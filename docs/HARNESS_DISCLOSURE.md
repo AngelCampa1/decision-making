@@ -72,7 +72,7 @@ so a mid-experiment change surfaces as an error rather than as noise.
 | Tools | `--tools ""` — none |
 | Slash commands | `--disable-slash-commands` |
 | MCP | `--strict-mcp-config --mcp-config '{"mcpServers":{}}'` |
-| Settings sources | `--setting-sources ""` — no user, project, or enterprise settings |
+| Settings sources | `--setting-sources ""` — **the load-bearing isolation control.** Measured: a planted `CLAUDE.md` is still injected under a full `--system-prompt` replacement, and this flag alone blocks it. See [the canary ablation](../notebook/2026-08-10-isolation-canary.md) |
 | Other skills | Excluded by the empty settings sources; asserted by test |
 
 The skill under test is the only intervention. Anything else in scope would be a
@@ -93,6 +93,16 @@ be an explanation for a difference between arms.
 is planted in the runner's working directory, and the test asserts the model does
 not follow it. Isolation that is merely configured is isolation that will
 silently break; this makes it a failing test instead.
+
+It ships with a **positive control** that asserts the same instruction *is*
+followed without the isolation flag. A canary that cannot fire proves nothing,
+and an isolation test that quietly stopped working would be worse than none — it
+would license exactly the confidence it no longer earns.
+
+The ablation behind the table above is why `--system-prompt` is listed as an
+experimental control and not as an isolation mechanism. Replacing the system
+prompt governs what the model is *told*; it does not govern what the model
+*discovers*.
 
 ### S — Scheduling
 

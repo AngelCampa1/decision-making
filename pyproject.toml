@@ -152,6 +152,7 @@ output = "coverage.json"
 "decision_evals/arenas.py" = { line = 100.0, branch = 100.0 }
 "decision_evals/budget.py" = { line = 100.0, branch = 100.0 }
 # A generator bug silently changes the benchmark rather than failing loudly.
+"decision_evals/providers" = { line = 100.0, branch = 100.0 }
 "decision_evals/generators" = { line = 98.0, branch = 95.0 }
 # Parse paths and failure paths must both be exercised.
 "decision_evals/scorers" = { line = 95.0, branch = 90.0 }
