@@ -12,6 +12,41 @@ Since the independent variable here is a markdown file and the model is held
 fixed, the harness is not background detail — it is the largest thing in the
 room, and it has to be nailed down and written down.
 
+## Preconditions
+
+**A replicator must verify that the CLI can actually authenticate, because
+`claude auth status` will not tell them.**
+
+The harness's first claimed property is that it runs on a consumer subscription
+with no API key. That rests on an assumption worth stating as one: that a
+subscription-authed CLI invoked as a subprocess will authenticate. It can fail
+while every visible indicator says otherwise. Observed on 2026-08-10:
+
+```
+$ claude auth status
+{"loggedIn": true, "authMethod": "claude.ai", "subscriptionType": "max"}
+
+$ claude -p "Say OK" --model haiku --output-format json
+{"is_error": true, "api_error_status": 401,
+ "result": "Failed to authenticate. API Error: 401 OAuth access token has been revoked."}
+```
+
+`loggedIn: true` is read from local state and is not validated against the
+server, so it means only that a credential file exists. A token rotated by a
+login elsewhere is revoked rather than expired, and no refresh recovers it. The
+fix is `claude auth login`.
+
+Two consequences are built into the runner rather than left to the operator:
+
+1. **Preflight.** Every run makes one throwaway call before item 1 and aborts on
+   a 401. A confirmation run is checkpointed and resumable across days precisely
+   because rate limits are the budget, which means a token can rotate *between*
+   sessions of a single run.
+2. **Triage.** `authentication` is an explicit subtype of the
+   infrastructure-error category in the zero-score classification, so a run that
+   silently loses its credential is never recorded as a few hundred model
+   failures.
+
 ## The record
 
 Every run writes `results/<skill>/<date>-<sha7>/config.json` containing the
@@ -25,7 +60,7 @@ so a mid-experiment change surfaces as an error rather than as noise.
 | Agent | Claude Code CLI, non-interactive (`claude -p`) |
 | CLI version | Recorded per run |
 | Resolved model id | Recorded per run from `--output-format json` |
-| Auth | Subscription OAuth. **No API key.** `--bare` is unusable: its help states auth is strictly `ANTHROPIC_API_KEY`/`apiKeyHelper` and OAuth is never read |
+| Auth | Subscription OAuth. **No API key.** `--bare` is unusable: its help states auth is strictly `ANTHROPIC_API_KEY`/`apiKeyHelper` and OAuth is never read. See *Preconditions* below — this is the harness's most fragile assumption |
 | Sampling parameters | **Not exposed.** No temperature control — see [`LIMITATIONS.md`](LIMITATIONS.md) |
 | Repeats | ≥2 independent runs per cell; variance reported |
 | Working directory | A scratch directory **outside `D:\code`** |
