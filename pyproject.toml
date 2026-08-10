@@ -1,0 +1,160 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "decision-evals"
+version = "0.1.0"
+description = "Evaluation harness for measuring whether agent decision skills actually work"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+authors = [{ name = "Angel Campa" }]
+keywords = ["evaluation", "agent-skills", "llm", "decision-making", "calibration"]
+
+dependencies = [
+    "numpy>=2.1",
+    "scipy>=1.14",
+    "statsmodels>=0.14",
+    "pydantic>=2.9",
+    "pyyaml>=6.0",
+    "typer>=0.15",
+]
+
+[project.optional-dependencies]
+# Kept separate: the stats/generators/lint layers must work without a model backend,
+# so `de check` can run with zero LLM dependencies installed.
+harness = ["inspect-ai>=0.3.100"]
+
+[project.scripts]
+de = "decision_evals.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/AngelCampa1/decision-making"
+Repository = "https://github.com/AngelCampa1/decision-making"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "hypothesis>=6.120",
+    "ruff>=0.9",
+    "mypy>=1.14",
+    "pre-commit>=4.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["evals/src/decision_evals"]
+
+# --------------------------------------------------------------------------- #
+# Lint / format
+# --------------------------------------------------------------------------- #
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["evals/src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # isort
+    "N",        # pep8-naming
+    "UP",       # pyupgrade
+    "B",        # bugbear
+    "A",        # builtins shadowing
+    "C4",       # comprehensions
+    "PT",       # pytest style
+    "SIM",      # simplify
+    "PTH",      # use pathlib
+    "RUF",
+]
+ignore = [
+    "E501",  # line length is handled by the formatter
+]
+
+# Statistical notation in docstrings is deliberate and clearer than the ASCII
+# fallback: a real minus sign in "Reliability − Resolution", Greek letters for
+# the usual error rates. Allow them rather than degrading the prose.
+allowed-confusables = ["−", "α", "β", "ρ", "σ", "Δ", "×", "≥", "≤", "π", "ψ", "δ"]
+
+[tool.ruff.lint.per-file-ignores]
+# Property-based tests deliberately use single-letter mathematical names.
+"tests/**" = ["N806", "N803"]
+
+# --------------------------------------------------------------------------- #
+# Types
+# --------------------------------------------------------------------------- #
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_unreachable = true
+disallow_any_generics = true
+mypy_path = "evals/src"
+packages = ["decision_evals"]
+
+[[tool.mypy.overrides]]
+# These ship without complete stubs.
+module = ["statsmodels.*", "scipy.*", "inspect_ai.*"]
+ignore_missing_imports = true
+
+# --------------------------------------------------------------------------- #
+# Tests
+# --------------------------------------------------------------------------- #
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["evals/src"]
+addopts = "-q --strict-markers --strict-config"
+markers = [
+    "llm: requires a live model backend; never runs in `de check`",
+    "slow: long-running (e.g. CI-coverage simulation); excluded from the default run",
+]
+
+# --------------------------------------------------------------------------- #
+# Coverage
+#
+# The global floor is 95%, but a global number can hide a 40%-covered stats
+# module behind a 100%-covered CLI. Per-module floors are enforced separately by
+# scripts/check_coverage_floors.py reading coverage.json.
+# --------------------------------------------------------------------------- #
+[tool.coverage.run]
+branch = true
+source = ["evals/src/decision_evals"]
+omit = ["*/__main__.py"]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+skip_covered = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@overload",
+    "if __name__ == .__main__.:",
+]
+
+[tool.coverage.json]
+output = "coverage.json"
+
+# --------------------------------------------------------------------------- #
+# Per-module coverage floors, enforced by scripts/check_coverage_floors.py.
+#
+# A global 95% can hide a 40%-covered stats module behind a 100%-covered CLI, so
+# the modules whose failure would corrupt a published number rather than crash
+# carry stricter floors. Patterns are substring matches on the file path; the
+# longest match wins.
+# --------------------------------------------------------------------------- #
+[tool.decision-evals.coverage-floors]
+# Every published number flows through here. Non-negotiable.
+"decision_evals/stats" = { line = 100.0, branch = 100.0 }
+# Integrity locks: every refusal branch needs a test asserting it refuses.
+"decision_evals/prereg.py" = { line = 100.0, branch = 100.0 }
+"decision_evals/arenas.py" = { line = 100.0, branch = 100.0 }
+"decision_evals/budget.py" = { line = 100.0, branch = 100.0 }
+# A generator bug silently changes the benchmark rather than failing loudly.
+"decision_evals/generators" = { line = 98.0, branch = 95.0 }
+# Parse paths and failure paths must both be exercised.
+"decision_evals/scorers" = { line = 95.0, branch = 90.0 }
+"decision_evals/plugin" = { line = 95.0, branch = 90.0 }
+# Argument wiring, exercised through integration tests.
+"decision_evals/cli.py" = { line = 85.0, branch = 75.0 }

@@ -1,0 +1,45 @@
+# Local git hooks. There is no cloud CI — nothing in this gate needs a remote
+# runner, and a green local tree that actually ran is more credible than a
+# matrix with silently-skipped jobs.
+#
+# Install both stages once:
+#   python -m uv run pre-commit install
+#   python -m uv run pre-commit install --hook-type pre-push
+#
+# `uv` is invoked as `python -m uv` because pip-installed uv does not land on
+# PATH on Windows.
+
+default_install_hook_types: [pre-commit, pre-push]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=2048]
+
+  - repo: local
+    hooks:
+      # Fast subset on every commit: lint, types, skill validation, and the
+      # commit-attribution guard. Under a few seconds, so it does not train
+      # anyone to reach for --no-verify.
+      - id: de-check-fast
+        name: de check --fast (lint, types, git identity, skill lint)
+        entry: python -m uv run de check --fast
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      # Everything on push: tests, coverage floors, golden files.
+      - id: de-check
+        name: de check (full gate, including tests and coverage floors)
+        entry: python -m uv run de check
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
