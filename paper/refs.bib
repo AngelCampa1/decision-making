@@ -1,0 +1,479 @@
+% Bibliography for "Do Agent Skills Actually Work?"
+%
+% Seeded from docs/RELATED_WORK.md. Entries marked `% VERIFY` have an arXiv id
+% and title recorded during the literature sweep but an author list that has NOT
+% been checked against the PDF. Verify every one of them before submission --
+% a wrong author list is the cheapest possible way to lose a reviewer's trust,
+% and these are all one download away from being correct.
+
+% ---------------------------------------------------------------------------
+% Skills as an intervention
+% ---------------------------------------------------------------------------
+
+% VERIFY
+@article{skillsbench2026,
+  title  = {Skill Availability and Presentation Granularity in {LLM} Agents},
+  journal = {arXiv preprint arXiv:2605.31408},
+  year   = {2026},
+  note   = {86 tasks across 11 domains. Availability +18.0 to +36.0pp;
+            prose granularity +0.7pp (GPT-5.5) / -6.7pp (DeepSeek), CIs
+            crossing zero}
+}
+
+% VERIFY
+@article{skillopt2026,
+  title  = {Executive Strategy for Self-Evolving Agent Skills},
+  journal = {arXiv preprint arXiv:2605.23904},
+  year   = {2026},
+  note   = {Microsoft Research. Code at github.com/microsoft/SkillOpt.
+            +23.5pp average on GPT-5.5 across six benchmarks. No CIs, no
+            significance tests, no multiplicity correction}
+}
+
+% VERIFY
+@article{agentsmd2026,
+  title  = {On the Impact of {AGENTS.md} Files on the Efficiency of {AI}
+            Coding Agents},
+  journal = {arXiv preprint arXiv:2601.20404},
+  year   = {2026},
+  note   = {124 PRs across 10 repos. -20.27\% mean wall-clock, -20.08\% mean
+            output tokens; benefit concentrated in a few expensive runs}
+}
+
+% VERIFY
+@article{authoringskills2026,
+  title  = {Authoring Agent Skills: A Software-Engineering Approach},
+  journal = {arXiv preprint arXiv:2607.25032},
+  year   = {2026}
+}
+
+% VERIFY
+@article{skillsmells2026,
+  title  = {From Anatomy to Smells: An Empirical Study of {SKILL.md}},
+  journal = {arXiv preprint arXiv:2607.01456},
+  year   = {2026}
+}
+
+% VERIFY
+@article{skillsecurity2026,
+  title  = {Security Analysis of the Agent Skills Ecosystem},
+  journal = {arXiv preprint arXiv:2601.10338},
+  year   = {2026},
+  note   = {26.1\% of sampled skills contained at least one vulnerability}
+}
+
+% ---------------------------------------------------------------------------
+% Harness variance
+% ---------------------------------------------------------------------------
+
+% VERIFY
+@article{harnessdisclosure2026,
+  title  = {Stop Comparing {LLM} Agents Without Disclosing the Harness},
+  journal = {arXiv preprint arXiv:2605.23950},
+  year   = {2026},
+  note   = {3x3 factorial on 100 SWE-bench Verified tasks. Harness variance /
+            model variance ~7.8x; six ranking reversals in nine comparisons.
+            Source of the ETCSOVG checklist}
+}
+
+% VERIFY
+@article{harnessbench2026,
+  title  = {Harness-Bench: Disentangling Harness and Model Contributions to
+            Agent Performance},
+  journal = {arXiv preprint arXiv:2605.27922},
+  year   = {2026},
+  note   = {5,194 trajectories, 6 harnesses x 8 backends x 106 tasks.
+            23.8-point swing from harness alone}
+}
+
+% ---------------------------------------------------------------------------
+% Context degradation and irrelevant information
+% ---------------------------------------------------------------------------
+
+@article{gsmsymbolic2024,
+  author = {Mirzadeh, Iman and Alizadeh, Keivan and Shahrokhi, Hooman and
+            Tuzel, Oncel and Bengio, Samy and Farajtabar, Mehrdad},
+  title  = {{GSM-Symbolic}: Understanding the Limitations of Mathematical
+            Reasoning in Large Language Models},
+  journal = {arXiv preprint arXiv:2410.05229},
+  year   = {2024}
+}
+
+@inproceedings{liu2024lost,
+  author = {Liu, Nelson F. and Lin, Kevin and Hewitt, John and Paranjape,
+            Ashwin and Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},
+  title  = {Lost in the Middle: How Language Models Use Long Contexts},
+  booktitle = {Transactions of the Association for Computational Linguistics},
+  year   = {2024},
+  note   = {arXiv:2307.03172}
+}
+
+% VERIFY
+@article{contextrot2026,
+  title  = {Diagnosing and Mitigating Context Rot in Long-horizon Search},
+  journal = {arXiv preprint arXiv:2606.29718},
+  year   = {2026}
+}
+
+% VERIFY
+@article{unabletoforget2025,
+  title  = {Unable to Forget: Proactive Interference Reveals Working Memory
+            Limits in {LLMs}},
+  journal = {arXiv preprint arXiv:2506.08184},
+  year   = {2025}
+}
+
+% VERIFY
+@article{contextcuration2026,
+  title  = {Escaping the Context Bottleneck: Active Context Curation for
+            {LLM} Agents via Reinforcement Learning},
+  journal = {arXiv preprint arXiv:2604.11462},
+  year   = {2026},
+  note   = {WebArena 36.4 -> 41.2 with 8.8\% fewer tokens; 8x token reduction
+            on DeepSearch}
+}
+
+% VERIFY
+@inproceedings{ace2026,
+  title  = {Agentic Context Engineering: Evolving Contexts for Self-Improving
+            Language Models},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year   = {2026},
+  note   = {arXiv:2510.04618. Oral}
+}
+
+% ---------------------------------------------------------------------------
+% Control, clarification, abstention
+% ---------------------------------------------------------------------------
+
+% VERIFY
+@article{agentatlas2026,
+  title  = {Beyond Outcome Leaderboards for {LLM} Agents},
+  journal = {arXiv preprint arXiv:2605.20530},
+  year   = {2026},
+  note   = {Act/Ask/Refuse/Stop/Confirm/Recover taxonomy. Removing explicit
+            option menus dropped trajectory accuracy 14-40pp across 8 models}
+}
+
+% VERIFY
+@article{askorassume2026,
+  title  = {Ask or Assume? Uncertainty-Aware Clarification-Seeking in Coding
+            Agents},
+  journal = {arXiv preprint arXiv:2603.26233},
+  year   = {2026},
+  note   = {SWE-bench Verified 61.2 -> 69.4 by decoupling underspecification
+            detection from execution}
+}
+
+% VERIFY
+@article{abstentionbench2025,
+  title  = {{AbstentionBench}: Reasoning {LLMs} Fail on Unanswerable Questions},
+  journal = {arXiv preprint arXiv:2506.09038},
+  year   = {2025},
+  note   = {Reasoning-tuned models ~24\% worse at abstaining than base models}
+}
+
+% VERIFY
+@article{trustoverfear2026,
+  title  = {Trust Over Fear: Framing Effects in Agent System Prompts},
+  journal = {arXiv preprint arXiv:2603.14373},
+  year   = {2026},
+  note   = {Trust-framed prompts surfaced 59\% more hidden issues}
+}
+
+% ---------------------------------------------------------------------------
+% Calibration
+% ---------------------------------------------------------------------------
+
+@inproceedings{tian2023just,
+  author = {Tian, Katherine and Mitchell, Eric and Zhou, Allan and Sharma,
+            Archit and Rafailov, Rafael and Yao, Huaxiu and Finn, Chelsea and
+            Manning, Christopher D.},
+  title  = {Just Ask for Calibration: Strategies for Eliciting Calibrated
+            Confidence Scores from Language Models Fine-Tuned with Human
+            Feedback},
+  booktitle = {Proceedings of EMNLP},
+  year   = {2023},
+  note   = {arXiv:2305.14975}
+}
+
+@article{kadavath2022know,
+  author = {Kadavath, Saurav and Conerly, Tom and Askell, Amanda and others},
+  title  = {Language Models (Mostly) Know What They Know},
+  journal = {arXiv preprint arXiv:2207.05221},
+  year   = {2022}
+}
+
+% VERIFY
+@article{smece2026,
+  title  = {Debiased Kernel-Smoothed Estimation of Calibration Error},
+  journal = {arXiv preprint arXiv:2603.14092},
+  year   = {2026}
+}
+
+% VERIFY
+@article{calibrationdrift2026,
+  title  = {Calibration Drift Under Reasoning},
+  journal = {arXiv preprint arXiv:2606.11211},
+  year   = {2026},
+  note   = {Calibration improves then degrades past a reasoning-budget
+            threshold, non-monotonically}
+}
+
+@inproceedings{forecastbench2025,
+  author = {Karger, Ezra and Bastani, Houtan and Yueh-Han, Chen and others},
+  title  = {{ForecastBench}: A Dynamic Benchmark of {AI} Forecasting
+            Capabilities},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year   = {2025},
+  note   = {arXiv:2409.19839}
+}
+
+@article{murphy1973new,
+  author = {Murphy, Allan H.},
+  title  = {A New Vector Partition of the Probability Score},
+  journal = {Journal of Applied Meteorology},
+  volume = {12},
+  number = {4},
+  pages  = {595--600},
+  year   = {1973}
+}
+
+% ---------------------------------------------------------------------------
+% Judges, juries, debate
+% ---------------------------------------------------------------------------
+
+@inproceedings{zheng2023judging,
+  author = {Zheng, Lianmin and Chiang, Wei-Lin and Sheng, Ying and others},
+  title  = {Judging {LLM}-as-a-Judge with {MT-Bench} and {Chatbot Arena}},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year   = {2023},
+  note   = {arXiv:2306.05685}
+}
+
+@article{verga2024poll,
+  author = {Verga, Pat and Hofstatter, Sebastian and Althammer, Sophia and
+            others},
+  title  = {Replacing Judges with Juries: Evaluating {LLM} Generations with a
+            Panel of Diverse Models},
+  journal = {arXiv preprint arXiv:2404.18796},
+  year   = {2024}
+}
+
+% VERIFY
+@article{ropoll2026,
+  title  = {{RoPoLL}: Robust Aggregation for Panels of {LLM} Judges},
+  journal = {arXiv preprint arXiv:2606.30931},
+  year   = {2026},
+  note   = {PoLL incurs unbounded bias under any positive contamination
+            regardless of jury size; geometric median gives ~19\% improvement}
+}
+
+% VERIFY
+@article{ninejudges2026,
+  title  = {Nine Judges, Two Effective Votes},
+  journal = {arXiv preprint arXiv:2605.29800},
+  year   = {2026},
+  note   = {n_eff = 2.18, 95\% CI [2.07, 2.31]; panel lift over best single
+            judge +0.2pp against 22pp predicted under independence}
+}
+
+@inproceedings{shankar2024validators,
+  author = {Shankar, Shreya and Zamfirescu-Pereira, J.D. and Hartmann, Bjoern
+            and Parameswaran, Aditya G. and Arawjo, Ian},
+  title  = {Who Validates the Validators? Aligning {LLM}-Assisted Evaluation
+            of {LLM} Outputs with Human Preferences},
+  booktitle = {Proceedings of UIST},
+  year   = {2024},
+  note   = {arXiv:2404.12272. Source of the criteria-drift result}
+}
+
+@inproceedings{huang2024selfcorrect,
+  author = {Huang, Jie and Chen, Xinyun and Mishra, Swaroop and Zheng, Huaixiu
+            Steven and Yu, Adams Wei and Song, Xinying and Zhou, Denny},
+  title  = {Large Language Models Cannot Self-Correct Reasoning Yet},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year   = {2024},
+  note   = {arXiv:2310.01798}
+}
+
+@inproceedings{du2024debate,
+  author = {Du, Yilun and Li, Shuang and Torralba, Antonio and Tenenbaum,
+            Joshua B. and Mordatch, Igor},
+  title  = {Improving Factuality and Reasoning in Language Models through
+            Multiagent Debate},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year   = {2024},
+  note   = {arXiv:2305.14325}
+}
+
+% VERIFY
+@article{costofconsensus2026,
+  title  = {The Cost of Consensus: Isolated Self-Correction Versus Multi-Agent
+            Debate},
+  journal = {arXiv preprint arXiv:2605.00914},
+  year   = {2026}
+}
+
+@inproceedings{wang2023selfconsistency,
+  author = {Wang, Xuezhi and Wei, Jason and Schuurmans, Dale and others},
+  title  = {Self-Consistency Improves Chain of Thought Reasoning in Language
+            Models},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year   = {2023},
+  note   = {arXiv:2203.11171}
+}
+
+% ---------------------------------------------------------------------------
+% Evaluation methodology and statistics
+% ---------------------------------------------------------------------------
+
+@article{miller2024errorbars,
+  author = {Miller, Evan},
+  title  = {Adding Error Bars to Evals: A Statistical Approach to Language
+            Model Evaluations},
+  journal = {arXiv preprint arXiv:2411.00640},
+  year   = {2024}
+}
+
+% VERIFY
+@article{noclt2025,
+  title  = {Don't Use the {CLT} in {LLM} Evals With Fewer Than a Few Hundred
+            Datapoints},
+  journal = {arXiv preprint arXiv:2503.01747},
+  year   = {2025}
+}
+
+@article{biderman2024lessons,
+  author = {Biderman, Stella and Schoelkopf, Hailey and Sutawika, Lintang and
+            others},
+  title  = {Lessons from the Trenches on Reproducible Evaluation of Language
+            Models},
+  journal = {arXiv preprint arXiv:2405.14782},
+  year   = {2024}
+}
+
+@article{benjamini1995fdr,
+  author = {Benjamini, Yoav and Hochberg, Yosef},
+  title  = {Controlling the False Discovery Rate: A Practical and Powerful
+            Approach to Multiple Testing},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume = {57},
+  number = {1},
+  pages  = {289--300},
+  year   = {1995}
+}
+
+@article{mcnemar1947note,
+  author = {McNemar, Quinn},
+  title  = {Note on the Sampling Error of the Difference Between Correlated
+            Proportions or Percentages},
+  journal = {Psychometrika},
+  volume = {12},
+  number = {2},
+  pages  = {153--157},
+  year   = {1947}
+}
+
+@article{pineau2021checklist,
+  author = {Pineau, Joelle and Vincent-Lamarre, Philippe and Sinha, Koustuv and
+            others},
+  title  = {Improving Reproducibility in Machine Learning Research},
+  journal = {Journal of Machine Learning Research},
+  volume = {22},
+  number = {164},
+  pages  = {1--20},
+  year   = {2021}
+}
+
+@inproceedings{mitchell2019modelcards,
+  author = {Mitchell, Margaret and Wu, Simone and Zaldivar, Andrew and others},
+  title  = {Model Cards for Model Reporting},
+  booktitle = {Proceedings of FAT*},
+  year   = {2019},
+  note   = {arXiv:1810.03993}
+}
+
+@inproceedings{musgrave2020reality,
+  author = {Musgrave, Kevin and Belongie, Serge and Lim, Ser-Nam},
+  title  = {A Metric Learning Reality Check},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year   = {2020},
+  note   = {arXiv:2003.08505}
+}
+
+% ---------------------------------------------------------------------------
+% Prompt optimisation and transfer
+% ---------------------------------------------------------------------------
+
+% VERIFY
+@article{promptinginversion2025,
+  title  = {Prompting Inversion: When Sculpted Prompts Hurt Stronger Models},
+  journal = {arXiv preprint arXiv:2510.22251},
+  year   = {2025},
+  note   = {Helped GPT-4o (97\% vs 93\%), hurt GPT-5 (94.00\% vs 96.36\%
+            plain CoT)}
+}
+
+% VERIFY
+@article{promptcoinflip2026,
+  title  = {Prompt Optimization Is a Coin Flip},
+  journal = {arXiv preprint arXiv:2604.14585},
+  year   = {2026}
+}
+
+% VERIFY
+@inproceedings{gepa2026,
+  title  = {{GEPA}: Reflective Prompt Evolution Can Outperform Reinforcement
+            Learning},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year   = {2026},
+  note   = {Oral}
+}
+
+% ---------------------------------------------------------------------------
+% Decision science
+% ---------------------------------------------------------------------------
+
+@article{flyvbjerg2002underestimating,
+  author = {Flyvbjerg, Bent and Holm, Mette K. Skamris and Buhl, S{\o}ren L.},
+  title  = {Underestimating Costs in Public Works Projects: Error or Lie?},
+  journal = {Journal of the American Planning Association},
+  volume = {68},
+  number = {3},
+  pages  = {279--295},
+  year   = {2002}
+}
+
+@article{klein2007premortem,
+  author = {Klein, Gary},
+  title  = {Performing a Project Premortem},
+  journal = {Harvard Business Review},
+  volume = {85},
+  number = {9},
+  pages  = {18--19},
+  year   = {2007}
+}
+
+@book{kahneman2021noise,
+  author    = {Kahneman, Daniel and Sibony, Olivier and Sunstein, Cass R.},
+  title     = {Noise: A Flaw in Human Judgment},
+  publisher = {Little, Brown Spark},
+  year      = {2021},
+  note      = {Ch. 25: the Mediating Assessments Protocol}
+}
+
+@book{tetlock2015superforecasting,
+  author    = {Tetlock, Philip E. and Gardner, Dan},
+  title     = {Superforecasting: The Art and Science of Prediction},
+  publisher = {Crown},
+  year      = {2015}
+}
+
+@book{heuer1999psychology,
+  author    = {Heuer, Richards J.},
+  title     = {Psychology of Intelligence Analysis},
+  publisher = {Center for the Study of Intelligence, CIA},
+  year      = {1999},
+  note      = {Source of Analysis of Competing Hypotheses}
+}

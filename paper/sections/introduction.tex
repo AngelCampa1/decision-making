@@ -1,0 +1,45 @@
+\section{Introduction}
+\label{sec:intro}
+
+% ARGUMENT (fixed before results; the numbers are not):
+%
+%   1. Markdown "skills" are now a real distribution channel. The Agent Skills
+%      standard has ~40 adopting products and a shared .agents/skills/ path.
+%      Thousands of these files are installed and running.
+%   2. Almost none of them carry evidence. The closest prior art ships 28
+%      skills and its own README concedes none is proven to improve accuracy.
+%   3. The 2026 literature disagrees with itself about whether the content of
+%      such a file even matters: SkillsBench says presence is worth +18-36pp
+%      and prose granularity +0.7pp with CIs crossing zero; SkillOpt reports
+%      +23.5pp from optimising that same prose.
+%   4. Meanwhile harness variance exceeds model variance by ~7.8x, so the
+%      scaffold is the dominant term and almost nobody reports it.
+%   5. So: hold the model fixed, vary one markdown file, and measure it
+%      properly -- placebo arm, CoT arm, paired exact tests, clustered
+%      bootstrap, hash-locked pre-registration.
+%
+% TONE: this is a measurement paper. It does not need to argue that skills are
+% good or bad. It needs to argue that the question is currently unanswered and
+% that the design here can answer it.
+
+\TODO{Draft after the first skill has a verdict (sequencing step 8).}
+
+\paragraph{Contributions.}
+% Each of these stands whether the skills succeed or fail. That is deliberate:
+% a contribution contingent on a positive result is a bet, not a contribution.
+\begin{enumerate}
+  \item A harness for evaluating markdown skill artifacts \emph{with the model
+    held fixed}, using the Claude Code CLI itself as the subject under test and
+    reproducible on a consumer subscription with no API key. Configuration is
+    disclosed against the ETCSOVG checklist \citep{harnessdisclosure2026}.
+  \item An adjudication of a live disagreement in the 2026 literature between
+    \citet{skillsbench2026} and \citet{skillopt2026}, with the SkillsBench null
+    \emph{pre-registered as our prediction}.
+  \item Methodological apparatus this literature currently lacks: a
+    token- and structure-matched placebo arm, a plain chain-of-thought arm,
+    paired exact tests with clustered bootstrap intervals, Benjamini--Hochberg
+    control across skills, and hash-locked pre-registration.
+  \item A replication attempt on the distractor effect in an agentic setting,
+    using a two-auditor-filtered dataset, in light of the 2026 re-audit that
+    largely dissolved the original GSM-NoOp magnitude \citep{gsmsymbolic2024}.
+\end{enumerate}

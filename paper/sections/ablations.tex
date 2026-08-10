@@ -1,0 +1,47 @@
+\section{Ablations}
+\label{sec:ablations}
+
+\subsection{The presence-versus-prose adjudication}
+% THE HEADLINE ABLATION. SkillsBench and SkillOpt cannot both be right in the
+% general case, and this is the experiment that separates them.
+%
+% Design: ACE-style incremental playbook curation (preferred over GEPA's
+% whole-prompt rewrite, to avoid regression and context collapse) run against
+% local Ollama models, where rollouts are free and unlimited. Then measure
+% transfer to the target model.
+%
+% The SkillsBench null is PRE-REGISTERED as our prediction. That pre-registration
+% is what makes a null informative here rather than a failure to find something
+% -- and it is precisely the discipline an accept-if-strictly-better ratchet
+% lacks.
+%
+% Transfer is simultaneously a direct test of Prompting Inversion on our own
+% data: scaffolding tuned against a small local model may become a handicap on a
+% frontier one. Either direction is reportable.
+%
+% Whatever comes out, this is an ablation row and never the load-bearing claim.
+
+\subsection{Forked versus inline context curation}
+% Three-way: no curation / inline curation / forked curator returning only a
+% ledger. Motivated by arXiv:2604.11462, which found a decoupled curator lifting
+% WebArena 36.4 -> 41.2 with 8.8% FEWER tokens.
+%
+% Report tokens alongside accuracy. A curation win that costs 3x the tokens is a
+% different result from one that costs fewer, and only the second is interesting.
+
+\subsection{Isolated versus in-situ injection}
+% --system-prompt (full replacement) vs --append-system-prompt (on top of the
+% default). The first is the clean measurement; the second is what daily use
+% actually looks like.
+%
+% Disagreement between them is a reportable result, not an inconvenience -- and
+% where they disagree, the in-situ number is the one that describes practice.
+
+\subsection{Council versus self-consistency at matched budget}
+% The council must beat CoT + self-consistency at MATCHED TOKEN BUDGET, not at
+% matched sample count. Anything else is buying accuracy with compute and
+% calling it a method.
+%
+% Report the panel's measured effective sample size. With n_eff ~ 2 for three
+% judges, "three perspectives" is a description of the prompt, not of the
+% estimator, and saying so is more useful than the headcount.

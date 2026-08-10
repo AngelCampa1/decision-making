@@ -1,0 +1,47 @@
+\section{Related Work}
+\label{sec:related}
+
+% SOURCE OF TRUTH: ../docs/RELATED_WORK.md. That file is organised by what each
+% finding changed about the design and flags confidence per source. This section
+% is a condensation of it, not a second inventory -- keep them consistent, and
+% when they diverge the docs file is correct.
+%
+% Reviewers will know this neighbourhood well. Position explicitly against:
+% SkillOpt, SkillsBench, the AGENTS.md impact study, and the two harness papers.
+
+\TODO{Condense from \texttt{docs/RELATED\_WORK.md} once the results fix which
+threads are load-bearing.}
+
+\subsection{Skills as an intervention}
+% The core tension, stated plainly and early. SkillsBench (86 tasks, 11 domains):
+% availability +18.0 to +36.0pp; granularity +0.7pp (GPT-5.5) / -6.7pp
+% (DeepSeek), CIs crossing zero. SkillOpt: +23.5pp from bounded edits to the
+% same prose, evaluated inside Claude Code and Codex CLI harnesses.
+%
+% Be fair to SkillOpt. Its method is sound in outline and its harness choice is
+% the right one. The criticism is narrow and specific: no CIs, no significance
+% tests, and no correction for the many implicit comparisons its
+% accept-if-strictly-better ratchet performs. Its own ablation shows a
+% target-matched optimiser recovering only 56-74% of the gain, which implies a
+% distillation component the paper does not name.
+
+\subsection{Context degradation and irrelevant information}
+% GSM-Symbolic, and the 2026 re-audit that kept 117/945 (12.4%) of candidate
+% distractors and found the residual effect indistinguishable from zero. Report
+% the re-audit's provenance honestly -- it is a re-analysis, not peer-reviewed.
+% Then relocate: context rot survives in long-horizon agentic search at 30-50%.
+
+\subsection{Harness variance}
+% ~7.8x HV/MV, six ranking reversals in nine comparisons, 23.8-point swing in
+% Harness-Bench. This is what makes "hold the model fixed and vary the markdown"
+% a coherent experiment rather than a curiosity.
+
+\subsection{Judges and councils}
+% PoLL -> RoPoLL (unbounded bias under contamination; geometric median). Nine
+% judges, two effective votes (n_eff 2.18). Debate losing to isolated
+% self-correction at 2-3x the token cost. Criteria drift.
+
+\subsection{Evaluation methodology}
+% Miller's error bars, qualified by the no-CLT result at our N. Biderman et al.
+% on reproducible evaluation. Murphy decomposition and smECE. The Husain/Shankar
+% bottom-up error-analysis school.

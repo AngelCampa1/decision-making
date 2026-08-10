@@ -1,0 +1,18 @@
+# LaTeX build intermediates.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Generated artifacts. Figures and reported numbers are rebuilt from
+# ../results by `make figures`; committing them would let the PDF drift from
+# the data, which is the exact failure this arrangement exists to prevent.
+figures/
+generated/
+main.pdf

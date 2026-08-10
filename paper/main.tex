@@ -1,0 +1,73 @@
+% Do Agent Skills Actually Work?
+% A Pre-Registered, Placebo-Controlled Evaluation of Markdown Decision Skills
+%
+% Build:  make paper      (regenerates figures from ../results, then compiles)
+% Never edit figures/ by hand -- they are generated artifacts.
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{natbib}
+
+% Drafting aids. \draftmode is switched off before submission; the TODO macro
+% then expands to nothing, so a stray note cannot silently ship.
+\newif\ifdraftmode
+\draftmodetrue
+
+\ifdraftmode
+  \newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+  \newcommand{\NUM}[1]{\textcolor{blue}{\texttt{#1}}}
+\else
+  \newcommand{\TODO}[1]{}
+  \newcommand{\NUM}[1]{#1}
+\fi
+
+% Every number that comes from a run is written by `de figures` into
+% generated/macros.tex. Nothing in the prose is transcribed by hand -- if a
+% number appears in the text and not in that file, it is a bug.
+\IfFileExists{generated/macros.tex}{\input{generated/macros}}{}
+
+\title{Do Agent Skills Actually Work?\\
+\large A Pre-Registered, Placebo-Controlled Evaluation of\\Markdown Decision Skills}
+
+\author{Angel Campa\\
+\texttt{github.com/AngelCampa1/decision-making}}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\TODO{Written last. Do not draft an abstract around results that do not exist
+yet -- that is how a paper acquires claims its data will not support.}
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/method}
+\input{sections/datasets}
+\input{sections/results}
+\input{sections/ablations}
+\input{sections/discussion}
+\input{sections/limitations}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+\input{sections/appendix_harness}
+\input{sections/appendix_prompts}
+
+\end{document}

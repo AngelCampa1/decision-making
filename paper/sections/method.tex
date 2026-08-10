@@ -1,0 +1,66 @@
+\section{Method}
+\label{sec:method}
+
+% SOURCE OF TRUTH: ../docs/PROTOCOL.md (versioned; v1 at time of writing).
+% This section is the paper-facing rendering of it. If the protocol is revised
+% mid-project, the paper must state which version each run was conducted under.
+
+\subsection{Design}
+% Four arms, same items, paired by item:
+%   off      task framing + response-format contract
+%   on       control + skill body
+%   placebo  control + token- and structure-matched contentless filler
+%   cot      control + "Think step by step"
+% Plus a fifth in-situ arm (--append-system-prompt) for ecological validity.
+%
+% THREE THINGS TO STATE EXPLICITLY, because their absence is what makes most
+% skill evaluations uninterpretable:
+%   (a) the response-format contract is in EVERY arm -- otherwise the experiment
+%       measures instruction-following, not decision quality;
+%   (b) the placebo is matched on tokens and structure, and no SHIP verdict is
+%       issued without it;
+%   (c) option menus are held constant across arms, because removing them moved
+%       trajectory accuracy 14-40pp in AgentAtlas -- larger than any effect we
+%       expect to measure.
+
+\subsection{Arenas}
+% dev (local/mock) -> screen (cheap hosted) -> confirm (target model, private
+% holdout, hash-locked). Only confirm emits a verdict. The separation is
+% enforced in code, not by discipline, and the reason is Prompting Inversion:
+% scaffolding tuned against a weak model can become a handicap on a strong one.
+
+\subsection{Pre-registration}
+% preregistration/<skill>-v<n>.yaml: hypothesis, primary metric, N, MDE, alpha,
+% guards, stopping rule, skill_sha256, analysis_script_sha256. A confirmation
+% run refuses to start unless the file is committed, is a git ancestor of HEAD,
+% predates every result, and both hashes match.
+%
+% Emphasise the analysis-script lock. A pre-registered metric means nothing if
+% the code computing it can be rewritten after seeing the data, and that is the
+% gap most "pre-registered" ML work leaves open.
+%
+% Fixed N, no interim analysis. The screen/confirm split buys cost control
+% without alpha spending because the stages use disjoint items.
+
+\subsection{Statistics}
+% McNemar exact for paired binary; paired permutation for continuous;
+% cluster bootstrap over TEMPLATES for intervals. Not the CLT -- restricted
+% below a few hundred effectively independent datapoints, and a design effect of
+% 1 + (m-1)rho ~ 2.0 at m=6, rho=0.2 puts us squarely in that range.
+%
+% Guards are one-sided non-inferiority tests and are deliberately NOT corrected:
+% correcting a conservative-direction test would make it easier for a harmful
+% skill to pass. State this so it is not mistaken for an oversight.
+%
+% BH at q=0.10 across the pre-registered primaries. Report raw p and adjusted q.
+%
+% Calibration: Murphy decomposition with a hard resolution floor, and smECE
+% rather than binned ECE.
+
+\subsection{Harness disclosure}
+% Full ETCSOVG record in Appendix~\ref{sec:appendix-harness}. Two points belong
+% in the body because they are results-relevant rather than administrative:
+% arms are interleaved per item so quota drift cannot align with an arm, and
+% CLAUDE.md isolation is proven by a canary test rather than assumed.
+
+\TODO{Draft alongside the first confirmation run, not after it.}

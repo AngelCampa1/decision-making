@@ -1,0 +1,51 @@
+\section{Datasets}
+\label{sec:datasets}
+
+% SOURCE OF TRUTH: ../docs/PROTOCOL.md sec. 6 and the eval-set datasheet.
+
+\subsection{Generation}
+% Parameterised YAML templates with COMPUTED ground truth, in the style of
+% GSM-Symbolic. The argument for this over authored items is auditability:
+% checking ~50 template rules is tractable, checking 300 authored answers is
+% not. Publish the template schema in full -- it is more useful to a replicator
+% than the items themselves.
+
+\subsection{The distractor audit}
+% This is the most important gate in the whole pipeline and should be presented
+% as such, because the 2026 re-audit is the single largest threat to the
+% flagship's premise.
+%
+% A distractor qualifies only if (a) the computed solution is provably invariant
+% to its removal, and (b) two independent passes agree it is genuinely
+% irrelevant rather than plausibly foldable into the reasoning. The re-audit
+% kept 12.4% of candidates; report our own attrition rate whatever it is.
+% \NUM{\attritionRate}
+
+\subsection{Difficulty gates}
+% All three run on the CONTROL arm only, so they cannot bias the
+% treatment-minus-control difference. Say that explicitly -- it is the kind of
+% detail that separates a fair gate from a thumb on the scale.
+%
+%   1. Clean-room: >=95% control accuracy on distractor-free variants. An item
+%      missed WITHOUT distractors is ambiguous, not hard.
+%   2. Difficulty calibration: control accuracy on distractor-present items in
+%      [0.35, 0.75]. Above that there is no headroom and required N explodes.
+%   3. Human audit of a 10% sample for realism.
+
+\subsection{Clustering}
+% Items from one template are correlated. Design effect 1 + (m-1)rho, so the
+% design favours MANY templates with FEW variants each (50 x 4-6, not 10 x 30).
+% Template id is the cluster key in every score record and the resampling unit
+% in every interval.
+
+\subsection{Splits and contamination}
+% Public/screen items are committed and expected to become contaminated; they
+% only gate spending and never enter a verdict. The holdout regenerates from a
+% passphrase-derived seed held outside the repository and is published after the
+% verdict, with fresh seeds next run.
+%
+% State the principle: contamination is handled by regeneration, not secrecy.
+% A benchmark whose validity depends on nobody having seen it has a shelf life;
+% one that can be regenerated does not.
+
+\TODO{Report final template counts, attrition, and gate pass rates.}

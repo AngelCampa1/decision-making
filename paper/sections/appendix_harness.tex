@@ -1,0 +1,27 @@
+\section{Harness disclosure}
+\label{sec:appendix-harness}
+
+% SOURCE OF TRUTH: ../docs/HARNESS_DISCLOSURE.md. Reproduce the ETCSOVG table in
+% full here -- Execution, Tools, Context, Scheduling, Observability,
+% Verification, Governance. This is the appendix that makes the paper
+% reproducible, and it is the one most papers in this area omit entirely.
+
+\TODO{Render the ETCSOVG table from \texttt{docs/HARNESS\_DISCLOSURE.md}, plus
+the per-run \texttt{config.json} schema.}
+
+% Points worth stating in prose rather than leaving to the table:
+%
+%   - Subscription OAuth, no API key. --bare is unusable because its auth path
+%     is strictly ANTHROPIC_API_KEY/apiKeyHelper and OAuth is never read. The
+%     isolation is assembled from individual flags instead. This is a
+%     reproducibility asset, not a workaround: anyone with a consumer
+%     subscription can rerun the harness.
+%   - Zero tools, no MCP, no settings sources, no session persistence. The skill
+%     is the only intervention, and "the agent looked it up" cannot explain a
+%     difference between arms.
+%   - CLAUDE.md isolation is proven by a canary test that plants a file with a
+%     distinctive instruction in the runner cwd and asserts the model does not
+%     follow it. Isolation that is merely configured is isolation that will
+%     silently break.
+%   - Arms are interleaved per item rather than run in blocks, so quota drift
+%     and served-model changes cannot align with an arm.

@@ -1,0 +1,52 @@
+\section{Results}
+\label{sec:results}
+
+% EVERY number and figure in this section is generated. Nothing is transcribed.
+% `make figures` writes figures/*.pdf and generated/macros.tex from
+% ../results/**/summary.json; if a number appears here that is not a macro from
+% that file, it is a bug.
+%
+% REPORTING RULES, fixed in advance:
+%
+%   - Report the pre-registered primary first, before anything exploratory.
+%   - Report raw p AND BH-adjusted q for every primary.
+%   - Report every guard, including the ones that passed. A guard table with
+%     only failures is a guard table nobody can check.
+%   - Report means WITH p90 and p99. The AGENTS.md study found the benefit of an
+%     instruction artifact concentrates in a small number of expensive runs; a
+%     mean-only report can hide the effect entirely.
+%   - Report nulls in the same table, same format, same prominence as wins.
+%   - Report the placebo and CoT arms every time. A skill that beats `off` but
+%     not `placebo` is a length effect and must be shown as one.
+%   - Where a comparison is underpowered, report the MDE and label it UNTESTED
+%     rather than presenting it as a null.
+
+\subsection{Main table}
+% One row per skill: verdict, primary metric, effect, 95% CI, p, q, N, model,
+% run id. Mirrors ../SCORECARD.md, which is itself generated -- and `de check`
+% fails the build if the committed scorecard disagrees with the results.
+
+\TODO{Generated table.}
+
+\subsection{Per-skill detail}
+% For each skill: the four-arm comparison, the guard table, the stratified
+% breakdown (clean vs distractor-present), and the error taxonomy from the
+% bottom-up analysis.
+
+\subsection{Trigger quality}
+% Reported SEPARATELY from task accuracy, against a positive set and a negative
+% set of ~50 turns that superficially resemble triggers. Precision and recall.
+%
+% This is not a secondary curiosity. A suite that improves accuracy by 10pp
+% while firing on 60% of ordinary turns is a net loss in daily use, and an
+% accuracy-only evaluation would not notice.
+
+\subsection{Wiring modes}
+% Auto-trigger vs AGENTS.md workflow wiring vs explicit invocation vs hook.
+% Given SkillsBench's presence-vs-prose result, this is expected to be the
+% larger effect, and it is the one a practitioner can act on.
+
+\subsection{Run-to-run variance}
+% >=2 independent runs per cell. Report the variance rather than claiming
+% determinism -- sampling parameters are not exposed by the CLI, and temperature
+% 0 is not deterministic on hosted inference in any case.

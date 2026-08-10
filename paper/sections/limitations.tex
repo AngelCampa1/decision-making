@@ -1,0 +1,28 @@
+\section{Limitations}
+\label{sec:limitations}
+
+% SOURCE OF TRUTH: ../docs/LIMITATIONS.md, written before any results existed so
+% it could not be tuned to flatter them. This section condenses it. Nothing may
+% be dropped between that file and this section without a note saying why.
+
+\TODO{Condense from \texttt{docs/LIMITATIONS.md}. Do not shorten by deletion.}
+
+% The ones that must appear in the paper regardless of how the results land:
+%
+%   - No temperature control. The CLI exposes no sampling parameters. Mitigated
+%     by >=2 repeats per cell with variance reported, not by claiming
+%     determinism.
+%   - Small N. Subscription throughput caps items, and a cluster design effect
+%     of ~2.0 halves the effective count again. Exact and resampling methods
+%     recover validity but not power.
+%   - Self-generated datasets. We avoid contamination and thereby own the item
+%     biases. Realism rests on a 10% human audit.
+%   - The distractor premise is weakened by the 2026 re-audit, whose source is a
+%     re-analysis rather than peer-reviewed work. Flag the confidence.
+%   - Judge panels carry ~2 effective votes regardless of headcount, and drift
+%     between recalibrations.
+%   - Local judge models are weaker; provider diversity is bought at the cost of
+%     individual judge quality.
+%   - Single harness. The paper's own central citation says this limits transfer.
+%   - Tasks with computable ground truth only. This is the same restriction
+%     SkillOpt operates under; the difference is that we state it.
