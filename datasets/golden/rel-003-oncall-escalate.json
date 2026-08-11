@@ -1,0 +1,1734 @@
+[
+  {
+    "answer": "escalate",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 13% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 39% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v0-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "none",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 39,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 42,
+      "threshold_pct": 13
+    },
+    "variant": 0
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 13% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 39% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v0-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 39,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 42,
+      "threshold_pct": 13
+    },
+    "variant": 0
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 13% of requests are affected."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 39% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v0-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 39,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 42,
+      "threshold_pct": 13
+    },
+    "variant": 0
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 13% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 39% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v0-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 39,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 42,
+      "threshold_pct": 13
+    },
+    "variant": 0
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d1",
+      "d4",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 13% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 39% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v0-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 39,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 42,
+      "threshold_pct": 13
+    },
+    "variant": 0
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d1",
+      "d4",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 13% of requests are affected."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 39% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v0-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 39,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 42,
+      "threshold_pct": 13
+    },
+    "variant": 0
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d1",
+      "d4",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 13% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 39% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v0-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 39,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 42,
+      "threshold_pct": 13
+    },
+    "variant": 0
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 20% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v1-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "none",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 20,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 23,
+      "threshold_pct": 20
+    },
+    "variant": 1
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 20% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v1-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 20,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 23,
+      "threshold_pct": 20
+    },
+    "variant": 1
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 20% of requests are affected."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v1-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 20,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 23,
+      "threshold_pct": 20
+    },
+    "variant": 1
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 20% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v1-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 20,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 23,
+      "threshold_pct": 20
+    },
+    "variant": 1
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3",
+      "d1",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 23 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 20% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v1-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 20,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 23,
+      "threshold_pct": 20
+    },
+    "variant": 1
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3",
+      "d1",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 20% of requests are affected."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 23 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v1-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 20,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 23,
+      "threshold_pct": 20
+    },
+    "variant": 1
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3",
+      "d1",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 20% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 23 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v1-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 20,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 23,
+      "threshold_pct": 20
+    },
+    "variant": 1
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 4% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 5% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v2-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "none",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 5,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 37,
+      "threshold_pct": 4
+    },
+    "variant": 2
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 4% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 5% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v2-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 5,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 37,
+      "threshold_pct": 4
+    },
+    "variant": 2
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 4% of requests are affected."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 5% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v2-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 5,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 37,
+      "threshold_pct": 4
+    },
+    "variant": 2
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 4% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 5% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v2-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 5,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 37,
+      "threshold_pct": 4
+    },
+    "variant": 2
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d3",
+      "d2",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 37 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 4% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 5% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v2-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 5,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 37,
+      "threshold_pct": 4
+    },
+    "variant": 2
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d3",
+      "d2",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 4% of requests are affected."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 37 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 5% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v2-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 5,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 37,
+      "threshold_pct": 4
+    },
+    "variant": 2
+  },
+  {
+    "answer": "escalate",
+    "distractor_ids": [
+      "d3",
+      "d2",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 4% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 5% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The blue cluster was renamed during last year's migration."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The latency runbook is 37 pages long and was reviewed this quarter."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v2-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 5,
+      "alert": "latency",
+      "cluster": "blue",
+      "runbook_pages": 37,
+      "threshold_pct": 4
+    },
+    "variant": 2
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 16% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 1% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v3-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "none",
+    "question": "Should the on-call engineer escalate the queue-depth alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 1,
+      "alert": "queue-depth",
+      "cluster": "green",
+      "runbook_pages": 5,
+      "threshold_pct": 16
+    },
+    "variant": 3
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 16% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 1% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v3-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the queue-depth alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 1,
+      "alert": "queue-depth",
+      "cluster": "green",
+      "runbook_pages": 5,
+      "threshold_pct": 16
+    },
+    "variant": 3
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 16% of requests are affected."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 1% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v3-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the queue-depth alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 1,
+      "alert": "queue-depth",
+      "cluster": "green",
+      "runbook_pages": 5,
+      "threshold_pct": 16
+    },
+    "variant": 3
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 16% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 1% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v3-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the queue-depth alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 1,
+      "alert": "queue-depth",
+      "cluster": "green",
+      "runbook_pages": 5,
+      "threshold_pct": 16
+    },
+    "variant": 3
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3",
+      "d4",
+      "d1",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The queue-depth alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The queue-depth runbook is 5 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 16% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 1% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v3-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "early",
+    "question": "Should the on-call engineer escalate the queue-depth alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 1,
+      "alert": "queue-depth",
+      "cluster": "green",
+      "runbook_pages": 5,
+      "threshold_pct": 16
+    },
+    "variant": 3
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3",
+      "d4",
+      "d1",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 16% of requests are affected."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The queue-depth alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The queue-depth runbook is 5 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 1% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v3-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "middle",
+    "question": "Should the on-call engineer escalate the queue-depth alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 1,
+      "alert": "queue-depth",
+      "cluster": "green",
+      "runbook_pages": 5,
+      "threshold_pct": 16
+    },
+    "variant": 3
+  },
+  {
+    "answer": "monitor",
+    "distractor_ids": [
+      "d3",
+      "d4",
+      "d1",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The escalation policy triggers when more than 16% of requests are affected."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Current telemetry shows 1% of requests affected and holding steady."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The alerting dashboard now supports dark mode."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The queue-depth alert has the longest name of any alert in the catalogue."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The queue-depth runbook is 5 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
+      }
+    ],
+    "item_id": "rel-003-oncall-escalate#v3-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "escalate",
+      "monitor"
+    ],
+    "position": "late",
+    "question": "Should the on-call engineer escalate the queue-depth alert, or keep monitoring?",
+    "seed": 1,
+    "template_id": "rel-003-oncall-escalate",
+    "variables": {
+      "affected_pct": 1,
+      "alert": "queue-depth",
+      "cluster": "green",
+      "runbook_pages": 5,
+      "threshold_pct": 16
+    },
+    "variant": 3
+  }
+]

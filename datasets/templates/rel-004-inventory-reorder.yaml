@@ -1,0 +1,47 @@
+template_id: rel-004-inventory-reorder
+question: "Should the buyer place a reorder for {sku} now, or hold?"
+options: [reorder_now, hold_order]
+
+variables:
+  sku: {choice: [SKU-4412, SKU-8801, SKU-2290, SKU-6135]}
+  stock_units: {int: [40, 900]}
+  daily_units: {int: [5, 60]}
+  lead_days: {int: [3, 30]}
+  warehouse: {choice: [Leeds, Utrecht, Malmo]}
+  supplier: {choice: [Aldebaran, Borealis, Cygnus]}
+
+relevant_facts:
+  - id: r1
+    text: "{stock_units} units of {sku} remain in stock."
+  - id: r2
+    text: "{sku} sells at a steady {daily_units} units per day."
+  - id: r3
+    text: "A replenishment order from {supplier} takes {lead_days} days to arrive."
+  - id: r4
+    text: "Policy is to reorder whenever stock would run out before a new order could land."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "{sku} is stored in the {warehouse} warehouse, which was reorganised in spring."
+  - id: d2
+    strength: high
+    text: "{supplier} won a packaging design award last year."
+  - id: d3
+    strength: medium
+    text: "The {warehouse} site has the newest forklift fleet in the network."
+  - id: d4
+    strength: medium
+    text: "{sku} has the shortest product description in the catalogue."
+  - id: d5
+    strength: low
+    text: "The warehouse noticeboard was repainted in June."
+
+solution:
+  expr: "'reorder_now' if stock_units < daily_units * lead_days else 'hold_order'"
+  load_bearing: [r1, r2, r3]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

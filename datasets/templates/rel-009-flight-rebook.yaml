@@ -1,0 +1,44 @@
+template_id: rel-009-flight-rebook
+question: "Should the traveller rebook onto the later flight, or wait at the gate?"
+options: [rebook_now, wait_at_gate]
+
+variables:
+  airline: {choice: [Meridian, Solstice, Zephyr]}
+  delay_min: {int: [15, 240]}
+  connection_min: {int: [30, 200]}
+  city: {choice: [Porto, Bergen, Sapporo, Asuncion]}
+  bags: {int: [0, 3]}
+
+relevant_facts:
+  - id: r1
+    text: "The inbound aircraft is running {delay_min} minutes late."
+  - id: r2
+    text: "The traveller has {connection_min} minutes of slack before the onward connection."
+  - id: r3
+    text: "The later flight has seats available and no rebooking fee."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "It is raining heavily in {city}, which is neither the origin nor the destination."
+  - id: d2
+    strength: high
+    text: "{airline} refreshed its cabin interiors across the fleet last year."
+  - id: d3
+    strength: medium
+    text: "The traveller has {bags} checked bags, all already tagged through to the final stop."
+  - id: d4
+    strength: medium
+    text: "{airline} operates its largest lounge in {city}."
+  - id: d5
+    strength: low
+    text: "The gate area has been fitted with new seating."
+
+solution:
+  expr: "'rebook_now' if delay_min > connection_min else 'wait_at_gate'"
+  load_bearing: [r1, r2]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

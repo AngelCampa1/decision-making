@@ -1,0 +1,1790 @@
+[
+  {
+    "answer": "renew",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 250 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 321 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 76% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v0-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "none",
+    "question": "Should the team renew the Lantern contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Procurement",
+      "seats_paid": 250,
+      "seats_used": 321,
+      "tool": "Lantern",
+      "utilisation_floor": 76,
+      "years": 7
+    },
+    "variant": 0
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 250 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 321 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 76% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v0-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Lantern contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Procurement",
+      "seats_paid": 250,
+      "seats_used": 321,
+      "tool": "Lantern",
+      "utilisation_floor": 76,
+      "years": 7
+    },
+    "variant": 0
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 250 seats at the current rate."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 321 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 76% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v0-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Lantern contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Procurement",
+      "seats_paid": 250,
+      "seats_used": 321,
+      "tool": "Lantern",
+      "utilisation_floor": 76,
+      "years": 7
+    },
+    "variant": 0
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 250 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 321 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 76% of paid seats."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern released a redesigned onboarding flow this spring."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v0-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Lantern contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Procurement",
+      "seats_paid": 250,
+      "seats_used": 321,
+      "tool": "Lantern",
+      "utilisation_floor": 76,
+      "years": 7
+    },
+    "variant": 0
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Lantern is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern has been in use for 7 years and is owned by Procurement."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 250 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 321 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 76% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v0-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Lantern contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Procurement",
+      "seats_paid": 250,
+      "seats_used": 321,
+      "tool": "Lantern",
+      "utilisation_floor": 76,
+      "years": 7
+    },
+    "variant": 0
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 250 seats at the current rate."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Lantern is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern has been in use for 7 years and is owned by Procurement."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 321 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 76% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v0-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Lantern contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Procurement",
+      "seats_paid": 250,
+      "seats_used": 321,
+      "tool": "Lantern",
+      "utilisation_floor": 76,
+      "years": 7
+    },
+    "variant": 0
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 250 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 321 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 76% of paid seats."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Lantern is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Lantern has been in use for 7 years and is owned by Procurement."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v0-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Lantern contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Procurement",
+      "seats_paid": 250,
+      "seats_used": 321,
+      "tool": "Lantern",
+      "utilisation_floor": 76,
+      "years": 7
+    },
+    "variant": 0
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 481 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 111 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 61% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v1-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "none",
+    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Engineering",
+      "seats_paid": 481,
+      "seats_used": 111,
+      "tool": "Compass",
+      "utilisation_floor": 61,
+      "years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 481 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 111 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 61% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v1-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Engineering",
+      "seats_paid": 481,
+      "seats_used": 111,
+      "tool": "Compass",
+      "utilisation_floor": 61,
+      "years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 481 seats at the current rate."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 111 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 61% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v1-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Engineering",
+      "seats_paid": 481,
+      "seats_used": 111,
+      "tool": "Compass",
+      "utilisation_floor": 61,
+      "years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 481 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 111 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 61% of paid seats."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass released a redesigned onboarding flow this spring."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v1-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Engineering",
+      "seats_paid": 481,
+      "seats_used": 111,
+      "tool": "Compass",
+      "utilisation_floor": 61,
+      "years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d1",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass has been in use for 4 years and is owned by Engineering."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Compass is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 481 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 111 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 61% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v1-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Engineering",
+      "seats_paid": 481,
+      "seats_used": 111,
+      "tool": "Compass",
+      "utilisation_floor": 61,
+      "years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d1",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 481 seats at the current rate."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass has been in use for 4 years and is owned by Engineering."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Compass is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 111 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 61% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v1-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Engineering",
+      "seats_paid": 481,
+      "seats_used": 111,
+      "tool": "Compass",
+      "utilisation_floor": 61,
+      "years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d1",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 481 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 111 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 61% of paid seats."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Compass has been in use for 4 years and is owned by Engineering."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Compass is the only vendor in the stack with a purple logo."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v1-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Engineering",
+      "seats_paid": 481,
+      "seats_used": 111,
+      "tool": "Compass",
+      "utilisation_floor": 61,
+      "years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 116 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 155 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v2-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "none",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 116,
+      "seats_used": 155,
+      "tool": "Quarry",
+      "utilisation_floor": 95,
+      "years": 9
+    },
+    "variant": 2
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 116 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 155 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v2-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 116,
+      "seats_used": 155,
+      "tool": "Quarry",
+      "utilisation_floor": 95,
+      "years": 9
+    },
+    "variant": 2
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 116 seats at the current rate."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 155 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v2-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 116,
+      "seats_used": 155,
+      "tool": "Quarry",
+      "utilisation_floor": 95,
+      "years": 9
+    },
+    "variant": 2
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 116 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 155 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v2-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 116,
+      "seats_used": 155,
+      "tool": "Quarry",
+      "utilisation_floor": 95,
+      "years": 9
+    },
+    "variant": 2
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d5",
+      "d1",
+      "d4",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry has been in use for 9 years and is owned by Finance."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Quarry is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Finance moved to a new contract management system last year."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 116 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 155 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v2-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 116,
+      "seats_used": 155,
+      "tool": "Quarry",
+      "utilisation_floor": 95,
+      "years": 9
+    },
+    "variant": 2
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d5",
+      "d1",
+      "d4",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 116 seats at the current rate."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry has been in use for 9 years and is owned by Finance."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Quarry is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Finance moved to a new contract management system last year."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 155 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v2-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 116,
+      "seats_used": 155,
+      "tool": "Quarry",
+      "utilisation_floor": 95,
+      "years": 9
+    },
+    "variant": 2
+  },
+  {
+    "answer": "renew",
+    "distractor_ids": [
+      "d5",
+      "d1",
+      "d4",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 116 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 155 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry has been in use for 9 years and is owned by Finance."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Quarry is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Finance moved to a new contract management system last year."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v2-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 116,
+      "seats_used": 155,
+      "tool": "Quarry",
+      "utilisation_floor": 95,
+      "years": 9
+    },
+    "variant": 2
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 243 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 142 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 83% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v3-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "none",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 243,
+      "seats_used": 142,
+      "tool": "Quarry",
+      "utilisation_floor": 83,
+      "years": 3
+    },
+    "variant": 3
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 243 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 142 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 83% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v3-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 243,
+      "seats_used": 142,
+      "tool": "Quarry",
+      "utilisation_floor": 83,
+      "years": 3
+    },
+    "variant": 3
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 243 seats at the current rate."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 142 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 83% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v3-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 243,
+      "seats_used": 142,
+      "tool": "Quarry",
+      "utilisation_floor": 83,
+      "years": 3
+    },
+    "variant": 3
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 243 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 142 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 83% of paid seats."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v3-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 243,
+      "seats_used": 142,
+      "tool": "Quarry",
+      "utilisation_floor": 83,
+      "years": 3
+    },
+    "variant": 3
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d5",
+      "d2",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Quarry is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry has been in use for 3 years and is owned by Finance."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 243 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 142 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 83% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v3-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "early",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 243,
+      "seats_used": 142,
+      "tool": "Quarry",
+      "utilisation_floor": 83,
+      "years": 3
+    },
+    "variant": 3
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d5",
+      "d2",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 243 seats at the current rate."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Quarry is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry has been in use for 3 years and is owned by Finance."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 142 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 83% of paid seats."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v3-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "middle",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 243,
+      "seats_used": 142,
+      "tool": "Quarry",
+      "utilisation_floor": 83,
+      "years": 3
+    },
+    "variant": 3
+  },
+  {
+    "answer": "renegotiate",
+    "distractor_ids": [
+      "d5",
+      "d2",
+      "d4",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The renewal quote covers 243 seats at the current rate."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Usage reporting shows 142 seats active in the last 90 days."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to renegotiate whenever utilisation falls below 83% of paid seats."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The renewal calendar invite has no agenda attached."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry released a redesigned onboarding flow this spring."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Quarry is the only vendor in the stack with a purple logo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Quarry has been in use for 3 years and is owned by Finance."
+      }
+    ],
+    "item_id": "rel-008-contract-renew#v3-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "renew",
+      "renegotiate"
+    ],
+    "position": "late",
+    "question": "Should the team renew the Quarry contract as offered, or renegotiate?",
+    "seed": 1,
+    "template_id": "rel-008-contract-renew",
+    "variables": {
+      "buyer": "Finance",
+      "seats_paid": 243,
+      "seats_used": 142,
+      "tool": "Quarry",
+      "utilisation_floor": 83,
+      "years": 3
+    },
+    "variant": 3
+  }
+]

@@ -1,0 +1,1734 @@
+[
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 88 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 77 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v0-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "none",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 77,
+      "delay_min": 88
+    },
+    "variant": 0
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 88 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 77 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v0-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 77,
+      "delay_min": 88
+    },
+    "variant": 0
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 88 minutes late."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 77 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v0-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 77,
+      "delay_min": 88
+    },
+    "variant": 0
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 88 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 77 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v0-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 77,
+      "delay_min": 88
+    },
+    "variant": 0
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d4",
+      "d1",
+      "d2",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 88 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 77 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v0-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 77,
+      "delay_min": 88
+    },
+    "variant": 0
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d4",
+      "d1",
+      "d2",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 88 minutes late."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 77 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v0-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 77,
+      "delay_min": 88
+    },
+    "variant": 0
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d4",
+      "d1",
+      "d2",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 88 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 77 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v0-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 77,
+      "delay_min": 88
+    },
+    "variant": 0
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 76 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 96 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v1-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "none",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 96,
+      "delay_min": 76
+    },
+    "variant": 1
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 76 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 96 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v1-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 96,
+      "delay_min": 76
+    },
+    "variant": 1
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 76 minutes late."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 96 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v1-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 96,
+      "delay_min": 76
+    },
+    "variant": 1
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 76 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 96 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v1-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 96,
+      "delay_min": 76
+    },
+    "variant": 1
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1",
+      "d3",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 76 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 96 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v1-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 96,
+      "delay_min": 76
+    },
+    "variant": 1
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1",
+      "d3",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 76 minutes late."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 96 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v1-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 96,
+      "delay_min": 76
+    },
+    "variant": 1
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1",
+      "d3",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 76 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 96 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Zephyr operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v1-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 96,
+      "delay_min": 76
+    },
+    "variant": 1
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 142 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 112 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v2-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "none",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 0,
+      "city": "Bergen",
+      "connection_min": 112,
+      "delay_min": 142
+    },
+    "variant": 2
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 142 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 112 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v2-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 0,
+      "city": "Bergen",
+      "connection_min": 112,
+      "delay_min": 142
+    },
+    "variant": 2
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 142 minutes late."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 112 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v2-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 0,
+      "city": "Bergen",
+      "connection_min": 112,
+      "delay_min": 142
+    },
+    "variant": 2
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 142 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 112 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v2-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 0,
+      "city": "Bergen",
+      "connection_min": 112,
+      "delay_min": 142
+    },
+    "variant": 2
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d1",
+      "d3",
+      "d2",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 0 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 142 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 112 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v2-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 0,
+      "city": "Bergen",
+      "connection_min": 112,
+      "delay_min": 142
+    },
+    "variant": 2
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d1",
+      "d3",
+      "d2",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 142 minutes late."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 0 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 112 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v2-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 0,
+      "city": "Bergen",
+      "connection_min": 112,
+      "delay_min": 142
+    },
+    "variant": 2
+  },
+  {
+    "answer": "rebook_now",
+    "distractor_ids": [
+      "d1",
+      "d3",
+      "d2",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 142 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 112 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 0 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v2-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Zephyr",
+      "bags": 0,
+      "city": "Bergen",
+      "connection_min": 112,
+      "delay_min": 142
+    },
+    "variant": 2
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 159 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 159 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v3-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "none",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Solstice",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 159,
+      "delay_min": 159
+    },
+    "variant": 3
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 159 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 159 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v3-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Solstice",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 159,
+      "delay_min": 159
+    },
+    "variant": 3
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 159 minutes late."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 159 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v3-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Solstice",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 159,
+      "delay_min": 159
+    },
+    "variant": 3
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 159 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 159 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v3-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Solstice",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 159,
+      "delay_min": 159
+    },
+    "variant": 3
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1",
+      "d4",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Solstice operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Solstice refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 159 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 159 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v3-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "early",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Solstice",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 159,
+      "delay_min": 159
+    },
+    "variant": 3
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1",
+      "d4",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 159 minutes late."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Solstice operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Solstice refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 159 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v3-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "middle",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Solstice",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 159,
+      "delay_min": 159
+    },
+    "variant": 3
+  },
+  {
+    "answer": "wait_at_gate",
+    "distractor_ids": [
+      "d1",
+      "d4",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The inbound aircraft is running 159 minutes late."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 159 minutes of slack before the onward connection."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The later flight has seats available and no rebooking fee."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Solstice operates its largest lounge in Sapporo."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Solstice refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+      }
+    ],
+    "item_id": "rel-009-flight-rebook#v3-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "rebook_now",
+      "wait_at_gate"
+    ],
+    "position": "late",
+    "question": "Should the traveller rebook onto the later flight, or wait at the gate?",
+    "seed": 1,
+    "template_id": "rel-009-flight-rebook",
+    "variables": {
+      "airline": "Solstice",
+      "bags": 3,
+      "city": "Sapporo",
+      "connection_min": 159,
+      "delay_min": 159
+    },
+    "variant": 3
+  }
+]

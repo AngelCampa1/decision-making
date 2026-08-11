@@ -1,0 +1,44 @@
+template_id: rel-003-oncall-escalate
+question: "Should the on-call engineer escalate the {alert} alert, or keep monitoring?"
+options: [escalate, monitor]
+
+variables:
+  alert: {choice: [latency, error-rate, queue-depth, disk-usage]}
+  affected_pct: {int: [1, 40]}
+  threshold_pct: {int: [3, 30]}
+  runbook_pages: {int: [2, 60]}
+  cluster: {choice: [blue, green, canary]}
+
+relevant_facts:
+  - id: r1
+    text: "The escalation policy triggers when more than {threshold_pct}% of requests are affected."
+  - id: r2
+    text: "Current telemetry shows {affected_pct}% of requests affected and holding steady."
+  - id: r3
+    text: "The secondary on-call is available and has acknowledged the page."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "The {alert} runbook is {runbook_pages} pages long and was reviewed this quarter."
+  - id: d2
+    strength: high
+    text: "The {cluster} cluster was renamed during last year's migration."
+  - id: d3
+    strength: medium
+    text: "The alerting dashboard now supports dark mode."
+  - id: d4
+    strength: medium
+    text: "The {alert} alert has the longest name of any alert in the catalogue."
+  - id: d5
+    strength: low
+    text: "The team's incident retrospectives are held on Thursdays."
+
+solution:
+  expr: "'escalate' if affected_pct > threshold_pct else 'monitor'"
+  load_bearing: [r1, r2]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

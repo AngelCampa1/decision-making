@@ -1,0 +1,45 @@
+template_id: rel-007-capacity-scale
+question: "Should the {tier} tier scale up before the campaign, or keep current capacity?"
+options: [scale_up, keep_current]
+
+variables:
+  tier: {choice: [web, api, worker, cache]}
+  capacity_rps: {int: [200, 3000]}
+  expected_rps: {int: [150, 3200]}
+  headroom_pct: {int: [10, 40]}
+  vendor: {choice: [Helios, Vega, Rigel]}
+  cost_per_node: {int: [40, 900]}
+
+relevant_facts:
+  - id: r1
+    text: "The {tier} tier currently sustains {capacity_rps} requests per second."
+  - id: r2
+    text: "The campaign is forecast to peak at {expected_rps} requests per second."
+  - id: r3
+    text: "Standing policy requires {headroom_pct}% headroom above forecast peak."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "Each additional {tier} node costs {cost_per_node} per month with {vendor}."
+  - id: d2
+    strength: high
+    text: "{vendor} announced a new availability zone last month."
+  - id: d3
+    strength: medium
+    text: "The {tier} tier has the oldest Terraform module in the repository."
+  - id: d4
+    strength: medium
+    text: "{vendor}'s billing portal now supports single sign-on."
+  - id: d5
+    strength: low
+    text: "The capacity spreadsheet uses a green-and-white colour scheme."
+
+solution:
+  expr: "'scale_up' if expected_rps * (100 + headroom_pct) > capacity_rps * 100 else 'keep_current'"
+  load_bearing: [r1, r2, r3]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

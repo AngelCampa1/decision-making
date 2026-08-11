@@ -1,0 +1,44 @@
+template_id: rel-006-refund-request
+question: "Should support approve the refund for order {order_no}?"
+options: [approve_refund, decline_refund]
+
+variables:
+  order_no: {choice: [A-3391, B-7724, C-1180, D-9052]}
+  days_since: {int: [2, 60]}
+  window_days: {int: [7, 45]}
+  plan: {choice: [Starter, Growth, Enterprise]}
+  tickets: {int: [1, 25]}
+
+relevant_facts:
+  - id: r1
+    text: "The published refund window is {window_days} days from delivery."
+  - id: r2
+    text: "Order {order_no} was delivered {days_since} days ago."
+  - id: r3
+    text: "The goods were returned unopened and in resalable condition."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "The customer is on the {plan} plan and has opened {tickets} tickets this year."
+  - id: d2
+    strength: high
+    text: "Order {order_no} was the customer's first purchase through the mobile app."
+  - id: d3
+    strength: medium
+    text: "The {plan} plan was renamed in last year's pricing refresh."
+  - id: d4
+    strength: medium
+    text: "Refund confirmation emails were redesigned in April."
+  - id: d5
+    strength: low
+    text: "The support team's mascot is a capybara."
+
+solution:
+  expr: "'approve_refund' if days_since <= window_days else 'decline_refund'"
+  load_bearing: [r1, r2]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

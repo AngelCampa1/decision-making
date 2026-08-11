@@ -1,0 +1,44 @@
+template_id: rel-005-security-patch
+question: "Should the {component} vulnerability be patched immediately, or scheduled?"
+options: [patch_immediately, schedule_patch]
+
+variables:
+  component: {choice: [auth-proxy, image-resizer, log-shipper, pdf-render]}
+  severity: {int: [1, 10]}
+  emergency_at: {int: [3, 9]}
+  cve_year: {int: [2019, 2026]}
+  owner: {choice: [Infrastructure, Security, Data]}
+
+relevant_facts:
+  - id: r1
+    text: "The published severity score for the {component} issue is {severity} out of 10."
+  - id: r2
+    text: "Standing policy patches out of band at severity {emergency_at} or above."
+  - id: r3
+    text: "A maintenance window is available in nine days if the fix can wait."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "The advisory carries a {cve_year} CVE identifier."
+  - id: d2
+    strength: high
+    text: "{component} is maintained by the {owner} team, which is hiring."
+  - id: d3
+    strength: medium
+    text: "{component} has been in production longer than any other service."
+  - id: d4
+    strength: medium
+    text: "The {owner} team recently migrated its documentation to a new wiki."
+  - id: d5
+    strength: low
+    text: "The security newsletter goes out on the first Monday of each month."
+
+solution:
+  expr: "'patch_immediately' if severity >= emergency_at else 'schedule_patch'"
+  load_bearing: [r1, r2]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

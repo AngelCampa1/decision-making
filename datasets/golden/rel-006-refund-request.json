@@ -1,0 +1,1734 @@
+[
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 24 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order D-9052 was delivered 9 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v0-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "none",
+    "question": "Should support approve the refund for order D-9052?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 9,
+      "order_no": "D-9052",
+      "plan": "Growth",
+      "tickets": 5,
+      "window_days": 24
+    },
+    "variant": 0
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 24 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order D-9052 was delivered 9 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v0-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order D-9052?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 9,
+      "order_no": "D-9052",
+      "plan": "Growth",
+      "tickets": 5,
+      "window_days": 24
+    },
+    "variant": 0
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 24 days from delivery."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order D-9052 was delivered 9 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v0-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order D-9052?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 9,
+      "order_no": "D-9052",
+      "plan": "Growth",
+      "tickets": 5,
+      "window_days": 24
+    },
+    "variant": 0
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 24 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order D-9052 was delivered 9 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v0-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order D-9052?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 9,
+      "order_no": "D-9052",
+      "plan": "Growth",
+      "tickets": 5,
+      "window_days": 24
+    },
+    "variant": 0
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d4",
+      "d5",
+      "d3",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The customer is on the Growth plan and has opened 5 tickets this year."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 24 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order D-9052 was delivered 9 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v0-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order D-9052?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 9,
+      "order_no": "D-9052",
+      "plan": "Growth",
+      "tickets": 5,
+      "window_days": 24
+    },
+    "variant": 0
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d4",
+      "d5",
+      "d3",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 24 days from delivery."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The customer is on the Growth plan and has opened 5 tickets this year."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order D-9052 was delivered 9 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v0-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order D-9052?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 9,
+      "order_no": "D-9052",
+      "plan": "Growth",
+      "tickets": 5,
+      "window_days": 24
+    },
+    "variant": 0
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d4",
+      "d5",
+      "d3",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 24 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order D-9052 was delivered 9 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The customer is on the Growth plan and has opened 5 tickets this year."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v0-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order D-9052?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 9,
+      "order_no": "D-9052",
+      "plan": "Growth",
+      "tickets": 5,
+      "window_days": 24
+    },
+    "variant": 0
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 12 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 23 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v1-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "none",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 23,
+      "order_no": "C-1180",
+      "plan": "Enterprise",
+      "tickets": 1,
+      "window_days": 12
+    },
+    "variant": 1
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 12 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 23 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v1-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 23,
+      "order_no": "C-1180",
+      "plan": "Enterprise",
+      "tickets": 1,
+      "window_days": 12
+    },
+    "variant": 1
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 12 days from delivery."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 23 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v1-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 23,
+      "order_no": "C-1180",
+      "plan": "Enterprise",
+      "tickets": 1,
+      "window_days": 12
+    },
+    "variant": 1
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 12 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 23 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v1-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 23,
+      "order_no": "C-1180",
+      "plan": "Enterprise",
+      "tickets": 1,
+      "window_days": 12
+    },
+    "variant": 1
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d2",
+      "d3",
+      "d5",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The customer is on the Enterprise plan and has opened 1 tickets this year."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 12 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 23 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v1-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 23,
+      "order_no": "C-1180",
+      "plan": "Enterprise",
+      "tickets": 1,
+      "window_days": 12
+    },
+    "variant": 1
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d2",
+      "d3",
+      "d5",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 12 days from delivery."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The customer is on the Enterprise plan and has opened 1 tickets this year."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 23 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v1-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 23,
+      "order_no": "C-1180",
+      "plan": "Enterprise",
+      "tickets": 1,
+      "window_days": 12
+    },
+    "variant": 1
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d2",
+      "d3",
+      "d5",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 12 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 23 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The customer is on the Enterprise plan and has opened 1 tickets this year."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v1-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 23,
+      "order_no": "C-1180",
+      "plan": "Enterprise",
+      "tickets": 1,
+      "window_days": 12
+    },
+    "variant": 1
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 25 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 2 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v2-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "none",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 2,
+      "order_no": "C-1180",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 25
+    },
+    "variant": 2
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 25 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 2 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v2-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 2,
+      "order_no": "C-1180",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 25
+    },
+    "variant": 2
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 25 days from delivery."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 2 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v2-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 2,
+      "order_no": "C-1180",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 25
+    },
+    "variant": 2
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 25 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 2 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v2-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 2,
+      "order_no": "C-1180",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 25
+    },
+    "variant": 2
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d5",
+      "d3",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Starter plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 25 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 2 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v2-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 2,
+      "order_no": "C-1180",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 25
+    },
+    "variant": 2
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d5",
+      "d3",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 25 days from delivery."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Starter plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 2 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v2-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 2,
+      "order_no": "C-1180",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 25
+    },
+    "variant": 2
+  },
+  {
+    "answer": "approve_refund",
+    "distractor_ids": [
+      "d5",
+      "d3",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 25 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order C-1180 was delivered 2 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Starter plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v2-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order C-1180?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 2,
+      "order_no": "C-1180",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 25
+    },
+    "variant": 2
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 28 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order A-3391 was delivered 33 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v3-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "none",
+    "question": "Should support approve the refund for order A-3391?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 33,
+      "order_no": "A-3391",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 28
+    },
+    "variant": 3
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 28 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order A-3391 was delivered 33 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v3-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order A-3391?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 33,
+      "order_no": "A-3391",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 28
+    },
+    "variant": 3
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 28 days from delivery."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order A-3391 was delivered 33 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v3-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order A-3391?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 33,
+      "order_no": "A-3391",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 28
+    },
+    "variant": 3
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 28 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order A-3391 was delivered 33 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v3-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order A-3391?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 33,
+      "order_no": "A-3391",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 28
+    },
+    "variant": 3
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d4",
+      "d3",
+      "d5",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Starter plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order A-3391 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 28 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order A-3391 was delivered 33 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v3-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "early",
+    "question": "Should support approve the refund for order A-3391?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 33,
+      "order_no": "A-3391",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 28
+    },
+    "variant": 3
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d4",
+      "d3",
+      "d5",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 28 days from delivery."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Starter plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order A-3391 was the customer's first purchase through the mobile app."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order A-3391 was delivered 33 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v3-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "middle",
+    "question": "Should support approve the refund for order A-3391?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 33,
+      "order_no": "A-3391",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 28
+    },
+    "variant": 3
+  },
+  {
+    "answer": "decline_refund",
+    "distractor_ids": [
+      "d4",
+      "d3",
+      "d5",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The published refund window is 28 days from delivery."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Order A-3391 was delivered 33 days ago."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The goods were returned unopened and in resalable condition."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Refund confirmation emails were redesigned in April."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Starter plan was renamed in last year's pricing refresh."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The support team's mascot is a capybara."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order A-3391 was the customer's first purchase through the mobile app."
+      }
+    ],
+    "item_id": "rel-006-refund-request#v3-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "approve_refund",
+      "decline_refund"
+    ],
+    "position": "late",
+    "question": "Should support approve the refund for order A-3391?",
+    "seed": 1,
+    "template_id": "rel-006-refund-request",
+    "variables": {
+      "days_since": 33,
+      "order_no": "A-3391",
+      "plan": "Starter",
+      "tickets": 12,
+      "window_days": 28
+    },
+    "variant": 3
+  }
+]

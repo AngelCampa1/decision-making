@@ -1,0 +1,45 @@
+# The answer turns on two facts. Everything else is true, on-topic, and inert.
+template_id: rel-001-vendor-outage
+question: "The {vendor} outage has ended. Should the team file an SLA claim or wait?"
+options: [file_sla_claim, wait]
+
+variables:
+  vendor: {choice: [Northwind, Contoso, Fabrikam, Tailspin]}
+  outage_h: {int: [2, 26]}
+  sla_h: {int: [4, 24]}
+  region: {choice: [eu-west, us-east, ap-south]}
+  headcount: {int: [12, 400]}
+
+relevant_facts:
+  - id: r1
+    text: "The {vendor} contract credits SLA penalties only after {sla_h} continuous hours of downtime."
+  - id: r2
+    text: "Yesterday's incident kept the service unavailable for {outage_h} continuous hours."
+  - id: r3
+    text: "Filing a claim costs nothing and has no effect on renewal terms."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "{vendor} redesigned its public status page last quarter."
+  - id: d2
+    strength: high
+    text: "The {region} region accounts for the largest share of {vendor} customers."
+  - id: d3
+    strength: medium
+    text: "The support organisation has {headcount} people across all products."
+  - id: d4
+    strength: medium
+    text: "{vendor} moved its head office to a new building in March."
+  - id: d5
+    strength: low
+    text: "The office coffee machine was serviced on Tuesday."
+
+solution:
+  expr: "'file_sla_claim' if outage_h > sla_h else 'wait'"
+  load_bearing: [r1, r2]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

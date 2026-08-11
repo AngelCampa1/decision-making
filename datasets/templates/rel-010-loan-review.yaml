@@ -1,0 +1,44 @@
+template_id: rel-010-loan-review
+question: "Should application {app_no} be auto-approved, or referred for manual review?"
+options: [auto_approve, refer_to_manual]
+
+variables:
+  app_no: {choice: [L-2201, L-5518, L-7043, L-9986]}
+  score: {int: [520, 820]}
+  score_floor: {int: [580, 760]}
+  branch: {choice: [Riverside, Kingsway, Northgate]}
+  tenure_years: {int: [1, 30]}
+
+relevant_facts:
+  - id: r1
+    text: "The automated approval threshold is a credit score of {score_floor}."
+  - id: r2
+    text: "Application {app_no} carries a credit score of {score}."
+  - id: r3
+    text: "All supporting documents were submitted and verified."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "Application {app_no} was submitted through the {branch} branch."
+  - id: d2
+    strength: high
+    text: "The applicant has banked with the institution for {tenure_years} years."
+  - id: d3
+    strength: medium
+    text: "The {branch} branch has the longest opening hours in the region."
+  - id: d4
+    strength: medium
+    text: "The application form was reformatted to two columns last year."
+  - id: d5
+    strength: low
+    text: "The branch lobby has a new noticeboard."
+
+solution:
+  expr: "'auto_approve' if score >= score_floor else 'refer_to_manual'"
+  load_bearing: [r1, r2]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

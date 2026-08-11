@@ -1,0 +1,1734 @@
+[
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for notifications is 68 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 50 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v0-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "none",
+    "question": "Should the notifications release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 5,
+      "service": "notifications",
+      "smoke_min": 50,
+      "team": "Growth",
+      "window_min": 68
+    },
+    "variant": 0
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns notifications and rotated its on-call lead this month."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for notifications is 68 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 50 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v0-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the notifications release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 5,
+      "service": "notifications",
+      "smoke_min": 50,
+      "team": "Growth",
+      "window_min": 68
+    },
+    "variant": 0
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for notifications is 68 minutes."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns notifications and rotated its on-call lead this month."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 50 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v0-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the notifications release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 5,
+      "service": "notifications",
+      "smoke_min": 50,
+      "team": "Growth",
+      "window_min": 68
+    },
+    "variant": 0
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for notifications is 68 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 50 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns notifications and rotated its on-call lead this month."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v0-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the notifications release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 5,
+      "service": "notifications",
+      "smoke_min": 50,
+      "team": "Growth",
+      "window_min": 68
+    },
+    "variant": 0
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d1",
+      "d5",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns notifications and rotated its on-call lead this month."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The notifications backlog currently lists 5 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "notifications was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for notifications is 68 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 50 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v0-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the notifications release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 5,
+      "service": "notifications",
+      "smoke_min": 50,
+      "team": "Growth",
+      "window_min": 68
+    },
+    "variant": 0
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d1",
+      "d5",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for notifications is 68 minutes."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns notifications and rotated its on-call lead this month."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The notifications backlog currently lists 5 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "notifications was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 50 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v0-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the notifications release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 5,
+      "service": "notifications",
+      "smoke_min": 50,
+      "team": "Growth",
+      "window_min": 68
+    },
+    "variant": 0
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d1",
+      "d5",
+      "d2",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for notifications is 68 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 50 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns notifications and rotated its on-call lead this month."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The notifications backlog currently lists 5 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "notifications was the most-viewed dashboard at last week's review."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v0-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the notifications release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 5,
+      "service": "notifications",
+      "smoke_min": 50,
+      "team": "Growth",
+      "window_min": 68
+    },
+    "variant": 0
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 11 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 42 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v1-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "none",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 0,
+      "service": "billing",
+      "smoke_min": 42,
+      "team": "Growth",
+      "window_min": 11
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth team is trialling a new stand-up format."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 11 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 42 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v1-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 0,
+      "service": "billing",
+      "smoke_min": 42,
+      "team": "Growth",
+      "window_min": 11
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 11 minutes."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth team is trialling a new stand-up format."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 42 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v1-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 0,
+      "service": "billing",
+      "smoke_min": 42,
+      "team": "Growth",
+      "window_min": 11
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 11 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 42 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth team is trialling a new stand-up format."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v1-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 0,
+      "service": "billing",
+      "smoke_min": 42,
+      "team": "Growth",
+      "window_min": 11
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d4",
+      "d3",
+      "d1",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth team is trialling a new stand-up format."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns billing and rotated its on-call lead this month."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 11 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 42 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v1-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 0,
+      "service": "billing",
+      "smoke_min": 42,
+      "team": "Growth",
+      "window_min": 11
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d4",
+      "d3",
+      "d1",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 11 minutes."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth team is trialling a new stand-up format."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns billing and rotated its on-call lead this month."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 42 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v1-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 0,
+      "service": "billing",
+      "smoke_min": 42,
+      "team": "Growth",
+      "window_min": 11
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d4",
+      "d3",
+      "d1",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 11 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 42 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Growth team is trialling a new stand-up format."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Growth team owns billing and rotated its on-call lead this month."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v1-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 0,
+      "service": "billing",
+      "smoke_min": 42,
+      "team": "Growth",
+      "window_min": 11
+    },
+    "variant": 1
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 63 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 41 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v2-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "none",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 36,
+      "service": "billing",
+      "smoke_min": 41,
+      "team": "Payments",
+      "window_min": 63
+    },
+    "variant": 2
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 63 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 41 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v2-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 36,
+      "service": "billing",
+      "smoke_min": 41,
+      "team": "Payments",
+      "window_min": 63
+    },
+    "variant": 2
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 63 minutes."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 41 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v2-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 36,
+      "service": "billing",
+      "smoke_min": 41,
+      "team": "Payments",
+      "window_min": 63
+    },
+    "variant": 2
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 63 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 41 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v2-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 36,
+      "service": "billing",
+      "smoke_min": 41,
+      "team": "Payments",
+      "window_min": 63
+    },
+    "variant": 2
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d3",
+      "d5",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The billing backlog currently lists 36 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Payments team is trialling a new stand-up format."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 63 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 41 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v2-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 36,
+      "service": "billing",
+      "smoke_min": 41,
+      "team": "Payments",
+      "window_min": 63
+    },
+    "variant": 2
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d3",
+      "d5",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 63 minutes."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The billing backlog currently lists 36 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Payments team is trialling a new stand-up format."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 41 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v2-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 36,
+      "service": "billing",
+      "smoke_min": 41,
+      "team": "Payments",
+      "window_min": 63
+    },
+    "variant": 2
+  },
+  {
+    "answer": "deploy_now",
+    "distractor_ids": [
+      "d3",
+      "d5",
+      "d2",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for billing is 63 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 41 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "billing was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The billing backlog currently lists 36 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Payments team is trialling a new stand-up format."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v2-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the billing release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 36,
+      "service": "billing",
+      "smoke_min": 41,
+      "team": "Payments",
+      "window_min": 63
+    },
+    "variant": 2
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for checkout is 26 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 33 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v3-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "none",
+    "question": "Should the checkout release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 39,
+      "service": "checkout",
+      "smoke_min": 33,
+      "team": "Payments",
+      "window_min": 26
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Payments team owns checkout and rotated its on-call lead this month."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for checkout is 26 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 33 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v3-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the checkout release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 39,
+      "service": "checkout",
+      "smoke_min": 33,
+      "team": "Payments",
+      "window_min": 26
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for checkout is 26 minutes."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Payments team owns checkout and rotated its on-call lead this month."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 33 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v3-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the checkout release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 39,
+      "service": "checkout",
+      "smoke_min": 33,
+      "team": "Payments",
+      "window_min": 26
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for checkout is 26 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 33 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Payments team owns checkout and rotated its on-call lead this month."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v3-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the checkout release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 39,
+      "service": "checkout",
+      "smoke_min": 33,
+      "team": "Payments",
+      "window_min": 26
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d1",
+      "d2",
+      "d5",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Payments team owns checkout and rotated its on-call lead this month."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The checkout backlog currently lists 39 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "checkout was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for checkout is 26 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 33 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v3-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "early",
+    "question": "Should the checkout release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 39,
+      "service": "checkout",
+      "smoke_min": 33,
+      "team": "Payments",
+      "window_min": 26
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d1",
+      "d2",
+      "d5",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for checkout is 26 minutes."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Payments team owns checkout and rotated its on-call lead this month."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The checkout backlog currently lists 39 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "checkout was the most-viewed dashboard at last week's review."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 33 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v3-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "middle",
+    "question": "Should the checkout release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 39,
+      "service": "checkout",
+      "smoke_min": 33,
+      "team": "Payments",
+      "window_min": 26
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_deploy",
+    "distractor_ids": [
+      "d1",
+      "d2",
+      "d5",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The remaining change window for checkout is 26 minutes."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "A full smoke test plus rollback rehearsal takes 33 minutes."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Payments team owns checkout and rotated its on-call lead this month."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The checkout backlog currently lists 39 open bugs, none of them release blockers."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The release notes template was updated to use a new font."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "checkout was the most-viewed dashboard at last week's review."
+      }
+    ],
+    "item_id": "rel-002-deploy-window#v3-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "deploy_now",
+      "hold_deploy"
+    ],
+    "position": "late",
+    "question": "Should the checkout release go out now, or hold until the next window?",
+    "seed": 1,
+    "template_id": "rel-002-deploy-window",
+    "variables": {
+      "open_bugs": 39,
+      "service": "checkout",
+      "smoke_min": 33,
+      "team": "Payments",
+      "window_min": 26
+    },
+    "variant": 3
+  }
+]

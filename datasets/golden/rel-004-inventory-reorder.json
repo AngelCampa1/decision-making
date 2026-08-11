@@ -1,0 +1,1958 @@
+[
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "519 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 47 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v0-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "none",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 47,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 519,
+      "supplier": "Aldebaran",
+      "warehouse": "Utrecht"
+    },
+    "variant": 0
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "519 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 47 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v0-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 47,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 519,
+      "supplier": "Aldebaran",
+      "warehouse": "Utrecht"
+    },
+    "variant": 0
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "519 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 47 units per day."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v0-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 47,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 519,
+      "supplier": "Aldebaran",
+      "warehouse": "Utrecht"
+    },
+    "variant": 0
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "519 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 47 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v0-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 47,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 519,
+      "supplier": "Aldebaran",
+      "warehouse": "Utrecht"
+    },
+    "variant": 0
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d3",
+      "d2",
+      "d4",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran won a packaging design award last year."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-6135 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "519 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 47 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v0-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 47,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 519,
+      "supplier": "Aldebaran",
+      "warehouse": "Utrecht"
+    },
+    "variant": 0
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d3",
+      "d2",
+      "d4",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "519 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 47 units per day."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran won a packaging design award last year."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-6135 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v0-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 47,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 519,
+      "supplier": "Aldebaran",
+      "warehouse": "Utrecht"
+    },
+    "variant": 0
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d3",
+      "d2",
+      "d4",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "519 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 47 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran won a packaging design award last year."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-6135 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v0-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 47,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 519,
+      "supplier": "Aldebaran",
+      "warehouse": "Utrecht"
+    },
+    "variant": 0
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "809 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 30 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v1-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "none",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 30,
+      "lead_days": 5,
+      "sku": "SKU-6135",
+      "stock_units": 809,
+      "supplier": "Cygnus",
+      "warehouse": "Utrecht"
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "809 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 30 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v1-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 30,
+      "lead_days": 5,
+      "sku": "SKU-6135",
+      "stock_units": 809,
+      "supplier": "Cygnus",
+      "warehouse": "Utrecht"
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "809 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 30 units per day."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v1-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 30,
+      "lead_days": 5,
+      "sku": "SKU-6135",
+      "stock_units": 809,
+      "supplier": "Cygnus",
+      "warehouse": "Utrecht"
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "809 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 30 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v1-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 30,
+      "lead_days": 5,
+      "sku": "SKU-6135",
+      "stock_units": 809,
+      "supplier": "Cygnus",
+      "warehouse": "Utrecht"
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d3",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-6135 is stored in the Utrecht warehouse, which was reorganised in spring."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "809 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 30 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v1-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 30,
+      "lead_days": 5,
+      "sku": "SKU-6135",
+      "stock_units": 809,
+      "supplier": "Cygnus",
+      "warehouse": "Utrecht"
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d3",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "809 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 30 units per day."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-6135 is stored in the Utrecht warehouse, which was reorganised in spring."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v1-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 30,
+      "lead_days": 5,
+      "sku": "SKU-6135",
+      "stock_units": 809,
+      "supplier": "Cygnus",
+      "warehouse": "Utrecht"
+    },
+    "variant": 1
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d2",
+      "d5",
+      "d3",
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "809 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 30 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Utrecht site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-6135 is stored in the Utrecht warehouse, which was reorganised in spring."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v1-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 30,
+      "lead_days": 5,
+      "sku": "SKU-6135",
+      "stock_units": 809,
+      "supplier": "Cygnus",
+      "warehouse": "Utrecht"
+    },
+    "variant": 1
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "634 units of SKU-2290 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-2290 sells at a steady 50 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v2-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "none",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 50,
+      "lead_days": 17,
+      "sku": "SKU-2290",
+      "stock_units": 634,
+      "supplier": "Cygnus",
+      "warehouse": "Malmo"
+    },
+    "variant": 2
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "634 units of SKU-2290 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-2290 sells at a steady 50 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v2-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 50,
+      "lead_days": 17,
+      "sku": "SKU-2290",
+      "stock_units": 634,
+      "supplier": "Cygnus",
+      "warehouse": "Malmo"
+    },
+    "variant": 2
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "634 units of SKU-2290 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-2290 sells at a steady 50 units per day."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v2-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 50,
+      "lead_days": 17,
+      "sku": "SKU-2290",
+      "stock_units": 634,
+      "supplier": "Cygnus",
+      "warehouse": "Malmo"
+    },
+    "variant": 2
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d1"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "634 units of SKU-2290 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-2290 sells at a steady 50 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v2-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 50,
+      "lead_days": 17,
+      "sku": "SKU-2290",
+      "stock_units": 634,
+      "supplier": "Cygnus",
+      "warehouse": "Malmo"
+    },
+    "variant": 2
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d1",
+      "d2",
+      "d5",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-2290 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "634 units of SKU-2290 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-2290 sells at a steady 50 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v2-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 50,
+      "lead_days": 17,
+      "sku": "SKU-2290",
+      "stock_units": 634,
+      "supplier": "Cygnus",
+      "warehouse": "Malmo"
+    },
+    "variant": 2
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d1",
+      "d2",
+      "d5",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "634 units of SKU-2290 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-2290 sells at a steady 50 units per day."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-2290 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v2-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 50,
+      "lead_days": 17,
+      "sku": "SKU-2290",
+      "stock_units": 634,
+      "supplier": "Cygnus",
+      "warehouse": "Malmo"
+    },
+    "variant": 2
+  },
+  {
+    "answer": "reorder_now",
+    "distractor_ids": [
+      "d1",
+      "d2",
+      "d5",
+      "d4"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "634 units of SKU-2290 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-2290 sells at a steady 50 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Cygnus won a packaging design award last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-2290 has the shortest product description in the catalogue."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v2-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 50,
+      "lead_days": 17,
+      "sku": "SKU-2290",
+      "stock_units": 634,
+      "supplier": "Cygnus",
+      "warehouse": "Malmo"
+    },
+    "variant": 2
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "498 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 10 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v3-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "none",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 10,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 498,
+      "supplier": "Aldebaran",
+      "warehouse": "Malmo"
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "498 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 10 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v3-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 10,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 498,
+      "supplier": "Aldebaran",
+      "warehouse": "Malmo"
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "498 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 10 units per day."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v3-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 10,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 498,
+      "supplier": "Aldebaran",
+      "warehouse": "Malmo"
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "498 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 10 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v3-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 10,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 498,
+      "supplier": "Aldebaran",
+      "warehouse": "Malmo"
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d3",
+      "d5",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-6135 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran won a packaging design award last year."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "498 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 10 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v3-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "early",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 10,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 498,
+      "supplier": "Aldebaran",
+      "warehouse": "Malmo"
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d3",
+      "d5",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "498 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 10 units per day."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-6135 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran won a packaging design award last year."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v3-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "middle",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 10,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 498,
+      "supplier": "Aldebaran",
+      "warehouse": "Malmo"
+    },
+    "variant": 3
+  },
+  {
+    "answer": "hold_order",
+    "distractor_ids": [
+      "d3",
+      "d5",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "498 units of SKU-6135 remain in stock."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "SKU-6135 sells at a steady 10 units per day."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
+        "text": "Policy is to reorder whenever stock would run out before a new order could land."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The warehouse noticeboard was repainted in June."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-6135 has the shortest product description in the catalogue."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran won a packaging design award last year."
+      }
+    ],
+    "item_id": "rel-004-inventory-reorder#v3-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "reorder_now",
+      "hold_order"
+    ],
+    "position": "late",
+    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "seed": 1,
+    "template_id": "rel-004-inventory-reorder",
+    "variables": {
+      "daily_units": 10,
+      "lead_days": 27,
+      "sku": "SKU-6135",
+      "stock_units": 498,
+      "supplier": "Aldebaran",
+      "warehouse": "Malmo"
+    },
+    "variant": 3
+  }
+]

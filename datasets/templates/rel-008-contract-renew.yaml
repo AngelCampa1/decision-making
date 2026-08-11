@@ -1,0 +1,45 @@
+template_id: rel-008-contract-renew
+question: "Should the team renew the {tool} contract as offered, or renegotiate?"
+options: [renew, renegotiate]
+
+variables:
+  tool: {choice: [Beacon, Lantern, Compass, Quarry]}
+  seats_paid: {int: [20, 500]}
+  seats_used: {int: [10, 520]}
+  utilisation_floor: {int: [60, 95]}
+  buyer: {choice: [Procurement, Finance, Engineering]}
+  years: {int: [1, 9]}
+
+relevant_facts:
+  - id: r1
+    text: "The renewal quote covers {seats_paid} seats at the current rate."
+  - id: r2
+    text: "Usage reporting shows {seats_used} seats active in the last 90 days."
+  - id: r3
+    text: "Policy is to renegotiate whenever utilisation falls below {utilisation_floor}% of paid seats."
+
+distractor_facts:
+  - id: d1
+    strength: high
+    text: "{tool} has been in use for {years} years and is owned by {buyer}."
+  - id: d2
+    strength: high
+    text: "{tool} released a redesigned onboarding flow this spring."
+  - id: d3
+    strength: medium
+    text: "{buyer} moved to a new contract management system last year."
+  - id: d4
+    strength: medium
+    text: "{tool} is the only vendor in the stack with a purple logo."
+  - id: d5
+    strength: low
+    text: "The renewal calendar invite has no agenda attached."
+
+solution:
+  expr: "'renew' if seats_used * 100 >= seats_paid * utilisation_floor else 'renegotiate'"
+  load_bearing: [r1, r2, r3]
+
+strata:
+  distractors: [0, 1, 4]
+  position: [early, middle, late]
+variants: 4

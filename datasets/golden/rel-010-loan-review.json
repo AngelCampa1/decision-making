@@ -1,0 +1,1734 @@
+[
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 654."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 819."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v0-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "none",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Kingsway",
+      "score": 819,
+      "score_floor": 654,
+      "tenure_years": 3
+    },
+    "variant": 0
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 654."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 819."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v0-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Kingsway",
+      "score": 819,
+      "score_floor": 654,
+      "tenure_years": 3
+    },
+    "variant": 0
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 654."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 819."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v0-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Kingsway",
+      "score": 819,
+      "score_floor": 654,
+      "tenure_years": 3
+    },
+    "variant": 0
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 654."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 819."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v0-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Kingsway",
+      "score": 819,
+      "score_floor": 654,
+      "tenure_years": 3
+    },
+    "variant": 0
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5",
+      "d1",
+      "d3",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-5518 was submitted through the Kingsway branch."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Kingsway branch has the longest opening hours in the region."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 3 years."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 654."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 819."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v0-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Kingsway",
+      "score": 819,
+      "score_floor": 654,
+      "tenure_years": 3
+    },
+    "variant": 0
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5",
+      "d1",
+      "d3",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 654."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-5518 was submitted through the Kingsway branch."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Kingsway branch has the longest opening hours in the region."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 3 years."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 819."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v0-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Kingsway",
+      "score": 819,
+      "score_floor": 654,
+      "tenure_years": 3
+    },
+    "variant": 0
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5",
+      "d1",
+      "d3",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 654."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 819."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-5518 was submitted through the Kingsway branch."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Kingsway branch has the longest opening hours in the region."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 3 years."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v0-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Kingsway",
+      "score": 819,
+      "score_floor": 654,
+      "tenure_years": 3
+    },
+    "variant": 0
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 748."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 745."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v1-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "none",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Northgate",
+      "score": 745,
+      "score_floor": 748,
+      "tenure_years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 4 years."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 748."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 745."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v1-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Northgate",
+      "score": 745,
+      "score_floor": 748,
+      "tenure_years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 748."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 4 years."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 745."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v1-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Northgate",
+      "score": 745,
+      "score_floor": 748,
+      "tenure_years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 748."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 745."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 4 years."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v1-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Northgate",
+      "score": 745,
+      "score_floor": 748,
+      "tenure_years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2",
+      "d1",
+      "d5",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 4 years."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-2201 was submitted through the Northgate branch."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Northgate branch has the longest opening hours in the region."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 748."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 745."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v1-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Northgate",
+      "score": 745,
+      "score_floor": 748,
+      "tenure_years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2",
+      "d1",
+      "d5",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 748."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 4 years."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-2201 was submitted through the Northgate branch."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Northgate branch has the longest opening hours in the region."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 745."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v1-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Northgate",
+      "score": 745,
+      "score_floor": 748,
+      "tenure_years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2",
+      "d1",
+      "d5",
+      "d3"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 748."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 745."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 4 years."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-2201 was submitted through the Northgate branch."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Northgate branch has the longest opening hours in the region."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v1-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Northgate",
+      "score": 745,
+      "score_floor": 748,
+      "tenure_years": 4
+    },
+    "variant": 1
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 688."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 710."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v2-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "none",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Northgate",
+      "score": 710,
+      "score_floor": 688,
+      "tenure_years": 17
+    },
+    "variant": 2
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 688."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 710."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v2-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Northgate",
+      "score": 710,
+      "score_floor": 688,
+      "tenure_years": 17
+    },
+    "variant": 2
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 688."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 710."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v2-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Northgate",
+      "score": 710,
+      "score_floor": 688,
+      "tenure_years": 17
+    },
+    "variant": 2
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 688."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 710."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v2-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Northgate",
+      "score": 710,
+      "score_floor": 688,
+      "tenure_years": 17
+    },
+    "variant": 2
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5",
+      "d3",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Northgate branch has the longest opening hours in the region."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The application form was reformatted to two columns last year."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 17 years."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 688."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 710."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v2-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Northgate",
+      "score": 710,
+      "score_floor": 688,
+      "tenure_years": 17
+    },
+    "variant": 2
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5",
+      "d3",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 688."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Northgate branch has the longest opening hours in the region."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The application form was reformatted to two columns last year."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 17 years."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 710."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v2-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Northgate",
+      "score": 710,
+      "score_floor": 688,
+      "tenure_years": 17
+    },
+    "variant": 2
+  },
+  {
+    "answer": "auto_approve",
+    "distractor_ids": [
+      "d5",
+      "d3",
+      "d4",
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 688."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-5518 carries a credit score of 710."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Northgate branch has the longest opening hours in the region."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The application form was reformatted to two columns last year."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 17 years."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v2-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-5518 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-5518",
+      "branch": "Northgate",
+      "score": 710,
+      "score_floor": 688,
+      "tenure_years": 17
+    },
+    "variant": 2
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 753."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 638."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v3-d0-none",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 0,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "none",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Kingsway",
+      "score": 638,
+      "score_floor": 753,
+      "tenure_years": 14
+    },
+    "variant": 3
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 14 years."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 753."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 638."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v3-d1-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Kingsway",
+      "score": 638,
+      "score_floor": 753,
+      "tenure_years": 14
+    },
+    "variant": 3
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 753."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 14 years."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 638."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v3-d1-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Kingsway",
+      "score": 638,
+      "score_floor": 753,
+      "tenure_years": 14
+    },
+    "variant": 3
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 753."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 638."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 14 years."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v3-d1-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 1,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Kingsway",
+      "score": 638,
+      "score_floor": 753,
+      "tenure_years": 14
+    },
+    "variant": 3
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2",
+      "d1",
+      "d4",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 14 years."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-2201 was submitted through the Kingsway branch."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The application form was reformatted to two columns last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 753."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 638."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v3-d4-early",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "early",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Kingsway",
+      "score": 638,
+      "score_floor": 753,
+      "tenure_years": 14
+    },
+    "variant": 3
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2",
+      "d1",
+      "d4",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 753."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 14 years."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-2201 was submitted through the Kingsway branch."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The application form was reformatted to two columns last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 638."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v3-d4-middle",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "middle",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Kingsway",
+      "score": 638,
+      "score_floor": 753,
+      "tenure_years": 14
+    },
+    "variant": 3
+  },
+  {
+    "answer": "refer_to_manual",
+    "distractor_ids": [
+      "d2",
+      "d1",
+      "d4",
+      "d5"
+    ],
+    "facts": [
+      {
+        "id": "r1",
+        "role": "relevant",
+        "strength": null,
+        "text": "The automated approval threshold is a credit score of 753."
+      },
+      {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "Application L-2201 carries a credit score of 638."
+      },
+      {
+        "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "All supporting documents were submitted and verified."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The applicant has banked with the institution for 14 years."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Application L-2201 was submitted through the Kingsway branch."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The application form was reformatted to two columns last year."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The branch lobby has a new noticeboard."
+      }
+    ],
+    "item_id": "rel-010-loan-review#v3-d4-late",
+    "load_bearing": [
+      "r1",
+      "r2"
+    ],
+    "n_distractors": 4,
+    "options": [
+      "auto_approve",
+      "refer_to_manual"
+    ],
+    "position": "late",
+    "question": "Should application L-2201 be auto-approved, or referred for manual review?",
+    "seed": 1,
+    "template_id": "rel-010-loan-review",
+    "variables": {
+      "app_no": "L-2201",
+      "branch": "Kingsway",
+      "score": 638,
+      "score_floor": 753,
+      "tenure_years": 14
+    },
+    "variant": 3
+  }
+]
