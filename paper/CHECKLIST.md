@@ -49,10 +49,11 @@ claimed and what exists is visible at every commit.
 
 ## Data
 
-- [ ] Eval-set datasheet — `../docs/EVAL_SET_DATASHEET.md`
+- [x] Eval-set datasheet — [`../docs/EVAL_SET_DATASHEET.md`](../docs/EVAL_SET_DATASHEET.md)
 - [x] Ground truth computed from template rules, never authored
 - [ ] Template schema published in full
-- [ ] Distractor audit procedure and attrition rate reported
+- [ ] Distractor audit procedure and attrition rate reported — structural half
+      done (50/50 pass), semantic half pending local auditor models
 - [ ] Difficulty gates run on the control arm only, and stated as such
 - [ ] Public/screen split committed
 - [ ] Holdout seed published after the verdict
