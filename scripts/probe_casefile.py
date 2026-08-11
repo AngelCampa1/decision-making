@@ -84,6 +84,59 @@ FORMAT_CONTRACT: Final = (
     "  2. A7"
 )
 
+#: The menu-free contract. The first probe run scored 12/12 on avoiding
+#: prohibited actions, which cannot be read as forward reasoning while the
+#: candidate list spells the reasoning out -- "Defer the Year 3 amendment until
+#: after the Year 1 assessment window closes" is the insight, printed on the
+#: menu. AgentAtlas measured 14-40pp from menu presence alone with plain option
+#: labels; this menu carries far more than a label. Removing it is the only way
+#: to tell recognition from generation, and it is the difference between a
+#: publishable negative and an artefact.
+FORMAT_CONTRACT_FREE: Final = (
+    "Reason as much as you find useful, then end your reply with exactly these "
+    "five blocks in this order and nothing after them:\n"
+    "\n"
+    "CONDITIONS\n"
+    "  one line per condition, every condition listed, in the form\n"
+    "  C1: governs\n"
+    "  C2: does not govern\n"
+    "CONSEQUENCES\n"
+    "  free text -- for each step you recommend, what follows from it\n"
+    "EXPOSURE\n"
+    "  one word: negligible, low, moderate, high, or severe\n"
+    "MISSING\n"
+    "  the single fact that would most change your recommendation, or NONE\n"
+    "ACTIONS\n"
+    "  the steps you recommend, most urgent first, one per line, each a single\n"
+    "  short sentence naming a concrete step"
+)
+
+#: The bare contract: documents and a question, nothing else. The menu-free run
+#: still handed the model a numbered list of the conditions in play, so a 0.97
+#: condition recall measured *classification* of an extracted list, not
+#: discovery. Real use supplies neither the list nor the risk question. This mode
+#: removes the last of the scaffolding so the task is the one the skills are
+#: actually for.
+BARE_FRAMING: Final = (
+    "You are advising on a professional matter. You will be given a case file of "
+    "documents and a question. Work out what bears on the decision and what "
+    "should be done. There is no single correct set of steps -- there are "
+    "recommendations that hold up and recommendations that do not."
+)
+
+FORMAT_CONTRACT_BARE: Final = (
+    "Reason as much as you find useful, then end your reply with exactly these "
+    "three blocks in this order and nothing after them:\n"
+    "\n"
+    "CONSEQUENCES\n"
+    "  free text -- for each step you recommend, what follows from it\n"
+    "MISSING\n"
+    "  the single fact that would most change your recommendation, or NONE\n"
+    "ACTIONS\n"
+    "  the steps you recommend, most urgent first, one per line, each a single\n"
+    "  short sentence naming a concrete step"
+)
+
 _BLOCK_NAMES: Final = ("CONDITIONS", "CONSEQUENCES", "EXPOSURE", "MISSING", "ACTIONS")
 _BLOCK_HEADER: Final = re.compile(
     r"^[\s>*\-#]*(?:\*\*|__|`)?\s*(" + "|".join(_BLOCK_NAMES) + r")\s*(?:\*\*|__|`)?\s*:?\s*$",
@@ -234,6 +287,39 @@ def render(case: Casefile) -> str:
         f"CONDITIONS IN PLAY\n{conditions}\n\n"
         f"CANDIDATE ACTIONS\n{actions}\n\n"
         f"RISK QUESTION: {case.raw['exposure_question'].strip()}"
+    )
+
+
+def render_no_menu(case: Casefile) -> str:
+    """Render the same case file without the candidate action list.
+
+    Identical in every other respect, so the menu is the only thing that varies
+    between the two runs.
+    """
+    documents = "\n\n".join(
+        f"[{doc['id']}] {doc['title']}\n{doc['body'].rstrip()}" for doc in case.raw["documents"]
+    )
+    conditions = "\n".join(f"  {c['id'].upper()}. {c['text']}" for c in case.conditions)
+    return (
+        f"CASE FILE — {len(case.raw['documents'])} documents\n\n"
+        f"{documents}\n\n"
+        f"{'=' * 60}\n\n"
+        f"QUESTION: {case.raw['question'].strip()}\n\n"
+        f"CONDITIONS IN PLAY\n{conditions}\n\n"
+        f"RISK QUESTION: {case.raw['exposure_question'].strip()}"
+    )
+
+
+def render_bare(case: Casefile) -> str:
+    """Documents and the question. No condition list, no menu, no risk question."""
+    documents = "\n\n".join(
+        f"[{doc['id']}] {doc['title']}\n{doc['body'].rstrip()}" for doc in case.raw["documents"]
+    )
+    return (
+        f"CASE FILE — {len(case.raw['documents'])} documents\n\n"
+        f"{documents}\n\n"
+        f"{'=' * 60}\n\n"
+        f"QUESTION: {case.raw['question'].strip()}"
     )
 
 
@@ -407,6 +493,16 @@ def main() -> int:
     parser.add_argument(
         "--validate-only", action="store_true", help="check the answer key, spend nothing"
     )
+    parser.add_argument(
+        "--no-menu",
+        action="store_true",
+        help="withhold the candidate action list; recommendations are free text, read by hand",
+    )
+    parser.add_argument(
+        "--bare",
+        action="store_true",
+        help="documents and the question only: no condition list, no menu, no risk question",
+    )
     args = parser.parse_args()
 
     assert_model_allowed("screen", args.model)
@@ -429,17 +525,36 @@ def main() -> int:
         if not cases:
             raise SystemExit(f"no casefile with id {args.case!r}")
 
+    if args.bare:
+        checkpoint = CHECKPOINT.with_name("casefile-probe-bare.jsonl")
+    elif args.no_menu:
+        checkpoint = CHECKPOINT.with_name("casefile-probe-nomenu.jsonl")
+    else:
+        checkpoint = CHECKPOINT
+    hand_read = args.bare or args.no_menu
+
     if not args.report_only:
-        CHECKPOINT.parent.mkdir(parents=True, exist_ok=True)
-        done = completed(CHECKPOINT)
+        checkpoint.parent.mkdir(parents=True, exist_ok=True)
+        done = completed(checkpoint)
         ledger = BudgetLedger(limit_usd=args.budget)
-        system_prompt = f"{BASE_FRAMING}\n\n{FORMAT_CONTRACT}"
+        if args.bare:
+            framing, contract = BARE_FRAMING, FORMAT_CONTRACT_BARE
+        elif args.no_menu:
+            framing = BASE_FRAMING.replace(
+                "and a list of candidate actions identified by reference. ", ""
+            ).replace(
+                "Some candidate actions are wrong to take. ", "Some steps are wrong to take. "
+            )
+            contract = FORMAT_CONTRACT_FREE
+        else:
+            framing, contract = BASE_FRAMING, FORMAT_CONTRACT
+        system_prompt = f"{framing}\n\n{contract}"
 
         with tempfile.TemporaryDirectory(prefix="de-probe-") as scratch:
             print(f"preflight against {args.model} ...", flush=True)
             cli_preflight(model=args.model, cwd=scratch)
 
-            with CHECKPOINT.open("a", encoding="utf-8") as handle:
+            with checkpoint.open("a", encoding="utf-8") as handle:
                 for case in cases:
                     if case.case_id in done:
                         continue
@@ -450,7 +565,11 @@ def main() -> int:
                         break
                     try:
                         result = cli_run(
-                            render(case),
+                            render_bare(case)
+                            if args.bare
+                            else render_no_menu(case)
+                            if args.no_menu
+                            else render(case),
                             system_prompt=system_prompt,
                             model=args.model,
                             cwd=scratch,
@@ -473,13 +592,28 @@ def main() -> int:
                         + "\n"
                     )
                     handle.flush()
-                    flag = "ok " if scored.admissible else "FAIL"
-                    print(
-                        f"  {flag} {case.case_id}  order {scored.trap_order}  "
-                        f"trap_hit={scored.trap_hit}  exposure={scored.exposure_said}",
-                        flush=True,
-                    )
+                    if hand_read:
+                        # Action identifiers do not exist in these modes, so every
+                        # automatic field except exposure is meaningless. Say so
+                        # rather than print a scoreboard that reads as a result.
+                        print(
+                            f"  recorded {case.case_id}  order {scored.trap_order}  "
+                            f"exposure={scored.exposure_said}",
+                            flush=True,
+                        )
+                    else:
+                        flag = "ok " if scored.admissible else "FAIL"
+                        print(
+                            f"  {flag} {case.case_id}  order {scored.trap_order}  "
+                            f"trap_hit={scored.trap_hit}  exposure={scored.exposure_said}",
+                            flush=True,
+                        )
 
+    if hand_read:
+        mode = "bare" if args.bare else "no-menu"
+        print(f"\n{mode} run complete -> {checkpoint}")
+        print("Recommendations are free text. They are read by hand; there is no gate here.")
+        return 0
     return report()
 
 
