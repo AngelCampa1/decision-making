@@ -42,3 +42,13 @@ paper/main.pdf
 # OS
 Thumbs.db
 .DS_Store
+
+# Live run checkpoints. These are append-only working files that a run writes
+# while it executes, so committing one mid-run is both meaningless and, on
+# Windows, impossible while the writer holds it.
+#
+# Reported runs are published deliberately as results/<skill>/<date>-<sha7>/
+# once complete, transcripts included. The calibration checkpoint is a
+# pre-registration gate rather than a reported result; its outcome is recorded
+# in notebook/.
+results/calibration/

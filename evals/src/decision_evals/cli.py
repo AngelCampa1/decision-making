@@ -195,9 +195,22 @@ def lint_skills_step() -> StepResult:
         typer.echo("skills/ is empty; nothing to validate")
         return StepResult(name, True, "no skills")
 
-    # The full validator (frontmatter schema, evidence coverage, claim coverage,
-    # pre-registration hash integrity) arrives with the first skill.
-    typer.echo(f"found {len(skill_files)} skill(s)")
+    from decision_evals.skills import validate_all
+
+    # Source skills may carry UNTESTED -- that is the normal state during
+    # development. The plugin directory is what ships, so the evidence rule
+    # applies there.
+    issues = validate_all(skills_dir)
+    plugin_skills = REPO_ROOT / "plugin" / "skills"
+    if plugin_skills.is_dir():
+        issues += validate_all(plugin_skills, shipped=True)
+
+    for issue in issues:
+        typer.echo(f"  {issue}")
+    if issues:
+        return StepResult(name, False, f"{len(issues)} issue(s)")
+
+    typer.echo(f"{len(skill_files)} skill(s) valid")
     return StepResult(name, True)
 
 

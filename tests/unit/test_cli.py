@@ -81,13 +81,24 @@ class TestSkillLint:
         assert result.passed
         assert result.detail == "no skills"
 
-    def test_counts_discovered_skills(
+    def test_an_incomplete_skill_fails_the_gate(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
     ) -> None:
+        """Was written against the stub validator, which passed anything.
+
+        Now that the validator is real, a skill with nothing but a name is
+        exactly what the gate exists to stop.
+        """
         skill = tmp_path / "skills" / "evidence-ledger"
         skill.mkdir(parents=True)
         (skill / "SKILL.md").write_text("---\nname: evidence-ledger\n---\n", encoding="utf-8")
         monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = lint_skills_step()
+        assert not result.passed
+        assert "issue(s)" in (result.detail or "")
+
+    def test_the_real_skills_directory_passes(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """No monkeypatching: the shipped skills must satisfy the shipped gate."""
         assert lint_skills_step().passed
 
 

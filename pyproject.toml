@@ -158,6 +158,9 @@ output = "coverage.json"
 # The three fairness invariants live here: format contract in every arm, option
 # menu held constant, placebo matched. Each fails silently if it regresses.
 "decision_evals/solvers" = { line = 100.0, branch = 100.0 }
+# Resumability: a checkpoint that silently re-runs or silently skips corrupts
+# the result rather than merely wasting time.
+"decision_evals/runner.py" = { line = 100.0, branch = 100.0 }
 # Parse paths and failure paths must both be exercised.
 "decision_evals/scorers" = { line = 95.0, branch = 90.0 }
 "decision_evals/plugin" = { line = 95.0, branch = 90.0 }
