@@ -14,10 +14,13 @@ from decision_evals.skills import (
     VERDICTS,
     check_mirrors,
     mirror_plan,
+    orphaned_promotions,
     parse_skill,
+    promotable,
     sync_mirrors,
     validate_all,
     validate_skill,
+    verdict_of,
 )
 
 BODY = "\n# Title\n\n## Abort if\nSkip when small.\n\n## Step\n" + ("word " * 60)
@@ -307,3 +310,119 @@ def test_sync_repairs_a_stale_mirror(tmp_path: Path) -> None:
     (repo / "CLAUDE.md").write_text("tampered", encoding="utf-8")
     assert sync_mirrors(repo) == [repo / "CLAUDE.md"]
     assert check_mirrors(repo) == []
+
+
+# -- promotion --------------------------------------------------------------
+
+
+def _promote(repo: Path, verdict: str, *, name: str = "demo-skill") -> Path:
+    """Rewrite a source skill's verdict, as a confirmation run would."""
+    front = _frontmatter(
+        name=name,
+        metadata={"verdict": verdict, "claims": [{"id": "c1", "text": "t"}]},
+    )
+    _write(repo / "skills", name=name, front=front)
+    return repo
+
+
+def test_an_untested_skill_is_not_promotable(tmp_path: Path) -> None:
+    """The gate. Nothing reaches the plugin on good intentions."""
+    assert promotable(_repo(tmp_path) / "skills") == []
+
+
+@pytest.mark.parametrize("verdict", sorted(VERDICTS - {"UNTESTED"}))
+def test_any_recorded_verdict_makes_a_skill_promotable(tmp_path: Path, verdict: str) -> None:
+    """Including HARMFUL: shipping it off-by-default with its evidence is the point."""
+    repo = _promote(_repo(tmp_path), verdict)
+    assert [path.name for path in promotable(repo / "skills")] == ["demo-skill"]
+
+
+def test_a_skill_with_unreadable_metadata_is_not_promotable(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    _write(repo / "skills", name="demo-skill", front=_frontmatter(metadata="none"))
+    assert promotable(repo / "skills") == []
+
+
+def test_verdict_of_a_directory_without_a_skill_file(tmp_path: Path) -> None:
+    assert verdict_of(tmp_path / "absent") is None
+
+
+def test_promotable_on_a_missing_skills_root(tmp_path: Path) -> None:
+    assert promotable(tmp_path / "nothing") == []
+
+
+def test_an_untested_skill_never_reaches_the_plugin(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    sync_mirrors(repo)
+    assert not (repo / "plugin" / "skills" / "demo-skill").exists()
+    assert check_mirrors(repo) == []
+
+
+def test_promotion_copies_the_whole_skill_directory(tmp_path: Path) -> None:
+    """Everything travels, not just SKILL.md.
+
+    The placebo, because evidence includes what the skill was tested against;
+    and nested `references/` or `scripts/`, because a skill that loses them on
+    promotion ships broken to every installer while validating locally.
+    """
+    repo = _promote(_repo(tmp_path), "SHIP")
+    nested = repo / "skills" / "demo-skill" / "references"
+    nested.mkdir()
+    (nested / "worked-example.md").write_text("example", encoding="utf-8")
+
+    sync_mirrors(repo)
+    promoted = repo / "plugin" / "skills" / "demo-skill"
+    assert (promoted / "SKILL.md").exists()
+    assert (promoted / "placebo.md").exists()
+    assert (promoted / "references" / "worked-example.md").read_text(encoding="utf-8") == "example"
+    assert check_mirrors(repo) == []
+
+
+def test_a_promoted_skill_that_is_demoted_is_reported(tmp_path: Path) -> None:
+    """The failure the evidence rule exists to prevent, and the one mirror_plan misses.
+
+    A demoted skill contributes no source/mirror pairs at all, so a staleness
+    check sees nothing wrong while the plugin keeps shipping a withdrawn badge.
+    """
+    repo = _promote(_repo(tmp_path), "SHIP")
+    sync_mirrors(repo)
+    _promote(repo, "UNTESTED")
+    issues = check_mirrors(repo)
+    assert any("promoted but its source now records UNTESTED" in str(i) for i in issues)
+
+
+def test_sync_withdraws_a_demoted_skill(tmp_path: Path) -> None:
+    repo = _promote(_repo(tmp_path), "SHIP")
+    sync_mirrors(repo)
+    _promote(repo, "UNTESTED")
+    assert repo / "plugin" / "skills" / "demo-skill" in sync_mirrors(repo)
+    assert not (repo / "plugin" / "skills" / "demo-skill").exists()
+    assert check_mirrors(repo) == []
+
+
+def test_a_plugin_skill_with_no_source_at_all_is_reported(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    (repo / "plugin" / "skills" / "ghost").mkdir(parents=True)
+    assert any("no source skill" in str(i) for i in check_mirrors(repo))
+
+
+def test_a_file_beside_the_promotions_is_not_an_orphan(tmp_path: Path) -> None:
+    """`plugin/skills/README.md` explains the empty directory; it is not a skill."""
+    repo = _repo(tmp_path)
+    plugin_skills = repo / "plugin" / "skills"
+    plugin_skills.mkdir(parents=True)
+    (plugin_skills / "README.md").write_text("why this is empty", encoding="utf-8")
+    assert orphaned_promotions(repo) == []
+
+
+def test_orphan_detection_without_a_plugin_directory(tmp_path: Path) -> None:
+    assert orphaned_promotions(tmp_path) == []
+
+
+# -- the real repository ----------------------------------------------------
+
+
+def test_the_shipped_plugin_promotes_nothing_yet() -> None:
+    """Guards the README badge. `proven: 0` has to mean the directory is empty."""
+    assert promotable(REPO_ROOT / "skills") == []
+    assert orphaned_promotions(REPO_ROOT) == []

@@ -24,6 +24,7 @@ unvalidated prompt library.
 
 from __future__ import annotations
 
+import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Final
@@ -259,6 +260,37 @@ def validate_all(skills_root: Path, *, shipped: bool = False) -> list[SkillIssue
 # ---------------------------------------------------------------------------
 
 
+def verdict_of(skill_dir: Path) -> str | None:
+    """The verdict recorded in a skill's frontmatter, or None if unreadable."""
+    path = skill_dir / "SKILL.md"
+    if not path.is_file():
+        return None
+    metadata = parse_skill(path).frontmatter.get("metadata")
+    if not isinstance(metadata, dict):
+        return None
+    recorded = metadata.get("verdict")
+    return recorded if isinstance(recorded, str) and recorded in VERDICTS else None
+
+
+def promotable(skills_root: Path) -> list[Path]:
+    """Skill directories whose recorded verdict permits shipping.
+
+    The promotion gate, and the reason it is a gate rather than a lint: an
+    UNTESTED skill is never copied into the plugin in the first place, so the
+    "no unproven skill ships" rule cannot be violated by forgetting to run a
+    check. Demotion works the same way in reverse -- a skill whose verdict
+    reverts stops being promotable, and the copy it left behind is reported as
+    an orphan rather than quietly continuing to ship.
+    """
+    if not skills_root.is_dir():
+        return []
+    return [
+        path.parent
+        for path in sorted(skills_root.glob("*/SKILL.md"))
+        if (verdict_of(path.parent) or "UNTESTED") != "UNTESTED"
+    ]
+
+
 def mirror_plan(repo_root: Path) -> list[tuple[Path, Path]]:
     """Every (source, mirror) pair that must hold identical bytes."""
     pairs: list[tuple[Path, Path]] = []
@@ -273,11 +305,42 @@ def mirror_plan(repo_root: Path) -> list[tuple[Path, Path]]:
             if source.is_file():
                 relative = source.relative_to(skills_root)
                 pairs.append((source, repo_root / ".agents" / "skills" / relative))
+
+    for skill_dir in promotable(skills_root):
+        for source in sorted(skill_dir.rglob("*")):
+            if source.is_file():
+                relative = source.relative_to(skills_root)
+                pairs.append((source, repo_root / "plugin" / "skills" / relative))
     return pairs
 
 
+def orphaned_promotions(repo_root: Path) -> list[Path]:
+    """Plugin skill directories with no promotable source behind them.
+
+    Left unchecked this is the failure the whole evidence rule exists to
+    prevent: a skill that was promoted on a verdict, then demoted when a
+    replication came back worse, still sitting in the shipped directory with a
+    badge it no longer earns. ``mirror_plan`` cannot catch it, because a
+    demoted skill contributes no pairs at all.
+    """
+    plugin_skills = repo_root / "plugin" / "skills"
+    if not plugin_skills.is_dir():
+        return []
+    promoted = {path.name for path in promotable(repo_root / "skills")}
+    return [
+        path
+        for path in sorted(plugin_skills.iterdir())
+        if path.is_dir() and path.name not in promoted
+    ]
+
+
 def sync_mirrors(repo_root: Path) -> list[Path]:
-    """Write every mirror from its source. Returns the paths that changed."""
+    """Write every mirror from its source, and prune demoted promotions.
+
+    Returns the paths that changed. ``plugin/skills/`` is a generated directory
+    in its entirety, so removing a demoted skill from it is a regeneration
+    rather than a deletion of anything authored.
+    """
     changed: list[Path] = []
     for source, mirror in mirror_plan(repo_root):
         content = source.read_bytes()
@@ -286,6 +349,10 @@ def sync_mirrors(repo_root: Path) -> list[Path]:
         mirror.parent.mkdir(parents=True, exist_ok=True)
         mirror.write_bytes(content)
         changed.append(mirror)
+
+    for orphan in orphaned_promotions(repo_root):
+        shutil.rmtree(orphan)
+        changed.append(orphan)
     return changed
 
 
@@ -304,4 +371,14 @@ def check_mirrors(repo_root: Path) -> list[SkillIssue]:
             issues.append(SkillIssue("mirror", f"{label} is missing; run `de mirror`"))
         elif mirror.read_bytes() != source.read_bytes():
             issues.append(SkillIssue("mirror", f"{label} is stale; run `de mirror`"))
+
+    for orphan in orphaned_promotions(repo_root):
+        recorded = verdict_of(repo_root / "skills" / orphan.name) or "no source skill"
+        issues.append(
+            SkillIssue(
+                "mirror",
+                f"plugin/skills/{orphan.name} is promoted but its source now records "
+                f"{recorded}; run `de mirror` to withdraw it",
+            )
+        )
     return issues

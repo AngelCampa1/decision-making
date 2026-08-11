@@ -13,7 +13,14 @@ import pytest
 from typer.testing import CliRunner
 
 from decision_evals import cli
-from decision_evals.cli import StepResult, _summarise, app, check_git_identity, lint_skills_step
+from decision_evals.cli import (
+    StepResult,
+    _summarise,
+    app,
+    check_git_identity,
+    lint_skills_step,
+    validate_manifests_step,
+)
 
 runner = CliRunner()
 
@@ -102,6 +109,41 @@ class TestSkillLint:
         assert lint_skills_step().passed
 
 
+class TestManifestValidation:
+    """Cheap because it reads two JSON files — no model call, no network."""
+
+    def test_reports_no_manifests(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = validate_manifests_step()
+        assert result.passed
+        assert result.detail == "no manifests"
+
+    def test_reports_a_missing_claude_cli(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """Fails rather than skips: an unvalidated manifest is what installers hit."""
+        (tmp_path / ".claude-plugin").mkdir()
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        monkeypatch.setattr(cli.shutil, "which", lambda _: None)
+        result = validate_manifests_step()
+        assert not result.passed
+        assert "not on PATH" in result.detail
+
+    def test_a_rejected_manifest_fails_the_gate(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        (tmp_path / ".claude-plugin").mkdir()
+        (tmp_path / ".claude-plugin" / "marketplace.json").write_text("{}", encoding="utf-8")
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = validate_manifests_step()
+        assert not result.passed
+        assert "rejected" in (result.detail or "")
+
+    def test_the_real_manifests_validate(self) -> None:
+        """No monkeypatching. Shells out to the real `claude plugin validate`."""
+        assert validate_manifests_step().passed
+
+
 class TestSummary:
     def test_returns_zero_when_everything_passes(self) -> None:
         assert _summarise([StepResult("a", True), StepResult("b", True)]) == 0
@@ -113,6 +155,12 @@ class TestSummary:
 class TestCommands:
     def test_lint_command_exits_cleanly(self) -> None:
         assert runner.invoke(app, ["lint"]).exit_code == 0
+
+    def test_mirror_command_is_a_no_op_on_a_synced_tree(self) -> None:
+        """If this writes anything, a mirror was committed stale."""
+        result = runner.invoke(app, ["mirror"])
+        assert result.exit_code == 0
+        assert "0 mirror(s) updated" in result.stdout
 
     def test_help_lists_the_gate_commands(self) -> None:
         result = runner.invoke(app, ["--help"])

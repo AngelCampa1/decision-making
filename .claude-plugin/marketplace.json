@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "angelcampa1-decision-making",
+  "owner": {
+    "name": "Angel Campa",
+    "url": "https://github.com/AngelCampa1"
+  },
+  "metadata": {
+    "description": "Decision skills for agents, published with the evidence that earned them a verdict.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "decision-making",
+      "source": "./plugin",
+      "description": "Decision skills for agents, each shipped with the evidence for or against it. Skills appear here only after a confirmation run assigns them a verdict.",
+      "category": "productivity",
+      "license": "Apache-2.0"
+    }
+  ]
+}

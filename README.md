@@ -30,6 +30,7 @@ for building the feedback loop that tells you *which* ones help, and by how much
 | Component | Purpose |
 | --- | --- |
 | `skills/` | The skills, authored to the [Agent Skills](https://agentskills.io) 6-field standard so they work in Claude Code, Codex, Cursor, Copilot, Gemini CLI, Cline, Amp and OpenCode without conversion |
+| `plugin/` | The Claude Code plugin. A skill is copied here only once a confirmation run gives it a verdict, so the directory is currently empty on purpose |
 | `evals/` | `decision_evals` — the harness. Paired experiments, exact tests, cluster-aware resampling |
 | `datasets/` | Parameterised scenario templates with *computed* ground truth |
 | `preregistration/` | Hypotheses, committed and hash-locked before the run |

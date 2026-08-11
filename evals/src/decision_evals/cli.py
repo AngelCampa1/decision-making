@@ -145,6 +145,7 @@ def check(
         _run("ruff format", [python, "-m", "ruff", "format", "--check", "."]),
         _run("mypy", [python, "-m", "mypy"]),
         lint_skills_step(),
+        validate_manifests_step(),
     ]
 
     if not fast:
@@ -212,6 +213,41 @@ def lint_skills_step() -> StepResult:
         return StepResult(name, False, f"{len(issues)} issue(s)")
 
     typer.echo(f"{len(skill_files)} skill(s) valid")
+    return StepResult(name, True)
+
+
+def validate_manifests_step() -> StepResult:
+    """Validate the plugin and marketplace manifests against Claude Code's schema.
+
+    Makes no model calls -- it reads two JSON files. Run under ``--strict`` so
+    an unrecognised field fails here rather than being tolerated locally and
+    rejected by whoever installs it.
+    """
+    name = "plugin manifests"
+    _echo_header(name)
+
+    targets = [
+        path for path in (REPO_ROOT / "plugin", REPO_ROOT) if (path / ".claude-plugin").is_dir()
+    ]
+    if not targets:
+        typer.echo("no .claude-plugin/ manifests yet; nothing to validate")
+        return StepResult(name, True, "no manifests")
+
+    if shutil.which("claude") is None:
+        return StepResult(name, False, "the `claude` CLI is not on PATH")
+
+    failed = [
+        target
+        for target in targets
+        if subprocess.run(
+            ["claude", "plugin", "validate", str(target), "--strict"],
+            cwd=REPO_ROOT,
+            check=False,
+        ).returncode
+        != 0
+    ]
+    if failed:
+        return StepResult(name, False, f"{len(failed)} manifest(s) rejected")
     return StepResult(name, True)
 
 
