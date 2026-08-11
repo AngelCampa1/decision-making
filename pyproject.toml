@@ -155,6 +155,9 @@ output = "coverage.json"
 # A generator bug silently changes the benchmark rather than failing loudly.
 "decision_evals/providers" = { line = 100.0, branch = 100.0 }
 "decision_evals/generators" = { line = 98.0, branch = 95.0 }
+# The three fairness invariants live here: format contract in every arm, option
+# menu held constant, placebo matched. Each fails silently if it regresses.
+"decision_evals/solvers" = { line = 100.0, branch = 100.0 }
 # Parse paths and failure paths must both be exercised.
 "decision_evals/scorers" = { line = 95.0, branch = 90.0 }
 "decision_evals/plugin" = { line = 95.0, branch = 90.0 }
