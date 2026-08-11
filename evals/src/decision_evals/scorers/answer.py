@@ -31,13 +31,27 @@ from decision_evals.generators.generate import Item
 
 ParseStatus = Literal["parsed", "no_answer_line", "unlisted_option", "ambiguous"]
 
-#: Why an item scored zero. The first three are assigned automatically; the last
-#: two require a human reading the trace, and exist so that "we did not look" is
+#: Why an item scored zero. The first three are assigned automatically; the rest
+#: require a human reading the trace, and exist so that "we did not look" is
 #: distinguishable from "we looked and it was the model".
+#:
+#: ``agent_wrong`` is therefore **provisional until a trace is read**. On the
+#: first full control run all fifteen zeros were automatically labelled
+#: ``agent_wrong`` and all fifteen turned out to be ``item_defect`` -- the
+#: model's answer was defensible and the ground truth was not. Treating the
+#: automatic label as a finding would have reported a 5% agent error rate that
+#: did not exist.
+#:
+#: ``item_defect`` is separate from ``verifier_defect`` on purpose. Harbor's
+#: ontology assumes fixed tasks and folds both into the verifier, but here the
+#: parser and the comparison were correct and the *item* was wrong, and the two
+#: have completely different fixes: one is a code change, the other is a
+#: template change and a re-blessed golden.
 ZeroCause = Literal[
     "agent_wrong",
     "format_violation",
     "infrastructure",
+    "item_defect",
     "verifier_defect",
     "environment_leak",
 ]

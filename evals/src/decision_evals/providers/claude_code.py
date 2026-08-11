@@ -198,14 +198,33 @@ def run(
     )
     # Fixed argv, no shell: `command` is assembled by build_command, never
     # interpolated from item text.
+    #
+    # `encoding` is explicit and not optional. `text=True` alone decodes with
+    # the locale codec, which on Windows is cp1252: the first curly quote or
+    # dash the model emits raises UnicodeDecodeError *inside subprocess's reader
+    # thread*, where it cannot propagate. `subprocess.run` then returns normally
+    # with `stdout` set to None, and the failure surfaces several frames away as
+    # a TypeError about NoneType. It took 280 clean items before one response
+    # contained a byte cp1252 could not decode.
+    #
+    # `errors="replace"` on top: a run that has already spent its quota should
+    # not be lost to one undecodable byte, and a mangled character in a response
+    # is visible in the record while a dead run is not.
     completed = subprocess.run(
         command,
         cwd=cwd,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         timeout=timeout,
         check=False,
     )
+    if completed.stdout is None:
+        raise CliError(
+            f"CLI produced no stdout (exit {completed.returncode}); "
+            f"stderr {(completed.stderr or '')[:200]!r}"
+        )
     try:
         payload = json.loads(completed.stdout)
     except json.JSONDecodeError as exc:

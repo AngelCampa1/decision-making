@@ -241,3 +241,45 @@ def test_preflight_returns_the_result_when_the_credential_works(
         subprocess, "run", lambda *a, **k: _Completed(json.dumps(_payload(result="ready")))
     )
     assert cc.preflight(model="haiku", cwd="/scratch").text == "ready"
+
+
+def test_the_subprocess_decodes_as_utf8_rather_than_the_locale_codec(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The bug that killed a run after 280 clean items.
+
+    ``text=True`` alone decodes with the locale codec, which on Windows is
+    cp1252. The first curly quote the model emitted raised UnicodeDecodeError
+    inside subprocess's reader thread, where it could not propagate; ``run``
+    returned normally with ``stdout`` set to None and the failure surfaced
+    several frames away as a TypeError about NoneType.
+    """
+    seen: dict[str, Any] = {}
+
+    def fake_run(command: list[str], **kwargs: Any) -> _Completed:
+        seen.update(kwargs)
+        return _Completed(json.dumps(_payload()))
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    cc.run("q", system_prompt="s", model="haiku", cwd=".")
+
+    assert seen["encoding"] == "utf-8"
+    assert seen["errors"] == "replace"
+
+
+def test_a_response_with_non_ascii_content_survives_the_round_trip(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    payload = _payload()
+    payload["result"] = "The window — 12 hours — “exceeds” the threshold."
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: _Completed(json.dumps(payload)))
+    assert "—" in cc.run("q", system_prompt="s", model="haiku", cwd=".").text
+
+
+def test_stdout_of_none_is_reported_rather_than_crashing_downstream(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Belt and braces: if a decode ever fails again, it fails here and says so."""
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: _Completed(None, "boom", 1))  # type: ignore[arg-type]
+    with pytest.raises(cc.CliError, match="produced no stdout"):
+        cc.run("q", system_prompt="s", model="haiku", cwd=".")
