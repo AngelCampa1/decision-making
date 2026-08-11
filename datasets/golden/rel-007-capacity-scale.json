@@ -7,19 +7,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The cache tier currently sustains 1055 requests per second."
+        "text": "The web tier currently sustains 1495 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1062 requests per second."
+        "text": "The campaign is forecast to peak at 2103 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 17% headroom above forecast peak."
+        "text": "Standing policy requires 10% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v0-d0-none",
@@ -34,48 +34,50 @@
       "keep_current"
     ],
     "position": "none",
-    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 1055,
-      "cost_per_node": 812,
-      "expected_rps": 1062,
-      "headroom_pct": 17,
-      "tier": "cache",
-      "vendor": "Helios"
+      "capacity_rps": 1495,
+      "cost_per_node": 109,
+      "expected_rps": 2103,
+      "headroom_pct": 10,
+      "last_rps": 492,
+      "tested_rps": 2325,
+      "tier": "web",
+      "vendor": "Vega"
     },
     "variant": 0
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The cache tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the web tier to 2325 requests per second on hardware that does not match production."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The cache tier currently sustains 1055 requests per second."
+        "text": "The web tier currently sustains 1495 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1062 requests per second."
+        "text": "The campaign is forecast to peak at 2103 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 17% headroom above forecast peak."
+        "text": "Standing policy requires 10% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v0-d1-early",
@@ -90,48 +92,50 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 1055,
-      "cost_per_node": 812,
-      "expected_rps": 1062,
-      "headroom_pct": 17,
-      "tier": "cache",
-      "vendor": "Helios"
+      "capacity_rps": 1495,
+      "cost_per_node": 109,
+      "expected_rps": 2103,
+      "headroom_pct": 10,
+      "last_rps": 492,
+      "tested_rps": 2325,
+      "tier": "web",
+      "vendor": "Vega"
     },
     "variant": 0
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The cache tier currently sustains 1055 requests per second."
+        "text": "The web tier currently sustains 1495 requests per second."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The cache tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the web tier to 2325 requests per second on hardware that does not match production."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1062 requests per second."
+        "text": "The campaign is forecast to peak at 2103 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 17% headroom above forecast peak."
+        "text": "Standing policy requires 10% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v0-d1-middle",
@@ -146,48 +150,50 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 1055,
-      "cost_per_node": 812,
-      "expected_rps": 1062,
-      "headroom_pct": 17,
-      "tier": "cache",
-      "vendor": "Helios"
+      "capacity_rps": 1495,
+      "cost_per_node": 109,
+      "expected_rps": 2103,
+      "headroom_pct": 10,
+      "last_rps": 492,
+      "tested_rps": 2325,
+      "tier": "web",
+      "vendor": "Vega"
     },
     "variant": 0
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The cache tier currently sustains 1055 requests per second."
+        "text": "The web tier currently sustains 1495 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1062 requests per second."
+        "text": "The campaign is forecast to peak at 2103 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 17% headroom above forecast peak."
+        "text": "Standing policy requires 10% headroom above forecast peak."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The cache tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the web tier to 2325 requests per second on hardware that does not match production."
       }
     ],
     "item_id": "rel-007-capacity-scale#v0-d1-late",
@@ -202,69 +208,71 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 1055,
-      "cost_per_node": 812,
-      "expected_rps": 1062,
-      "headroom_pct": 17,
-      "tier": "cache",
-      "vendor": "Helios"
+      "capacity_rps": 1495,
+      "cost_per_node": 109,
+      "expected_rps": 2103,
+      "headroom_pct": 10,
+      "last_rps": 492,
+      "tested_rps": 2325,
+      "tier": "web",
+      "vendor": "Vega"
     },
     "variant": 0
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d3",
-      "d2",
       "d1",
-      "d4"
+      "d2",
+      "d4",
+      "d3"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The cache tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the web tier to 2325 requests per second on hardware that does not match production."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Helios announced a new availability zone last month."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Each additional cache node costs 812 per month with Helios."
+        "text": "Last year's equivalent campaign peaked at 492 requests per second."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Helios's billing portal now supports single sign-on."
+        "text": "Vega's billing portal now supports single sign-on."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The web tier has the oldest Terraform module in the repository."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The cache tier currently sustains 1055 requests per second."
+        "text": "The web tier currently sustains 1495 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1062 requests per second."
+        "text": "The campaign is forecast to peak at 2103 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 17% headroom above forecast peak."
+        "text": "Standing policy requires 10% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v0-d4-early",
@@ -279,69 +287,71 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 1055,
-      "cost_per_node": 812,
-      "expected_rps": 1062,
-      "headroom_pct": 17,
-      "tier": "cache",
-      "vendor": "Helios"
+      "capacity_rps": 1495,
+      "cost_per_node": 109,
+      "expected_rps": 2103,
+      "headroom_pct": 10,
+      "last_rps": 492,
+      "tested_rps": 2325,
+      "tier": "web",
+      "vendor": "Vega"
     },
     "variant": 0
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d3",
-      "d2",
       "d1",
-      "d4"
+      "d2",
+      "d4",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The cache tier currently sustains 1055 requests per second."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The cache tier has the oldest Terraform module in the repository."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Helios announced a new availability zone last month."
+        "text": "The web tier currently sustains 1495 requests per second."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional cache node costs 812 per month with Helios."
+        "text": "A staging load test drove the web tier to 2325 requests per second on hardware that does not match production."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 492 requests per second."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Helios's billing portal now supports single sign-on."
+        "text": "Vega's billing portal now supports single sign-on."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The web tier has the oldest Terraform module in the repository."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1062 requests per second."
+        "text": "The campaign is forecast to peak at 2103 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 17% headroom above forecast peak."
+        "text": "Standing policy requires 10% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v0-d4-middle",
@@ -356,69 +366,71 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 1055,
-      "cost_per_node": 812,
-      "expected_rps": 1062,
-      "headroom_pct": 17,
-      "tier": "cache",
-      "vendor": "Helios"
+      "capacity_rps": 1495,
+      "cost_per_node": 109,
+      "expected_rps": 2103,
+      "headroom_pct": 10,
+      "last_rps": 492,
+      "tested_rps": 2325,
+      "tier": "web",
+      "vendor": "Vega"
     },
     "variant": 0
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d3",
-      "d2",
       "d1",
-      "d4"
+      "d2",
+      "d4",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The cache tier currently sustains 1055 requests per second."
+        "text": "The web tier currently sustains 1495 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1062 requests per second."
+        "text": "The campaign is forecast to peak at 2103 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 17% headroom above forecast peak."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The cache tier has the oldest Terraform module in the repository."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Helios announced a new availability zone last month."
+        "text": "Standing policy requires 10% headroom above forecast peak."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional cache node costs 812 per month with Helios."
+        "text": "A staging load test drove the web tier to 2325 requests per second on hardware that does not match production."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 492 requests per second."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Helios's billing portal now supports single sign-on."
+        "text": "Vega's billing portal now supports single sign-on."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The web tier has the oldest Terraform module in the repository."
       }
     ],
     "item_id": "rel-007-capacity-scale#v0-d4-late",
@@ -433,16 +445,18 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 1055,
-      "cost_per_node": 812,
-      "expected_rps": 1062,
-      "headroom_pct": 17,
-      "tier": "cache",
-      "vendor": "Helios"
+      "capacity_rps": 1495,
+      "cost_per_node": 109,
+      "expected_rps": 2103,
+      "headroom_pct": 10,
+      "last_rps": 492,
+      "tested_rps": 2325,
+      "tier": "web",
+      "vendor": "Vega"
     },
     "variant": 0
   },
@@ -454,19 +468,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2136 requests per second."
+        "text": "The cache tier currently sustains 2402 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 156 requests per second."
+        "text": "The campaign is forecast to peak at 692 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 19% headroom above forecast peak."
+        "text": "Standing policy requires 36% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v1-d0-none",
@@ -481,48 +495,50 @@
       "keep_current"
     ],
     "position": "none",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2136,
-      "cost_per_node": 827,
-      "expected_rps": 156,
-      "headroom_pct": 19,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2402,
+      "cost_per_node": 286,
+      "expected_rps": 692,
+      "headroom_pct": 36,
+      "last_rps": 2509,
+      "tested_rps": 642,
+      "tier": "cache",
+      "vendor": "Helios"
     },
     "variant": 1
   },
   {
     "answer": "keep_current",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The worker tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the cache tier to 642 requests per second on hardware that does not match production."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2136 requests per second."
+        "text": "The cache tier currently sustains 2402 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 156 requests per second."
+        "text": "The campaign is forecast to peak at 692 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 19% headroom above forecast peak."
+        "text": "Standing policy requires 36% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v1-d1-early",
@@ -537,48 +553,50 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2136,
-      "cost_per_node": 827,
-      "expected_rps": 156,
-      "headroom_pct": 19,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2402,
+      "cost_per_node": 286,
+      "expected_rps": 692,
+      "headroom_pct": 36,
+      "last_rps": 2509,
+      "tested_rps": 642,
+      "tier": "cache",
+      "vendor": "Helios"
     },
     "variant": 1
   },
   {
     "answer": "keep_current",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2136 requests per second."
+        "text": "The cache tier currently sustains 2402 requests per second."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The worker tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the cache tier to 642 requests per second on hardware that does not match production."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 156 requests per second."
+        "text": "The campaign is forecast to peak at 692 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 19% headroom above forecast peak."
+        "text": "Standing policy requires 36% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v1-d1-middle",
@@ -593,48 +611,50 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2136,
-      "cost_per_node": 827,
-      "expected_rps": 156,
-      "headroom_pct": 19,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2402,
+      "cost_per_node": 286,
+      "expected_rps": 692,
+      "headroom_pct": 36,
+      "last_rps": 2509,
+      "tested_rps": 642,
+      "tier": "cache",
+      "vendor": "Helios"
     },
     "variant": 1
   },
   {
     "answer": "keep_current",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2136 requests per second."
+        "text": "The cache tier currently sustains 2402 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 156 requests per second."
+        "text": "The campaign is forecast to peak at 692 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 19% headroom above forecast peak."
+        "text": "Standing policy requires 36% headroom above forecast peak."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The worker tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the cache tier to 642 requests per second on hardware that does not match production."
       }
     ],
     "item_id": "rel-007-capacity-scale#v1-d1-late",
@@ -649,45 +669,41 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2136,
-      "cost_per_node": 827,
-      "expected_rps": 156,
-      "headroom_pct": 19,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2402,
+      "cost_per_node": 286,
+      "expected_rps": 692,
+      "headroom_pct": 36,
+      "last_rps": 2509,
+      "tested_rps": 642,
+      "tier": "cache",
+      "vendor": "Helios"
     },
     "variant": 1
   },
   {
     "answer": "keep_current",
     "distractor_ids": [
-      "d3",
-      "d2",
       "d1",
-      "d5"
+      "d2",
+      "d5",
+      "d3"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The worker tier has the oldest Terraform module in the repository."
+        "strength": "high",
+        "text": "A staging load test drove the cache tier to 642 requests per second on hardware that does not match production."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Vega announced a new availability zone last month."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Each additional worker node costs 827 per month with Vega."
+        "text": "Last year's equivalent campaign peaked at 2509 requests per second."
       },
       {
         "id": "d5",
@@ -696,22 +712,28 @@
         "text": "The capacity spreadsheet uses a green-and-white colour scheme."
       },
       {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The cache tier has the oldest Terraform module in the repository."
+      },
+      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2136 requests per second."
+        "text": "The cache tier currently sustains 2402 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 156 requests per second."
+        "text": "The campaign is forecast to peak at 692 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 19% headroom above forecast peak."
+        "text": "Standing policy requires 36% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v1-d4-early",
@@ -726,51 +748,47 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2136,
-      "cost_per_node": 827,
-      "expected_rps": 156,
-      "headroom_pct": 19,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2402,
+      "cost_per_node": 286,
+      "expected_rps": 692,
+      "headroom_pct": 36,
+      "last_rps": 2509,
+      "tested_rps": 642,
+      "tier": "cache",
+      "vendor": "Helios"
     },
     "variant": 1
   },
   {
     "answer": "keep_current",
     "distractor_ids": [
-      "d3",
-      "d2",
       "d1",
-      "d5"
+      "d2",
+      "d5",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2136 requests per second."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The worker tier has the oldest Terraform module in the repository."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Vega announced a new availability zone last month."
+        "text": "The cache tier currently sustains 2402 requests per second."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional worker node costs 827 per month with Vega."
+        "text": "A staging load test drove the cache tier to 642 requests per second on hardware that does not match production."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 2509 requests per second."
       },
       {
         "id": "d5",
@@ -779,16 +797,22 @@
         "text": "The capacity spreadsheet uses a green-and-white colour scheme."
       },
       {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The cache tier has the oldest Terraform module in the repository."
+      },
+      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 156 requests per second."
+        "text": "The campaign is forecast to peak at 692 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 19% headroom above forecast peak."
+        "text": "Standing policy requires 36% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v1-d4-middle",
@@ -803,69 +827,71 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2136,
-      "cost_per_node": 827,
-      "expected_rps": 156,
-      "headroom_pct": 19,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2402,
+      "cost_per_node": 286,
+      "expected_rps": 692,
+      "headroom_pct": 36,
+      "last_rps": 2509,
+      "tested_rps": 642,
+      "tier": "cache",
+      "vendor": "Helios"
     },
     "variant": 1
   },
   {
     "answer": "keep_current",
     "distractor_ids": [
-      "d3",
-      "d2",
       "d1",
-      "d5"
+      "d2",
+      "d5",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2136 requests per second."
+        "text": "The cache tier currently sustains 2402 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 156 requests per second."
+        "text": "The campaign is forecast to peak at 692 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 19% headroom above forecast peak."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The worker tier has the oldest Terraform module in the repository."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Vega announced a new availability zone last month."
+        "text": "Standing policy requires 36% headroom above forecast peak."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional worker node costs 827 per month with Vega."
+        "text": "A staging load test drove the cache tier to 642 requests per second on hardware that does not match production."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 2509 requests per second."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The capacity spreadsheet uses a green-and-white colour scheme."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The cache tier has the oldest Terraform module in the repository."
       }
     ],
     "item_id": "rel-007-capacity-scale#v1-d4-late",
@@ -880,16 +906,18 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the cache tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2136,
-      "cost_per_node": 827,
-      "expected_rps": 156,
-      "headroom_pct": 19,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2402,
+      "cost_per_node": 286,
+      "expected_rps": 692,
+      "headroom_pct": 36,
+      "last_rps": 2509,
+      "tested_rps": 642,
+      "tier": "cache",
+      "vendor": "Helios"
     },
     "variant": 1
   },
@@ -901,19 +929,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2898 requests per second."
+        "text": "The api tier currently sustains 2018 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 2643 requests per second."
+        "text": "The campaign is forecast to peak at 2620 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 15% headroom above forecast peak."
+        "text": "Standing policy requires 12% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v2-d0-none",
@@ -928,48 +956,50 @@
       "keep_current"
     ],
     "position": "none",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2898,
-      "cost_per_node": 388,
-      "expected_rps": 2643,
-      "headroom_pct": 15,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2018,
+      "cost_per_node": 846,
+      "expected_rps": 2620,
+      "headroom_pct": 12,
+      "last_rps": 919,
+      "tested_rps": 2963,
+      "tier": "api",
+      "vendor": "Rigel"
     },
     "variant": 2
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Vega's billing portal now supports single sign-on."
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 919 requests per second."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2898 requests per second."
+        "text": "The api tier currently sustains 2018 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 2643 requests per second."
+        "text": "The campaign is forecast to peak at 2620 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 15% headroom above forecast peak."
+        "text": "Standing policy requires 12% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v2-d1-early",
@@ -984,48 +1014,50 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2898,
-      "cost_per_node": 388,
-      "expected_rps": 2643,
-      "headroom_pct": 15,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2018,
+      "cost_per_node": 846,
+      "expected_rps": 2620,
+      "headroom_pct": 12,
+      "last_rps": 919,
+      "tested_rps": 2963,
+      "tier": "api",
+      "vendor": "Rigel"
     },
     "variant": 2
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2898 requests per second."
+        "text": "The api tier currently sustains 2018 requests per second."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Vega's billing portal now supports single sign-on."
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 919 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 2643 requests per second."
+        "text": "The campaign is forecast to peak at 2620 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 15% headroom above forecast peak."
+        "text": "Standing policy requires 12% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v2-d1-middle",
@@ -1040,48 +1072,50 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2898,
-      "cost_per_node": 388,
-      "expected_rps": 2643,
-      "headroom_pct": 15,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2018,
+      "cost_per_node": 846,
+      "expected_rps": 2620,
+      "headroom_pct": 12,
+      "last_rps": 919,
+      "tested_rps": 2963,
+      "tier": "api",
+      "vendor": "Rigel"
     },
     "variant": 2
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2898 requests per second."
+        "text": "The api tier currently sustains 2018 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 2643 requests per second."
+        "text": "The campaign is forecast to peak at 2620 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 15% headroom above forecast peak."
+        "text": "Standing policy requires 12% headroom above forecast peak."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Vega's billing portal now supports single sign-on."
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 919 requests per second."
       }
     ],
     "item_id": "rel-007-capacity-scale#v2-d1-late",
@@ -1096,39 +1130,41 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2898,
-      "cost_per_node": 388,
-      "expected_rps": 2643,
-      "headroom_pct": 15,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2018,
+      "cost_per_node": 846,
+      "expected_rps": 2620,
+      "headroom_pct": 12,
+      "last_rps": 919,
+      "tested_rps": 2963,
+      "tier": "api",
+      "vendor": "Rigel"
     },
     "variant": 2
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d4",
+      "d2",
       "d1",
       "d5",
-      "d2"
+      "d3"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Vega's billing portal now supports single sign-on."
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 919 requests per second."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional worker node costs 388 per month with Vega."
+        "text": "A staging load test drove the api tier to 2963 requests per second on hardware that does not match production."
       },
       {
         "id": "d5",
@@ -1137,28 +1173,28 @@
         "text": "The capacity spreadsheet uses a green-and-white colour scheme."
       },
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "Vega announced a new availability zone last month."
+        "strength": "medium",
+        "text": "The api tier has the oldest Terraform module in the repository."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2898 requests per second."
+        "text": "The api tier currently sustains 2018 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 2643 requests per second."
+        "text": "The campaign is forecast to peak at 2620 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 15% headroom above forecast peak."
+        "text": "Standing policy requires 12% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v2-d4-early",
@@ -1173,45 +1209,47 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2898,
-      "cost_per_node": 388,
-      "expected_rps": 2643,
-      "headroom_pct": 15,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2018,
+      "cost_per_node": 846,
+      "expected_rps": 2620,
+      "headroom_pct": 12,
+      "last_rps": 919,
+      "tested_rps": 2963,
+      "tier": "api",
+      "vendor": "Rigel"
     },
     "variant": 2
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d4",
+      "d2",
       "d1",
       "d5",
-      "d2"
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2898 requests per second."
+        "text": "The api tier currently sustains 2018 requests per second."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Vega's billing portal now supports single sign-on."
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 919 requests per second."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional worker node costs 388 per month with Vega."
+        "text": "A staging load test drove the api tier to 2963 requests per second on hardware that does not match production."
       },
       {
         "id": "d5",
@@ -1220,22 +1258,22 @@
         "text": "The capacity spreadsheet uses a green-and-white colour scheme."
       },
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "Vega announced a new availability zone last month."
+        "strength": "medium",
+        "text": "The api tier has the oldest Terraform module in the repository."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 2643 requests per second."
+        "text": "The campaign is forecast to peak at 2620 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 15% headroom above forecast peak."
+        "text": "Standing policy requires 12% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v2-d4-middle",
@@ -1250,57 +1288,59 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2898,
-      "cost_per_node": 388,
-      "expected_rps": 2643,
-      "headroom_pct": 15,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2018,
+      "cost_per_node": 846,
+      "expected_rps": 2620,
+      "headroom_pct": 12,
+      "last_rps": 919,
+      "tested_rps": 2963,
+      "tier": "api",
+      "vendor": "Rigel"
     },
     "variant": 2
   },
   {
     "answer": "scale_up",
     "distractor_ids": [
-      "d4",
+      "d2",
       "d1",
       "d5",
-      "d2"
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The worker tier currently sustains 2898 requests per second."
+        "text": "The api tier currently sustains 2018 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 2643 requests per second."
+        "text": "The campaign is forecast to peak at 2620 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 15% headroom above forecast peak."
+        "text": "Standing policy requires 12% headroom above forecast peak."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Vega's billing portal now supports single sign-on."
+        "strength": "high",
+        "text": "Last year's equivalent campaign peaked at 919 requests per second."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional worker node costs 388 per month with Vega."
+        "text": "A staging load test drove the api tier to 2963 requests per second on hardware that does not match production."
       },
       {
         "id": "d5",
@@ -1309,10 +1349,10 @@
         "text": "The capacity spreadsheet uses a green-and-white colour scheme."
       },
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "Vega announced a new availability zone last month."
+        "strength": "medium",
+        "text": "The api tier has the oldest Terraform module in the repository."
       }
     ],
     "item_id": "rel-007-capacity-scale#v2-d4-late",
@@ -1327,16 +1367,18 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the worker tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2898,
-      "cost_per_node": 388,
-      "expected_rps": 2643,
-      "headroom_pct": 15,
-      "tier": "worker",
-      "vendor": "Vega"
+      "capacity_rps": 2018,
+      "cost_per_node": 846,
+      "expected_rps": 2620,
+      "headroom_pct": 12,
+      "last_rps": 919,
+      "tested_rps": 2963,
+      "tier": "api",
+      "vendor": "Rigel"
     },
     "variant": 2
   },
@@ -1348,19 +1390,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The api tier currently sustains 2830 requests per second."
+        "text": "The web tier currently sustains 1909 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1419 requests per second."
+        "text": "The campaign is forecast to peak at 1404 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 30% headroom above forecast peak."
+        "text": "Standing policy requires 31% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v3-d0-none",
@@ -1375,15 +1417,17 @@
       "keep_current"
     ],
     "position": "none",
-    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2830,
-      "cost_per_node": 854,
-      "expected_rps": 1419,
-      "headroom_pct": 30,
-      "tier": "api",
+      "capacity_rps": 1909,
+      "cost_per_node": 678,
+      "expected_rps": 1404,
+      "headroom_pct": 31,
+      "last_rps": 2749,
+      "tested_rps": 1045,
+      "tier": "web",
       "vendor": "Helios"
     },
     "variant": 3
@@ -1398,25 +1442,25 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional api node costs 854 per month with Helios."
+        "text": "A staging load test drove the web tier to 1045 requests per second on hardware that does not match production."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The api tier currently sustains 2830 requests per second."
+        "text": "The web tier currently sustains 1909 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1419 requests per second."
+        "text": "The campaign is forecast to peak at 1404 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 30% headroom above forecast peak."
+        "text": "Standing policy requires 31% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v3-d1-early",
@@ -1431,15 +1475,17 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2830,
-      "cost_per_node": 854,
-      "expected_rps": 1419,
-      "headroom_pct": 30,
-      "tier": "api",
+      "capacity_rps": 1909,
+      "cost_per_node": 678,
+      "expected_rps": 1404,
+      "headroom_pct": 31,
+      "last_rps": 2749,
+      "tested_rps": 1045,
+      "tier": "web",
       "vendor": "Helios"
     },
     "variant": 3
@@ -1454,25 +1500,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The api tier currently sustains 2830 requests per second."
+        "text": "The web tier currently sustains 1909 requests per second."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional api node costs 854 per month with Helios."
+        "text": "A staging load test drove the web tier to 1045 requests per second on hardware that does not match production."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1419 requests per second."
+        "text": "The campaign is forecast to peak at 1404 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 30% headroom above forecast peak."
+        "text": "Standing policy requires 31% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v3-d1-middle",
@@ -1487,15 +1533,17 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2830,
-      "cost_per_node": 854,
-      "expected_rps": 1419,
-      "headroom_pct": 30,
-      "tier": "api",
+      "capacity_rps": 1909,
+      "cost_per_node": 678,
+      "expected_rps": 1404,
+      "headroom_pct": 31,
+      "last_rps": 2749,
+      "tested_rps": 1045,
+      "tier": "web",
       "vendor": "Helios"
     },
     "variant": 3
@@ -1510,25 +1558,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The api tier currently sustains 2830 requests per second."
+        "text": "The web tier currently sustains 1909 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1419 requests per second."
+        "text": "The campaign is forecast to peak at 1404 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 30% headroom above forecast peak."
+        "text": "Standing policy requires 31% headroom above forecast peak."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional api node costs 854 per month with Helios."
+        "text": "A staging load test drove the web tier to 1045 requests per second on hardware that does not match production."
       }
     ],
     "item_id": "rel-007-capacity-scale#v3-d1-late",
@@ -1543,15 +1591,17 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2830,
-      "cost_per_node": 854,
-      "expected_rps": 1419,
-      "headroom_pct": 30,
-      "tier": "api",
+      "capacity_rps": 1909,
+      "cost_per_node": 678,
+      "expected_rps": 1404,
+      "headroom_pct": 31,
+      "last_rps": 2749,
+      "tested_rps": 1045,
+      "tier": "web",
       "vendor": "Helios"
     },
     "variant": 3
@@ -1569,13 +1619,13 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional api node costs 854 per month with Helios."
+        "text": "A staging load test drove the web tier to 1045 requests per second on hardware that does not match production."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Helios announced a new availability zone last month."
+        "text": "Last year's equivalent campaign peaked at 2749 requests per second."
       },
       {
         "id": "d4",
@@ -1587,25 +1637,25 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The api tier has the oldest Terraform module in the repository."
+        "text": "The web tier has the oldest Terraform module in the repository."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The api tier currently sustains 2830 requests per second."
+        "text": "The web tier currently sustains 1909 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1419 requests per second."
+        "text": "The campaign is forecast to peak at 1404 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 30% headroom above forecast peak."
+        "text": "Standing policy requires 31% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v3-d4-early",
@@ -1620,15 +1670,17 @@
       "keep_current"
     ],
     "position": "early",
-    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2830,
-      "cost_per_node": 854,
-      "expected_rps": 1419,
-      "headroom_pct": 30,
-      "tier": "api",
+      "capacity_rps": 1909,
+      "cost_per_node": 678,
+      "expected_rps": 1404,
+      "headroom_pct": 31,
+      "last_rps": 2749,
+      "tested_rps": 1045,
+      "tier": "web",
       "vendor": "Helios"
     },
     "variant": 3
@@ -1646,19 +1698,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The api tier currently sustains 2830 requests per second."
+        "text": "The web tier currently sustains 1909 requests per second."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional api node costs 854 per month with Helios."
+        "text": "A staging load test drove the web tier to 1045 requests per second on hardware that does not match production."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Helios announced a new availability zone last month."
+        "text": "Last year's equivalent campaign peaked at 2749 requests per second."
       },
       {
         "id": "d4",
@@ -1670,19 +1722,19 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The api tier has the oldest Terraform module in the repository."
+        "text": "The web tier has the oldest Terraform module in the repository."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1419 requests per second."
+        "text": "The campaign is forecast to peak at 1404 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 30% headroom above forecast peak."
+        "text": "Standing policy requires 31% headroom above forecast peak."
       }
     ],
     "item_id": "rel-007-capacity-scale#v3-d4-middle",
@@ -1697,15 +1749,17 @@
       "keep_current"
     ],
     "position": "middle",
-    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2830,
-      "cost_per_node": 854,
-      "expected_rps": 1419,
-      "headroom_pct": 30,
-      "tier": "api",
+      "capacity_rps": 1909,
+      "cost_per_node": 678,
+      "expected_rps": 1404,
+      "headroom_pct": 31,
+      "last_rps": 2749,
+      "tested_rps": 1045,
+      "tier": "web",
       "vendor": "Helios"
     },
     "variant": 3
@@ -1723,31 +1777,31 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The api tier currently sustains 2830 requests per second."
+        "text": "The web tier currently sustains 1909 requests per second."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The campaign is forecast to peak at 1419 requests per second."
+        "text": "The campaign is forecast to peak at 1404 requests per second."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy requires 30% headroom above forecast peak."
+        "text": "Standing policy requires 31% headroom above forecast peak."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Each additional api node costs 854 per month with Helios."
+        "text": "A staging load test drove the web tier to 1045 requests per second on hardware that does not match production."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Helios announced a new availability zone last month."
+        "text": "Last year's equivalent campaign peaked at 2749 requests per second."
       },
       {
         "id": "d4",
@@ -1759,7 +1813,7 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The api tier has the oldest Terraform module in the repository."
+        "text": "The web tier has the oldest Terraform module in the repository."
       }
     ],
     "item_id": "rel-007-capacity-scale#v3-d4-late",
@@ -1774,15 +1828,17 @@
       "keep_current"
     ],
     "position": "late",
-    "question": "Should the api tier scale up before the campaign, or keep current capacity?",
+    "question": "Should the web tier scale up before the campaign, or keep current capacity?",
     "seed": 1,
     "template_id": "rel-007-capacity-scale",
     "variables": {
-      "capacity_rps": 2830,
-      "cost_per_node": 854,
-      "expected_rps": 1419,
-      "headroom_pct": 30,
-      "tier": "api",
+      "capacity_rps": 1909,
+      "cost_per_node": 678,
+      "expected_rps": 1404,
+      "headroom_pct": 31,
+      "last_rps": 2749,
+      "tested_rps": 1045,
+      "tier": "web",
       "vendor": "Helios"
     },
     "variant": 3

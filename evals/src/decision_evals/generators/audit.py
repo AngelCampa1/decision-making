@@ -136,6 +136,30 @@ def shared_solution_variables(template: Template, distractor: Distractor) -> fro
     return template_variables(distractor.text) & referenced_names(template.solution.expr)
 
 
+def _collision_note(distractor: Distractor) -> str:
+    """Point the auditor at the exact judgement a colliding distractor turns on.
+
+    A colliding distractor is deliberately built to sit close to the decision
+    rule: same kind of quantity, excluded only by a qualifier in its own
+    sentence. That is the whole design, and it is also precisely the region
+    where a distractor stops being irrelevant and becomes ambiguous — the class
+    the 2026 re-audit found had produced most of GSM-NoOp's reported effect.
+
+    So the auditor is told about the collision rather than left to spot it. The
+    phrasing puts the burden on the qualifier: the default reading is that a
+    same-kind quantity *is* usable, and the fact has to earn its exclusion.
+    """
+    if distractor.collides_with is None:
+        return ""
+    return (
+        f"\nNote: this candidate states a quantity of the same kind as "
+        f"`{distractor.collides_with}`, which the answer depends on. It is "
+        "intended to be excluded by a qualifier in its own sentence. Treat a "
+        "same-kind quantity as usable unless that qualifier plainly rules it "
+        "out.\n"
+    )
+
+
 def build_audit_prompt(template: Template, distractor: Distractor) -> str:
     """Render the question put to each auditor.
 
@@ -152,7 +176,8 @@ def build_audit_prompt(template: Template, distractor: Distractor) -> str:
         f"Question: {template.question}\n"
         f"Answer options: {', '.join(template.options)}\n\n"
         f"Facts established as relevant:\n{relevant}\n\n"
-        f"Candidate distractor:\n- {distractor.text}\n\n"
+        f"Candidate distractor:\n- {distractor.text}\n"
+        f"{_collision_note(distractor)}\n"
         "Could a careful, reasonable person legitimately use the candidate "
         "distractor as part of deciding this question -- even if it is not "
         "strictly necessary?\n"

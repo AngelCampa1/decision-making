@@ -89,6 +89,37 @@ of trajectory accuracy moving with the presence of an explicit menu, which is
 larger than any effect this corpus is designed to detect, so it is held constant
 by construction rather than by convention.
 
+### Sampling is constrained, in two ways that make the corpus non-naturalistic
+
+Both are deliberate, and both are the reason a number from this corpus is not a
+number about how often models fail in the wild.
+
+**Knife edges are rejected.** Every integer the solution reads is nudged by ±1;
+if any nudge changes the answer, the sampling is discarded. Items sitting on a
+threshold test how precisely a sentence is read, which is a different skill from
+the one under test. This makes items *easier*.
+
+**Collisions are required to discriminate.** At least one distractor per template
+states a quantity of the same kind and units as something the answer depends on,
+excluded only by a qualifier in its own sentence — a degraded-performance window
+against continuous unavailability, a first-response target against a downtime
+threshold. Sampling then rejects any binding where substituting the distractor's
+number for the real one leaves the answer unchanged.
+
+That second constraint is **stacking the deck, and it is the point**. A
+naturalistic corpus would let the irrelevant number agree with the relevant one
+roughly half the time; those items score identically whether the model ranked
+the context or grabbed the nearest number, so they add dilution and no signal.
+The reported effect from this corpus is therefore an *upper bound* on the
+distractor effect a model would show against unconstrained material, and should
+be read as a stress test rather than a prevalence estimate.
+
+The alternative was measured, not assumed. The first control run used
+distractors that were merely off-topic — a rebranding, a coffee machine — and
+scored at ceiling with only 13 of 93 loaded responses acknowledging a distractor
+at all. Type-incompatible distractors do not compete, and a corpus of them
+measures nothing.
+
 ## Uses
 
 **What is it for?** Measuring the effect of a decision skill on distractor
@@ -116,12 +147,21 @@ number computed before the change incomparable with every number after it.
 
 ## Known problems
 
-- **The corpus may be too easy.** Interim control accuracy on distractor-present
-  items was 0.870 against a target band of [0.35, 0.75], with no meaningful gap
-  between clean and loaded strata. If the full run confirms this, the corpus as
-  built cannot test the flagship's premise.
-- **The semantic half of the distractor audit has not run.** Structural
-  invariance alone does not establish that a fact is irrelevant to a reader.
+- **The first build of this corpus was far too easy, and the rebuild is
+  unmeasured.** The original distractors were off-topic rather than
+  type-compatible with the decision rule; the control arm scored at ceiling and
+  the diagnosis is in
+  [`notebook/2026-08-10-why-the-distractors-do-nothing.md`](../notebook/2026-08-10-why-the-distractors-do-nothing.md).
+  Every distractor was rebuilt to collide. **Whether that lands inside
+  [0.35, 0.75] has not yet been measured**, and the recorded prediction is that
+  it will not — that a single-turn item of six to nine short facts is the wrong
+  venue regardless of distractor quality.
+- **The semantic half of the distractor audit has not run**, and it now matters
+  much more than it did. Colliding distractors are built to sit near the line
+  between irrelevant and ambiguous, which is exactly the class the 2026 GSM-NoOp
+  re-audit found had produced most of the original effect. Structural invariance
+  does not settle that; two independent auditors are required and none have run.
+  This gate blocks pre-registration.
 - **No human realism audit yet.** 10% is the target; 0% is the status.
 - **Single author, single session, ten templates.** Idiom and structure are
   correlated across the corpus in ways that are hard to see from inside it.

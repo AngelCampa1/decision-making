@@ -9,6 +9,8 @@ variables:
   utilisation_floor: {int: [60, 95]}
   buyer: {choice: [Procurement, Finance, Engineering]}
   years: {int: [1, 9]}
+  prior_seats: {int: [20, 500]}
+  provisioned_seats: {int: [10, 520]}
 
 relevant_facts:
   - id: r1
@@ -19,12 +21,16 @@ relevant_facts:
     text: "Policy is to renegotiate whenever utilisation falls below {utilisation_floor}% of paid seats."
 
 distractor_facts:
+  # Both are seat counts. One is from the expiring term, the other includes
+  # accounts the utilisation rule explicitly does not count.
   - id: d1
     strength: high
-    text: "{tool} has been in use for {years} years and is owned by {buyer}."
+    collides_with: seats_paid
+    text: "The expiring term covered {prior_seats} seats."
   - id: d2
     strength: high
-    text: "{tool} released a redesigned onboarding flow this spring."
+    collides_with: seats_used
+    text: "{provisioned_seats} {tool} accounts exist in total, including deactivated ones that do not count as active."
   - id: d3
     strength: medium
     text: "{buyer} moved to a new contract management system last year."

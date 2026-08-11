@@ -153,3 +153,89 @@ def test_templates_are_frozen(template_dict: Build) -> None:
     template = Template.model_validate(template_dict())
     with pytest.raises(ValidationError):
         template.variants = 9
+
+
+# -- collisions -------------------------------------------------------------
+
+
+def test_a_template_with_no_colliding_distractor_is_rejected(template_dict: Build) -> None:
+    """The lesson of the first control run, encoded as a load-time error.
+
+    A corpus of off-topic distractors scored 110/110 and measured nothing.
+    """
+    with pytest.raises(ValidationError, match="no distractor declares `collides_with`"):
+        Template.model_validate(
+            template_dict(
+                distractor_facts=[
+                    {"id": "d1", "text": "The office is {colour}.", "strength": "high"},
+                    {"id": "d2", "text": "The office is open.", "strength": "low"},
+                ]
+            )
+        )
+
+
+def test_colliding_with_something_the_solution_ignores_is_rejected(template_dict: Build) -> None:
+    with pytest.raises(ValidationError, match="which the solution does not read"):
+        Template.model_validate(
+            template_dict(
+                distractor_facts=[
+                    {
+                        "id": "d1",
+                        "text": "An unrelated item costs {other_value}.",
+                        "strength": "high",
+                        "collides_with": "colour",
+                    },
+                    {"id": "d2", "text": "The office is open.", "strength": "low"},
+                ]
+            )
+        )
+
+
+def test_a_collision_carrying_no_competing_quantity_is_rejected(template_dict: Build) -> None:
+    """Declaring a collision does not create one."""
+    with pytest.raises(ValidationError, match="carries 0 competing variable"):
+        Template.model_validate(
+            template_dict(
+                distractor_facts=[
+                    {
+                        "id": "d1",
+                        "text": "The {thing} was reviewed last year.",
+                        "strength": "high",
+                        "collides_with": "value",
+                    },
+                    {"id": "d2", "text": "The office is open.", "strength": "low"},
+                ]
+            )
+        )
+
+
+def test_an_ambiguous_collision_is_rejected(template_dict: Build) -> None:
+    """Two competing quantities of the same kind: which one is it competing with?"""
+    with pytest.raises(ValidationError, match="carries 2 competing variable"):
+        Template.model_validate(
+            template_dict(
+                variables={
+                    "thing": {"choice": ["alpha", "beta"]},
+                    "value": {"int": [1, 10]},
+                    "limit": {"int": [1, 10]},
+                    "other_value": {"int": [1, 10]},
+                    "third_value": {"int": [1, 10]},
+                    "colour": {"choice": ["red", "blue"]},
+                },
+                distractor_facts=[
+                    {
+                        "id": "d1",
+                        "text": "Two unrelated readings were {other_value} and {third_value}.",
+                        "strength": "high",
+                        "collides_with": "value",
+                    },
+                    {"id": "d2", "text": "The office is open.", "strength": "low"},
+                ],
+            )
+        )
+
+
+def test_a_choice_in_the_same_sentence_is_not_a_competing_quantity(template_dict: Build) -> None:
+    """`{thing}` sits beside the number and must not be mistaken for it."""
+    template = Template.model_validate(template_dict())
+    assert template.collision_pairs() == [("value", "other_value")]

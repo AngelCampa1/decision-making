@@ -8,6 +8,8 @@ variables:
   connection_min: {int: [30, 200]}
   city: {choice: [Porto, Bergen, Sapporo, Asuncion]}
   bags: {int: [0, 3]}
+  other_delay_min: {int: [15, 240]}
+  mct_min: {int: [30, 200]}
 
 relevant_facts:
   - id: r1
@@ -18,12 +20,16 @@ relevant_facts:
     text: "The later flight has seats available and no rebooking fee."
 
 distractor_facts:
+  # Both are durations in minutes: another aircraft's delay, and a minimum
+  # connection time the itinerary is stated to already meet.
   - id: d1
     strength: high
-    text: "It is raining heavily in {city}, which is neither the origin nor the destination."
+    collides_with: delay_min
+    text: "The departure board shows an unrelated {airline} service running {other_delay_min} minutes late."
   - id: d2
     strength: high
-    text: "{airline} refreshed its cabin interiors across the fleet last year."
+    collides_with: connection_min
+    text: "The minimum legal connection time at the transfer airport is {mct_min} minutes, which this itinerary already satisfies."
   - id: d3
     strength: medium
     text: "The traveller has {bags} checked bags, all already tagged through to the final stop."

@@ -7,13 +7,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 88 minutes late."
+        "text": "The inbound aircraft is running 177 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 77 minutes of slack before the onward connection."
+        "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -37,37 +37,39 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
-      "bags": 3,
+      "airline": "Meridian",
+      "bags": 2,
       "city": "Sapporo",
-      "connection_min": 77,
-      "delay_min": 88
+      "connection_min": 165,
+      "delay_min": 177,
+      "mct_min": 180,
+      "other_delay_min": 122
     },
     "variant": 0
   },
   {
     "answer": "rebook_now",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 88 minutes late."
+        "text": "The inbound aircraft is running 177 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 77 minutes of slack before the onward connection."
+        "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -91,37 +93,39 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
-      "bags": 3,
+      "airline": "Meridian",
+      "bags": 2,
       "city": "Sapporo",
-      "connection_min": 77,
-      "delay_min": 88
+      "connection_min": 165,
+      "delay_min": 177,
+      "mct_min": 180,
+      "other_delay_min": 122
     },
     "variant": 0
   },
   {
     "answer": "rebook_now",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 88 minutes late."
+        "text": "The inbound aircraft is running 177 minutes late."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 77 minutes of slack before the onward connection."
+        "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -145,31 +149,33 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
-      "bags": 3,
+      "airline": "Meridian",
+      "bags": 2,
       "city": "Sapporo",
-      "connection_min": 77,
-      "delay_min": 88
+      "connection_min": 165,
+      "delay_min": 177,
+      "mct_min": 180,
+      "other_delay_min": 122
     },
     "variant": 0
   },
   {
     "answer": "rebook_now",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 88 minutes late."
+        "text": "The inbound aircraft is running 177 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 77 minutes of slack before the onward connection."
+        "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -178,10 +184,10 @@
         "text": "The later flight has seats available and no rebooking fee."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
       }
     ],
     "item_id": "rel-009-flight-rebook#v0-d1-late",
@@ -199,40 +205,42 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
-      "bags": 3,
+      "airline": "Meridian",
+      "bags": 2,
       "city": "Sapporo",
-      "connection_min": 77,
-      "delay_min": 88
+      "connection_min": 165,
+      "delay_min": 177,
+      "mct_min": 180,
+      "other_delay_min": 122
     },
     "variant": 0
   },
   {
     "answer": "rebook_now",
     "distractor_ids": [
-      "d4",
-      "d1",
       "d2",
+      "d1",
+      "d3",
       "d5"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 122 minutes late."
       },
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+        "strength": "medium",
+        "text": "The traveller has 2 checked bags, all already tagged through to the final stop."
       },
       {
         "id": "d5",
@@ -244,13 +252,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 88 minutes late."
+        "text": "The inbound aircraft is running 177 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 77 minutes of slack before the onward connection."
+        "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -274,20 +282,22 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
-      "bags": 3,
+      "airline": "Meridian",
+      "bags": 2,
       "city": "Sapporo",
-      "connection_min": 77,
-      "delay_min": 88
+      "connection_min": 165,
+      "delay_min": 177,
+      "mct_min": 180,
+      "other_delay_min": 122
     },
     "variant": 0
   },
   {
     "answer": "rebook_now",
     "distractor_ids": [
-      "d4",
-      "d1",
       "d2",
+      "d1",
+      "d3",
       "d5"
     ],
     "facts": [
@@ -295,25 +305,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 88 minutes late."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The inbound aircraft is running 177 minutes late."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The departure board shows an unrelated Meridian service running 122 minutes late."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The traveller has 2 checked bags, all already tagged through to the final stop."
       },
       {
         "id": "d5",
@@ -325,7 +335,7 @@
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 77 minutes of slack before the onward connection."
+        "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -349,20 +359,22 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
-      "bags": 3,
+      "airline": "Meridian",
+      "bags": 2,
       "city": "Sapporo",
-      "connection_min": 77,
-      "delay_min": 88
+      "connection_min": 165,
+      "delay_min": 177,
+      "mct_min": 180,
+      "other_delay_min": 122
     },
     "variant": 0
   },
   {
     "answer": "rebook_now",
     "distractor_ids": [
-      "d4",
-      "d1",
       "d2",
+      "d1",
+      "d3",
       "d5"
     ],
     "facts": [
@@ -370,13 +382,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 88 minutes late."
+        "text": "The inbound aircraft is running 177 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 77 minutes of slack before the onward connection."
+        "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -385,22 +397,22 @@
         "text": "The later flight has seats available and no rebooking fee."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 122 minutes late."
       },
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+        "strength": "medium",
+        "text": "The traveller has 2 checked bags, all already tagged through to the final stop."
       },
       {
         "id": "d5",
@@ -424,11 +436,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
-      "bags": 3,
+      "airline": "Meridian",
+      "bags": 2,
       "city": "Sapporo",
-      "connection_min": 77,
-      "delay_min": 88
+      "connection_min": 165,
+      "delay_min": 177,
+      "mct_min": 180,
+      "other_delay_min": 122
     },
     "variant": 0
   },
@@ -440,13 +454,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 76 minutes late."
+        "text": "The inbound aircraft is running 59 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 96 minutes of slack before the onward connection."
+        "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -470,37 +484,39 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 3,
-      "city": "Sapporo",
-      "connection_min": 96,
-      "delay_min": 76
+      "city": "Bergen",
+      "connection_min": 127,
+      "delay_min": 59,
+      "mct_min": 36,
+      "other_delay_min": 201
     },
     "variant": 1
   },
   {
     "answer": "wait_at_gate",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 76 minutes late."
+        "text": "The inbound aircraft is running 59 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 96 minutes of slack before the onward connection."
+        "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -524,37 +540,39 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 3,
-      "city": "Sapporo",
-      "connection_min": 96,
-      "delay_min": 76
+      "city": "Bergen",
+      "connection_min": 127,
+      "delay_min": 59,
+      "mct_min": 36,
+      "other_delay_min": 201
     },
     "variant": 1
   },
   {
     "answer": "wait_at_gate",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 76 minutes late."
+        "text": "The inbound aircraft is running 59 minutes late."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 96 minutes of slack before the onward connection."
+        "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -578,31 +596,33 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 3,
-      "city": "Sapporo",
-      "connection_min": 96,
-      "delay_min": 76
+      "city": "Bergen",
+      "connection_min": 127,
+      "delay_min": 59,
+      "mct_min": 36,
+      "other_delay_min": 201
     },
     "variant": 1
   },
   {
     "answer": "wait_at_gate",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 76 minutes late."
+        "text": "The inbound aircraft is running 59 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 96 minutes of slack before the onward connection."
+        "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -611,10 +631,10 @@
         "text": "The later flight has seats available and no rebooking fee."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
       }
     ],
     "item_id": "rel-009-flight-rebook#v1-d1-late",
@@ -632,28 +652,42 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 3,
-      "city": "Sapporo",
-      "connection_min": 96,
-      "delay_min": 76
+      "city": "Bergen",
+      "connection_min": 127,
+      "delay_min": 59,
+      "mct_min": 36,
+      "other_delay_min": 201
     },
     "variant": 1
   },
   {
     "answer": "wait_at_gate",
     "distractor_ids": [
+      "d2",
       "d1",
-      "d3",
-      "d4",
-      "d2"
+      "d5",
+      "d3"
     ],
     "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
+      },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 201 minutes late."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
       },
       {
         "id": "d3",
@@ -662,28 +696,16 @@
         "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
       },
       {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
-      },
-      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 76 minutes late."
+        "text": "The inbound aircraft is running 59 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 96 minutes of slack before the onward connection."
+        "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -707,34 +729,48 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 3,
-      "city": "Sapporo",
-      "connection_min": 96,
-      "delay_min": 76
+      "city": "Bergen",
+      "connection_min": 127,
+      "delay_min": 59,
+      "mct_min": 36,
+      "other_delay_min": 201
     },
     "variant": 1
   },
   {
     "answer": "wait_at_gate",
     "distractor_ids": [
+      "d2",
       "d1",
-      "d3",
-      "d4",
-      "d2"
+      "d5",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 76 minutes late."
+        "text": "The inbound aircraft is running 59 minutes late."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 201 minutes late."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
       },
       {
         "id": "d3",
@@ -743,22 +779,10 @@
         "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
       },
       {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 96 minutes of slack before the onward connection."
+        "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -782,34 +806,36 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 3,
-      "city": "Sapporo",
-      "connection_min": 96,
-      "delay_min": 76
+      "city": "Bergen",
+      "connection_min": 127,
+      "delay_min": 59,
+      "mct_min": 36,
+      "other_delay_min": 201
     },
     "variant": 1
   },
   {
     "answer": "wait_at_gate",
     "distractor_ids": [
+      "d2",
       "d1",
-      "d3",
-      "d4",
-      "d2"
+      "d5",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 76 minutes late."
+        "text": "The inbound aircraft is running 59 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 96 minutes of slack before the onward connection."
+        "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -818,28 +844,28 @@
         "text": "The later flight has seats available and no rebooking fee."
       },
       {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
+      },
+      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 201 minutes late."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The gate area has been fitted with new seating."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
         "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Zephyr operates its largest lounge in Sapporo."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
       }
     ],
     "item_id": "rel-009-flight-rebook#v1-d4-late",
@@ -857,11 +883,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 3,
-      "city": "Sapporo",
-      "connection_min": 96,
-      "delay_min": 76
+      "city": "Bergen",
+      "connection_min": 127,
+      "delay_min": 59,
+      "mct_min": 36,
+      "other_delay_min": 201
     },
     "variant": 1
   },
@@ -873,13 +901,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 142 minutes late."
+        "text": "The inbound aircraft is running 179 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 112 minutes of slack before the onward connection."
+        "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -903,11 +931,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 0,
-      "city": "Bergen",
-      "connection_min": 112,
-      "delay_min": 142
+      "city": "Porto",
+      "connection_min": 63,
+      "delay_min": 179,
+      "mct_min": 193,
+      "other_delay_min": 43
     },
     "variant": 2
   },
@@ -921,19 +951,19 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 142 minutes late."
+        "text": "The inbound aircraft is running 179 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 112 minutes of slack before the onward connection."
+        "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -957,11 +987,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 0,
-      "city": "Bergen",
-      "connection_min": 112,
-      "delay_min": 142
+      "city": "Porto",
+      "connection_min": 63,
+      "delay_min": 179,
+      "mct_min": 193,
+      "other_delay_min": 43
     },
     "variant": 2
   },
@@ -975,19 +1007,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 142 minutes late."
+        "text": "The inbound aircraft is running 179 minutes late."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 112 minutes of slack before the onward connection."
+        "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1011,11 +1043,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 0,
-      "city": "Bergen",
-      "connection_min": 112,
-      "delay_min": 142
+      "city": "Porto",
+      "connection_min": 63,
+      "delay_min": 179,
+      "mct_min": 193,
+      "other_delay_min": 43
     },
     "variant": 2
   },
@@ -1029,13 +1063,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 142 minutes late."
+        "text": "The inbound aircraft is running 179 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 112 minutes of slack before the onward connection."
+        "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1047,7 +1081,7 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
       }
     ],
     "item_id": "rel-009-flight-rebook#v2-d1-late",
@@ -1065,11 +1099,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 0,
-      "city": "Bergen",
-      "connection_min": 112,
-      "delay_min": 142
+      "city": "Porto",
+      "connection_min": 63,
+      "delay_min": 179,
+      "mct_min": 193,
+      "other_delay_min": 43
     },
     "variant": 2
   },
@@ -1077,28 +1113,22 @@
     "answer": "rebook_now",
     "distractor_ids": [
       "d1",
-      "d3",
       "d2",
-      "d5"
+      "d5",
+      "d4"
     ],
     "facts": [
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The traveller has 0 checked bags, all already tagged through to the final stop."
+        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+        "text": "The minimum legal connection time at the transfer airport is 193 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d5",
@@ -1107,16 +1137,22 @@
         "text": "The gate area has been fitted with new seating."
       },
       {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Meridian operates its largest lounge in Porto."
+      },
+      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 142 minutes late."
+        "text": "The inbound aircraft is running 179 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 112 minutes of slack before the onward connection."
+        "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1140,11 +1176,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 0,
-      "city": "Bergen",
-      "connection_min": 112,
-      "delay_min": 142
+      "city": "Porto",
+      "connection_min": 63,
+      "delay_min": 179,
+      "mct_min": 193,
+      "other_delay_min": 43
     },
     "variant": 2
   },
@@ -1152,34 +1190,28 @@
     "answer": "rebook_now",
     "distractor_ids": [
       "d1",
-      "d3",
       "d2",
-      "d5"
+      "d5",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 142 minutes late."
+        "text": "The inbound aircraft is running 179 minutes late."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The traveller has 0 checked bags, all already tagged through to the final stop."
+        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+        "text": "The minimum legal connection time at the transfer airport is 193 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d5",
@@ -1188,10 +1220,16 @@
         "text": "The gate area has been fitted with new seating."
       },
       {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Meridian operates its largest lounge in Porto."
+      },
+      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 112 minutes of slack before the onward connection."
+        "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1215,11 +1253,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 0,
-      "city": "Bergen",
-      "connection_min": 112,
-      "delay_min": 142
+      "city": "Porto",
+      "connection_min": 63,
+      "delay_min": 179,
+      "mct_min": 193,
+      "other_delay_min": 43
     },
     "variant": 2
   },
@@ -1227,22 +1267,22 @@
     "answer": "rebook_now",
     "distractor_ids": [
       "d1",
-      "d3",
       "d2",
-      "d5"
+      "d5",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 142 minutes late."
+        "text": "The inbound aircraft is running 179 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 112 minutes of slack before the onward connection."
+        "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1254,25 +1294,25 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Bergen, which is neither the origin nor the destination."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The traveller has 0 checked bags, all already tagged through to the final stop."
+        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Zephyr refreshed its cabin interiors across the fleet last year."
+        "text": "The minimum legal connection time at the transfer airport is 193 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The gate area has been fitted with new seating."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Meridian operates its largest lounge in Porto."
       }
     ],
     "item_id": "rel-009-flight-rebook#v2-d4-late",
@@ -1290,11 +1330,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Zephyr",
+      "airline": "Meridian",
       "bags": 0,
-      "city": "Bergen",
-      "connection_min": 112,
-      "delay_min": 142
+      "city": "Porto",
+      "connection_min": 63,
+      "delay_min": 179,
+      "mct_min": 193,
+      "other_delay_min": 43
     },
     "variant": 2
   },
@@ -1306,13 +1348,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 101 minutes late."
+        "text": "The inbound aircraft is running 162 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 141 minutes of slack before the onward connection."
+        "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1336,11 +1378,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Meridian",
-      "bags": 3,
+      "airline": "Solstice",
+      "bags": 1,
       "city": "Sapporo",
-      "connection_min": 141,
-      "delay_min": 101
+      "connection_min": 179,
+      "delay_min": 162,
+      "mct_min": 98,
+      "other_delay_min": 194
     },
     "variant": 3
   },
@@ -1354,19 +1398,19 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 101 minutes late."
+        "text": "The inbound aircraft is running 162 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 141 minutes of slack before the onward connection."
+        "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1390,11 +1434,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Meridian",
-      "bags": 3,
+      "airline": "Solstice",
+      "bags": 1,
       "city": "Sapporo",
-      "connection_min": 141,
-      "delay_min": 101
+      "connection_min": 179,
+      "delay_min": 162,
+      "mct_min": 98,
+      "other_delay_min": 194
     },
     "variant": 3
   },
@@ -1408,19 +1454,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 101 minutes late."
+        "text": "The inbound aircraft is running 162 minutes late."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 141 minutes of slack before the onward connection."
+        "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1444,11 +1490,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Meridian",
-      "bags": 3,
+      "airline": "Solstice",
+      "bags": 1,
       "city": "Sapporo",
-      "connection_min": 141,
-      "delay_min": 101
+      "connection_min": 179,
+      "delay_min": 162,
+      "mct_min": 98,
+      "other_delay_min": 194
     },
     "variant": 3
   },
@@ -1462,13 +1510,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 101 minutes late."
+        "text": "The inbound aircraft is running 162 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 141 minutes of slack before the onward connection."
+        "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1480,7 +1528,7 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
       }
     ],
     "item_id": "rel-009-flight-rebook#v3-d1-late",
@@ -1498,11 +1546,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Meridian",
-      "bags": 3,
+      "airline": "Solstice",
+      "bags": 1,
       "city": "Sapporo",
-      "connection_min": 141,
-      "delay_min": 101
+      "connection_min": 179,
+      "delay_min": 162,
+      "mct_min": 98,
+      "other_delay_min": 194
     },
     "variant": 3
   },
@@ -1511,45 +1561,45 @@
     "distractor_ids": [
       "d1",
       "d2",
-      "d4",
-      "d3"
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Meridian refreshed its cabin interiors across the fleet last year."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Meridian operates its largest lounge in Sapporo."
+        "text": "The minimum legal connection time at the transfer airport is 98 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+        "text": "The traveller has 1 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Solstice operates its largest lounge in Sapporo."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 101 minutes late."
+        "text": "The inbound aircraft is running 162 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 141 minutes of slack before the onward connection."
+        "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1573,11 +1623,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Meridian",
-      "bags": 3,
+      "airline": "Solstice",
+      "bags": 1,
       "city": "Sapporo",
-      "connection_min": 141,
-      "delay_min": 101
+      "connection_min": 179,
+      "delay_min": 162,
+      "mct_min": 98,
+      "other_delay_min": 194
     },
     "variant": 3
   },
@@ -1586,45 +1638,45 @@
     "distractor_ids": [
       "d1",
       "d2",
-      "d4",
-      "d3"
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 101 minutes late."
+        "text": "The inbound aircraft is running 162 minutes late."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Meridian refreshed its cabin interiors across the fleet last year."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Meridian operates its largest lounge in Sapporo."
+        "text": "The minimum legal connection time at the transfer airport is 98 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+        "text": "The traveller has 1 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Solstice operates its largest lounge in Sapporo."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 141 minutes of slack before the onward connection."
+        "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1648,11 +1700,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Meridian",
-      "bags": 3,
+      "airline": "Solstice",
+      "bags": 1,
       "city": "Sapporo",
-      "connection_min": 141,
-      "delay_min": 101
+      "connection_min": 179,
+      "delay_min": 162,
+      "mct_min": 98,
+      "other_delay_min": 194
     },
     "variant": 3
   },
@@ -1661,21 +1715,21 @@
     "distractor_ids": [
       "d1",
       "d2",
-      "d4",
-      "d3"
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 101 minutes late."
+        "text": "The inbound aircraft is running 162 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 141 minutes of slack before the onward connection."
+        "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1687,25 +1741,25 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
+        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Meridian refreshed its cabin interiors across the fleet last year."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Meridian operates its largest lounge in Sapporo."
+        "text": "The minimum legal connection time at the transfer airport is 98 minutes, which this itinerary already satisfies."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
+        "text": "The traveller has 1 checked bags, all already tagged through to the final stop."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Solstice operates its largest lounge in Sapporo."
       }
     ],
     "item_id": "rel-009-flight-rebook#v3-d4-late",
@@ -1723,11 +1777,13 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Meridian",
-      "bags": 3,
+      "airline": "Solstice",
+      "bags": 1,
       "city": "Sapporo",
-      "connection_min": 141,
-      "delay_min": 101
+      "connection_min": 179,
+      "delay_min": 162,
+      "mct_min": 98,
+      "other_delay_min": 194
     },
     "variant": 3
   }

@@ -8,6 +8,8 @@ variables:
   window_days: {int: [7, 45]}
   plan: {choice: [Starter, Growth, Enterprise]}
   tickets: {int: [1, 25]}
+  trial_days: {int: [7, 45]}
+  ordered_days: {int: [2, 60]}
 
 relevant_facts:
   - id: r1
@@ -18,12 +20,16 @@ relevant_facts:
     text: "The goods were returned unopened and in resalable condition."
 
 distractor_facts:
+  # Both are counts of days. One is a different window, the other is measured
+  # from a different event than the rule uses.
   - id: d1
     strength: high
-    text: "The customer is on the {plan} plan and has opened {tickets} tickets this year."
+    collides_with: window_days
+    text: "The separate trial-cancellation window on the {plan} plan runs {trial_days} days."
   - id: d2
     strength: high
-    text: "Order {order_no} was the customer's first purchase through the mobile app."
+    collides_with: days_since
+    text: "Order {order_no} was placed {ordered_days} days ago, though the refund window runs from delivery rather than purchase."
   - id: d3
     strength: medium
     text: "The {plan} plan was renamed in last year's pricing refresh."

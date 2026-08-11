@@ -8,6 +8,8 @@ variables:
   smoke_min: {int: [8, 75]}
   team: {choice: [Platform, Growth, Payments]}
   open_bugs: {int: [0, 40]}
+  next_window_min: {int: [10, 90]}
+  unit_min: {int: [8, 75]}
 
 relevant_facts:
   - id: r1
@@ -18,12 +20,15 @@ relevant_facts:
     text: "Policy forbids starting a deploy that cannot complete its smoke test inside the window."
 
 distractor_facts:
+  # Both are durations in minutes. Neither is *this* window or *the* smoke test.
   - id: d1
     strength: high
-    text: "The {team} team owns {service} and rotated its on-call lead this month."
+    collides_with: window_min
+    text: "Tomorrow morning's change window for {service} is {next_window_min} minutes long."
   - id: d2
     strength: high
-    text: "The {service} backlog currently lists {open_bugs} open bugs, none of them release blockers."
+    collides_with: smoke_min
+    text: "A unit-test-only run finishes in {unit_min} minutes, which policy does not accept in place of a smoke test."
   - id: d3
     strength: medium
     text: "{service} was the most-viewed dashboard at last week's review."

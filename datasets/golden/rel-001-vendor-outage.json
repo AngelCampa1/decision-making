@@ -7,13 +7,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
+        "text": "The Contoso contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 14 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
       },
       {
         "id": "r3",
@@ -33,41 +33,43 @@
       "wait"
     ],
     "position": "none",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Contoso outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 85,
-      "outage_h": 14,
-      "region": "eu-west",
+      "degraded_h": 2,
+      "headcount": 308,
+      "outage_h": 11,
+      "region": "us-east",
+      "response_h": 19,
       "sla_h": 6,
-      "vendor": "Fabrikam"
+      "vendor": "Contoso"
     },
     "variant": 0
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "The Contoso support agreement promises a first response to critical tickets within 19 hours."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
+        "text": "The Contoso contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 14 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
       },
       {
         "id": "r3",
@@ -87,41 +89,43 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Contoso outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 85,
-      "outage_h": 14,
-      "region": "eu-west",
+      "degraded_h": 2,
+      "headcount": 308,
+      "outage_h": 11,
+      "region": "us-east",
+      "response_h": 19,
       "sla_h": 6,
-      "vendor": "Fabrikam"
+      "vendor": "Contoso"
     },
     "variant": 0
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
+        "text": "The Contoso contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "The Contoso support agreement promises a first response to critical tickets within 19 hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 14 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
       },
       {
         "id": "r3",
@@ -141,35 +145,37 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Contoso outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 85,
-      "outage_h": 14,
-      "region": "eu-west",
+      "degraded_h": 2,
+      "headcount": 308,
+      "outage_h": 11,
+      "region": "us-east",
+      "response_h": 19,
       "sla_h": 6,
-      "vendor": "Fabrikam"
+      "vendor": "Contoso"
     },
     "variant": 0
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
+        "text": "The Contoso contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 14 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
       },
       {
         "id": "r3",
@@ -178,10 +184,10 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "The Contoso support agreement promises a first response to critical tickets within 19 hours."
       }
     ],
     "item_id": "rel-001-vendor-outage#v0-d1-late",
@@ -195,62 +201,64 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Contoso outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 85,
-      "outage_h": 14,
-      "region": "eu-west",
+      "degraded_h": 2,
+      "headcount": 308,
+      "outage_h": 11,
+      "region": "us-east",
+      "response_h": 19,
       "sla_h": 6,
-      "vendor": "Fabrikam"
+      "vendor": "Contoso"
     },
     "variant": 0
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
+      "d2",
       "d1",
       "d3",
-      "d2",
-      "d5"
+      "d4"
     ],
     "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Contoso support agreement promises a first response to critical tickets within 19 hours."
+      },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 2 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 85 people across all products."
+        "text": "The support organisation has 308 people across all products."
       },
       {
-        "id": "d2",
+        "id": "d4",
         "role": "distractor",
-        "strength": "high",
-        "text": "The eu-west region accounts for the largest share of Fabrikam customers."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The office coffee machine was serviced on Tuesday."
+        "strength": "medium",
+        "text": "Contoso moved its head office to a new building in March."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
+        "text": "The Contoso contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 14 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
       },
       {
         "id": "r3",
@@ -270,62 +278,64 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Contoso outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 85,
-      "outage_h": 14,
-      "region": "eu-west",
+      "degraded_h": 2,
+      "headcount": 308,
+      "outage_h": 11,
+      "region": "us-east",
+      "response_h": 19,
       "sla_h": 6,
-      "vendor": "Fabrikam"
+      "vendor": "Contoso"
     },
     "variant": 0
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
+      "d2",
       "d1",
       "d3",
-      "d2",
-      "d5"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The support organisation has 85 people across all products."
+        "text": "The Contoso contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The eu-west region accounts for the largest share of Fabrikam customers."
+        "text": "The Contoso support agreement promises a first response to critical tickets within 19 hours."
       },
       {
-        "id": "d5",
+        "id": "d1",
         "role": "distractor",
-        "strength": "low",
-        "text": "The office coffee machine was serviced on Tuesday."
+        "strength": "high",
+        "text": "A separate degraded-performance window the same day lasted 2 continuous hours, with the service still reachable throughout."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The support organisation has 308 people across all products."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Contoso moved its head office to a new building in March."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 14 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
       },
       {
         "id": "r3",
@@ -345,38 +355,40 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Contoso outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 85,
-      "outage_h": 14,
-      "region": "eu-west",
+      "degraded_h": 2,
+      "headcount": 308,
+      "outage_h": 11,
+      "region": "us-east",
+      "response_h": 19,
       "sla_h": 6,
-      "vendor": "Fabrikam"
+      "vendor": "Contoso"
     },
     "variant": 0
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
+      "d2",
       "d1",
       "d3",
-      "d2",
-      "d5"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
+        "text": "The Contoso contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 14 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
       },
       {
         "id": "r3",
@@ -385,28 +397,28 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Contoso support agreement promises a first response to critical tickets within 19 hours."
+      },
+      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 2 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 85 people across all products."
+        "text": "The support organisation has 308 people across all products."
       },
       {
-        "id": "d2",
+        "id": "d4",
         "role": "distractor",
-        "strength": "high",
-        "text": "The eu-west region accounts for the largest share of Fabrikam customers."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The office coffee machine was serviced on Tuesday."
+        "strength": "medium",
+        "text": "Contoso moved its head office to a new building in March."
       }
     ],
     "item_id": "rel-001-vendor-outage#v0-d4-late",
@@ -420,15 +432,17 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Contoso outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 85,
-      "outage_h": 14,
-      "region": "eu-west",
+      "degraded_h": 2,
+      "headcount": 308,
+      "outage_h": 11,
+      "region": "us-east",
+      "response_h": 19,
       "sla_h": 6,
-      "vendor": "Fabrikam"
+      "vendor": "Contoso"
     },
     "variant": 0
   },
@@ -440,13 +454,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 10 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 7 continuous hours."
       },
       {
         "id": "r3",
@@ -466,41 +480,43 @@
       "wait"
     ],
     "position": "none",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 203,
-      "outage_h": 10,
-      "region": "ap-south",
+      "degraded_h": 17,
+      "headcount": 316,
+      "outage_h": 7,
+      "region": "eu-west",
+      "response_h": 2,
       "sla_h": 15,
-      "vendor": "Tailspin"
+      "vendor": "Fabrikam"
     },
     "variant": 1
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Tailspin moved its head office to a new building in March."
+        "strength": "high",
+        "text": "A separate degraded-performance window the same day lasted 17 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 10 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 7 continuous hours."
       },
       {
         "id": "r3",
@@ -520,41 +536,43 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 203,
-      "outage_h": 10,
-      "region": "ap-south",
+      "degraded_h": 17,
+      "headcount": 316,
+      "outage_h": 7,
+      "region": "eu-west",
+      "response_h": 2,
       "sla_h": 15,
-      "vendor": "Tailspin"
+      "vendor": "Fabrikam"
     },
     "variant": 1
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Tailspin moved its head office to a new building in March."
+        "strength": "high",
+        "text": "A separate degraded-performance window the same day lasted 17 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 10 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 7 continuous hours."
       },
       {
         "id": "r3",
@@ -574,35 +592,37 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 203,
-      "outage_h": 10,
-      "region": "ap-south",
+      "degraded_h": 17,
+      "headcount": 316,
+      "outage_h": 7,
+      "region": "eu-west",
+      "response_h": 2,
       "sla_h": 15,
-      "vendor": "Tailspin"
+      "vendor": "Fabrikam"
     },
     "variant": 1
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 10 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 7 continuous hours."
       },
       {
         "id": "r3",
@@ -611,10 +631,10 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Tailspin moved its head office to a new building in March."
+        "strength": "high",
+        "text": "A separate degraded-performance window the same day lasted 17 continuous hours, with the service still reachable throughout."
       }
     ],
     "item_id": "rel-001-vendor-outage#v1-d1-late",
@@ -628,44 +648,46 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 203,
-      "outage_h": 10,
-      "region": "ap-south",
+      "degraded_h": 17,
+      "headcount": 316,
+      "outage_h": 7,
+      "region": "eu-west",
+      "response_h": 2,
       "sla_h": 15,
-      "vendor": "Tailspin"
+      "vendor": "Fabrikam"
     },
     "variant": 1
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4",
+      "d1",
       "d2",
       "d3",
       "d5"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Tailspin moved its head office to a new building in March."
+        "strength": "high",
+        "text": "A separate degraded-performance window the same day lasted 17 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The ap-south region accounts for the largest share of Tailspin customers."
+        "text": "The Fabrikam support agreement promises a first response to critical tickets within 2 hours."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 203 people across all products."
+        "text": "The support organisation has 316 people across all products."
       },
       {
         "id": "d5",
@@ -677,13 +699,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 10 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 7 continuous hours."
       },
       {
         "id": "r3",
@@ -703,22 +725,24 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 203,
-      "outage_h": 10,
-      "region": "ap-south",
+      "degraded_h": 17,
+      "headcount": 316,
+      "outage_h": 7,
+      "region": "eu-west",
+      "response_h": 2,
       "sla_h": 15,
-      "vendor": "Tailspin"
+      "vendor": "Fabrikam"
     },
     "variant": 1
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4",
+      "d1",
       "d2",
       "d3",
       "d5"
@@ -728,25 +752,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Tailspin moved its head office to a new building in March."
+        "strength": "high",
+        "text": "A separate degraded-performance window the same day lasted 17 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The ap-south region accounts for the largest share of Tailspin customers."
+        "text": "The Fabrikam support agreement promises a first response to critical tickets within 2 hours."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 203 people across all products."
+        "text": "The support organisation has 316 people across all products."
       },
       {
         "id": "d5",
@@ -758,7 +782,7 @@
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 10 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 7 continuous hours."
       },
       {
         "id": "r3",
@@ -778,22 +802,24 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 203,
-      "outage_h": 10,
-      "region": "ap-south",
+      "degraded_h": 17,
+      "headcount": 316,
+      "outage_h": 7,
+      "region": "eu-west",
+      "response_h": 2,
       "sla_h": 15,
-      "vendor": "Tailspin"
+      "vendor": "Fabrikam"
     },
     "variant": 1
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4",
+      "d1",
       "d2",
       "d3",
       "d5"
@@ -803,13 +829,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 10 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 7 continuous hours."
       },
       {
         "id": "r3",
@@ -818,22 +844,22 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Tailspin moved its head office to a new building in March."
+        "strength": "high",
+        "text": "A separate degraded-performance window the same day lasted 17 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The ap-south region accounts for the largest share of Tailspin customers."
+        "text": "The Fabrikam support agreement promises a first response to critical tickets within 2 hours."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 203 people across all products."
+        "text": "The support organisation has 316 people across all products."
       },
       {
         "id": "d5",
@@ -853,15 +879,17 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 203,
-      "outage_h": 10,
-      "region": "ap-south",
+      "degraded_h": 17,
+      "headcount": 316,
+      "outage_h": 7,
+      "region": "eu-west",
+      "response_h": 2,
       "sla_h": 15,
-      "vendor": "Tailspin"
+      "vendor": "Fabrikam"
     },
     "variant": 1
   },
@@ -873,13 +901,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 19 continuous hours."
       },
       {
         "id": "r3",
@@ -899,41 +927,43 @@
       "wait"
     ],
     "position": "none",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 70,
-      "outage_h": 21,
-      "region": "eu-west",
-      "sla_h": 15,
-      "vendor": "Fabrikam"
+      "degraded_h": 13,
+      "headcount": 138,
+      "outage_h": 19,
+      "region": "us-east",
+      "response_h": 21,
+      "sla_h": 17,
+      "vendor": "Tailspin"
     },
     "variant": 2
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "The Tailspin support agreement promises a first response to critical tickets within 21 hours."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 19 continuous hours."
       },
       {
         "id": "r3",
@@ -953,41 +983,43 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 70,
-      "outage_h": 21,
-      "region": "eu-west",
-      "sla_h": 15,
-      "vendor": "Fabrikam"
+      "degraded_h": 13,
+      "headcount": 138,
+      "outage_h": 19,
+      "region": "us-east",
+      "response_h": 21,
+      "sla_h": 17,
+      "vendor": "Tailspin"
     },
     "variant": 2
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "The Tailspin support agreement promises a first response to critical tickets within 21 hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 19 continuous hours."
       },
       {
         "id": "r3",
@@ -1007,35 +1039,37 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 70,
-      "outage_h": 21,
-      "region": "eu-west",
-      "sla_h": 15,
-      "vendor": "Fabrikam"
+      "degraded_h": 13,
+      "headcount": 138,
+      "outage_h": 19,
+      "region": "us-east",
+      "response_h": 21,
+      "sla_h": 17,
+      "vendor": "Tailspin"
     },
     "variant": 2
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 19 continuous hours."
       },
       {
         "id": "r3",
@@ -1044,10 +1078,10 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "The Tailspin support agreement promises a first response to critical tickets within 21 hours."
       }
     ],
     "item_id": "rel-001-vendor-outage#v2-d1-late",
@@ -1061,62 +1095,64 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 70,
-      "outage_h": 21,
-      "region": "eu-west",
-      "sla_h": 15,
-      "vendor": "Fabrikam"
+      "degraded_h": 13,
+      "headcount": 138,
+      "outage_h": 19,
+      "region": "us-east",
+      "response_h": 21,
+      "sla_h": 17,
+      "vendor": "Tailspin"
     },
     "variant": 2
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
+      "d2",
       "d1",
       "d4",
-      "d5",
       "d3"
     ],
     "facts": [
       {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Tailspin support agreement promises a first response to critical tickets within 21 hours."
+      },
+      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 13 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Fabrikam moved its head office to a new building in March."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The office coffee machine was serviced on Tuesday."
+        "text": "Tailspin moved its head office to a new building in March."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 70 people across all products."
+        "text": "The support organisation has 138 people across all products."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 19 continuous hours."
       },
       {
         "id": "r3",
@@ -1136,24 +1172,26 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 70,
-      "outage_h": 21,
-      "region": "eu-west",
-      "sla_h": 15,
-      "vendor": "Fabrikam"
+      "degraded_h": 13,
+      "headcount": 138,
+      "outage_h": 19,
+      "region": "us-east",
+      "response_h": 21,
+      "sla_h": 17,
+      "vendor": "Tailspin"
     },
     "variant": 2
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
+      "d2",
       "d1",
       "d4",
-      "d5",
       "d3"
     ],
     "facts": [
@@ -1161,37 +1199,37 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 17 continuous hours."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Tailspin support agreement promises a first response to critical tickets within 21 hours."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 13 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Fabrikam moved its head office to a new building in March."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The office coffee machine was serviced on Tuesday."
+        "text": "Tailspin moved its head office to a new building in March."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 70 people across all products."
+        "text": "The support organisation has 138 people across all products."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 19 continuous hours."
       },
       {
         "id": "r3",
@@ -1211,24 +1249,26 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 70,
-      "outage_h": 21,
-      "region": "eu-west",
-      "sla_h": 15,
-      "vendor": "Fabrikam"
+      "degraded_h": 13,
+      "headcount": 138,
+      "outage_h": 19,
+      "region": "us-east",
+      "response_h": 21,
+      "sla_h": 17,
+      "vendor": "Tailspin"
     },
     "variant": 2
   },
   {
     "answer": "file_sla_claim",
     "distractor_ids": [
+      "d2",
       "d1",
       "d4",
-      "d5",
       "d3"
     ],
     "facts": [
@@ -1236,13 +1276,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 19 continuous hours."
       },
       {
         "id": "r3",
@@ -1251,28 +1291,28 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Tailspin support agreement promises a first response to critical tickets within 21 hours."
+      },
+      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Fabrikam redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 13 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Fabrikam moved its head office to a new building in March."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The office coffee machine was serviced on Tuesday."
+        "text": "Tailspin moved its head office to a new building in March."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 70 people across all products."
+        "text": "The support organisation has 138 people across all products."
       }
     ],
     "item_id": "rel-001-vendor-outage#v2-d4-late",
@@ -1286,15 +1326,17 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 70,
-      "outage_h": 21,
-      "region": "eu-west",
-      "sla_h": 15,
-      "vendor": "Fabrikam"
+      "degraded_h": 13,
+      "headcount": 138,
+      "outage_h": 19,
+      "region": "us-east",
+      "response_h": 21,
+      "sla_h": 17,
+      "vendor": "Tailspin"
     },
     "variant": 2
   },
@@ -1306,13 +1348,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 2 continuous hours."
       },
       {
         "id": "r3",
@@ -1332,41 +1374,43 @@
       "wait"
     ],
     "position": "none",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 362,
-      "outage_h": 15,
-      "region": "us-east",
-      "sla_h": 22,
-      "vendor": "Tailspin"
+      "degraded_h": 20,
+      "headcount": 164,
+      "outage_h": 2,
+      "region": "eu-west",
+      "response_h": 1,
+      "sla_h": 17,
+      "vendor": "Fabrikam"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The us-east region accounts for the largest share of Tailspin customers."
+        "text": "A separate degraded-performance window the same day lasted 20 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 2 continuous hours."
       },
       {
         "id": "r3",
@@ -1386,41 +1430,43 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 362,
-      "outage_h": 15,
-      "region": "us-east",
-      "sla_h": 22,
-      "vendor": "Tailspin"
+      "degraded_h": 20,
+      "headcount": 164,
+      "outage_h": 2,
+      "region": "eu-west",
+      "response_h": 1,
+      "sla_h": 17,
+      "vendor": "Fabrikam"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The us-east region accounts for the largest share of Tailspin customers."
+        "text": "A separate degraded-performance window the same day lasted 20 continuous hours, with the service still reachable throughout."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 2 continuous hours."
       },
       {
         "id": "r3",
@@ -1440,35 +1486,37 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 362,
-      "outage_h": 15,
-      "region": "us-east",
-      "sla_h": 22,
-      "vendor": "Tailspin"
+      "degraded_h": 20,
+      "headcount": 164,
+      "outage_h": 2,
+      "region": "eu-west",
+      "response_h": 1,
+      "sla_h": 17,
+      "vendor": "Fabrikam"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 2 continuous hours."
       },
       {
         "id": "r3",
@@ -1477,10 +1525,10 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The us-east region accounts for the largest share of Tailspin customers."
+        "text": "A separate degraded-performance window the same day lasted 20 continuous hours, with the service still reachable throughout."
       }
     ],
     "item_id": "rel-001-vendor-outage#v3-d1-late",
@@ -1494,44 +1542,40 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 362,
-      "outage_h": 15,
-      "region": "us-east",
-      "sla_h": 22,
-      "vendor": "Tailspin"
+      "degraded_h": 20,
+      "headcount": 164,
+      "outage_h": 2,
+      "region": "eu-west",
+      "response_h": 1,
+      "sla_h": 17,
+      "vendor": "Fabrikam"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d2",
-      "d3",
       "d1",
-      "d5"
+      "d2",
+      "d5",
+      "d3"
     ],
     "facts": [
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The us-east region accounts for the largest share of Tailspin customers."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The support organisation has 362 people across all products."
-      },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Tailspin redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 20 continuous hours, with the service still reachable throughout."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Fabrikam support agreement promises a first response to critical tickets within 1 hours."
       },
       {
         "id": "d5",
@@ -1540,16 +1584,22 @@
         "text": "The office coffee machine was serviced on Tuesday."
       },
       {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The support organisation has 164 people across all products."
+      },
+      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 2 continuous hours."
       },
       {
         "id": "r3",
@@ -1569,50 +1619,46 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 362,
-      "outage_h": 15,
-      "region": "us-east",
-      "sla_h": 22,
-      "vendor": "Tailspin"
+      "degraded_h": 20,
+      "headcount": 164,
+      "outage_h": 2,
+      "region": "eu-west",
+      "response_h": 1,
+      "sla_h": 17,
+      "vendor": "Fabrikam"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d2",
-      "d3",
       "d1",
-      "d5"
+      "d2",
+      "d5",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The us-east region accounts for the largest share of Tailspin customers."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The support organisation has 362 people across all products."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Tailspin redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 20 continuous hours, with the service still reachable throughout."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Fabrikam support agreement promises a first response to critical tickets within 1 hours."
       },
       {
         "id": "d5",
@@ -1621,10 +1667,16 @@
         "text": "The office coffee machine was serviced on Tuesday."
       },
       {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The support organisation has 164 people across all products."
+      },
+      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 2 continuous hours."
       },
       {
         "id": "r3",
@@ -1644,38 +1696,40 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 362,
-      "outage_h": 15,
-      "region": "us-east",
-      "sla_h": 22,
-      "vendor": "Tailspin"
+      "degraded_h": 20,
+      "headcount": 164,
+      "outage_h": 2,
+      "region": "eu-west",
+      "response_h": 1,
+      "sla_h": 17,
+      "vendor": "Fabrikam"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d2",
-      "d3",
       "d1",
-      "d5"
+      "d2",
+      "d5",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 17 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 2 continuous hours."
       },
       {
         "id": "r3",
@@ -1684,28 +1738,28 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The us-east region accounts for the largest share of Tailspin customers."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The support organisation has 362 people across all products."
-      },
-      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Tailspin redesigned its public status page last quarter."
+        "text": "A separate degraded-performance window the same day lasted 20 continuous hours, with the service still reachable throughout."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The Fabrikam support agreement promises a first response to critical tickets within 1 hours."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The office coffee machine was serviced on Tuesday."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The support organisation has 164 people across all products."
       }
     ],
     "item_id": "rel-001-vendor-outage#v3-d4-late",
@@ -1719,15 +1773,17 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 362,
-      "outage_h": 15,
-      "region": "us-east",
-      "sla_h": 22,
-      "vendor": "Tailspin"
+      "degraded_h": 20,
+      "headcount": 164,
+      "outage_h": 2,
+      "region": "eu-west",
+      "response_h": 1,
+      "sla_h": 17,
+      "vendor": "Fabrikam"
     },
     "variant": 3
   }

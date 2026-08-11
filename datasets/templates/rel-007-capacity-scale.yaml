@@ -9,6 +9,8 @@ variables:
   headroom_pct: {int: [10, 40]}
   vendor: {choice: [Helios, Vega, Rigel]}
   cost_per_node: {int: [40, 900]}
+  tested_rps: {int: [200, 3000]}
+  last_rps: {int: [150, 3200]}
 
 relevant_facts:
   - id: r1
@@ -19,12 +21,16 @@ relevant_facts:
     text: "Standing policy requires {headroom_pct}% headroom above forecast peak."
 
 distractor_facts:
+  # Both are requests per second. One was measured on different hardware, the
+  # other is a past peak rather than the forecast the policy applies to.
   - id: d1
     strength: high
-    text: "Each additional {tier} node costs {cost_per_node} per month with {vendor}."
+    collides_with: capacity_rps
+    text: "A staging load test drove the {tier} tier to {tested_rps} requests per second on hardware that does not match production."
   - id: d2
     strength: high
-    text: "{vendor} announced a new availability zone last month."
+    collides_with: expected_rps
+    text: "Last year's equivalent campaign peaked at {last_rps} requests per second."
   - id: d3
     strength: medium
     text: "The {tier} tier has the oldest Terraform module in the repository."

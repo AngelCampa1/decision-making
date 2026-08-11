@@ -8,6 +8,8 @@ variables:
   score_floor: {int: [580, 760]}
   branch: {choice: [Riverside, Kingsway, Northgate]}
   tenure_years: {int: [1, 30]}
+  manual_floor: {int: [580, 760]}
+  old_score: {int: [520, 820]}
 
 relevant_facts:
   - id: r1
@@ -18,12 +20,16 @@ relevant_facts:
     text: "All supporting documents were submitted and verified."
 
 distractor_facts:
+  # Both are credit scores. One belongs to a later stage of the process, the
+  # other to the same applicant at a date the rule does not use.
   - id: d1
     strength: high
-    text: "Application {app_no} was submitted through the {branch} branch."
+    collides_with: score_floor
+    text: "A separate manual-review escalation threshold, applied later in the process, sits at a score of {manual_floor}."
   - id: d2
     strength: high
-    text: "The applicant has banked with the institution for {tenure_years} years."
+    collides_with: score
+    text: "The same applicant's credit score twelve months ago was {old_score}."
   - id: d3
     strength: medium
     text: "The {branch} branch has the longest opening hours in the region."

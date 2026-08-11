@@ -8,6 +8,8 @@ variables:
   threshold_pct: {int: [3, 30]}
   runbook_pages: {int: [2, 60]}
   cluster: {choice: [blue, green, canary]}
+  capacity_threshold_pct: {int: [3, 30]}
+  retry_pct: {int: [1, 40]}
 
 relevant_facts:
   - id: r1
@@ -18,12 +20,16 @@ relevant_facts:
     text: "The secondary on-call is available and has acknowledged the page."
 
 distractor_facts:
+  # Both are percentages of requests. One is a different policy's threshold,
+  # the other a share explicitly excluded from the affected count.
   - id: d1
     strength: high
-    text: "The {alert} runbook is {runbook_pages} pages long and was reviewed this quarter."
+    collides_with: threshold_pct
+    text: "A separate capacity-planning policy raises a ticket at {capacity_threshold_pct}% of requests."
   - id: d2
     strength: high
-    text: "The {cluster} cluster was renamed during last year's migration."
+    collides_with: affected_pct
+    text: "A further {retry_pct}% of requests were retried successfully and are not counted as affected."
   - id: d3
     strength: medium
     text: "The alerting dashboard now supports dark mode."

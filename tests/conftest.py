@@ -50,15 +50,24 @@ def template_dict() -> Callable[..., dict[str, Any]]:
                 "thing": {"choice": ["alpha", "beta"]},
                 "value": {"int": [1, 10]},
                 "limit": {"int": [1, 10]},
+                "other_value": {"int": [1, 10]},
                 "colour": {"choice": ["red", "blue"]},
             },
             "relevant_facts": [
                 {"id": "r1", "text": "The limit is {limit}."},
                 {"id": "r2", "text": "The value is {value}."},
             ],
+            # d1 collides: it states a quantity of the same kind as `value`,
+            # excluded only by the qualifier "unrelated". Every template needs
+            # at least one, so the baseline fixture carries one.
             "distractor_facts": [
-                {"id": "d1", "text": "The {thing} is {colour}.", "strength": "high"},
-                {"id": "d2", "text": "The office is open.", "strength": "low"},
+                {
+                    "id": "d1",
+                    "text": "An unrelated {thing} has a value of {other_value}.",
+                    "strength": "high",
+                    "collides_with": "value",
+                },
+                {"id": "d2", "text": "The office is {colour}.", "strength": "low"},
             ],
             "solution": {
                 "expr": "'act' if value > limit else 'hold'",

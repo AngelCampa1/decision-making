@@ -8,6 +8,8 @@ variables:
   emergency_at: {int: [3, 9]}
   cve_year: {int: [2019, 2026]}
   owner: {choice: [Infrastructure, Security, Data]}
+  other_severity: {int: [1, 10]}
+  vendor_at: {int: [3, 9]}
 
 relevant_facts:
   - id: r1
@@ -18,12 +20,16 @@ relevant_facts:
     text: "A maintenance window is available in nine days if the fix can wait."
 
 distractor_facts:
+  # Both are severity scores on the same 1-10 scale: one for a different issue,
+  # one from a policy this organisation does not follow.
   - id: d1
     strength: high
-    text: "The advisory carries a {cve_year} CVE identifier."
+    collides_with: severity
+    text: "An unrelated advisory affecting a different component scored {other_severity} out of 10 the same week."
   - id: d2
     strength: high
-    text: "{component} is maintained by the {owner} team, which is hiring."
+    collides_with: emergency_at
+    text: "The vendor's own guidance recommends out-of-band patching at {vendor_at} or above, which this organisation has not adopted."
   - id: d3
     strength: medium
     text: "{component} has been in production longer than any other service."

@@ -7,19 +7,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "519 units of SKU-6135 remain in stock."
+        "text": "431 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 47 units per day."
+        "text": "SKU-4412 sells at a steady 27 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 25 days to arrive."
       },
       {
         "id": "r4",
@@ -40,48 +40,50 @@
       "hold_order"
     ],
     "position": "none",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 47,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 519,
+      "daily_units": 27,
+      "express_days": 8,
+      "lead_days": 25,
+      "reserved_units": 838,
+      "sku": "SKU-4412",
+      "stock_units": 431,
       "supplier": "Aldebaran",
-      "warehouse": "Utrecht"
+      "warehouse": "Malmo"
     },
     "variant": 0
   },
   {
     "answer": "reorder_now",
     "distractor_ids": [
-      "d3"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
+        "strength": "high",
+        "text": "Aldebaran offers an air-freight option that arrives in 8 days, which is not approved for SKU-4412."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "519 units of SKU-6135 remain in stock."
+        "text": "431 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 47 units per day."
+        "text": "SKU-4412 sells at a steady 27 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 25 days to arrive."
       },
       {
         "id": "r4",
@@ -102,48 +104,50 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 47,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 519,
+      "daily_units": 27,
+      "express_days": 8,
+      "lead_days": 25,
+      "reserved_units": 838,
+      "sku": "SKU-4412",
+      "stock_units": 431,
       "supplier": "Aldebaran",
-      "warehouse": "Utrecht"
+      "warehouse": "Malmo"
     },
     "variant": 0
   },
   {
     "answer": "reorder_now",
     "distractor_ids": [
-      "d3"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "519 units of SKU-6135 remain in stock."
+        "text": "431 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 47 units per day."
+        "text": "SKU-4412 sells at a steady 27 units per day."
       },
       {
-        "id": "d3",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
+        "strength": "high",
+        "text": "Aldebaran offers an air-freight option that arrives in 8 days, which is not approved for SKU-4412."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 25 days to arrive."
       },
       {
         "id": "r4",
@@ -164,42 +168,44 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 47,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 519,
+      "daily_units": 27,
+      "express_days": 8,
+      "lead_days": 25,
+      "reserved_units": 838,
+      "sku": "SKU-4412",
+      "stock_units": 431,
       "supplier": "Aldebaran",
-      "warehouse": "Utrecht"
+      "warehouse": "Malmo"
     },
     "variant": 0
   },
   {
     "answer": "reorder_now",
     "distractor_ids": [
-      "d3"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "519 units of SKU-6135 remain in stock."
+        "text": "431 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 47 units per day."
+        "text": "SKU-4412 sells at a steady 27 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 25 days to arrive."
       },
       {
         "id": "r4",
@@ -208,10 +214,10 @@
         "text": "Policy is to reorder whenever stock would run out before a new order could land."
       },
       {
-        "id": "d3",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
+        "strength": "high",
+        "text": "Aldebaran offers an air-freight option that arrives in 8 days, which is not approved for SKU-4412."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v0-d1-late",
@@ -226,69 +232,71 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 47,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 519,
+      "daily_units": 27,
+      "express_days": 8,
+      "lead_days": 25,
+      "reserved_units": 838,
+      "sku": "SKU-4412",
+      "stock_units": 431,
       "supplier": "Aldebaran",
-      "warehouse": "Utrecht"
+      "warehouse": "Malmo"
     },
     "variant": 0
   },
   {
     "answer": "reorder_now",
     "distractor_ids": [
-      "d3",
       "d2",
-      "d4",
-      "d5"
+      "d1",
+      "d3",
+      "d4"
     ],
     "facts": [
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
-      },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Aldebaran won a packaging design award last year."
+        "text": "Aldebaran offers an air-freight option that arrives in 8 days, which is not approved for SKU-4412."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 838 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-6135 has the shortest product description in the catalogue."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The warehouse noticeboard was repainted in June."
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "519 units of SKU-6135 remain in stock."
+        "text": "431 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 47 units per day."
+        "text": "SKU-4412 sells at a steady 27 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 25 days to arrive."
       },
       {
         "id": "r4",
@@ -309,69 +317,71 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 47,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 519,
+      "daily_units": 27,
+      "express_days": 8,
+      "lead_days": 25,
+      "reserved_units": 838,
+      "sku": "SKU-4412",
+      "stock_units": 431,
       "supplier": "Aldebaran",
-      "warehouse": "Utrecht"
+      "warehouse": "Malmo"
     },
     "variant": 0
   },
   {
     "answer": "reorder_now",
     "distractor_ids": [
-      "d3",
       "d2",
-      "d4",
-      "d5"
+      "d1",
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "519 units of SKU-6135 remain in stock."
+        "text": "431 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 47 units per day."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
+        "text": "SKU-4412 sells at a steady 27 units per day."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Aldebaran won a packaging design award last year."
+        "text": "Aldebaran offers an air-freight option that arrives in 8 days, which is not approved for SKU-4412."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 838 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-6135 has the shortest product description in the catalogue."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The warehouse noticeboard was repainted in June."
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 25 days to arrive."
       },
       {
         "id": "r4",
@@ -392,45 +402,47 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 47,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 519,
+      "daily_units": 27,
+      "express_days": 8,
+      "lead_days": 25,
+      "reserved_units": 838,
+      "sku": "SKU-4412",
+      "stock_units": 431,
       "supplier": "Aldebaran",
-      "warehouse": "Utrecht"
+      "warehouse": "Malmo"
     },
     "variant": 0
   },
   {
     "answer": "reorder_now",
     "distractor_ids": [
-      "d3",
       "d2",
-      "d4",
-      "d5"
+      "d1",
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "519 units of SKU-6135 remain in stock."
+        "text": "431 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 47 units per day."
+        "text": "SKU-4412 sells at a steady 27 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 25 days to arrive."
       },
       {
         "id": "r4",
@@ -439,28 +451,28 @@
         "text": "Policy is to reorder whenever stock would run out before a new order could land."
       },
       {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
-      },
-      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Aldebaran won a packaging design award last year."
+        "text": "Aldebaran offers an air-freight option that arrives in 8 days, which is not approved for SKU-4412."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 838 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Malmo site has the newest forklift fleet in the network."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-6135 has the shortest product description in the catalogue."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The warehouse noticeboard was repainted in June."
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v0-d4-late",
@@ -475,16 +487,18 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 47,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 519,
+      "daily_units": 27,
+      "express_days": 8,
+      "lead_days": 25,
+      "reserved_units": 838,
+      "sku": "SKU-4412",
+      "stock_units": 431,
       "supplier": "Aldebaran",
-      "warehouse": "Utrecht"
+      "warehouse": "Malmo"
     },
     "variant": 0
   },
@@ -496,19 +510,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "809 units of SKU-6135 remain in stock."
+        "text": "818 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 30 units per day."
+        "text": "SKU-4412 sells at a steady 54 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+        "text": "A replenishment order from Borealis takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -529,48 +543,50 @@
       "hold_order"
     ],
     "position": "none",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 30,
-      "lead_days": 5,
-      "sku": "SKU-6135",
-      "stock_units": 809,
-      "supplier": "Cygnus",
-      "warehouse": "Utrecht"
+      "daily_units": 54,
+      "express_days": 24,
+      "lead_days": 10,
+      "reserved_units": 386,
+      "sku": "SKU-4412",
+      "stock_units": 818,
+      "supplier": "Borealis",
+      "warehouse": "Malmo"
     },
     "variant": 1
   },
   {
     "answer": "hold_order",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "A further 386 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "809 units of SKU-6135 remain in stock."
+        "text": "818 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 30 units per day."
+        "text": "SKU-4412 sells at a steady 54 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+        "text": "A replenishment order from Borealis takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -591,48 +607,50 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 30,
-      "lead_days": 5,
-      "sku": "SKU-6135",
-      "stock_units": 809,
-      "supplier": "Cygnus",
-      "warehouse": "Utrecht"
+      "daily_units": 54,
+      "express_days": 24,
+      "lead_days": 10,
+      "reserved_units": 386,
+      "sku": "SKU-4412",
+      "stock_units": 818,
+      "supplier": "Borealis",
+      "warehouse": "Malmo"
     },
     "variant": 1
   },
   {
     "answer": "hold_order",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "809 units of SKU-6135 remain in stock."
+        "text": "818 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 30 units per day."
+        "text": "SKU-4412 sells at a steady 54 units per day."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "A further 386 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+        "text": "A replenishment order from Borealis takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -653,42 +671,44 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 30,
-      "lead_days": 5,
-      "sku": "SKU-6135",
-      "stock_units": 809,
-      "supplier": "Cygnus",
-      "warehouse": "Utrecht"
+      "daily_units": 54,
+      "express_days": 24,
+      "lead_days": 10,
+      "reserved_units": 386,
+      "sku": "SKU-4412",
+      "stock_units": 818,
+      "supplier": "Borealis",
+      "warehouse": "Malmo"
     },
     "variant": 1
   },
   {
     "answer": "hold_order",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "809 units of SKU-6135 remain in stock."
+        "text": "818 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 30 units per day."
+        "text": "SKU-4412 sells at a steady 54 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+        "text": "A replenishment order from Borealis takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -697,10 +717,10 @@
         "text": "Policy is to reorder whenever stock would run out before a new order could land."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "A further 386 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v1-d1-late",
@@ -715,33 +735,47 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 30,
-      "lead_days": 5,
-      "sku": "SKU-6135",
-      "stock_units": 809,
-      "supplier": "Cygnus",
-      "warehouse": "Utrecht"
+      "daily_units": 54,
+      "express_days": 24,
+      "lead_days": 10,
+      "reserved_units": 386,
+      "sku": "SKU-4412",
+      "stock_units": 818,
+      "supplier": "Borealis",
+      "warehouse": "Malmo"
     },
     "variant": 1
   },
   {
     "answer": "hold_order",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d5",
-      "d3",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 386 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "Borealis offers an air-freight option that arrives in 24 days, which is not approved for SKU-4412."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       },
       {
         "id": "d5",
@@ -750,34 +784,22 @@
         "text": "The warehouse noticeboard was repainted in June."
       },
       {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "SKU-6135 is stored in the Utrecht warehouse, which was reorganised in spring."
-      },
-      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "809 units of SKU-6135 remain in stock."
+        "text": "818 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 30 units per day."
+        "text": "SKU-4412 sells at a steady 54 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+        "text": "A replenishment order from Borealis takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -798,45 +820,59 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 30,
-      "lead_days": 5,
-      "sku": "SKU-6135",
-      "stock_units": 809,
-      "supplier": "Cygnus",
-      "warehouse": "Utrecht"
+      "daily_units": 54,
+      "express_days": 24,
+      "lead_days": 10,
+      "reserved_units": 386,
+      "sku": "SKU-4412",
+      "stock_units": 818,
+      "supplier": "Borealis",
+      "warehouse": "Malmo"
     },
     "variant": 1
   },
   {
     "answer": "hold_order",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d5",
-      "d3",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "809 units of SKU-6135 remain in stock."
+        "text": "818 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 30 units per day."
+        "text": "SKU-4412 sells at a steady 54 units per day."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 386 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "Borealis offers an air-freight option that arrives in 24 days, which is not approved for SKU-4412."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       },
       {
         "id": "d5",
@@ -845,22 +881,10 @@
         "text": "The warehouse noticeboard was repainted in June."
       },
       {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "SKU-6135 is stored in the Utrecht warehouse, which was reorganised in spring."
-      },
-      {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+        "text": "A replenishment order from Borealis takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -881,45 +905,47 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 30,
-      "lead_days": 5,
-      "sku": "SKU-6135",
-      "stock_units": 809,
-      "supplier": "Cygnus",
-      "warehouse": "Utrecht"
+      "daily_units": 54,
+      "express_days": 24,
+      "lead_days": 10,
+      "reserved_units": 386,
+      "sku": "SKU-4412",
+      "stock_units": 818,
+      "supplier": "Borealis",
+      "warehouse": "Malmo"
     },
     "variant": 1
   },
   {
     "answer": "hold_order",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d5",
-      "d3",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "809 units of SKU-6135 remain in stock."
+        "text": "818 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 30 units per day."
+        "text": "SKU-4412 sells at a steady 54 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 5 days to arrive."
+        "text": "A replenishment order from Borealis takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -928,28 +954,28 @@
         "text": "Policy is to reorder whenever stock would run out before a new order could land."
       },
       {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 386 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
+      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "Borealis offers an air-freight option that arrives in 24 days, which is not approved for SKU-4412."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The warehouse noticeboard was repainted in June."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Utrecht site has the newest forklift fleet in the network."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "SKU-6135 is stored in the Utrecht warehouse, which was reorganised in spring."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v1-d4-late",
@@ -964,16 +990,18 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 30,
-      "lead_days": 5,
-      "sku": "SKU-6135",
-      "stock_units": 809,
-      "supplier": "Cygnus",
-      "warehouse": "Utrecht"
+      "daily_units": 54,
+      "express_days": 24,
+      "lead_days": 10,
+      "reserved_units": 386,
+      "sku": "SKU-4412",
+      "stock_units": 818,
+      "supplier": "Borealis",
+      "warehouse": "Malmo"
     },
     "variant": 1
   },
@@ -985,19 +1013,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "634 units of SKU-2290 remain in stock."
+        "text": "309 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-2290 sells at a steady 50 units per day."
+        "text": "SKU-4412 sells at a steady 38 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+        "text": "A replenishment order from Cygnus takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -1018,16 +1046,18 @@
       "hold_order"
     ],
     "position": "none",
-    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 50,
-      "lead_days": 17,
-      "sku": "SKU-2290",
-      "stock_units": 634,
+      "daily_units": 38,
+      "express_days": 3,
+      "lead_days": 10,
+      "reserved_units": 477,
+      "sku": "SKU-4412",
+      "stock_units": 309,
       "supplier": "Cygnus",
-      "warehouse": "Malmo"
+      "warehouse": "Leeds"
     },
     "variant": 2
   },
@@ -1041,25 +1071,25 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+        "text": "A further 477 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "634 units of SKU-2290 remain in stock."
+        "text": "309 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-2290 sells at a steady 50 units per day."
+        "text": "SKU-4412 sells at a steady 38 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+        "text": "A replenishment order from Cygnus takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -1080,16 +1110,18 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 50,
-      "lead_days": 17,
-      "sku": "SKU-2290",
-      "stock_units": 634,
+      "daily_units": 38,
+      "express_days": 3,
+      "lead_days": 10,
+      "reserved_units": 477,
+      "sku": "SKU-4412",
+      "stock_units": 309,
       "supplier": "Cygnus",
-      "warehouse": "Malmo"
+      "warehouse": "Leeds"
     },
     "variant": 2
   },
@@ -1103,25 +1135,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "634 units of SKU-2290 remain in stock."
+        "text": "309 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-2290 sells at a steady 50 units per day."
+        "text": "SKU-4412 sells at a steady 38 units per day."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+        "text": "A further 477 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+        "text": "A replenishment order from Cygnus takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -1142,16 +1174,18 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 50,
-      "lead_days": 17,
-      "sku": "SKU-2290",
-      "stock_units": 634,
+      "daily_units": 38,
+      "express_days": 3,
+      "lead_days": 10,
+      "reserved_units": 477,
+      "sku": "SKU-4412",
+      "stock_units": 309,
       "supplier": "Cygnus",
-      "warehouse": "Malmo"
+      "warehouse": "Leeds"
     },
     "variant": 2
   },
@@ -1165,19 +1199,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "634 units of SKU-2290 remain in stock."
+        "text": "309 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-2290 sells at a steady 50 units per day."
+        "text": "SKU-4412 sells at a steady 38 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+        "text": "A replenishment order from Cygnus takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -1189,7 +1223,7 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+        "text": "A further 477 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v2-d1-late",
@@ -1204,16 +1238,18 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 50,
-      "lead_days": 17,
-      "sku": "SKU-2290",
-      "stock_units": 634,
+      "daily_units": 38,
+      "express_days": 3,
+      "lead_days": 10,
+      "reserved_units": 477,
+      "sku": "SKU-4412",
+      "stock_units": 309,
       "supplier": "Cygnus",
-      "warehouse": "Malmo"
+      "warehouse": "Leeds"
     },
     "variant": 2
   },
@@ -1230,13 +1266,13 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+        "text": "A further 477 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "Cygnus offers an air-freight option that arrives in 3 days, which is not approved for SKU-4412."
       },
       {
         "id": "d5",
@@ -1248,25 +1284,25 @@
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-2290 has the shortest product description in the catalogue."
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "634 units of SKU-2290 remain in stock."
+        "text": "309 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-2290 sells at a steady 50 units per day."
+        "text": "SKU-4412 sells at a steady 38 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+        "text": "A replenishment order from Cygnus takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -1287,16 +1323,18 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 50,
-      "lead_days": 17,
-      "sku": "SKU-2290",
-      "stock_units": 634,
+      "daily_units": 38,
+      "express_days": 3,
+      "lead_days": 10,
+      "reserved_units": 477,
+      "sku": "SKU-4412",
+      "stock_units": 309,
       "supplier": "Cygnus",
-      "warehouse": "Malmo"
+      "warehouse": "Leeds"
     },
     "variant": 2
   },
@@ -1313,25 +1351,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "634 units of SKU-2290 remain in stock."
+        "text": "309 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-2290 sells at a steady 50 units per day."
+        "text": "SKU-4412 sells at a steady 38 units per day."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+        "text": "A further 477 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "Cygnus offers an air-freight option that arrives in 3 days, which is not approved for SKU-4412."
       },
       {
         "id": "d5",
@@ -1343,13 +1381,13 @@
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-2290 has the shortest product description in the catalogue."
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+        "text": "A replenishment order from Cygnus takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -1370,16 +1408,18 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 50,
-      "lead_days": 17,
-      "sku": "SKU-2290",
-      "stock_units": 634,
+      "daily_units": 38,
+      "express_days": 3,
+      "lead_days": 10,
+      "reserved_units": 477,
+      "sku": "SKU-4412",
+      "stock_units": 309,
       "supplier": "Cygnus",
-      "warehouse": "Malmo"
+      "warehouse": "Leeds"
     },
     "variant": 2
   },
@@ -1396,19 +1436,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "634 units of SKU-2290 remain in stock."
+        "text": "309 units of SKU-4412 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-2290 sells at a steady 50 units per day."
+        "text": "SKU-4412 sells at a steady 38 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Cygnus takes 17 days to arrive."
+        "text": "A replenishment order from Cygnus takes 10 days to arrive."
       },
       {
         "id": "r4",
@@ -1420,13 +1460,13 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "SKU-2290 is stored in the Malmo warehouse, which was reorganised in spring."
+        "text": "A further 477 units of SKU-4412 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Cygnus won a packaging design award last year."
+        "text": "Cygnus offers an air-freight option that arrives in 3 days, which is not approved for SKU-4412."
       },
       {
         "id": "d5",
@@ -1438,7 +1478,7 @@
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-2290 has the shortest product description in the catalogue."
+        "text": "SKU-4412 has the shortest product description in the catalogue."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v2-d4-late",
@@ -1453,16 +1493,18 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-4412 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 50,
-      "lead_days": 17,
-      "sku": "SKU-2290",
-      "stock_units": 634,
+      "daily_units": 38,
+      "express_days": 3,
+      "lead_days": 10,
+      "reserved_units": 477,
+      "sku": "SKU-4412",
+      "stock_units": 309,
       "supplier": "Cygnus",
-      "warehouse": "Malmo"
+      "warehouse": "Leeds"
     },
     "variant": 2
   },
@@ -1474,19 +1516,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "498 units of SKU-6135 remain in stock."
+        "text": "858 units of SKU-2290 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 10 units per day."
+        "text": "SKU-2290 sells at a steady 34 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 7 days to arrive."
       },
       {
         "id": "r4",
@@ -1507,14 +1549,16 @@
       "hold_order"
     ],
     "position": "none",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 10,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 498,
+      "daily_units": 34,
+      "express_days": 29,
+      "lead_days": 7,
+      "reserved_units": 132,
+      "sku": "SKU-2290",
+      "stock_units": 858,
       "supplier": "Aldebaran",
       "warehouse": "Malmo"
     },
@@ -1523,32 +1567,32 @@
   {
     "answer": "hold_order",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The Malmo site has the newest forklift fleet in the network."
+        "strength": "high",
+        "text": "A further 132 units of SKU-2290 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "498 units of SKU-6135 remain in stock."
+        "text": "858 units of SKU-2290 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 10 units per day."
+        "text": "SKU-2290 sells at a steady 34 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 7 days to arrive."
       },
       {
         "id": "r4",
@@ -1569,14 +1613,16 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 10,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 498,
+      "daily_units": 34,
+      "express_days": 29,
+      "lead_days": 7,
+      "reserved_units": 132,
+      "sku": "SKU-2290",
+      "stock_units": 858,
       "supplier": "Aldebaran",
       "warehouse": "Malmo"
     },
@@ -1585,32 +1631,32 @@
   {
     "answer": "hold_order",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "498 units of SKU-6135 remain in stock."
+        "text": "858 units of SKU-2290 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 10 units per day."
+        "text": "SKU-2290 sells at a steady 34 units per day."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The Malmo site has the newest forklift fleet in the network."
+        "strength": "high",
+        "text": "A further 132 units of SKU-2290 sit at a partner site and are not part of this warehouse's sellable stock."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 7 days to arrive."
       },
       {
         "id": "r4",
@@ -1631,14 +1677,16 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 10,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 498,
+      "daily_units": 34,
+      "express_days": 29,
+      "lead_days": 7,
+      "reserved_units": 132,
+      "sku": "SKU-2290",
+      "stock_units": 858,
       "supplier": "Aldebaran",
       "warehouse": "Malmo"
     },
@@ -1647,26 +1695,26 @@
   {
     "answer": "hold_order",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "498 units of SKU-6135 remain in stock."
+        "text": "858 units of SKU-2290 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 10 units per day."
+        "text": "SKU-2290 sells at a steady 34 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 7 days to arrive."
       },
       {
         "id": "r4",
@@ -1675,10 +1723,10 @@
         "text": "Policy is to reorder whenever stock would run out before a new order could land."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The Malmo site has the newest forklift fleet in the network."
+        "strength": "high",
+        "text": "A further 132 units of SKU-2290 sit at a partner site and are not part of this warehouse's sellable stock."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v3-d1-late",
@@ -1693,14 +1741,16 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 10,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 498,
+      "daily_units": 34,
+      "express_days": 29,
+      "lead_days": 7,
+      "reserved_units": 132,
+      "sku": "SKU-2290",
+      "stock_units": 858,
       "supplier": "Aldebaran",
       "warehouse": "Malmo"
     },
@@ -1709,12 +1759,24 @@
   {
     "answer": "hold_order",
     "distractor_ids": [
+      "d1",
+      "d2",
       "d3",
-      "d5",
-      "d4",
-      "d2"
+      "d4"
     ],
     "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 132 units of SKU-2290 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran offers an air-freight option that arrives in 29 days, which is not approved for SKU-2290."
+      },
       {
         "id": "d3",
         "role": "distractor",
@@ -1722,40 +1784,28 @@
         "text": "The Malmo site has the newest forklift fleet in the network."
       },
       {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The warehouse noticeboard was repainted in June."
-      },
-      {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-6135 has the shortest product description in the catalogue."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Aldebaran won a packaging design award last year."
+        "text": "SKU-2290 has the shortest product description in the catalogue."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "498 units of SKU-6135 remain in stock."
+        "text": "858 units of SKU-2290 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 10 units per day."
+        "text": "SKU-2290 sells at a steady 34 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 7 days to arrive."
       },
       {
         "id": "r4",
@@ -1776,14 +1826,16 @@
       "hold_order"
     ],
     "position": "early",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 10,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 498,
+      "daily_units": 34,
+      "express_days": 29,
+      "lead_days": 7,
+      "reserved_units": 132,
+      "sku": "SKU-2290",
+      "stock_units": 858,
       "supplier": "Aldebaran",
       "warehouse": "Malmo"
     },
@@ -1792,23 +1844,35 @@
   {
     "answer": "hold_order",
     "distractor_ids": [
+      "d1",
+      "d2",
       "d3",
-      "d5",
-      "d4",
-      "d2"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "498 units of SKU-6135 remain in stock."
+        "text": "858 units of SKU-2290 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 10 units per day."
+        "text": "SKU-2290 sells at a steady 34 units per day."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 132 units of SKU-2290 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran offers an air-freight option that arrives in 29 days, which is not approved for SKU-2290."
       },
       {
         "id": "d3",
@@ -1817,28 +1881,16 @@
         "text": "The Malmo site has the newest forklift fleet in the network."
       },
       {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The warehouse noticeboard was repainted in June."
-      },
-      {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-6135 has the shortest product description in the catalogue."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Aldebaran won a packaging design award last year."
+        "text": "SKU-2290 has the shortest product description in the catalogue."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 7 days to arrive."
       },
       {
         "id": "r4",
@@ -1859,14 +1911,16 @@
       "hold_order"
     ],
     "position": "middle",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 10,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 498,
+      "daily_units": 34,
+      "express_days": 29,
+      "lead_days": 7,
+      "reserved_units": 132,
+      "sku": "SKU-2290",
+      "stock_units": 858,
       "supplier": "Aldebaran",
       "warehouse": "Malmo"
     },
@@ -1875,29 +1929,29 @@
   {
     "answer": "hold_order",
     "distractor_ids": [
+      "d1",
+      "d2",
       "d3",
-      "d5",
-      "d4",
-      "d2"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "498 units of SKU-6135 remain in stock."
+        "text": "858 units of SKU-2290 remain in stock."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "SKU-6135 sells at a steady 10 units per day."
+        "text": "SKU-2290 sells at a steady 34 units per day."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "A replenishment order from Aldebaran takes 27 days to arrive."
+        "text": "A replenishment order from Aldebaran takes 7 days to arrive."
       },
       {
         "id": "r4",
@@ -1906,28 +1960,28 @@
         "text": "Policy is to reorder whenever stock would run out before a new order could land."
       },
       {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "A further 132 units of SKU-2290 sit at a partner site and are not part of this warehouse's sellable stock."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Aldebaran offers an air-freight option that arrives in 29 days, which is not approved for SKU-2290."
+      },
+      {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
         "text": "The Malmo site has the newest forklift fleet in the network."
       },
       {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The warehouse noticeboard was repainted in June."
-      },
-      {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "SKU-6135 has the shortest product description in the catalogue."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Aldebaran won a packaging design award last year."
+        "text": "SKU-2290 has the shortest product description in the catalogue."
       }
     ],
     "item_id": "rel-004-inventory-reorder#v3-d4-late",
@@ -1942,14 +1996,16 @@
       "hold_order"
     ],
     "position": "late",
-    "question": "Should the buyer place a reorder for SKU-6135 now, or hold?",
+    "question": "Should the buyer place a reorder for SKU-2290 now, or hold?",
     "seed": 1,
     "template_id": "rel-004-inventory-reorder",
     "variables": {
-      "daily_units": 10,
-      "lead_days": 27,
-      "sku": "SKU-6135",
-      "stock_units": 498,
+      "daily_units": 34,
+      "express_days": 29,
+      "lead_days": 7,
+      "reserved_units": 132,
+      "sku": "SKU-2290",
+      "stock_units": 858,
       "supplier": "Aldebaran",
       "warehouse": "Malmo"
     },

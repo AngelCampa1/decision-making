@@ -15,6 +15,7 @@ from decision_evals.generators.generate import (
     arrange,
     derive_seed,
     generate,
+    is_discriminative,
     is_robust,
     sample_variables,
     strata_combinations,
@@ -125,7 +126,18 @@ def test_robustness_ignores_non_numeric_variables(template_dict: Build) -> None:
     """A choice variable has no ±1 neighbour; nudging it is meaningless."""
     by_choice = Template.model_validate(
         template_dict(
-            solution={"expr": "'act' if thing == 'alpha' else 'hold'", "load_bearing": ["r1"]}
+            solution={"expr": "'act' if thing == 'alpha' else 'hold'", "load_bearing": ["r1"]},
+            # The collision has to follow the solution: this one turns on a
+            # choice, so the competing quantity is a choice too.
+            distractor_facts=[
+                {
+                    "id": "d1",
+                    "text": "An unrelated item is {colour}.",
+                    "strength": "high",
+                    "collides_with": "thing",
+                },
+                {"id": "d2", "text": "The office is open.", "strength": "low"},
+            ],
         )
     )
     assert is_robust(by_choice, {"thing": "alpha", "value": 1, "limit": 1, "colour": "red"})
@@ -153,19 +165,32 @@ def test_a_corpus_too_tight_for_a_margin_fails_loudly(template_dict: Build) -> N
                 "colour": {"choice": ["red"]},
                 "value": {"int": [5, 5]},
                 "limit": {"int": [5, 5]},
+                "other_value": {"int": [5, 5]},
             }
         )
     )
-    with pytest.raises(GenerationError, match="robust answer"):
+    with pytest.raises(GenerationError, match="robust, discriminative answer"):
         generate(cramped, seed=1)
 
 
 def test_an_unreachable_option_fails_loudly(template_dict: Build) -> None:
     """A template that cannot produce one of its options is defective, not unlucky."""
     unreachable = Template.model_validate(
-        template_dict(solution={"expr": "'act'", "load_bearing": ["r1"]})
+        template_dict(
+            solution={"expr": "'act' if value > 0 else 'hold'", "load_bearing": ["r1"]},
+            variables={
+                "thing": {"choice": ["alpha", "beta"]},
+                "value": {"int": [1, 10]},
+                "limit": {"int": [1, 10]},
+                # Ranged below the threshold so the collision can still flip the
+                # answer; otherwise this template would fail the discriminative
+                # check first and the test would stop being about reachability.
+                "other_value": {"int": [-5, 0]},
+                "colour": {"choice": ["red", "blue"]},
+            },
+        )
     )
-    with pytest.raises(GenerationError, match="could not produce a robust answer 'hold'"):
+    with pytest.raises(GenerationError, match="answer 'hold'"):
         generate(unreachable, seed=1)
 
 
@@ -179,7 +204,7 @@ def test_a_non_string_answer_is_rejected(template_dict: Build) -> None:
 
 def test_an_answer_outside_the_option_menu_is_rejected(template_dict: Build) -> None:
     stray = Template.model_validate(
-        template_dict(solution={"expr": "'maybe'", "load_bearing": ["r1"]})
+        template_dict(solution={"expr": "'maybe' if value > 0 else 'act'", "load_bearing": ["r1"]})
     )
     with pytest.raises(GenerationError, match="not one of the options"):
         generate(stray, seed=1)
@@ -243,3 +268,62 @@ def test_item_ids_encode_their_coordinates(template: Template) -> None:
     ids = [item.item_id for item in generate(template, 1)]
     assert "tst-001-example#v0-d0-none" in ids
     assert len(set(ids)) == len(ids)
+
+
+# -- collisions -------------------------------------------------------------
+
+
+def test_every_generated_item_discriminates(template: Template) -> None:
+    """Reading the wrong number must change the answer, on every item.
+
+    Otherwise the careful reader and the number-grabber score identically and
+    the item contributes dilution rather than signal.
+    """
+    for item in generate(template, seed=3):
+        assert is_discriminative(template, item.variables), item.variables
+
+
+def test_a_collision_that_agrees_is_not_discriminative(template: Template) -> None:
+    """value=9, other_value=8: both above limit=5, so the substitution changes nothing."""
+    agreeing = {"value": 9, "other_value": 8, "limit": 5, "thing": "alpha", "colour": "red"}
+    assert not is_discriminative(template, agreeing)
+    disagreeing = {**agreeing, "other_value": 2}
+    assert is_discriminative(template, disagreeing)
+
+
+def test_a_substitution_that_leaves_the_option_menu_is_not_discriminative(
+    template_dict: Build,
+) -> None:
+    """If the two quantities are not comparable, the distractor is not competing."""
+    narrow = Template.model_validate(
+        template_dict(
+            solution={
+                "expr": "'act' if value > 5 else ('hold' if value > 0 else 'undefined')",
+                "load_bearing": ["r1"],
+            }
+        )
+    )
+    assert not is_discriminative(
+        narrow, {"value": 9, "other_value": -3, "limit": 1, "thing": "a", "colour": "red"}
+    )
+
+
+def test_the_real_templates_all_discriminate() -> None:
+    """Not a fixture: every shipped item must carry a live collision."""
+    from decision_evals.generators import load_all
+
+    for template in load_all():
+        assert template.collision_pairs()
+        for item in generate(template, seed=1):
+            assert is_discriminative(template, item.variables), item.item_id
+
+
+def test_the_one_distractor_stratum_always_gets_a_colliding_distractor() -> None:
+    """A uniform draw would spend that stratum on a coffee machine most of the time."""
+    from decision_evals.generators import load_all
+
+    for template in load_all():
+        colliding = {d.id for d in template.distractor_facts if d.collides_with is not None}
+        for item in generate(template, seed=1):
+            if item.n_distractors == 1:
+                assert item.distractor_ids[0] in colliding, item.item_id

@@ -55,6 +55,12 @@ def test_a_distractor_sharing_a_solution_variable_is_not_provably_inert(
             distractor_facts=[
                 {"id": "d1", "text": "The limit was set to {limit} last year.", "strength": "high"},
                 {"id": "d2", "text": "The office is open.", "strength": "low"},
+                {
+                    "id": "d3",
+                    "text": "An unrelated {thing} has a value of {other_value}.",
+                    "strength": "high",
+                    "collides_with": "value",
+                },
             ]
         )
     )
@@ -70,6 +76,12 @@ def test_a_shared_variable_rejects_without_consulting_the_auditors(
             distractor_facts=[
                 {"id": "d1", "text": "The value was {value} last year.", "strength": "high"},
                 {"id": "d2", "text": "The office is open.", "strength": "low"},
+                {
+                    "id": "d3",
+                    "text": "An unrelated {thing} has a value of {other_value}.",
+                    "strength": "high",
+                    "collides_with": "value",
+                },
             ]
         )
     )
@@ -160,3 +172,20 @@ def test_summary_reports_attrition(template: Template) -> None:
 def test_an_empty_audit_has_a_defined_rate() -> None:
     summary = summarise([])
     assert summary.acceptance_rate == 0.0
+
+
+# -- colliding distractors --------------------------------------------------
+
+
+def test_the_prompt_names_the_collision(template_dict: Build) -> None:
+    """The auditor should not have to spot the near-miss unaided."""
+    template = Template.model_validate(template_dict())
+    prompt = build_audit_prompt(template, _distractor(template, "d1"))
+    assert "same kind as `value`" in prompt
+    assert "usable unless that qualifier plainly rules it out" in prompt
+
+
+def test_the_prompt_stays_quiet_about_a_non_colliding_distractor(template_dict: Build) -> None:
+    template = Template.model_validate(template_dict())
+    prompt = build_audit_prompt(template, _distractor(template, "d2"))
+    assert "same kind as" not in prompt

@@ -7,13 +7,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 3 or above."
       },
       {
         "id": "r3",
@@ -33,41 +33,43 @@
       "schedule_patch"
     ],
     "position": "none",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2025,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2026,
+      "emergency_at": 3,
+      "other_severity": 2,
+      "owner": "Infrastructure",
+      "severity": 4,
+      "vendor_at": 8
     },
     "variant": 0
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 2 out of 10 the same week."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 3 or above."
       },
       {
         "id": "r3",
@@ -87,41 +89,43 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2025,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2026,
+      "emergency_at": 3,
+      "other_severity": 2,
+      "owner": "Infrastructure",
+      "severity": 4,
+      "vendor_at": 8
     },
     "variant": 0
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 4 out of 10."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 2 out of 10 the same week."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 3 or above."
       },
       {
         "id": "r3",
@@ -141,35 +145,37 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2025,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2026,
+      "emergency_at": 3,
+      "other_severity": 2,
+      "owner": "Infrastructure",
+      "severity": 4,
+      "vendor_at": 8
     },
     "variant": 0
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d3"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 3 or above."
       },
       {
         "id": "r3",
@@ -178,10 +184,10 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
-        "id": "d3",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 2 out of 10 the same week."
       }
     ],
     "item_id": "rel-005-security-patch#v0-d1-late",
@@ -195,62 +201,64 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2025,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2026,
+      "emergency_at": 3,
+      "other_severity": 2,
+      "owner": "Infrastructure",
+      "severity": 4,
+      "vendor_at": 8
     },
     "variant": 0
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d3",
       "d1",
       "d2",
-      "d4"
+      "d4",
+      "d3"
     ],
     "facts": [
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
-      },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2025 CVE identifier."
+        "text": "An unrelated advisory affecting a different component scored 2 out of 10 the same week."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "image-resizer is maintained by the Data team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 8 or above, which this organisation has not adopted."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Data team recently migrated its documentation to a new wiki."
+        "text": "The Infrastructure team recently migrated its documentation to a new wiki."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "pdf-render has been in production longer than any other service."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 3 or above."
       },
       {
         "id": "r3",
@@ -270,62 +278,64 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2025,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2026,
+      "emergency_at": 3,
+      "other_severity": 2,
+      "owner": "Infrastructure",
+      "severity": 4,
+      "vendor_at": 8
     },
     "variant": 0
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d3",
       "d1",
       "d2",
-      "d4"
+      "d4",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 8 out of 10."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "text": "The published severity score for the pdf-render issue is 4 out of 10."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2025 CVE identifier."
+        "text": "An unrelated advisory affecting a different component scored 2 out of 10 the same week."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "image-resizer is maintained by the Data team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 8 or above, which this organisation has not adopted."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Data team recently migrated its documentation to a new wiki."
+        "text": "The Infrastructure team recently migrated its documentation to a new wiki."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "pdf-render has been in production longer than any other service."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 3 or above."
       },
       {
         "id": "r3",
@@ -345,38 +355,40 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2025,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2026,
+      "emergency_at": 3,
+      "other_severity": 2,
+      "owner": "Infrastructure",
+      "severity": 4,
+      "vendor_at": 8
     },
     "variant": 0
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d3",
       "d1",
       "d2",
-      "d4"
+      "d4",
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 3 or above."
       },
       {
         "id": "r3",
@@ -385,28 +397,28 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
-      },
-      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2025 CVE identifier."
+        "text": "An unrelated advisory affecting a different component scored 2 out of 10 the same week."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "image-resizer is maintained by the Data team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 8 or above, which this organisation has not adopted."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Data team recently migrated its documentation to a new wiki."
+        "text": "The Infrastructure team recently migrated its documentation to a new wiki."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "pdf-render has been in production longer than any other service."
       }
     ],
     "item_id": "rel-005-security-patch#v0-d4-late",
@@ -420,15 +432,17 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2025,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2026,
+      "emergency_at": 3,
+      "other_severity": 2,
+      "owner": "Infrastructure",
+      "severity": 4,
+      "vendor_at": 8
     },
     "variant": 0
   },
@@ -440,13 +454,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 5 out of 10."
+        "text": "The published severity score for the log-shipper issue is 3 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 9 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -466,15 +480,17 @@
       "schedule_patch"
     ],
     "position": "none",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2021,
-      "emergency_at": 9,
-      "owner": "Security",
-      "severity": 5
+      "component": "log-shipper",
+      "cve_year": 2020,
+      "emergency_at": 6,
+      "other_severity": 7,
+      "owner": "Data",
+      "severity": 3,
+      "vendor_at": 3
     },
     "variant": 1
   },
@@ -488,19 +504,19 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2021 CVE identifier."
+        "text": "An unrelated advisory affecting a different component scored 7 out of 10 the same week."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 5 out of 10."
+        "text": "The published severity score for the log-shipper issue is 3 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 9 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -520,15 +536,17 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2021,
-      "emergency_at": 9,
-      "owner": "Security",
-      "severity": 5
+      "component": "log-shipper",
+      "cve_year": 2020,
+      "emergency_at": 6,
+      "other_severity": 7,
+      "owner": "Data",
+      "severity": 3,
+      "vendor_at": 3
     },
     "variant": 1
   },
@@ -542,19 +560,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 5 out of 10."
+        "text": "The published severity score for the log-shipper issue is 3 out of 10."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2021 CVE identifier."
+        "text": "An unrelated advisory affecting a different component scored 7 out of 10 the same week."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 9 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -574,15 +592,17 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2021,
-      "emergency_at": 9,
-      "owner": "Security",
-      "severity": 5
+      "component": "log-shipper",
+      "cve_year": 2020,
+      "emergency_at": 6,
+      "other_severity": 7,
+      "owner": "Data",
+      "severity": 3,
+      "vendor_at": 3
     },
     "variant": 1
   },
@@ -596,13 +616,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 5 out of 10."
+        "text": "The published severity score for the log-shipper issue is 3 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 9 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -614,7 +634,7 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2021 CVE identifier."
+        "text": "An unrelated advisory affecting a different component scored 7 out of 10 the same week."
       }
     ],
     "item_id": "rel-005-security-patch#v1-d1-late",
@@ -628,15 +648,17 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2021,
-      "emergency_at": 9,
-      "owner": "Security",
-      "severity": 5
+      "component": "log-shipper",
+      "cve_year": 2020,
+      "emergency_at": 6,
+      "other_severity": 7,
+      "owner": "Data",
+      "severity": 3,
+      "vendor_at": 3
     },
     "variant": 1
   },
@@ -644,46 +666,46 @@
     "answer": "schedule_patch",
     "distractor_ids": [
       "d1",
-      "d4",
       "d2",
-      "d3"
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2021 CVE identifier."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Security team recently migrated its documentation to a new wiki."
+        "text": "An unrelated advisory affecting a different component scored 7 out of 10 the same week."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "image-resizer is maintained by the Security team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "text": "log-shipper has been in production longer than any other service."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Data team recently migrated its documentation to a new wiki."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 5 out of 10."
+        "text": "The published severity score for the log-shipper issue is 3 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 9 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -703,15 +725,17 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2021,
-      "emergency_at": 9,
-      "owner": "Security",
-      "severity": 5
+      "component": "log-shipper",
+      "cve_year": 2020,
+      "emergency_at": 6,
+      "other_severity": 7,
+      "owner": "Data",
+      "severity": 3,
+      "vendor_at": 3
     },
     "variant": 1
   },
@@ -719,46 +743,46 @@
     "answer": "schedule_patch",
     "distractor_ids": [
       "d1",
-      "d4",
       "d2",
-      "d3"
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 5 out of 10."
+        "text": "The published severity score for the log-shipper issue is 3 out of 10."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2021 CVE identifier."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Security team recently migrated its documentation to a new wiki."
+        "text": "An unrelated advisory affecting a different component scored 7 out of 10 the same week."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "image-resizer is maintained by the Security team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "text": "log-shipper has been in production longer than any other service."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Data team recently migrated its documentation to a new wiki."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 9 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -778,15 +802,17 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2021,
-      "emergency_at": 9,
-      "owner": "Security",
-      "severity": 5
+      "component": "log-shipper",
+      "cve_year": 2020,
+      "emergency_at": 6,
+      "other_severity": 7,
+      "owner": "Data",
+      "severity": 3,
+      "vendor_at": 3
     },
     "variant": 1
   },
@@ -794,22 +820,22 @@
     "answer": "schedule_patch",
     "distractor_ids": [
       "d1",
-      "d4",
       "d2",
-      "d3"
+      "d3",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 5 out of 10."
+        "text": "The published severity score for the log-shipper issue is 3 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 9 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -821,25 +847,25 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2021 CVE identifier."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Security team recently migrated its documentation to a new wiki."
+        "text": "An unrelated advisory affecting a different component scored 7 out of 10 the same week."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "image-resizer is maintained by the Security team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "text": "log-shipper has been in production longer than any other service."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Data team recently migrated its documentation to a new wiki."
       }
     ],
     "item_id": "rel-005-security-patch#v1-d4-late",
@@ -853,15 +879,17 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2021,
-      "emergency_at": 9,
-      "owner": "Security",
-      "severity": 5
+      "component": "log-shipper",
+      "cve_year": 2020,
+      "emergency_at": 6,
+      "other_severity": 7,
+      "owner": "Data",
+      "severity": 3,
+      "vendor_at": 3
     },
     "variant": 1
   },
@@ -873,13 +901,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the log-shipper issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 6 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 4 or above."
       },
       {
         "id": "r3",
@@ -899,41 +927,43 @@
       "schedule_patch"
     ],
     "position": "none",
-    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "log-shipper",
-      "cve_year": 2020,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2021,
+      "emergency_at": 4,
+      "other_severity": 3,
+      "owner": "Infrastructure",
+      "severity": 6,
+      "vendor_at": 7
     },
     "variant": 2
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "log-shipper is maintained by the Data team, which is hiring."
+        "text": "An unrelated advisory affecting a different component scored 3 out of 10 the same week."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the log-shipper issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 6 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 4 or above."
       },
       {
         "id": "r3",
@@ -953,41 +983,43 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "log-shipper",
-      "cve_year": 2020,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2021,
+      "emergency_at": 4,
+      "other_severity": 3,
+      "owner": "Infrastructure",
+      "severity": 6,
+      "vendor_at": 7
     },
     "variant": 2
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the log-shipper issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 6 out of 10."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "log-shipper is maintained by the Data team, which is hiring."
+        "text": "An unrelated advisory affecting a different component scored 3 out of 10 the same week."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 4 or above."
       },
       {
         "id": "r3",
@@ -1007,35 +1039,37 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "log-shipper",
-      "cve_year": 2020,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2021,
+      "emergency_at": 4,
+      "other_severity": 3,
+      "owner": "Infrastructure",
+      "severity": 6,
+      "vendor_at": 7
     },
     "variant": 2
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the log-shipper issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 6 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 4 or above."
       },
       {
         "id": "r3",
@@ -1044,10 +1078,10 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "log-shipper is maintained by the Data team, which is hiring."
+        "text": "An unrelated advisory affecting a different component scored 3 out of 10 the same week."
       }
     ],
     "item_id": "rel-005-security-patch#v2-d1-late",
@@ -1061,38 +1095,46 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "log-shipper",
-      "cve_year": 2020,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2021,
+      "emergency_at": 4,
+      "other_severity": 3,
+      "owner": "Infrastructure",
+      "severity": 6,
+      "vendor_at": 7
     },
     "variant": 2
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d3",
-      "d5",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 3 out of 10 the same week."
+      },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "log-shipper is maintained by the Data team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 7 or above, which this organisation has not adopted."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "log-shipper has been in production longer than any other service."
+        "text": "The Infrastructure team recently migrated its documentation to a new wiki."
       },
       {
         "id": "d5",
@@ -1101,22 +1143,16 @@
         "text": "The security newsletter goes out on the first Monday of each month."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The advisory carries a 2020 CVE identifier."
-      },
-      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the log-shipper issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 6 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 4 or above."
       },
       {
         "id": "r3",
@@ -1136,44 +1172,52 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "log-shipper",
-      "cve_year": 2020,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2021,
+      "emergency_at": 4,
+      "other_severity": 3,
+      "owner": "Infrastructure",
+      "severity": 6,
+      "vendor_at": 7
     },
     "variant": 2
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d3",
-      "d5",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the log-shipper issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 6 out of 10."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 3 out of 10 the same week."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "log-shipper is maintained by the Data team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 7 or above, which this organisation has not adopted."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "log-shipper has been in production longer than any other service."
+        "text": "The Infrastructure team recently migrated its documentation to a new wiki."
       },
       {
         "id": "d5",
@@ -1182,16 +1226,10 @@
         "text": "The security newsletter goes out on the first Monday of each month."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The advisory carries a 2020 CVE identifier."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 4 or above."
       },
       {
         "id": "r3",
@@ -1211,38 +1249,40 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "log-shipper",
-      "cve_year": 2020,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2021,
+      "emergency_at": 4,
+      "other_severity": 3,
+      "owner": "Infrastructure",
+      "severity": 6,
+      "vendor_at": 7
     },
     "variant": 2
   },
   {
     "answer": "patch_immediately",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d3",
-      "d5",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the log-shipper issue is 8 out of 10."
+        "text": "The published severity score for the pdf-render issue is 6 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 5 or above."
+        "text": "Standing policy patches out of band at severity 4 or above."
       },
       {
         "id": "r3",
@@ -1251,28 +1291,28 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 3 out of 10 the same week."
+      },
+      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "log-shipper is maintained by the Data team, which is hiring."
+        "text": "The vendor's own guidance recommends out-of-band patching at 7 or above, which this organisation has not adopted."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "log-shipper has been in production longer than any other service."
+        "text": "The Infrastructure team recently migrated its documentation to a new wiki."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The security newsletter goes out on the first Monday of each month."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The advisory carries a 2020 CVE identifier."
       }
     ],
     "item_id": "rel-005-security-patch#v2-d4-late",
@@ -1286,15 +1326,17 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the log-shipper vulnerability be patched immediately, or scheduled?",
+    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "log-shipper",
-      "cve_year": 2020,
-      "emergency_at": 5,
-      "owner": "Data",
-      "severity": 8
+      "component": "pdf-render",
+      "cve_year": 2021,
+      "emergency_at": 4,
+      "other_severity": 3,
+      "owner": "Infrastructure",
+      "severity": 6,
+      "vendor_at": 7
     },
     "variant": 2
   },
@@ -1306,13 +1348,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 1 out of 10."
+        "text": "The published severity score for the auth-proxy issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 4 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -1332,41 +1374,43 @@
       "schedule_patch"
     ],
     "position": "none",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the auth-proxy vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2022,
-      "emergency_at": 4,
-      "owner": "Security",
-      "severity": 1
+      "component": "auth-proxy",
+      "cve_year": 2026,
+      "emergency_at": 6,
+      "other_severity": 9,
+      "owner": "Data",
+      "severity": 4,
+      "vendor_at": 3
     },
     "variant": 3
   },
   {
     "answer": "schedule_patch",
     "distractor_ids": [
-      "d5"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d5",
+        "id": "d2",
         "role": "distractor",
-        "strength": "low",
-        "text": "The security newsletter goes out on the first Monday of each month."
+        "strength": "high",
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 1 out of 10."
+        "text": "The published severity score for the auth-proxy issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 4 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -1386,41 +1430,43 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the auth-proxy vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2022,
-      "emergency_at": 4,
-      "owner": "Security",
-      "severity": 1
+      "component": "auth-proxy",
+      "cve_year": 2026,
+      "emergency_at": 6,
+      "other_severity": 9,
+      "owner": "Data",
+      "severity": 4,
+      "vendor_at": 3
     },
     "variant": 3
   },
   {
     "answer": "schedule_patch",
     "distractor_ids": [
-      "d5"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 1 out of 10."
+        "text": "The published severity score for the auth-proxy issue is 4 out of 10."
       },
       {
-        "id": "d5",
+        "id": "d2",
         "role": "distractor",
-        "strength": "low",
-        "text": "The security newsletter goes out on the first Monday of each month."
+        "strength": "high",
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 4 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -1440,35 +1486,37 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the auth-proxy vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2022,
-      "emergency_at": 4,
-      "owner": "Security",
-      "severity": 1
+      "component": "auth-proxy",
+      "cve_year": 2026,
+      "emergency_at": 6,
+      "other_severity": 9,
+      "owner": "Data",
+      "severity": 4,
+      "vendor_at": 3
     },
     "variant": 3
   },
   {
     "answer": "schedule_patch",
     "distractor_ids": [
-      "d5"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 1 out of 10."
+        "text": "The published severity score for the auth-proxy issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 4 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -1477,10 +1525,10 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
-        "id": "d5",
+        "id": "d2",
         "role": "distractor",
-        "strength": "low",
-        "text": "The security newsletter goes out on the first Monday of each month."
+        "strength": "high",
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
       }
     ],
     "item_id": "rel-005-security-patch#v3-d1-late",
@@ -1494,27 +1542,47 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the auth-proxy vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2022,
-      "emergency_at": 4,
-      "owner": "Security",
-      "severity": 1
+      "component": "auth-proxy",
+      "cve_year": 2026,
+      "emergency_at": 6,
+      "other_severity": 9,
+      "owner": "Data",
+      "severity": 4,
+      "vendor_at": 3
     },
     "variant": 3
   },
   {
     "answer": "schedule_patch",
     "distractor_ids": [
-      "d5",
+      "d2",
       "d1",
-      "d3",
-      "d4"
+      "d4",
+      "d5"
     ],
     "facts": [
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 9 out of 10 the same week."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Data team recently migrated its documentation to a new wiki."
+      },
       {
         "id": "d5",
         "role": "distractor",
@@ -1522,34 +1590,16 @@
         "text": "The security newsletter goes out on the first Monday of each month."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The advisory carries a 2022 CVE identifier."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Security team recently migrated its documentation to a new wiki."
-      },
-      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 1 out of 10."
+        "text": "The published severity score for the auth-proxy issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 4 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -1569,32 +1619,52 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the auth-proxy vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2022,
-      "emergency_at": 4,
-      "owner": "Security",
-      "severity": 1
+      "component": "auth-proxy",
+      "cve_year": 2026,
+      "emergency_at": 6,
+      "other_severity": 9,
+      "owner": "Data",
+      "severity": 4,
+      "vendor_at": 3
     },
     "variant": 3
   },
   {
     "answer": "schedule_patch",
     "distractor_ids": [
-      "d5",
+      "d2",
       "d1",
-      "d3",
-      "d4"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 1 out of 10."
+        "text": "The published severity score for the auth-proxy issue is 4 out of 10."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "An unrelated advisory affecting a different component scored 9 out of 10 the same week."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Data team recently migrated its documentation to a new wiki."
       },
       {
         "id": "d5",
@@ -1603,28 +1673,10 @@
         "text": "The security newsletter goes out on the first Monday of each month."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The advisory carries a 2022 CVE identifier."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Security team recently migrated its documentation to a new wiki."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 4 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -1644,38 +1696,40 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the auth-proxy vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2022,
-      "emergency_at": 4,
-      "owner": "Security",
-      "severity": 1
+      "component": "auth-proxy",
+      "cve_year": 2026,
+      "emergency_at": 6,
+      "other_severity": 9,
+      "owner": "Data",
+      "severity": 4,
+      "vendor_at": 3
     },
     "variant": 3
   },
   {
     "answer": "schedule_patch",
     "distractor_ids": [
-      "d5",
+      "d2",
       "d1",
-      "d3",
-      "d4"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the image-resizer issue is 1 out of 10."
+        "text": "The published severity score for the auth-proxy issue is 4 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 4 or above."
+        "text": "Standing policy patches out of band at severity 6 or above."
       },
       {
         "id": "r3",
@@ -1684,28 +1738,28 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
-        "id": "d5",
+        "id": "d2",
         "role": "distractor",
-        "strength": "low",
-        "text": "The security newsletter goes out on the first Monday of each month."
+        "strength": "high",
+        "text": "The vendor's own guidance recommends out-of-band patching at 3 or above, which this organisation has not adopted."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The advisory carries a 2022 CVE identifier."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "image-resizer has been in production longer than any other service."
+        "text": "An unrelated advisory affecting a different component scored 9 out of 10 the same week."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Security team recently migrated its documentation to a new wiki."
+        "text": "The Data team recently migrated its documentation to a new wiki."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The security newsletter goes out on the first Monday of each month."
       }
     ],
     "item_id": "rel-005-security-patch#v3-d4-late",
@@ -1719,15 +1773,17 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
+    "question": "Should the auth-proxy vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "image-resizer",
-      "cve_year": 2022,
-      "emergency_at": 4,
-      "owner": "Security",
-      "severity": 1
+      "component": "auth-proxy",
+      "cve_year": 2026,
+      "emergency_at": 6,
+      "other_severity": 9,
+      "owner": "Data",
+      "severity": 4,
+      "vendor_at": 3
     },
     "variant": 3
   }

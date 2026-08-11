@@ -163,7 +163,7 @@ def generate(template: Template, seed: int) -> list[Item]:
         # of a given variant share the same distractor pool. A larger stratum is
         # then a superset of a smaller one rather than an unrelated draw, which
         # makes the distractor-count effect a within-variant contrast.
-        pool = rng.sample(template.distractor_facts, k=max(count for count, _ in combos))
+        pool = _draw_pool(template, rng, k=max(count for count, _ in combos))
 
         for count, position in combos:
             chosen = list(pool[:count])
@@ -186,6 +186,27 @@ def generate(template: Template, seed: int) -> list[Item]:
                 )
             )
     return items
+
+
+def _draw_pool(template: Template, rng: random.Random, *, k: int) -> list[Fact]:
+    """Draw a distractor pool, colliding distractors first.
+
+    Order is load-bearing, because ``pool[:count]`` is what each stratum uses.
+    A uniform draw would leave the one-distractor stratum holding an off-type
+    fact about a coffee machine on most variants, which measures nothing — the
+    whole point of that stratum is the cleanest possible single contrast.
+
+    So colliding distractors are shuffled among themselves and placed first,
+    then the rest. Ordering within each group stays random, so position in the
+    prompt is not confounded with which distractor was chosen.
+    """
+    colliding = [d for d in template.distractor_facts if d.collides_with is not None]
+    inert = [d for d in template.distractor_facts if d.collides_with is None]
+    ordered: list[Fact] = [
+        *rng.sample(colliding, k=len(colliding)),
+        *rng.sample(inert, k=len(inert)),
+    ]
+    return ordered[:k]
 
 
 def _target(template: Template, variant: int) -> str:
@@ -222,14 +243,52 @@ def _sample_for_target(
     for _ in range(_MAX_SAMPLING_ATTEMPTS):
         variables = sample_variables(template, rng)
         answer = _compute_answer(template, variables)
-        if answer == target and is_robust(template, variables):
+        if (
+            answer == target
+            and is_robust(template, variables)
+            and is_discriminative(template, variables)
+        ):
             return variables, answer
     raise GenerationError(
-        f"{template.template_id}: could not produce a robust answer {target!r} in "
-        f"{_MAX_SAMPLING_ATTEMPTS} attempts. Either the option is unreachable, or the "
-        f"variable ranges are too tight to leave a margin of {_ROBUSTNESS_MARGIN} on "
-        "every threshold."
+        f"{template.template_id}: could not produce a robust, discriminative answer "
+        f"{target!r} in {_MAX_SAMPLING_ATTEMPTS} attempts. Either the option is "
+        f"unreachable, the ranges are too tight to leave a margin of "
+        f"{_ROBUSTNESS_MARGIN} on every threshold, or a colliding distractor's range "
+        "does not overlap the variable it competes with."
     )
+
+
+def is_discriminative(template: Template, variables: dict[str, Any]) -> bool:
+    """True when reading a colliding distractor's number instead flips the answer.
+
+    A colliding distractor states a quantity in the units of the decision rule.
+    That only *tests* anything if substituting it for the real one changes the
+    verdict — otherwise the careful reader and the number-grabber agree, the
+    item scores the same either way, and it contributes nothing but dilution to
+    the distractor effect.
+
+    So each collision is simulated: evaluate the solution with the distractor's
+    variable in place of the one it competes with, and require a different
+    answer. Samplings that fail are rejected the same way knife edges are.
+
+    **This is deliberate stacking, and it is recorded as such** in the eval-set
+    datasheet. It makes the corpus a stress test rather than a naturalistic
+    sample of how often an irrelevant number happens to disagree. That is the
+    right trade for a diagnostic benchmark — a corpus where half the loaded
+    items cannot discriminate is a corpus that reports a halved effect and
+    invites the reading that the failure mode is not real.
+    """
+    answer = _compute_answer(template, variables)
+    for target_name, source_name in template.collision_pairs():
+        substituted = {**variables, target_name: variables[source_name]}
+        try:
+            if _compute_answer(template, substituted) == answer:
+                return False
+        except GenerationError:
+            # Substitution left the option menu: the two are not comparable, so
+            # the distractor cannot be doing the job it claims to do.
+            return False
+    return True
 
 
 def is_robust(template: Template, variables: dict[str, Any]) -> bool:

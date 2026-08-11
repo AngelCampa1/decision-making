@@ -9,6 +9,8 @@ variables:
   lead_days: {int: [3, 30]}
   warehouse: {choice: [Leeds, Utrecht, Malmo]}
   supplier: {choice: [Aldebaran, Borealis, Cygnus]}
+  reserved_units: {int: [40, 900]}
+  express_days: {int: [3, 30]}
 
 relevant_facts:
   - id: r1
@@ -21,12 +23,16 @@ relevant_facts:
     text: "Policy is to reorder whenever stock would run out before a new order could land."
 
 distractor_facts:
+  # Units of stock and days of lead time -- the two quantities the rule reads --
+  # each attached to something the rule explicitly does not cover.
   - id: d1
     strength: high
-    text: "{sku} is stored in the {warehouse} warehouse, which was reorganised in spring."
+    collides_with: stock_units
+    text: "A further {reserved_units} units of {sku} sit at a partner site and are not part of this warehouse's sellable stock."
   - id: d2
     strength: high
-    text: "{supplier} won a packaging design award last year."
+    collides_with: lead_days
+    text: "{supplier} offers an air-freight option that arrives in {express_days} days, which is not approved for {sku}."
   - id: d3
     strength: medium
     text: "The {warehouse} site has the newest forklift fleet in the network."

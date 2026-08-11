@@ -78,9 +78,29 @@ class Fact(_Strict):
 
 
 class Distractor(Fact):
-    """A fact that must not change the answer."""
+    """A fact that must not change the answer.
+
+    ``collides_with`` names a variable the solution expression reads, and
+    asserts that this distractor states a quantity of the *same kind and units*
+    — distinguished from the real one only by a qualifier a careful reader has
+    to notice.
+
+    That field exists because the first control run came back at ceiling, and
+    reading the transcripts showed why: the original distractors were unrelated
+    to the decision rule in type, not merely in topic, so nothing competed and
+    only 13 of 93 loaded responses acknowledged them at all. ``strength`` ranks
+    topical proximity, which turned out to be the wrong axis. A number in the
+    units of the computation is the right one.
+
+    The cliff on the other side is the GSM-NoOp re-audit's: a distractor placed
+    *too* close is one a reasonable solver folds in, and a model that "fails" it
+    is defensibly right. The qualifier requirement is what keeps a colliding
+    distractor irrelevant rather than ambiguous, and the two-auditor filter
+    still runs on top of it.
+    """
 
     strength: Strength
+    collides_with: str | None = None
 
 
 class Solution(_Strict):
@@ -137,6 +157,7 @@ class Template(_Strict):
         self._check_placeholders()
         self._check_solution_names()
         self._check_distractor_supply()
+        self._check_collisions()
         return self
 
     # -- individual checks, split out so each failure names its own cause ----
@@ -187,6 +208,73 @@ class Template(_Strict):
                 f"strata ask for {wanted} distractors but only "
                 f"{len(self.distractor_facts)} are defined"
             )
+
+    def _check_collisions(self) -> None:
+        """Require at least one distractor that can actually compete.
+
+        A template whose distractors are all type-incompatible with the decision
+        rule cannot exert ranking pressure, and will read as a null result about
+        the skill when it is really a null result about the item. Measured
+        rather than assumed: the first control run scored 110/110 on exactly
+        such a corpus.
+
+        Resolving the pairing here rather than at generation time means an
+        ambiguous collision is a load-time error naming the template, instead of
+        a type error thrown from inside the sampler several frames away.
+        """
+        if not any(d.collides_with is not None for d in self.distractor_facts):
+            raise ValueError(
+                "no distractor declares `collides_with`. At least one must state a "
+                "quantity in the units of the decision rule, or nothing competes for "
+                "the model's attention and the template measures nothing."
+            )
+        self.collision_pairs()
+
+    def collision_pairs(self) -> list[tuple[str, str]]:
+        """``(solution variable, competing variable)`` for each colliding distractor.
+
+        The competing variable is the one the distractor carries that the
+        solution does not read, matched on declared kind — an ``int`` threshold
+        competes with an ``int``, never with a ``choice`` of vendor names that
+        happens to appear in the same sentence.
+        """
+        solution_vars = referenced_names(self.solution.expr)
+        pairs: list[tuple[str, str]] = []
+
+        for distractor in self.distractor_facts:
+            target = distractor.collides_with
+            if target is None:
+                continue
+            if target not in solution_vars:
+                raise ValueError(
+                    f"distractor {distractor.id!r} collides_with {target!r}, which the "
+                    f"solution does not read; it reads {sorted(solution_vars)}"
+                )
+            kind = self._kind_of(target)
+            candidates = sorted(
+                name
+                for name in self._variables_in(distractor.text) - solution_vars
+                if self._kind_of(name) == kind
+            )
+            if len(candidates) != 1:
+                raise ValueError(
+                    f"distractor {distractor.id!r} collides_with {target!r} (kind "
+                    f"{kind!r}) but carries {len(candidates)} competing variable(s) of "
+                    f"that kind {candidates}; it needs exactly one"
+                )
+            pairs.append((target, candidates[0]))
+        return pairs
+
+    def _kind_of(self, name: str) -> str:
+        # Indexed rather than guarded: `_check_placeholders` and
+        # `_check_solution_names` both run first, so every name reaching here is
+        # declared. A KeyError would mean those checks were reordered, which is
+        # worth failing loudly rather than papering over.
+        return "int" if self.variables[name].int_range is not None else "choice"
+
+    @staticmethod
+    def _variables_in(text: str) -> set[str]:
+        return {field for _, field, _, _ in Formatter().parse(text) if field}
 
     # -- derived views ------------------------------------------------------
 

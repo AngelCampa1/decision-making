@@ -7,13 +7,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 24 days from delivery."
+        "text": "The published refund window is 44 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order D-9052 was delivered 9 days ago."
+        "text": "Order C-1180 was delivered 39 days ago."
       },
       {
         "id": "r3",
@@ -33,41 +33,43 @@
       "decline_refund"
     ],
     "position": "none",
-    "question": "Should support approve the refund for order D-9052?",
+    "question": "Should support approve the refund for order C-1180?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 9,
-      "order_no": "D-9052",
-      "plan": "Growth",
-      "tickets": 5,
-      "window_days": 24
+      "days_since": 39,
+      "order_no": "C-1180",
+      "ordered_days": 59,
+      "plan": "Enterprise",
+      "tickets": 16,
+      "trial_days": 36,
+      "window_days": 44
     },
     "variant": 0
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d4"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 36 days."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 24 days from delivery."
+        "text": "The published refund window is 44 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order D-9052 was delivered 9 days ago."
+        "text": "Order C-1180 was delivered 39 days ago."
       },
       {
         "id": "r3",
@@ -87,41 +89,43 @@
       "decline_refund"
     ],
     "position": "early",
-    "question": "Should support approve the refund for order D-9052?",
+    "question": "Should support approve the refund for order C-1180?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 9,
-      "order_no": "D-9052",
-      "plan": "Growth",
-      "tickets": 5,
-      "window_days": 24
+      "days_since": 39,
+      "order_no": "C-1180",
+      "ordered_days": 59,
+      "plan": "Enterprise",
+      "tickets": 16,
+      "trial_days": 36,
+      "window_days": 44
     },
     "variant": 0
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d4"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 24 days from delivery."
+        "text": "The published refund window is 44 days from delivery."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 36 days."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order D-9052 was delivered 9 days ago."
+        "text": "Order C-1180 was delivered 39 days ago."
       },
       {
         "id": "r3",
@@ -141,35 +145,37 @@
       "decline_refund"
     ],
     "position": "middle",
-    "question": "Should support approve the refund for order D-9052?",
+    "question": "Should support approve the refund for order C-1180?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 9,
-      "order_no": "D-9052",
-      "plan": "Growth",
-      "tickets": 5,
-      "window_days": 24
+      "days_since": 39,
+      "order_no": "C-1180",
+      "ordered_days": 59,
+      "plan": "Enterprise",
+      "tickets": 16,
+      "trial_days": 36,
+      "window_days": 44
     },
     "variant": 0
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d4"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 24 days from delivery."
+        "text": "The published refund window is 44 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order D-9052 was delivered 9 days ago."
+        "text": "Order C-1180 was delivered 39 days ago."
       },
       {
         "id": "r3",
@@ -178,10 +184,10 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 36 days."
       }
     ],
     "item_id": "rel-006-refund-request#v0-d1-late",
@@ -195,32 +201,40 @@
       "decline_refund"
     ],
     "position": "late",
-    "question": "Should support approve the refund for order D-9052?",
+    "question": "Should support approve the refund for order C-1180?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 9,
-      "order_no": "D-9052",
-      "plan": "Growth",
-      "tickets": 5,
-      "window_days": 24
+      "days_since": 39,
+      "order_no": "C-1180",
+      "ordered_days": 59,
+      "plan": "Enterprise",
+      "tickets": 16,
+      "trial_days": 36,
+      "window_days": 44
     },
     "variant": 0
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d4",
+      "d1",
+      "d2",
       "d5",
-      "d3",
-      "d1"
+      "d3"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 36 days."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was placed 59 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
         "id": "d5",
@@ -232,25 +246,19 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Growth plan was renamed in last year's pricing refresh."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The customer is on the Growth plan and has opened 5 tickets this year."
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 24 days from delivery."
+        "text": "The published refund window is 44 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order D-9052 was delivered 9 days ago."
+        "text": "Order C-1180 was delivered 39 days ago."
       },
       {
         "id": "r3",
@@ -270,38 +278,46 @@
       "decline_refund"
     ],
     "position": "early",
-    "question": "Should support approve the refund for order D-9052?",
+    "question": "Should support approve the refund for order C-1180?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 9,
-      "order_no": "D-9052",
-      "plan": "Growth",
-      "tickets": 5,
-      "window_days": 24
+      "days_since": 39,
+      "order_no": "C-1180",
+      "ordered_days": 59,
+      "plan": "Enterprise",
+      "tickets": 16,
+      "trial_days": 36,
+      "window_days": 44
     },
     "variant": 0
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d4",
+      "d1",
+      "d2",
       "d5",
-      "d3",
-      "d1"
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 24 days from delivery."
+        "text": "The published refund window is 44 days from delivery."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 36 days."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was placed 59 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
         "id": "d5",
@@ -313,19 +329,13 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Growth plan was renamed in last year's pricing refresh."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The customer is on the Growth plan and has opened 5 tickets this year."
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order D-9052 was delivered 9 days ago."
+        "text": "Order C-1180 was delivered 39 days ago."
       },
       {
         "id": "r3",
@@ -345,38 +355,40 @@
       "decline_refund"
     ],
     "position": "middle",
-    "question": "Should support approve the refund for order D-9052?",
+    "question": "Should support approve the refund for order C-1180?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 9,
-      "order_no": "D-9052",
-      "plan": "Growth",
-      "tickets": 5,
-      "window_days": 24
+      "days_since": 39,
+      "order_no": "C-1180",
+      "ordered_days": 59,
+      "plan": "Enterprise",
+      "tickets": 16,
+      "trial_days": 36,
+      "window_days": 44
     },
     "variant": 0
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d4",
+      "d1",
+      "d2",
       "d5",
-      "d3",
-      "d1"
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 24 days from delivery."
+        "text": "The published refund window is 44 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order D-9052 was delivered 9 days ago."
+        "text": "Order C-1180 was delivered 39 days ago."
       },
       {
         "id": "r3",
@@ -385,10 +397,16 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
-        "id": "d4",
+        "id": "d1",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 36 days."
+      },
+      {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "Order C-1180 was placed 59 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
         "id": "d5",
@@ -400,13 +418,7 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Growth plan was renamed in last year's pricing refresh."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The customer is on the Growth plan and has opened 5 tickets this year."
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
       }
     ],
     "item_id": "rel-006-refund-request#v0-d4-late",
@@ -420,15 +432,17 @@
       "decline_refund"
     ],
     "position": "late",
-    "question": "Should support approve the refund for order D-9052?",
+    "question": "Should support approve the refund for order C-1180?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 9,
-      "order_no": "D-9052",
-      "plan": "Growth",
-      "tickets": 5,
-      "window_days": 24
+      "days_since": 39,
+      "order_no": "C-1180",
+      "ordered_days": 59,
+      "plan": "Enterprise",
+      "tickets": 16,
+      "trial_days": 36,
+      "window_days": 44
     },
     "variant": 0
   },
@@ -440,13 +454,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 12 days from delivery."
+        "text": "The published refund window is 21 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 23 days ago."
+        "text": "Order A-3391 was delivered 24 days ago."
       },
       {
         "id": "r3",
@@ -466,41 +480,43 @@
       "decline_refund"
     ],
     "position": "none",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order A-3391?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 23,
-      "order_no": "C-1180",
-      "plan": "Enterprise",
-      "tickets": 1,
-      "window_days": 12
+      "days_since": 24,
+      "order_no": "A-3391",
+      "ordered_days": 18,
+      "plan": "Growth",
+      "tickets": 24,
+      "trial_days": 41,
+      "window_days": 21
     },
     "variant": 1
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "The separate trial-cancellation window on the Growth plan runs 41 days."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 12 days from delivery."
+        "text": "The published refund window is 21 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 23 days ago."
+        "text": "Order A-3391 was delivered 24 days ago."
       },
       {
         "id": "r3",
@@ -520,41 +536,43 @@
       "decline_refund"
     ],
     "position": "early",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order A-3391?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 23,
-      "order_no": "C-1180",
-      "plan": "Enterprise",
-      "tickets": 1,
-      "window_days": 12
+      "days_since": 24,
+      "order_no": "A-3391",
+      "ordered_days": 18,
+      "plan": "Growth",
+      "tickets": 24,
+      "trial_days": 41,
+      "window_days": 21
     },
     "variant": 1
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 12 days from delivery."
+        "text": "The published refund window is 21 days from delivery."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "The separate trial-cancellation window on the Growth plan runs 41 days."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 23 days ago."
+        "text": "Order A-3391 was delivered 24 days ago."
       },
       {
         "id": "r3",
@@ -574,35 +592,37 @@
       "decline_refund"
     ],
     "position": "middle",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order A-3391?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 23,
-      "order_no": "C-1180",
-      "plan": "Enterprise",
-      "tickets": 1,
-      "window_days": 12
+      "days_since": 24,
+      "order_no": "A-3391",
+      "ordered_days": 18,
+      "plan": "Growth",
+      "tickets": 24,
+      "trial_days": 41,
+      "window_days": 21
     },
     "variant": 1
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d2"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 12 days from delivery."
+        "text": "The published refund window is 21 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 23 days ago."
+        "text": "Order A-3391 was delivered 24 days ago."
       },
       {
         "id": "r3",
@@ -611,10 +631,10 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
-        "id": "d2",
+        "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "The separate trial-cancellation window on the Growth plan runs 41 days."
       }
     ],
     "item_id": "rel-006-refund-request#v1-d1-late",
@@ -628,38 +648,46 @@
       "decline_refund"
     ],
     "position": "late",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order A-3391?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 23,
-      "order_no": "C-1180",
-      "plan": "Enterprise",
-      "tickets": 1,
-      "window_days": 12
+      "days_since": 24,
+      "order_no": "A-3391",
+      "ordered_days": 18,
+      "plan": "Growth",
+      "tickets": 24,
+      "trial_days": 41,
+      "window_days": 21
     },
     "variant": 1
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d3",
-      "d5",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Growth plan runs 41 days."
+      },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "Order A-3391 was placed 18 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Enterprise plan was renamed in last year's pricing refresh."
+        "text": "Refund confirmation emails were redesigned in April."
       },
       {
         "id": "d5",
@@ -668,22 +696,16 @@
         "text": "The support team's mascot is a capybara."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The customer is on the Enterprise plan and has opened 1 tickets this year."
-      },
-      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 12 days from delivery."
+        "text": "The published refund window is 21 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 23 days ago."
+        "text": "Order A-3391 was delivered 24 days ago."
       },
       {
         "id": "r3",
@@ -703,44 +725,52 @@
       "decline_refund"
     ],
     "position": "early",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order A-3391?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 23,
-      "order_no": "C-1180",
-      "plan": "Enterprise",
-      "tickets": 1,
-      "window_days": 12
+      "days_since": 24,
+      "order_no": "A-3391",
+      "ordered_days": 18,
+      "plan": "Growth",
+      "tickets": 24,
+      "trial_days": 41,
+      "window_days": 21
     },
     "variant": 1
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d3",
-      "d5",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 12 days from delivery."
+        "text": "The published refund window is 21 days from delivery."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Growth plan runs 41 days."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "Order A-3391 was placed 18 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Enterprise plan was renamed in last year's pricing refresh."
+        "text": "Refund confirmation emails were redesigned in April."
       },
       {
         "id": "d5",
@@ -749,16 +779,10 @@
         "text": "The support team's mascot is a capybara."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The customer is on the Enterprise plan and has opened 1 tickets this year."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 23 days ago."
+        "text": "Order A-3391 was delivered 24 days ago."
       },
       {
         "id": "r3",
@@ -778,38 +802,40 @@
       "decline_refund"
     ],
     "position": "middle",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order A-3391?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 23,
-      "order_no": "C-1180",
-      "plan": "Enterprise",
-      "tickets": 1,
-      "window_days": 12
+      "days_since": 24,
+      "order_no": "A-3391",
+      "ordered_days": 18,
+      "plan": "Growth",
+      "tickets": 24,
+      "trial_days": 41,
+      "window_days": 21
     },
     "variant": 1
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
+      "d1",
       "d2",
-      "d3",
-      "d5",
-      "d1"
+      "d4",
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 12 days from delivery."
+        "text": "The published refund window is 21 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 23 days ago."
+        "text": "Order A-3391 was delivered 24 days ago."
       },
       {
         "id": "r3",
@@ -818,28 +844,28 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Growth plan runs 41 days."
+      },
+      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "Order A-3391 was placed 18 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Enterprise plan was renamed in last year's pricing refresh."
+        "text": "Refund confirmation emails were redesigned in April."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The support team's mascot is a capybara."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The customer is on the Enterprise plan and has opened 1 tickets this year."
       }
     ],
     "item_id": "rel-006-refund-request#v1-d4-late",
@@ -853,15 +879,17 @@
       "decline_refund"
     ],
     "position": "late",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order A-3391?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 23,
-      "order_no": "C-1180",
-      "plan": "Enterprise",
-      "tickets": 1,
-      "window_days": 12
+      "days_since": 24,
+      "order_no": "A-3391",
+      "ordered_days": 18,
+      "plan": "Growth",
+      "tickets": 24,
+      "trial_days": 41,
+      "window_days": 21
     },
     "variant": 1
   },
@@ -873,13 +901,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 25 days from delivery."
+        "text": "The published refund window is 42 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 2 days ago."
+        "text": "Order D-9052 was delivered 40 days ago."
       },
       {
         "id": "r3",
@@ -899,41 +927,43 @@
       "decline_refund"
     ],
     "position": "none",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order D-9052?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 2,
-      "order_no": "C-1180",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 25
+      "days_since": 40,
+      "order_no": "D-9052",
+      "ordered_days": 60,
+      "plan": "Enterprise",
+      "tickets": 10,
+      "trial_days": 26,
+      "window_days": 42
     },
     "variant": 2
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d5"
+      "d1"
     ],
     "facts": [
       {
-        "id": "d5",
+        "id": "d1",
         "role": "distractor",
-        "strength": "low",
-        "text": "The support team's mascot is a capybara."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 26 days."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 25 days from delivery."
+        "text": "The published refund window is 42 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 2 days ago."
+        "text": "Order D-9052 was delivered 40 days ago."
       },
       {
         "id": "r3",
@@ -953,41 +983,43 @@
       "decline_refund"
     ],
     "position": "early",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order D-9052?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 2,
-      "order_no": "C-1180",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 25
+      "days_since": 40,
+      "order_no": "D-9052",
+      "ordered_days": 60,
+      "plan": "Enterprise",
+      "tickets": 10,
+      "trial_days": 26,
+      "window_days": 42
     },
     "variant": 2
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d5"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 25 days from delivery."
+        "text": "The published refund window is 42 days from delivery."
       },
       {
-        "id": "d5",
+        "id": "d1",
         "role": "distractor",
-        "strength": "low",
-        "text": "The support team's mascot is a capybara."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 26 days."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 2 days ago."
+        "text": "Order D-9052 was delivered 40 days ago."
       },
       {
         "id": "r3",
@@ -1007,35 +1039,37 @@
       "decline_refund"
     ],
     "position": "middle",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order D-9052?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 2,
-      "order_no": "C-1180",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 25
+      "days_since": 40,
+      "order_no": "D-9052",
+      "ordered_days": 60,
+      "plan": "Enterprise",
+      "tickets": 10,
+      "trial_days": 26,
+      "window_days": 42
     },
     "variant": 2
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d5"
+      "d1"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 25 days from delivery."
+        "text": "The published refund window is 42 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 2 days ago."
+        "text": "Order D-9052 was delivered 40 days ago."
       },
       {
         "id": "r3",
@@ -1044,10 +1078,10 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
-        "id": "d5",
+        "id": "d1",
         "role": "distractor",
-        "strength": "low",
-        "text": "The support team's mascot is a capybara."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 26 days."
       }
     ],
     "item_id": "rel-006-refund-request#v2-d1-late",
@@ -1061,44 +1095,46 @@
       "decline_refund"
     ],
     "position": "late",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order D-9052?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 2,
-      "order_no": "C-1180",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 25
+      "days_since": 40,
+      "order_no": "D-9052",
+      "ordered_days": 60,
+      "plan": "Enterprise",
+      "tickets": 10,
+      "trial_days": 26,
+      "window_days": 42
     },
     "variant": 2
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d5",
-      "d3",
+      "d1",
       "d2",
+      "d3",
       "d4"
     ],
     "facts": [
       {
-        "id": "d5",
+        "id": "d1",
         "role": "distractor",
-        "strength": "low",
-        "text": "The support team's mascot is a capybara."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Starter plan was renamed in last year's pricing refresh."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 26 days."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "Order D-9052 was placed 60 days ago, though the refund window runs from delivery rather than purchase."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
       },
       {
         "id": "d4",
@@ -1110,13 +1146,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 25 days from delivery."
+        "text": "The published refund window is 42 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 2 days ago."
+        "text": "Order D-9052 was delivered 40 days ago."
       },
       {
         "id": "r3",
@@ -1136,24 +1172,26 @@
       "decline_refund"
     ],
     "position": "early",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order D-9052?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 2,
-      "order_no": "C-1180",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 25
+      "days_since": 40,
+      "order_no": "D-9052",
+      "ordered_days": 60,
+      "plan": "Enterprise",
+      "tickets": 10,
+      "trial_days": 26,
+      "window_days": 42
     },
     "variant": 2
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d5",
-      "d3",
+      "d1",
       "d2",
+      "d3",
       "d4"
     ],
     "facts": [
@@ -1161,25 +1199,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 25 days from delivery."
+        "text": "The published refund window is 42 days from delivery."
       },
       {
-        "id": "d5",
+        "id": "d1",
         "role": "distractor",
-        "strength": "low",
-        "text": "The support team's mascot is a capybara."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Starter plan was renamed in last year's pricing refresh."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 26 days."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "Order D-9052 was placed 60 days ago, though the refund window runs from delivery rather than purchase."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
       },
       {
         "id": "d4",
@@ -1191,7 +1229,7 @@
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 2 days ago."
+        "text": "Order D-9052 was delivered 40 days ago."
       },
       {
         "id": "r3",
@@ -1211,24 +1249,26 @@
       "decline_refund"
     ],
     "position": "middle",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order D-9052?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 2,
-      "order_no": "C-1180",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 25
+      "days_since": 40,
+      "order_no": "D-9052",
+      "ordered_days": 60,
+      "plan": "Enterprise",
+      "tickets": 10,
+      "trial_days": 26,
+      "window_days": 42
     },
     "variant": 2
   },
   {
     "answer": "approve_refund",
     "distractor_ids": [
-      "d5",
-      "d3",
+      "d1",
       "d2",
+      "d3",
       "d4"
     ],
     "facts": [
@@ -1236,13 +1276,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 25 days from delivery."
+        "text": "The published refund window is 42 days from delivery."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Order C-1180 was delivered 2 days ago."
+        "text": "Order D-9052 was delivered 40 days ago."
       },
       {
         "id": "r3",
@@ -1251,22 +1291,22 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
-        "id": "d5",
+        "id": "d1",
         "role": "distractor",
-        "strength": "low",
-        "text": "The support team's mascot is a capybara."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The Starter plan was renamed in last year's pricing refresh."
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Enterprise plan runs 26 days."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Order C-1180 was the customer's first purchase through the mobile app."
+        "text": "Order D-9052 was placed 60 days ago, though the refund window runs from delivery rather than purchase."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The Enterprise plan was renamed in last year's pricing refresh."
       },
       {
         "id": "d4",
@@ -1286,15 +1326,17 @@
       "decline_refund"
     ],
     "position": "late",
-    "question": "Should support approve the refund for order C-1180?",
+    "question": "Should support approve the refund for order D-9052?",
     "seed": 1,
     "template_id": "rel-006-refund-request",
     "variables": {
-      "days_since": 2,
-      "order_no": "C-1180",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 25
+      "days_since": 40,
+      "order_no": "D-9052",
+      "ordered_days": 60,
+      "plan": "Enterprise",
+      "tickets": 10,
+      "trial_days": 26,
+      "window_days": 42
     },
     "variant": 2
   },
@@ -1306,7 +1348,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 28 days from delivery."
+        "text": "The published refund window is 23 days from delivery."
       },
       {
         "id": "r2",
@@ -1338,29 +1380,31 @@
     "variables": {
       "days_since": 33,
       "order_no": "A-3391",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 28
+      "ordered_days": 15,
+      "plan": "Growth",
+      "tickets": 11,
+      "trial_days": 33,
+      "window_days": 23
     },
     "variant": 3
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "Order A-3391 was placed 15 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 28 days from delivery."
+        "text": "The published refund window is 23 days from delivery."
       },
       {
         "id": "r2",
@@ -1392,29 +1436,31 @@
     "variables": {
       "days_since": 33,
       "order_no": "A-3391",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 28
+      "ordered_days": 15,
+      "plan": "Growth",
+      "tickets": 11,
+      "trial_days": 33,
+      "window_days": 23
     },
     "variant": 3
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 28 days from delivery."
+        "text": "The published refund window is 23 days from delivery."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "Order A-3391 was placed 15 days ago, though the refund window runs from delivery rather than purchase."
       },
       {
         "id": "r2",
@@ -1446,23 +1492,25 @@
     "variables": {
       "days_since": 33,
       "order_no": "A-3391",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 28
+      "ordered_days": 15,
+      "plan": "Growth",
+      "tickets": 11,
+      "trial_days": 33,
+      "window_days": 23
     },
     "variant": 3
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 28 days from delivery."
+        "text": "The published refund window is 23 days from delivery."
       },
       {
         "id": "r2",
@@ -1477,10 +1525,10 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "Order A-3391 was placed 15 days ago, though the refund window runs from delivery rather than purchase."
       }
     ],
     "item_id": "rel-006-refund-request#v3-d1-late",
@@ -1500,32 +1548,40 @@
     "variables": {
       "days_since": 33,
       "order_no": "A-3391",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 28
+      "ordered_days": 15,
+      "plan": "Growth",
+      "tickets": 11,
+      "trial_days": 33,
+      "window_days": 23
     },
     "variant": 3
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d4",
+      "d2",
+      "d1",
       "d3",
-      "d5",
-      "d2"
+      "d5"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "Order A-3391 was placed 15 days ago, though the refund window runs from delivery rather than purchase."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Growth plan runs 33 days."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Starter plan was renamed in last year's pricing refresh."
+        "text": "The Growth plan was renamed in last year's pricing refresh."
       },
       {
         "id": "d5",
@@ -1534,16 +1590,10 @@
         "text": "The support team's mascot is a capybara."
       },
       {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Order A-3391 was the customer's first purchase through the mobile app."
-      },
-      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 28 days from delivery."
+        "text": "The published refund window is 23 days from delivery."
       },
       {
         "id": "r2",
@@ -1575,50 +1625,52 @@
     "variables": {
       "days_since": 33,
       "order_no": "A-3391",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 28
+      "ordered_days": 15,
+      "plan": "Growth",
+      "tickets": 11,
+      "trial_days": 33,
+      "window_days": 23
     },
     "variant": 3
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d4",
+      "d2",
+      "d1",
       "d3",
-      "d5",
-      "d2"
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 28 days from delivery."
+        "text": "The published refund window is 23 days from delivery."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "Order A-3391 was placed 15 days ago, though the refund window runs from delivery rather than purchase."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Growth plan runs 33 days."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Starter plan was renamed in last year's pricing refresh."
+        "text": "The Growth plan was renamed in last year's pricing refresh."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The support team's mascot is a capybara."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Order A-3391 was the customer's first purchase through the mobile app."
       },
       {
         "id": "r2",
@@ -1650,26 +1702,28 @@
     "variables": {
       "days_since": 33,
       "order_no": "A-3391",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 28
+      "ordered_days": 15,
+      "plan": "Growth",
+      "tickets": 11,
+      "trial_days": 33,
+      "window_days": 23
     },
     "variant": 3
   },
   {
     "answer": "decline_refund",
     "distractor_ids": [
-      "d4",
+      "d2",
+      "d1",
       "d3",
-      "d5",
-      "d2"
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published refund window is 28 days from delivery."
+        "text": "The published refund window is 23 days from delivery."
       },
       {
         "id": "r2",
@@ -1684,28 +1738,28 @@
         "text": "The goods were returned unopened and in resalable condition."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Refund confirmation emails were redesigned in April."
+        "strength": "high",
+        "text": "Order A-3391 was placed 15 days ago, though the refund window runs from delivery rather than purchase."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The separate trial-cancellation window on the Growth plan runs 33 days."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The Starter plan was renamed in last year's pricing refresh."
+        "text": "The Growth plan was renamed in last year's pricing refresh."
       },
       {
         "id": "d5",
         "role": "distractor",
         "strength": "low",
         "text": "The support team's mascot is a capybara."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "Order A-3391 was the customer's first purchase through the mobile app."
       }
     ],
     "item_id": "rel-006-refund-request#v3-d4-late",
@@ -1725,9 +1779,11 @@
     "variables": {
       "days_since": 33,
       "order_no": "A-3391",
-      "plan": "Starter",
-      "tickets": 12,
-      "window_days": 28
+      "ordered_days": 15,
+      "plan": "Growth",
+      "tickets": 11,
+      "trial_days": 33,
+      "window_days": 23
     },
     "variant": 3
   }

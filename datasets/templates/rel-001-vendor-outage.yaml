@@ -15,6 +15,8 @@ variables:
   sla_h: {int: [4, 24]}
   region: {choice: [eu-west, us-east, ap-south]}
   headcount: {int: [12, 400]}
+  degraded_h: {int: [2, 26]}
+  response_h: {int: [1, 24]}
 
 relevant_facts:
   - id: r1
@@ -25,12 +27,17 @@ relevant_facts:
     text: "Filing a claim costs nothing and has no effect on renewal terms."
 
 distractor_facts:
+  # d1 and d2 collide: both state a duration in continuous hours, the units the
+  # rule reads. Each is excluded by a qualifier in its own sentence -- degraded
+  # is not unavailable, first response is not downtime.
   - id: d1
     strength: high
-    text: "{vendor} redesigned its public status page last quarter."
+    collides_with: outage_h
+    text: "A separate degraded-performance window the same day lasted {degraded_h} continuous hours, with the service still reachable throughout."
   - id: d2
     strength: high
-    text: "The {region} region accounts for the largest share of {vendor} customers."
+    collides_with: sla_h
+    text: "The {vendor} support agreement promises a first response to critical tickets within {response_h} hours."
   - id: d3
     strength: medium
     text: "The support organisation has {headcount} people across all products."
