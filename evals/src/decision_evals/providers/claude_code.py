@@ -50,9 +50,29 @@ ISOLATION_FLAGS: Final[tuple[str, ...]] = (
 #: only reliable signal.
 _REVOKED_MARKER: Final = "authenticate"
 
+#: Text the CLI returns when the prompt exceeds the model's context window.
+#: Observed verbatim as "Prompt is too long" at a nominal 350k tokens.
+_TOO_LONG_MARKER: Final = "prompt is too long"
+
 
 class CliError(RuntimeError):
     """The CLI returned an error, or returned something unparseable."""
+
+
+class PromptTooLongError(CliError):
+    """The assembled prompt did not fit the model's context window.
+
+    Separated from :class:`CliError` because the two mean opposite things about
+    the corpus. Infrastructure noise is a reason to retry an item; a prompt that
+    overflows the window is a *construction defect* in the item, deterministic,
+    and it will overflow every time. Scoring it as ``infrastructure`` would put a
+    reproducible authoring mistake in the same bucket as a flaky network and hide
+    it behind a retry.
+
+    Measured: at a nominal 350k the CLI returns ``is_error`` with "Prompt is too
+    long" and spends nothing. At 101,142 tokens it answers normally, so the
+    ceiling is the model's window rather than anything in this harness.
+    """
 
 
 class AuthenticationError(CliError):
@@ -77,10 +97,25 @@ class CliResult:
     output_tokens: int
     duration_ms: int
     session_id: str
+    cache_creation_tokens: int = 0
+    cache_read_tokens: int = 0
+    context_window: int = 0
+
+    @property
+    def context_fraction(self) -> float:
+        """How full the context window was. 0.0 when the CLI did not report one.
+
+        Worth recording per item rather than assuming: the U-shaped degradation
+        reported in the context-rot literature holds only while the window is
+        below about half full, so which side of that line an item sits on is a
+        covariate, not a constant.
+        """
+        if self.context_window <= 0:
+            return 0.0
+        return (self.input_tokens + self.output_tokens) / self.context_window
 
 
 def build_command(
-    prompt: str,
     *,
     system_prompt: str,
     model: str,
@@ -89,8 +124,26 @@ def build_command(
 ) -> list[str]:
     """Assemble a fully isolated ``claude -p`` invocation.
 
+    **The prompt is not here.** It goes to the process on stdin, which is why
+    this function does not take one. ``claude -p`` with the default
+    ``--input-format text`` reads the prompt from stdin when no prompt argument
+    is given, and ``-p`` is documented as "useful for pipes".
+
+    The original version passed the rendered item as an argv element. That works
+    for a 350-token item and cannot work for a long one: Windows caps a whole
+    command line near 32 KB, and a 100k-token casefile is roughly 400 KB. Every
+    call in the two longest strata would have died as a :class:`CliError` and
+    been scored ``zero_cause="infrastructure"`` -- an entire arm of nulls that
+    reads like a finding.
+
+    There is deliberately no short-prompt fast path. A conditional argv/stdin
+    split means the long path is the rarely-exercised one and the two can drift,
+    which is exactly the harness variance this repository exists to measure.
+
+    The system prompt stays on argv: skill bodies are 1-2 KB and there is only
+    one of them per call.
+
     Args:
-        prompt: The rendered item.
         system_prompt: Arm-specific system prompt.
         model: Model alias or id, passed through to ``--model``.
         in_situ: Append to the CLI's built-in system prompt rather than
@@ -101,12 +154,12 @@ def build_command(
 
     Returns:
         Argument vector suitable for :func:`subprocess.run` without a shell.
+        Pass the prompt separately as ``input=``.
     """
     prompt_flag = "--append-system-prompt" if in_situ else "--system-prompt"
     command = [
         "claude",
         "-p",
-        prompt,
         prompt_flag,
         system_prompt,
         "--model",
@@ -135,6 +188,8 @@ def parse_result(payload: dict[str, Any]) -> CliResult:
                 f"{message} -- run `claude auth login`. Note that "
                 "`claude auth status` reports loggedIn:true in this state."
             )
+        if _TOO_LONG_MARKER in message.lower():
+            raise PromptTooLongError(message)
         raise CliError(message)
 
     text = payload.get("result")
@@ -150,14 +205,34 @@ def parse_result(payload: dict[str, Any]) -> CliResult:
     model = next(iter(model_usage))
 
     usage = payload.get("usage") or {}
+    cache_creation = int(_number(usage.get("cache_creation_input_tokens")))
+    cache_read = int(_number(usage.get("cache_read_input_tokens")))
+
+    # `usage.input_tokens` is the *uncached remainder*, not the prompt. On a
+    # 380 KB casefile it reads 10 while `cache_creation_input_tokens` carries the
+    # other 24,285, and the reported cost tracks the real figure. Recording
+    # `input_tokens` alone would have put ~10 in the token column of every long
+    # item -- and the token column is what `docs/HARNESS_DISCLOSURE.md` commits
+    # to reporting at p90/p99, so the disclosure would have been backwards
+    # precisely in the stratum it exists to describe.
+    #
+    # The three add up to the prompt the model actually read, which is the number
+    # this field is supposed to mean. The split is kept alongside because it is
+    # not noise: on the second repeat of an item the same prompt arrives as
+    # `cache_read`, which changes cost without changing what was sampled.
+    prompt_tokens = int(_number(usage.get("input_tokens"))) + cache_creation + cache_read
+
     return CliResult(
         text=text,
         model=model,
         cost_usd=_number(payload.get("total_cost_usd")),
-        input_tokens=int(_number(usage.get("input_tokens"))),
+        input_tokens=prompt_tokens,
         output_tokens=int(_number(usage.get("output_tokens"))),
         duration_ms=int(_number(payload.get("duration_ms"))),
         session_id=str(payload.get("session_id", "")),
+        cache_creation_tokens=cache_creation,
+        cache_read_tokens=cache_read,
+        context_window=int(_number((model_usage[model] or {}).get("contextWindow"))),
     )
 
 
@@ -179,7 +254,7 @@ def run(
     cwd: str,
     in_situ: bool = False,
     json_schema: str | None = None,
-    timeout: float = 300.0,
+    timeout: float = 900.0,
 ) -> CliResult:
     """Run one item and return its result.
 
@@ -188,16 +263,22 @@ def run(
     wherever the runner happens to start is how a confound gets in. Callers pass
     a scratch directory outside the source tree; the canary test in
     ``tests/integration/`` proves the arrangement works rather than assuming it.
+
+    The prompt goes in on stdin -- see :func:`build_command` for why. The default
+    timeout is 900 s rather than 300 s because a 100k-token prompt spends most of
+    it in prefill, and a run that times out is scored as infrastructure failure
+    rather than being retried.
     """
     command = build_command(
-        prompt,
         system_prompt=system_prompt,
         model=model,
         in_situ=in_situ,
         json_schema=json_schema,
     )
-    # Fixed argv, no shell: `command` is assembled by build_command, never
-    # interpolated from item text.
+    # Fixed argv, no shell: `command` is assembled by build_command and contains
+    # no item text at all. The prompt arrives on stdin, which removes the OS
+    # command-line limit as a ceiling on item length and removes any question of
+    # argv quoting.
     #
     # `encoding` is explicit and not optional. `text=True` alone decodes with
     # the locale codec, which on Windows is cp1252: the first curly quote or
@@ -212,6 +293,7 @@ def run(
     # is visible in the record while a dead run is not.
     completed = subprocess.run(
         command,
+        input=prompt,
         cwd=cwd,
         capture_output=True,
         text=True,

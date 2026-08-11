@@ -43,14 +43,14 @@ def _payload(**overrides: Any) -> dict[str, Any]:
 
 
 def test_isolated_arm_replaces_the_system_prompt() -> None:
-    command = cc.build_command("2+2?", system_prompt="be terse", model="haiku")
+    command = cc.build_command(system_prompt="be terse", model="haiku")
     assert "--system-prompt" in command
     assert "--append-system-prompt" not in command
     assert command[command.index("--system-prompt") + 1] == "be terse"
 
 
 def test_in_situ_arm_appends_instead_of_replacing() -> None:
-    command = cc.build_command("2+2?", system_prompt="be terse", model="haiku", in_situ=True)
+    command = cc.build_command(system_prompt="be terse", model="haiku", in_situ=True)
     assert "--append-system-prompt" in command
     assert "--system-prompt" not in command
 
@@ -63,7 +63,7 @@ def test_isolation_flags_present_in_every_mode(in_situ: bool) -> None:
     an ecological-validity choice, not a relaxation of isolation -- it must
     still be sealed off from project memory, and this asserts it.
     """
-    command = cc.build_command("q", system_prompt="s", model="haiku", in_situ=in_situ)
+    command = cc.build_command(system_prompt="s", model="haiku", in_situ=in_situ)
     for flag in cc.ISOLATION_FLAGS:
         assert flag in command
 
@@ -74,18 +74,50 @@ def test_isolation_flags_present_in_every_mode(in_situ: bool) -> None:
 
 
 def test_json_schema_is_appended_only_when_given() -> None:
-    without = cc.build_command("q", system_prompt="s", model="haiku")
+    without = cc.build_command(system_prompt="s", model="haiku")
     assert "--json-schema" not in without
 
-    with_schema = cc.build_command("q", system_prompt="s", model="haiku", json_schema='{"a":1}')
+    with_schema = cc.build_command(system_prompt="s", model="haiku", json_schema='{"a":1}')
     assert with_schema[with_schema.index("--json-schema") + 1] == '{"a":1}'
 
 
 def test_command_requests_json_output_and_the_named_model() -> None:
-    command = cc.build_command("q", system_prompt="s", model="sonnet")
-    assert command[:3] == ["claude", "-p", "q"]
+    command = cc.build_command(system_prompt="s", model="sonnet")
+    assert command[:2] == ["claude", "-p"]
     assert command[command.index("--model") + 1] == "sonnet"
     assert command[command.index("--output-format") + 1] == "json"
+
+
+def test_the_command_line_stays_small_whatever_the_item_size() -> None:
+    """The command line must not grow with the item, because it cannot.
+
+    Windows caps a whole command line near 32 KB. The corpus this harness is
+    being pointed at runs to 100k tokens per item -- roughly 400 KB -- so a
+    prompt on argv is not a tight fit, it is an impossibility, and it would have
+    failed as a ``CliError`` scored ``infrastructure`` for an entire stratum.
+    """
+    command = cc.build_command(system_prompt="s", model="haiku")
+    assert sum(len(part) for part in command) < 1_000
+
+
+def test_run_sends_a_long_prompt_on_stdin_and_none_of_it_on_argv(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A 640 KB item goes through stdin intact and leaves argv untouched."""
+    seen: dict[str, Any] = {}
+
+    def fake_run(command: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
+        seen["command"] = command
+        seen["input"] = kwargs.get("input")
+        return subprocess.CompletedProcess(command, 0, json.dumps(_payload()), "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    prompt = "MERIDIAN-CANARY " * 40_000
+    cc.run(prompt, system_prompt="s", model="haiku", cwd=".")
+
+    assert seen["input"] == prompt
+    assert not any("MERIDIAN-CANARY" in part for part in seen["command"])
+    assert sum(len(part) for part in seen["command"]) < 1_000
 
 
 # --------------------------------------------------------------------------
@@ -112,6 +144,68 @@ def test_parse_result_defaults_missing_usage_to_zero() -> None:
     assert result.cost_usd == 0.0
 
 
+def test_cached_prompt_tokens_are_counted_as_prompt_tokens() -> None:
+    """A measured defect, not a hypothetical one.
+
+    A 380 KB casefile came back reporting ``input_tokens: 10`` while
+    ``cache_creation_input_tokens`` carried the other 24,285 and the cost tracked
+    the real figure. Reading ``input_tokens`` alone put ~10 in the token column of
+    every long item -- the column ``docs/HARNESS_DISCLOSURE.md`` commits to
+    reporting at p90/p99, wrong in exactly the stratum it describes.
+    """
+    result = cc.parse_result(
+        _payload(
+            usage={
+                "input_tokens": 10,
+                "cache_creation_input_tokens": 24_285,
+                "cache_read_input_tokens": 0,
+                "output_tokens": 69,
+            }
+        )
+    )
+    assert result.input_tokens == 24_295
+    assert result.cache_creation_tokens == 24_285
+    assert result.cache_read_tokens == 0
+
+
+def test_a_repeat_served_from_cache_still_reports_the_whole_prompt() -> None:
+    """The second repeat of an item arrives as ``cache_read`` and costs less.
+
+    Cheaper is not smaller. The prompt the model read is identical, so the token
+    column must be identical too, or the two repeats of one cell look like two
+    different items.
+    """
+    result = cc.parse_result(
+        _payload(
+            usage={
+                "input_tokens": 10,
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 24_285,
+                "output_tokens": 69,
+            }
+        )
+    )
+    assert result.input_tokens == 24_295
+    assert result.cache_read_tokens == 24_285
+
+
+def test_context_window_is_recorded_and_yields_a_fraction() -> None:
+    result = cc.parse_result(
+        _payload(
+            usage={"input_tokens": 100_000, "output_tokens": 0},
+            modelUsage={"claude-haiku-4-5-20251001": {"contextWindow": 200_000}},
+        )
+    )
+    assert result.context_window == 200_000
+    assert result.context_fraction == 0.5
+
+
+def test_context_fraction_is_zero_when_no_window_is_reported() -> None:
+    result = cc.parse_result(_payload())
+    assert result.context_window == 0
+    assert result.context_fraction == 0.0
+
+
 def test_a_401_is_an_authentication_error_not_a_scoreable_failure() -> None:
     payload = _payload(
         is_error=True,
@@ -126,6 +220,25 @@ def test_authentication_failure_detected_from_the_message_without_a_status() -> 
     """The status field is not always populated, so the message is a fallback."""
     payload = _payload(is_error=True, api_error_status=None, result="Failed to authenticate.")
     with pytest.raises(cc.AuthenticationError):
+        cc.parse_result(payload)
+
+
+def test_an_overflowing_prompt_is_its_own_failure_not_infrastructure() -> None:
+    """Observed at a nominal 350k tokens: the CLI returns "Prompt is too long".
+
+    It has to be distinguishable from a flaky call. A prompt that overflows the
+    window does so deterministically, on every retry, and it is an authoring
+    defect in the item -- bucketing it as infrastructure hides a reproducible
+    mistake behind a retry loop.
+    """
+    payload = _payload(is_error=True, api_error_status=None, result="Prompt is too long")
+    with pytest.raises(cc.PromptTooLongError):
+        cc.parse_result(payload)
+
+
+def test_overflow_is_still_a_cli_error_for_callers_that_catch_broadly() -> None:
+    payload = _payload(is_error=True, result="Prompt is too long")
+    with pytest.raises(cc.CliError):
         cc.parse_result(payload)
 
 

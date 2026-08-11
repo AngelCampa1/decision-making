@@ -12,6 +12,7 @@ from decision_evals.providers.claude_code import (
     AuthenticationError,
     CliError,
     CliResult,
+    PromptTooLongError,
     build_command,
     parse_result,
 )
@@ -21,6 +22,7 @@ __all__ = [
     "AuthenticationError",
     "CliError",
     "CliResult",
+    "PromptTooLongError",
     "build_command",
     "parse_result",
 ]
