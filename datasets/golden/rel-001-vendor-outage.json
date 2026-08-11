@@ -7,7 +7,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only after 6 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
@@ -61,7 +61,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only after 6 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
@@ -109,7 +109,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only after 6 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "d1",
@@ -163,7 +163,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only after 6 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
@@ -244,7 +244,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only after 6 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
@@ -295,7 +295,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only after 6 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "d1",
@@ -370,7 +370,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Fabrikam contract credits SLA penalties only after 6 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 6 continuous hours."
       },
       {
         "id": "r2",
@@ -440,7 +440,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only after 15 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
@@ -494,7 +494,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only after 15 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
@@ -542,7 +542,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only after 15 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "d4",
@@ -596,7 +596,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only after 15 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
@@ -677,7 +677,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only after 15 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
@@ -728,7 +728,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only after 15 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "d4",
@@ -803,7 +803,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Tailspin contract credits SLA penalties only after 15 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
@@ -873,13 +873,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 10 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
       },
       {
         "id": "r3",
@@ -899,15 +899,15 @@
       "wait"
     ],
     "position": "none",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 209,
-      "outage_h": 11,
-      "region": "us-east",
-      "sla_h": 10,
-      "vendor": "Northwind"
+      "headcount": 70,
+      "outage_h": 21,
+      "region": "eu-west",
+      "sla_h": 15,
+      "vendor": "Fabrikam"
     },
     "variant": 2
   },
@@ -921,19 +921,19 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
+        "text": "Fabrikam redesigned its public status page last quarter."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 10 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
       },
       {
         "id": "r3",
@@ -953,15 +953,15 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 209,
-      "outage_h": 11,
-      "region": "us-east",
-      "sla_h": 10,
-      "vendor": "Northwind"
+      "headcount": 70,
+      "outage_h": 21,
+      "region": "eu-west",
+      "sla_h": 15,
+      "vendor": "Fabrikam"
     },
     "variant": 2
   },
@@ -975,19 +975,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 10 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
+        "text": "Fabrikam redesigned its public status page last quarter."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
       },
       {
         "id": "r3",
@@ -1007,15 +1007,15 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 209,
-      "outage_h": 11,
-      "region": "us-east",
-      "sla_h": 10,
-      "vendor": "Northwind"
+      "headcount": 70,
+      "outage_h": 21,
+      "region": "eu-west",
+      "sla_h": 15,
+      "vendor": "Fabrikam"
     },
     "variant": 2
   },
@@ -1029,13 +1029,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 10 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
       },
       {
         "id": "r3",
@@ -1047,7 +1047,7 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
+        "text": "Fabrikam redesigned its public status page last quarter."
       }
     ],
     "item_id": "rel-001-vendor-outage#v2-d1-late",
@@ -1061,15 +1061,15 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 209,
-      "outage_h": 11,
-      "region": "us-east",
-      "sla_h": 10,
-      "vendor": "Northwind"
+      "headcount": 70,
+      "outage_h": 21,
+      "region": "eu-west",
+      "sla_h": 15,
+      "vendor": "Fabrikam"
     },
     "variant": 2
   },
@@ -1077,8 +1077,8 @@
     "answer": "file_sla_claim",
     "distractor_ids": [
       "d1",
-      "d2",
       "d4",
+      "d5",
       "d3"
     ],
     "facts": [
@@ -1086,37 +1086,37 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The us-east region accounts for the largest share of Northwind customers."
+        "text": "Fabrikam redesigned its public status page last quarter."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "text": "Fabrikam moved its head office to a new building in March."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The office coffee machine was serviced on Tuesday."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 209 people across all products."
+        "text": "The support organisation has 70 people across all products."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 10 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
       },
       {
         "id": "r3",
@@ -1136,15 +1136,15 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 209,
-      "outage_h": 11,
-      "region": "us-east",
-      "sla_h": 10,
-      "vendor": "Northwind"
+      "headcount": 70,
+      "outage_h": 21,
+      "region": "eu-west",
+      "sla_h": 15,
+      "vendor": "Fabrikam"
     },
     "variant": 2
   },
@@ -1152,8 +1152,8 @@
     "answer": "file_sla_claim",
     "distractor_ids": [
       "d1",
-      "d2",
       "d4",
+      "d5",
       "d3"
     ],
     "facts": [
@@ -1161,37 +1161,37 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 10 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The us-east region accounts for the largest share of Northwind customers."
+        "text": "Fabrikam redesigned its public status page last quarter."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "text": "Fabrikam moved its head office to a new building in March."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The office coffee machine was serviced on Tuesday."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 209 people across all products."
+        "text": "The support organisation has 70 people across all products."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
       },
       {
         "id": "r3",
@@ -1211,15 +1211,15 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 209,
-      "outage_h": 11,
-      "region": "us-east",
-      "sla_h": 10,
-      "vendor": "Northwind"
+      "headcount": 70,
+      "outage_h": 21,
+      "region": "eu-west",
+      "sla_h": 15,
+      "vendor": "Fabrikam"
     },
     "variant": 2
   },
@@ -1227,8 +1227,8 @@
     "answer": "file_sla_claim",
     "distractor_ids": [
       "d1",
-      "d2",
       "d4",
+      "d5",
       "d3"
     ],
     "facts": [
@@ -1236,13 +1236,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 10 continuous hours of downtime."
+        "text": "The Fabrikam contract credits SLA penalties only when downtime exceeds 15 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 21 continuous hours."
       },
       {
         "id": "r3",
@@ -1254,25 +1254,25 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
-      },
-      {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The us-east region accounts for the largest share of Northwind customers."
+        "text": "Fabrikam redesigned its public status page last quarter."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "text": "Fabrikam moved its head office to a new building in March."
+      },
+      {
+        "id": "d5",
+        "role": "distractor",
+        "strength": "low",
+        "text": "The office coffee machine was serviced on Tuesday."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 209 people across all products."
+        "text": "The support organisation has 70 people across all products."
       }
     ],
     "item_id": "rel-001-vendor-outage#v2-d4-late",
@@ -1286,15 +1286,15 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Fabrikam outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 209,
-      "outage_h": 11,
-      "region": "us-east",
-      "sla_h": 10,
-      "vendor": "Northwind"
+      "headcount": 70,
+      "outage_h": 21,
+      "region": "eu-west",
+      "sla_h": 15,
+      "vendor": "Fabrikam"
     },
     "variant": 2
   },
@@ -1306,13 +1306,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 11 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
       },
       {
         "id": "r3",
@@ -1332,41 +1332,41 @@
       "wait"
     ],
     "position": "none",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 308,
-      "outage_h": 11,
-      "region": "eu-west",
-      "sla_h": 11,
-      "vendor": "Northwind"
+      "headcount": 362,
+      "outage_h": 15,
+      "region": "us-east",
+      "sla_h": 22,
+      "vendor": "Tailspin"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "strength": "high",
+        "text": "The us-east region accounts for the largest share of Tailspin customers."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 11 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
       },
       {
         "id": "r3",
@@ -1386,41 +1386,41 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 308,
-      "outage_h": 11,
-      "region": "eu-west",
-      "sla_h": 11,
-      "vendor": "Northwind"
+      "headcount": 362,
+      "outage_h": 15,
+      "region": "us-east",
+      "sla_h": 22,
+      "vendor": "Tailspin"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 11 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "strength": "high",
+        "text": "The us-east region accounts for the largest share of Tailspin customers."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
       },
       {
         "id": "r3",
@@ -1440,35 +1440,35 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 308,
-      "outage_h": 11,
-      "region": "eu-west",
-      "sla_h": 11,
-      "vendor": "Northwind"
+      "headcount": 362,
+      "outage_h": 15,
+      "region": "us-east",
+      "sla_h": 22,
+      "vendor": "Tailspin"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 11 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
       },
       {
         "id": "r3",
@@ -1477,10 +1477,10 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "strength": "high",
+        "text": "The us-east region accounts for the largest share of Tailspin customers."
       }
     ],
     "item_id": "rel-001-vendor-outage#v3-d1-late",
@@ -1494,44 +1494,44 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 308,
-      "outage_h": 11,
-      "region": "eu-west",
-      "sla_h": 11,
-      "vendor": "Northwind"
+      "headcount": 362,
+      "outage_h": 15,
+      "region": "us-east",
+      "sla_h": 22,
+      "vendor": "Tailspin"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4",
+      "d2",
       "d3",
       "d1",
       "d5"
     ],
     "facts": [
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "strength": "high",
+        "text": "The us-east region accounts for the largest share of Tailspin customers."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 308 people across all products."
+        "text": "The support organisation has 362 people across all products."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
+        "text": "Tailspin redesigned its public status page last quarter."
       },
       {
         "id": "d5",
@@ -1543,13 +1543,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 11 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
       },
       {
         "id": "r3",
@@ -1569,22 +1569,22 @@
       "wait"
     ],
     "position": "early",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 308,
-      "outage_h": 11,
-      "region": "eu-west",
-      "sla_h": 11,
-      "vendor": "Northwind"
+      "headcount": 362,
+      "outage_h": 15,
+      "region": "us-east",
+      "sla_h": 22,
+      "vendor": "Tailspin"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4",
+      "d2",
       "d3",
       "d1",
       "d5"
@@ -1594,25 +1594,25 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 11 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "strength": "high",
+        "text": "The us-east region accounts for the largest share of Tailspin customers."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 308 people across all products."
+        "text": "The support organisation has 362 people across all products."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
+        "text": "Tailspin redesigned its public status page last quarter."
       },
       {
         "id": "d5",
@@ -1624,7 +1624,7 @@
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
       },
       {
         "id": "r3",
@@ -1644,22 +1644,22 @@
       "wait"
     ],
     "position": "middle",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 308,
-      "outage_h": 11,
-      "region": "eu-west",
-      "sla_h": 11,
-      "vendor": "Northwind"
+      "headcount": 362,
+      "outage_h": 15,
+      "region": "us-east",
+      "sla_h": 22,
+      "vendor": "Tailspin"
     },
     "variant": 3
   },
   {
     "answer": "wait",
     "distractor_ids": [
-      "d4",
+      "d2",
       "d3",
       "d1",
       "d5"
@@ -1669,13 +1669,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The Northwind contract credits SLA penalties only after 11 continuous hours of downtime."
+        "text": "The Tailspin contract credits SLA penalties only when downtime exceeds 22 continuous hours."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Yesterday's incident kept the service unavailable for 11 continuous hours."
+        "text": "Yesterday's incident kept the service unavailable for 15 continuous hours."
       },
       {
         "id": "r3",
@@ -1684,22 +1684,22 @@
         "text": "Filing a claim costs nothing and has no effect on renewal terms."
       },
       {
-        "id": "d4",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "Northwind moved its head office to a new building in March."
+        "strength": "high",
+        "text": "The us-east region accounts for the largest share of Tailspin customers."
       },
       {
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "The support organisation has 308 people across all products."
+        "text": "The support organisation has 362 people across all products."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "Northwind redesigned its public status page last quarter."
+        "text": "Tailspin redesigned its public status page last quarter."
       },
       {
         "id": "d5",
@@ -1719,15 +1719,15 @@
       "wait"
     ],
     "position": "late",
-    "question": "The Northwind outage has ended. Should the team file an SLA claim or wait?",
+    "question": "The Tailspin outage has ended. Should the team file an SLA claim or wait?",
     "seed": 1,
     "template_id": "rel-001-vendor-outage",
     "variables": {
-      "headcount": 308,
-      "outage_h": 11,
-      "region": "eu-west",
-      "sla_h": 11,
-      "vendor": "Northwind"
+      "headcount": 362,
+      "outage_h": 15,
+      "region": "us-east",
+      "sla_h": 22,
+      "vendor": "Tailspin"
     },
     "variant": 3
   }

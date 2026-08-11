@@ -15,6 +15,7 @@ from decision_evals.generators.generate import (
     arrange,
     derive_seed,
     generate,
+    is_robust,
     sample_variables,
     strata_combinations,
 )
@@ -100,12 +101,71 @@ def test_labels_are_balanced_by_construction(template: Template) -> None:
     assert len(set(answers.values())) == 1, answers
 
 
+def test_generated_items_never_sit_on_a_threshold_edge(template: Template) -> None:
+    """The defect the first calibration run surfaced.
+
+    A sampling put ``outage_h == sla_h`` against a fact reading "only after N
+    continuous hours". Ground truth said `wait` on a strictly-greater rule; the
+    model read the sentence as inclusive and was defensibly right. Items on the
+    knife edge test how precisely a threshold sentence is read, not whether
+    irrelevant context was ranked out.
+    """
+    for item in generate(template, seed=5):
+        assert is_robust(template, item.variables), item.variables
+
+
+def test_a_tie_is_not_robust(template: Template) -> None:
+    """The exact case that failed: equal values either side of a comparison."""
+    assert not is_robust(template, {"value": 5, "limit": 5, "thing": "alpha", "colour": "red"})
+    assert not is_robust(template, {"value": 6, "limit": 5, "thing": "alpha", "colour": "red"})
+    assert is_robust(template, {"value": 9, "limit": 5, "thing": "alpha", "colour": "red"})
+
+
+def test_robustness_ignores_non_numeric_variables(template_dict: Build) -> None:
+    """A choice variable has no ±1 neighbour; nudging it is meaningless."""
+    by_choice = Template.model_validate(
+        template_dict(
+            solution={"expr": "'act' if thing == 'alpha' else 'hold'", "load_bearing": ["r1"]}
+        )
+    )
+    assert is_robust(by_choice, {"thing": "alpha", "value": 1, "limit": 1, "colour": "red"})
+
+
+def test_a_nudge_that_leaves_the_option_menu_counts_as_an_edge(template_dict: Build) -> None:
+    edgy = Template.model_validate(
+        template_dict(
+            solution={
+                "expr": "'act' if value > 5 else ('hold' if value > 3 else 'undefined')",
+                "load_bearing": ["r1"],
+            }
+        )
+    )
+    # value == 4 is one step from falling out of the option menu entirely.
+    assert not is_robust(edgy, {"value": 4, "limit": 1, "thing": "alpha", "colour": "red"})
+
+
+def test_a_corpus_too_tight_for_a_margin_fails_loudly(template_dict: Build) -> None:
+    """Better a build failure than a corpus of knife-edge items."""
+    cramped = Template.model_validate(
+        template_dict(
+            variables={
+                "thing": {"choice": ["alpha"]},
+                "colour": {"choice": ["red"]},
+                "value": {"int": [5, 5]},
+                "limit": {"int": [5, 5]},
+            }
+        )
+    )
+    with pytest.raises(GenerationError, match="robust answer"):
+        generate(cramped, seed=1)
+
+
 def test_an_unreachable_option_fails_loudly(template_dict: Build) -> None:
     """A template that cannot produce one of its options is defective, not unlucky."""
     unreachable = Template.model_validate(
         template_dict(solution={"expr": "'act'", "load_bearing": ["r1"]})
     )
-    with pytest.raises(GenerationError, match="could not produce answer 'hold'"):
+    with pytest.raises(GenerationError, match="could not produce a robust answer 'hold'"):
         generate(unreachable, seed=1)
 
 

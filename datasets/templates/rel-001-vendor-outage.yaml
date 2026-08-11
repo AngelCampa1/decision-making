@@ -1,4 +1,10 @@
 # The answer turns on two facts. Everything else is true, on-topic, and inert.
+#
+# r1 originally read "credits SLA penalties only after {sla_h} continuous hours".
+# The first calibration run failed on the tie case (outage_h == sla_h == 11):
+# the rule is strictly-greater, but "after 11 hours" with exactly 11 hours has
+# no single reading, and the model's answer was defensible. Reworded to
+# "exceeds", which is unambiguously strict.
 template_id: rel-001-vendor-outage
 question: "The {vendor} outage has ended. Should the team file an SLA claim or wait?"
 options: [file_sla_claim, wait]
@@ -12,7 +18,7 @@ variables:
 
 relevant_facts:
   - id: r1
-    text: "The {vendor} contract credits SLA penalties only after {sla_h} continuous hours of downtime."
+    text: "The {vendor} contract credits SLA penalties only when downtime exceeds {sla_h} continuous hours."
   - id: r2
     text: "Yesterday's incident kept the service unavailable for {outage_h} continuous hours."
   - id: r3

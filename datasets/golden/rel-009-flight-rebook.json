@@ -1306,13 +1306,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 159 minutes late."
+        "text": "The inbound aircraft is running 101 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 159 minutes of slack before the onward connection."
+        "text": "The traveller has 141 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1336,11 +1336,11 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Solstice",
+      "airline": "Meridian",
       "bags": 3,
       "city": "Sapporo",
-      "connection_min": 159,
-      "delay_min": 159
+      "connection_min": 141,
+      "delay_min": 101
     },
     "variant": 3
   },
@@ -1360,13 +1360,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 159 minutes late."
+        "text": "The inbound aircraft is running 101 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 159 minutes of slack before the onward connection."
+        "text": "The traveller has 141 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1390,11 +1390,11 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Solstice",
+      "airline": "Meridian",
       "bags": 3,
       "city": "Sapporo",
-      "connection_min": 159,
-      "delay_min": 159
+      "connection_min": 141,
+      "delay_min": 101
     },
     "variant": 3
   },
@@ -1408,7 +1408,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 159 minutes late."
+        "text": "The inbound aircraft is running 101 minutes late."
       },
       {
         "id": "d1",
@@ -1420,7 +1420,7 @@
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 159 minutes of slack before the onward connection."
+        "text": "The traveller has 141 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1444,11 +1444,11 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Solstice",
+      "airline": "Meridian",
       "bags": 3,
       "city": "Sapporo",
-      "connection_min": 159,
-      "delay_min": 159
+      "connection_min": 141,
+      "delay_min": 101
     },
     "variant": 3
   },
@@ -1462,13 +1462,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 159 minutes late."
+        "text": "The inbound aircraft is running 101 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 159 minutes of slack before the onward connection."
+        "text": "The traveller has 141 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1498,11 +1498,11 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Solstice",
+      "airline": "Meridian",
       "bags": 3,
       "city": "Sapporo",
-      "connection_min": 159,
-      "delay_min": 159
+      "connection_min": 141,
+      "delay_min": 101
     },
     "variant": 3
   },
@@ -1510,8 +1510,8 @@
     "answer": "wait_at_gate",
     "distractor_ids": [
       "d1",
-      "d4",
       "d2",
+      "d4",
       "d3"
     ],
     "facts": [
@@ -1522,16 +1522,16 @@
         "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
       },
       {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Solstice operates its largest lounge in Sapporo."
-      },
-      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Solstice refreshed its cabin interiors across the fleet last year."
+        "text": "Meridian refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Meridian operates its largest lounge in Sapporo."
       },
       {
         "id": "d3",
@@ -1543,13 +1543,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 159 minutes late."
+        "text": "The inbound aircraft is running 101 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 159 minutes of slack before the onward connection."
+        "text": "The traveller has 141 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1573,11 +1573,11 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Solstice",
+      "airline": "Meridian",
       "bags": 3,
       "city": "Sapporo",
-      "connection_min": 159,
-      "delay_min": 159
+      "connection_min": 141,
+      "delay_min": 101
     },
     "variant": 3
   },
@@ -1585,8 +1585,8 @@
     "answer": "wait_at_gate",
     "distractor_ids": [
       "d1",
-      "d4",
       "d2",
+      "d4",
       "d3"
     ],
     "facts": [
@@ -1594,7 +1594,7 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 159 minutes late."
+        "text": "The inbound aircraft is running 101 minutes late."
       },
       {
         "id": "d1",
@@ -1603,16 +1603,16 @@
         "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
       },
       {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Solstice operates its largest lounge in Sapporo."
-      },
-      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Solstice refreshed its cabin interiors across the fleet last year."
+        "text": "Meridian refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Meridian operates its largest lounge in Sapporo."
       },
       {
         "id": "d3",
@@ -1624,7 +1624,7 @@
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 159 minutes of slack before the onward connection."
+        "text": "The traveller has 141 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1648,11 +1648,11 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Solstice",
+      "airline": "Meridian",
       "bags": 3,
       "city": "Sapporo",
-      "connection_min": 159,
-      "delay_min": 159
+      "connection_min": 141,
+      "delay_min": 101
     },
     "variant": 3
   },
@@ -1660,8 +1660,8 @@
     "answer": "wait_at_gate",
     "distractor_ids": [
       "d1",
-      "d4",
       "d2",
+      "d4",
       "d3"
     ],
     "facts": [
@@ -1669,13 +1669,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The inbound aircraft is running 159 minutes late."
+        "text": "The inbound aircraft is running 101 minutes late."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 159 minutes of slack before the onward connection."
+        "text": "The traveller has 141 minutes of slack before the onward connection."
       },
       {
         "id": "r3",
@@ -1690,16 +1690,16 @@
         "text": "It is raining heavily in Sapporo, which is neither the origin nor the destination."
       },
       {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "Solstice operates its largest lounge in Sapporo."
-      },
-      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "Solstice refreshed its cabin interiors across the fleet last year."
+        "text": "Meridian refreshed its cabin interiors across the fleet last year."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "Meridian operates its largest lounge in Sapporo."
       },
       {
         "id": "d3",
@@ -1723,11 +1723,11 @@
     "seed": 1,
     "template_id": "rel-009-flight-rebook",
     "variables": {
-      "airline": "Solstice",
+      "airline": "Meridian",
       "bags": 3,
       "city": "Sapporo",
-      "connection_min": 159,
-      "delay_min": 159
+      "connection_min": 141,
+      "delay_min": 101
     },
     "variant": 3
   }

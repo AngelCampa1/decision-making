@@ -440,13 +440,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 20% of requests are affected."
+        "text": "The escalation policy triggers when more than 10% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 20% of requests affected and holding steady."
+        "text": "Current telemetry shows 6% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -470,37 +470,37 @@
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 20,
+      "affected_pct": 6,
       "alert": "latency",
       "cluster": "blue",
-      "runbook_pages": 23,
-      "threshold_pct": 20
+      "runbook_pages": 42,
+      "threshold_pct": 10
     },
     "variant": 1
   },
   {
     "answer": "monitor",
     "distractor_ids": [
-      "d3"
+      "d4"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
+        "text": "The latency alert has the longest name of any alert in the catalogue."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 20% of requests are affected."
+        "text": "The escalation policy triggers when more than 10% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 20% of requests affected and holding steady."
+        "text": "Current telemetry shows 6% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -524,37 +524,37 @@
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 20,
+      "affected_pct": 6,
       "alert": "latency",
       "cluster": "blue",
-      "runbook_pages": 23,
-      "threshold_pct": 20
+      "runbook_pages": 42,
+      "threshold_pct": 10
     },
     "variant": 1
   },
   {
     "answer": "monitor",
     "distractor_ids": [
-      "d3"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 20% of requests are affected."
+        "text": "The escalation policy triggers when more than 10% of requests are affected."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
+        "text": "The latency alert has the longest name of any alert in the catalogue."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 20% of requests affected and holding steady."
+        "text": "Current telemetry shows 6% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -578,31 +578,31 @@
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 20,
+      "affected_pct": 6,
       "alert": "latency",
       "cluster": "blue",
-      "runbook_pages": 23,
-      "threshold_pct": 20
+      "runbook_pages": 42,
+      "threshold_pct": 10
     },
     "variant": 1
   },
   {
     "answer": "monitor",
     "distractor_ids": [
-      "d3"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 20% of requests are affected."
+        "text": "The escalation policy triggers when more than 10% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 20% of requests affected and holding steady."
+        "text": "Current telemetry shows 6% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -611,10 +611,10 @@
         "text": "The secondary on-call is available and has acknowledged the page."
       },
       {
-        "id": "d3",
+        "id": "d4",
         "role": "distractor",
         "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
+        "text": "The latency alert has the longest name of any alert in the catalogue."
       }
     ],
     "item_id": "rel-003-oncall-escalate#v1-d1-late",
@@ -632,23 +632,29 @@
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 20,
+      "affected_pct": 6,
       "alert": "latency",
       "cluster": "blue",
-      "runbook_pages": 23,
-      "threshold_pct": 20
+      "runbook_pages": 42,
+      "threshold_pct": 10
     },
     "variant": 1
   },
   {
     "answer": "monitor",
     "distractor_ids": [
+      "d4",
       "d3",
       "d1",
-      "d2",
-      "d4"
+      "d5"
     ],
     "facts": [
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
+      },
       {
         "id": "d3",
         "role": "distractor",
@@ -659,31 +665,25 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The latency runbook is 23 pages long and was reviewed this quarter."
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
       },
       {
-        "id": "d2",
+        "id": "d5",
         "role": "distractor",
-        "strength": "high",
-        "text": "The blue cluster was renamed during last year's migration."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The latency alert has the longest name of any alert in the catalogue."
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 20% of requests are affected."
+        "text": "The escalation policy triggers when more than 10% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 20% of requests affected and holding steady."
+        "text": "Current telemetry shows 6% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -707,28 +707,34 @@
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 20,
+      "affected_pct": 6,
       "alert": "latency",
       "cluster": "blue",
-      "runbook_pages": 23,
-      "threshold_pct": 20
+      "runbook_pages": 42,
+      "threshold_pct": 10
     },
     "variant": 1
   },
   {
     "answer": "monitor",
     "distractor_ids": [
+      "d4",
       "d3",
       "d1",
-      "d2",
-      "d4"
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 20% of requests are affected."
+        "text": "The escalation policy triggers when more than 10% of requests are affected."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
       },
       {
         "id": "d3",
@@ -740,25 +746,19 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The latency runbook is 23 pages long and was reviewed this quarter."
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
       },
       {
-        "id": "d2",
+        "id": "d5",
         "role": "distractor",
-        "strength": "high",
-        "text": "The blue cluster was renamed during last year's migration."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The latency alert has the longest name of any alert in the catalogue."
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 20% of requests affected and holding steady."
+        "text": "Current telemetry shows 6% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -782,40 +782,46 @@
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 20,
+      "affected_pct": 6,
       "alert": "latency",
       "cluster": "blue",
-      "runbook_pages": 23,
-      "threshold_pct": 20
+      "runbook_pages": 42,
+      "threshold_pct": 10
     },
     "variant": 1
   },
   {
     "answer": "monitor",
     "distractor_ids": [
+      "d4",
       "d3",
       "d1",
-      "d2",
-      "d4"
+      "d5"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 20% of requests are affected."
+        "text": "The escalation policy triggers when more than 10% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 20% of requests affected and holding steady."
+        "text": "Current telemetry shows 6% of requests affected and holding steady."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
         "text": "The secondary on-call is available and has acknowledged the page."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The latency alert has the longest name of any alert in the catalogue."
       },
       {
         "id": "d3",
@@ -827,19 +833,13 @@
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The latency runbook is 23 pages long and was reviewed this quarter."
+        "text": "The latency runbook is 42 pages long and was reviewed this quarter."
       },
       {
-        "id": "d2",
+        "id": "d5",
         "role": "distractor",
-        "strength": "high",
-        "text": "The blue cluster was renamed during last year's migration."
-      },
-      {
-        "id": "d4",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The latency alert has the longest name of any alert in the catalogue."
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
       }
     ],
     "item_id": "rel-003-oncall-escalate#v1-d4-late",
@@ -857,11 +857,11 @@
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 20,
+      "affected_pct": 6,
       "alert": "latency",
       "cluster": "blue",
-      "runbook_pages": 23,
-      "threshold_pct": 20
+      "runbook_pages": 42,
+      "threshold_pct": 10
     },
     "variant": 1
   },
@@ -873,13 +873,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 4% of requests are affected."
+        "text": "The escalation policy triggers when more than 3% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 5% of requests affected and holding steady."
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -899,41 +899,41 @@
       "monitor"
     ],
     "position": "none",
-    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "question": "Should the on-call engineer escalate the error-rate alert, or keep monitoring?",
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 5,
-      "alert": "latency",
-      "cluster": "blue",
-      "runbook_pages": 37,
-      "threshold_pct": 4
+      "affected_pct": 20,
+      "alert": "error-rate",
+      "cluster": "green",
+      "runbook_pages": 36,
+      "threshold_pct": 3
     },
     "variant": 2
   },
   {
     "answer": "escalate",
     "distractor_ids": [
-      "d3"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d3",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
+        "strength": "high",
+        "text": "The green cluster was renamed during last year's migration."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 4% of requests are affected."
+        "text": "The escalation policy triggers when more than 3% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 5% of requests affected and holding steady."
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -953,41 +953,41 @@
       "monitor"
     ],
     "position": "early",
-    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "question": "Should the on-call engineer escalate the error-rate alert, or keep monitoring?",
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 5,
-      "alert": "latency",
-      "cluster": "blue",
-      "runbook_pages": 37,
-      "threshold_pct": 4
+      "affected_pct": 20,
+      "alert": "error-rate",
+      "cluster": "green",
+      "runbook_pages": 36,
+      "threshold_pct": 3
     },
     "variant": 2
   },
   {
     "answer": "escalate",
     "distractor_ids": [
-      "d3"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 4% of requests are affected."
+        "text": "The escalation policy triggers when more than 3% of requests are affected."
       },
       {
-        "id": "d3",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
+        "strength": "high",
+        "text": "The green cluster was renamed during last year's migration."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 5% of requests affected and holding steady."
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -1007,35 +1007,35 @@
       "monitor"
     ],
     "position": "middle",
-    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "question": "Should the on-call engineer escalate the error-rate alert, or keep monitoring?",
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 5,
-      "alert": "latency",
-      "cluster": "blue",
-      "runbook_pages": 37,
-      "threshold_pct": 4
+      "affected_pct": 20,
+      "alert": "error-rate",
+      "cluster": "green",
+      "runbook_pages": 36,
+      "threshold_pct": 3
     },
     "variant": 2
   },
   {
     "answer": "escalate",
     "distractor_ids": [
-      "d3"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 4% of requests are affected."
+        "text": "The escalation policy triggers when more than 3% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 5% of requests affected and holding steady."
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -1044,10 +1044,10 @@
         "text": "The secondary on-call is available and has acknowledged the page."
       },
       {
-        "id": "d3",
+        "id": "d2",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
+        "strength": "high",
+        "text": "The green cluster was renamed during last year's migration."
       }
     ],
     "item_id": "rel-003-oncall-escalate#v2-d1-late",
@@ -1061,62 +1061,62 @@
       "monitor"
     ],
     "position": "late",
-    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "question": "Should the on-call engineer escalate the error-rate alert, or keep monitoring?",
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 5,
-      "alert": "latency",
-      "cluster": "blue",
-      "runbook_pages": 37,
-      "threshold_pct": 4
+      "affected_pct": 20,
+      "alert": "error-rate",
+      "cluster": "green",
+      "runbook_pages": 36,
+      "threshold_pct": 3
     },
     "variant": 2
   },
   {
     "answer": "escalate",
     "distractor_ids": [
-      "d3",
       "d2",
-      "d4",
-      "d1"
+      "d5",
+      "d1",
+      "d4"
     ],
     "facts": [
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
-      },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The blue cluster was renamed during last year's migration."
+        "text": "The green cluster was renamed during last year's migration."
       },
       {
-        "id": "d4",
+        "id": "d5",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The latency alert has the longest name of any alert in the catalogue."
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The latency runbook is 37 pages long and was reviewed this quarter."
+        "text": "The error-rate runbook is 36 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The error-rate alert has the longest name of any alert in the catalogue."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 4% of requests are affected."
+        "text": "The escalation policy triggers when more than 3% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 5% of requests affected and holding steady."
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -1136,62 +1136,62 @@
       "monitor"
     ],
     "position": "early",
-    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "question": "Should the on-call engineer escalate the error-rate alert, or keep monitoring?",
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 5,
-      "alert": "latency",
-      "cluster": "blue",
-      "runbook_pages": 37,
-      "threshold_pct": 4
+      "affected_pct": 20,
+      "alert": "error-rate",
+      "cluster": "green",
+      "runbook_pages": 36,
+      "threshold_pct": 3
     },
     "variant": 2
   },
   {
     "answer": "escalate",
     "distractor_ids": [
-      "d3",
       "d2",
-      "d4",
-      "d1"
+      "d5",
+      "d1",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 4% of requests are affected."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
+        "text": "The escalation policy triggers when more than 3% of requests are affected."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The blue cluster was renamed during last year's migration."
+        "text": "The green cluster was renamed during last year's migration."
       },
       {
-        "id": "d4",
+        "id": "d5",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The latency alert has the longest name of any alert in the catalogue."
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The latency runbook is 37 pages long and was reviewed this quarter."
+        "text": "The error-rate runbook is 36 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The error-rate alert has the longest name of any alert in the catalogue."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 5% of requests affected and holding steady."
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -1211,38 +1211,38 @@
       "monitor"
     ],
     "position": "middle",
-    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "question": "Should the on-call engineer escalate the error-rate alert, or keep monitoring?",
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 5,
-      "alert": "latency",
-      "cluster": "blue",
-      "runbook_pages": 37,
-      "threshold_pct": 4
+      "affected_pct": 20,
+      "alert": "error-rate",
+      "cluster": "green",
+      "runbook_pages": 36,
+      "threshold_pct": 3
     },
     "variant": 2
   },
   {
     "answer": "escalate",
     "distractor_ids": [
-      "d3",
       "d2",
-      "d4",
-      "d1"
+      "d5",
+      "d1",
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The escalation policy triggers when more than 4% of requests are affected."
+        "text": "The escalation policy triggers when more than 3% of requests are affected."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Current telemetry shows 5% of requests affected and holding steady."
+        "text": "Current telemetry shows 20% of requests affected and holding steady."
       },
       {
         "id": "r3",
@@ -1251,28 +1251,28 @@
         "text": "The secondary on-call is available and has acknowledged the page."
       },
       {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "The alerting dashboard now supports dark mode."
-      },
-      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The blue cluster was renamed during last year's migration."
+        "text": "The green cluster was renamed during last year's migration."
       },
       {
-        "id": "d4",
+        "id": "d5",
         "role": "distractor",
-        "strength": "medium",
-        "text": "The latency alert has the longest name of any alert in the catalogue."
+        "strength": "low",
+        "text": "The team's incident retrospectives are held on Thursdays."
       },
       {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
-        "text": "The latency runbook is 37 pages long and was reviewed this quarter."
+        "text": "The error-rate runbook is 36 pages long and was reviewed this quarter."
+      },
+      {
+        "id": "d4",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "The error-rate alert has the longest name of any alert in the catalogue."
       }
     ],
     "item_id": "rel-003-oncall-escalate#v2-d4-late",
@@ -1286,15 +1286,15 @@
       "monitor"
     ],
     "position": "late",
-    "question": "Should the on-call engineer escalate the latency alert, or keep monitoring?",
+    "question": "Should the on-call engineer escalate the error-rate alert, or keep monitoring?",
     "seed": 1,
     "template_id": "rel-003-oncall-escalate",
     "variables": {
-      "affected_pct": 5,
-      "alert": "latency",
-      "cluster": "blue",
-      "runbook_pages": 37,
-      "threshold_pct": 4
+      "affected_pct": 20,
+      "alert": "error-rate",
+      "cluster": "green",
+      "runbook_pages": 36,
+      "threshold_pct": 3
     },
     "variant": 2
   },

@@ -33,7 +33,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict
 
-from decision_evals.generators.safe_eval import evaluate
+from decision_evals.generators.safe_eval import evaluate, referenced_names
 from decision_evals.generators.schema import Fact, Position, Strength, Template
 
 #: Position label used when a stratum has no distractors to position.
@@ -44,6 +44,10 @@ NO_POSITION = "none"
 #: about two draws on average, so reaching this bound means an option is
 #: effectively unreachable rather than merely uncommon.
 _MAX_SAMPLING_ATTEMPTS = 500
+
+#: How far every threshold-relevant integer must sit from flipping the answer.
+#: See :func:`is_robust` for what went wrong without it.
+_ROBUSTNESS_MARGIN = 1
 
 
 class RenderedFact(BaseModel):
@@ -218,13 +222,55 @@ def _sample_for_target(
     for _ in range(_MAX_SAMPLING_ATTEMPTS):
         variables = sample_variables(template, rng)
         answer = _compute_answer(template, variables)
-        if answer == target:
+        if answer == target and is_robust(template, variables):
             return variables, answer
     raise GenerationError(
-        f"{template.template_id}: could not produce answer {target!r} in "
-        f"{_MAX_SAMPLING_ATTEMPTS} attempts. The variable ranges make this option "
-        f"unreachable or very rare, which would leave the template unbalanced."
+        f"{template.template_id}: could not produce a robust answer {target!r} in "
+        f"{_MAX_SAMPLING_ATTEMPTS} attempts. Either the option is unreachable, or the "
+        f"variable ranges are too tight to leave a margin of {_ROBUSTNESS_MARGIN} on "
+        "every threshold."
     )
+
+
+def is_robust(template: Template, variables: dict[str, Any]) -> bool:
+    """True when the answer does not sit on a threshold's knife edge.
+
+    Every integer variable the solution reads is nudged by ±1; if any nudge
+    changes the answer, the sampling is rejected.
+
+    **Why this exists.** The first calibration run failed on a single template
+    variant, and it failed at *zero distractors* — the clean-room case. The
+    sampling had put ``outage_h == sla_h == 11`` against a fact reading "credits
+    penalties only after 11 continuous hours". The rule is strictly-greater, so
+    ground truth was ``wait``; the model read "after 11 hours" as inclusive and
+    answered ``file_sla_claim``. It was right to, or at least defensibly so:
+    that sentence does not have one reading.
+
+    An exact tie is the worst case, but the neighbouring values are barely
+    better, because they turn the item into a test of how precisely a threshold
+    sentence is read rather than of whether irrelevant context was ranked out.
+    That is a different skill from the one under test, and mixing it in adds
+    noise to every stratum at once.
+
+    This makes items slightly easier, which is the wrong direction for a corpus
+    already near the accuracy ceiling. Taking it anyway: the honest fix for a
+    ceiling is stronger distractors, not ambiguous items that the control arm
+    happens to get wrong.
+    """
+    answer = _compute_answer(template, variables)
+    for name in referenced_names(template.solution.expr):
+        value = variables.get(name)
+        if not isinstance(value, int) or isinstance(value, bool):
+            continue
+        for delta in (-_ROBUSTNESS_MARGIN, _ROBUSTNESS_MARGIN):
+            try:
+                nudged = _compute_answer(template, {**variables, name: value + delta})
+            except GenerationError:
+                # A nudge that leaves the option menu is itself a knife edge.
+                return False
+            if nudged != answer:
+                return False
+    return True
 
 
 def _compute_answer(template: Template, variables: dict[str, Any]) -> str:

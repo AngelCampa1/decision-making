@@ -7,13 +7,13 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the pdf-render issue is 8 out of 10."
+        "text": "The published severity score for the image-resizer issue is 8 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 8 or above."
+        "text": "Standing policy patches out of band at severity 5 or above."
       },
       {
         "id": "r3",
@@ -33,13 +33,13 @@
       "schedule_patch"
     ],
     "position": "none",
-    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
+    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "pdf-render",
-      "cve_year": 2020,
-      "emergency_at": 8,
+      "component": "image-resizer",
+      "cve_year": 2025,
+      "emergency_at": 5,
       "owner": "Data",
       "severity": 8
     },
@@ -48,26 +48,26 @@
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d2"
+      "d3"
     ],
     "facts": [
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "pdf-render is maintained by the Data team, which is hiring."
+        "strength": "medium",
+        "text": "image-resizer has been in production longer than any other service."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the pdf-render issue is 8 out of 10."
+        "text": "The published severity score for the image-resizer issue is 8 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 8 or above."
+        "text": "Standing policy patches out of band at severity 5 or above."
       },
       {
         "id": "r3",
@@ -87,13 +87,13 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
+    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "pdf-render",
-      "cve_year": 2020,
-      "emergency_at": 8,
+      "component": "image-resizer",
+      "cve_year": 2025,
+      "emergency_at": 5,
       "owner": "Data",
       "severity": 8
     },
@@ -102,26 +102,26 @@
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d2"
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the pdf-render issue is 8 out of 10."
+        "text": "The published severity score for the image-resizer issue is 8 out of 10."
       },
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "pdf-render is maintained by the Data team, which is hiring."
+        "strength": "medium",
+        "text": "image-resizer has been in production longer than any other service."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 8 or above."
+        "text": "Standing policy patches out of band at severity 5 or above."
       },
       {
         "id": "r3",
@@ -141,13 +141,13 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
+    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "pdf-render",
-      "cve_year": 2020,
-      "emergency_at": 8,
+      "component": "image-resizer",
+      "cve_year": 2025,
+      "emergency_at": 5,
       "owner": "Data",
       "severity": 8
     },
@@ -156,20 +156,20 @@
   {
     "answer": "patch_immediately",
     "distractor_ids": [
-      "d2"
+      "d3"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the pdf-render issue is 8 out of 10."
+        "text": "The published severity score for the image-resizer issue is 8 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 8 or above."
+        "text": "Standing policy patches out of band at severity 5 or above."
       },
       {
         "id": "r3",
@@ -178,10 +178,10 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
-        "id": "d2",
+        "id": "d3",
         "role": "distractor",
-        "strength": "high",
-        "text": "pdf-render is maintained by the Data team, which is hiring."
+        "strength": "medium",
+        "text": "image-resizer has been in production longer than any other service."
       }
     ],
     "item_id": "rel-005-security-patch#v0-d1-late",
@@ -195,13 +195,13 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
+    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "pdf-render",
-      "cve_year": 2020,
-      "emergency_at": 8,
+      "component": "image-resizer",
+      "cve_year": 2025,
+      "emergency_at": 5,
       "owner": "Data",
       "severity": 8
     },
@@ -210,17 +210,29 @@
   {
     "answer": "patch_immediately",
     "distractor_ids": [
+      "d3",
+      "d1",
       "d2",
-      "d4",
-      "d5",
-      "d3"
+      "d4"
     ],
     "facts": [
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "image-resizer has been in production longer than any other service."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The advisory carries a 2025 CVE identifier."
+      },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "pdf-render is maintained by the Data team, which is hiring."
+        "text": "image-resizer is maintained by the Data team, which is hiring."
       },
       {
         "id": "d4",
@@ -229,28 +241,16 @@
         "text": "The Data team recently migrated its documentation to a new wiki."
       },
       {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The security newsletter goes out on the first Monday of each month."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "pdf-render has been in production longer than any other service."
-      },
-      {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the pdf-render issue is 8 out of 10."
+        "text": "The published severity score for the image-resizer issue is 8 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 8 or above."
+        "text": "Standing policy patches out of band at severity 5 or above."
       },
       {
         "id": "r3",
@@ -270,13 +270,13 @@
       "schedule_patch"
     ],
     "position": "early",
-    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
+    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "pdf-render",
-      "cve_year": 2020,
-      "emergency_at": 8,
+      "component": "image-resizer",
+      "cve_year": 2025,
+      "emergency_at": 5,
       "owner": "Data",
       "severity": 8
     },
@@ -285,23 +285,35 @@
   {
     "answer": "patch_immediately",
     "distractor_ids": [
+      "d3",
+      "d1",
       "d2",
-      "d4",
-      "d5",
-      "d3"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the pdf-render issue is 8 out of 10."
+        "text": "The published severity score for the image-resizer issue is 8 out of 10."
+      },
+      {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "image-resizer has been in production longer than any other service."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The advisory carries a 2025 CVE identifier."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "pdf-render is maintained by the Data team, which is hiring."
+        "text": "image-resizer is maintained by the Data team, which is hiring."
       },
       {
         "id": "d4",
@@ -310,22 +322,10 @@
         "text": "The Data team recently migrated its documentation to a new wiki."
       },
       {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The security newsletter goes out on the first Monday of each month."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "pdf-render has been in production longer than any other service."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 8 or above."
+        "text": "Standing policy patches out of band at severity 5 or above."
       },
       {
         "id": "r3",
@@ -345,13 +345,13 @@
       "schedule_patch"
     ],
     "position": "middle",
-    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
+    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "pdf-render",
-      "cve_year": 2020,
-      "emergency_at": 8,
+      "component": "image-resizer",
+      "cve_year": 2025,
+      "emergency_at": 5,
       "owner": "Data",
       "severity": 8
     },
@@ -360,23 +360,23 @@
   {
     "answer": "patch_immediately",
     "distractor_ids": [
+      "d3",
+      "d1",
       "d2",
-      "d4",
-      "d5",
-      "d3"
+      "d4"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The published severity score for the pdf-render issue is 8 out of 10."
+        "text": "The published severity score for the image-resizer issue is 8 out of 10."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Standing policy patches out of band at severity 8 or above."
+        "text": "Standing policy patches out of band at severity 5 or above."
       },
       {
         "id": "r3",
@@ -385,28 +385,28 @@
         "text": "A maintenance window is available in nine days if the fix can wait."
       },
       {
+        "id": "d3",
+        "role": "distractor",
+        "strength": "medium",
+        "text": "image-resizer has been in production longer than any other service."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The advisory carries a 2025 CVE identifier."
+      },
+      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "pdf-render is maintained by the Data team, which is hiring."
+        "text": "image-resizer is maintained by the Data team, which is hiring."
       },
       {
         "id": "d4",
         "role": "distractor",
         "strength": "medium",
         "text": "The Data team recently migrated its documentation to a new wiki."
-      },
-      {
-        "id": "d5",
-        "role": "distractor",
-        "strength": "low",
-        "text": "The security newsletter goes out on the first Monday of each month."
-      },
-      {
-        "id": "d3",
-        "role": "distractor",
-        "strength": "medium",
-        "text": "pdf-render has been in production longer than any other service."
       }
     ],
     "item_id": "rel-005-security-patch#v0-d4-late",
@@ -420,13 +420,13 @@
       "schedule_patch"
     ],
     "position": "late",
-    "question": "Should the pdf-render vulnerability be patched immediately, or scheduled?",
+    "question": "Should the image-resizer vulnerability be patched immediately, or scheduled?",
     "seed": 1,
     "template_id": "rel-005-security-patch",
     "variables": {
-      "component": "pdf-render",
-      "cve_year": 2020,
-      "emergency_at": 8,
+      "component": "image-resizer",
+      "cve_year": 2025,
+      "emergency_at": 5,
       "owner": "Data",
       "severity": 8
     },
