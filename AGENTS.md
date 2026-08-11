@@ -108,6 +108,10 @@ subscription stated. Writing "we spent $250" would be false.
 
 If you are an agent contributing here rather than a user installing the skills:
 
+- **The experiment programme lives in
+  [`docs/superpowers/plans/2026-08-11-long-context-experiment.md`](docs/superpowers/plans/2026-08-11-long-context-experiment.md)**
+  — where we are, where we want to be, and the phased tasks. Start there before
+  proposing experiment work.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
   coverage floors, skill validation. There is no cloud CI. Run it before you
   believe anything works.
