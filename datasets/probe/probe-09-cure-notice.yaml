@@ -1,0 +1,271 @@
+# Order-2 foreclosure. The performance failures are real and documented. But
+# terminating without a compliant cure notice converts the dismissal to
+# without-cause by operation of s.44(5), and because that lands inside the
+# s.46 window with no pre-existing notice trail, it also destroys the only
+# available rebuttal to the protected-disclosure presumption. Two doors close,
+# and the second one is the expensive one.
+case_id: probe-09-cure-notice
+domain: employment
+trap_order: 2
+trap_kind: foreclosure
+jurisdiction: Meridian
+
+question: >-
+  You advise Ferrant Utilities on the Okonkwo matter. Decide what the company
+  should do and in what order.
+
+exposure_question: >-
+  What is the expected exposure if Okonkwo is dismissed this week on the
+  existing file?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Employment Standards Act — extracts
+    body: |
+      s.44(1) An employer may terminate for cause on the ground of repeated
+      performance failure only where
+        (a) a written cure notice has been served specifying the failure and
+            allowing a cure period of not less than 21 days, and
+        (b) the failure has continued after the expiry of that period.
+
+      s.44(5) A termination on the ground of repeated performance failure that
+      is not preceded by a cure notice complying with subsection (1) is a
+      termination without cause, whatever the underlying conduct, and the
+      without-cause entitlement applies.
+
+      s.46(1) Where an employee is dismissed within 90 days of raising a
+      protected concern, the dismissal is presumed to have been by reason of
+      that concern.
+
+      s.46(3) The presumption is rebuttable only by evidence of a course of
+      action commenced before the protected concern was raised. A cure notice
+      served under s.44(1) before that date is sufficient for this purpose;
+      informal performance records are not.
+
+      s.46(6) Where the presumption is not rebutted the tribunal may award up to
+      three times annual salary and may order reinstatement.
+
+      s.49(2) The without-cause entitlement is six months' salary.
+
+      Schedule 4 exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: hr_file
+    title: Personnel file extract — A. Okonkwo, Network Technician
+    body: |
+      Annual salary $108,000. Six years' service.
+
+      Supervisor notes, informal, held on the team drive:
+        Nine months ago — repeated errors in circuit tagging, discussed verbally.
+        Six months ago — same issue, discussed verbally, supervisor noted "will
+          monitor".
+        Three months ago — third occurrence, supervisor emailed a summary to HR.
+        Five weeks ago — fourth occurrence.
+
+      No cure notice has been served. No formal performance process has been
+      opened. Nothing has been given to the employee in writing.
+
+  - id: doc3
+    kind: register
+    title: Matter register — Ferrant Utilities / Okonkwo
+    body: |
+      Protected concern raised by Okonkwo — 40 days ago. Concern related to
+      switching-room access controls; logged by the safety officer and still
+      open.
+      s.46(1) presumption window — closes in 50 days.
+      Quarterly MESA workforce return — due in 18 days.
+      Okonkwo's annual leave — booked to start in 9 days.
+
+  - id: doc4
+    kind: email
+    title: Email — Operations Manager to HR
+    body: |
+      I want him off the tools. Four occurrences in nine months on circuit
+      tagging is not something I can carry, and the last one could have hurt
+      someone. We have the supervisor notes going back nine months so the record
+      is there.
+
+      Can we do this before he goes on leave next week? It is cleaner than
+      bringing him back to do it.
+
+  - id: doc5
+    kind: memo
+    title: Safety officer note
+    body: |
+      The access control concern Okonkwo raised is being taken seriously and a
+      review is under way. It is unrelated to the circuit tagging matter and the
+      safety officer has had no involvement in the performance discussions.
+
+  - id: doc6
+    kind: bulletin
+    title: Firm employment bulletin 26-01 — s.46 rebuttals
+    body: |
+      Employers routinely assume that a documented performance history predating
+      a protected concern will rebut the s.46(1) presumption. s.46(3) is
+      narrower than that: the course of action must have been commenced, and
+      informal records held internally are expressly excluded.
+
+      In practice this means the rebuttal is available only where a compliant
+      s.44 cure notice was already on foot. Where it was not, serving one after
+      the concern is raised does not retrospectively supply it — but it does
+      start the clock for a lawful process afterwards.
+
+  - id: doc7
+    kind: memo
+    title: Fleet memorandum
+    body: |
+      The van replacement programme is complete. All regional teams are now on
+      the new fleet and the disposal of the old vehicles realised $61,000 above
+      book value.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: s.44(1) requires a written cure notice with at least 21 days before a for-cause termination for performance.
+    governs: true
+  - id: c2
+    source: doc2
+    text: No cure notice has been served and nothing has been given to the employee in writing.
+    governs: true
+  - id: c3
+    source: doc1
+    text: s.44(5) makes a termination without a compliant cure notice a without-cause termination whatever the conduct.
+    governs: true
+  - id: c4
+    source: doc3
+    text: The protected concern was raised 40 days ago and the s.46(1) window closes in 50 days.
+    governs: true
+  - id: c5
+    source: doc1
+    text: s.46(3) allows rebuttal only by a course of action commenced before the concern, and excludes informal records.
+    governs: true
+  - id: c6
+    source: doc1
+    text: s.46(6) permits an award of up to three times annual salary and reinstatement.
+    governs: true
+  - id: c7
+    source: doc3
+    text: The quarterly MESA workforce return is due in 18 days.
+    governs: true
+  - id: c8
+    source: doc4
+    text: The operations manager wants the dismissal completed before the employee's leave begins in 9 days.
+    governs: false
+  - id: c9
+    source: doc7
+    text: The van replacement programme realised $61,000 above book value.
+    governs: false
+  - id: c10
+    source: doc2
+    text: Supervisor notes record four occurrences over nine months.
+    governs: false
+
+actions:
+  - id: A1
+    text: >-
+      Serve a written cure notice under s.44(1) specifying the circuit tagging
+      failures and allowing a cure period of not less than 21 days.
+    status: required
+    licensed_by: [c1, c2]
+  - id: A2
+    text: >-
+      Do not terminate before the cure period has expired and the failure has
+      continued.
+    status: required
+    licensed_by: [c1, c3]
+  - id: A3
+    text: >-
+      Advise Ferrant in writing that the s.46(1) presumption applies for the
+      next 50 days and cannot be rebutted on the existing file.
+    status: required
+    licensed_by: [c4, c5]
+  - id: A4
+    text: File the quarterly MESA workforce return within 18 days.
+    status: required
+    licensed_by: [c7]
+  - id: A5
+    text: Dismiss Okonkwo for cause this week on the strength of the supervisor notes.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c8, c10]
+    why: >-
+      The order-2 trap, and the answer the operations manager is asking for.
+      s.44(5) converts it to a without-cause termination, and because it lands
+      inside the s.46 window with no cure notice on foot, s.46(3) leaves no
+      route to rebut the presumption. The informal notes are expressly excluded.
+  - id: A6
+    text: >-
+      Dismiss before the leave begins and rely on the nine-month supervisor
+      record to rebut any protected-concern claim.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c10]
+    why: >-
+      Exactly the assumption doc6 exists to correct. s.46(3) excludes informal
+      internal records.
+  - id: A7
+    text: >-
+      Wait 50 days for the s.46 window to close, then dismiss on the existing
+      file.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c4]
+    why: >-
+      Fixes the s.46 problem and leaves the s.44(5) problem untouched, so the
+      dismissal is still without cause. It also delays the cure notice that has
+      to be served either way.
+  - id: A8
+    text: >-
+      Offer a settlement this week in exchange for a waiver of all claims,
+      including the protected-concern claim.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c8]
+    why: >-
+      Negotiating a waiver of a claim that has not yet been the subject of any
+      lawful process, inside the presumption window, while no cure notice exists.
+  - id: A9
+    text: Record the van disposal surplus in the regional performance report.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c9]
+    why: The raincoat.
+  - id: A10
+    text: >-
+      Keep the access-control review separate from the performance process and
+      documented as such.
+    status: optional
+    licensed_by: [c4]
+  - id: A11
+    text: Move Okonkwo off safety-critical tagging work while the cure period runs.
+    status: optional
+    licensed_by: [c1]
+
+exposure:
+  band: moderate
+  point_usd: 297000
+  working: >-
+    Without-cause entitlement under s.49(2) is six months at $108,000 = $54,000,
+    payable on any of these routes. The s.46(1) presumption applies and cannot
+    be rebutted on this file, so the s.46(6) award of up to three times salary,
+    $324,000, is live; at a 75% likelihood of the presumption standing that is
+    $243,000. Total $297,000, plus a reinstatement risk Schedule 4 does not
+    price. A reader who stops at s.44(5) prices the $54,000 and answers low.
+  first_order_wrong_answer: low
+
+pivot:
+  present: false
+  why: >-
+    Salary, service, the date of the concern, the state of the file and the
+    statutory entitlements are all given. The one thing genuinely unknown is
+    whether Okonkwo would in fact cure the failure, and that is what the cure
+    notice exists to find out rather than a fact to be requested.
+
+notes: >-
+  A7 is the sharpest distractor here. It correctly identifies the s.46 window
+  as a problem and solves it, while leaving the s.44(5) foreclosure in place. A
+  response that takes A7 has done exactly half the forward reasoning, which
+  makes it more informative than one that takes A5.

@@ -1,0 +1,211 @@
+# Order-1 induced obligation. Making the election is correct and creates a duty
+# with a 30-day fuse that did not exist before. Missing the induced duty voids
+# the election retrospectively, so the good decision becomes the expensive one.
+case_id: probe-04-deferred-basis-election
+domain: tax
+trap_order: 1
+trap_kind: induced_obligation
+jurisdiction: Meridian
+
+question: >-
+  You advise Ordway Marine on its Year 6 tax position. Decide what the company
+  should do about the deferred revenue basis, and in what order.
+
+exposure_question: >-
+  What is the expected exposure if the s.320 election is made and no
+  transitional statement is filed?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Revenue Code — extracts
+    body: |
+      s.320(1) An entity recognising revenue from long-term contracts may elect
+      the deferred revenue basis, under which revenue is brought into charge on
+      completion rather than on progress.
+
+      s.320(2) The election is available only in the first assessment year in
+      which the entity recognises revenue from a long-term contract. It is not
+      available in any later year.
+
+      s.320(6) An entity making the election must file a transitional statement
+      within 30 days of the date of election. Where no transitional statement
+      is filed within that period the election is void from the outset and the
+      entity is assessed as though it had never been made.
+
+      s.216(5) The correction charge is the tax understated. The understatement
+      penalty is a further 40% of that amount.
+
+      Corporate rate: 25%.
+
+      Schedule 4 exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: workpaper
+    title: Long-term contracts schedule — Year 6
+    body: |
+      Year 6 is the first year in which Ordway has recognised revenue from
+      long-term contracts, following the Kestrel hull programme signed in
+      March.
+
+      Revenue recognised on progress in Year 6:        $4,800,000
+      Revenue that would be recognised on completion:  $1,200,000
+      Difference deferred if the election is made:     $3,600,000
+
+      No contract in the programme completes before Year 8.
+
+  - id: doc3
+    kind: minutes
+    title: Board minutes — extract
+    body: |
+      The board resolved to adopt the deferred revenue basis for the Kestrel
+      programme if the advisers confirm it is available, and delegated
+      execution to the Finance Director.
+
+      The board asked to be told of any conditions attaching to the election.
+
+  - id: doc4
+    kind: register
+    title: Client deadline register — Ordway Marine
+    body: |
+      Year 6 corporate return — due in 96 days.
+      Quarterly instalment 4 — due in 12 days. Unpaid.
+      Transitional statement under s.320(6) — not applicable until an election
+      is made; register entry to be created on election.
+      Annual confirmation statement — filed.
+
+  - id: doc5
+    kind: bulletin
+    title: Firm technical bulletin 26-02 — s.320 elections
+    body: |
+      The 30-day transitional statement is the most common way a s.320 election
+      fails. The statement is short and its content is not contentious; it is
+      simply missed, because the election itself is filed with the return and
+      the statement is not.
+
+      Note that s.320(6) voids the election from the outset rather than
+      prospectively. The consequence is not a late filing charge but a full
+      reinstatement of the deferred revenue, with the understatement penalty
+      applying to the tax on it.
+
+  - id: doc6
+    kind: memo
+    title: Yard operations memorandum
+    body: |
+      The Kestrel programme has been reallocated to the north slipway following
+      the crane inspection. The reallocation adds an estimated eleven days to
+      the schedule and has been agreed with the customer at no cost.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: s.320(2) makes the election available only in Year 6, the first year of long-term contract revenue.
+    governs: true
+  - id: c2
+    source: doc1
+    text: s.320(6) requires a transitional statement within 30 days of election, failing which the election is void from the outset.
+    governs: true
+  - id: c3
+    source: doc2
+    text: $3,600,000 of revenue would be deferred if the election is made.
+    governs: true
+  - id: c4
+    source: doc4
+    text: Quarterly instalment 4 is unpaid and due in 12 days.
+    governs: true
+  - id: c5
+    source: doc3
+    text: The board asked to be told of any conditions attaching to the election.
+    governs: true
+  - id: c6
+    source: doc6
+    text: The Kestrel programme has moved to the north slipway, adding eleven days.
+    governs: false
+  - id: c7
+    source: doc4
+    text: The Year 6 return is due in 96 days.
+    governs: false
+
+actions:
+  - id: A1
+    text: Make the s.320 election for Year 6.
+    status: required
+    licensed_by: [c1, c3]
+  - id: A2
+    text: >-
+      File the s.320(6) transitional statement within 30 days of the date of
+      election.
+    status: required
+    licensed_by: [c2]
+  - id: A3
+    text: >-
+      Create the register entry for the 30-day transitional statement deadline
+      at the moment the election is made.
+    status: required
+    licensed_by: [c2, c4]
+  - id: A4
+    text: Report the s.320(6) condition to the board as it asked.
+    status: required
+    licensed_by: [c5]
+  - id: A5
+    text: Pay quarterly instalment 4 within 12 days.
+    status: required
+    licensed_by: [c4]
+  - id: A6
+    text: >-
+      Make the election and report it with the Year 6 return in 96 days.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c7]
+    why: >-
+      The order-1 trap. Correct about the election, silent about the induced
+      duty, and 96 days is past the 30-day fuse, so it voids the election it is
+      trying to make.
+  - id: A7
+    text: >-
+      Defer the election to Year 7, when the programme is further advanced and
+      the numbers are firmer.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c3]
+    why: >-
+      s.320(2) makes the election available in Year 6 only. Deferring does not
+      postpone the decision, it forecloses it permanently.
+  - id: A8
+    text: Reflect the eleven-day slipway delay in the contract progress calculation.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c6]
+    why: >-
+      The raincoat. doc6 says the reallocation was agreed at no cost, and under
+      the elected basis progress stops driving the charge anyway.
+  - id: A9
+    text: Obtain written board approval of the final transitional statement before filing.
+    status: optional
+    licensed_by: [c5]
+
+exposure:
+  band: high
+  point_usd: 1260000
+  working: >-
+    A void election reinstates the full $3,600,000 of deferred revenue. Tax at
+    25% = $900,000. Understatement penalty at 40% of that = $360,000. Total
+    $1,260,000, which is high under Schedule 4. A reader who treats a missed
+    statement as a filing default prices a small fixed charge and answers
+    negligible.
+  first_order_wrong_answer: negligible
+
+pivot:
+  present: false
+  why: >-
+    The election date is within the company's control, the deferral amount is
+    in doc2, and the rate and penalty are in doc1. Nothing determinative is
+    withheld.
+
+notes: >-
+  A6 is the trap and A7 is its mirror — one misses the duty the action creates,
+  the other avoids the duty by forfeiting the benefit permanently. A response
+  that takes A1 without A2 or A3 is the failure this case exists to detect, and
+  it will look confident and well-reasoned while doing it.

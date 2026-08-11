@@ -1,0 +1,280 @@
+# Order-3 chain. Accepting the partial payment is obviously good (money, and it
+# acknowledges the debt). It restarts the limitation clock on the whole account,
+# which revives a counterclaim that expired last month, and the revived
+# counterclaim triggers a notification duty to the insurer whose breach voids
+# cover for the very claim it revived. Each step is in a different document.
+case_id: probe-12-partial-payment
+domain: contract
+trap_order: 3
+trap_kind: compounding_exposure
+jurisdiction: Meridian
+
+question: >-
+  You act for Threlkeld Engineering on the Marchetti account. Decide what
+  Threlkeld should do about the offered payment.
+
+exposure_question: >-
+  What is the expected exposure if Threlkeld banks the $95,000 and takes no
+  further step?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Limitation Act — extracts
+    body: |
+      s.12(1) An action founded on contract may not be brought after six years
+      from the date on which the cause of action accrued.
+
+      s.19(1) Where a party makes a payment in respect of a debt, or
+      acknowledges it in writing, the period in s.12(1) begins again from the
+      date of the payment or acknowledgement.
+
+      s.19(3) A payment or acknowledgement under subsection (1) restarts the
+      period in respect of the whole account between the parties, including any
+      claim the other party may have arising from the same account, and not only
+      the sum paid.
+
+      s.19(5) Subsection (1) does not apply where the payment is made and
+      received under a written agreement that it is not to operate as an
+      acknowledgement.
+
+      Schedule 4 exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: correspondence
+    title: Letter — Marchetti Fabrications to Threlkeld Engineering
+    body: |
+      We enclose payment of $95,000 on account of the outstanding balance of
+      $340,000 in respect of the Denholm contract.
+
+      We remain of the view that the balance is not properly due and reserve our
+      position generally.
+
+  - id: doc3
+    kind: matter_file
+    title: Matter file note — Threlkeld / Marchetti
+    body: |
+      Threlkeld's claim: $340,000 outstanding on the Denholm contract. Cause of
+      action accrued 4 years and 2 months ago. Well within s.12(1).
+
+      Marchetti's counterclaim: alleged defective fabrication of the Denholm
+      frames, quantified in correspondence at $1,150,000. That cause of action
+      accrued 6 years and 1 month ago and became time-barred last month under
+      s.12(1). Marchetti has not issued proceedings.
+
+      Both matters arise from the Denholm contract and the same running account.
+
+  - id: doc4
+    kind: policy
+    title: Professional indemnity policy — extracts
+    body: |
+      cl. 8.1 The Insured shall notify the Insurer in writing of any
+      circumstance which may give rise to a claim as soon as practicable and in
+      any event within 14 days of the Insured becoming aware of it.
+
+      cl. 8.4 Where notification is not given within the period in cl. 8.1 the
+      Insurer is under no liability in respect of any claim arising from that
+      circumstance.
+
+      cl. 9.2 The Insured shall not, without the Insurer's written consent, take
+      any step which revives, admits or extends a claim or potential claim
+      against the Insured.
+
+      Limit of indemnity: $1,000,000 any one claim.
+
+  - id: doc5
+    kind: email
+    title: Email — Threlkeld Managing Director
+    body: |
+      Ninety-five thousand is ninety-five thousand and cash is tight. Bank it.
+
+      It also puts it beyond doubt that they accept they owe us something, which
+      has to help if this ever goes anywhere.
+
+  - id: doc6
+    kind: register
+    title: Matter register — Threlkeld / Marchetti
+    body: |
+      Payment received — 2 days ago, uncashed, held in the client account.
+      cl. 8.1 notification period — 12 days remaining from receipt.
+      Marchetti counterclaim limitation — expired last month.
+      Threlkeld claim limitation — 1 year 10 months remaining.
+      Annual policy renewal — in 96 days.
+
+  - id: doc7
+    kind: bulletin
+    title: Firm litigation bulletin 26-06 — s.19(3) and running accounts
+    body: |
+      s.19(3) is frequently overlooked because it operates against the party
+      receiving the payment. Accepting a payment on a running account restarts
+      the period on the whole account, which includes any cross-claim the payer
+      has arising from the same dealings, even one that has already expired.
+
+      Where a time-barred cross-claim exceeds the sum being paid, accepting
+      without a s.19(5) agreement is capable of being the single most expensive
+      step in the matter.
+
+  - id: doc8
+    kind: memo
+    title: Works memorandum
+    body: |
+      The Denholm site has been demobilised and the temporary works removed. The
+      client has confirmed practical completion and the retention release is
+      scheduled in the ordinary course.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: s.19(1) restarts the limitation period on a payment in respect of a debt.
+    governs: true
+  - id: c2
+    source: doc1
+    text: s.19(3) restarts the period for the whole account, including the other party's claim.
+    governs: true
+  - id: c3
+    source: doc3
+    text: Marchetti's $1,150,000 counterclaim became time-barred last month and arises from the same account.
+    governs: true
+  - id: c4
+    source: doc1
+    text: s.19(5) preserves the position where the payment is received under a written non-acknowledgement agreement.
+    governs: true
+  - id: c5
+    source: doc4
+    text: cl. 8.1 requires notification of a circumstance within 14 days, and cl. 8.4 voids cover for late notification.
+    governs: true
+  - id: c6
+    source: doc4
+    text: cl. 9.2 forbids taking any step that revives a potential claim without the insurer's written consent.
+    governs: true
+  - id: c7
+    source: doc6
+    text: 12 days remain of the cl. 8.1 notification period and the payment is uncashed.
+    governs: true
+  - id: c8
+    source: doc5
+    text: The managing director wants the payment banked because cash is tight.
+    governs: false
+  - id: c9
+    source: doc8
+    text: The Denholm site has been demobilised and practical completion confirmed.
+    governs: false
+  - id: c10
+    source: doc6
+    text: Policy renewal falls in 96 days.
+    governs: false
+
+actions:
+  - id: A1
+    text: >-
+      Do not bank the payment until a written s.19(5) non-acknowledgement
+      agreement is in place with Marchetti.
+    status: required
+    licensed_by: [c1, c2, c3, c4]
+  - id: A2
+    text: >-
+      Notify the insurer of the circumstance in writing within the remaining 12
+      days of the cl. 8.1 period.
+    status: required
+    licensed_by: [c5, c7]
+  - id: A3
+    text: >-
+      Obtain the insurer's written consent under cl. 9.2 before taking any step
+      capable of reviving the counterclaim.
+    status: required
+    licensed_by: [c6]
+  - id: A4
+    text: >-
+      Advise Threlkeld in writing that banking the payment revives a $1,150,000
+      time-barred counterclaim under s.19(3).
+    status: required
+    licensed_by: [c2, c3]
+  - id: A5
+    text: Bank the $95,000 as the managing director instructs.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c8]
+    why: >-
+      The order-3 trap. It gains $95,000, revives a $1,150,000 counterclaim under
+      s.19(3), breaches cl. 9.2, and starts a 14-day insurance clock that cl. 8.4
+      turns into a total loss of cover if missed.
+  - id: A6
+    text: >-
+      Bank the payment and rely on Marchetti's own reservation of position in
+      its covering letter.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c8]
+    why: >-
+      s.19(5) requires a written agreement between the parties that the payment
+      does not operate as an acknowledgement. A unilateral reservation by the
+      payer is not that, and in any event reserves the wrong party's position.
+  - id: A7
+    text: >-
+      Bank the payment, then notify the insurer of the revived counterclaim
+      within 14 days.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c5]
+    why: >-
+      The order-2 stop, and the most instructive wrong answer here. It sees the
+      revival and the notification duty, and still breaches cl. 9.2 by taking the
+      reviving step without consent — which is a separate route to the same
+      uninsured outcome.
+  - id: A8
+    text: Return the payment to Marchetti without further correspondence.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c1]
+    why: >-
+      Protects the limitation position and discards $95,000 that A1 shows can be
+      kept, and it forgoes the s.19(5) route entirely.
+  - id: A9
+    text: Confirm the Denholm retention release is scheduled in the ordinary course.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c9]
+    why: The raincoat.
+  - id: A10
+    text: Diarise the s.12(1) expiry of Threlkeld's own claim in 1 year 10 months.
+    status: optional
+    licensed_by: [c3]
+
+exposure:
+  band: high
+  point_usd: 1150000
+  working: >-
+    Banking revives the $1,150,000 counterclaim under s.19(3). Taking that step
+    without consent breaches cl. 9.2, and doing so without notifying inside the
+    cl. 8.1 period engages cl. 8.4, under which the insurer has no liability at
+    all. The $1,000,000 limit of indemnity is therefore unavailable and the whole
+    $1,150,000 sits with Threlkeld, less the $95,000 banked. High under Schedule
+    4. A reader who assumes cover responds nets the counterclaim against the
+    $1,000,000 limit, gets $150,000, and answers moderate.
+  first_order_wrong_answer: moderate
+
+pivot:
+  present: true
+  text: Whether the insurer will consent under cl. 9.2 to the payment being accepted on s.19(5) terms.
+  why: >-
+    A1 and A3 together only work if consent is forthcoming, and nothing in the
+    file says whether it will be. It is the one fact that decides between keeping
+    the $95,000 and returning it, and it has to be asked for rather than assumed.
+  accepts:
+    - insurer
+    - insurance
+    - consent
+    - cl. 9.2
+    - underwriter
+    - whether the insurer will agree
+    - marchetti will agree
+    - agreement from marchetti
+
+notes: >-
+  Three documents, three steps, and no document mentions more than one of them:
+  the Limitation Act says nothing about insurance, the policy says nothing about
+  limitation, and the matter file says nothing about either consequence. A7 is
+  the key diagnostic — it demonstrates two steps of forward reasoning and still
+  fails, which is precisely the depth profile this stratum exists to measure.

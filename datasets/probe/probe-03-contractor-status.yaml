@@ -1,0 +1,227 @@
+# Control stratum. A multi-factor test applied to messy facts. Hard to get right,
+# but nothing here is wrong only later.
+case_id: probe-03-contractor-status
+domain: employment
+trap_order: none
+trap_kind: none
+jurisdiction: Meridian
+
+question: >-
+  You advise Torrance Studio on employment matters. Decide how Ilya Braddock's
+  engagement should be treated and what the studio must do.
+
+exposure_question: >-
+  What is the expected exposure if Braddock is found on review to have been an
+  employee throughout the engagement?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Employment Standards Act — extracts
+    body: |
+      s.7(1) A worker is an employee for the purposes of this Act if three or
+      more of the following are present:
+        (a) the engager controls how the work is done, not only what is
+            delivered;
+        (b) the worker must perform the work personally and may not send a
+            substitute;
+        (c) the engager provides the principal tools or equipment;
+        (d) the worker bears no risk of loss on the engagement;
+        (e) the engagement is not limited to a defined deliverable or term.
+
+      s.7(3) The written label the parties apply to the engagement is not
+      determinative and is disregarded where it conflicts with the substance.
+
+      s.9(1) Where a worker is found to have been an employee, the engager is
+      liable for unpaid contributions for the whole period of the engagement at
+      22% of amounts paid.
+
+      s.9(4) A surcharge of 50% of the unpaid contributions applies unless the
+      engager has made a voluntary declaration under s.11 before the Authority
+      opens a review.
+
+      Schedule 4 exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: contract
+    title: Services agreement — Torrance Studio and I. Braddock
+    body: |
+      The Contractor is engaged as an independent contractor and not as an
+      employee. The Contractor is responsible for their own tax and
+      contributions.
+
+      The Contractor shall provide design services as directed by the Studio.
+      The Contractor may not subcontract or substitute any other person without
+      the Studio's prior written consent, which the Studio may withhold at its
+      discretion.
+
+      The agreement continues until terminated by either party on one month's
+      notice.
+
+  - id: doc3
+    kind: email
+    title: Email thread — studio manager to HR
+    body: |
+      Ilya is here Monday to Thursday, nine to six, same as the salaried
+      designers. He works on whatever is in the queue that week — I set the
+      priorities at the Monday stand-up like I do for everyone else.
+
+      He uses a studio workstation and our software licences. He asked about
+      working from home on Fridays and I said the same rule applies to him as
+      to the team.
+
+      Three years now. He has never invoiced anyone else as far as I know.
+
+  - id: doc4
+    kind: payroll
+    title: Payments extract — I. Braddock
+    body: |
+      Year 3: $60,000
+      Year 4: $62,000
+      Year 5: $64,000
+      Total paid to date: $186,000
+
+      All amounts paid monthly on submission of an invoice. No amounts have
+      been withheld.
+
+  - id: doc5
+    kind: register
+    title: Compliance register — Torrance Studio
+    body: |
+      MESA annual self-review declaration — due in 45 days.
+      No Authority review is currently open in respect of the Studio.
+      Workplace safety certification — current.
+
+  - id: doc6
+    kind: memo
+    title: Studio note
+    body: |
+      Braddock also runs a wedding photography business at weekends, trading as
+      Braddock Images. He mentioned it at the summer social. It has nothing to
+      do with the Studio and the Studio has never engaged it.
+
+conditions:
+  - id: c1
+    source: doc3
+    text: The studio manager sets weekly priorities and hours, which is control over how the work is done — s.7(1)(a).
+    governs: true
+  - id: c2
+    source: doc2
+    text: Substitution requires consent that may be withheld at discretion — s.7(1)(b).
+    governs: true
+  - id: c3
+    source: doc3
+    text: The studio provides the workstation and software licences — s.7(1)(c).
+    governs: true
+  - id: c4
+    source: doc2
+    text: The engagement is open-ended rather than limited to a deliverable or term — s.7(1)(e).
+    governs: true
+  - id: c5
+    source: doc1
+    text: s.9(4) removes the 50% surcharge only if a voluntary declaration is made before a review opens.
+    governs: true
+  - id: c6
+    source: doc5
+    text: No Authority review is currently open, and the self-review declaration is due in 45 days.
+    governs: true
+  - id: c7
+    source: doc2
+    text: The agreement labels Braddock an independent contractor.
+    governs: false
+  - id: c8
+    source: doc6
+    text: Braddock runs a weekend wedding photography business.
+    governs: false
+  - id: c9
+    source: doc4
+    text: Braddock invoices monthly and no amounts have been withheld.
+    governs: false
+
+actions:
+  - id: A1
+    text: >-
+      Conclude that Braddock is an employee under s.7(1), four factors being
+      present, and treat the engagement accordingly going forward.
+    status: required
+    licensed_by: [c1, c2, c3, c4]
+  - id: A2
+    text: >-
+      Make a voluntary declaration under s.11 before any Authority review
+      opens, to remove the s.9(4) surcharge.
+    status: required
+    licensed_by: [c5, c6]
+  - id: A3
+    text: File the MESA self-review declaration within 45 days.
+    status: required
+    licensed_by: [c6]
+  - id: A4
+    text: >-
+      Rely on the contractual label and continue treating Braddock as a
+      contractor.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c7]
+    why: s.7(3) disregards the label where it conflicts with the substance.
+  - id: A5
+    text: >-
+      Treat the weekend photography business as evidence that Braddock is in
+      business on his own account, and conclude he is a contractor.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c8]
+    why: >-
+      The raincoat, and a well-disguised one: it is genuinely relevant-sounding
+      in employment status disputes, and s.7(1) does not list it.
+  - id: A6
+    text: >-
+      Terminate the engagement on one month's notice so the question does not
+      arise.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c7]
+    why: >-
+      Does not touch the s.9(1) liability, which runs on amounts already paid,
+      and adds a dismissal to the exposure.
+  - id: A7
+    text: Rewrite the services agreement to strengthen the substitution clause.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c2]
+    why: >-
+      A prospective fix presented as a cure for a retrospective liability. The
+      s.9(1) period is the whole engagement to date.
+  - id: A8
+    text: Advise the Studio in writing of the s.9(1) exposure and its amount.
+    status: required
+    licensed_by: [c5]
+  - id: A9
+    text: Review the other design engagements for the same pattern.
+    status: optional
+    licensed_by: [c1]
+
+exposure:
+  band: low
+  point_usd: 61380
+  working: >-
+    Contributions at 22% of $186,000 paid = $40,920. Surcharge at 50% under
+    s.9(4) = $20,460, applicable because no voluntary declaration has been made.
+    Total $61,380, which is low under Schedule 4. Note the question asks about
+    a finding on review, so the surcharge applies; a voluntary declaration made
+    first would remove it.
+
+pivot:
+  present: false
+  why: >-
+    Every s.7(1) factor is evidenced in the file and the payment history is
+    complete. The engagement's start date is not given precisely, but doc4 gives
+    the full amounts paid to date, which is what s.9(1) is computed on.
+
+notes: >-
+  A5 is the most interesting action in this case. It is the raincoat, but unlike
+  the storage migration in probe-07 it is domain-plausible — "he has his own
+  business" is exactly the kind of fact that feels dispositive and is not in the
+  statutory test. If models take A5 and not A6, the raincoat failure is about
+  plausibility rather than salience.

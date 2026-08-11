@@ -1,0 +1,220 @@
+# Control stratum. The classification question is hard, but nothing downstream
+# changes it: the write-down and the disclosure both land in the same set of
+# accounts, signed off once.
+case_id: probe-02-subsequent-event
+domain: financial_reporting
+trap_order: none
+trap_kind: none
+jurisdiction: Meridian
+
+question: >-
+  You are completing the Year 5 accounts for Halvard Logistics. Decide how the
+  Brenmark receivable should be treated and what must happen before sign-off.
+
+exposure_question: >-
+  What is the size of the misstatement in the Year 5 accounts if the Brenmark
+  receivable is left at its full carrying amount?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Financial Reporting Standards — extracts
+    body: |
+      MFRS 110.3 An adjusting event is one that provides evidence of conditions
+      that existed at the reporting date. A non-adjusting event is one
+      indicative of conditions that arose after the reporting date.
+
+      MFRS 110.9(b) The insolvency of a customer occurring after the reporting
+      date ordinarily confirms that a loss already existed at the reporting
+      date in respect of amounts owing at that date, and is an adjusting event.
+
+      MFRS 110.21 For a non-adjusting event that is material, the entity
+      discloses the nature of the event and an estimate of its financial
+      effect. No adjustment is made to the amounts recognised.
+
+      MFRS 101.7 Information is material if omitting or misstating it could
+      influence the decisions of users. There is no numeric threshold; a
+      quantitative benchmark of 5% of profit before tax is used by this firm as
+      a starting point only.
+
+      Schedule 4 exposure bands (used firm-wide): negligible, under $25,000;
+      low, $25,000 to $100,000; moderate, $100,000 to $400,000; high, $400,000
+      to $1,500,000; severe, over $1,500,000.
+
+  - id: doc2
+    kind: minutes
+    title: Board minutes — extract
+    body: |
+      The chair reported that Brenmark Distribution entered administration on
+      21 January, three weeks after the Year 5 reporting date of 31 December.
+
+      The administrator's first circular states that the company had been
+      trading while insolvent since at least the previous autumn and that
+      unsecured creditors should expect a nil return.
+
+      Management noted the amount owing and asked the finance team to consider
+      the accounting treatment.
+
+  - id: doc3
+    kind: ledger
+    title: Ledger extract — trade receivables at 31 December Year 5
+    body: |
+      Brenmark Distribution                     $1,240,000
+      All other trade receivables              $17,360,000
+      Total trade receivables                  $18,600,000
+
+      Loss allowance recognised at 31 December: $210,000, none of it against
+      the Brenmark balance.
+
+      Profit before tax for Year 5: $4,100,000.
+
+      The entire Brenmark balance arose from invoices issued between August and
+      November of Year 5. Nothing was invoiced after the reporting date.
+
+  - id: doc4
+    kind: email
+    title: Email — audit engagement partner
+    body: |
+      We have seen the administrator's circular. Before we can sign we need to
+      understand your treatment of the Brenmark balance and, if you are writing
+      it down, the basis for the amount.
+
+      Please also confirm whether any part of the balance is insured or
+      otherwise secured. Our file has nothing on that.
+
+  - id: doc5
+    kind: register
+    title: Reporting deadline register — Halvard Logistics
+    body: |
+      Year 5 accounts — board sign-off in 19 days.
+      Filing with the Registrar — 60 days after sign-off.
+      Covenant certificate to lenders — due with the signed accounts.
+      Interim management accounts — issued.
+
+  - id: doc6
+    kind: memo
+    title: Facilities memorandum
+    body: |
+      The head office lease expires in fourteen months. The landlord has
+      offered a five-year renewal at a 9% uplift, open for acceptance until the
+      end of next quarter. Facilities recommend accepting.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: Customer insolvency after the reporting date is ordinarily an adjusting event under MFRS 110.9(b).
+    governs: true
+  - id: c2
+    source: doc3
+    text: The whole Brenmark balance arose from invoices issued before the reporting date.
+    governs: true
+  - id: c3
+    source: doc2
+    text: The administrator states the company was insolvent from the previous autumn and expects a nil return to unsecured creditors.
+    governs: true
+  - id: c4
+    source: doc3
+    text: $1,240,000 is 30% of profit before tax, far above the 5% starting benchmark.
+    governs: true
+  - id: c5
+    source: doc5
+    text: Board sign-off is in 19 days.
+    governs: true
+  - id: c6
+    source: doc6
+    text: The head office lease renewal offer is open until the end of next quarter.
+    governs: false
+  - id: c7
+    source: doc3
+    text: A loss allowance of $210,000 is already recognised against other balances.
+    governs: false
+  - id: c8
+    source: doc4
+    text: The audit partner has asked to understand the treatment before signing.
+    governs: false
+
+actions:
+  - id: A1
+    text: >-
+      Write the Brenmark receivable down in the Year 5 accounts as an adjusting
+      event under MFRS 110.9(b).
+    status: required
+    licensed_by: [c1, c2, c3]
+  - id: A2
+    text: Disclose the nature and financial effect of the Brenmark administration in the notes.
+    status: required
+    licensed_by: [c3, c4]
+  - id: A3
+    text: Complete the adjustment and disclosure before the 19-day board sign-off.
+    status: required
+    licensed_by: [c5]
+  - id: A4
+    text: >-
+      Treat the administration as a non-adjusting event and disclose it without
+      adjusting the carrying amount.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c1]
+    why: >-
+      The plausible wrong answer. It reads MFRS 110.3 and stops before 110.9(b),
+      and it is what a reader who anchors on "the event happened after year end"
+      will conclude.
+  - id: A5
+    text: Treat the balance as immaterial on the basis that it is under 7% of total receivables.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c4]
+    why: Measures materiality against the wrong benchmark; it is 30% of profit before tax.
+  - id: A6
+    text: Accept the head office lease renewal before the offer expires.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c6]
+    why: >-
+      The raincoat. A real decision with a real deadline that has nothing to do
+      with the question asked.
+  - id: A7
+    text: >-
+      Increase the general loss allowance by $1,240,000 rather than writing off
+      the specific balance.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c7]
+    why: Presents a specific identified loss as a general allowance.
+  - id: A8
+    text: Provide the audit partner with the basis for the write-down.
+    status: optional
+    licensed_by: [c8]
+
+exposure:
+  band: high
+  point_usd: 1240000
+  working: >-
+    The administrator expects a nil return to unsecured creditors, so the whole
+    $1,240,000 is the misstatement if the balance is left at carrying amount.
+    That is the high band under Schedule 4.
+
+pivot:
+  present: true
+  text: Whether any part of the Brenmark balance is insured or otherwise secured.
+  why: >-
+    doc4 states plainly that the audit file has nothing on this, and it is the
+    one fact that would change the amount of the write-down rather than the
+    treatment. A response that commits to $1,240,000 without flagging it has
+    answered more confidently than the file supports.
+  accepts:
+    - insur
+    - secur
+    - collateral
+    - credit insurance
+    - guarantee
+    - recoverable amount
+    - expected recovery
+    - retention of title
+
+notes: >-
+  No trap: the write-down does not create a new obligation or foreclose
+  anything. The covenant certificate in doc5 is a deliberate near-miss — it is
+  due with the accounts, but nothing in this file says the write-down breaches
+  a covenant, and inventing one is over-reading. That thread is picked up
+  properly in probe-08.

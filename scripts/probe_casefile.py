@@ -145,6 +145,75 @@ def load_casefiles(directory: Path = PROBE_DIR) -> list[Casefile]:
     return cases
 
 
+def validate(cases: list[Casefile]) -> list[str]:
+    """Check the hand-written ground truth for the mistakes hand-writing makes.
+
+    Twelve files of cross-referenced identifiers is exactly where a typo hides,
+    and a dangling ``licensed_by`` silently changes what counts as the raincoat.
+    Cheap to check, and a wrong answer key is indistinguishable from a model
+    failure once the run is over.
+    """
+    problems: list[str] = []
+    for case in cases:
+        where = case.case_id
+        doc_ids = {d["id"] for d in case.raw["documents"]}
+        condition_ids = {c["id"] for c in case.conditions}
+        action_ids = [a["id"] for a in case.actions]
+
+        if case.trap_order not in ("none", 1, 2, 3):
+            problems.append(f"{where}: trap_order {case.trap_order!r} is not none/1/2/3")
+        if len(set(action_ids)) != len(action_ids):
+            problems.append(f"{where}: duplicate action ids")
+        if len(condition_ids) != len(case.conditions):
+            problems.append(f"{where}: duplicate condition ids")
+        if not case.by_status("required"):
+            problems.append(f"{where}: no required actions, so admissibility is trivial")
+        if not case.by_failure_kind("unjustified"):
+            problems.append(f"{where}: no unjustified action, so the raincoat is unmeasurable")
+        if not case.governing:
+            problems.append(f"{where}: no governing conditions")
+
+        for condition in case.conditions:
+            if condition["source"] not in doc_ids:
+                problems.append(
+                    f"{where}: {condition['id']} cites unknown document {condition['source']}"
+                )
+        for action in case.actions:
+            for cid in action.get("licensed_by", []):
+                if cid not in condition_ids:
+                    problems.append(f"{where}: {action['id']} licensed_by unknown condition {cid}")
+            if action["status"] not in ("required", "prohibited", "optional"):
+                problems.append(f"{where}: {action['id']} has status {action['status']!r}")
+            if action["status"] == "prohibited" and "failure_kind" not in action:
+                problems.append(f"{where}: {action['id']} is prohibited with no failure_kind")
+
+        # An unjustified action licensed by a governing condition is not the
+        # raincoat -- it has real support and would be arguable.
+        for action_id in case.by_failure_kind("unjustified"):
+            action = next(a for a in case.actions if a["id"] == action_id)
+            if set(action.get("licensed_by", [])) & case.governing:
+                problems.append(
+                    f"{where}: {action_id} is called unjustified but a governing condition licenses it"
+                )
+
+        if case.raw["exposure"]["band"] not in BANDS:
+            problems.append(
+                f"{where}: exposure band {case.raw['exposure']['band']!r} is not a band"
+            )
+        first_order = case.raw["exposure"].get("first_order_wrong_answer")
+        if first_order is not None and first_order == case.raw["exposure"]["band"]:
+            problems.append(f"{where}: the first-order wrong answer equals the right one")
+        if case.trap_order == "none" and case.by_failure_kind("trap"):
+            problems.append(f"{where}: control stratum should have no trap actions")
+        if case.trap_order != "none" and not case.by_failure_kind("trap"):
+            problems.append(f"{where}: trap_order {case.trap_order} with no trap action")
+
+        pivot = case.raw.get("pivot") or {}
+        if pivot.get("present") and not pivot.get("accepts"):
+            problems.append(f"{where}: pivot present with no accepted phrasings")
+    return problems
+
+
 def render(case: Casefile) -> str:
     """Render the user-facing case file.
 
@@ -335,10 +404,26 @@ def main() -> int:
     parser.add_argument("--case", default="", help="run a single case id, for a smoke run")
     parser.add_argument("--budget", type=float, default=2.0)
     parser.add_argument("--report-only", action="store_true")
+    parser.add_argument(
+        "--validate-only", action="store_true", help="check the answer key, spend nothing"
+    )
     args = parser.parse_args()
 
     assert_model_allowed("screen", args.model)
     cases = load_casefiles()
+
+    # Before anything is spent. A wrong answer key and a model failure are
+    # indistinguishable once the run is over.
+    problems = validate(cases)
+    if problems:
+        print(f"{len(problems)} problem(s) in the casefiles:", file=sys.stderr)
+        for problem in problems:
+            print(f"  {problem}", file=sys.stderr)
+        return 2
+    print(f"{len(cases)} casefiles validated", flush=True)
+    if args.validate_only:
+        return 0
+
     if args.case:
         cases = [c for c in cases if c.case_id == args.case]
         if not cases:

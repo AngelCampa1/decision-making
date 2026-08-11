@@ -1,0 +1,243 @@
+# Order-2 induced obligation. The restatement is required and correct. It
+# retrospectively breaches a covenant tested on reported EBITDA, which starts a
+# 10-business-day notification clock that did not exist before the restatement
+# was decided on. Miss the clock and a curable breach becomes an event of
+# default. Nothing in the accounting documents mentions the facility.
+case_id: probe-08-restatement-covenant
+domain: financial_reporting
+trap_order: 2
+trap_kind: induced_obligation
+jurisdiction: Meridian
+
+question: >-
+  You are advising Kettering Foods on the Year 4 cut-off error found this week.
+  Decide what the company should do and in what order.
+
+exposure_question: >-
+  What is the expected exposure if the restatement is made and the lender is not
+  notified within 10 business days?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Financial Reporting Standards — extracts
+    body: |
+      MFRS 108.42 An entity shall correct material prior-period errors
+      retrospectively in the first set of financial statements authorised for
+      issue after their discovery, by restating the comparative amounts for the
+      prior period presented.
+
+      MFRS 108.49 The entity shall disclose the nature of the prior-period
+      error and, for each prior period presented, the amount of the correction
+      for each line item affected.
+
+      Retrospective restatement changes the amounts reported for the prior
+      period. It does not create a new prior period.
+
+  - id: doc2
+    kind: workpaper
+    title: Error summary — Year 4 revenue cut-off
+    body: |
+      Revenue of $890,000 recognised in Year 4 related to goods despatched in
+      Year 5. The error is material to Year 4 and reverses in Year 5.
+
+      Effect on Year 4 as previously reported:
+        Revenue            reduced by $890,000
+        EBITDA             reduced by $890,000
+        Year 4 EBITDA as previously reported   $6,200,000
+        Year 4 EBITDA as restated              $5,310,000
+
+      Year 4 net debt at the test date: $21,900,000.
+
+  - id: doc3
+    kind: facility
+    title: Facility agreement — extracts
+    body: |
+      cl. 19.1 The Borrower shall ensure that Leverage does not exceed 3.75:1
+      at each Test Date. Leverage means Net Debt divided by EBITDA, in each
+      case as reported in the audited financial statements for the relevant
+      period.
+
+      cl. 19.4 Where a Test previously certified as satisfied is subsequently
+      shown not to have been satisfied, whether by restatement or otherwise, the
+      Borrower shall notify the Agent within 10 Business Days of the date on
+      which any director becomes aware. On such notification the Borrower has 30
+      days to remedy or to agree a waiver with the Agent.
+
+      cl. 19.5 Failure to notify within the period in cl. 19.4 is an Event of
+      Default, and the remedy period in cl. 19.4 is not available. On an Event
+      of Default the Agent may declare all amounts outstanding immediately due
+      and payable.
+
+      Amount drawn and outstanding: $12,400,000.
+
+  - id: doc4
+    kind: email
+    title: Email — Group Financial Controller
+    body: |
+      Confirmed with the despatch team this morning. The $890,000 is a clean
+      cut-off error, no question about the facts, and it reverses in Year 5 so
+      the two years together are unaffected.
+
+      I have told the CFO and the audit committee chair. That was today.
+
+  - id: doc5
+    kind: register
+    title: Reporting and compliance register — Kettering Foods
+    body: |
+      Year 5 accounts — board authorisation for issue in 26 days.
+      Covenant certificate for the Year 5 half year — due in 41 days.
+      Year 4 covenant certificate — certified as satisfied at the time.
+      Insurance renewal — due in 30 days.
+
+  - id: doc6
+    kind: bulletin
+    title: Firm technical bulletin 26-09 — restatements and financing documents
+    body: |
+      Retrospective restatement under MFRS 108 changes the figures on which
+      historic covenant certificates were given. Most Meridian facility
+      agreements written after Y-6 contain a look-back clause of the cl. 19.4
+      type, and the notification period usually runs from director awareness
+      rather than from the date the accounts are authorised.
+
+      The practical consequence is that the notification clock starts before the
+      restatement is published, and frequently before the audit is complete.
+
+  - id: doc7
+    kind: memo
+    title: Procurement memorandum
+    body: |
+      The group has completed its move to the new packaging supplier. Unit costs
+      are 4% below the previous contract and the transition produced no
+      disruption to despatch schedules.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: MFRS 108.42 requires retrospective restatement of the Year 4 comparatives.
+    governs: true
+  - id: c2
+    source: doc2
+    text: Restated Year 4 EBITDA is $5,310,000 against net debt of $21,900,000, giving leverage of 4.12:1.
+    governs: true
+  - id: c3
+    source: doc3
+    text: cl. 19.1 caps leverage at 3.75:1 on figures as reported in the audited statements.
+    governs: true
+  - id: c4
+    source: doc3
+    text: cl. 19.4 requires notification within 10 business days of any director becoming aware.
+    governs: true
+  - id: c5
+    source: doc4
+    text: The CFO and audit committee chair were told today, so the 10-business-day clock has started.
+    governs: true
+  - id: c6
+    source: doc3
+    text: cl. 19.5 makes failure to notify an Event of Default and removes the 30-day remedy period.
+    governs: true
+  - id: c7
+    source: doc5
+    text: Board authorisation of the Year 5 accounts is in 26 days.
+    governs: false
+  - id: c8
+    source: doc7
+    text: The packaging supplier transition delivered a 4% unit cost reduction.
+    governs: false
+  - id: c9
+    source: doc2
+    text: The error reverses in Year 5, so the two years taken together are unaffected.
+    governs: false
+
+actions:
+  - id: A1
+    text: Restate the Year 4 comparatives under MFRS 108.42.
+    status: required
+    licensed_by: [c1]
+  - id: A2
+    text: >-
+      Notify the Agent under cl. 19.4 within 10 business days of today, the date
+      directors became aware.
+    status: required
+    licensed_by: [c2, c3, c4, c5]
+  - id: A3
+    text: >-
+      Open the cl. 19.4 remedy or waiver discussion with the Agent within the
+      30-day period that notification preserves.
+    status: required
+    licensed_by: [c4, c6]
+  - id: A4
+    text: Disclose the nature and amount of the prior-period error under MFRS 108.49.
+    status: required
+    licensed_by: [c1]
+  - id: A5
+    text: >-
+      Restate the comparatives and address the covenant position when the Year 5
+      covenant certificate falls due in 41 days.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c7]
+    why: >-
+      The order-2 trap. Correct on the accounting, silent on what the accounting
+      sets off, and 41 days is far past the 10-business-day notification the
+      restatement triggers. cl. 19.5 then converts a curable breach into an
+      Event of Default.
+  - id: A6
+    text: >-
+      Treat the error as immaterial on the basis that it reverses in Year 5, and
+      make no restatement.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c9]
+    why: >-
+      Avoids the covenant consequence by not correcting a material error, which
+      is the wrong reason to reach an accounting conclusion and fails MFRS
+      108.42 on its own terms.
+  - id: A7
+    text: >-
+      Notify the Agent only once the restated accounts are authorised for issue
+      in 26 days.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c7]
+    why: >-
+      Reads the clock as running from publication. cl. 19.4 runs from director
+      awareness, which doc4 puts at today.
+  - id: A8
+    text: Reflect the packaging supplier cost reduction in the Year 5 forecast.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c8]
+    why: The raincoat.
+  - id: A9
+    text: Advise the audit committee in writing of the covenant consequence of restating.
+    status: required
+    licensed_by: [c3, c6]
+  - id: A10
+    text: Confirm the insurance renewal is placed before its due date.
+    status: optional
+    licensed_by: []
+
+exposure:
+  band: severe
+  point_usd: 12400000
+  working: >-
+    Without notification, cl. 19.5 makes the position an Event of Default and
+    removes the remedy period, and the Agent may declare all outstanding amounts
+    immediately due. That is the full $12,400,000 drawn, which is severe under
+    Schedule 4. A reader who stops at the accounting prices the $890,000
+    restatement and answers high.
+  first_order_wrong_answer: high
+
+pivot:
+  present: false
+  why: >-
+    Awareness date, drawn amount, restated EBITDA, net debt and the covenant
+    ratio are all stated. The leverage calculation can be done from doc2 and
+    doc3 without anything further.
+
+notes: >-
+  The chain is restate, breach, notify, and only the first link is in the
+  accounting documents. doc6 exists to make the link findable for a careful
+  reader without stating the conclusion. A response that takes A1 and A4 and
+  stops has done competent accounting and exposed the company to $12.4m.

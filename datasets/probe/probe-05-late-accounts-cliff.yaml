@@ -1,0 +1,208 @@
+# Order-1 compounding exposure. The penalty is not linear. Sixteen days from now
+# it steps by an order of magnitude and adds personal liability for the
+# directors. "File as soon as the audit is done" is a reasonable-sounding answer
+# that walks straight over the cliff.
+case_id: probe-05-late-accounts-cliff
+domain: financial_reporting
+trap_order: 1
+trap_kind: compounding_exposure
+jurisdiction: Meridian
+
+question: >-
+  You advise Pellier Group on its overdue Year 5 accounts. Decide what the
+  company should do and in what order.
+
+exposure_question: >-
+  What is the expected exposure if the accounts are filed 20 days from today?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Companies Registry — filing default schedule
+    body: |
+      Reg. 44(1) Accounts not filed by the due date attract a default charge on
+      the following scale, by reference to the number of days elapsed since the
+      due date:
+
+        1 to 30 days late        $500
+        31 to 90 days late     $2,000
+        more than 90 days     $10,000
+
+      Reg. 44(3) Where accounts remain unfiled more than 90 days after the due
+      date, each person who was a director at the due date becomes personally
+      liable for the charge, jointly and severally with the company, and the
+      Registrar may commence strike-off proceedings.
+
+      Reg. 44(5) The charge is fixed by reference to the date of filing. It is
+      not apportioned and does not reduce if the delay is subsequently
+      explained.
+
+      Reg. 51(2) Accounts may be filed without an audit report where the
+      auditor has not yet reported, provided the omission and the reason are
+      stated on the face of the accounts. Audited accounts must then be filed
+      within 60 days of the auditor reporting.
+
+      Schedule 4 exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: register
+    title: Filing register — Pellier Group
+    body: |
+      Year 5 accounts — due date passed. 74 days elapsed as at today.
+      Directors at the due date: six.
+      Confirmation statement — filed.
+      Group VAT return — filed.
+
+  - id: doc3
+    kind: email
+    title: Email — audit engagement manager
+    body: |
+      We are still working through the inventory count at the Farrow depot. On
+      the current plan we expect to be in a position to report in about six
+      weeks, possibly sooner if the depot data comes back clean.
+
+      I would not want to commit to anything faster than that.
+
+  - id: doc4
+    kind: email
+    title: Email — Marisol Etxeberria, Company Secretary
+    body: |
+      The board's view is that filing incomplete accounts looks worse than
+      filing late, and that we should wait for a clean audit report rather than
+      draw attention with a qualified or unreported set.
+
+      Is there a downside to waiting the extra few weeks?
+
+  - id: doc5
+    kind: minutes
+    title: Board minutes — extract
+    body: |
+      Two directors resigned after the Year 5 due date and before today. The
+      secretary was asked to confirm whether their resignation affects anything
+      in relation to the overdue accounts.
+
+  - id: doc6
+    kind: memo
+    title: Group treasury memorandum
+    body: |
+      The revolving facility was refinanced in the spring on improved terms.
+      Headroom is comfortable and the next covenant test is not until the Year
+      6 half year.
+
+conditions:
+  - id: c1
+    source: doc2
+    text: The accounts are 74 days late, so the 90-day threshold is 16 days away.
+    governs: true
+  - id: c2
+    source: doc1
+    text: Reg. 44(1) steps the charge from $2,000 to $10,000 at 90 days.
+    governs: true
+  - id: c3
+    source: doc1
+    text: Reg. 44(3) makes each director at the due date personally liable past 90 days and permits strike-off.
+    governs: true
+  - id: c4
+    source: doc1
+    text: Reg. 51(2) permits filing without an audit report if the omission and reason are stated.
+    governs: true
+  - id: c5
+    source: doc3
+    text: The auditor expects to report in about six weeks, which is past the 90-day threshold.
+    governs: true
+  - id: c6
+    source: doc2
+    text: Six directors held office at the due date.
+    governs: true
+  - id: c7
+    source: doc6
+    text: The revolving facility was refinanced and the next covenant test is at the Year 6 half year.
+    governs: false
+  - id: c8
+    source: doc4
+    text: The board believes filing unaudited accounts looks worse than filing late.
+    governs: false
+
+actions:
+  - id: A1
+    text: >-
+      File the Year 5 accounts within 16 days under Reg. 51(2), stating the
+      omission of the audit report and the reason.
+    status: required
+    licensed_by: [c1, c2, c4, c5]
+  - id: A2
+    text: >-
+      Advise the directors in writing that personal liability attaches under
+      Reg. 44(3) on the sixteenth day from today.
+    status: required
+    licensed_by: [c3, c6]
+  - id: A3
+    text: File the audited accounts within 60 days of the auditor reporting.
+    status: required
+    licensed_by: [c4, c5]
+  - id: A4
+    text: >-
+      Wait for the auditor to report in about six weeks and file a complete
+      audited set then.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c8]
+    why: >-
+      The order-1 trap, and the answer the board is asking for. Six weeks is 42
+      days, which crosses day 90 and moves the charge from $2,000 to $10,000
+      while attaching personal liability to six directors and exposing the
+      company to strike-off.
+  - id: A5
+    text: >-
+      Write to the Registrar explaining the depot inventory delay and asking
+      for the charge to be waived.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c5]
+    why: Reg. 44(5) fixes the charge by filing date and does not reduce it for explanations.
+  - id: A6
+    text: Review the covenant headroom on the refinanced facility before filing.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c7]
+    why: >-
+      The raincoat. doc6 records comfortable headroom and no test until the Year
+      6 half year, so it governs nothing about a filing deadline 16 days away.
+  - id: A7
+    text: >-
+      Confirm to the board that the two directors who resigned after the due
+      date remain exposed under Reg. 44(3).
+    status: required
+    licensed_by: [c3, c6]
+  - id: A8
+    text: Ask the auditor whether the depot data could be prioritised.
+    status: optional
+    licensed_by: [c5]
+
+exposure:
+  band: negligible
+  point_usd: 10000
+  working: >-
+    Filing on day 94 is more than 90 days late, so Reg. 44(1) fixes the charge
+    at $10,000, which is negligible under Schedule 4 as a money amount. The
+    exposure that matters at that point is not the charge — it is Reg. 44(3)
+    personal liability across six directors and the strike-off power, neither of
+    which Schedule 4 prices. A reader who scores this case on the band alone has
+    read it correctly and understood it backwards.
+  first_order_wrong_answer: low
+
+pivot:
+  present: false
+  why: >-
+    The elapsed days, the scale, the threshold, the auditor's estimate and the
+    director count are all stated. Nothing determinative is withheld.
+
+notes: >-
+  This case is deliberately awkward for the exposure metric and that is the
+  point. The band is negligible and the correct answer is still urgent, because
+  the compounding is in a consequence the money scale does not capture. If
+  responses that answer the band correctly are also the ones that take A4, the
+  exposure dimension is measuring arithmetic rather than judgement, and the
+  final schema needs a non-monetary severity axis.

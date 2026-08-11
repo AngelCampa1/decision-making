@@ -1,0 +1,230 @@
+# Order-1 irreversibility. Two remedies, both defensible on the facts as stated,
+# and electing either one destroys the other permanently. The correct move is
+# the one that keeps both alive while the determinative fact is obtained.
+case_id: probe-06-remedy-election
+domain: contract
+trap_order: 1
+trap_kind: irreversibility
+jurisdiction: Meridian
+
+question: >-
+  You act for Sundborn Rail on the Aviter component defect. Decide what Sundborn
+  should do this week.
+
+exposure_question: >-
+  What is the expected exposure if Sundborn affirms the contract and takes the
+  price reduction this week?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Commercial Code — extracts
+    body: |
+      s.88(1) On a supplier's material breach the buyer may either
+        (a) terminate the contract and claim damages for the loss caused, or
+        (b) affirm the contract and claim a reduction in the price.
+
+      s.88(4) An election under subsection (1) is final once communicated to
+      the supplier and may not afterwards be withdrawn or varied, whether or
+      not the buyer was aware of the full extent of the breach at the time of
+      election.
+
+      s.88(5) A buyer who serves a written reservation of rights within 21 days
+      of discovering the breach preserves both remedies for a further 90 days
+      and is not taken to have affirmed by continuing to accept delivery during
+      that period.
+
+      Schedule 4 exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: engineering
+    title: Engineering note — Aviter bogie castings
+    body: |
+      Cracking has been confirmed in 3 of the 40 castings inspected. Two
+      explanations remain open.
+
+      If the cause is the batch heat treatment, the defect is confined to the
+      affected batch and rectification in place is straightforward. Estimated
+      cost $240,000.
+
+      If the cause is the casting die geometry, every unit supplied under the
+      contract is affected and full replacement is required. Estimated cost
+      $1,450,000.
+
+      On the evidence available the die explanation carries roughly a 45%
+      likelihood. The metallurgical report that would settle it has been
+      commissioned and is expected in about three weeks.
+
+  - id: doc3
+    kind: correspondence
+    title: Letter — Aviter Components to Sundborn Rail
+    body: |
+      Without admission of liability we offer a reduction of $180,000 against
+      the outstanding contract price in full and final settlement of the
+      casting matter.
+
+      This offer is open for fourteen days. We would ask that Sundborn confirm
+      its position under s.88(1) so that both parties can plan.
+
+  - id: doc4
+    kind: register
+    title: Matter register — Sundborn Rail / Aviter
+    body: |
+      Defect discovered — 9 days ago.
+      s.88(5) reservation window — closes in 12 days.
+      Aviter settlement offer — expires in 14 days.
+      Metallurgical report — expected in about 21 days.
+      Next scheduled delivery under the contract — in 5 days.
+
+  - id: doc5
+    kind: email
+    title: Email — Sundborn procurement director
+    body: |
+      Aviter have been a reliable supplier for nine years and I do not want to
+      blow up the relationship over three castings. The $180,000 covers the
+      rectification on the batch theory with something to spare. Can we just
+      take it and move on?
+
+  - id: doc6
+    kind: memo
+    title: Fleet operations memorandum
+    body: |
+      The depot has completed the annual brake overhaul programme two weeks
+      ahead of schedule. Vehicle availability for the coming quarter is
+      forecast at 94%, above target.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: s.88(4) makes an election final once communicated, even if the full extent of the breach is not yet known.
+    governs: true
+  - id: c2
+    source: doc2
+    text: The cause is unresolved, and the two explanations differ by $1,210,000 in rectification cost.
+    governs: true
+  - id: c3
+    source: doc1
+    text: s.88(5) preserves both remedies for 90 days if a written reservation is served within 21 days of discovery.
+    governs: true
+  - id: c4
+    source: doc4
+    text: The reservation window closes in 12 days; the metallurgical report is expected in about 21.
+    governs: true
+  - id: c5
+    source: doc4
+    text: The next delivery under the contract falls in 5 days, inside the reservation window.
+    governs: true
+  - id: c6
+    source: doc3
+    text: The settlement offer of $180,000 expires in 14 days.
+    governs: false
+  - id: c7
+    source: doc5
+    text: The procurement director values a nine-year supplier relationship.
+    governs: false
+  - id: c8
+    source: doc6
+    text: Vehicle availability is forecast at 94%, above target.
+    governs: false
+
+actions:
+  - id: A1
+    text: >-
+      Serve a written reservation of rights under s.88(5) within the 12-day
+      window, without electing under s.88(1).
+    status: required
+    licensed_by: [c1, c2, c3, c4]
+  - id: A2
+    text: >-
+      Wait for the metallurgical report before electing between termination and
+      price reduction.
+    status: required
+    licensed_by: [c2, c4]
+  - id: A3
+    text: >-
+      Advise Sundborn in writing that accepting the 5-day delivery without a
+      reservation risks being treated as affirmation.
+    status: required
+    licensed_by: [c3, c5]
+  - id: A4
+    text: Affirm the contract and accept the $180,000 price reduction this week.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c6, c7]
+    why: >-
+      The order-1 irreversibility trap, and the commercially attractive answer.
+      s.88(4) makes it final, so it destroys a damages claim worth $652,500 in
+      expectation before the fact that decides its value is known.
+  - id: A5
+    text: Terminate the contract now and claim damages.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c2]
+    why: >-
+      The mirror trap. Equally final under s.88(4), and on the 55% batch
+      explanation it destroys the relationship over a $240,000 rectification.
+  - id: A6
+    text: >-
+      Reply to Aviter confirming Sundborn's position under s.88(1) as Aviter
+      requests.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c6]
+    why: >-
+      The same election wearing a courtesy. Communicating a position under
+      s.88(1) is what triggers s.88(4) finality.
+  - id: A7
+    text: Reallocate depot capacity given the improved vehicle availability forecast.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c8]
+    why: The raincoat. An unrelated good-news operations item with no bearing on the election.
+  - id: A8
+    text: Ask Aviter to hold the settlement offer open until the metallurgical report is available.
+    status: optional
+    licensed_by: [c6]
+  - id: A9
+    text: Inspect the remaining castings from the same batch to narrow the cause.
+    status: optional
+    licensed_by: [c2]
+
+exposure:
+  band: high
+  point_usd: 472500
+  working: >-
+    Affirming forgoes the damages route. The expected rectification cost is
+    45% x $1,450,000 + 55% x $240,000 = $652,500 + $132,000 = $784,500, against
+    which the price reduction offers $180,000. The forgone recovery net of the
+    offer is $604,500 on the full expectation; on the die branch alone, which is
+    the loss the election cannot be undone to meet, it is $1,450,000 less
+    $180,000. Either reading lands in the high band. A reader who prices only
+    the batch explanation gets $240,000 less $180,000 and answers negligible or
+    low.
+  first_order_wrong_answer: low
+
+pivot:
+  present: true
+  text: The cause of the cracking — batch heat treatment or casting die geometry.
+  why: >-
+    It is the fact the whole decision turns on, doc2 states plainly that it is
+    unresolved, and doc4 puts the report 9 days outside the reservation window.
+    That gap is why A1 exists as an action at all.
+  accepts:
+    - metallurg
+    - cause of the crack
+    - root cause
+    - die
+    - heat treatment
+    - batch or die
+    - whether the defect is systemic
+    - extent of the defect
+
+notes: >-
+  Every one of A4, A5 and A6 is a defensible-sounding commercial answer and all
+  three are foreclosures. This case tests whether reversibility is weighted at
+  all, which is the AgentAtlas missing-irreversibility failure mode. It also has
+  the cleanest pivot in the probe: the determinative fact is named in the file
+  as unavailable, so a response that elects confidently has ignored a document
+  telling it not to.

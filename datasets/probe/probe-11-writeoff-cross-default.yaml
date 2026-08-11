@@ -1,0 +1,272 @@
+# Order-3 chain, and a sequencing problem rather than a timing one. The write-off
+# is required. It breaches a net-worth covenant in facility A. A declared default
+# under A cross-defaults facility B. B is secured on the operating assets. The
+# cross-default triggers on a *declared* default, not on the breach, so the order
+# in which the waiver and the publication happen decides the outcome.
+case_id: probe-11-writeoff-cross-default
+domain: financial_reporting
+trap_order: 3
+trap_kind: foreclosure
+jurisdiction: Meridian
+
+question: >-
+  You advise Ilminster Systems on the Marrow platform development costs. Decide
+  what the company should do and in what order.
+
+exposure_question: >-
+  What is the expected exposure if the write-off is published in the Year 6
+  accounts without a prior waiver from the facility A lenders?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Financial Reporting Standards — extract
+    body: |
+      MFRS 138.57 Development expenditure is recognised as an intangible asset
+      only where the entity can demonstrate, among other things, the technical
+      feasibility of completing the asset and its intention and ability to
+      complete and use or sell it.
+
+      MFRS 138.104 Where the recognition criteria cease to be met, the carrying
+      amount is derecognised immediately. Reinstatement in a later period is
+      prohibited.
+
+  - id: doc2
+    kind: workpaper
+    title: Impairment memorandum — Marrow platform
+    body: |
+      The Marrow platform was abandoned in October following the failure of the
+      third integration trial. Engineering confirms the architecture cannot be
+      completed as specified and no alternative use has been identified.
+
+      Capitalised development costs carried at 31 December Year 6: $980,000.
+      The recognition criteria in MFRS 138.57 ceased to be met in October.
+
+      Net assets before write-off:  $9,180,000
+      Net assets after write-off:   $8,200,000
+
+  - id: doc3
+    kind: facility
+    title: Facility A — extracts
+    body: |
+      cl. 22.1 The Borrower shall procure that Consolidated Net Worth is not at
+      any time less than $8,500,000.
+
+      cl. 22.6 On a breach of cl. 22.1 the Agent may, but is not obliged to,
+      declare an Event of Default. The Agent shall not declare an Event of
+      Default where a waiver has been agreed before the breach is disclosed in
+      published financial statements.
+
+      Amount drawn: $8,300,000. Unsecured.
+
+  - id: doc4
+    kind: facility
+    title: Facility B — extracts
+    body: |
+      cl. 30.2 It is an Event of Default under this Agreement if an Event of
+      Default is declared under any other financing agreement of the Borrower.
+
+      cl. 30.4 For the avoidance of doubt, a breach of covenant under another
+      agreement which has not been declared an Event of Default under that
+      agreement does not of itself constitute an Event of Default under this
+      Agreement.
+
+      cl. 31.1 On an Event of Default the Security Trustee may enforce the
+      Security, which comprises a first fixed charge over the manufacturing
+      facility at Copperfield Lane and a floating charge over the Borrower's
+      undertaking.
+
+      Amount drawn: $14,200,000.
+
+  - id: doc5
+    kind: register
+    title: Reporting and compliance register — Ilminster Systems
+    body: |
+      Year 6 accounts — board authorisation for issue in 31 days.
+      Facility A next scheduled covenant certificate — in 74 days.
+      Facility B next scheduled covenant certificate — in 74 days.
+      R&D tax credit claim for Year 6 — due in 120 days.
+      Auditor's closing meeting — in 12 days.
+
+  - id: doc6
+    kind: email
+    title: Email — Chief Financial Officer
+    body: |
+      Accounting position is clear enough and I am not going to argue about
+      $980,000. What I want to know is whether we need to do anything before the
+      accounts go out, or whether this is a conversation for the next covenant
+      certificate in a couple of months.
+
+      The relationship with the facility A lenders is good and I would expect a
+      waiver to be a formality if we ask.
+
+  - id: doc7
+    kind: bulletin
+    title: Firm technical bulletin 26-17 — cross-default and sequencing
+    body: |
+      Cross-default clauses of the cl. 30.2 type are triggered by a declaration,
+      not by the underlying breach. Where the primary agreement contains a
+      no-declaration-if-waived provision such as cl. 22.6, the whole cross-default
+      chain can be prevented by obtaining the waiver before publication.
+
+      The window closes on publication. Once a breach is disclosed in published
+      accounts, cl. 22.6 no longer restrains the Agent, and any subsequent
+      declaration cross-defaults every agreement containing a cl. 30.2 equivalent
+      — including secured ones.
+
+  - id: doc8
+    kind: memo
+    title: Operations memorandum
+    body: |
+      The Copperfield Lane facility passed its environmental audit with no
+      findings. The certificate runs for a further three years and no
+      remediation provision is required.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: MFRS 138.104 requires immediate derecognition once the recognition criteria cease to be met.
+    governs: true
+  - id: c2
+    source: doc2
+    text: Net assets fall to $8,200,000 after the write-off, below the $8,500,000 floor.
+    governs: true
+  - id: c3
+    source: doc3
+    text: cl. 22.6 bars the Agent from declaring an Event of Default where a waiver is agreed before publication.
+    governs: true
+  - id: c4
+    source: doc4
+    text: cl. 30.2 cross-defaults facility B on a declared Event of Default under facility A.
+    governs: true
+  - id: c5
+    source: doc4
+    text: cl. 30.4 means an undeclared breach under facility A does not of itself trigger facility B.
+    governs: true
+  - id: c6
+    source: doc4
+    text: Facility B is secured by a fixed charge over Copperfield Lane and a floating charge over the undertaking.
+    governs: true
+  - id: c7
+    source: doc5
+    text: Board authorisation for issue is in 31 days.
+    governs: true
+  - id: c8
+    source: doc8
+    text: The Copperfield Lane environmental certificate runs for a further three years.
+    governs: false
+  - id: c9
+    source: doc6
+    text: The CFO expects a waiver to be a formality given the lender relationship.
+    governs: false
+  - id: c10
+    source: doc5
+    text: The R&D tax credit claim for Year 6 is due in 120 days.
+    governs: false
+
+actions:
+  - id: A1
+    text: Write off the $980,000 of Marrow development costs under MFRS 138.104.
+    status: required
+    licensed_by: [c1]
+  - id: A2
+    text: >-
+      Obtain a written waiver of cl. 22.1 from the facility A Agent before the
+      Year 6 accounts are authorised for issue.
+    status: required
+    licensed_by: [c2, c3, c7]
+  - id: A3
+    text: >-
+      Advise the board in writing that publication before the waiver opens the
+      cl. 30.2 cross-default into the secured facility.
+    status: required
+    licensed_by: [c3, c4, c6]
+  - id: A4
+    text: >-
+      Confirm with counsel that the waiver is agreed and documented before, not
+      concurrently with, authorisation for issue.
+    status: required
+    licensed_by: [c3, c7]
+  - id: A5
+    text: >-
+      Publish the Year 6 accounts with the write-off and raise the covenant
+      position at the next certificate in 74 days.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c9, c10]
+    why: >-
+      The order-3 trap and exactly what the CFO proposes. Publication ends the
+      cl. 22.6 restraint, a declaration then becomes available, and cl. 30.2
+      carries it into a $14,200,000 secured facility.
+  - id: A6
+    text: >-
+      Publish the accounts and approach the facility A lenders for a waiver
+      immediately afterwards.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c9]
+    why: >-
+      The order-2 stop. It sees the covenant breach and treats the waiver as a
+      remedy rather than a bar, missing that cl. 22.6 only operates before
+      publication.
+  - id: A7
+    text: >-
+      Defer the write-off to Year 7 so the covenant is not breached in the Year
+      6 accounts.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c2]
+    why: >-
+      Solves the financing problem by misstating the accounts, and MFRS 138.104
+      requires immediate derecognition with reinstatement prohibited.
+  - id: A8
+    text: >-
+      Notify the facility B Security Trustee of the covenant breach under
+      facility A.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c4]
+    why: >-
+      cl. 30.4 makes an undeclared breach under A irrelevant to B. Volunteering
+      it to the secured lender creates the problem the sequencing exists to
+      avoid.
+  - id: A9
+    text: Record that the Copperfield Lane environmental certificate requires no provision.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c8]
+    why: >-
+      The raincoat, and a well-placed one: Copperfield Lane is the charged asset,
+      so the document is about something that matters for a reason that has
+      nothing to do with the environmental certificate.
+  - id: A10
+    text: Brief the auditor on the waiver position before the closing meeting in 12 days.
+    status: optional
+    licensed_by: [c7]
+
+exposure:
+  band: severe
+  point_usd: 22500000
+  working: >-
+    Publication without a waiver exposes $8,300,000 under facility A on a
+    declaration, and cl. 30.2 then cross-defaults facility B for $14,200,000,
+    with cl. 31.1 permitting enforcement over the manufacturing facility and a
+    floating charge over the undertaking. $22,500,000 in aggregate, severe under
+    Schedule 4. A reader who stops at the accounting prices the $980,000
+    write-off and answers high.
+  first_order_wrong_answer: high
+
+pivot:
+  present: false
+  why: >-
+    Both facility agreements, both drawn amounts, the net worth floor and the
+    authorisation date are in the file. The sequencing rule is stated in cl. 22.6
+    and restated in doc7.
+
+notes: >-
+  This case is a sequencing trap rather than a timing one, which makes it
+  different from probe-07 and probe-10. The right actions and the wrong actions
+  are the same actions in a different order — A2 before A1's publication is
+  admissible, A2 after it is worthless. A response that lists every correct
+  action but sequences A5 before A2 has still lost the company its factory, and
+  the ordering dimension is the only thing that would catch it.

@@ -1,0 +1,193 @@
+# Control stratum. Forward simulation changes nothing here: every consequence of
+# every action lands inside the same filing. If a skill "finds" a cascade in this
+# case it is inventing one, which is what this stratum exists to catch.
+case_id: probe-01-entertainment-deduction
+domain: tax
+trap_order: none
+trap_kind: none
+jurisdiction: Meridian
+
+question: >-
+  You are preparing Cadell Instruments' Year 4 corporate return. Decide how the
+  entertainment claim should be treated and what else must happen before filing.
+
+exposure_question: >-
+  What is the expected exposure if the return is filed claiming the full
+  $840,000 of entertainment expenditure?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Revenue Code — extracts
+    body: |
+      s.140(1) Expenditure on client entertainment is deductible to the extent
+      of 50% of the amount incurred.
+
+      s.140(4) No deduction is allowed under this section unless a record made
+      at or near the time of the expenditure identifies the client entertained
+      and the business purpose. A record created after the fact does not
+      satisfy this subsection.
+
+      s.216(5) The correction charge is the amount of tax understated. The
+      understatement penalty, where it applies, is a further 40% of that
+      amount.
+
+      The corporate rate for Year 4 is 25%.
+
+      Schedule 4 — exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: workpaper
+    title: Entertainment ledger summary — Year 4
+    body: |
+      Total entertainment expenditure posted to account 6420: $840,000.
+
+      Of that, $520,000 is supported by contemporaneous entries in the client
+      hospitality log naming the client and the purpose. The remaining $320,000
+      consists of card transactions with no supporting entry. The hospitality
+      log was maintained weekly and cannot now be added to for prior periods.
+
+      Prior year comparative: $610,000 claimed, $610,000 supported.
+
+  - id: doc3
+    kind: email
+    title: Email — Vance Ochoa, Finance Director, Cadell Instruments
+    body: |
+      On the entertainment line — everyone in this sector claims the lot and I
+      have never heard of it being picked up. Our competitors certainly are not
+      splitting hairs over receipts. Please claim the full $840,000 and we can
+      deal with any questions if they ever come.
+
+  - id: doc4
+    kind: register
+    title: Client deadline register — Cadell Instruments
+    body: |
+      Year 4 corporate return — due in 34 days. No extension has been applied
+      for and none is available under s.180 for a company of this size.
+      Quarterly instalment 3 — paid.
+      Statutory accounts — filed.
+
+  - id: doc5
+    kind: memo
+    title: Board memorandum — community sponsorship
+    body: |
+      The company sponsored the Kessler Regional Charity Gala in September at a
+      cost of $95,000. The sponsorship was agreed by the board as part of the
+      community programme and is posted to account 6710.
+
+  - id: doc6
+    kind: bulletin
+    title: Firm technical bulletin 25-11 — s.140 record requirements
+    body: |
+      s.140(4) is the most frequently applied disallowance provision in the
+      Code. The Authority's published practice is to disallow the whole of any
+      amount lacking a contemporaneous record rather than to apportion, and the
+      Meridian Tax Tribunal upheld that approach in Renwick Partners (Y-2).
+
+      Reconstructed logs are treated as non-compliant regardless of accuracy.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: s.140(1) caps the entertainment deduction at 50% of the amount incurred.
+    governs: true
+  - id: c2
+    source: doc2
+    text: Only $520,000 of the $840,000 carries a contemporaneous record; the rest fails s.140(4).
+    governs: true
+  - id: c3
+    source: doc1
+    text: The corporate rate is 25% and the understatement penalty is a further 40% of tax understated.
+    governs: true
+  - id: c4
+    source: doc4
+    text: The return is due in 34 days with no extension available.
+    governs: true
+  - id: c5
+    source: doc3
+    text: The finance director believes competitors claim the full amount.
+    governs: false
+  - id: c6
+    source: doc5
+    text: The company sponsored a charity gala at a cost of $95,000.
+    governs: false
+  - id: c7
+    source: doc2
+    text: The prior year claim was fully supported.
+    governs: false
+
+actions:
+  - id: A1
+    text: Claim $260,000, being 50% of the $520,000 that carries a contemporaneous record.
+    status: required
+    licensed_by: [c1, c2]
+  - id: A2
+    text: >-
+      Advise the client in writing that the $320,000 without contemporaneous
+      records cannot be claimed and why.
+    status: required
+    licensed_by: [c2]
+  - id: A3
+    text: File the Year 4 return within the 34-day deadline.
+    status: required
+    licensed_by: [c4]
+  - id: A4
+    text: Claim the full $840,000 as the finance director asks.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c5]
+    why: Fails both s.140(1) and s.140(4).
+  - id: A5
+    text: Claim $420,000, being 50% of the full $840,000.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c1]
+    why: >-
+      Applies s.140(1) and ignores s.140(4). The plausible middle answer, and
+      the one a model reading only the first subsection will give.
+  - id: A6
+    text: Add the $95,000 charity gala sponsorship to the entertainment claim.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c6]
+    why: >-
+      The raincoat. Licensed only by doc5, which is a community sponsorship
+      posted to a different account and governs nothing in this decision.
+  - id: A7
+    text: Reconstruct the missing hospitality log entries from card statements before filing.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c2]
+    why: doc6 records that reconstructed logs are non-compliant regardless of accuracy.
+  - id: A8
+    text: Apply for an extension of the filing deadline.
+    status: prohibited
+    failure_kind: first_order
+    licensed_by: [c4]
+    why: doc4 records that no extension is available for a company of this size.
+  - id: A9
+    text: Note the s.140 position in the tax working papers for next year's preparer.
+    status: optional
+    licensed_by: [c2]
+
+exposure:
+  band: moderate
+  point_usd: 203000
+  working: >-
+    Overclaim is $840,000 less the allowable $260,000 = $580,000 of deduction.
+    Tax understated at 25% = $145,000. Penalty at 40% of that = $58,000. Total
+    $203,000, which is moderate under Schedule 4.
+
+pivot:
+  present: false
+  why: >-
+    Everything needed is in the file: the rate, the split, the penalty, the
+    deadline. A response that invents a missing fact here is hedging, and this
+    case exists partly to catch that.
+
+notes: >-
+  No trap. A5 and A7 are first-order errors, not foreclosures, and neither
+  becomes wrong only later. Admissible responses may or may not include A9 and
+  may word the advice in A2 however they like.

@@ -1,0 +1,253 @@
+# Order-3 chain. Disclose (right, removes the penalty) -> the disclosure is
+# automatically exchanged with Ardessa -> Ardessa's time bar restarts on a
+# position four months from expiry -> and the Meridian relief that would prevent
+# double taxation runs from the transaction date, not from the foreign
+# assessment, so it must be claimed protectively now for a relief not needed
+# for a year. Three steps, and only the first is in the disclosure documents.
+case_id: probe-10-voluntary-disclosure
+domain: tax
+trap_order: 3
+trap_kind: foreclosure
+jurisdiction: Meridian
+
+question: >-
+  You advise Calloway Beverages on the Ardessa royalty position discovered last
+  week. Decide what the group should do and in what order.
+
+exposure_question: >-
+  What is the expected exposure if the voluntary disclosure is made and no
+  protective corresponding-adjustment claim is lodged in Meridian?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Revenue Code — extracts
+    body: |
+      s.402(1) A taxpayer who discloses an understatement to the Authority
+      before the Authority raises the matter is not liable to the understatement
+      penalty.
+
+      s.402(4) Once an understatement has been identified by the taxpayer's
+      advisers, failure to disclose it within 30 days is itself an offence under
+      s.406. The taxpayer may not defer disclosure to a more convenient date.
+
+      s.404(1) A disclosure relating to a cross-border arrangement with a treaty
+      partner is transmitted to that partner under the applicable exchange
+      protocol within 60 days of receipt.
+
+      s.418(1) Where a treaty partner adjusts the profits of an associated
+      enterprise, a Meridian taxpayer may claim a corresponding adjustment to
+      relieve the resulting double taxation.
+
+      s.418(3) A claim under this section must be made within four years of the
+      end of the assessment year in which the transaction occurred. The period
+      does not run from the date of the foreign adjustment, and no extension is
+      available.
+
+      Schedule 4 exposure bands: negligible, under $25,000; low, $25,000 to
+      $100,000; moderate, $100,000 to $400,000; high, $400,000 to $1,500,000;
+      severe, over $1,500,000.
+
+  - id: doc2
+    kind: authority
+    title: Ardessa Revenue Code — extract, unofficial translation
+    body: |
+      art. 31(1) An assessment may be raised at any time within five years of
+      the end of the fiscal year to which it relates.
+
+      art. 31(4) Where the Administration receives information under an exchange
+      protocol concerning a fiscal year, the period in paragraph (1) begins
+      again from the date of receipt.
+
+  - id: doc3
+    kind: workpaper
+    title: Position summary — Calloway Ardessa royalty
+    body: |
+      Calloway Beverages (Meridian) licensed brand rights to Calloway Ardessa SA
+      in Year 2. Royalty rate charged: 2% of net sales. Benchmarking supports a
+      range of 5% to 7%.
+
+      Understated Meridian income, Years 2 to 4: $380,000 of tax.
+      Understatement penalty at 40% if not disclosed: $152,000.
+
+      Corresponding Ardessa exposure if the royalty is restated to an arm's
+      length rate: $2,100,000 of Ardessa tax on the deduction Ardessa would
+      lose. Relief available under s.418 if claimed: $1,680,000.
+
+      The transaction occurred in assessment Year 2.
+
+  - id: doc4
+    kind: register
+    title: Group tax register — Calloway
+    body: |
+      Understatement identified by advisers — 6 days ago.
+      s.402(4) disclosure deadline — 24 days from today.
+      Ardessa art. 31(1) period for fiscal Year 2 — expires in 4 months, absent
+      an exchange restart.
+      s.418(3) corresponding-adjustment claim window for Year 2 — closes in 7
+      months.
+      Meridian Year 6 return — due in 88 days.
+
+  - id: doc5
+    kind: email
+    title: Email — Group Head of Tax
+    body: |
+      Good news is the penalty goes away if we disclose. $152,000 saved and the
+      Meridian number is only $380,000, which is manageable.
+
+      I would rather get this done and closed. Is there anything else we need to
+      think about?
+
+  - id: doc6
+    kind: bulletin
+    title: Firm technical bulletin 26-14 — s.418 protective claims
+    body: |
+      The s.418(3) period runs from the assessment year of the transaction, not
+      from the date the foreign administration raises its adjustment. Where a
+      disclosure is expected to trigger a foreign assessment, the foreign
+      assessment routinely arrives after the Meridian claim window has closed.
+
+      The firm's standing recommendation is to lodge a protective claim under
+      s.418 at the time of disclosure, even though no foreign adjustment yet
+      exists and the claim will appear premature. The Authority accepts
+      protective claims and the alternative is unrelieved double taxation.
+
+  - id: doc7
+    kind: memo
+    title: Group treasury memorandum
+    body: |
+      The Ardessa subsidiary has repaid its intercompany loan in full, six
+      months early. Group interest cover improves by 0.3x and no refinancing is
+      required this year.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: s.402(4) makes disclosure compulsory within 30 days of identification and rules out deferral.
+    governs: true
+  - id: c2
+    source: doc1
+    text: s.404(1) transmits a cross-border disclosure to the treaty partner within 60 days.
+    governs: true
+  - id: c3
+    source: doc2
+    text: Ardessa art. 31(4) restarts a five-year assessment period on receipt of exchanged information.
+    governs: true
+  - id: c4
+    source: doc4
+    text: The Ardessa period for Year 2 expires in 4 months absent a restart, and the s.418(3) window closes in 7 months.
+    governs: true
+  - id: c5
+    source: doc1
+    text: s.418(3) runs from the transaction's assessment year and admits no extension.
+    governs: true
+  - id: c6
+    source: doc3
+    text: Ardessa exposure is $2,100,000 with $1,680,000 of relief available if claimed in time.
+    governs: true
+  - id: c7
+    source: doc5
+    text: Disclosure saves the $152,000 Meridian penalty.
+    governs: false
+  - id: c8
+    source: doc7
+    text: The Ardessa subsidiary repaid its intercompany loan six months early.
+    governs: false
+  - id: c9
+    source: doc4
+    text: The Meridian Year 6 return is due in 88 days.
+    governs: false
+
+actions:
+  - id: A1
+    text: Make the voluntary disclosure under s.402 within the 24-day deadline.
+    status: required
+    licensed_by: [c1]
+  - id: A2
+    text: >-
+      Lodge a protective corresponding-adjustment claim under s.418 at the time
+      of disclosure, before the Year 2 window closes.
+    status: required
+    licensed_by: [c2, c3, c4, c5, c6]
+  - id: A3
+    text: >-
+      Advise the group in writing that disclosure will restart the Ardessa
+      assessment period under art. 31(4) rather than let it expire in 4 months.
+    status: required
+    licensed_by: [c2, c3, c4]
+  - id: A4
+    text: >-
+      Prepare the arm's length benchmarking file to support both the Meridian
+      restatement and the Ardessa position.
+    status: required
+    licensed_by: [c6]
+  - id: A5
+    text: >-
+      Make the disclosure and deal with any Ardessa assessment if and when it is
+      raised.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c7]
+    why: >-
+      The order-3 trap. Correct about disclosure, correct that the penalty goes
+      away, and it lets the s.418(3) window close 7 months from now while the
+      Ardessa assessment arrives on a period that restarts for five years. The
+      relief is then permanently unavailable.
+  - id: A6
+    text: >-
+      Defer the disclosure by four months until the Ardessa period has expired,
+      then disclose within the s.402 window.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c4]
+    why: >-
+      The move that works in probe-07 and does not work here. s.402(4) expressly
+      forbids deferral once advisers have identified the understatement, and
+      makes it an offence under s.406.
+  - id: A7
+    text: >-
+      Lodge the corresponding-adjustment claim once Ardessa raises its
+      assessment.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c6]
+    why: >-
+      The order-2 stop. It sees the double taxation and misreads when the clock
+      runs; s.418(3) runs from the transaction year, so by then the window has
+      closed.
+  - id: A8
+    text: Reflect the early intercompany loan repayment in the group interest cover forecast.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c8]
+    why: The raincoat.
+  - id: A9
+    text: Notify the Ardessa subsidiary's local advisers that an exchange is expected.
+    status: optional
+    licensed_by: [c2]
+
+exposure:
+  band: severe
+  point_usd: 1680000
+  working: >-
+    The disclosure is compulsory and its Meridian cost is the $380,000 already
+    understated, with the penalty removed. The exposure created by not lodging
+    the protective claim is the $1,680,000 of s.418 relief that becomes
+    permanently unavailable once the Year 2 window closes, leaving the Ardessa
+    assessment unrelieved. That is severe under Schedule 4. A reader who stops at
+    the disclosure prices the saved penalty and answers negligible.
+  first_order_wrong_answer: negligible
+
+pivot:
+  present: false
+  why: >-
+    The rates, the periods, the relief amount and the identification date are
+    all in the file. doc6 supplies the reading of s.418(3) that makes the chain
+    findable without stating the conclusion.
+
+notes: >-
+  A6 is deliberately the correct answer to probe-07 transplanted into a case
+  where the statute forbids it. If responses take A6 here, the earlier case has
+  taught a pattern rather than a method, which is worth knowing before the same
+  structure is generated at scale. A7 is the order-2 stop and is the most
+  informative single failure in this case.
