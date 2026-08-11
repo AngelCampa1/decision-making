@@ -1,0 +1,18 @@
+{
+  "run": "control-arm difficulty calibration",
+  "corpus": "pre-collision-rebuild (off-topic distractors)",
+  "corpus_commit": "0345304",
+  "arm": "off",
+  "model_requested": "haiku",
+  "model_served": "claude-haiku-4-5-20251001",
+  "seed": 1,
+  "n_items": 280,
+  "n_templates": 10,
+  "spend_usd": 1.241,
+  "gates": {
+    "clean_room": {"value": 0.950, "floor": 0.95, "result": "PASS (pooled)"},
+    "difficulty": {"value": 0.946, "band": [0.35, 0.75], "result": "FAIL"}
+  },
+  "superseded_by": "the collision rebuild; this corpus no longer exists on main",
+  "why_kept": "It is the evidence that motivated the rebuild, and the control-arm baseline the paper's distractor section reports against. Regenerating it is not possible from main, so the records are committed rather than reproduced."
+}

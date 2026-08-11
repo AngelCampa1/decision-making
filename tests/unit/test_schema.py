@@ -239,3 +239,15 @@ def test_a_choice_in_the_same_sentence_is_not_a_competing_quantity(template_dict
     """`{thing}` sits beside the number and must not be mistaken for it."""
     template = Template.model_validate(template_dict())
     assert template.collision_pairs() == [("value", "other_value")]
+
+
+def test_a_constraint_referencing_an_undeclared_variable_is_rejected(
+    template_dict: Build,
+) -> None:
+    with pytest.raises(ValidationError, match="references undeclared"):
+        Template.model_validate(template_dict(constraints=["nonexistent > 1"]))
+
+
+def test_an_unsafe_constraint_is_rejected(template_dict: Build) -> None:
+    with pytest.raises(ValidationError):
+        Template.model_validate(template_dict(constraints=["__import__('os').system('x')"]))

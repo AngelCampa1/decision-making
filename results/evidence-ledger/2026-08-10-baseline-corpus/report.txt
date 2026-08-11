@@ -1,0 +1,40 @@
+preflight against haiku ...
+running 280 items, checkpoint D:\code\decision-making\results\calibration\off-arm.jsonl
+  280 new records this invocation
+
+==================================================================
+control-arm calibration -- 280 records
+model: ['claude-haiku-4-5-20251001']
+spend: $1.241
+==================================================================
+
+GATE 1 clean-room     0.950 (n=40)   need >= 0.95   PASS
+GATE 2 difficulty     0.946 (n=240)   need in (0.35, 0.75)   FAIL
+       parse failures 0.000
+
+by distractor count:
+   0 distractors  acc 0.950  (n=40)
+   1 distractors  acc 0.942  (n=120)
+   4 distractors  acc 0.950  (n=120)
+
+by position (loaded items only):
+   early  acc 0.938  (n=80)
+    late  acc 0.950  (n=80)
+  middle  acc 0.950  (n=80)
+
+by template:
+  rel-001-vendor-outage      clean 1.00  loaded 1.00
+  rel-002-deploy-window      clean 1.00  loaded 1.00
+  rel-003-oncall-escalate    clean 1.00  loaded 1.00
+  rel-004-inventory-reorder  clean 1.00  loaded 1.00
+  rel-005-security-patch     clean 1.00  loaded 1.00
+  rel-006-refund-request     clean 1.00  loaded 1.00
+  rel-007-capacity-scale     clean 1.00  loaded 1.00
+  rel-008-contract-renew     clean 1.00  loaded 0.96
+  rel-009-flight-rebook      clean 0.50  loaded 0.50
+  rel-010-loan-review        clean 1.00  loaded 1.00
+
+between-template spread: sd 0.157
+
+==================================================================
+at least one gate failed -- see notebook for the diagnosis

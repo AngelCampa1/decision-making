@@ -18,6 +18,7 @@ from decision_evals.generators.generate import (
     is_discriminative,
     is_robust,
     sample_variables,
+    satisfies_constraints,
     strata_combinations,
 )
 from decision_evals.generators.schema import Fact, Template
@@ -327,3 +328,23 @@ def test_the_one_distractor_stratum_always_gets_a_colliding_distractor() -> None
         for item in generate(template, seed=1):
             if item.n_distractors == 1:
                 assert item.distractor_ids[0] in colliding, item.item_id
+
+
+# -- constraints ------------------------------------------------------------
+
+
+def test_a_constraint_excludes_incoherent_samplings(template_dict: Build) -> None:
+    """rel-008 drew 155 seats in use against a 116-seat quote, and the rule was silent."""
+    bounded = Template.model_validate(template_dict(constraints=["value <= limit + 3"]))
+    for item in generate(bounded, seed=2):
+        assert item.variables["value"] <= item.variables["limit"] + 3, item.variables
+
+
+def test_satisfies_constraints_is_vacuously_true_without_any(template: Template) -> None:
+    assert satisfies_constraints(template, {"value": 99, "limit": 1})
+
+
+def test_an_unsatisfiable_constraint_fails_loudly(template_dict: Build) -> None:
+    impossible = Template.model_validate(template_dict(constraints=["value > limit + 100"]))
+    with pytest.raises(GenerationError, match="robust, discriminative answer"):
+        generate(impossible, seed=1)

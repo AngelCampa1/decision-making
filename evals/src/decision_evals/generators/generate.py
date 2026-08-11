@@ -244,7 +244,8 @@ def _sample_for_target(
         variables = sample_variables(template, rng)
         answer = _compute_answer(template, variables)
         if (
-            answer == target
+            satisfies_constraints(template, variables)
+            and answer == target
             and is_robust(template, variables)
             and is_discriminative(template, variables)
         ):
@@ -256,6 +257,24 @@ def _sample_for_target(
         f"{_ROBUSTNESS_MARGIN} on every threshold, or a colliding distractor's range "
         "does not overlap the variable it competes with."
     )
+
+
+def satisfies_constraints(template: Template, variables: dict[str, Any]) -> bool:
+    """True when every declared constraint holds for this sampling.
+
+    Guards against scenarios that are arithmetically fine and situationally
+    absurd. ``rel-008`` drew 155 seats in active use against a 116-seat renewal
+    quote: the utilisation rule computed ``renew``, and the model declined on
+    the grounds that the quote does not cover the team. It was right. The
+    utilisation policy addresses under-use and is silent about a shortfall, so
+    the model was reasoning past a gap in the scenario rather than failing to
+    read it.
+
+    That class of defect cannot be reworded away and the ±1 robustness margin
+    cannot see it — the sampling was nowhere near a threshold. It has to be
+    excluded at the point where the scenario is built.
+    """
+    return all(bool(evaluate(expression, variables)) for expression in template.constraints)
 
 
 def is_discriminative(template: Template, variables: dict[str, Any]) -> bool:

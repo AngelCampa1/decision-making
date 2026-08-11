@@ -146,6 +146,14 @@ class Template(_Strict):
     variables: dict[str, Variable]
     relevant_facts: list[Fact] = Field(min_length=1)
     distractor_facts: list[Distractor]
+    #: Expressions every sampling must satisfy, for scenarios that are coherent
+    #: on paper but nonsense in the world. ``rel-008`` sampled 155 seats in use
+    #: against a 116-seat renewal quote; the utilisation rule said renew, and the
+    #: model refused on the grounds that the quote does not cover the team. It
+    #: was right — the policy addresses under-use and says nothing about a
+    #: shortfall — and no amount of rewording the rule fixes a scenario that
+    #: should never have been generated.
+    constraints: list[str] = Field(default_factory=list)
     solution: Solution
     strata: Strata
     variants: int = Field(default=6, ge=1, le=64)
@@ -156,6 +164,7 @@ class Template(_Strict):
         self._check_load_bearing()
         self._check_placeholders()
         self._check_solution_names()
+        self._check_constraints()
         self._check_distractor_supply()
         self._check_collisions()
         return self
@@ -208,6 +217,13 @@ class Template(_Strict):
                 f"strata ask for {wanted} distractors but only "
                 f"{len(self.distractor_facts)} are defined"
             )
+
+    def _check_constraints(self) -> None:
+        for expression in self.constraints:
+            validate(expression)
+            unknown = sorted(referenced_names(expression) - set(self.variables))
+            if unknown:
+                raise ValueError(f"constraint {expression!r} references undeclared {unknown}")
 
     def _check_collisions(self) -> None:
         """Require at least one distractor that can actually compete.

@@ -154,13 +154,28 @@ def report() -> int:
     loaded_acc = _accuracy(loaded)
     parse_rate = sum(1 for r in records if r.parse_status != "parsed") / len(records)
 
-    gate1 = clean_acc >= CLEAN_ROOM_FLOOR
+    # Per-template, not pooled. The first full run passed this gate at exactly
+    # 0.950 while one of ten templates sat at 0.50 in *both* strata -- a broken
+    # template hiding behind nine good ones, one item away from going unnoticed.
+    # A clean-room failure is a property of an item, so pooling is the wrong
+    # operation on it.
+    per_template_clean = _group(clean, lambda r: r.template_id)
+    failing = sorted(
+        template_id
+        for template_id, group in per_template_clean.items()
+        if _accuracy(group) < CLEAN_ROOM_FLOOR
+    )
+    gate1 = not failing
     gate2 = DIFFICULTY_BAND[0] <= loaded_acc <= DIFFICULTY_BAND[1]
 
     print(
-        f"\nGATE 1 clean-room     {clean_acc:.3f} (n={len(clean)})   "
-        f"need >= {CLEAN_ROOM_FLOOR}   {'PASS' if gate1 else 'FAIL'}"
+        f"\nGATE 1 clean-room     {clean_acc:.3f} pooled (n={len(clean)})   "
+        f"every template needs >= {CLEAN_ROOM_FLOOR}   {'PASS' if gate1 else 'FAIL'}"
     )
+    for template_id in failing:
+        print(
+            f"       below floor: {template_id} at {_accuracy(per_template_clean[template_id]):.2f}"
+        )
     print(
         f"GATE 2 difficulty     {loaded_acc:.3f} (n={len(loaded)})   "
         f"need in {DIFFICULTY_BAND}   {'PASS' if gate2 else 'FAIL'}"

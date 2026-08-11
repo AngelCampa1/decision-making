@@ -929,19 +929,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The renewal quote covers 217 seats at the current rate."
+        "text": "The renewal quote covers 279 seats at the current rate."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Usage reporting shows 266 seats active in the last 90 days."
+        "text": "Usage reporting shows 270 seats active in the last 90 days."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Policy is to renegotiate whenever utilisation falls below 74% of paid seats."
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
       }
     ],
     "item_id": "rel-008-contract-renew#v2-d0-none",
@@ -956,50 +956,50 @@
       "renegotiate"
     ],
     "position": "none",
-    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "question": "Should the team renew the Beacon contract as offered, or renegotiate?",
     "seed": 1,
     "template_id": "rel-008-contract-renew",
     "variables": {
-      "buyer": "Finance",
-      "prior_seats": 450,
-      "provisioned_seats": 147,
-      "seats_paid": 217,
-      "seats_used": 266,
-      "tool": "Compass",
-      "utilisation_floor": 74,
-      "years": 7
+      "buyer": "Engineering",
+      "prior_seats": 418,
+      "provisioned_seats": 136,
+      "seats_paid": 279,
+      "seats_used": 270,
+      "tool": "Beacon",
+      "utilisation_floor": 95,
+      "years": 5
     },
     "variant": 2
   },
   {
     "answer": "renew",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The expiring term covered 450 seats."
+        "text": "136 Beacon accounts exist in total, including deactivated ones that do not count as active."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The renewal quote covers 217 seats at the current rate."
+        "text": "The renewal quote covers 279 seats at the current rate."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Usage reporting shows 266 seats active in the last 90 days."
+        "text": "Usage reporting shows 270 seats active in the last 90 days."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Policy is to renegotiate whenever utilisation falls below 74% of paid seats."
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
       }
     ],
     "item_id": "rel-008-contract-renew#v2-d1-early",
@@ -1014,50 +1014,50 @@
       "renegotiate"
     ],
     "position": "early",
-    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "question": "Should the team renew the Beacon contract as offered, or renegotiate?",
     "seed": 1,
     "template_id": "rel-008-contract-renew",
     "variables": {
-      "buyer": "Finance",
-      "prior_seats": 450,
-      "provisioned_seats": 147,
-      "seats_paid": 217,
-      "seats_used": 266,
-      "tool": "Compass",
-      "utilisation_floor": 74,
-      "years": 7
+      "buyer": "Engineering",
+      "prior_seats": 418,
+      "provisioned_seats": 136,
+      "seats_paid": 279,
+      "seats_used": 270,
+      "tool": "Beacon",
+      "utilisation_floor": 95,
+      "years": 5
     },
     "variant": 2
   },
   {
     "answer": "renew",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The renewal quote covers 217 seats at the current rate."
+        "text": "The renewal quote covers 279 seats at the current rate."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The expiring term covered 450 seats."
+        "text": "136 Beacon accounts exist in total, including deactivated ones that do not count as active."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Usage reporting shows 266 seats active in the last 90 days."
+        "text": "Usage reporting shows 270 seats active in the last 90 days."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Policy is to renegotiate whenever utilisation falls below 74% of paid seats."
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
       }
     ],
     "item_id": "rel-008-contract-renew#v2-d1-middle",
@@ -1072,50 +1072,50 @@
       "renegotiate"
     ],
     "position": "middle",
-    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "question": "Should the team renew the Beacon contract as offered, or renegotiate?",
     "seed": 1,
     "template_id": "rel-008-contract-renew",
     "variables": {
-      "buyer": "Finance",
-      "prior_seats": 450,
-      "provisioned_seats": 147,
-      "seats_paid": 217,
-      "seats_used": 266,
-      "tool": "Compass",
-      "utilisation_floor": 74,
-      "years": 7
+      "buyer": "Engineering",
+      "prior_seats": 418,
+      "provisioned_seats": 136,
+      "seats_paid": 279,
+      "seats_used": 270,
+      "tool": "Beacon",
+      "utilisation_floor": 95,
+      "years": 5
     },
     "variant": 2
   },
   {
     "answer": "renew",
     "distractor_ids": [
-      "d1"
+      "d2"
     ],
     "facts": [
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The renewal quote covers 217 seats at the current rate."
+        "text": "The renewal quote covers 279 seats at the current rate."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Usage reporting shows 266 seats active in the last 90 days."
+        "text": "Usage reporting shows 270 seats active in the last 90 days."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Policy is to renegotiate whenever utilisation falls below 74% of paid seats."
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
       },
       {
-        "id": "d1",
+        "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "The expiring term covered 450 seats."
+        "text": "136 Beacon accounts exist in total, including deactivated ones that do not count as active."
       }
     ],
     "item_id": "rel-008-contract-renew#v2-d1-late",
@@ -1130,41 +1130,41 @@
       "renegotiate"
     ],
     "position": "late",
-    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "question": "Should the team renew the Beacon contract as offered, or renegotiate?",
     "seed": 1,
     "template_id": "rel-008-contract-renew",
     "variables": {
-      "buyer": "Finance",
-      "prior_seats": 450,
-      "provisioned_seats": 147,
-      "seats_paid": 217,
-      "seats_used": 266,
-      "tool": "Compass",
-      "utilisation_floor": 74,
-      "years": 7
+      "buyer": "Engineering",
+      "prior_seats": 418,
+      "provisioned_seats": 136,
+      "seats_paid": 279,
+      "seats_used": 270,
+      "tool": "Beacon",
+      "utilisation_floor": 95,
+      "years": 5
     },
     "variant": 2
   },
   {
     "answer": "renew",
     "distractor_ids": [
-      "d1",
       "d2",
+      "d1",
       "d5",
       "d3"
     ],
     "facts": [
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The expiring term covered 450 seats."
-      },
-      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "147 Compass accounts exist in total, including deactivated ones that do not count as active."
+        "text": "136 Beacon accounts exist in total, including deactivated ones that do not count as active."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The expiring term covered 418 seats."
       },
       {
         "id": "d5",
@@ -1176,25 +1176,25 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "Finance moved to a new contract management system last year."
+        "text": "Engineering moved to a new contract management system last year."
       },
       {
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The renewal quote covers 217 seats at the current rate."
+        "text": "The renewal quote covers 279 seats at the current rate."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Usage reporting shows 266 seats active in the last 90 days."
+        "text": "Usage reporting shows 270 seats active in the last 90 days."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Policy is to renegotiate whenever utilisation falls below 74% of paid seats."
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
       }
     ],
     "item_id": "rel-008-contract-renew#v2-d4-early",
@@ -1209,26 +1209,26 @@
       "renegotiate"
     ],
     "position": "early",
-    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "question": "Should the team renew the Beacon contract as offered, or renegotiate?",
     "seed": 1,
     "template_id": "rel-008-contract-renew",
     "variables": {
-      "buyer": "Finance",
-      "prior_seats": 450,
-      "provisioned_seats": 147,
-      "seats_paid": 217,
-      "seats_used": 266,
-      "tool": "Compass",
-      "utilisation_floor": 74,
-      "years": 7
+      "buyer": "Engineering",
+      "prior_seats": 418,
+      "provisioned_seats": 136,
+      "seats_paid": 279,
+      "seats_used": 270,
+      "tool": "Beacon",
+      "utilisation_floor": 95,
+      "years": 5
     },
     "variant": 2
   },
   {
     "answer": "renew",
     "distractor_ids": [
-      "d1",
       "d2",
+      "d1",
       "d5",
       "d3"
     ],
@@ -1237,19 +1237,19 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The renewal quote covers 217 seats at the current rate."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The expiring term covered 450 seats."
+        "text": "The renewal quote covers 279 seats at the current rate."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "147 Compass accounts exist in total, including deactivated ones that do not count as active."
+        "text": "136 Beacon accounts exist in total, including deactivated ones that do not count as active."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The expiring term covered 418 seats."
       },
       {
         "id": "d5",
@@ -1261,19 +1261,19 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "Finance moved to a new contract management system last year."
+        "text": "Engineering moved to a new contract management system last year."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Usage reporting shows 266 seats active in the last 90 days."
+        "text": "Usage reporting shows 270 seats active in the last 90 days."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Policy is to renegotiate whenever utilisation falls below 74% of paid seats."
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
       }
     ],
     "item_id": "rel-008-contract-renew#v2-d4-middle",
@@ -1288,26 +1288,26 @@
       "renegotiate"
     ],
     "position": "middle",
-    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "question": "Should the team renew the Beacon contract as offered, or renegotiate?",
     "seed": 1,
     "template_id": "rel-008-contract-renew",
     "variables": {
-      "buyer": "Finance",
-      "prior_seats": 450,
-      "provisioned_seats": 147,
-      "seats_paid": 217,
-      "seats_used": 266,
-      "tool": "Compass",
-      "utilisation_floor": 74,
-      "years": 7
+      "buyer": "Engineering",
+      "prior_seats": 418,
+      "provisioned_seats": 136,
+      "seats_paid": 279,
+      "seats_used": 270,
+      "tool": "Beacon",
+      "utilisation_floor": 95,
+      "years": 5
     },
     "variant": 2
   },
   {
     "answer": "renew",
     "distractor_ids": [
-      "d1",
       "d2",
+      "d1",
       "d5",
       "d3"
     ],
@@ -1316,31 +1316,31 @@
         "id": "r1",
         "role": "relevant",
         "strength": null,
-        "text": "The renewal quote covers 217 seats at the current rate."
+        "text": "The renewal quote covers 279 seats at the current rate."
       },
       {
         "id": "r2",
         "role": "relevant",
         "strength": null,
-        "text": "Usage reporting shows 266 seats active in the last 90 days."
+        "text": "Usage reporting shows 270 seats active in the last 90 days."
       },
       {
         "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "Policy is to renegotiate whenever utilisation falls below 74% of paid seats."
-      },
-      {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The expiring term covered 450 seats."
+        "text": "Policy is to renegotiate whenever utilisation falls below 95% of paid seats."
       },
       {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
-        "text": "147 Compass accounts exist in total, including deactivated ones that do not count as active."
+        "text": "136 Beacon accounts exist in total, including deactivated ones that do not count as active."
+      },
+      {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The expiring term covered 418 seats."
       },
       {
         "id": "d5",
@@ -1352,7 +1352,7 @@
         "id": "d3",
         "role": "distractor",
         "strength": "medium",
-        "text": "Finance moved to a new contract management system last year."
+        "text": "Engineering moved to a new contract management system last year."
       }
     ],
     "item_id": "rel-008-contract-renew#v2-d4-late",
@@ -1367,18 +1367,18 @@
       "renegotiate"
     ],
     "position": "late",
-    "question": "Should the team renew the Compass contract as offered, or renegotiate?",
+    "question": "Should the team renew the Beacon contract as offered, or renegotiate?",
     "seed": 1,
     "template_id": "rel-008-contract-renew",
     "variables": {
-      "buyer": "Finance",
-      "prior_seats": 450,
-      "provisioned_seats": 147,
-      "seats_paid": 217,
-      "seats_used": 266,
-      "tool": "Compass",
-      "utilisation_floor": 74,
-      "years": 7
+      "buyer": "Engineering",
+      "prior_seats": 418,
+      "provisioned_seats": 136,
+      "seats_paid": 279,
+      "seats_used": 270,
+      "tool": "Beacon",
+      "utilisation_floor": 95,
+      "years": 5
     },
     "variant": 2
   },

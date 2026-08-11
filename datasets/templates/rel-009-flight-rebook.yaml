@@ -16,7 +16,16 @@ relevant_facts:
     text: "The inbound aircraft is running {delay_min} minutes late."
   - id: r2
     text: "The traveller has {connection_min} minutes of slack before the onward connection."
+  # r3 is the policy fact, and its absence was the defect. Every other template
+  # states the rule that decides the question; this one stated only the two
+  # quantities and left "is 20 minutes enough to make a connection?" to the
+  # reader's judgement about real airports. The model reasoned about deplaning,
+  # walking to the gate and luggage transfers, concluded that a free rebooking
+  # beat a tight connection, and was right to. Ground truth said otherwise
+  # because the arithmetic said otherwise, which is not the same thing.
   - id: r3
+    text: "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+  - id: r4
     text: "The later flight has seats available and no rebooking fee."
 
 distractor_facts:

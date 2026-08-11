@@ -19,6 +19,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -75,6 +81,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -116,19 +128,25 @@
         "text": "The inbound aircraft is running 177 minutes late."
       },
       {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
         "text": "The traveller has 165 minutes of slack before the onward connection."
       },
       {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 180 minutes, which this itinerary already satisfies."
+      },
+      {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -179,6 +197,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -264,6 +288,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -308,6 +338,12 @@
         "text": "The inbound aircraft is running 177 minutes late."
       },
       {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 165 minutes of slack before the onward connection."
+      },
+      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
@@ -332,13 +368,13 @@
         "text": "The gate area has been fitted with new seating."
       },
       {
-        "id": "r2",
+        "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 165 minutes of slack before the onward connection."
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
       },
       {
-        "id": "r3",
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -392,6 +428,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -466,6 +508,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -522,6 +570,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -563,19 +617,25 @@
         "text": "The inbound aircraft is running 59 minutes late."
       },
       {
-        "id": "d2",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
         "text": "The traveller has 127 minutes of slack before the onward connection."
       },
       {
+        "id": "d2",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The minimum legal connection time at the transfer airport is 36 minutes, which this itinerary already satisfies."
+      },
+      {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -626,6 +686,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -711,6 +777,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -755,6 +827,12 @@
         "text": "The inbound aircraft is running 59 minutes late."
       },
       {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 127 minutes of slack before the onward connection."
+      },
+      {
         "id": "d2",
         "role": "distractor",
         "strength": "high",
@@ -779,13 +857,13 @@
         "text": "The traveller has 3 checked bags, all already tagged through to the final stop."
       },
       {
-        "id": "r2",
+        "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 127 minutes of slack before the onward connection."
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
       },
       {
-        "id": "r3",
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -839,6 +917,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -913,6 +997,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -969,6 +1059,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -1010,19 +1106,25 @@
         "text": "The inbound aircraft is running 179 minutes late."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
         "text": "The traveller has 63 minutes of slack before the onward connection."
       },
       {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The departure board shows an unrelated Meridian service running 43 minutes late."
+      },
+      {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -1073,6 +1175,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -1158,6 +1266,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -1202,6 +1316,12 @@
         "text": "The inbound aircraft is running 179 minutes late."
       },
       {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 63 minutes of slack before the onward connection."
+      },
+      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
@@ -1226,13 +1346,13 @@
         "text": "Meridian operates its largest lounge in Porto."
       },
       {
-        "id": "r2",
+        "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 63 minutes of slack before the onward connection."
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
       },
       {
-        "id": "r3",
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -1286,6 +1406,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -1360,6 +1486,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -1416,6 +1548,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -1457,19 +1595,25 @@
         "text": "The inbound aircraft is running 162 minutes late."
       },
       {
-        "id": "d1",
-        "role": "distractor",
-        "strength": "high",
-        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
-      },
-      {
         "id": "r2",
         "role": "relevant",
         "strength": null,
         "text": "The traveller has 179 minutes of slack before the onward connection."
       },
       {
+        "id": "d1",
+        "role": "distractor",
+        "strength": "high",
+        "text": "The departure board shows an unrelated Solstice service running 194 minutes late."
+      },
+      {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -1520,6 +1664,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -1605,6 +1755,12 @@
         "id": "r3",
         "role": "relevant",
         "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
+        "role": "relevant",
+        "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
       }
     ],
@@ -1649,6 +1805,12 @@
         "text": "The inbound aircraft is running 162 minutes late."
       },
       {
+        "id": "r2",
+        "role": "relevant",
+        "strength": null,
+        "text": "The traveller has 179 minutes of slack before the onward connection."
+      },
+      {
         "id": "d1",
         "role": "distractor",
         "strength": "high",
@@ -1673,13 +1835,13 @@
         "text": "Solstice operates its largest lounge in Sapporo."
       },
       {
-        "id": "r2",
+        "id": "r3",
         "role": "relevant",
         "strength": null,
-        "text": "The traveller has 179 minutes of slack before the onward connection."
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
       },
       {
-        "id": "r3",
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."
@@ -1733,6 +1895,12 @@
       },
       {
         "id": "r3",
+        "role": "relevant",
+        "strength": null,
+        "text": "The transfer airport protects any connection that still has slack remaining once the delay is applied; rebooking voluntarily forfeits that protection."
+      },
+      {
+        "id": "r4",
         "role": "relevant",
         "strength": null,
         "text": "The later flight has seats available and no rebooking fee."

@@ -41,6 +41,13 @@ distractor_facts:
     strength: low
     text: "The renewal calendar invite has no agenda attached."
 
+# The utilisation policy addresses under-use and says nothing about a shortfall.
+# A sampling with more seats in use than the quote covers is a scenario the rule
+# does not govern, and the model was right to decline it rather than apply the
+# rule anyway. Excluded here rather than papered over with more policy text.
+constraints:
+  - "seats_used <= seats_paid"
+
 solution:
   expr: "'renew' if seats_used * 100 >= seats_paid * utilisation_floor else 'renegotiate'"
   load_bearing: [r1, r2, r3]
