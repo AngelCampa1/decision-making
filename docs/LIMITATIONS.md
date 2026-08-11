@@ -11,11 +11,17 @@ variance rather than to claim determinism. This is less of a loss than it sounds
 temperature 0 is not deterministic on hosted inference anyway, and a stated
 variance is more honest than an assumed constant.
 
-**Rate limits, not dollars, are the budget.** Subscription auth means the binding
-constraint is a rolling quota rather than a spend cap. Runs are therefore
-checkpointed and resumable across days, and a confirmation run may span multiple
-sessions. Wall-clock timing is not comparable across runs and is not reported as
-a metric.
+**Rate limits, not dollars, are the budget.** Every call runs on a Claude Max
+subscription; there is no API key. The binding constraint is a rolling quota
+rather than a spend cap, so runs are checkpointed and resumable across days and a
+confirmation run may span multiple sessions. Wall-clock timing is not comparable
+across runs and is not reported as a metric.
+
+**Every dollar figure in this repository is notional.** `total_cost_usd` is what
+the same tokens would have cost on the API, not money charged. It is reported as
+a unit of account and as a proxy for quota burn, and it is never described as
+spend. A reader comparing our per-item cost against an API-billed study is
+comparing a price to a price, not a price to an invoice.
 
 **`--system-prompt` measures a clean injection, not daily use.** Replacing the
 system prompt removes the confounds — tools, other skills, settings, MCP — but

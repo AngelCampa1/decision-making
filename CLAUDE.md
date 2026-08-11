@@ -72,6 +72,38 @@ statements apart. A skill may not enter the shipped plugin while carrying
 
 ---
 
+## How this runs: a Claude Max subscription, not an API key
+
+Every model call in this repository goes through the Claude Code CLI on the
+maintainer's **Claude Max subscription**. There is no API key here and none
+should be added.
+
+**So the dollar figures are not money.** `total_cost_usd` in the CLI's JSON
+output is a *notional API-equivalent price*. Nothing is billed per call. When a
+run record says $0.23, that is what the same tokens would have cost on the API —
+it is a unit of account, never an expense.
+
+Two things follow, and both have been got wrong here before:
+
+- **Do not design around dollars.** Do not drop a model tier, trim a stratum, or
+  cut repeats to save money. There is no money to save. If an experiment needs
+  Opus at 100k tokens to answer the question, that is not a cost decision.
+- **There is still a budget — it just is not denominated in dollars.** The
+  binding constraints are the subscription's rolling usage quota and wall-clock
+  time. A 101k-token call takes about 8 seconds, so a confirmatory grid of ~800
+  long calls is hours of serial running spread across days and windows. That is
+  why the runner is checkpointed and resumable, and why `--model` tiers exist:
+  to stay inside a quota, not inside a price.
+
+`BudgetLedger` stays, reinterpreted. Reported cost scales with tokens, so it is
+the best available **burn meter** for quota consumption. It is not a spend cap
+and must not be described as one.
+
+In the paper and in `results/`, this is reported as *notional cost*, with the
+subscription stated. Writing "we spent $250" would be false.
+
+---
+
 ## Working in this repository
 
 If you are an agent contributing here rather than a user installing the skills:
