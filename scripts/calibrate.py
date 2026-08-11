@@ -20,15 +20,18 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import statistics
 import sys
 import tempfile
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
 
 from decision_evals.arenas import assert_model_allowed
 from decision_evals.budget import BudgetLedger
 from decision_evals.generators import generate, load_all
+from decision_evals.generators.generate import Item
 from decision_evals.runner import RunError, default_call, load_records, preflight, run_arm
 from decision_evals.solvers.arms import build_arm
 
@@ -56,6 +59,12 @@ def main() -> int:
     if args.limit:
         items = items[: args.limit]
 
+    try:
+        assert_checkpoint_matches(CHECKPOINT, items)
+    except CorpusMismatchError as exc:
+        print(f"\n{exc}", file=sys.stderr)
+        return 2
+
     # Scratch cwd outside the source tree: this is the first isolation guard,
     # and the reason a planted CLAUDE.md cannot reach the run.
     with tempfile.TemporaryDirectory(prefix="de-calibrate-") as scratch:
@@ -80,6 +89,51 @@ def main() -> int:
         print(f"  {len(produced)} new records this invocation", flush=True)
 
     return report()
+
+
+class CorpusMismatchError(RuntimeError):
+    """The checkpoint on disk describes a different corpus."""
+
+
+def corpus_fingerprint(items: Sequence[Item]) -> str:
+    """A hash of everything that was actually put in front of the model.
+
+    Item ids are coordinates — template, variant, stratum — and stay identical
+    when the *content* at those coordinates changes. So a rebuilt corpus resumes
+    cleanly off an old checkpoint and reports a number computed half on one set
+    of items and half on another, with nothing anywhere raising an eyebrow. That
+    is the single most damaging bug this harness could have, and it was one
+    template rewrite away from happening.
+    """
+    digest = hashlib.sha256()
+    for item in items:
+        digest.update(item.item_id.encode())
+        digest.update(item.question.encode())
+        digest.update(item.answer.encode())
+        for fact in item.facts:
+            digest.update(f"{fact.id}:{fact.text}".encode())
+    return digest.hexdigest()
+
+
+def assert_checkpoint_matches(checkpoint: Path, items: Sequence[Item]) -> None:
+    """Refuse to resume a checkpoint that was produced from other items."""
+    sidecar = checkpoint.with_suffix(".corpus")
+    fingerprint = corpus_fingerprint(items)
+
+    if not checkpoint.exists():
+        sidecar.parent.mkdir(parents=True, exist_ok=True)
+        sidecar.write_text(fingerprint, encoding="utf-8")
+        return
+
+    recorded = sidecar.read_text(encoding="utf-8").strip() if sidecar.exists() else "(none)"
+    if recorded != fingerprint:
+        raise CorpusMismatchError(
+            f"{checkpoint} was produced from a different corpus.\n"
+            f"  recorded: {recorded[:16]}\n"
+            f"  current:  {fingerprint[:16]}\n"
+            "Resuming would mix records from two sets of items into one number. "
+            "Move the checkpoint aside and start a fresh run."
+        )
 
 
 def report() -> int:
