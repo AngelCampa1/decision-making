@@ -195,7 +195,7 @@ def lint_skills_step() -> StepResult:
         typer.echo("skills/ is empty; nothing to validate")
         return StepResult(name, True, "no skills")
 
-    from decision_evals.skills import validate_all
+    from decision_evals.skills import check_mirrors, validate_all
 
     # Source skills may carry UNTESTED -- that is the normal state during
     # development. The plugin directory is what ships, so the evidence rule
@@ -204,6 +204,7 @@ def lint_skills_step() -> StepResult:
     plugin_skills = REPO_ROOT / "plugin" / "skills"
     if plugin_skills.is_dir():
         issues += validate_all(plugin_skills, shipped=True)
+    issues += check_mirrors(REPO_ROOT)
 
     for issue in issues:
         typer.echo(f"  {issue}")
@@ -212,6 +213,21 @@ def lint_skills_step() -> StepResult:
 
     typer.echo(f"{len(skill_files)} skill(s) valid")
     return StepResult(name, True)
+
+
+@app.command()
+def mirror() -> None:
+    """Regenerate the cross-tool mirrors (`.agents/skills/`, `CLAUDE.md`).
+
+    Symlinks would express this better and do not survive a Windows checkout,
+    so the copies are generated and `de check` gates their agreement.
+    """
+    from decision_evals.skills import sync_mirrors
+
+    changed = sync_mirrors(REPO_ROOT)
+    for path in changed:
+        typer.echo(f"wrote {path.relative_to(REPO_ROOT)}")
+    typer.echo(f"{len(changed)} mirror(s) updated")
 
 
 @app.command()

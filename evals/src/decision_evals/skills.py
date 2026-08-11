@@ -245,3 +245,63 @@ def validate_all(skills_root: Path, *, shipped: bool = False) -> list[SkillIssue
     for path in sorted(skills_root.glob("*/SKILL.md")):
         issues += validate_skill(path, shipped=shipped)
     return issues
+
+
+# ---------------------------------------------------------------------------
+# Mirrors
+#
+# The same content has to exist at more than one path: `.agents/skills/` is the
+# convergent discovery path across Codex, Cursor, Copilot, Gemini CLI, Cline,
+# Amp and OpenCode, and CLAUDE.md is what Claude Code reads where everything
+# else reads AGENTS.md. Symlinks would express this exactly and do not survive
+# a Windows checkout, so the copies are generated and their agreement is a
+# gate rather than a habit.
+# ---------------------------------------------------------------------------
+
+
+def mirror_plan(repo_root: Path) -> list[tuple[Path, Path]]:
+    """Every (source, mirror) pair that must hold identical bytes."""
+    pairs: list[tuple[Path, Path]] = []
+
+    agents = repo_root / "AGENTS.md"
+    if agents.exists():
+        pairs.append((agents, repo_root / "CLAUDE.md"))
+
+    skills_root = repo_root / "skills"
+    if skills_root.is_dir():
+        for source in sorted(skills_root.rglob("*")):
+            if source.is_file():
+                relative = source.relative_to(skills_root)
+                pairs.append((source, repo_root / ".agents" / "skills" / relative))
+    return pairs
+
+
+def sync_mirrors(repo_root: Path) -> list[Path]:
+    """Write every mirror from its source. Returns the paths that changed."""
+    changed: list[Path] = []
+    for source, mirror in mirror_plan(repo_root):
+        content = source.read_bytes()
+        if mirror.exists() and mirror.read_bytes() == content:
+            continue
+        mirror.parent.mkdir(parents=True, exist_ok=True)
+        mirror.write_bytes(content)
+        changed.append(mirror)
+    return changed
+
+
+def check_mirrors(repo_root: Path) -> list[SkillIssue]:
+    """Report mirrors that are missing or stale.
+
+    Stale rather than merely absent matters more: an out-of-date
+    ``.agents/skills/`` copy is worse than none, because it silently serves an
+    old skill to every tool that is not Claude Code, and the difference would
+    show up as unexplained variance between platforms rather than as an error.
+    """
+    issues: list[SkillIssue] = []
+    for source, mirror in mirror_plan(repo_root):
+        label = str(mirror.relative_to(repo_root)).replace("\\", "/")
+        if not mirror.exists():
+            issues.append(SkillIssue("mirror", f"{label} is missing; run `de mirror`"))
+        elif mirror.read_bytes() != source.read_bytes():
+            issues.append(SkillIssue("mirror", f"{label} is stale; run `de mirror`"))
+    return issues

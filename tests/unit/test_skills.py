@@ -12,7 +12,10 @@ from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.skills import (
     STANDARD_FIELDS,
     VERDICTS,
+    check_mirrors,
+    mirror_plan,
     parse_skill,
+    sync_mirrors,
     validate_all,
     validate_skill,
 )
@@ -237,3 +240,70 @@ def test_validate_all_covers_every_skill(tmp_path: Path) -> None:
 
 def test_validate_all_on_an_empty_root(tmp_path: Path) -> None:
     assert validate_all(tmp_path) == []
+
+
+# -- mirrors ----------------------------------------------------------------
+
+
+def _repo(tmp_path: Path) -> Path:
+    (tmp_path / "AGENTS.md").write_text("# Agents\nwiring block\n", encoding="utf-8")
+    _write(tmp_path / "skills", name="demo-skill")
+    return tmp_path
+
+
+def test_the_real_repository_mirrors_are_current() -> None:
+    """A stale `.agents/skills/` silently serves an old skill to every non-Claude tool."""
+    assert check_mirrors(REPO_ROOT) == []
+
+
+def test_mirror_plan_pairs_agents_with_claude(tmp_path: Path) -> None:
+    pairs = mirror_plan(_repo(tmp_path))
+    assert (tmp_path / "AGENTS.md", tmp_path / "CLAUDE.md") in pairs
+
+
+def test_mirror_plan_skips_an_absent_agents_file(tmp_path: Path) -> None:
+    _write(tmp_path / "skills", name="demo-skill")
+    assert all(source.name != "AGENTS.md" for source, _ in mirror_plan(tmp_path))
+
+
+def test_mirror_plan_covers_every_skill_file(tmp_path: Path) -> None:
+    """Not just SKILL.md: the placebo has to reach the mirror too."""
+    mirrors = {mirror.name for _, mirror in mirror_plan(_repo(tmp_path))}
+    assert {"SKILL.md", "placebo.md", "CLAUDE.md"} <= mirrors
+
+
+def test_mirror_plan_on_a_bare_directory(tmp_path: Path) -> None:
+    assert mirror_plan(tmp_path) == []
+
+
+def test_sync_writes_then_becomes_a_no_op(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    first = sync_mirrors(repo)
+    assert first
+    assert sync_mirrors(repo) == []
+    assert (repo / "CLAUDE.md").read_text(encoding="utf-8") == (repo / "AGENTS.md").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_a_missing_mirror_is_reported(tmp_path: Path) -> None:
+    issues = check_mirrors(_repo(tmp_path))
+    assert issues
+    assert all("is missing" in str(i) for i in issues)
+
+
+def test_a_stale_mirror_is_reported(tmp_path: Path) -> None:
+    """Worse than a missing one: it serves old content without erroring."""
+    repo = _repo(tmp_path)
+    sync_mirrors(repo)
+    (repo / "AGENTS.md").write_text("# Agents\nrevised wiring\n", encoding="utf-8")
+    issues = check_mirrors(repo)
+    assert any("CLAUDE.md is stale" in str(i) for i in issues)
+
+
+def test_sync_repairs_a_stale_mirror(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    sync_mirrors(repo)
+    (repo / "CLAUDE.md").write_text("tampered", encoding="utf-8")
+    assert sync_mirrors(repo) == [repo / "CLAUDE.md"]
+    assert check_mirrors(repo) == []
