@@ -1,0 +1,220 @@
+# Trigger set for `evidence-ledger`.
+#
+# Measured separately from task accuracy, and reported separately. A suite that
+# improves accuracy by 10pp while firing on 60% of ordinary turns is a net loss
+# in daily use, and an accuracy-only evaluation would not notice.
+#
+# The negatives are the point. Each one deliberately carries a surface feature
+# that looks like a trigger -- the words "should I", a long pasted blob, several
+# facts, a request for a recommendation -- while being a turn where firing would
+# waste tokens and add a detour. Negatives that look nothing like triggers would
+# make precision look good for free.
+
+skill: evidence-ledger
+
+positive:
+  - id: p01
+    turn: "Here's the full incident channel from last night (40 messages). Given all this, do we roll back or patch forward?"
+    why: long accumulated context, a real decision, most of it irrelevant
+  - id: p02
+    turn: "I've pasted our vendor contract, last quarter's uptime report, and the support thread. Should we invoke the SLA credit?"
+    why: several documents, one decision, load-bearing facts scattered
+  - id: p03
+    turn: "Search returned 12 results about the migration. Which approach should we take?"
+    why: retrieved pile, decision, unranked results
+  - id: p04
+    turn: "Based on everything in this thread, is the release ready?"
+    why: the phrase "everything in this thread" is the accumulation signal
+  - id: p05
+    turn: "Attaching three postmortems and the current alert config. Do we need to change the escalation policy?"
+    why: multiple sources, one decision
+  - id: p06
+    turn: "Here are the logs, the config, the changelog, and the customer's email. What's the right call on the refund?"
+    why: four sources, a decision, most of it inert
+  - id: p07
+    turn: "I dumped the whole Slack backlog below. What should we prioritise this sprint?"
+    why: backlog dump plus a decision
+  - id: p08
+    turn: "Given the benchmark table, the pricing page, and what our CTO said in standup, which vendor do we pick?"
+    why: heterogeneous sources including a quoted opinion
+  - id: p09
+    turn: "Read through the PR description, the linked issue, and the review comments, then tell me whether to merge."
+    why: three linked contexts, one binary decision
+  - id: p10
+    turn: "There's a lot going on here — capacity numbers, the campaign forecast, the budget thread, and the vendor's email. Do we scale up?"
+    why: explicitly flags volume, then asks for a decision
+
+negative:
+  # --- carries "should I" but has no context pile ---
+  - id: n01
+    turn: "Should I use tabs or spaces?"
+    why: a preference question with no context to rank
+  - id: n02
+    turn: "Should I name this variable `count` or `total`?"
+    why: trivial, two facts at most
+  - id: n03
+    turn: "Should I learn Rust?"
+    why: open-ended, no supplied context
+  - id: n04
+    turn: "Should we get lunch before or after the standup?"
+    why: decision-shaped, nothing to ration
+
+  # --- long pasted blob, but not a decision ---
+  - id: n05
+    turn: "Here's a 600-line stack trace. What's causing this?"
+    why: debugging, not deciding; the answer is a diagnosis
+  - id: n06
+    turn: "I've pasted the whole file. Can you add type hints?"
+    why: a transformation task over long input
+  - id: n07
+    turn: "Here's our API docs. Write a client for it."
+    why: long context, but generation rather than a decision
+  - id: n08
+    turn: "Pasting the CSV below — can you total column D?"
+    why: computation over long input
+  - id: n09
+    turn: "Here's the transcript of the meeting. Summarise it."
+    why: summarisation, where discarding is the failure mode not the goal
+  - id: n10
+    turn: "Full config attached. Reformat it as TOML."
+    why: mechanical conversion
+
+  # --- several facts, but one obvious source ---
+  - id: n11
+    turn: "The docs say the timeout is 30s but the code says 60s. Which is right?"
+    why: two facts, a lookup, no ranking needed
+  - id: n12
+    turn: "What's the current version of pytest?"
+    why: single-source lookup
+  - id: n13
+    turn: "In this function, what does the `strict` flag do?"
+    why: reading comprehension over one source
+  - id: n14
+    turn: "Does Postgres support partial indexes?"
+    why: factual lookup
+
+  # --- asks for a recommendation, but it is creative or open-ended ---
+  - id: n15
+    turn: "Give me some name ideas for this library."
+    why: generative, no correct answer to be reached by ranking
+  - id: n16
+    turn: "What's a good architecture for a chat app?"
+    why: open-ended design, not a choice among supplied options
+  - id: n17
+    turn: "Write a blog post about our migration."
+    why: writing task
+  - id: n18
+    turn: "Brainstorm ways to reduce our cloud bill."
+    why: divergent, and a ledger would prune prematurely
+  - id: n19
+    turn: "Draft a friendly reply to this customer."
+    why: tone task
+
+  # --- a decision, but trivially determined ---
+  - id: n20
+    turn: "The tests are failing. Should I fix them before merging?"
+    why: one fact, no ranking
+  - id: n21
+    turn: "The disk is at 99%. Do we need to act?"
+    why: single decisive fact
+  - id: n22
+    turn: "The build is green. Can I deploy?"
+    why: one fact
+  - id: n23
+    turn: "This dependency has a critical CVE. Patch now?"
+    why: one fact, obvious
+
+  # --- meta and conversational ---
+  - id: n24
+    turn: "What did you just do?"
+    why: meta
+  - id: n25
+    turn: "Can you explain your reasoning on that last answer?"
+    why: meta, and the ledger is not the subject
+  - id: n26
+    turn: "Thanks, that worked."
+    why: acknowledgement
+  - id: n27
+    turn: "Actually, ignore what I said about the timeout."
+    why: a correction, not a decision
+  - id: n28
+    turn: "Let's come back to this tomorrow."
+    why: no request at all
+  - id: n29
+    turn: "Wait, run that again."
+    why: a repeat instruction
+
+  # --- mentions evidence or context explicitly, but should not fire ---
+  - id: n30
+    turn: "What evidence would settle this question?"
+    why: asks about evidence rather than needing it ranked
+  - id: n31
+    turn: "How much context can this model hold?"
+    why: the word "context" with no pile behind it
+  - id: n32
+    turn: "Add the incident context to the ticket description."
+    why: a write task
+  - id: n33
+    turn: "Can you rank these test cases by runtime?"
+    why: ranking, but by a measured quantity rather than relevance
+  - id: n34
+    turn: "Which of these facts is most interesting?"
+    why: ranking by interest, which is explicitly not the ledger's criterion
+
+  # --- decision already made, or already ledgered ---
+  - id: n35
+    turn: "We decided to roll back. Write the incident note."
+    why: the decision is upstream of this turn
+  - id: n36
+    turn: "Good, go with option B."
+    why: confirmation
+  - id: n37
+    turn: "Using the ledger above, draft the summary."
+    why: a ledger already exists in this turn
+
+  # --- code tasks that mention many things ---
+  - id: n38
+    turn: "Refactor this module — it imports twelve things and does four jobs."
+    why: many items named, but the task is restructuring
+  - id: n39
+    turn: "There are 30 failing tests. Fix them."
+    why: volume, but no decision among options
+  - id: n40
+    turn: "Rename `foo` to `bar` everywhere in this repo."
+    why: mechanical, repo-wide
+  - id: n41
+    turn: "Review this diff."
+    why: review, where surfacing everything is the goal
+  - id: n42
+    turn: "Why is this query slow? Here's the plan and the schema."
+    why: two sources, but the task is diagnosis
+
+  # --- numeric and estimation ---
+  - id: n43
+    turn: "How many requests per second can this handle?"
+    why: estimation, which is `base-rates` territory if anything
+  - id: n44
+    turn: "What's 15% of our 4.2M monthly requests?"
+    why: arithmetic
+  - id: n45
+    turn: "How likely is this migration to slip?"
+    why: forecasting rather than relevance ranking
+
+  # --- clarification-shaped ---
+  - id: n46
+    turn: "Make it faster."
+    why: underspecified, which is `ask-or-act` territory
+  - id: n47
+    turn: "Fix the thing we discussed."
+    why: underspecified reference
+  - id: n48
+    turn: "Do the usual."
+    why: no content to rank
+
+  # --- long but homogeneous and all relevant ---
+  - id: n49
+    turn: "Here are the 20 acceptance criteria for the feature. Implement them."
+    why: long, but every item is load-bearing by construction
+  - id: n50
+    turn: "Below are the 15 fields in the form. Validate each one."
+    why: volume with nothing to discard
