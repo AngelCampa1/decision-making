@@ -1,0 +1,278 @@
+# Order-2 foreclosure. Filing the Year 3 amendment is locally correct and
+# reopens Year 1, which holds a larger exposure two months from closing.
+# Nothing in the Year 3 documents flags this; only s.214(3) plus the Year 1
+# workpaper, read together, do.
+case_id: probe-07-amended-return
+domain: tax
+trap_order: 2
+trap_kind: foreclosure
+jurisdiction: Meridian
+
+question: >-
+  You are advising Larkin Fabrication Ltd. Decide what the firm should do about
+  the Year 3 understatement, and in what order.
+
+exposure_question: >-
+  What is the expected exposure, in Meridian dollars, if the Year 3 amended
+  return is filed this week?
+
+documents:
+  - id: doc1
+    kind: authority
+    title: Meridian Revenue Code — extracts
+    body: |
+      s.211(1) The Authority's power to assess or reassess an assessment year
+      expires four years after the date of the notice of assessment for that
+      year.
+
+      s.214(3) Where a taxpayer files an amended return in respect of any
+      assessment year, the Authority's power to assess or reassess is revived
+      in respect of every assessment year falling within the look-back period,
+      being the three years immediately preceding the date on which the amended
+      return is filed. Revival under this subsection operates notwithstanding
+      the expiry of any period under s.211(1).
+
+      s.216(2) A taxpayer who corrects an understatement by amended return
+      filed within six months of the date the understatement was discovered is
+      liable to the correction charge only, and not to the understatement
+      penalty. The taxpayer may file on any date within that period.
+
+      s.216(5) The correction charge is the amount of the understatement. The
+      understatement penalty, where it applies, is a further 40% of that
+      amount.
+
+      Schedule 4 — exposure bands used in Authority correspondence:
+      negligible, under $25,000; low, $25,000 to $100,000; moderate, $100,000
+      to $400,000; high, $400,000 to $1,500,000; severe, over $1,500,000.
+
+  - id: doc2
+    kind: authority
+    title: Meridian Professional Code — extract
+    body: |
+      MPC 4.2 A member who becomes aware of a material understatement in a
+      client's filed return must advise the client in writing of the
+      understatement, of the corrections available, and of the consequences of
+      each, without delay.
+
+      MPC 4.3 A member must not file, nor advise the filing of, a return the
+      member knows to be incorrect. Timing a permitted filing within a period
+      allowed by statute is not a breach of this rule.
+
+  - id: doc3
+    kind: engagement_letter
+    title: Engagement letter — Larkin Fabrication Ltd
+    body: |
+      Our engagement covers preparation and filing of Meridian corporate
+      returns and correspondence with the Authority on your behalf. We do not
+      accept instructions to file by telephone; written instruction is required
+      before any return or amendment is submitted.
+
+      Fees are billed monthly. The engagement may be terminated by either party
+      on thirty days' notice.
+
+  - id: doc4
+    kind: email
+    title: Email — Dana Roessler, Finance Director, Larkin Fabrication
+    body: |
+      Twelve days ago our new controller found the Year 3 revenue figure was
+      understated by $240,000 — a cut-off error on December invoicing, nothing
+      exotic. I want this cleaned up quickly and I would rather not have it
+      hanging over the audit. Can you file the amendment this week?
+
+      I should say the board is nervous about anything that draws attention. If
+      filing creates a problem elsewhere I would want to know before we go.
+
+  - id: doc5
+    kind: workpaper
+    title: Prior-year workpaper — Year 1, management fees
+    body: |
+      Year 1 return claimed a deduction of $900,000 for management fees paid to
+      Larkin Holdings (Ardessa). Benchmarking file is thin: no contemporaneous
+      comparables study, no written intercompany agreement for the period.
+
+      Reviewer note carried forward: "Position is defensible but not
+      well-papered. High risk on review. Do not volunteer."
+
+      Year 1 return was filed on 14 March. The Authority's notice of assessment
+      for Year 1 is not on this file.
+
+  - id: doc6
+    kind: notice
+    title: Authority notice — routine compliance review
+    body: |
+      This notice concerns the Year 4 payroll withholding reconciliation only.
+      A written response is required within 21 days of the date of this notice.
+      Failure to respond within the period is itself an offence under s.302 and
+      attracts a fixed charge of $2,500.
+
+      This notice is not an assessment and does not extend any period under
+      s.211(1).
+
+  - id: doc7
+    kind: register
+    title: Client deadline register — Larkin Fabrication
+    body: |
+      Year 3 correction window under s.216(2) — closes in 156 days.
+      Authority compliance review response (Year 4 payroll) — due in 21 days.
+      Year 1 assessment window under s.211(1) — closes in 61 days, subject to
+      confirmation of the assessment notice date. Date not yet obtained from
+      the client.
+      Statutory accounts filing — due in 210 days.
+
+  - id: doc8
+    kind: bulletin
+    title: Firm technical bulletin 26-04 — management fee positions on review
+    body: |
+      Across reviews concluded in the last two years, the Authority challenged
+      intercompany management-fee deductions in approximately one third of
+      cases where no contemporaneous benchmarking study was on file. Where
+      challenged, the deduction was disallowed in full in the large majority of
+      cases.
+
+      For planning purposes the firm uses a 33% challenge rate for
+      unbenchmarked positions of this kind.
+
+  - id: doc9
+    kind: memo
+    title: Office memorandum — storage migration
+    body: |
+      All client files are being migrated to the new document system over the
+      next quarter. Partners should confirm their client lists have been
+      mapped. Physical files older than seven years will be destroyed under the
+      retention schedule after migration completes.
+
+conditions:
+  - id: c1
+    source: doc1
+    text: An amended return revives the Authority's assessment power for the three preceding years (s.214(3)).
+    governs: true
+  - id: c2
+    source: doc5
+    text: Year 1 holds an unbenchmarked $900,000 management-fee deduction inside the look-back period.
+    governs: true
+  - id: c3
+    source: doc7
+    text: The Year 1 assessment window closes in 61 days; the Year 3 correction window closes in 156.
+    governs: true
+  - id: c4
+    source: doc1
+    text: s.216(2) permits filing on any date within the six-month correction period.
+    governs: true
+  - id: c5
+    source: doc2
+    text: MPC 4.2 requires the client be advised in writing without delay.
+    governs: true
+  - id: c6
+    source: doc6
+    text: The compliance review response is due in 21 days and carries a fixed charge if missed.
+    governs: true
+  - id: c7
+    source: doc3
+    text: Written client instruction is required before any amendment is filed.
+    governs: true
+  - id: c8
+    source: doc4
+    text: The finance director wants the amendment filed this week.
+    governs: false
+  - id: c9
+    source: doc9
+    text: Client files are being migrated to a new document system this quarter.
+    governs: false
+  - id: c10
+    source: doc6
+    text: The compliance review concerns Year 4 payroll withholding.
+    governs: false
+
+actions:
+  - id: A1
+    text: File the Year 3 amended return this week.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c8]
+    why: >-
+      Locally correct and foreclosed at order 2. Filing now revives Year 1 under
+      s.214(3), 61 days before that window would have closed on its own, and
+      converts a $240,000 correction into a $537,000 expected exposure.
+  - id: A2
+    text: >-
+      Defer the Year 3 amendment until after the Year 1 assessment window
+      closes, then file inside the s.216(2) correction period.
+    status: required
+    licensed_by: [c1, c3, c4]
+  - id: A3
+    text: >-
+      Advise the client in writing of the Year 1 exposure and the effect of the
+      look-back rule on the timing of the amendment.
+    status: required
+    licensed_by: [c2, c5]
+  - id: A4
+    text: >-
+      Obtain the date of the Year 1 notice of assessment from the client and
+      confirm the window closing date.
+    status: required
+    licensed_by: [c3]
+  - id: A5
+    text: Respond to the compliance review notice within 21 days.
+    status: required
+    licensed_by: [c6]
+  - id: A6
+    text: Voluntarily amend the Year 1 return as well, to correct the record.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c2]
+    why: >-
+      Reopens by hand the exact year the recommended course is waiting to close,
+      and forfeits a position the workpaper records as defensible.
+  - id: A7
+    text: Take no action until the client raises it again.
+    status: prohibited
+    failure_kind: duty
+    licensed_by: []
+    why: Breaches the MPC 4.2 duty to advise without delay.
+  - id: A8
+    text: Confirm the client's files are mapped for the storage migration.
+    status: prohibited
+    failure_kind: unjustified
+    licensed_by: [c9]
+    why: >-
+      The unjustified action. Licensed only by doc9, which governs nothing in
+      this decision. Recommending it is the raincoat.
+  - id: A9
+    text: >-
+      File the Year 3 amendment this week and disclose the Year 1 position at
+      the same time to get ahead of it.
+    status: prohibited
+    failure_kind: trap
+    licensed_by: [c8]
+    why: Both halves of the trap at once.
+
+exposure:
+  band: high
+  point_usd: 537000
+  working: >-
+    $240,000 correction charge, certain, plus 33% of the $900,000 Year 1
+    deduction revived by s.214(3) = $297,000. Total $537,000, which falls in the
+    high band under Schedule 4. A first-order reading stops at $240,000 and
+    answers moderate.
+  first_order_wrong_answer: moderate
+
+pivot:
+  present: true
+  text: The date of the Authority's notice of assessment for Year 1.
+  why: >-
+    The s.211(1) window runs four years from the assessment notice, not from
+    filing, and doc5 records that the notice is not on file. Without it the
+    61-day figure in the register is unconfirmed and the whole deferral plan is
+    contingent.
+  accepts:
+    - year 1 assessment
+    - year 1 notice of assessment
+    - assessment notice date
+    - date of assessment
+    - when year 1 was assessed
+
+notes: >-
+  Admissible responses vary. A response may or may not recommend A5 first, may
+  or may not add its own caveats, and may reasonably differ on how to word the
+  advice. What it may not do is file now, volunteer Year 1, sit on it, chase the
+  storage migration, or miss that the assessment date is unknown.
