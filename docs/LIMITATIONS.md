@@ -99,6 +99,18 @@ diversity at zero cost, which is the active ingredient per RoPoLL, but they are
 small. Diversity of failure mode is bought at the price of individual judge
 quality, and that trade is a design choice rather than a free win.
 
+**The distractor auditors are not independent, and Ollama is not installed.**
+The two-auditor filter is the gate the whole distractor claim rests on, and it
+currently runs two Claude models of different capability — same trainer, same
+data lineage, correlated failure modes. That is materially less independence
+than the re-audit's methodology assumes, and it biases in the permissive
+direction: two correlated auditors agree more often than two independent ones,
+so more distractors are admitted than a genuinely independent pair would admit.
+The acceptance rate should therefore be read as an upper bound on how strict
+this filter is. Installing Ollama and adding a non-Claude auditor is the fix,
+and until then the attrition number carries this caveat wherever it is
+reported.
+
 ## Scope
 
 **Five skills is what the budget supports, not what the space contains.** The
