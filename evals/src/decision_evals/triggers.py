@@ -19,18 +19,30 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Final
 
 import yaml
 
 
 @dataclass(frozen=True)
 class TriggerCase:
-    """One turn, and whether the skill should fire on it."""
+    """One turn, and whether the skill should fire on it.
+
+    Attributes:
+        route: Which procedure inside the skill this turn should select, or
+            ``None`` where the skill's own router is genuinely open. A secondary
+            label: firing at all is the primary quantity, and a report giving
+            routing accuracy without precision has answered the easier question.
+            ``None`` cases are *excluded* from routing accuracy rather than
+            guessed at, because a forced label on an ambiguous turn measures the
+            author's taste.
+    """
 
     id: str
     turn: str
     should_fire: bool
     why: str
+    route: str | None = None
 
 
 @dataclass(frozen=True)
@@ -100,12 +112,20 @@ def load_trigger_set(path: Path) -> TriggerSet:
         for entry in raw.get(key) or []:
             if not isinstance(entry, dict) or not {"id", "turn", "why"} <= set(entry):
                 raise TriggerSetError(f"{path}: malformed {key} case {entry!r}")
+            route = entry.get("route")
+            if route is not None and not should_fire:
+                raise TriggerSetError(
+                    f"{path}: negative case {entry['id']!r} carries route {route!r}. A turn "
+                    "the skill should not fire on has no procedure to route to, and a route "
+                    "here would be counted as a routing decision that never happens."
+                )
             cases.append(
                 TriggerCase(
                     id=str(entry["id"]),
                     turn=str(entry["turn"]),
                     should_fire=should_fire,
                     why=str(entry["why"]),
+                    route=None if route is None else str(route),
                 )
             )
     if not cases:
@@ -152,3 +172,110 @@ def _report(cases: Sequence[TriggerCase], fires: Callable[[str], bool]) -> Trigg
         fired_on=tuple(fired_on),
         missed=tuple(missed),
     )
+
+
+#: Where trigger sets live, one YAML per skill, named for the skill.
+TRIGGERS_DIR: Final = "datasets/triggers"
+
+
+@dataclass(frozen=True)
+class RoutingReport:
+    """Which procedure the skill picked, over the cases that declare one.
+
+    Reported *beside* a :class:`TriggerReport` and never instead of it. Routing
+    accuracy answers "given that it fired, did it read the right file", which is
+    the easier question; a suite that routes perfectly and fires on every
+    ordinary turn is still a net loss in daily use.
+
+    Attributes:
+        unlabelled: Positive cases carrying ``route: ~``. Excluded rather than
+            guessed: forcing a label onto a turn where the skill's own router is
+            open would measure the set author's taste.
+    """
+
+    correct: int
+    incorrect: int
+    unlabelled: int
+    confusions: tuple[tuple[str, str, str], ...] = ()
+
+    @property
+    def n_scored(self) -> int:
+        return self.correct + self.incorrect
+
+    @property
+    def accuracy(self) -> float:
+        return self.correct / self.n_scored if self.n_scored else 0.0
+
+
+def evaluate_routing(trigger_set: TriggerSet, route: Callable[[str], str | None]) -> RoutingReport:
+    """Score a routing decision function over the positives that declare a route.
+
+    ``route`` is injected for the same reason ``fires`` is: the same report has
+    to describe a real model choosing from the skill's table and a stub in a
+    test.
+    """
+    correct = incorrect = unlabelled = 0
+    confusions: list[tuple[str, str, str]] = []
+    for case in trigger_set.positives:
+        if case.route is None:
+            unlabelled += 1
+            continue
+        chosen = route(case.turn)
+        if chosen == case.route:
+            correct += 1
+        else:
+            incorrect += 1
+            confusions.append((case.id, case.route, chosen or "(none)"))
+    return RoutingReport(
+        correct=correct,
+        incorrect=incorrect,
+        unlabelled=unlabelled,
+        confusions=tuple(confusions),
+    )
+
+
+def check_trigger_sets(repo_root: Path) -> list[str]:
+    """Every skill has a trigger set, and every trigger set names a real skill.
+
+    This exists because neither held. ``datasets/triggers/evidence-ledger.yaml``
+    named a skill that stopped existing when the four procedures were
+    consolidated behind one router on 2026-08-11, and the shipped skill had no
+    trigger set at all. Nothing noticed for a day, because
+    :func:`load_trigger_set` was not called by anything -- the machinery was
+    written, tested to 100%, and wired to nothing.
+
+    A dataset that describes a skill which no longer exists is worse than a
+    missing one: it reports a measurement of something that is not shipping.
+    """
+    issues: list[str] = []
+    skills_dir = repo_root / "skills"
+    triggers_dir = repo_root / TRIGGERS_DIR
+
+    skills = {path.parent.name for path in skills_dir.glob("*/SKILL.md")}
+    sets = {path.stem: path for path in triggers_dir.glob("*.yaml")}
+
+    for name in sorted(skills - set(sets)):
+        issues.append(f"skill {name!r} has no trigger set at {TRIGGERS_DIR}/{name}.yaml")
+    for name in sorted(set(sets) - skills):
+        issues.append(
+            f"{TRIGGERS_DIR}/{name}.yaml names skill {name!r}, which is not in skills/. "
+            "A trigger set for a skill that does not exist reports a measurement of "
+            "something that is not shipping."
+        )
+    for name, path in sorted(sets.items()):
+        if name not in skills:
+            continue
+        try:
+            trigger_set = load_trigger_set(path)
+        except TriggerSetError as error:
+            issues.append(str(error))
+            continue
+        if trigger_set.skill != name:
+            issues.append(f"{path}: declares skill {trigger_set.skill!r} but is filed as {name!r}")
+        if not trigger_set.negatives:
+            issues.append(
+                f"{path}: no negative cases. Precision cannot be measured without them, "
+                "and precision is the number that decides whether a skill is worth "
+                "having installed."
+            )
+    return issues

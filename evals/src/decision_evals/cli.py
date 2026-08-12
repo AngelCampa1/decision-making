@@ -149,6 +149,7 @@ def check(
         _run("ruff format", [python, "-m", "ruff", "format", "--check", "."]),
         _run("mypy", [python, "-m", "mypy"]),
         lint_skills_step(),
+        check_triggers_step(),
         validate_manifests_step(),
         check_citations_step(),
     ]
@@ -178,6 +179,52 @@ def check(
         )
 
     raise typer.Exit(_summarise(results))
+
+
+def check_triggers_step() -> StepResult:
+    """Every skill has a trigger set, and every trigger set names a real skill.
+
+    Added 2026-08-12 because neither held and nothing noticed. The four
+    procedures were consolidated behind one router the previous day;
+    ``datasets/triggers/evidence-ledger.yaml`` went on describing a skill that
+    no longer existed, and the skill that *did* ship had no trigger set at all.
+    The module was written and tested to 100% and called by nothing, so there
+    was no run in which the mismatch could surface.
+
+    Firing precision is the number that decides whether a skill is worth having
+    installed -- a suite that improves answers while interrupting ordinary turns
+    is a net loss -- so a set with no negatives is refused too.
+    """
+    name = "trigger sets"
+    _echo_header(name)
+
+    from decision_evals.triggers import (
+        TRIGGERS_DIR,
+        TriggerSetError,
+        check_trigger_sets,
+        load_trigger_set,
+    )
+
+    triggers_dir = REPO_ROOT / TRIGGERS_DIR
+    for path in sorted(triggers_dir.glob("*.yaml")):
+        try:
+            trigger_set = load_trigger_set(path)
+        except TriggerSetError:
+            # Reported with its reason by check_trigger_sets below; this loop
+            # only prints the census.
+            continue
+        typer.echo(
+            f"{path.stem}: {len(trigger_set.positives)} positive, "
+            f"{len(trigger_set.negatives)} negative, "
+            f"{sum(1 for c in trigger_set.positives if c.route)} routed"
+        )
+
+    issues = check_trigger_sets(REPO_ROOT)
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
 
 
 def check_citations_step() -> StepResult:

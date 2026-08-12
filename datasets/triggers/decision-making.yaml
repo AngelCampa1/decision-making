@@ -1,0 +1,296 @@
+# Trigger set for `decision-making`, the skill that actually ships.
+#
+# Written 2026-08-12, and it replaces nothing: the only trigger set on disk was
+# `evidence-ledger.yaml`, which names a skill that no longer exists. The four
+# procedures were consolidated behind one router on 2026-08-11 and the dataset
+# was not updated, so what was measured and what shipped had come apart. Nothing
+# noticed, because `load_trigger_set` was never called by anything.
+#
+# Firing behaviour is measured separately from answer quality and reported
+# separately. Skill availability is the dominant term in whether a skill helps
+# at all, and availability is decided here -- by whether the description fires
+# at the right moments. A skill that improves answers while interrupting 60% of
+# ordinary turns is a net loss to whoever installed it, and an accuracy-only
+# evaluation records that as a win.
+#
+# **The negatives carry the weight.** Every one of them wears a surface feature
+# of a trigger: the words "should I", a pile of pasted context, several
+# competing facts, an explicit request for a recommendation. Precision measured
+# against negatives that look nothing like triggers is free and means nothing.
+#
+# `route` on a positive case names which of the four procedures the SKILL.md
+# router should select, taken from its own table rather than invented here. It
+# is a *secondary* label: firing at all is the primary quantity, and a run that
+# reports routing accuracy without reporting precision has answered the easier
+# question. Cases where the router itself is genuinely ambiguous are marked
+# `route: ~` and excluded from routing accuracy rather than being guessed.
+
+skill: decision-making
+
+positive:
+  # -- ledger: a pile arrived and it is unclear what the answer turns on ------
+  - id: p01
+    turn: "Here's the whole thread with the landlord, the inspection report, and my last three bank statements. Do I sign the renewal?"
+    why: several sources, one decision, most of it inert
+    route: ledger
+  - id: p02
+    turn: "I've pasted everything the recruiter sent plus my current comp breakdown. Given all of it, should I take the offer?"
+    why: '"given all of it" is the accumulation signal, and the decision is explicit'
+    route: ledger
+  - id: p03
+    turn: "Six people replied to my question in the group chat and they disagree. What should I actually do?"
+    why: a pile of conflicting input, and the ask is what to do rather than a summary
+    route: ledger
+
+  # -- fit: generically right, possibly wrong for this person -----------------
+  - id: p04
+    turn: "Everyone says build six months of runway before quitting. My visa is tied to my employer. Should I still wait?"
+    why: the advice is sound in general and the stated fact may overturn it here
+    route: fit
+  - id: p05
+    turn: "The standard advice is to max the match before paying down debt. My debt is a family loan with no interest. Which first?"
+    why: a general rule against a fact that changes whether it applies
+    route: fit
+  - id: p06
+    turn: "Is it a mistake to take a pay cut for a smaller company? I'm 54 and my pension vests in three years."
+    why: a generic question carrying the fact that would overturn the generic answer
+    route: fit
+
+  # -- cascade: the action looks fine; the worry is what it starts -----------
+  - id: p07
+    turn: "I want to resign on Friday. I was also going to raise the safety thing with HR next month. Should I go ahead?"
+    why: the action ends the standing to do the other thing, which is the real question
+    route: cascade
+  - id: p08
+    turn: "If I tell my co-founder I'm unhappy, what does that set off? Should I say it now or not at all?"
+    why: explicitly about downstream consequences of an action
+    route: cascade
+  - id: p09
+    turn: "We could settle this complaint quietly. It's cheap. What does settling cost us that isn't money?"
+    why: asks what the action spends rather than what it does
+    route: cascade
+
+  # -- timing: direction settled, the question is when ------------------------
+  - id: p10
+    turn: "I've decided to move. The lease breaks in April and the job starts in June. When do I tell them?"
+    why: direction is settled and the question is only when
+    route: timing
+  - id: p11
+    turn: "We're definitely doing the migration. Is there any reason not to start it this quarter?"
+    why: the choice is made; this is about the moment
+    route: timing
+
+  # -- fires, but the router is genuinely open --------------------------------
+  - id: p12
+    turn: "My mother wants to move in with us. I don't know where to start with this."
+    why: a real decision with no obvious dominant difficulty
+    route: ~
+  - id: p13
+    turn: "Two job offers, both fine, and I keep going back and forth. What would you do?"
+    why: '"what would you do" is a request for a recommendation on a live decision'
+    route: ~
+
+  # -- promoted from evidence-ledger.yaml, 2026-08-12 -----------------------
+  # Each of these was a *negative* for `evidence-ledger` and is a positive
+  # here. That is the finding rather than an editing slip: consolidating four
+  # narrow skills behind one router widens the trigger surface, so a negative
+  # set built for the narrow skill silently becomes wrong. n22 and n23 match
+  # the router's timing row almost verbatim.
+  - id: x-n20
+    turn: "The tests are failing. Should I fix them before merging?"
+    why: "direction settled (merge), the question is only when"
+    route: timing
+  - id: x-n22
+    turn: "The build is green. Can I deploy?"
+    why: "matches the router's timing row almost verbatim: the choice is made"
+    route: timing
+  - id: x-n23
+    turn: "This dependency has a critical CVE. Patch now?"
+    why: "patch now or later is a timing question with an undo price"
+    route: timing
+  - id: x-n03
+    turn: "Should I learn Rust?"
+    why: "a real decision about their own time, with no dominant difficulty"
+    route: ~
+  - id: x-n21
+    turn: "The disk is at 99%. Do we need to act?"
+    why: "a live operational decision, and which procedure fits is open"
+    route: ~
+
+negative:
+  # Each of these wears a trigger's surface features. Firing here costs tokens
+  # and turns an answerable question into a detour.
+  - id: n01
+    turn: "Should I use a list or a set here if I need membership tests in a loop?"
+    why: says "should I" and asks for a recommendation, but it is a technical lookup with a known answer
+  - id: n02
+    turn: "Here are our last four quarterly reports. What was the revenue trend?"
+    why: a large pile plus a question, but the ask is information, not a decision
+  - id: n03
+    turn: "I've pasted the stack trace, the config, and the failing test. Why is this breaking?"
+    why: multiple sources and an explicit ask, but it is a technical diagnosis
+  - id: n04
+    turn: "What would you do with a plot twist here? I'm stuck on chapter nine."
+    why: '"what would you do" on creative work, which the skill''s own Abort if excludes'
+  - id: n05
+    turn: "Given everything above, can you summarise the argument for me?"
+    why: the accumulation phrase is present and the ask is a summary
+  - id: n06
+    turn: "Should I be worried that this returns 404 instead of 403?"
+    why: reads as a decision, is a question about correct behaviour
+  - id: n07
+    turn: "My partner and I disagree about the holiday. Talk me through how couples usually decide this."
+    why: asks for information about a process, not a recommendation for this case
+  - id: n08
+    turn: "Here's the contract. Which clause covers early termination?"
+    why: a document plus a question, and the answer is a location in it
+  - id: n09
+    turn: "I'm choosing between three names for the album. Give me five more ideas."
+    why: a choice framing on exploratory work, and the ask is generation
+  - id: n10
+    turn: "What are the trade-offs between renting and buying?"
+    why: the decision's subject matter without a decision being made; they want the information
+  - id: n11
+    turn: "Should I convert this to async? Here's the function and its two callers."
+    why: pasted context plus "should I", and it is a technical judgement with a determinate answer
+  - id: n12
+    turn: "We already decided to go with the cheaper vendor. Draft the email telling the other one."
+    why: a decision is mentioned and already made; the ask is drafting
+  # -- ported from evidence-ledger.yaml, 2026-08-12 -------------------------
+  # Audited one at a time against this skill's own Abort if clauses: lookup,
+  # calculation or diagnosis; creative or exploratory; information rather than
+  # a recommendation. Five did not survive and were promoted to positives
+  # above. Two were dropped as genuinely undecidable:
+  #   n04 "Should we get lunch before or after the standup?"
+  #       trivially small. Whether the skill should fire on a lunch decision is genuinely undecided, and guessing puts the author's taste in the denominator.
+  #   n16 "What's a good architecture for a chat app?"
+  #       reads as a request for information about design rather than a recommendation on a decision they are making. Defensible either way.
+  - id: x-n01
+    turn: "Should I use tabs or spaces?"
+    why: "a preference question with no context to rank"
+  - id: x-n02
+    turn: "Should I name this variable `count` or `total`?"
+    why: "trivial, two facts at most"
+  - id: x-n05
+    turn: "Here's a 600-line stack trace. What's causing this?"
+    why: "debugging, not deciding; the answer is a diagnosis"
+  - id: x-n06
+    turn: "I've pasted the whole file. Can you add type hints?"
+    why: "a transformation task over long input"
+  - id: x-n07
+    turn: "Here's our API docs. Write a client for it."
+    why: "long context, but generation rather than a decision"
+  - id: x-n08
+    turn: "Pasting the CSV below — can you total column D?"
+    why: "computation over long input"
+  - id: x-n09
+    turn: "Here's the transcript of the meeting. Summarise it."
+    why: "summarisation, where discarding is the failure mode not the goal"
+  - id: x-n10
+    turn: "Full config attached. Reformat it as TOML."
+    why: "mechanical conversion"
+  - id: x-n11
+    turn: "The docs say the timeout is 30s but the code says 60s. Which is right?"
+    why: "two facts, a lookup, no ranking needed"
+  - id: x-n12
+    turn: "What's the current version of pytest?"
+    why: "single-source lookup"
+  - id: x-n13
+    turn: "In this function, what does the `strict` flag do?"
+    why: "reading comprehension over one source"
+  - id: x-n14
+    turn: "Does Postgres support partial indexes?"
+    why: "factual lookup"
+  - id: x-n15
+    turn: "Give me some name ideas for this library."
+    why: "generative, no correct answer to be reached by ranking"
+  - id: x-n17
+    turn: "Write a blog post about our migration."
+    why: "writing task"
+  - id: x-n18
+    turn: "Brainstorm ways to reduce our cloud bill."
+    why: "divergent, and a ledger would prune prematurely"
+  - id: x-n19
+    turn: "Draft a friendly reply to this customer."
+    why: "tone task"
+  - id: x-n24
+    turn: "What did you just do?"
+    why: "meta"
+  - id: x-n25
+    turn: "Can you explain your reasoning on that last answer?"
+    why: "meta, and the ledger is not the subject"
+  - id: x-n26
+    turn: "Thanks, that worked."
+    why: "acknowledgement"
+  - id: x-n27
+    turn: "Actually, ignore what I said about the timeout."
+    why: "a correction, not a decision"
+  - id: x-n28
+    turn: "Let's come back to this tomorrow."
+    why: "no request at all"
+  - id: x-n29
+    turn: "Wait, run that again."
+    why: "a repeat instruction"
+  - id: x-n30
+    turn: "What evidence would settle this question?"
+    why: "asks about evidence rather than needing it ranked"
+  - id: x-n31
+    turn: "How much context can this model hold?"
+    why: "the word \"context\" with no pile behind it"
+  - id: x-n32
+    turn: "Add the incident context to the ticket description."
+    why: "a write task"
+  - id: x-n33
+    turn: "Can you rank these test cases by runtime?"
+    why: "ranking, but by a measured quantity rather than relevance"
+  - id: x-n34
+    turn: "Which of these facts is most interesting?"
+    why: "ranking by interest, which is explicitly not the ledger's criterion"
+  - id: x-n35
+    turn: "We decided to roll back. Write the incident note."
+    why: "the decision is upstream of this turn"
+  - id: x-n36
+    turn: "Good, go with option B."
+    why: "confirmation"
+  - id: x-n37
+    turn: "Using the ledger above, draft the summary."
+    why: "a ledger already exists in this turn"
+  - id: x-n38
+    turn: "Refactor this module — it imports twelve things and does four jobs."
+    why: "many items named, but the task is restructuring"
+  - id: x-n39
+    turn: "There are 30 failing tests. Fix them."
+    why: "volume, but no decision among options"
+  - id: x-n40
+    turn: "Rename `foo` to `bar` everywhere in this repo."
+    why: "mechanical, repo-wide"
+  - id: x-n41
+    turn: "Review this diff."
+    why: "review, where surfacing everything is the goal"
+  - id: x-n42
+    turn: "Why is this query slow? Here's the plan and the schema."
+    why: "two sources, but the task is diagnosis"
+  - id: x-n43
+    turn: "How many requests per second can this handle?"
+    why: "estimation, which is `base-rates` territory if anything"
+  - id: x-n44
+    turn: "What's 15% of our 4.2M monthly requests?"
+    why: "arithmetic"
+  - id: x-n45
+    turn: "How likely is this migration to slip?"
+    why: "forecasting rather than relevance ranking"
+  - id: x-n46
+    turn: "Make it faster."
+    why: "underspecified, which is `ask-or-act` territory"
+  - id: x-n47
+    turn: "Fix the thing we discussed."
+    why: "underspecified reference"
+  - id: x-n48
+    turn: "Do the usual."
+    why: "no content to rank"
+  - id: x-n49
+    turn: "Here are the 20 acceptance criteria for the feature. Implement them."
+    why: "long, but every item is load-bearing by construction"
+  - id: x-n50
+    turn: "Below are the 15 fields in the form. Validate each one."
+    why: "volume with nothing to discard"

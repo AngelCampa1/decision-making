@@ -10,11 +10,18 @@ import yaml
 from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.triggers import (
     TriggerSetError,
+    check_trigger_sets,
     evaluate,
+    evaluate_routing,
     load_trigger_set,
 )
 
-SET_PATH = REPO_ROOT / "datasets" / "triggers" / "evidence-ledger.yaml"
+#: The set for the skill that ships. It was `evidence-ledger.yaml` until
+#: 2026-08-12, which named a skill retired when the four procedures were
+#: consolidated behind one router -- and this constant is why the mismatch
+#: survived: the test pinned a path rather than asking which skills exist.
+#: `check_trigger_sets` now answers that question, and is asserted below.
+SET_PATH = REPO_ROOT / "datasets" / "triggers" / "decision-making.yaml"
 
 
 # -- the shipped set --------------------------------------------------------
@@ -22,7 +29,7 @@ SET_PATH = REPO_ROOT / "datasets" / "triggers" / "evidence-ledger.yaml"
 
 def test_the_shipped_trigger_set_loads() -> None:
     trigger_set = load_trigger_set(SET_PATH)
-    assert trigger_set.skill == "evidence-ledger"
+    assert trigger_set.skill == "decision-making"
     assert len(trigger_set.positives) >= 10
     assert len(trigger_set.negatives) >= 50
 
@@ -193,3 +200,101 @@ def test_an_all_positive_set_has_a_defined_false_positive_rate(tmp_path: Path) -
     payload = {"skill": "x", "positive": [{"id": "p1", "turn": "t", "why": "w"}]}
     report = evaluate(load_trigger_set(_write(tmp_path / "s.yaml", payload)), lambda _: True)
     assert report.false_positive_rate == 0.0
+
+
+# -- routing, and the correspondence check ----------------------------------
+
+
+class TestRouting:
+    def test_it_scores_only_the_cases_that_declare_a_route(self) -> None:
+        trigger_set = load_trigger_set(SET_PATH)
+        report = evaluate_routing(trigger_set, lambda _: "ledger")
+        labelled = [c for c in trigger_set.positives if c.route]
+        assert report.n_scored == len(labelled)
+        assert report.unlabelled == len(trigger_set.positives) - len(labelled)
+
+    def test_a_perfect_router_scores_one(self) -> None:
+        trigger_set = load_trigger_set(SET_PATH)
+        by_turn = {c.turn: c.route for c in trigger_set.positives}
+        report = evaluate_routing(trigger_set, lambda turn: by_turn[turn])
+        assert report.accuracy == 1.0
+        assert report.confusions == ()
+
+    def test_confusions_name_the_case_the_want_and_the_got(self) -> None:
+        trigger_set = load_trigger_set(SET_PATH)
+        report = evaluate_routing(trigger_set, lambda _: None)
+        assert report.accuracy == 0.0
+        case_id, wanted, got = report.confusions[0]
+        assert got == "(none)"
+        assert wanted in {"ledger", "fit", "cascade", "timing"}
+        assert case_id
+
+    def test_no_labelled_cases_divides_by_nothing(self, tmp_path: Path) -> None:
+        path = tmp_path / "s.yaml"
+        path.write_text(
+            "skill: s\npositive:\n  - {id: p1, turn: t, why: w}\n"
+            "negative:\n  - {id: n1, turn: t2, why: w}\n",
+            encoding="utf-8",
+        )
+        report = evaluate_routing(load_trigger_set(path), lambda _: "x")
+        assert report.n_scored == 0
+        assert report.accuracy == 0.0
+
+    def test_a_negative_may_not_declare_a_route(self, tmp_path: Path) -> None:
+        """A turn the skill should not fire on has no procedure to route to."""
+        path = tmp_path / "s.yaml"
+        path.write_text(
+            "skill: s\nnegative:\n  - {id: n1, turn: t, why: w, route: ledger}\n",
+            encoding="utf-8",
+        )
+        with pytest.raises(TriggerSetError, match="has no procedure to route to"):
+            load_trigger_set(path)
+
+
+class TestCorrespondence:
+    def test_the_repository_satisfies_it(self) -> None:
+        """The check that would have caught the orphan, run on the real tree."""
+        assert check_trigger_sets(REPO_ROOT) == []
+
+    def test_a_skill_without_a_trigger_set_is_reported(self, tmp_path: Path) -> None:
+        (tmp_path / "skills" / "lonely").mkdir(parents=True)
+        (tmp_path / "skills" / "lonely" / "SKILL.md").write_text("x", encoding="utf-8")
+        (tmp_path / "datasets" / "triggers").mkdir(parents=True)
+        assert any("has no trigger set" in i for i in check_trigger_sets(tmp_path))
+
+    def test_a_trigger_set_for_a_retired_skill_is_reported(self, tmp_path: Path) -> None:
+        """The actual defect: evidence-ledger.yaml outlived its skill by a day."""
+        (tmp_path / "skills").mkdir(parents=True)
+        (tmp_path / "datasets" / "triggers").mkdir(parents=True)
+        (tmp_path / "datasets" / "triggers" / "ghost.yaml").write_text(
+            "skill: ghost\npositive:\n  - {id: p1, turn: t, why: w}\n", encoding="utf-8"
+        )
+        assert any("not in skills/" in i for i in check_trigger_sets(tmp_path))
+
+    def test_a_set_filed_under_the_wrong_name_is_reported(self, tmp_path: Path) -> None:
+        (tmp_path / "skills" / "real").mkdir(parents=True)
+        (tmp_path / "skills" / "real" / "SKILL.md").write_text("x", encoding="utf-8")
+        (tmp_path / "datasets" / "triggers").mkdir(parents=True)
+        (tmp_path / "datasets" / "triggers" / "real.yaml").write_text(
+            "skill: other\npositive:\n  - {id: p1, turn: t, why: w}\n"
+            "negative:\n  - {id: n1, turn: t2, why: w}\n",
+            encoding="utf-8",
+        )
+        assert any("is filed as" in i for i in check_trigger_sets(tmp_path))
+
+    def test_a_set_with_no_negatives_is_reported(self, tmp_path: Path) -> None:
+        """Precision decides whether a skill is worth having installed."""
+        (tmp_path / "skills" / "real").mkdir(parents=True)
+        (tmp_path / "skills" / "real" / "SKILL.md").write_text("x", encoding="utf-8")
+        (tmp_path / "datasets" / "triggers").mkdir(parents=True)
+        (tmp_path / "datasets" / "triggers" / "real.yaml").write_text(
+            "skill: real\npositive:\n  - {id: p1, turn: t, why: w}\n", encoding="utf-8"
+        )
+        assert any("no negative cases" in i for i in check_trigger_sets(tmp_path))
+
+    def test_a_malformed_set_is_reported_rather_than_raising(self, tmp_path: Path) -> None:
+        (tmp_path / "skills" / "real").mkdir(parents=True)
+        (tmp_path / "skills" / "real" / "SKILL.md").write_text("x", encoding="utf-8")
+        (tmp_path / "datasets" / "triggers").mkdir(parents=True)
+        (tmp_path / "datasets" / "triggers" / "real.yaml").write_text("[]", encoding="utf-8")
+        assert any("expected a mapping" in i for i in check_trigger_sets(tmp_path))
