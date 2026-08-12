@@ -334,6 +334,21 @@ def actions_report(records: list[ShardedRecord], limit: int) -> None:
     print("ACTIONS -- were the required functions named? (not: was the call right)")
     print("=" * 72)
 
+    # Naming reads ``final_response``. That is legitimate for a single response
+    # and is a turn-count proxy for a *paired* comparison, because ``full`` has
+    # one turn to name the function in and ``sharded`` has six to bury it in.
+    # A closing instruction does not fix it -- it makes it worse, because a
+    # complete final answer to a tool-use task is the results, not the tool.
+    # Only a call-format contract puts the call in the final reply in both arms.
+    contract_marker = bfcl.CALL_FORMAT.splitlines()[0]
+    relevant = [r for r in records if r.task == "actions"]
+    under_contract = bool(relevant) and all(
+        contract_marker in (r.system_prompt or "") for r in relevant
+    )
+    if not under_contract:
+        print("\n  *** This run did not ask for a parseable call, so the two arms'")
+        print("  *** naming counts are NOT comparable. See the note below the counts.")
+
     named = {FULL: 0, SHARDED: 0}
     parsed = {FULL: 0, SHARDED: 0}
     graded = {FULL: 0, SHARDED: 0}
@@ -404,11 +419,21 @@ def actions_report(records: list[ShardedRecord], limit: int) -> None:
     print(f"\npairs                          {pairs}")
     for condition in (FULL, SHARDED):
         print(f"  {condition:<8} named every function   {named[condition]}/{pairs}")
-    print(f"\n  discordant on naming         {discordant_named}/{pairs}")
-    if pairs:
-        print(f"  p_discordant (naming)        {discordant_named / pairs:.3f}")
-    print("\nNaming is a floor on capability. A response that names create_histogram")
-    print("and gets both bin counts wrong is counted as a hit above.")
+    if under_contract:
+        print(f"\n  discordant on naming         {discordant_named}/{pairs}")
+        if pairs:
+            print(f"  p_discordant (naming)        {discordant_named / pairs:.3f}")
+        print("\nNaming is a floor on capability. A response that names create_histogram")
+        print("and gets both bin counts wrong is counted as a hit above.")
+    else:
+        print("\n  p_discordant (naming)        NOT COMPUTED")
+        print("  The two arms' counts above are printed but must not be compared, and")
+        print("  the difference between them is not a result. Neither system prompt")
+        print("  asks for a call in the final reply, so a full response has one turn")
+        print("  to name the function in and a sharded response has six to bury it in.")
+        print("  Measured twice on 2026-08-12: without a closing turn 45 vs 23, with")
+        print("  one 47 vs 3, and crediting the whole conversation 47 vs 49. Every")
+        print("  one of those reads turn count. Re-run with --call-format.")
 
     total_parsed = parsed[FULL] + parsed[SHARDED]
     print(f"\n  responses carrying a parseable call  {total_parsed}/{2 * pairs}")
@@ -423,7 +448,11 @@ def actions_report(records: list[ShardedRecord], limit: int) -> None:
     print(f"  discordant on AST match      {discordant_graded}/{pairs}")
     if total_parsed < 2 * pairs * 0.9:
         print("\n  *** parse rate below 90%. The AST half is measuring format compliance,")
-        print("  *** not reasoning. Read the naming number instead.")
+        if under_contract:
+            print("  *** not reasoning. Read the naming number instead.")
+        else:
+            print("  *** not reasoning -- and the naming number is refused above, so")
+            print("  *** this run yields no comparison at all. Re-run with --call-format.")
 
 
 def main() -> int:
