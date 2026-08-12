@@ -4,10 +4,16 @@ This file is read by Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode
 and others. Claude Code reads `CLAUDE.md`; the two carry the same content here.
 
 **It is also the product.** Skill *availability* is the dominant term in whether
-a skill helps at all — SkillsBench measures +18 to +36pp from having the right
-skill present, against +0.7pp from polishing its prose, with intervals crossing
+a skill helps at all — SkillsBench measures a large gain from having the right
+skill present against +0.7pp from polishing its prose, with intervals crossing
 zero. So the block below is not documentation about the skills. It is the part
 that makes them fire, and it is meant to be copied into your own project.
+
+> The presence figure previously read "+18 to +36pp" here. A 2026-08-11
+> literature check surfaced the paper's headline as **+16.6pp** average
+> (33.9 → 50.5). Both are under re-check against arXiv:2602.12670 before either
+> is asserted again — see Track K in
+> [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md).
 
 ---
 
@@ -25,6 +31,23 @@ than a detour.
   (a long thread, pasted logs, search results, a channel backlog) and what the
   answer turns on has to be separated from what merely arrived. Skip it for a
   short prompt with one or two facts, or a lookup with one obvious source.
+
+- **switching-conditions** — when someone asks what *they* should do and the
+  right answer turns on facts about them: the offer, the move, the lease, the
+  course, whether to tell them. Gives the generic answer first, then the facts
+  that would overturn it and the threshold at which each one bites. Skip it when
+  the answer is the same for everyone.
+
+- **consequence-cascade** — when an action looks fine on its own and the worry is
+  what it sets in motion, or which option it quietly spends. Follows the chain to
+  the point where it stops being knowable, and checks whether the order of two
+  steps matters. Skip it for contained, reversible, low-stakes moves.
+
+- **decide-or-wait** — when the question is timing rather than direction, or when
+  something feels urgent and it is not clear the urgency is real. Prices the
+  undo, separates the real deadline from the felt one, and often splits the move
+  into a part to do now and a part to defer. Skip it while what to do is still
+  unsettled.
 
 Trust your own read on when these apply. They are procedures, not policies:
 if one of them is producing worse answers than working directly, that is worth
@@ -46,10 +69,10 @@ The canonical skills use only the six portable frontmatter fields defined by the
 
 ```bash
 # Cross-tool: Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode
-cp -r .agents/skills/evidence-ledger ~/.agents/skills/
+cp -r .agents/skills/* ~/.agents/skills/
 
 # Claude Code, project-scoped
-cp -r skills/evidence-ledger .claude/skills/
+cp -r skills/* .claude/skills/
 ```
 
 Vendor-only frontmatter (`context: fork`, `disable-model-invocation`) is a hard
@@ -60,12 +83,14 @@ Claude-specific keys live in the plugin overlay.
 
 ## What is actually proven
 
-**Nothing yet.** `evidence-ledger` currently carries `verdict: UNTESTED` and
-ships as `experimental`. See [`SCORECARD.md`](SCORECARD.md) for the verdict
-vocabulary and what each one licenses you to claim.
+**Nothing yet.** All four skills carry `verdict: UNTESTED` and ship as
+`experimental`. See [`SCORECARD.md`](SCORECARD.md) for the verdict vocabulary
+and what each one licenses you to claim.
 
-That is not false modesty and it is not a reason to avoid the skill — use it if
-it helps you. It is the difference between "we have not shown this works" and
+That is not false modesty and it is not a reason to avoid them — use them if
+they help you. A verdict governs the *public claim*, not whether a skill is
+usable, and `UNTESTED` blocks entry to the shipped plugin rather than blocking
+`cp -r skills/* .claude/skills/`. It is the difference between "we have not shown this works" and
 "this works", and the whole point of the repository is to keep those two
 statements apart. A skill may not enter the shipped plugin while carrying
 `UNTESTED`; `de check` enforces that rather than trusting anyone to remember it.
@@ -110,9 +135,11 @@ If you are an agent contributing here rather than a user installing the skills:
 
 - **The experiment programme lives in
   [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md)** — the goal, what
-  the literature already settles, and eleven tracks you can be pointed at. Start
-  there before proposing experiment work. Track 0 blocks everything and Track A
-  is the one that runs first.
+  the literature already settles, and fourteen tracks you can be pointed at.
+  Start there before proposing experiment work. **Track K runs first** (the
+  decision-frameworks review, free, no instrument), **Track S runs in parallel
+  from day one** (the skills themselves), and Track 0 blocks the measurement
+  but not the skills.
 - The long-context experiment
   ([`docs/superpowers/plans/2026-08-11-long-context-experiment.md`](docs/superpowers/plans/2026-08-11-long-context-experiment.md))
   is now **Track G** and its pilot-library authoring is on hold. Read it for the

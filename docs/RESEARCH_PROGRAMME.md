@@ -117,6 +117,118 @@ whether the damage came from turns or from delegation.
 
 ---
 
+## Track K — Decision frameworks: the review this project skipped
+
+**Question.** What is already known about how to make good decisions, and which
+of it can be written down as a skill?
+
+**Why it matters.** The founding brief asked for research on *decision making*
+before any direction was chosen — "how to make great decisions." Every skill in
+this repository was instead invented from first principles by a model. That is
+precisely the "skills based on really nothing" the brief warned against, and
+SkillsBench's finding that **self-generated skills yield negligible or negative
+gains while curated ones yield +16.6pp** is the same warning with a number on it.
+
+This track runs **first**. It is free, it needs no instrument, and it changes
+what every other track is testing.
+
+| # | Work |
+|---|---|
+| K1 | Review the normative and applied decision literature: decision analysis and expected value, reference-class forecasting and base rates, calibration training, pre-mortems, Kepner-Tregoe, WRAP, OODA, satisficing vs maximising, option value and reversibility, dominance and elimination-by-aspects. One page each: what it claims, what evidence supports it, what it costs to run. |
+| K2 | Review the *prescriptive* evidence — which of these actually improve human decisions in trials, not which are popular. Many are folklore with a book attached, and the write-up must say which. |
+| K3 | Mine [cc-thinking-skills](https://github.com/tjboudreaux/cc-thinking-skills) and comparable prompt libraries: what frameworks are already encoded, in what form, with what evidence behind them. The maintainer installed it and reports it did not help — that is data about form, not about the frameworks. |
+| K4 | Map framework → failure mode. A framework is only a skill candidate if it targets a failure an LLM actually makes. Cross against Track A's results. |
+| K5 | Verify the SkillsBench figures cited throughout this repo against arXiv:2602.12670, and correct `AGENTS.md`, `CLAUDE.md` and any notebook entry that repeats them. |
+| K6 | Output: `docs/DECISION_FRAMEWORKS.md` — the catalogue, with a shortlist of framework-derived skill candidates ranked by evidence strength. |
+
+**Skill candidates already named in the brief and not yet written:** a council /
+adversarial-review skill (multiple positions argued before deciding — which is
+also the sub-agent architecture question), and a clarify-or-decide skill (when
+to ask for more information versus decide under incomplete information).
+
+**Done when** `docs/DECISION_FRAMEWORKS.md` exists and every current skill is
+either traced to a documented framework or explicitly marked as invented.
+
+---
+
+## Track L — Skill variants: which formulation is best
+
+**Question.** For one target failure, which way of writing the skill works best?
+
+**Why it matters.** The brief asked to test "different types of skills and
+variations, finding the most optimal one." The current design compares one skill
+against control, placebo and chain-of-thought — it never compares **skill A
+against skill B for the same job**. Without that there is no basis for saying a
+skill is good, only that it is better than nothing.
+
+SkillsBench gives a directional prior worth testing here: **focused 2–3 module
+skills outperform comprehensive documentation.** Every skill in this repo is
+already short, so that prediction is testable and cheap.
+
+| # | Variant axis | Example |
+|---|---|---|
+| L1 | **Framework** | the same failure targeted via a ledger, a pre-mortem, or a reference class |
+| L2 | **Length** | 400 words vs 1,200 vs 150 |
+| L3 | **Output shape** | a fixed block template vs free prose vs a checklist |
+| L4 | **Framing** | procedure ("do this") vs diagnostic ("check whether") vs question list |
+| L5 | **Trigger breadth** | narrow description vs broad, measured on false-fire rate as well as on help |
+
+**This is a horse race, and it needs the multiplicity machinery already built.**
+`stats/multiplicity.py` exists and has never been used in anger. Winner's curse
+is the standing threat: with five variants the best one is biased upward, so the
+winner is re-run on a fresh holdout before it is called best.
+
+**Done when** one target failure has ≥3 authored variants, a pre-registered
+comparison, and a winner replicated on a holdout.
+
+---
+
+## Track S — Ship the skills
+
+**Question.** What can the maintainer, and anyone else, install and use today?
+
+**Why it matters.** This project is dual-purpose: skills someone actually uses,
+*and* a paper. The programme as first written was a research programme with a
+skill attached — no skill improved until Track C/D/E, months out, and it produced
+exactly one new skill almost by accident. That ratio is wrong and it is the
+mistake this track corrects.
+
+**The decoupling that makes it possible.** `SCORECARD.md` already says a verdict
+governs the *public claim*, not whether a skill is usable. `UNTESTED` blocks
+entry to `plugin/skills/`; it does not block `cp -r skills/* .claude/skills/`.
+Shipping honestly-labelled unproven skills and shipping unproven skills *as
+proven* are different acts, and only the second is the thing the evidence rule
+exists to prevent.
+
+**Runs from day one, in parallel, never downstream.** Every research finding is
+harvested into a skill revision the week it arrives, not at the end.
+
+| # | Work | Status |
+|---|---|---|
+| S1 | `evidence-ledger` — the accumulated-context pile | written, `UNTESTED` |
+| S2 | `switching-conditions` — is this generic advice right for *me* | written, `UNTESTED` |
+| S3 | `consequence-cascade` — what this sets in motion, and what it spends | written, `UNTESTED` |
+| S4 | `decide-or-wait` — timing, reversibility, real vs felt deadlines | written, `UNTESTED` |
+| S5 | a council / adversarial-review skill — argue the positions before deciding | named in the brief, not written |
+| S6 | a clarify-or-decide skill — ask for more, or decide under incomplete information | named in the brief, not written |
+| S7 | Re-derive each of the above from Track K's catalogue, or mark it invented | pending K |
+
+**The maintainer's daily use is evidence.** Not publishable as a headline, and
+the fastest signal available: a skill that fires when it should not, or produces
+a worse answer than working directly, is worth knowing about in a day rather
+than in a quarter. The copy-paste block in `AGENTS.md` closes on an explicit
+invitation to report exactly that.
+
+**Honest caveat carried on all four:** `consequence-cascade` has the weakest
+prior of the set. The casefile probe found the model already doing order-1
+through order-3 consequence reasoning unprompted — 27 trap opportunities, zero
+taken, and it computed a leverage ratio nobody asked for. That was professional
+casefiles with an option menu, not personal decisions, so the skill is still
+worth having and worth testing. But if any of the four comes back `NULL`, this
+is the one to bet on.
+
+---
+
 ## Track 0 — Instrument
 
 **Question.** Can this stack run a genuinely multi-turn, genuinely delegating
@@ -408,10 +520,23 @@ Unchanged, and they apply to every track:
 ## Sequencing
 
 ```text
-  Track 0  Instrument            <- blocks everything
+  Track K  Decision frameworks   <- FIRST. Free, no instrument, and it changes
+     |                              what every other track is testing.
+     |                              The review the project skipped.
      |
-  Track A  Replication           <- run this first, ~1200 calls, hours not days
+  Track S  Ship the skills       <- parallel from day one, never downstream.
+     |                              Write them, use them, label them honestly,
+     |                              harvest each finding into a revision.
+     |
+  Track 0  Instrument            <- blocks the measurement, not the skills
+     |
+  Track A  Replication           <- ~1200 calls, hours not days
      |                              can kill or redirect the whole programme
+     |
+  Track L  Skill variants        <- the horse race the brief asked for:
+     |                              which formulation wins, not just
+     |                              whether one beats nothing
+     |
   Track B  Attribution           <- runs on Track A's traces
      |
      +--> Track C  Evidence aggregation   \
