@@ -9,7 +9,7 @@ none of them together:
 
 | Part | Status |
 |---|---|
-| a written skill | `evidence-ledger` exists, `verdict: UNTESTED` |
+| a written skill | `decision-making` v0.2.0 ships, four procedures behind a router, `verdict: UNTESTED` |
 | measurably improves decisions | three corpora, three nulls, 21/21 scored failures were answer-key errors |
 | an agentic system | every call to date is one `claude -p`, no tools, no session |
 | accumulates over turns | accumulation has been *rendered*, never *lived* |
@@ -77,17 +77,17 @@ Measured elsewhere. We do not re-measure these; we check they hold on our stack
 
 | Finding | Source | Number |
 |---|---|---|
-| Single-turn → multi-turn accuracy collapse | [LLMs Get Lost In Multi-Turn Conversation](https://arxiv.org/abs/2505.06120), ICLR 2026 | **−39% average**, 15 models, 200k conversations; Claude 3.7 Sonnet 85.4 → 70.0 |
+| Single-turn → multi-turn accuracy collapse | [LLMs Get Lost In Multi-Turn Conversation](https://arxiv.org/abs/2505.06120) | **−39% average across six generation tasks** (abstract, verbatim). Per-model figures are in Table 1 and are **not** quoted here until read from the table — an earlier draft carried 85.4 → 70.0 for Claude 3.7 Sonnet, which is reportedly the *Math task alone* against a six-task average of 78.0 → 65.6. Venue unverified. |
 | The collapse is *unreliability*, not lost aptitude | ibid. | same model, same question, answers scatter |
 | Mechanism: anchor early, then over-weight the latest turn | ibid. | — |
-| Multi-agent failure taxonomy | [MAST](https://arxiv.org/abs/2503.13657) | 14 modes, 1600+ traces, κ=0.88; **41.8%** design/spec, **36.9%** inter-agent misalignment, **21.3%** verification/termination |
+| Multi-agent failure taxonomy | [MAST](https://arxiv.org/abs/2503.13657) | 14 modes, 1600+ traces, κ=0.88 — all three verified. **The category percentages are not in the paper.** An earlier draft carried 41.8 / 36.9 / 21.3; aggregating the per-mode rates in Figure 1 gives roughly **44.3 / 32.4 / 23.5**, and any figure used must be labelled "our aggregation of MAST Figure 1". MAST's traces are 7 frameworks on coding and maths — transfer to a 4-node decision task is an assumption, not a finding. |
 | Summarisation is not neutral compression | [When Summaries Distort Decisions](https://arxiv.org/html/2606.29251) | different summarisers move identical evidence toward opposite decisions |
 | Recency in ranking | [Do LLMs Favor Recent Content?](https://arxiv.org/abs/2509.11353) | 7 models; up to 95 rank positions |
 | Skill *presence* is the dominant term; *form* is not | [Xu & Wu](https://arxiv.org/abs/2605.31408), 30 tasks, 2 models | **+18 to +36pp** from presence; granularity minimal and model-dependent |
 | Curated skills help; self-generated ones do not | [SkillsBench](https://arxiv.org/abs/2602.12670), 87 tasks, 8 domains | **+16.6pp** (33.9 → 50.5); focused bundles beat larger ones |
-| More skills makes agents worse | [Skill shadowing](https://arxiv.org/html/2605.24050) | selection accuracy >90% under 30 candidates → 13.6% at scale; mechanism is **description overlap** |
-| Orchestration is not free | [In-Context Prompting Obsoletes Agent Orchestration](https://arxiv.org/pdf/2604.27891) | for procedural tasks a single well-prompted call matches multi-agent |
-| Orchestrator prompting already shown to help | [PerspectiveGap](https://arxiv.org/pdf/2606.08878) | prior art — we must be sharper than "prompting the orchestrator helps" |
+| More skills makes agents worse | [Skill shadowing](https://arxiv.org/abs/2605.24050) | **"up to 21% when scaling from a small set of helpful skills to a 202-skill library"** (abstract, verbatim). Shadowing dominates context overhead, which is "small and indistinguishable from zero". **Regime is 202 skills.** An earlier draft of this table carried "90% → 13.6%", which is this paper *quoting* Gan & Sun 2025 on **tool** selection at **11,100** candidates — not its own finding, and three orders of magnitude from any decision made here. |
+| Orchestration is not free | [In-Context Prompting Obsoletes Agent Orchestration **for Procedural Tasks**](https://arxiv.org/abs/2604.27891) | the qualifier is the scope. Reported as *domination*, not parity — failure rates 11.5% vs 24%, 0.5% vs 9%, 5% vs 17%. This is a **stronger** threat to Track D than an earlier draft said. |
+| Orchestration prompting is a measured *capability gap* | [PerspectiveGap](https://arxiv.org/abs/2606.08878) | 17.2% average combined pass rate; best model 62.0%; Opus 4.8 singled out for weakness despite strong coding. **It does not show that prompting the orchestrator helps** — it shows models are bad at orchestration prompting. So it is a baseline and an item source for Tracks D and E, not prior art to be out-sharpened. |
 
 **A caution about this table, learned by getting it wrong.** The first draft
 collapsed the two skills rows into one, on the assumption that a search result
@@ -181,7 +181,7 @@ what every other track is testing.
 | K2 | Review the *prescriptive* evidence — which of these actually improve human decisions in trials, not which are popular. Many are folklore with a book attached, and the write-up must say which. |
 | K3 | Mine [cc-thinking-skills](https://github.com/tjboudreaux/cc-thinking-skills) and comparable prompt libraries: what frameworks are already encoded, in what form, with what evidence behind them. The maintainer installed it and reports it did not help — that is data about form, not about the frameworks. |
 | K4 | Map framework → failure mode. A framework is only a skill candidate if it targets a failure an LLM actually makes. Cross against Track A's results. |
-| K5 | **Citation audit.** 65 arXiv identifiers are cited across `docs/` and `notebook/`; `paper/refs.bib` holds 39. Resolve every cited identifier against arxiv.org, add the 26 missing entries, and make `de check` fail when a markdown citation has no bib entry. A 2026-08-11 spot check already found one conflation of two real papers, caught only because the same claim carried two identifiers. |
+| K5 | **Citation audit, and it is worse than a coverage gap.** Counts drift with the glob, so `de check` computes them rather than prose asserting them — measured 2026-08-11: 67 unique identifiers cited across `docs/`, `notebook/`, `skills/` and the product files; `paper/refs.bib` holds 49 entries, 39 carrying arXiv ids. **Nine of the ten papers in the headline literature table are absent from the bibliography** — only 2605.31408 is present. So the bib and the programme cite disjoint literatures. Work: resolve every identifier against arxiv.org; add the missing entries; and make `de check` fail when a number is asserted beside an arXiv id **without a `quote:` field in the bib entry holding the verbatim source sentence.** Presence-checking alone would not have caught any of the three misattributions found on 2026-08-11 — all three cited real papers that existed and said something adjacent. |
 | K6 | Output: `docs/DECISION_FRAMEWORKS.md` — the catalogue, with a shortlist of framework-derived skill candidates ranked by evidence strength. |
 
 **Skill candidates already named in the brief and not yet written:** a council /
@@ -220,7 +220,7 @@ read when it fires.
 | M1 | Read the Agent Skills specification properly and record what the three disclosure levels cost and buy. |
 | M2 | Measure false-fire rate: how often does `decision-making` activate when it should not, and how often does it miss? This is the number the description controls and nothing in this repo measures it yet. |
 | M3 | Measure whether routing works: given a decision, does the model read the *right* one of the four files? A router that always reads `ledger.md` is one skill wearing four. |
-| M4 | Race one-entry-with-routing against four-separate-skills. The four-skill version is preserved in git at `9a16b18` and is the comparison arm. This is Track L applied to structure rather than to prose. |
+| M4 | Race one-entry-with-routing against four-separate-skills. **Build the four-skill arm from the *current* procedure files** — the four bodies verbatim, wrapped in four `SKILL.md` files with four descriptions — so that structure and description are the only things that vary. Do **not** use the historical four-skill tree at `9a16b18` as an arm: the prose has moved since, and a race against it would vary structure, content and description at once, which is uninterpretable for a question about structure. This is the experiment that would justify or overturn the one-entry choice, which is currently an extrapolation from a 202-skill regime down to four. |
 | M5 | Bundle-size curve: 2 procedures, 4, 8. Where does routing accuracy break? |
 
 **Hypothesis falsifier.** If routing accuracy is at chance, the bundle is a
@@ -253,15 +253,20 @@ exists to prevent.
 **Runs from day one, in parallel, never downstream.** Every research finding is
 harvested into a skill revision the week it arrives, not at the end.
 
-| # | Work | Status |
+**Shipped state as of 2026-08-11: one skill, `decision-making` v0.2.0,
+`verdict: UNTESTED`**, with four procedures behind a router. Not four skills —
+they were consolidated the same day they were written (see Track M).
+
+| # | Procedure / work | Status |
 |---|---|---|
-| S1 | `evidence-ledger` — the accumulated-context pile | written, `UNTESTED` |
-| S2 | `switching-conditions` — is this generic advice right for *me* | written, `UNTESTED` |
-| S3 | `consequence-cascade` — what this sets in motion, and what it spends | written, `UNTESTED` |
-| S4 | `decide-or-wait` — timing, reversibility, real vs felt deadlines | written, `UNTESTED` |
-| S5 | a council / adversarial-review skill — argue the positions before deciding | named in the brief, not written |
-| S6 | a clarify-or-decide skill — ask for more, or decide under incomplete information | named in the brief, not written |
+| S1 | `ledger.md` — a pile arrived and it is unclear what the answer turns on | in the bundle |
+| S2 | `fit.md` — is this generic advice right for *this* person | in the bundle |
+| S3 | `cascade.md` — what it sets in motion, and which option it spends | in the bundle |
+| S4 | `timing.md` — the undo price, the real deadline, what waiting buys | in the bundle |
+| S5 | a council / adversarial-review procedure — argue the positions before deciding | named in the founding brief, not written |
+| S6 | a clarify-or-decide procedure — ask for more, or decide under incomplete information | named in the founding brief, not written |
 | S7 | Re-derive each of the above from Track K's catalogue, or mark it invented | pending K |
+| S8 | **A retirement rule.** "Daily use is evidence" currently has no failure condition — no threshold at which use retires a procedure. Define one: a procedure the maintainer disables for N consecutive days is marked `WITHDRAWN` in `SCORECARD.md`. Evidence that cannot come out negative is not evidence. | not written |
 
 **The maintainer's daily use is evidence.** Not publishable as a headline, and
 the fastest signal available: a skill that fires when it should not, or produces
@@ -294,7 +299,7 @@ horse race and a fishing trip.
 | # | Variant axis | Example | Published prior | Weight |
 |---|---|---|---|---|
 | **L6** | **Revision against failure traces** — run it, read what went wrong, edit the skill, re-run | one skill, five rounds | **+25.6pp** (36.05 → 61.63), 3 benchmarks, 5 LLMs — [arXiv:2606.01139](https://arxiv.org/abs/2606.01139) | **primary** |
-| **L1** | **Framework** — genuinely different content for the same failure | a ledger vs a pre-mortem vs a reference class | curated beats self-generated by **+16.6pp**; self-generated ≈0 or negative — [2602.12670](https://arxiv.org/abs/2602.12670) | **primary** |
+| **L1** | **Framework** — genuinely different content for the same failure | a ledger vs a pre-mortem vs a reference class | curated vs **no-skill** +16.6pp (33.9→50.5); self-generated **−1.3pp vs no-skill** — [2602.12670](https://arxiv.org/abs/2602.12670). Two separate contrasts; an earlier draft merged them into one. | **primary** |
 | **L5** | **Trigger breadth** — the description, which controls whether it fires at all | narrow vs broad, scored on false-fire *and* miss rate | availability is the dominant term, **+18–36pp** — [2605.31408](https://arxiv.org/abs/2605.31408) | **primary** |
 | L2 | Length | 150 vs 400 vs 1,200 words | ~+0.7pp, intervals crossing zero | confirm the null |
 | L3 | Output shape | block template vs prose vs checklist | same | confirm the null |
@@ -322,10 +327,16 @@ looked at until the end.
 **L1 draws its candidates from Track K6**, not from invention. That is the whole
 point of doing the frameworks review first.
 
-**Winner's curse is the standing threat.** With several variants the best one is
-biased upward, so the winner is re-run on a fresh holdout before it is called
-best. `stats/multiplicity.py` exists, is property-tested at 100% coverage, and
-has never been used in anger.
+**Winner's curse is the standing threat, and `stats/` has nothing for it.**
+`stats/multiplicity.py` contains exactly one function, `benjamini_hochberg`. BH
+controls the false discovery *rate* among rejections; it does nothing about the
+magnitude bias of a selected maximum. There is no shrinkage, no selective or
+conditional inference, and no holdout re-estimation helper anywhere in `stats/`.
+An earlier draft cited the module here as though it addressed this, which
+misrepresented readiness in the programme's most active track.
+
+**Holdout re-estimation is therefore the only control in this design, and the
+holdout estimate — not the discovery-set estimate — is the number reported.**
 
 **Done when** one target failure has ≥3 authored variants plus a revision loop, a
 pre-registered comparison, and a winner replicated on a holdout it never saw.
@@ -570,6 +581,16 @@ sensitivity and specificity separately plus Youden's J. **Without the third
 file the metric is unidentified**: a model that flips on any perturbation
 whatsoever scores a perfect 1.0.
 
+> **Non-negotiable, and here is why, so that a future editor cannot remove it
+> without reading the reason.** The matched non-governing arm is the third of
+> three files and it will look like the cheapest thing to cut when the grid is
+> too large — it is the arm where, by design, *nothing is supposed to happen*.
+> Cutting it does not shrink the metric, it destroys it, and what remains is a
+> flip-rate that reports a perfect score for a model that flips on everything.
+> The failure is silent: the number still computes and still looks reasonable.
+> The same applies to the elicited-quantity primary below. Neither may be
+> dropped "to save a stratum" or "to trim the grid".
+
 The primary is an elicited quantity (months of runway, a threshold, a notice
 period), not a flip, because flip-rate scores conditional advice — the best
 available answer — as failure.
@@ -686,10 +707,26 @@ come apart.
 
 Written down now so a null is a result rather than a fourth dead corpus.
 
-1. **Track A comes back flat.** No multi-turn drop, no recency effect, no
-   handoff loss on our stack. Then the 2026 models have fixed what the 2025
-   models did, and that is publishable — but it is a different paper and this
-   programme stops.
+1. **Track A comes back flat *and the MDE was below the effect the literature
+   reports*.** Both halves are required, and the second half was missing from an
+   earlier draft — which made this the most dangerous sentence in the document.
+
+   The arithmetic, using this repo's own `stats/power.required_pairs`: detecting
+   a 12pp drop at 80% power needs roughly **127 pairs**, or ~254 once the stated
+   design effect of ~2.0 is applied. **Track A has 12 items**, which are also the
+   clustering unit, so the cluster bootstrap runs on 12 clusters. A flat Track A
+   is therefore the *expected* result whether or not the effect is real.
+
+   As written, this falsifier turned an underpowered null into a
+   programme-terminating decision — the same "build first, check the premise
+   later" error as the three dead corpora, run in reverse. And the two biases do
+   not cancel: the author's documented bias is toward the experiment working, the
+   design's bias is toward a null, and what that produces is **a null that gets
+   believed**.
+
+   So: Track 0 computes the MDE per experiment before Track A runs, the notebook
+   records the MDE beside the point prediction, and item count is sized from it.
+   A flat result at a 30pp MDE kills nothing.
 2. **Delegation never helps (A4).** If a single well-prompted call always beats
    the orchestrated system on our tasks, sub-agents are a handicap rather than
    an architecture here, and the honest deliverable is a skill about *when not

@@ -14,13 +14,20 @@ a skill helps at all. Two independent benchmarks agree on the direction:
 So the block below is not documentation about the skills. It is the part that
 makes them fire, and it is meant to be copied into your own project.
 
-**And the block stays short on purpose.** Expanding a skill library causes
-*skill shadowing* — selection accuracy falls from above 90% with fewer than 30
-candidates to 13.6% at ecosystem scale, and the mechanism is **description
-overlap**: when two descriptions sound alike, the agent guesses
-([arXiv:2605.24050](https://arxiv.org/html/2605.24050)). Four separately-listed
-skills that all read as "help me decide" are that failure, which is why the
-decision procedures live behind **one** entry rather than four.
+**And the block stays short on purpose — but read this as a design bet, not as a
+measured result.** Expanding a skill library causes *skill shadowing*:
+performance degrades "by up to 21% when scaling from a small set of helpful
+skills to a **202-skill library**"
+([arXiv:2605.24050](https://arxiv.org/abs/2605.24050), its own abstract).
+
+The decision procedures live behind **one** entry rather than four because four
+descriptions that all read as "help me decide" look like the same failure. **That
+is an extrapolation and it should be labelled as one.** The published evidence
+sits at 202 skills; the choice here was made at four. Nobody has measured
+shadowing at n=4, and this repository has not either. Track M4 in
+[`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md) is the experiment that
+would settle it, and until it runs, one-entry-not-four is a judgement call
+wearing a citation.
 
 ---
 
@@ -127,7 +134,7 @@ If you are an agent contributing here rather than a user installing the skills:
 
 - **The experiment programme lives in
   [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md)** — the goal, what
-  the literature already settles, and fourteen tracks you can be pointed at.
+  the literature already settles, and fifteen tracks you can be pointed at.
   Start there before proposing experiment work. **Track K runs first** (the
   decision-frameworks review, free, no instrument), **Track S runs in parallel
   from day one** (the skills themselves), and Track 0 blocks the measurement
