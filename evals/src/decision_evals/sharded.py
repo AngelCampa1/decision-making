@@ -53,6 +53,35 @@ FULL_INSTRUCTION_FIELD: Final[dict[str, str]] = {
     "math": "question",
 }
 
+#: Which payload field carries the task's **standing context** -- the material an
+#: answer is impossible without, which no shard ever states.
+#:
+#: This exists because the pilot ran without it and the omission was invisible.
+#: ``database`` was asked *"which countries' tv channels are playing some cartoon
+#: written by Todd Casey?"* with no schema, and answered *"I don't have access to
+#: real-time TV broadcasting schedules"* -- a correct response to the question it
+#: was actually asked, and not the text-to-SQL task the corpus is. ``actions``
+#: was asked to use ``create_histogram`` with no function definitions and wrote
+#: prose. Neither is a hard item; both were unanswerable.
+#:
+#: A map with no default, for the same reason as
+#: :data:`FULL_INSTRUCTION_FIELD`. ``None`` means *declared to need none* --
+#: ``math`` is a word problem and carries its own numbers -- which is a different
+#: statement from a family nobody has considered, and the second one raises.
+TASK_CONTEXT_FIELD: Final[dict[str, str | None]] = {
+    "actions": "function",
+    "database": "schema_sql",
+    "math": None,
+}
+
+#: How each context field is introduced. Identical in both conditions, so it
+#: cannot be a confound with delivery; it is a confound with the *published*
+#: task, which is why it is stated here rather than composed at the call site.
+TASK_CONTEXT_PREAMBLE: Final[dict[str, str]] = {
+    "actions": "The following functions are available to you:",
+    "database": "You are writing SQL against this database:",
+}
+
 #: Families deliberately left out, with the reason, so an unexplained item count
 #: cannot appear downstream.
 EXCLUDED_FAMILIES: Final[dict[str, str]] = {
@@ -110,6 +139,12 @@ class ShardedRecord:
         model: The **resolved** model id the CLI reports, never the alias asked
             for. ``haiku`` is not a version, and the two conditions of one pair
             must land in the same group when this column is grouped on.
+        system_prompt: Verbatim, because the pilot's worst defect was in it and
+            nothing in the record showed it. Forty ``actions`` and ``database``
+            pairs ran with no function list and no schema, and every trace reads
+            as a plausible answer to a question that was not the task. Stored in
+            full rather than hashed: a hash proves two runs differ and cannot say
+            what was missing.
     """
 
     task_id: str
@@ -127,6 +162,7 @@ class ShardedRecord:
     schema_version: int = RECORD_SCHEMA_VERSION
     error: str | None = None
     final_turn: str | None = None
+    system_prompt: str | None = None
 
     @property
     def shard_turns(self) -> int:
@@ -175,6 +211,37 @@ def full_instruction(instruction: ShardedInstruction) -> str:
             f"{instruction.task_id} has no usable {field_name!r}; cannot build the full condition"
         )
     return value.strip()
+
+
+def task_context(instruction: ShardedInstruction) -> str:
+    """The standing context this task is unanswerable without, or ``""``.
+
+    Belongs in the system prompt, identical in both conditions. It is not part
+    of the manipulation -- delivery is -- so giving it to one condition and not
+    the other, or to neither, changes the task rather than the treatment.
+
+    Raises:
+        ShardedRunError: The family is not in :data:`TASK_CONTEXT_FIELD`, or is
+            declared to need context and does not carry it. Returning ``""`` on
+            a missing field is how the pilot asked for SQL without a schema and
+            recorded the refusal as data.
+    """
+    if instruction.task not in TASK_CONTEXT_FIELD:
+        raise ShardedRunError(
+            f"task family {instruction.task!r} has no declared standing context. "
+            "Whether it needs one is a research decision; there is no default."
+        )
+    field_name = TASK_CONTEXT_FIELD[instruction.task]
+    if field_name is None:
+        return ""
+    value = instruction.payload.get(field_name)
+    if value is None or (isinstance(value, str) and not value.strip()):
+        raise ShardedRunError(
+            f"{instruction.task_id} is declared to need {field_name!r} and does not carry it; "
+            "the item is unanswerable and must not be run"
+        )
+    body = value if isinstance(value, str) else json.dumps(value, indent=2, ensure_ascii=False)
+    return f"{TASK_CONTEXT_PREAMBLE[instruction.task]}\n\n{body.strip()}"
 
 
 def _unwrap_message_list(task_id: str, field_name: str, value: list[object]) -> str:
@@ -328,6 +395,7 @@ def run_full(
         duration_ms=result.duration_ms,
         conversation_id=conversation_id,
         final_turn=final_turn,
+        system_prompt=system_prompt,
     )
 
 
@@ -394,6 +462,7 @@ def run_sharded(
         duration_ms=duration,
         conversation_id=conversation_id,
         final_turn=final_turn,
+        system_prompt=system_prompt,
     )
 
 

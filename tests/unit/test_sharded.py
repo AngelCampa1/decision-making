@@ -14,7 +14,7 @@ from typing import Any
 
 import pytest
 
-from decision_evals.corpora import ShardedInstruction
+from decision_evals.corpora import ShardedInstruction, load_corpus
 from decision_evals.providers.claude_code import CliResult
 from decision_evals.sharded import (
     EXCLUDED_FAMILIES,
@@ -22,6 +22,8 @@ from decision_evals.sharded import (
     FULL,
     FULL_INSTRUCTION_FIELD,
     SHARDED,
+    TASK_CONTEXT_FIELD,
+    TASK_CONTEXT_PREAMBLE,
     ShardedRecord,
     ShardedRunError,
     append_record,
@@ -32,6 +34,7 @@ from decision_evals.sharded import (
     plan_run,
     run_full,
     run_sharded,
+    task_context,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -184,6 +187,50 @@ class TestRunFull:
             conversation_id="c1",
         )
         assert record.model == "claude-haiku-4-5-20251001"
+
+
+class TestTaskContext:
+    """The material the task is unanswerable without, which no shard states."""
+
+    def test_a_schema_is_rendered_with_its_preamble(self) -> None:
+        item = _instruction("database", schema_sql="CREATE TABLE tv (id TEXT);")
+        rendered = task_context(item)
+        assert "You are writing SQL against this database:" in rendered
+        assert "CREATE TABLE tv (id TEXT);" in rendered
+
+    def test_a_function_list_is_rendered_as_json(self) -> None:
+        item = _instruction("actions", function=[{"name": "create_histogram"}])
+        assert '"name": "create_histogram"' in task_context(item)
+
+    def test_a_family_declared_to_need_none_gets_an_empty_string(self) -> None:
+        assert task_context(_instruction("math", question="q")) == ""
+
+    def test_a_family_declared_to_need_context_and_missing_it_is_refused(self) -> None:
+        """The pilot's defect. Returning "" here is how it went unnoticed."""
+        with pytest.raises(ShardedRunError, match="unanswerable and must not be run"):
+            task_context(_instruction("database"))
+
+    def test_an_undeclared_family_is_refused_rather_than_defaulted(self) -> None:
+        with pytest.raises(ShardedRunError, match="no declared standing context"):
+            task_context(_instruction("summary", query="q"))
+
+    def test_every_pairable_family_is_declared(self) -> None:
+        """Whether a family needs context is decided here, not at a call site."""
+        assert set(FULL_INSTRUCTION_FIELD) <= set(TASK_CONTEXT_FIELD)
+
+    def test_every_declared_context_field_has_a_preamble(self) -> None:
+        needs = {task for task, f in TASK_CONTEXT_FIELD.items() if f is not None}
+        assert needs == set(TASK_CONTEXT_PREAMBLE)
+
+    def test_the_real_corpus_carries_what_is_declared(self) -> None:
+        """A declared field that no record holds would fail every item at run time."""
+        corpus = load_corpus(REPO_ROOT, check_hash=False)
+        for family, field_name in TASK_CONTEXT_FIELD.items():
+            if field_name is None:
+                continue
+            items = [item for item in corpus if item.task == family]
+            assert items, family
+            assert all(item.payload.get(field_name) for item in items), family
 
 
 class TestClosingTurn:

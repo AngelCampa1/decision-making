@@ -44,6 +44,7 @@ from decision_evals.sharded import (  # noqa: E402
     plan_run,
     run_full,
     run_sharded,
+    task_context,
 )
 
 CHECKPOINT = REPO_ROOT / "results" / "track-a" / "pilot.jsonl"
@@ -54,6 +55,17 @@ SYSTEM_PROMPT = (
     "You are answering a user's request. Work from everything they have told you "
     "so far. When you have enough to answer, give your best final answer."
 )
+
+
+def system_prompt_for(item: ShardedInstruction) -> str:
+    """The shared preamble plus whatever this family cannot be answered without.
+
+    Still identical across the two conditions of a pair -- it is a function of
+    the item, never of the condition.
+    """
+    context = task_context(item)
+    return f"{SYSTEM_PROMPT}\n\n{context}" if context else SYSTEM_PROMPT
+
 
 #: Fixed so the pilot is reproducible and so nobody can reselect until the
 #: numbers look better.
@@ -91,18 +103,27 @@ def main() -> int:
     print(f"closing instruction: {'yes' if closing else 'no'}")
     print(f"checkpoint: {CHECKPOINT.relative_to(REPO_ROOT)}\n")
 
-    # Resuming across a change of this flag would append records made under a
-    # different instruction to the ones already there, and nothing downstream
-    # would show it. The two are separate runs.
+    # Resuming across a change to either prompt would append records made under
+    # different conditions to the ones already there, and nothing downstream
+    # would show it. That is how the first pilot ran forty pairs with no schema
+    # and no function list; the second time it should refuse rather than resume.
     if CHECKPOINT.exists():
-        existing = {record.final_turn for record in load_records(CHECKPOINT)}
-        if existing and existing != {closing}:
-            print(
-                f"*** {CHECKPOINT.name} holds records made with a different closing "
-                f"instruction ({sorted(str(e) for e in existing)}). Resuming would pool "
-                "two runs. Move it aside or drop --final-turn."
+        wanted = {system_prompt_for(item) for item in items}
+        for record in load_records(CHECKPOINT):
+            mismatch = (
+                "closing instruction"
+                if record.final_turn != closing
+                else "system prompt"
+                if record.system_prompt not in wanted
+                else None
             )
-            return 1
+            if mismatch:
+                print(
+                    f"*** {CHECKPOINT.name} holds records made with a different {mismatch} "
+                    f"({record.task_id}). Resuming would pool two runs into one file. "
+                    "Move it aside."
+                )
+                return 1
 
     done = completed_keys(CHECKPOINT)
     started = time.time()
@@ -110,6 +131,7 @@ def main() -> int:
 
     for index, item in enumerate(items, start=1):
         conversation_id = f"pilot-{item.task_id}"
+        system = system_prompt_for(item)
 
         with tempfile.TemporaryDirectory() as cwd:
             # -- full: the fully-specified question, one call ------------------
@@ -117,7 +139,7 @@ def main() -> int:
                 try:
                     record = run_full(
                         item,
-                        system_prompt=SYSTEM_PROMPT,
+                        system_prompt=system,
                         call=lambda prompt, system: cli_run(
                             prompt, system_prompt=system, model=args.model, cwd=cwd
                         ),
@@ -132,12 +154,10 @@ def main() -> int:
             # -- sharded: one shard per turn, one live process -----------------
             if (item.task_id, "sharded") not in done:
                 try:
-                    with Conversation(
-                        system_prompt=SYSTEM_PROMPT, model=args.model, cwd=cwd
-                    ) as chat:
+                    with Conversation(system_prompt=system, model=args.model, cwd=cwd) as chat:
                         record = run_sharded(
                             item,
-                            system_prompt=SYSTEM_PROMPT,
+                            system_prompt=system,
                             conversation=chat,
                             conversation_id=conversation_id,
                             final_turn=closing,
