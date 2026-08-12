@@ -83,3 +83,16 @@ that is a publishable finding and it kills the skill honestly. But the failure
 mode itself hasn't vanished — it relocated. Context rot is still documented at
 30–50% degradation in long-horizon agentic search (arXiv:2606.29718), which is
 where the skill should be aimed.
+
+---
+
+**Correction, 2026-08-12.** The 30–50% degradation figure attributed above to
+arXiv:2606.29718 is not in that paper. Not in the abstract, not found in the
+PDF, not in any secondary summary. What the paper shows is **premature
+termination** — models giving up or answering uncertainly well before the
+context window is full, at a rate rising with context length, over four models
+and three search benchmarks. Its own headline number is a 2.6–4.9% *gain* from
+behaviour-aware filtering.
+
+The reasoning in this entry does not depend on the magnitude, only on the
+direction, so what is argued above stands. The number should not be repeated.

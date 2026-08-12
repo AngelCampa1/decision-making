@@ -22,7 +22,11 @@ Three corpora, three failures to measure anything, and the harness itself was th
 
 The casefile probe is a clean negative and is recorded as one. Haiku 4.5 does order-1 through order-3 consequence reasoning reliably on 5–9-document professional casefiles, with an action menu, without one, and with no scaffolding at all. It computed a 4.12:1 leverage ratio unprompted, sequenced a waiver before publication, and surfaced the exact fact `s.46(3)` turns on from seven documents nobody had indexed for it.
 
-**Every corpus built so far is under 2,000 tokens.** Trap sophistication, distractor type-compatibility and scaffolding have all been varied; the one variable the literature actually implicates — volume — has been held constant. Context rot is documented at 30–50% in long-horizon settings (arXiv:2606.29718) and nothing here is long-horizon.
+**Every corpus built so far is under 2,000 tokens.** Trap sophistication, distractor type-compatibility and scaffolding have all been varied; the one variable the literature actually implicates — volume — has been held constant. Nothing built here is long-horizon.
+
+**And this paragraph used to carry a number that does not exist.** It said context rot is documented at 30–50% in long-horizon settings, citing arXiv:2606.29718. That figure is not in the paper's abstract, was not found in its PDF, and appears in no secondary summary of it; checked 2026-08-12. What that paper does establish is a *mechanism* — **premature termination**, models giving up or answering uncertainly long before the context window is full, at a rate that rises with context length, across four flagship models and three search benchmarks. Its own headline figure is a 2.6–4.9% *gain* from behaviour-aware filtering.
+
+The mechanism is enough to motivate this plan and is arguably a better fit for it than a degradation percentage would be: premature termination is a specific failure a decision procedure could plausibly interrupt. But the plan should be read knowing that **the size of the effect it is hunting was never established by the citation it leaned on**, so the Phase 0 control-admissibility band is doing more work than it looked like.
 
 ### What is already fixed (commit `c25d675`)
 

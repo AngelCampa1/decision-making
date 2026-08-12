@@ -115,3 +115,16 @@ downstream before a single new document is written.
 to **0.70 ± 0.10**, and within-item scatter at least doubles. I am recording it
 because my last five predictions were wrong in the same direction — toward the
 experiment working — and the record should keep saying so.
+
+---
+
+**Correction, 2026-08-12.** The table above gives "36.9% inter-agent
+misalignment" for MAST. **That percentage is not in the paper.** It was one of
+three category figures (41.8 / 36.9 / 21.3) an early draft carried;
+`docs/RESEARCH_PROGRAMME.md` already records the retraction, and this entry did
+not. Aggregating MAST's per-mode rates in Figure 1 gives roughly 44.3 / 32.4 /
+23.5, and any figure of that kind must be labelled as our aggregation.
+
+What is verified first-hand: **14 modes in 3 categories, 1600+ annotated traces,
+κ = 0.88.** With one denominator worth keeping straight — the κ is from the 150
+traces the taxonomy was developed on, not from the 1600+.

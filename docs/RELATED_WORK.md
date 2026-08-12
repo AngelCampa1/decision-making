@@ -241,8 +241,13 @@ baseline any council must beat at matched token budget.
 
 ## 5. Skills as an intervention
 
-**SkillsBench, "Skill Availability and Presentation Granularity in LLM Agents"** —
-arXiv:2605.31408. 86 tasks, 11 domains. Skill availability: **+26.7 to +36.0pp**
+**Xu & Wu, "Skill Availability and Presentation Granularity in LLM Agents"** —
+arXiv:2605.31408. A **30-task** domain-balanced SkillsBench subset, **2 models**,
+six skill conditions, five trials, 1,800 rows. (An earlier draft of this entry
+said "86 tasks, 11 domains", which is this paper's scale confused with
+SkillsBench's own — and SkillsBench is 87 tasks and 8 domains, so both halves
+were wrong, in the direction that made this paper look bigger. Verified
+first-hand 2026-08-12.) Skill availability: **+26.7 to +36.0pp**
 (GPT-5.5), **+18.0 to +26.0pp** (DeepSeek V4-Flash). Granularity of the skill's
 prose: **+0.7pp** (GPT-5.5), **−6.7pp** (DeepSeek), CIs crossing zero. Worked
 examples: +0.7–1.3pp. *Effect on design:* engineering effort goes into triggering
@@ -263,9 +268,12 @@ scoring, not flagged as a limitation; a target-matched optimiser recovers only
 this project's stated contributions.*
 
 **"On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents"** —
-arXiv:2601.20404. 124 PRs across 10 repos: −20.27% mean wall-clock (median
-−28.64%), −20.08% mean output tokens. **The benefit concentrates in a small
-number of very expensive runs rather than spreading uniformly.**
+arXiv:2601.20404. 124 PRs across 10 repos. The abstract's figures are
+**medians**: −28.64% runtime, −16.58% output tokens. (The −20.27% and −20.08%
+*means* this entry used to lead with are not in the abstract and have not been
+checked against the body; nor has the claim below. Verified first-hand
+2026-08-12 as far as the abstract goes.) **The benefit is said to concentrate in
+a small number of very expensive runs rather than spreading uniformly.**
 *Effect on design:* p90/p99 are reported alongside means.
 
 **"Authoring Agent Skills: A Software-Engineering Approach"** — arXiv:2607.25032.

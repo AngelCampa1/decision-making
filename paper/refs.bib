@@ -10,14 +10,25 @@
 % Skills as an intervention
 % ---------------------------------------------------------------------------
 
-% VERIFY
 @article{skillsbench2026,
-  title  = {Skill Availability and Presentation Granularity in {LLM} Agents},
+  author = {Xu, Xiaonan and Wu, Wenjing},
+  title  = {Skill Availability and Presentation Granularity in
+            Large-Language-Model Agents: A Controlled {SkillsBench} Study},
   journal = {arXiv preprint arXiv:2605.31408},
   year   = {2026},
-  note   = {86 tasks across 11 domains. Availability +18.0 to +36.0pp;
-            prose granularity +0.7pp (GPT-5.5) / -6.7pp (DeepSeek), CIs
-            crossing zero}
+  quote  = {Relative to no skill, skill conditions increase task-mean pass
+            rate by 26.7 to 36.0 percentage points for GPT-5.5 and by 18.0 to
+            26.0 percentage points for DeepSeek V4-Flash.},
+  note   = {Verified first-hand 2026-08-12. SCALE CORRECTED: a 30-task
+            domain-balanced SkillsBench subset, 2 models, 6 skill conditions,
+            5 trials, 1800 rows. Earlier entries here and in RELATED_WORK said
+            "86 tasks, 11 domains", which is neither this paper's scale nor
+            SkillsBench's own (87 tasks, 8 domains) -- it conflated the two, in
+            the direction that made this paper look larger. The +18 to +36pp
+            range quoted in CLAUDE.md and AGENTS.md is the union of the two
+            models' ranges and is correct. Granularity +0.7pp (GPT-5.5),
+            -6.7pp (DeepSeek), CIs crossing zero; the -6.7 is the larger
+            figure and should travel with the +0.7 whenever both are summarised}
 }
 
 % VERIFY
@@ -30,14 +41,21 @@
             significance tests, no multiplicity correction}
 }
 
-% VERIFY
 @article{agentsmd2026,
+  author = {Lulla, Jai Lal and Mohsenimofidi, Seyedmoein and Galster, Matthias
+            and Zhang, Jie M. and Baltes, Sebastian and Treude, Christoph},
   title  = {On the Impact of {AGENTS.md} Files on the Efficiency of {AI}
             Coding Agents},
   journal = {arXiv preprint arXiv:2601.20404},
   year   = {2026},
-  note   = {124 PRs across 10 repos. -20.27\% mean wall-clock, -20.08\% mean
-            output tokens; benefit concentrated in a few expensive runs}
+  quote  = {We analyze 10 repositories and 124 pull requests, executing agents
+            under two conditions: with and without an AGENTS.md file.},
+  note   = {Verified first-hand 2026-08-12. The abstract's own figures are
+            MEDIANS: runtime -28.64\%, output tokens -16.58\%. The -20.27\% and
+            -20.08\% MEANS carried in RELATED_WORK are not in the abstract and
+            are unverified against the body; the median runtime figure is the
+            one to quote until someone reads the paper. The
+            concentrated-in-expensive-runs claim is likewise unverified}
 }
 
 % VERIFY
@@ -54,12 +72,19 @@
   year   = {2026}
 }
 
-% VERIFY
 @article{skillsecurity2026,
-  title  = {Security Analysis of the Agent Skills Ecosystem},
+  author = {Liu, Yi and Wang, Weizhe and Feng, Ruitao and Zhang, Yao and
+            Xu, Guangquan and Deng, Gelei and Li, Yuekang and Zhang, Leo},
+  title  = {Agent Skills in the Wild: An Empirical Study of Security
+            Vulnerabilities at Scale},
   journal = {arXiv preprint arXiv:2601.10338},
   year   = {2026},
-  note   = {26.1\% of sampled skills contained at least one vulnerability}
+  quote  = {Our findings reveal pervasive security risks: 26.1\% of skills
+            contain at least one vulnerability, spanning 14 distinct patterns
+            across four categories.},
+  note   = {Verified first-hand 2026-08-12. Title corrected. 42,447 skills
+            collected, 31,132 analysed. Data exfiltration 13.3\%, privilege
+            escalation 11.8\%, high-severity 5.2\%}
 }
 
 % ---------------------------------------------------------------------------
@@ -108,11 +133,24 @@
   note   = {arXiv:2307.03172}
 }
 
-% VERIFY
 @article{contextrot2026,
+  author = {Xia, Shijie and Wang, Yikun and Huang, Zhen and Liu, Pengfei},
   title  = {Diagnosing and Mitigating Context Rot in Long-horizon Search},
   journal = {arXiv preprint arXiv:2606.29718},
-  year   = {2026}
+  year   = {2026},
+  quote  = {By controlling for query difficulty, we show that the premature
+            termination rate is positively correlated with context length.},
+  note   = {Verified first-hand 2026-08-12, and THE 30-50\% FIGURE IS NOT IN
+            THIS PAPER. Three documents here cited it for "context rot is
+            documented at 30-50\% in long-horizon settings"; it is not in the
+            abstract, was not found in the PDF, and does not appear in any
+            secondary summary. What the paper establishes is a MECHANISM --
+            premature termination, models giving up or answering uncertainly
+            long before the window is full, at a rate rising with context
+            length -- across four flagship models and three benchmarks
+            (BrowseComp, BrowseComp-Plus, xbench-DeepSearch). Its own headline
+            number is a GAIN of 2.6-4.9\% from behaviour-aware filtering. Cite
+            the mechanism; do not attach a magnitude to it from here}
 }
 
 % VERIFY
@@ -194,7 +232,13 @@
             Feedback},
   booktitle = {Proceedings of EMNLP},
   year   = {2023},
-  note   = {arXiv:2305.14975}
+  quote  = {We find that verbalized confidences emitted as output tokens are
+            typically better-calibrated than the model's conditional
+            probabilities, often reducing the expected calibration error by a
+            relative 50\%.},
+  note   = {arXiv:2305.14975. Quote verified first-hand 2026-08-12. The 50\% is
+            RELATIVE and holds on TriviaQA, SciQ and TruthfulQA with RLHF
+            models; "~50\% ECE reduction" in REJECTED.md is a fair summary}
 }
 
 @article{kadavath2022know,
@@ -517,11 +561,22 @@
 }
 
 @article{cemri2025mast,
+  author  = {Cemri, Mert and Pan, Melissa Z. and Yang, Shuyi and Agrawal,
+             Lakshya A. and Chopra, Bhavya and Tiwari, Rishabh and Keutzer,
+             Kurt and Parameswaran, Aditya and Klein, Dan and Ramchandran,
+             Kannan and Zaharia, Matei and Gonzalez, Joseph E. and Stoica, Ion},
   title   = {Why Do Multi-Agent {LLM} Systems Fail?},
   journal = {arXiv preprint arXiv:2503.13657},
   year    = {2025},
+  quote   = {We develop MAST through rigorous analysis of 150 traces, guided
+             closely by expert human annotators and validated by high
+             inter-annotator agreement (kappa = 0.88).},
   note    = {MAST: 14 failure modes in 3 categories, 1600+ annotated traces,
-             inter-annotator kappa 0.88 -- all three verified. NO QUOTE FIELD
+             inter-annotator kappa 0.88 -- all three verified first-hand
+             2026-08-12. NOTE THE QUOTE'S OWN DENOMINATOR: kappa 0.88 is from
+             the 150 traces MAST was developed on, not from the 1600+ in
+             MAST-Data, and writing "1600+ traces, kappa 0.88" in one breath
+             attaches the agreement figure to the larger number. NO QUOTE FIELD
              DELIBERATELY: the category percentages 41.8/36.9/21.3 that an
              earlier draft carried are not in the paper. Aggregating the
              per-mode rates in Figure 1 gives roughly 44.3/32.4/23.5, and any
@@ -577,13 +632,17 @@
 }
 
 @article{perspectivegap2026,
+  author  = {Sun, Youran and Ren, Xingyu and Zhang, Kejia and Liu, Xinpeng and
+             Guo, Jiaxuan},
   title   = {{PerspectiveGap}: A Benchmark for Multi-Agent Orchestration
              Prompting},
   journal = {arXiv preprint arXiv:2606.08878},
   year    = {2026},
-  note    = {NO QUOTE FIELD: reported figures (17.2% average combined pass
-             rate, best model 62.0%) come from an adversarial reviewer's read,
-             not a first-hand fetch. Verify before asserting any number.
+  quote   = {the evaluated models achieve an average combined pass rate of only
+             17.2\% (GPT-5.5 62.0\%)},
+  note    = {Verified first-hand 2026-08-12: 17.2\% average combined pass rate
+             and GPT-5.5 at 62.0\% are exact, and GPT-5.5 is the best model.
+             110 scenarios, 10 topologies, 33 models from 10 companies.
              Direction is established and is the opposite of what an earlier
              draft said: it shows models are BAD at orchestration prompting,
              not that prompting the orchestrator helps. Use as a baseline and
@@ -591,13 +650,18 @@
 }
 
 @article{incontext2026,
+  author  = {Dennis, Simon and Diamond, Michael and Patil, Rivaan and
+             Shabahang, Kevin and Guo, Hao},
   title   = {In-Context Prompting Obsoletes Agent Orchestration for Procedural
              Tasks},
   journal = {arXiv preprint arXiv:2604.27891},
   year    = {2026},
-  note    = {NO QUOTE FIELD: the failure-rate pairs (11.5% vs 24%, 0.5% vs 9%,
-             5% vs 17%) come from an adversarial reviewer's read. Verify before
-             asserting. "for Procedural Tasks" is the entire scope and must not
+  quote   = {The orchestrated system fails on 24\% of travel, 9\% of Zoom, and
+             17\% of insurance conversations, compared to 11.5\%, 0.5\%, and 5\%
+             for the in-context baseline.},
+  note    = {Verified first-hand 2026-08-12: all three failure-rate pairs are
+             exact, and "dominated" is the paper's own word. 200 conversations
+             per condition, three domains, LLM-as-judge on five criteria. "for Procedural Tasks" is the entire scope and must not
              be dropped from the title}
 }
 

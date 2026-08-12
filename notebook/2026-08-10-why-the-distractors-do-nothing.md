@@ -130,3 +130,16 @@ clean-room and no-harm stratum, which is a job it is genuinely good at.
 If it lands inside [0.35, 0.75] I will have been wrong about the venue and the
 single-turn corpus stands. Recording the number I expect so that either outcome
 costs me something.
+
+---
+
+**Correction, 2026-08-12.** The 30–50% degradation figure attributed above to
+arXiv:2606.29718 is not in that paper. Not in the abstract, not found in the
+PDF, not in any secondary summary. What the paper shows is **premature
+termination** — models giving up or answering uncertainly well before the
+context window is full, at a rate rising with context length, over four models
+and three search benchmarks. Its own headline number is a 2.6–4.9% *gain* from
+behaviour-aware filtering.
+
+The reasoning in this entry does not depend on the magnitude, only on the
+direction, so what is argued above stands. The number should not be repeated.
