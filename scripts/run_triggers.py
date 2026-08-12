@@ -101,10 +101,119 @@ def ask(description: str, case: TriggerCase, model: str) -> tuple[bool | None, s
     return decision(result.text)
 
 
+CHECKPOINT = REPO_ROOT / "results" / "triggers" / "verdicts.jsonl"
+
+
+def load_done(path: Path) -> dict[tuple[str, int], dict[str, object]]:
+    """Verdicts already collected, keyed by (case id, repeat)."""
+    if not path.exists():
+        return {}
+    done = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            row = json.loads(line)
+            done[(str(row["case"]), int(row["repeat"]))] = row
+    return done
+
+
+def collect(
+    trigger_set: object, description: str, model: str, repeats: int
+) -> dict[tuple[str, int], dict[str, object]]:
+    """Run every case `repeats` times, checkpointing after each call.
+
+    Resumable, because two runs already showed the item verdicts moving and the
+    honest number needs enough repeats that a lost run would be expensive to
+    redo.
+    """
+    done = load_done(CHECKPOINT)
+    CHECKPOINT.parent.mkdir(parents=True, exist_ok=True)
+    cases = trigger_set.cases  # type: ignore[attr-defined]
+    total = len(cases) * repeats
+
+    with CHECKPOINT.open("a", encoding="utf-8") as handle:
+        for repeat in range(repeats):
+            for index, case in enumerate(cases):
+                if (case.id, repeat) in done:
+                    continue
+                try:
+                    fired, procedure = ask(description, case, model)
+                except IsolationError:
+                    raise
+                except CliError as error:
+                    fired, procedure = None, None
+                    print(f"  r{repeat} {case.id}: call failed -- {error}")
+                row = {
+                    "case": case.id,
+                    "repeat": repeat,
+                    "fired": fired,
+                    "procedure": procedure,
+                    "should_fire": case.should_fire,
+                    "route": case.route,
+                }
+                handle.write(json.dumps(row) + "\n")
+                handle.flush()
+                done[(case.id, repeat)] = row
+                seen = repeat * len(cases) + index + 1
+                if seen % 25 == 0 or seen == total:
+                    print(f"  {seen}/{total}")
+    return done
+
+
+def report_stability(
+    trigger_set: object, done: dict[tuple[str, int], dict[str, object]], repeats: int
+) -> None:
+    """Per-item stability, and how many repeats the aggregate actually needs."""
+    import numpy as np
+
+    from decision_evals.stats import per_item_reliability, repeats_for_reliability
+
+    cases = trigger_set.cases  # type: ignore[attr-defined]
+    rows = []
+    unstable_fire: list[str] = []
+    unstable_route: list[str] = []
+
+    for case in cases:
+        verdicts = [done.get((case.id, r)) for r in range(repeats)]
+        if any(v is None or v["fired"] is None for v in verdicts):
+            continue
+        fired = [bool(v["fired"]) for v in verdicts]  # type: ignore[index]
+        rows.append([1.0 if f == case.should_fire else 0.0 for f in fired])
+        if len(set(fired)) > 1:
+            unstable_fire.append(f"{case.id}({sum(fired)}/{repeats})")
+        if case.should_fire and case.route:
+            chosen = {v["procedure"] for v in verdicts}  # type: ignore[index]
+            if len(chosen) > 1:
+                unstable_route.append(
+                    f"{case.id}({'/'.join(str(c) for c in sorted(chosen, key=str))})"
+                )
+
+    scores = np.array(rows, dtype=float)
+    print(f"\n{'=' * 60}\nSTABILITY across {repeats} repeats\n{'=' * 60}")
+    print(f"  items scored          {len(rows)}")
+    print(f"  firing flipped on     {len(unstable_fire)} item(s)")
+    for entry in unstable_fire:
+        print(f"      {entry}")
+    print(f"  routing varied on     {len(unstable_route)} labelled item(s)")
+    for entry in unstable_route:
+        print(f"      {entry}")
+
+    result = per_item_reliability(scores)
+    print(f"\n  ICC                   {result.icc:.3f}")
+    print(f"  aptitude (p90)        {result.aptitude:.3f}")
+    print(f"  scatter (p90-p10)     {result.scatter:.3f}")
+    for target in (0.8, 0.9):
+        try:
+            k = repeats_for_reliability(result.icc, target)
+            print(f"  repeats for r={target}   {k}")
+        except ValueError as error:
+            print(f"  repeats for r={target}   n/a ({error})")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="haiku")
     parser.add_argument("--skill", default="decision-making")
+    parser.add_argument("--repeats", type=int, default=1)
     args = parser.parse_args()
 
     trigger_set = load_trigger_set(REPO_ROOT / TRIGGERS_DIR / f"{args.skill}.yaml")
@@ -114,37 +223,30 @@ def main() -> int:
     print(
         f"{args.skill}: {len(trigger_set.positives)} positive, {len(trigger_set.negatives)} negative"
     )
-    print(f"description: {len(description)} chars\n")
+    print(f"description: {len(description)} chars, {args.repeats} repeat(s)\n")
 
+    try:
+        done = collect(trigger_set, description, args.model, args.repeats)
+    except IsolationError as error:
+        print(f"ISOLATION FAILURE, stopping: {error}")
+        return 1
+
+    if args.repeats > 1:
+        report_stability(trigger_set, done, args.repeats)
+
+    # The single-run report below describes repeat 0, and is kept because
+    # precision and recall are what the skill is judged on. With repeats > 1 the
+    # stability block above is the one that says whether to believe it.
     verdicts: dict[str, bool] = {}
     routes: dict[str, str | None] = {}
     unparseable: list[str] = []
-
-    for index, case in enumerate(trigger_set.cases, start=1):
-        try:
-            fired, procedure = ask(description, case, args.model)
-        except IsolationError as error:
-            print(f"ISOLATION FAILURE at {case.id}, stopping: {error}")
-            return 1
-        except CliError as error:
-            print(f"  {case.id}: call failed, excluded -- {error}")
+    for case in trigger_set.cases:
+        row = done.get((case.id, 0))
+        if row is None or row["fired"] is None:
             unparseable.append(case.id)
             continue
-
-        if fired is None:
-            unparseable.append(case.id)
-            print(f"  {case.id}: unparseable, excluded")
-            continue
-
-        verdicts[case.turn] = fired
-        routes[case.turn] = procedure
-        wanted = "fire" if case.should_fire else "skip"
-        got = "fire" if fired else "skip"
-        mark = " " if wanted == got else "X"
-        extra = f" -> {procedure}" if fired else ""
-        print(
-            f"  [{index:2}/{len(trigger_set.cases)}] {mark} {case.id:6} want {wanted} got {got}{extra}"
-        )
+        verdicts[case.turn] = bool(row["fired"])
+        routes[case.turn] = row["procedure"]  # type: ignore[assignment]
 
     scored = tuple(c for c in trigger_set.cases if c.turn in verdicts)
     if len(scored) < 0.9 * len(trigger_set.cases):
