@@ -8,6 +8,7 @@ may carry a correctness verdict.
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -59,14 +60,18 @@ def _result(text: str, *, input_tokens: int = 100) -> CliResult:
 class FakeConversation:
     """Returns a scripted result per turn, with a climbing prompt size."""
 
-    def __init__(self, replies: list[str]) -> None:
+    def __init__(self, replies: list[str], *, models: list[str] | None = None) -> None:
         self._replies = replies
+        self._models = models
         self.sent: list[str] = []
 
     def send(self, text: str) -> CliResult:
         self.sent.append(text)
         index = len(self.sent)
-        return _result(self._replies[index - 1], input_tokens=100 * index)
+        result = _result(self._replies[index - 1], input_tokens=100 * index)
+        if self._models is None:
+            return result
+        return replace(result, model=self._models[index - 1])
 
 
 class TestFullInstruction:
@@ -159,7 +164,7 @@ class TestRunFull:
             return _result("42 miles")
 
         item = _instruction("math", question="How far by 3pm?")
-        record = run_full(item, model="haiku", system_prompt="s", call=call, conversation_id="c1")
+        record = run_full(item, system_prompt="s", call=call, conversation_id="c1")
         assert sent == ["How far by 3pm?"]
         assert record.condition == FULL
         assert record.n_turns == 1
@@ -168,7 +173,6 @@ class TestRunFull:
     def test_the_resolved_model_is_recorded_not_the_alias(self) -> None:
         record = run_full(
             _instruction("math", question="q"),
-            model="haiku",
             system_prompt="s",
             call=lambda p, s: _result("x"),
             conversation_id="c1",
@@ -182,7 +186,6 @@ class TestRunSharded:
         chat = FakeConversation(["ok", "ok", "180 miles"])
         record = run_sharded(
             item,
-            model="haiku",
             system_prompt="s",
             conversation=chat,  # type: ignore[arg-type]
             conversation_id="c1",
@@ -194,7 +197,6 @@ class TestRunSharded:
     def test_the_final_response_is_the_last_turn(self) -> None:
         record = run_sharded(
             _instruction("math", question="q"),
-            model="haiku",
             system_prompt="s",
             conversation=FakeConversation(["a", "b", "180 miles"]),  # type: ignore[arg-type]
             conversation_id="c1",
@@ -206,7 +208,6 @@ class TestRunSharded:
         would make it unrecoverable from our own records."""
         record = run_sharded(
             _instruction("math", question="q"),
-            model="haiku",
             system_prompt="s",
             conversation=FakeConversation(["first", "second", "third"]),  # type: ignore[arg-type]
             conversation_id="c1",
@@ -216,7 +217,6 @@ class TestRunSharded:
     def test_cost_and_duration_accumulate_across_turns(self) -> None:
         record = run_sharded(
             _instruction("math", question="q"),
-            model="haiku",
             system_prompt="s",
             conversation=FakeConversation(["a", "b", "c"]),  # type: ignore[arg-type]
             conversation_id="c1",
@@ -227,13 +227,47 @@ class TestRunSharded:
     def test_prompt_tokens_climbing_is_visible_on_the_record(self) -> None:
         record = run_sharded(
             _instruction("math", question="q"),
-            model="haiku",
             system_prompt="s",
             conversation=FakeConversation(["a", "b", "c"]),  # type: ignore[arg-type]
             conversation_id="c1",
         )
         assert record.prompt_tokens_by_turn == (100, 200, 300)
         assert record.prompt_tokens_climb
+
+    def test_the_resolved_model_is_recorded_not_the_alias(self) -> None:
+        """The pilot's first pair recorded `claude-haiku-4-5-20251001` on the
+        full leg and `haiku` on the sharded leg -- one pair, two strings in the
+        column you would group on."""
+        record = run_sharded(
+            _instruction("math", question="q"),
+            system_prompt="s",
+            conversation=FakeConversation(["a", "b", "c"]),  # type: ignore[arg-type]
+            conversation_id="c1",
+        )
+        assert record.model == "claude-haiku-4-5-20251001"
+
+    def test_a_conversation_that_changed_model_midway_is_refused(self) -> None:
+        with pytest.raises(ShardedRunError, match="more than one"):
+            run_sharded(
+                _instruction("math", question="q"),
+                system_prompt="s",
+                conversation=FakeConversation(  # type: ignore[arg-type]
+                    ["a", "b", "c"],
+                    models=["claude-haiku-4-5-20251001", "claude-haiku-4-5-20251001", "other"],
+                ),
+                conversation_id="c1",
+            )
+
+    def test_an_instruction_with_no_shards_records_no_model(self) -> None:
+        item = ShardedInstruction(task_id="t", task="math", shards=(), payload={"question": "q"})
+        record = run_sharded(
+            item,
+            system_prompt="s",
+            conversation=FakeConversation([]),  # type: ignore[arg-type]
+            conversation_id="c1",
+        )
+        assert record.model == ""
+        assert record.n_turns == 0
 
     def test_a_non_climbing_prompt_is_detectable(self) -> None:
         """If this is ever false, the turns were not accumulating."""

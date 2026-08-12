@@ -95,7 +95,6 @@ def main() -> int:
                 try:
                     record = run_full(
                         item,
-                        model=args.model,
                         system_prompt=SYSTEM_PROMPT,
                         call=lambda prompt, system: cli_run(
                             prompt, system_prompt=system, model=args.model, cwd=cwd
@@ -115,7 +114,6 @@ def main() -> int:
                     ) as chat:
                         record = run_sharded(
                             item,
-                            model=args.model,
                             system_prompt=SYSTEM_PROMPT,
                             conversation=chat,
                             conversation_id=conversation_id,

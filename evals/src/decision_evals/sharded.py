@@ -83,6 +83,9 @@ class ShardedRecord:
         prompt_tokens_by_turn: Real prompt size per turn, meaning
             ``input + cache_creation + cache_read``. The CLI's ``input_tokens``
             alone is the uncached remainder and reads 10 for a 380 KB prompt.
+        model: The **resolved** model id the CLI reports, never the alias asked
+            for. ``haiku`` is not a version, and the two conditions of one pair
+            must land in the same group when this column is grouped on.
     """
 
     task_id: str
@@ -246,12 +249,17 @@ SingleCallFn = Callable[[str, str], CliResult]
 def run_full(
     instruction: ShardedInstruction,
     *,
-    model: str,
     system_prompt: str,
     call: SingleCallFn,
     conversation_id: str,
 ) -> ShardedRecord:
-    """Deliver the whole instruction in one call."""
+    """Deliver the whole instruction in one call.
+
+    There is no ``model`` parameter. The model is whatever ``call`` resolved,
+    read back off the result -- an argument here would be a second source of
+    truth for the same column, and the caller could set it to something the CLI
+    did not actually run.
+    """
     result = call(full_instruction(instruction), system_prompt)
     return ShardedRecord(
         task_id=instruction.task_id,
@@ -272,7 +280,6 @@ def run_full(
 def run_sharded(
     instruction: ShardedInstruction,
     *,
-    model: str,
     system_prompt: str,
     conversation: Conversation,
     conversation_id: str,
@@ -282,10 +289,16 @@ def run_sharded(
     The caller owns the :class:`Conversation` so that its isolation receipt can
     be asserted before any turn is scored, and so a failure closes one
     conversation rather than the run.
+
+    Raises:
+        ShardedRunError: The turns did not all resolve to the same model. A
+            conversation that changed tier partway is not one observation, and
+            it is invisible in the response text.
     """
     texts: list[str] = []
     prompts: list[int] = []
     outputs: list[int] = []
+    models: list[str] = []
     cost = 0.0
     duration = 0
     for shard in instruction.shards:
@@ -293,14 +306,23 @@ def run_sharded(
         texts.append(result.text)
         prompts.append(result.input_tokens)
         outputs.append(result.output_tokens)
+        models.append(result.model)
         cost += result.cost_usd
         duration += result.duration_ms
+
+    resolved = set(models)
+    if len(resolved) > 1:
+        raise ShardedRunError(
+            f"{instruction.task_id}: the conversation resolved to more than one "
+            f"model across its turns ({sorted(resolved)}). That is not one "
+            "observation and the response text does not show it."
+        )
 
     return ShardedRecord(
         task_id=instruction.task_id,
         task=instruction.task,
         condition=SHARDED,
-        model=model,
+        model=models[0] if models else "",
         n_turns=len(texts),
         final_response=texts[-1] if texts else "",
         turn_responses=tuple(texts),
