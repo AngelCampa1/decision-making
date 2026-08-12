@@ -4,16 +4,23 @@ This file is read by Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode
 and others. Claude Code reads `CLAUDE.md`; the two carry the same content here.
 
 **It is also the product.** Skill *availability* is the dominant term in whether
-a skill helps at all — SkillsBench measures a large gain from having the right
-skill present against +0.7pp from polishing its prose, with intervals crossing
-zero. So the block below is not documentation about the skills. It is the part
-that makes them fire, and it is meant to be copied into your own project.
+a skill helps at all. Two independent benchmarks agree on the direction:
 
-> The presence figure previously read "+18 to +36pp" here. A 2026-08-11
-> literature check surfaced the paper's headline as **+16.6pp** average
-> (33.9 → 50.5). Both are under re-check against arXiv:2602.12670 before either
-> is asserted again — see Track K in
-> [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md).
+| Source | Scale | Presence effect | On form |
+|---|---|---|---|
+| Xu & Wu, *Skill Availability and Presentation Granularity* (arXiv:2605.31408) | 30 tasks, 2 models | **+18 to +36pp** | granularity effects minimal, uncertain, model-dependent (+0.7pp, intervals crossing zero) |
+| Li et al., *SkillsBench* (arXiv:2602.12670) | 87 tasks, 8 domains | **+16.6pp** (33.9 → 50.5) | focused bundles beat larger ones; self-generated skills ≈0 or negative |
+
+So the block below is not documentation about the skills. It is the part that
+makes them fire, and it is meant to be copied into your own project.
+
+**And the block stays short on purpose.** Expanding a skill library causes
+*skill shadowing* — selection accuracy falls from above 90% with fewer than 30
+candidates to 13.6% at ecosystem scale, and the mechanism is **description
+overlap**: when two descriptions sound alike, the agent guesses
+([arXiv:2605.24050](https://arxiv.org/html/2605.24050)). Four separately-listed
+skills that all read as "help me decide" are that failure, which is why the
+decision procedures live behind **one** entry rather than four.
 
 ---
 
@@ -22,36 +29,21 @@ that makes them fire, and it is meant to be copied into your own project.
 ```markdown
 ## Decision skills
 
-Reach for these when the shape of the problem matches. They are cheap to enter
-and cheap to leave — each one opens with the conditions under which it should
-skip itself, so invoking one on a case it does not fit costs a few tokens rather
-than a detour.
+- **decision-making** — when someone is trying to decide something and wants help
+  deciding it: "help me think this through", "should I take it", "what would you
+  do", or a pile of context ending in a question about what to do. It routes to
+  one of four procedures depending on what is actually hard — too much context,
+  advice that may not fit this person, downstream consequences, or timing — and
+  reads only that one. Skip it for lookups, for creative or exploratory work, and
+  when the person wants information rather than a recommendation.
 
-- **evidence-ledger** — when a decision depends on a pile of accumulated context
-  (a long thread, pasted logs, search results, a channel backlog) and what the
-  answer turns on has to be separated from what merely arrived. Skip it for a
-  short prompt with one or two facts, or a lookup with one obvious source.
+One entry, not four. Four separate decision skills would have four descriptions
+that all read as "help me decide", and overlapping descriptions are the
+mechanism by which agents pick the wrong skill.
 
-- **switching-conditions** — when someone asks what *they* should do and the
-  right answer turns on facts about them: the offer, the move, the lease, the
-  course, whether to tell them. Gives the generic answer first, then the facts
-  that would overturn it and the threshold at which each one bites. Skip it when
-  the answer is the same for everyone.
-
-- **consequence-cascade** — when an action looks fine on its own and the worry is
-  what it sets in motion, or which option it quietly spends. Follows the chain to
-  the point where it stops being knowable, and checks whether the order of two
-  steps matters. Skip it for contained, reversible, low-stakes moves.
-
-- **decide-or-wait** — when the question is timing rather than direction, or when
-  something feels urgent and it is not clear the urgency is real. Prices the
-  undo, separates the real deadline from the felt one, and often splits the move
-  into a part to do now and a part to defer. Skip it while what to do is still
-  unsettled.
-
-Trust your own read on when these apply. They are procedures, not policies:
-if one of them is producing worse answers than working directly, that is worth
-knowing and worth saying.
+Trust your own read on when it applies. It is a procedure, not a policy: if it
+is producing worse answers than thinking directly, that is worth knowing and
+worth saying.
 ```
 
 The wording is deliberate. Trust-framed system prompts surfaced 59% more hidden

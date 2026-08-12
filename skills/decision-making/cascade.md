@@ -1,35 +1,3 @@
----
-name: consequence-cascade
-description: >-
-  Use when an action looks fine on its own and the worry is what it sets in
-  motion — resigning before something is signed, telling one person before
-  another, taking the money now, moving first and sorting the rest out later.
-  Produces the chain of effects to the point where it stops being knowable, the
-  options the action quietly spends, and the order the steps have to happen in.
-  Do not use for contained one-off actions with no downstream, for reversible
-  low-stakes choices, or for creative and exploratory work where following
-  consequences is not the point.
-license: Apache-2.0
-compatibility: ">=1.0"
-metadata:
-  version: 0.1.0
-  status: experimental
-  verdict: UNTESTED
-  primary_metric: foreclosure_recall
-  claims:
-    - id: cc-1
-      text: The chain is followed only to the point where the next step stops being knowable, and that stopping point is stated.
-    - id: cc-2
-      text: Options the action removes are named separately from effects the action causes.
-    - id: cc-3
-      text: Where two steps can happen in either order, the orders are compared rather than assumed.
-    - id: cc-4
-      text: One chain is followed per action under consideration, rather than a branching tree of possibilities.
-    - id: cc-5
-      text: The skill exits when the action has no downstream worth tracing.
-allowed-tools: []
----
-
 # Consequence cascade
 
 An action is usually judged on what it does. The trouble is rarely there. It is

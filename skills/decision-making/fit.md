@@ -1,35 +1,3 @@
----
-name: switching-conditions
-description: >-
-  Use when someone asks what they should do about their own life or work — take
-  the offer, move, buy or keep renting, go back to study, leave, tell them — and
-  the right answer turns on facts about that particular person. Produces the
-  generic answer, the specific facts that would overturn it with the threshold
-  at which each one bites, and an answer that stays conditional on whatever is
-  still unknown. Do not use for factual lookups, for questions with the same
-  answer for everyone, for debugging or code review, or when the person's
-  situation is already fully specified.
-license: Apache-2.0
-compatibility: ">=1.0"
-metadata:
-  version: 0.1.0
-  status: experimental
-  verdict: UNTESTED
-  primary_metric: switch_discrimination
-  claims:
-    - id: sc-1
-      text: The generic answer is written down separately, before any tailoring, so that it is visible as generic.
-    - id: sc-2
-      text: Each switching condition names the threshold or state at which the recommendation changes, not merely the topic it concerns.
-    - id: sc-3
-      text: Only facts that would change the recommendation are asked for.
-    - id: sc-4
-      text: An answer left conditional on an unknown is a complete answer rather than a deferral.
-    - id: sc-5
-      text: The skill exits without switches when the question does not depend on who is asking.
-allowed-tools: []
----
-
 # Switching conditions
 
 Most advice is correct in general and wrong for the person asking. *Build six

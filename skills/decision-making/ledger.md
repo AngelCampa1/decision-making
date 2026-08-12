@@ -1,35 +1,3 @@
----
-name: evidence-ledger
-description: >-
-  Use when a decision depends on a pile of accumulated context — a long thread,
-  pasted logs, search results, several documents, a channel backlog — and what
-  the answer turns on has to be separated from what merely arrived. Produces a
-  ranked ledger of load-bearing facts plus an explicit list of what was set
-  aside and why. Do not use for a short prompt with one or two facts, for
-  creative or open-ended writing, for a lookup with a single obvious source, or
-  when a ledger is already present in this turn.
-license: Apache-2.0
-compatibility: ">=1.0"
-metadata:
-  version: 0.1.0
-  status: experimental
-  verdict: UNTESTED
-  evidence: evidence/evidence-ledger.md
-  primary_metric: accuracy_distractor_present
-  claims:
-    - id: el-1
-      text: Each context item is verified individually before anything is discarded.
-    - id: el-2
-      text: A discarded item is named together with the reason it is not load-bearing.
-    - id: el-3
-      text: An item is load-bearing only if changing it would change the answer.
-    - id: el-4
-      text: Assertions carried in from the conversation are restated in the third person before being weighed.
-    - id: el-5
-      text: The skill exits without a ledger when the context is small enough not to need one.
-allowed-tools: []
----
-
 # Evidence ledger
 
 Context arrives; relevance is a separate question. A long thread, a pasted log,

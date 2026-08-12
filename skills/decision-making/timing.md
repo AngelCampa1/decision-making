@@ -1,35 +1,3 @@
----
-name: decide-or-wait
-description: >-
-  Use when the question is about timing rather than direction — should I commit
-  now, hold off, accept the offer today, sign, quit, tell them yet — or when a
-  decision feels urgent and it is not clear whether the urgency is real.
-  Produces whether the move is reversible and at what cost, which deadline is
-  real, what waiting buys and what it costs, and often a split into the part to
-  do now and the part to defer. Do not use when the choice itself is unresolved
-  rather than its timing, when a hard external deadline has already passed, or
-  for scheduling and calendar questions.
-license: Apache-2.0
-compatibility: ">=1.0"
-metadata:
-  version: 0.1.0
-  status: experimental
-  verdict: UNTESTED
-  primary_metric: timing_admissibility
-  claims:
-    - id: dw-1
-      text: Reversibility is stated as a cost to undo rather than as a yes or no.
-    - id: dw-2
-      text: Each deadline is marked real or imagined, and a real one names what enforces it.
-    - id: dw-3
-      text: What waiting buys is named as specific information arriving at a specific time, not as general clarity.
-    - id: dw-4
-      text: The cost of waiting is stated even when the recommendation is to wait.
-    - id: dw-5
-      text: The decision is split into its reversible and irreversible parts wherever the parts can move separately.
-allowed-tools: []
----
-
 # Decide or wait
 
 Cheap, reversible decisions get agonised over. Expensive, irreversible ones get

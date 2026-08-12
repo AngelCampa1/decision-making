@@ -75,7 +75,9 @@ Measured elsewhere. We do not re-measure these; we check they hold on our stack
 | Multi-agent failure taxonomy | [MAST](https://arxiv.org/abs/2503.13657) | 14 modes, 1600+ traces, κ=0.88; **41.8%** design/spec, **36.9%** inter-agent misalignment, **21.3%** verification/termination |
 | Summarisation is not neutral compression | [When Summaries Distort Decisions](https://arxiv.org/html/2606.29251) | different summarisers move identical evidence toward opposite decisions |
 | Recency in ranking | [Do LLMs Favor Recent Content?](https://arxiv.org/abs/2509.11353) | 7 models; up to 95 rank positions |
-| Curated skills help; self-generated ones do not | [SkillsBench](https://arxiv.org/abs/2602.12670) | **+16.6pp** (33.9 → 50.5); focused 2–3 module skills beat comprehensive docs |
+| Skill *presence* is the dominant term; *form* is not | [Xu & Wu](https://arxiv.org/abs/2605.31408), 30 tasks, 2 models | **+18 to +36pp** from presence; granularity minimal and model-dependent |
+| Curated skills help; self-generated ones do not | [SkillsBench](https://arxiv.org/abs/2602.12670), 87 tasks, 8 domains | **+16.6pp** (33.9 → 50.5); focused bundles beat larger ones |
+| More skills makes agents worse | [Skill shadowing](https://arxiv.org/html/2605.24050) | selection accuracy >90% under 30 candidates → 13.6% at scale; mechanism is **description overlap** |
 | Orchestration is not free | [In-Context Prompting Obsoletes Agent Orchestration](https://arxiv.org/pdf/2604.27891) | for procedural tasks a single well-prompted call matches multi-agent |
 | Orchestrator prompting already shown to help | [PerspectiveGap](https://arxiv.org/pdf/2606.08878) | prior art — we must be sharper than "prompting the orchestrator helps" |
 
@@ -138,7 +140,7 @@ what every other track is testing.
 | K2 | Review the *prescriptive* evidence — which of these actually improve human decisions in trials, not which are popular. Many are folklore with a book attached, and the write-up must say which. |
 | K3 | Mine [cc-thinking-skills](https://github.com/tjboudreaux/cc-thinking-skills) and comparable prompt libraries: what frameworks are already encoded, in what form, with what evidence behind them. The maintainer installed it and reports it did not help — that is data about form, not about the frameworks. |
 | K4 | Map framework → failure mode. A framework is only a skill candidate if it targets a failure an LLM actually makes. Cross against Track A's results. |
-| K5 | Verify the SkillsBench figures cited throughout this repo against arXiv:2602.12670, and correct `AGENTS.md`, `CLAUDE.md` and any notebook entry that repeats them. |
+| K5 | **Citation audit.** 65 arXiv identifiers are cited across `docs/` and `notebook/`; `paper/refs.bib` holds 39. Resolve every cited identifier against arxiv.org, add the 26 missing entries, and make `de check` fail when a markdown citation has no bib entry. A 2026-08-11 spot check already found one conflation of two real papers, caught only because the same claim carried two identifiers. |
 | K6 | Output: `docs/DECISION_FRAMEWORKS.md` — the catalogue, with a shortlist of framework-derived skill candidates ranked by evidence strength. |
 
 **Skill candidates already named in the brief and not yet written:** a council /
@@ -180,6 +182,43 @@ winner is re-run on a fresh holdout before it is called best.
 
 **Done when** one target failure has ≥3 authored variants, a pre-registered
 comparison, and a winner replicated on a holdout.
+
+---
+
+## Track M — Skill design: how a skill should be built
+
+**Question.** Given content worth having, what is the right *shape* to put it
+in — one skill or several, how long, how bundled, how described?
+
+**Why it matters.** This is a separate question from *what the skill says*, and
+the evidence says it may matter more. The repository shipped four decision skills
+on 2026-08-11 and consolidated them into one the same day, because the research
+below says four overlapping descriptions is a known failure rather than a
+richer offering.
+
+| Finding | Source | Bearing |
+|---|---|---|
+| Skill **presence** dominates; presentation granularity is minimal and model-dependent | [arXiv:2605.31408](https://arxiv.org/abs/2605.31408) — 30 tasks, 2 models | +18–36pp from presence, ~+0.7pp from form |
+| **Focused bundles beat larger ones**; self-generated skills ≈0 or negative | [arXiv:2602.12670](https://arxiv.org/abs/2602.12670) — 87 tasks, 8 domains | +16.6pp for curated |
+| **Skill shadowing** — more skills makes agents worse | [arXiv:2605.24050](https://arxiv.org/html/2605.24050) | selection >90% under 30 candidates → 13.6% at scale; mechanism is description overlap |
+| **Progressive disclosure** — metadata preloaded, body on activation, bundled files only when the body directs | Agent Skills specification | the mechanism that reconciles "one entry" with "focused content" |
+
+Those first two look opposed and are not. *Focused* is about what loads; *one
+entry* is about what the router has to choose between. Progressive disclosure
+separates the two: one description in context at all times, one procedure file
+read when it fires.
+
+| # | Work |
+|---|---|
+| M1 | Read the Agent Skills specification properly and record what the three disclosure levels cost and buy. |
+| M2 | Measure false-fire rate: how often does `decision-making` activate when it should not, and how often does it miss? This is the number the description controls and nothing in this repo measures it yet. |
+| M3 | Measure whether routing works: given a decision, does the model read the *right* one of the four files? A router that always reads `ledger.md` is one skill wearing four. |
+| M4 | Race one-entry-with-routing against four-separate-skills. The four-skill version is preserved in git at `9a16b18` and is the comparison arm. This is Track L applied to structure rather than to prose. |
+| M5 | Bundle-size curve: 2 procedures, 4, 8. Where does routing accuracy break? |
+
+**Hypothesis falsifier.** If routing accuracy is at chance, the bundle is a
+single long skill with extra steps, and the honest move is to merge the four
+procedures into one body or split them back into separately-triggered skills.
 
 ---
 
