@@ -43,7 +43,17 @@ REQUIRED_FIELDS: Final[frozenset[str]] = frozenset({"name", "description"})
 
 #: Verdicts from SCORECARD.md. A verdict outside this set is a typo, and a typo
 #: in a verdict is a false claim.
-VERDICTS: Final[frozenset[str]] = frozenset({"SHIP", "PROVISIONAL", "NULL", "HARMFUL", "UNTESTED"})
+VERDICTS: Final[frozenset[str]] = frozenset(
+    {"SHIP", "PROVISIONAL", "NULL", "HARMFUL", "UNTESTED", "WITHDRAWN"}
+)
+
+#: Verdicts that may not appear on a skill inside the plugin directory.
+#:
+#: ``UNTESTED`` because carrying no verdict into the plugin is what makes a badge
+#: meaningless. ``WITHDRAWN`` because it is the negative outcome of the
+#: maintainer's daily use, and a retirement rule with nothing behind it is not a
+#: rule -- evidence that cannot come out negative is not evidence.
+UNSHIPPABLE_VERDICTS: Final[frozenset[str]] = frozenset({"UNTESTED", "WITHDRAWN"})
 
 #: Phrases that mark a description's negative clause. Crude, and deliberately
 #: so: the check is that the author wrote one at all.
@@ -184,12 +194,13 @@ def _check_metadata(name: str, front: dict[str, Any], *, shipped: bool) -> list[
     verdict = metadata.get("verdict")
     if verdict not in VERDICTS:
         issues.append(SkillIssue(name, f"verdict {verdict!r} is not one of {sorted(VERDICTS)}"))
-    elif shipped and verdict == "UNTESTED":
+    elif shipped and verdict in UNSHIPPABLE_VERDICTS:
         issues.append(
             SkillIssue(
                 name,
-                "an UNTESTED skill may not ship. Develop it in skills/ for as long as you "
-                "like; carrying no verdict into the plugin is what makes a badge meaningless.",
+                f"a {verdict} skill may not ship. Develop it in skills/ for as long as you "
+                "like; carrying no verdict into the plugin is what makes a badge meaningless, "
+                "and a withdrawn one is a procedure the maintainer stopped using.",
             )
         )
 
@@ -291,13 +302,18 @@ def promotable(skills_root: Path) -> list[Path]:
     check. Demotion works the same way in reverse -- a skill whose verdict
     reverts stops being promotable, and the copy it left behind is reported as
     an orphan rather than quietly continuing to ship.
+
+    WITHDRAWN demotes by the same path. It is the negative outcome of the
+    maintainer's daily use, and routing it through the existing orphan machinery
+    rather than a second mechanism is what makes the retirement rule operate
+    instead of merely being written down.
     """
     if not skills_root.is_dir():
         return []
     return [
         path.parent
         for path in sorted(skills_root.glob("*/SKILL.md"))
-        if (verdict_of(path.parent) or "UNTESTED") != "UNTESTED"
+        if (verdict_of(path.parent) or "UNTESTED") not in UNSHIPPABLE_VERDICTS
     ]
 
 

@@ -11,6 +11,7 @@ import yaml
 from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.skills import (
     STANDARD_FIELDS,
+    UNSHIPPABLE_VERDICTS,
     VERDICTS,
     check_mirrors,
     mirror_plan,
@@ -185,10 +186,23 @@ def test_an_untested_skill_may_be_developed_but_not_shipped(tmp_path: Path) -> N
     assert any("may not ship" in str(i) for i in issues)
 
 
-@pytest.mark.parametrize("verdict", sorted(VERDICTS - {"UNTESTED"}))
+@pytest.mark.parametrize("verdict", sorted(VERDICTS - UNSHIPPABLE_VERDICTS))
 def test_a_skill_with_a_verdict_may_ship(tmp_path: Path, verdict: str) -> None:
     front = _frontmatter(metadata={"verdict": verdict, "claims": [{"id": "c1", "text": "t"}]})
     assert validate_skill(_write(tmp_path, front=front), shipped=True) == []
+
+
+def test_a_withdrawn_skill_may_be_developed_but_not_shipped(tmp_path: Path) -> None:
+    """The retirement rule, enforced rather than merely written in SCORECARD.md.
+
+    WITHDRAWN is the negative outcome of the maintainer's daily use. If it did
+    not block the plugin it would be a label, and an evidence channel that only
+    ever comes out positive is not an evidence channel.
+    """
+    front = _frontmatter(metadata={"verdict": "WITHDRAWN", "claims": [{"id": "c1", "text": "t"}]})
+    path = _write(tmp_path, front=front)
+    assert validate_skill(path, shipped=False) == []
+    assert any("WITHDRAWN skill may not ship" in str(i) for i in validate_skill(path, shipped=True))
 
 
 @pytest.mark.parametrize("claims", [None, [], "not a list"])
@@ -330,7 +344,7 @@ def test_an_untested_skill_is_not_promotable(tmp_path: Path) -> None:
     assert promotable(_repo(tmp_path) / "skills") == []
 
 
-@pytest.mark.parametrize("verdict", sorted(VERDICTS - {"UNTESTED"}))
+@pytest.mark.parametrize("verdict", sorted(VERDICTS - UNSHIPPABLE_VERDICTS))
 def test_any_recorded_verdict_makes_a_skill_promotable(tmp_path: Path, verdict: str) -> None:
     """Including HARMFUL: shipping it off-by-default with its evidence is the point."""
     repo = _promote(_repo(tmp_path), verdict)

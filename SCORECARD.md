@@ -1,8 +1,20 @@
 # Scorecard
 
-**Generated artifact — do not edit by hand.** `de report` rebuilds this from
+**Hand-maintained, and this line used to claim otherwise.** It read *"generated
+artifact — do not edit by hand; `de report` rebuilds this from
 `results/**/summary.json`, and `de check` fails the build if the committed copy
-differs from what the results imply.
+differs."* None of that was true: there is no `de report` command, no
+`summary.json` under `results/`, and no scorecard step in `de check`. The file
+had not changed since the initial commit, so nothing ever tested the promise.
+
+Correcting it rather than building the generator, because the table is still
+empty. A generator written now would be written against a results schema no run
+has produced. When the first confirmatory run lands, `de report` gets built and
+this paragraph gets replaced by the guarantee it describes.
+
+What *is* enforced today is the promotion gate: `de lint` refuses to let a skill
+carrying `UNTESTED` or `WITHDRAWN` sit in `plugin/skills/`, and `de check` runs
+it. That check is real and has teeth. The table below does not.
 
 ## Skills
 
@@ -25,6 +37,31 @@ verdict vocabulary, and [`notebook/`](notebook/) for the running research log.
 | `NULL` | Confidence interval includes zero, or the effect is smaller than the pre-registered minimum detectable effect. Back to the workbench; ships as `experimental` |
 | `HARMFUL` | Significantly worse, or a guard was violated. Off by default pending redesign |
 | `UNTESTED` | No confirmation run. Cannot carry a proven badge |
+| `WITHDRAWN` | The maintainer stopped using it. See the retirement rule below |
 
 A verdict governs the *public claim*, not whether a skill is usable. `NULL` means
 we have not shown it works, which is not the same as showing it does not.
+
+## The retirement rule
+
+The maintainer's daily use is the fastest signal this project has, and until now
+it could only come out positive. A procedure that fires when it should not, or
+that produces a worse answer than thinking directly, had no way of being
+recorded as such. **Evidence that cannot come out negative is not evidence**, so
+here is the failure condition.
+
+**A procedure disabled for 14 consecutive days is marked `WITHDRAWN`.**
+
+- The clock starts at a dated line in [`notebook/`](notebook/) saying the
+  procedure was turned off and why. Turning it back on is another dated line.
+- Fourteen days is chosen to survive a holiday and not to survive disinterest.
+  It is a judgement, not a measurement, and it is written down before any
+  procedure is near it so that it cannot be chosen to spare one.
+- `WITHDRAWN` blocks the plugin exactly as `UNTESTED` does — enforced by
+  `de lint`, not by intention.
+- It is reversible. A withdrawn procedure that is rewritten and used again
+  returns to `UNTESTED`, and the notebook keeps both entries.
+
+This is not a public claim about the procedure. It says the person who wrote it
+stopped reaching for it, which is worth exactly as much as that sounds — and
+considerably more than an evidence channel that only ever agrees with itself.
