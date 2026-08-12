@@ -289,6 +289,47 @@ def validate_manifests_step() -> StepResult:
 
 
 @app.command()
+def fetch(
+    force: bool = typer.Option(
+        False, "--force", help="Re-download even if the local copy already verifies."
+    ),
+) -> None:
+    """Download the vendored corpora and verify them against their locks.
+
+    Deliberately not part of ``de check``: it makes network calls, and the gate
+    is meant to be runnable offline and deterministic. The corpus is 28.9 MB and
+    is fetched once.
+    """
+    import urllib.request
+
+    from decision_evals.corpora import CORPUS_PATH, CorpusError, load_lock, verify
+
+    _echo_header("fetch")
+    lock = load_lock(REPO_ROOT)
+    target = REPO_ROOT / CORPUS_PATH
+
+    if not force:
+        try:
+            verify(target, lock)
+        except CorpusError:
+            pass
+        else:
+            typer.echo(f"{CORPUS_PATH} already matches the lock; nothing to do")
+            raise typer.Exit(0)
+
+    typer.echo(f"GET {lock.url}")
+    typer.echo(f"  {lock.size_bytes:,} bytes, {lock.data_license}")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    # The URL is built from the committed lock, never from user input, and the
+    # payload is verified against a pinned hash immediately after it lands.
+    with urllib.request.urlopen(lock.url) as response:
+        target.write_bytes(response.read())
+
+    verify(target, lock)
+    typer.echo(f"verified {CORPUS_PATH} against {lock.repo}@{lock.commit[:7]}")
+
+
+@app.command()
 def mirror() -> None:
     """Regenerate the cross-tool mirrors (`.agents/skills/`, `CLAUDE.md`).
 

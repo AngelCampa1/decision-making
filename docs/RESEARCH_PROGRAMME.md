@@ -436,11 +436,26 @@ any skill work. That is a real finding and it gets written up as one.
 
 | # | Experiment | Design | Prediction registered before |
 |---|---|---|---|
-| A1 | **Multi-turn drop** | **Adopt the published instrument rather than authoring one.** arXiv:2505.06120 released its sharded corpus and simulator — `github.com/microsoft/lost_in_conversation` (MIT) and `sharded_instructions_600.json` (CDLA-Permissive-2.0): 600 pre-sharded instructions, 7 task families, plus the sharding prompts and simulated-user agent. This *is* the A1 design, peer-reviewed, and it removes the activity with this repo's worst track record — three discarded corpora, 21/21 key errors. Needs a `model_claude_code.py` shim against their `generate()` interface; their only backend is OpenAI. Skip the `code` task (Unix-only eval). **The "~6 turns" figure was mine and has no source** — the paper sweeps 2→8 and reports no mean; measure it from the JSON. | yes |
+| A1 | **Multi-turn drop** | **Adopted, and now vendored.** `microsoft/lost_in_conversation` (MIT), corpus CDLA-Permissive-2.0, pinned at commit `c865793` with a SHA-256 in `datasets/vendor/lost_in_conversation.lock.json`; `de fetch` downloads it and the loader refuses anything that does not match. This removes the activity with this repo's worst record — three discarded corpora, 21/21 key errors. Still needed: a `model_claude_code.py` shim; their only backend is OpenAI. **Three things measured on retrieval, each contradicting something we had written down** — see below. | yes |
 | A2 | **Recency over-weighting** | Decisive fact placed at first / middle / last turn, total turns fixed. Flat means no recency effect here and Track C changes shape. | yes |
 | A3 | **Handoff loss** | Sub-agent reads the documents and reports; orchestrator decides from the report alone vs from raw documents. The gap is compression loss. Also: *which* facts survive. | yes |
 | A4 | **Does delegating even help?** | One agent with everything vs orchestrator + sub-agents, same task. If single wins, the skill's job changes from "delegate better" to "know when not to delegate." | yes |
 | A5 | **Reliability** | *k* repeats per item at each venue. Measure the scatter, not the mean. | yes |
+
+**What the vendored corpus actually contains**, measured 2026-08-11 by
+`decision_evals.corpora.shard_summary` rather than read off the paper:
+
+| We had written | The file says |
+|---|---|
+| 600 instructions | **627 records** — the filename is wrong, not the count |
+| 7 task families | **6 present**: actions, code, data2text, database, math, summary. The seventh, `translation`, is a separate file (`data/sharded_translation.json`) |
+| sharded "across ~6 turns", flagged as invented | **mean 5.97, median 6, range 3–12.** The invented figure was *right* — and it was still invented. It is now measured |
+| skip `code` (Unix-only eval) | leaves **527 records**, mean 5.78, median 6 |
+
+The turn-count spread is the part that changes a design. A corpus running 3 to 12
+turns is not a fixed-length instrument, so any per-item comparison has to carry
+turn count as a covariate rather than assume it away — and A2, which holds total
+turns fixed while moving a fact, cannot simply reuse A1's items.
 
 **Depends on.** Track 0.
 

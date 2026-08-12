@@ -21,6 +21,7 @@ from decision_evals.cli import (
     lint_skills_step,
     validate_manifests_step,
 )
+from decision_evals.corpora import CorpusError
 
 runner = CliRunner()
 
@@ -231,3 +232,116 @@ class TestCheckCitationsStep:
         result = cli.check_citations_step()
         assert not result.passed
         assert "25 issue(s)" in result.detail
+
+
+class TestFetch:
+    """The vendoring command.
+
+    The network call is stubbed. What is worth pinning down is that the command
+    verifies *after* writing, so a corrupted or redirected download cannot leave
+    a plausible-looking file in the vendor directory and exit zero.
+    """
+
+    _PAYLOAD = b'[{"task_id": "t", "task": "math", "shards": ["a"]}]'
+
+    @staticmethod
+    def _lock(root: Path, payload: bytes, *, sha: str | None = None) -> None:
+        import hashlib
+        import json as _json
+
+        (root / "datasets" / "vendor").mkdir(parents=True, exist_ok=True)
+        (root / "datasets" / "vendor" / "lost_in_conversation.lock.json").write_text(
+            _json.dumps(
+                {
+                    "repo": "microsoft/lost_in_conversation",
+                    "commit": "c" * 40,
+                    "member": "data/sharded_instructions_600.json",
+                    "size_bytes": len(payload),
+                    "sha256": sha or hashlib.sha256(payload).hexdigest(),
+                    "code_license": "MIT",
+                    "data_license": "CDLA-Permissive-2.0",
+                    "retrieved": "2026-08-11",
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    def _stub_urlopen(self, monkeypatch: pytest.MonkeyPatch, payload: bytes) -> list[str]:
+        import contextlib
+        import urllib.request
+
+        called: list[str] = []
+
+        @contextlib.contextmanager
+        def fake(url: str):  # type: ignore[no-untyped-def]
+            called.append(url)
+
+            class _Response:
+                @staticmethod
+                def read() -> bytes:
+                    return payload
+
+            yield _Response()
+
+        monkeypatch.setattr(urllib.request, "urlopen", fake)
+        return called
+
+    def test_downloads_and_verifies(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        self._lock(tmp_path, self._PAYLOAD)
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        called = self._stub_urlopen(monkeypatch, self._PAYLOAD)
+
+        result = runner.invoke(app, ["fetch"])
+        assert result.exit_code == 0, result.output
+        assert "verified" in result.output
+        assert len(called) == 1
+        assert called[0].startswith("https://raw.githubusercontent.com/")
+
+    def test_a_second_run_is_a_no_op(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        self._lock(tmp_path, self._PAYLOAD)
+        (tmp_path / "datasets" / "vendor" / "sharded_instructions_600.json").write_bytes(
+            self._PAYLOAD
+        )
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        called = self._stub_urlopen(monkeypatch, self._PAYLOAD)
+
+        result = runner.invoke(app, ["fetch"])
+        assert result.exit_code == 0
+        assert "already matches the lock" in result.output
+        assert called == []
+
+    def test_force_re_downloads_an_already_valid_copy(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        self._lock(tmp_path, self._PAYLOAD)
+        (tmp_path / "datasets" / "vendor" / "sharded_instructions_600.json").write_bytes(
+            self._PAYLOAD
+        )
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        called = self._stub_urlopen(monkeypatch, self._PAYLOAD)
+
+        result = runner.invoke(app, ["fetch", "--force"])
+        assert result.exit_code == 0
+        assert len(called) == 1
+
+    def test_a_download_that_does_not_match_the_lock_fails_loudly(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """The case this command exists for: something else arrived."""
+        self._lock(tmp_path, self._PAYLOAD, sha="a" * 64)
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        self._stub_urlopen(monkeypatch, self._PAYLOAD)
+
+        result = runner.invoke(app, ["fetch"])
+        assert result.exit_code != 0
+        assert isinstance(result.exception, CorpusError)
+
+    def test_a_missing_lock_is_refused_before_any_network_call(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        called = self._stub_urlopen(monkeypatch, self._PAYLOAD)
+
+        result = runner.invoke(app, ["fetch"])
+        assert result.exit_code != 0
+        assert called == []

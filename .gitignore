@@ -55,3 +55,9 @@ Thumbs.db
 # pre-registration gate rather than a reported result; its outcome is recorded
 # in notebook/.
 results/calibration/
+
+# Vendored third-party corpora: pinned by hash in *.lock.json, fetched by `de fetch`.
+# The payloads are large and byte-identical upstream, so the lock is committed and
+# the data is not.
+datasets/vendor/*.json
+!datasets/vendor/*.lock.json

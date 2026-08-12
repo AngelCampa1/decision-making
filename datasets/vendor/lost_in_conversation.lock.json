@@ -1,0 +1,31 @@
+{
+  "_comment": [
+    "The pinned identity of the sharded corpus released with arXiv:2505.06120.",
+    "The payload itself is 28.9 MB and is NOT committed; `de fetch` downloads it",
+    "and decision_evals.corpora.verify() refuses anything that does not match.",
+    "Upstream is a live main branch, so the commit pin is what makes 'we ran the",
+    "published corpus' checkable rather than hopeful. Do not re-pin this file to",
+    "silence a hash mismatch -- find out what changed upstream first."
+  ],
+  "repo": "microsoft/lost_in_conversation",
+  "commit": "c865793fe34a929d316119b0451d01bd9183bcfd",
+  "member": "data/sharded_instructions_600.json",
+  "size_bytes": 30352135,
+  "sha256": "6667a3ab2b013d51d7808ac913e24b2db843a0288da6a8c5cbddec89d6163f1e",
+  "code_license": "MIT",
+  "data_license": "CDLA-Permissive-2.0",
+  "retrieved": "2026-08-11",
+  "measured_on_retrieval": {
+    "_comment": "Measured, not assumed. Each of these contradicts something we had written down.",
+    "n_records": 627,
+    "filename_claims": 600,
+    "task_families_present": ["actions", "code", "data2text", "database", "math", "summary"],
+    "task_families_in_paper": 7,
+    "seventh_family_ships_separately_as": "data/sharded_translation.json",
+    "turns_min": 3,
+    "turns_median": 6,
+    "turns_mean": 5.97,
+    "turns_max": 12,
+    "excluding_code": { "n_records": 527, "turns_mean": 5.78, "turns_median": 6 }
+  }
+}
