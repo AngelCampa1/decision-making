@@ -153,3 +153,32 @@ def test_the_tolerance_is_adjustable() -> None:
 
 def test_an_empty_skill_has_a_defined_ratio() -> None:
     assert check_placebo_match("", PLACEBO).word_ratio == 0.0
+
+
+def test_a_placebo_without_the_skills_output_template_is_not_matched() -> None:
+    """Word count and heading count are both blind to a fenced output block.
+
+    A treatment that hands the model a template and a placebo that does not is
+    an arm pair differing in how much structure was requested -- which is
+    exactly what the venue's own five-block contract then scores. An arm winning
+    because it was told to emit more structure is a format effect wearing a
+    decision effect's clothes.
+    """
+    skill = "# S\n\nsome guidance\n\n```\nBLOCK\n  <thing>\n```\n"
+    placebo = "# P\n\nsome guidance\n\nwritten as ordinary prose instead.\n"
+
+    match = check_placebo_match(skill, placebo)
+    assert not match.templates_match
+    assert not match.ok
+
+
+def test_matching_fenced_blocks_satisfy_the_template_check() -> None:
+    skill = "# S\n\nguidance here\n\n```\nBLOCK\n  <thing>\n```\n"
+    placebo = "# P\n\nguidance there\n\n```\nSECTION\n  <thing>\n```\n"
+
+    assert check_placebo_match(skill, placebo).templates_match
+
+
+def test_two_documents_with_no_templates_at_all_match() -> None:
+    """Most skills carry no output block; the check must not invent a failure."""
+    assert check_placebo_match("# S\n\nprose", "# P\n\nprose").templates_match

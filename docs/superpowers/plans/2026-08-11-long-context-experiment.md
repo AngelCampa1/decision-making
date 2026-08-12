@@ -52,7 +52,7 @@ The harness could not have carried the experiment, and this was found for $0.45 
 | Fingerprint blind to documents | `scripts/calibrate.py:98` | Hashes `item_id`/`question`/`answer`/facts only; a padded corpus resumes off a stale checkpoint silently |
 | Silent record loss | `evals/src/decision_evals/runner.py:211` | `load_records` swallows `TypeError`, so adding a column makes every earlier record vanish without a word |
 | Broken primary metric | `scripts/probe_casefile.py:449` | `admissible = ... and pivot_ok` — 5 of 6 probe failures were this conjunct alone |
-| Unfair placebo | `skills/evidence-ledger/placebo.md` | 445 words vs a 623-word skill → ratio 0.71 against a ±0.15 tolerance. **Fails the repo's own guard today.** |
+| ~~Unfair placebo~~ | `skills/evidence-ledger/placebo.md` | **Struck. This entry was wrong.** The guard compares the placebo against the skill's *body*; 421w vs 445w is a ratio of 1.057 and it passes. The 0.71 counted YAML frontmatter as skill prose. What remains is a real but different concern — see Task 7. |
 
 ### The number that governs everything
 
@@ -809,74 +809,116 @@ Every acceptance band below is fixed **before looking**.
 | Gate | Cost | Kill condition | Task |
 |---|---|---|---|
 | Canary recall at 100k, three depths | $2 | any canary missing → the prompt is not arriving | ✅ passed |
-| Placebo/skill structural diff | free | word ratio outside ±0.15 → confounded arm | 7 |
+| Placebo/skill structural diff | free | word ratio outside ±0.15 → confounded arm | ✅ passes at 1.057 |
+| Placebo/skill *output-template* diff | free | treatment emits a block template, placebo does not → format confound | 7 |
 | Surface-feature separability | free | a trivial classifier gets AUC > 0.70 → re-author | 9 |
 | Padding-only ablation | $10 | model answers confidently with the core removed → invariance broken | 11 |
 | Core-detection probe | $3 | core precision > 0.60 → padding is transparent | 12 |
 | **Control admissibility at 100k** | $8 | **≥ 0.90 → nothing to explain, stop. ≤ 0.15 → a reading-stamina test, shorten. Target [0.25, 0.70]** | 14 |
 
-### Task 7: Make the placebo a fair control
+### Task 7: The placebo mismatch the word-count guard cannot see
 
 **Files:**
 - Modify: `skills/evidence-ledger/placebo.md`
-- Test: `tests/unit/test_skills.py`
+- Modify: `evals/src/decision_evals/solvers/arms.py` (`PlaceboMatch`)
+- Test: `tests/unit/test_arms.py`
 
-**Why:** 445 words against a 623-word `SKILL.md` is a ratio of 0.71 against `check_placebo_match`'s ±0.15 tolerance (`evals/src/decision_evals/solvers/arms.py:161`). It fails the repo's own guard today. An unfair placebo is how a format effect gets published as a decision effect.
+**The original premise here was wrong and is recorded as such.** `check_placebo_match` compares the placebo against the skill's *body*, and the body is 421 words against a 445-word placebo — a ratio of **1.057**, inside the ±0.15 tolerance. `de check`'s skill lint has been passing it all along. The "0.71" counted YAML frontmatter as skill prose; the model never sees the frontmatter.
+
+**What survives is a different and sharper problem.** `SKILL.md` ends with an output template:
+
+```
+LEDGER
+  1. <fact> — <what it decides>
+SET ASIDE
+  - <fact> — <why it is not load-bearing>
+THEREFORE
+  <the decision, following from the ledger alone>
+```
+
+The placebo ends with a paragraph about writing plainly. So the `on` arm receives *a second format instruction* and the `placebo` arm does not — and the venue already imposes a five-block contract of its own. Word count and heading count are both matched and both blind to this. An arm that emits more structure because it was told to emit more structure, scored on a structured contract, is a format effect wearing a decision effect's clothes.
+
+This is the confound the plan flags for Milestone G, and it is cheaper to fix now.
 
 - [ ] **Step 1: Write the failing test**
 
-Append to `tests/unit/test_skills.py`:
+Append to `tests/unit/test_arms.py`:
 
 ```python
-def test_every_shipped_placebo_passes_the_structural_guard() -> None:
-    """A placebo shorter than the skill it stands in for is not a control.
+def test_a_placebo_without_the_skills_output_template_is_not_matched() -> None:
+    """Word count and heading count are both blind to a fenced output block.
 
-    Nothing enforced this, and evidence-ledger's placebo has been failing since
-    it was written.
+    A treatment that hands the model a template and a placebo that does not is
+    an arm pair differing in how much structure was requested, which is exactly
+    what the venue then scores.
     """
-    for skill_dir in sorted(Path("skills").iterdir()):
-        placebo = skill_dir / "placebo.md"
-        if not placebo.exists():
-            continue
-        match = check_placebo_match(
-            (skill_dir / "SKILL.md").read_text(encoding="utf-8"),
-            placebo.read_text(encoding="utf-8"),
-        )
-        assert match.ok, (
-            f"{skill_dir.name}: word ratio {match.word_ratio:.2f}, "
-            f"sections {match.placebo_sections} vs {match.skill_sections}"
-        )
+    skill = "# S\n\nsome guidance\n\n```\nBLOCK\n  <thing>\n```\n"
+    placebo = "# P\n\nsome guidance\n\nwritten as ordinary prose instead.\n"
+
+    assert not check_placebo_match(skill, placebo).templates_match
+
+
+def test_matching_fenced_blocks_satisfy_the_template_check() -> None:
+    skill = "# S\n\nguidance\n\n```\nBLOCK\n  <thing>\n```\n"
+    placebo = "# P\n\nguidance\n\n```\nSECTION\n  <thing>\n```\n"
+
+    assert check_placebo_match(skill, placebo).templates_match
 ```
 
 - [ ] **Step 2: Run to verify it fails**
 
 ```bash
-python -m uv run pytest tests/unit/test_skills.py -k placebo -v
+python -m uv run pytest tests/unit/test_arms.py -k template -v
 ```
 
-Expected: FAIL with `evidence-ledger: word ratio 0.71`.
+Expected: `AttributeError: 'PlaceboMatch' object has no attribute 'templates_match'`.
 
-- [ ] **Step 3: Rewrite the placebo**
+- [ ] **Step 3: Add the check**
 
-Requirements, all of which the test or a human reviewer checks:
+In `evals/src/decision_evals/solvers/arms.py`, extend `PlaceboMatch` with fenced-block counts and fold the new property into `ok`:
 
-- **Word count within ±15% of `SKILL.md`** (623 words → 530–716).
-- **Identical heading count and heading depth.**
-- **Structurally parallel, semantically inert.** The skill tells the model to separate what the answer turns on from what merely arrived. The placebo must occupy the same instructional shape — same number of numbered steps, same output-block scaffolding, same "skip it when…" opening — while giving guidance that is generic to careful writing and specific to nothing.
-- **It must not name a procedure that would help.** No "list your evidence", no "state your assumptions". Those are the active ingredient in prose.
+```python
+skill_templates: int = 0
+placebo_templates: int = 0
 
-Draft it, then read both files side by side and ask: *if I handed a colleague these two documents with the titles removed, could they tell which one is the intervention?* If yes, the placebo is leaking and it is rewritten.
 
-- [ ] **Step 4: Run to verify it passes**
+@property
+def templates_match(self) -> bool:
+    """Whether both documents request the same number of output templates.
 
-```bash
-python -m uv run pytest tests/unit/test_skills.py -v
+    A fenced block in a skill is almost always an output contract. Length and
+    heading count cannot see one, so a treatment carrying a template against
+    a placebo carrying none passes both existing checks while differing in
+    the one dimension the venue scores.
+    """
+    return self.skill_templates == self.placebo_templates
+
+
+@property
+def ok(self) -> bool:
+    return self.words_match and self.structure_matches and self.templates_match
 ```
 
-- [ ] **Step 5: Commit**
+and count them in `check_placebo_match` with a `_count_fences` helper mirroring `_count_headings`.
+
+- [ ] **Step 4: Rewrite the placebo's closing section**
+
+Replace "A note on style" with a section that carries a fenced block of the same shape and no procedural content — a template that asks for the answer and nothing that would help produce it. It must not name a step that does work: no "list your evidence", no "state your assumptions", no "what would change your mind". Those are the active ingredient in prose.
+
+Keep the word count inside ±15% of the 421-word body (358–484) and the heading count at 5.
+
+Then read both files side by side with the titles removed and ask whether a colleague could tell which is the intervention. If yes, it is rewritten.
+
+- [ ] **Step 5: Run the gate**
 
 ```bash
-git add skills/evidence-ledger/placebo.md tests/unit/test_skills.py && git commit -m "skills: the placebo is a control again, and a test says so"
+python -m uv run de check
+```
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add skills/ evals/src/decision_evals/solvers/arms.py tests/unit/test_arms.py && git commit -m "arms: a placebo must match the skill's output template, not just its length"
 ```
 
 ---

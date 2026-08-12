@@ -140,6 +140,8 @@ class PlaceboMatch:
     skill_sections: int
     placebo_sections: int
     tolerance: float
+    skill_templates: int = 0
+    placebo_templates: int = 0
 
     @property
     def word_ratio(self) -> float:
@@ -154,8 +156,25 @@ class PlaceboMatch:
         return self.skill_sections == self.placebo_sections
 
     @property
+    def templates_match(self) -> bool:
+        """Whether both documents request the same number of output templates.
+
+        A fenced block in a skill is almost always an output contract, and the
+        two checks above cannot see one: ``evidence-ledger`` ends with a
+        LEDGER / SET ASIDE / THEREFORE block while its placebo ends with a
+        paragraph, and that pair passes on both word count and heading count.
+
+        The venue imposes a five-block contract of its own, so the ``on`` arm
+        would arrive carrying a second format instruction that the ``placebo``
+        arm does not. An arm that emits more structure because it was told to,
+        scored on a structured contract, is a format effect wearing a decision
+        effect's clothes.
+        """
+        return self.skill_templates == self.placebo_templates
+
+    @property
     def ok(self) -> bool:
-        return self.words_match and self.structure_matches
+        return self.words_match and self.structure_matches and self.templates_match
 
 
 def check_placebo_match(
@@ -179,8 +198,15 @@ def check_placebo_match(
         skill_sections=_count_headings(skill_body),
         placebo_sections=_count_headings(placebo_body),
         tolerance=tolerance,
+        skill_templates=_count_fences(skill_body),
+        placebo_templates=_count_fences(placebo_body),
     )
 
 
 def _count_headings(body: str) -> int:
     return sum(1 for line in body.splitlines() if line.lstrip().startswith("#"))
+
+
+def _count_fences(body: str) -> int:
+    """Fenced blocks, counted as opening/closing pairs."""
+    return sum(1 for line in body.splitlines() if line.lstrip().startswith("```")) // 2

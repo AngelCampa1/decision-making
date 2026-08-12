@@ -36,13 +36,24 @@ already put into reading is what makes that possible. Consider the question
 properly. Weigh things up. Arrive somewhere you would be comfortable explaining
 to someone who had read the same material with the same care.
 
-## A note on style
+## Setting it down
 
 Say what you mean plainly. A clear answer serves the reader better than an
 elaborate one, and clarity is usually a sign that the thinking behind it was
 clear too. Avoid hedging where you do not need to hedge, and avoid confidence
 where you have not earned it. Write the way you would speak to a colleague you
-respect.
+respect. When you have arrived somewhere, set it down in this shape:
+
+```
+READING
+  <the material, in your own words>
+
+BEARING
+  <how it sits with the question>
+
+ANSWER
+  <where you have arrived>
+```
 
 None of this is complicated. It is the ordinary discipline of paying attention,
 applied to the material in front of you, and it is worth doing every time.

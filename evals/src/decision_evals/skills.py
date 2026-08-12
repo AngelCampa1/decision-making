@@ -228,16 +228,26 @@ def _check_placebo(name: str, directory: Path, body: str) -> list[SkillIssue]:
             )
         ]
     match = check_placebo_match(body, placebo.read_text(encoding="utf-8"))
-    if not match.ok:
-        return [
-            SkillIssue(
-                name,
-                f"placebo is not matched: {match.skill_words}w/{match.skill_sections}h skill "
-                f"vs {match.placebo_words}w/{match.placebo_sections}h placebo "
-                f"(ratio {match.word_ratio:.2f}, tolerance {match.tolerance})",
-            )
-        ]
-    return []
+    if match.ok:
+        return []
+
+    # Name the dimension that failed. Reporting all three lets a reader glance at
+    # two matching word counts and conclude the guard is wrong.
+    failures = []
+    if not match.words_match:
+        failures.append(
+            f"length {match.skill_words}w vs {match.placebo_words}w "
+            f"(ratio {match.word_ratio:.2f}, tolerance {match.tolerance})"
+        )
+    if not match.structure_matches:
+        failures.append(f"headings {match.skill_sections} vs {match.placebo_sections}")
+    if not match.templates_match:
+        failures.append(
+            f"output templates {match.skill_templates} vs {match.placebo_templates} -- "
+            "a skill that hands the model a block template needs a placebo that hands "
+            "over one too, or the arms differ in how much structure was requested"
+        )
+    return [SkillIssue(name, f"placebo is not matched: {'; '.join(failures)}")]
 
 
 def validate_all(skills_root: Path, *, shipped: bool = False) -> list[SkillIssue]:
