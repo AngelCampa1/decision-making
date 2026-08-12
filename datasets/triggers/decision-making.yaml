@@ -123,6 +123,20 @@ positive:
     turn: "The disk is at 99%. Do we need to act?"
     why: "a live operational decision, and which procedure fits is open"
     route: ~
+  #
+  # All five `x-n*` cases above are **provisional**, and they stay in the set.
+  #
+  # Two of them (x-n21, x-n22) failed to fire in both of 2026-08-12's runs, and
+  # the first instinct was to pull those two as "contested". That would have
+  # been selection on the outcome: all five have identical provenance -- I wrote
+  # the promotion argument and the label in the same sitting -- so removing only
+  # the ones that disagreed with me would have deleted the evidence against my
+  # own judgement and quietly raised recall.
+  #
+  # They are therefore scored like everything else, and the `x-` prefix is what
+  # lets a reader take them out. Any report that leans on recall should give the
+  # figure with and without this block, because the difference is the size of
+  # one person's opinion.
 
 negative:
   # Each of these wears a trigger's surface features. Firing here costs tokens
