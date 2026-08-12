@@ -104,6 +104,12 @@ def corpus_fingerprint(items: Sequence[Item]) -> str:
     of items and half on another, with nothing anywhere raising an eyebrow. That
     is the single most damaging bug this harness could have, and it was one
     template rewrite away from happening.
+
+    Document bodies are hashed for the same reason facts are, and theirs is the
+    version that bites at length: a casefile's ids stay identical while a hundred
+    thousand tokens of padding change underneath them. They are hashed in order,
+    because padding order is reshuffled between arms and a different arrangement
+    is a different prompt.
     """
     digest = hashlib.sha256()
     for item in items:
@@ -112,6 +118,8 @@ def corpus_fingerprint(items: Sequence[Item]) -> str:
         digest.update(item.answer.encode())
         for fact in item.facts:
             digest.update(f"{fact.id}:{fact.text}".encode())
+        for document in getattr(item, "documents", ()):
+            digest.update(f"{document['id']}:{document['body']}".encode())
     return digest.hexdigest()
 
 

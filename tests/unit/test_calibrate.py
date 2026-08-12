@@ -13,6 +13,7 @@ from pathlib import Path
 from types import ModuleType
 
 import pytest
+from pydantic import Field
 
 from decision_evals.generators.generate import Item, RenderedFact
 
@@ -95,3 +96,51 @@ def test_a_checkpoint_with_no_sidecar_is_refused(tmp_path: Path) -> None:
     checkpoint.write_text("{}\n", encoding="utf-8")
     with pytest.raises(calibrate.CorpusMismatchError, match="recorded: \\(none\\)"):
         calibrate.assert_checkpoint_matches(checkpoint, [_item()])
+
+
+# -- documents --------------------------------------------------------------
+
+
+class _Casefile(Item):
+    """An item that carries documents, which is what a casefile is.
+
+    Defined here rather than added to ``Item`` because adding a field to ``Item``
+    re-blesses every ``rel-*`` golden file, and those must not move. This is a
+    stand-in for what the casefile item kind will be, and it exists so the
+    fingerprint's document handling is exercised before that lands rather than
+    after the first padded run resumes off a stale checkpoint.
+    """
+
+    documents: list[dict[str, str]] = Field(default_factory=list)
+
+
+def _casefile(bodies: list[tuple[str, str]]) -> _Casefile:
+    return _Casefile(
+        **_item().model_dump(),
+        documents=[{"id": doc_id, "body": body} for doc_id, body in bodies],
+    )
+
+
+def test_changing_a_document_body_changes_the_fingerprint() -> None:
+    """Padding lives in documents, not in facts.
+
+    A fingerprint blind to document bodies lets a padded corpus resume off a
+    checkpoint built from the unpadded one and report a number computed half on
+    each. Length is the independent variable, so this is the version of the bug
+    that bites exactly where the experiment lives.
+    """
+    before = calibrate.corpus_fingerprint([_casefile([("doc1", "The figure was 12.")])])
+    after = calibrate.corpus_fingerprint([_casefile([("doc1", "The figure was restated to 14.")])])
+    assert before != after
+
+
+def test_reordering_documents_changes_the_fingerprint() -> None:
+    """Padding order is reshuffled between arms, so it is part of the prompt."""
+    forwards = _casefile([("doc1", "alpha"), ("doc2", "beta")])
+    backwards = _casefile([("doc2", "beta"), ("doc1", "alpha")])
+    assert calibrate.corpus_fingerprint([forwards]) != calibrate.corpus_fingerprint([backwards])
+
+
+def test_an_item_without_documents_still_fingerprints() -> None:
+    """The rel-* corpus has no documents and must keep working unchanged."""
+    assert calibrate.corpus_fingerprint([_item()])
