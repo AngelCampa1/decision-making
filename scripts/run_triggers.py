@@ -20,11 +20,18 @@ receipt asserted, so nothing on disk can influence the decision.
 
 Usage:
     python scripts/run_triggers.py [--model haiku] [--skill decision-making]
-                                   [--repeats 5] [--confidence]
+                                   [--repeats 5] [--confidence] [--arm one|four]
 
 ``--confidence`` additionally elicits a probability and scores it. It writes to
 its own checkpoint: asking for a probability changes the response contract, so a
 confidence run and a plain one are two runs, not one run with an extra column.
+
+``--arm four`` is Track M4: the same four procedures presented as four separate
+tools instead of one tool with a router. Its descriptions are composed
+mechanically by :mod:`decision_evals.unbundle` from the shipped bundle, so the
+race varies structure and nothing else. Its own checkpoint, for the same reason
+as ``--confidence`` -- and the two flags are refused together, because two
+changes to the response contract in one run measure neither.
 """
 
 from __future__ import annotations
@@ -54,6 +61,7 @@ from decision_evals.triggers import (  # noqa: E402
     evaluate_routing,
     load_trigger_set,
 )
+from decision_evals.unbundle import UnbundleError, four_arm  # noqa: E402
 
 PROCEDURES = ("ledger", "fit", "cascade", "timing")
 
@@ -104,6 +112,31 @@ SYSTEM_CONFIDENCE = (
     "seven times in ten."
 )
 
+#: Track M4's other arm: the same four procedures presented as **four separate
+#: tools** rather than one tool with a router.
+#:
+#: The task is deliberately the same shape — fire or do not, and name which — so
+#: the two arms score on one metric and differ only in how many entries the
+#: model is choosing between. What changes is where the choice happens: in the
+#: one-entry arm the model decides to fire and *then* routes inside the tool; in
+#: this arm firing and routing are a single act, because declining to name a tool
+#: is declining to fire.
+#:
+#: That collapse is not a flaw in the design, it **is** the hypothesis. Skill
+#: shadowing's stated mechanism is description overlap at selection time
+#: (arXiv:2605.24050), and four descriptions that share an opener and an
+#: exclusion list are overlapping by construction. If the one-entry choice is
+#: right, this arm should fire *less* accurately.
+SYSTEM_FOUR = (
+    "You decide whether a tool should be used. You are given several tools' "
+    "descriptions and one message a user sent. Answer with a single line of "
+    "JSON and nothing else:\n"
+    '{"fire": true|false, "tool": "<tool name>"|null}\n'
+    "`fire` is whether any of these tools should be invoked for this message. "
+    "`tool` is the name of the one to invoke, or null if you would not invoke "
+    "any of them."
+)
+
 _JSON = re.compile(r"\{[^{}]*\}")
 
 
@@ -132,14 +165,29 @@ def decision(text: str) -> Verdict:
     fired = payload.get("fire")
     if not isinstance(fired, bool):
         return None, None, None
-    procedure = payload.get("procedure")
+    # The four-skill arm names a tool where the one-entry arm names a procedure.
+    # They are the same four strings and the same question, so they land in the
+    # same column and the two arms stay comparable on one metric.
+    procedure = payload.get("procedure", payload.get("tool"))
     raw = payload.get("p_fire")
     p_fire = float(raw) if isinstance(raw, int | float) and 0.0 <= raw <= 1.0 else None
     return fired, procedure if procedure in PROCEDURES else None, p_fire
 
 
+def four_arm_block(descriptions: dict[str, str]) -> str:
+    """The four tools, rendered as the prompt's tool section.
+
+    Order is the router table's, held fixed across cases. Shuffling per case
+    would add a nuisance factor to a run whose whole point is a between-arm
+    comparison, and shuffling per *arm* is meaningless when the other arm has
+    one entry. Position effects within the four are M5's question, not M4's.
+    """
+    return "\n\n".join(f"### {name}\n\n{text}" for name, text in descriptions.items())
+
+
 def ask(description: str, case: TriggerCase, model: str, system: str) -> Verdict:
-    prompt = f"## Tool description\n\n{description}\n\n## User message\n\n{case.turn}"
+    header = "Tool descriptions" if system is SYSTEM_FOUR else "Tool description"
+    prompt = f"## {header}\n\n{description}\n\n## User message\n\n{case.turn}"
     with (
         isolated_cwd("de-trigger-") as cwd,
         Conversation(system_prompt=system, model=model, cwd=cwd) as chat,
@@ -155,6 +203,11 @@ CHECKPOINT = REPO_ROOT / "results" / "triggers" / "verdicts.jsonl"
 #: contract and can change the decision, so the two runs are not one run with an
 #: extra field -- and a shared path plus a resume would have silently merged them.
 CHECKPOINT_CONFIDENCE = REPO_ROOT / "results" / "triggers" / "verdicts-confidence.jsonl"
+
+#: Track M4's four-skill arm, again on its own file. Same reason: a different
+#: response contract is a different run, and a shared path plus a resume would
+#: have merged the two arms of the experiment into one indistinguishable pile.
+CHECKPOINT_FOUR = REPO_ROOT / "results" / "triggers" / "verdicts-four.jsonl"
 
 
 def load_done(path: Path) -> dict[tuple[str, int], dict[str, object]]:
@@ -347,11 +400,31 @@ def main() -> int:
         action="store_true",
         help="also elicit p_fire and score it; writes a separate checkpoint",
     )
+    parser.add_argument(
+        "--arm",
+        choices=("one", "four"),
+        default="one",
+        help="M4: one entry with a router, or the same four procedures as four tools",
+    )
     args = parser.parse_args()
+
+    if args.arm == "four" and args.confidence:
+        print("--arm four and --confidence are two changes to the response contract.")
+        print("Run them separately or the run measures neither.")
+        return 1
 
     trigger_set = load_trigger_set(REPO_ROOT / TRIGGERS_DIR / f"{args.skill}.yaml")
     document = parse_skill(REPO_ROOT / "skills" / args.skill / "SKILL.md")
     description = str(document.frontmatter["description"]).strip()
+
+    if args.arm == "four":
+        try:
+            descriptions = four_arm(description, document.body)
+        except UnbundleError as error:
+            print(f"cannot build the four-skill arm: {error}")
+            return 1
+        description = four_arm_block(descriptions)
+        print(f"four-skill arm: {', '.join(descriptions)}")
 
     print(
         f"{args.skill}: {len(trigger_set.positives)} positive, {len(trigger_set.negatives)} negative"
@@ -360,6 +433,8 @@ def main() -> int:
 
     system = SYSTEM_CONFIDENCE if args.confidence else SYSTEM
     checkpoint = CHECKPOINT_CONFIDENCE if args.confidence else CHECKPOINT
+    if args.arm == "four":
+        system, checkpoint = SYSTEM_FOUR, CHECKPOINT_FOUR
     try:
         done = collect(
             trigger_set,
