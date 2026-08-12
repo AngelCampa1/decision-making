@@ -85,3 +85,54 @@ half the published −39%.
 That is my sixth consecutive prediction in the direction of the experiment
 working. The record of the previous five being wrong in that same direction is
 the reason to write this one down rather than to trust it.
+
+---
+
+## Correction, same day: 527 was wrong. A1 is 315.
+
+Written above: *"627 records minus the Unix-only `code` family is **527 usable
+pairs**."* That is arithmetic on the wrong quantity, and I found it an hour later
+while building the runner.
+
+527 counts records that are not `code`. A **pair** additionally needs a
+*full-setting* instruction to put opposite the sharded one — and I had silently
+assumed that joining the shards reconstructs it. It does not. For one `database`
+record:
+
+- full: *"which countries' tv channels are playing some cartoon written by Todd
+  Casey?"*
+- shards joined: *"tv channels airing cartoons determine which countries these tv
+  channels belong to ensure the tv channels are actively playing…"*
+
+Those are not the same instruction in two deliveries. They are two different
+instructions. Pairing them would have measured sharded delivery against **a third
+condition I wrote myself**, and reported it as the published design — the exact
+failure the vendored corpus was adopted to avoid, reintroduced one layer down.
+
+The full instruction has to come from a named field, and the field differs per
+family:
+
+| Family | n | Field | Usable |
+|---|---|---|---|
+| `actions` | 105 | `fully_specified_question` | yes |
+| `database` | 107 | `fully_specified_question` | yes |
+| `math` | 103 | `question` | yes |
+| `summary` | 92 | `query`, but the task also carries `documents` | **undecided** |
+| `data2text` | 120 | none — the input is a table | no |
+| `code` | 100 | split `prompt`/`question_content` | excluded anyway |
+
+**A1 is 315 pairs.** MDE 5.4–9.9pp, or 7.6–13.9pp at design effect 2.0. Against
+−39% the conclusion is unchanged: A1 is well-powered and a flat A1 would mean
+something. The conclusion survived; the number did not, and the number was in a
+document for an hour.
+
+`summary` stays undecided rather than being folded in to recover 92 pairs.
+Deciding it means deciding what the full instruction *is* for that task, and that
+is a parameter, not a preference.
+
+**What this says about the method.** Rule 1 is written as "never invent a missing
+parameter", and I did not think I was inventing one — I thought I was reading a
+count off a file I had already verified by hash. The invention was upstream of
+the arithmetic, in an unexamined assumption about what a pair is. Verifying the
+corpus bytes proved the corpus was authentic and proved nothing about whether my
+design fit it.

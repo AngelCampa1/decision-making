@@ -793,14 +793,44 @@ Written down now so a null is a result rather than a fourth dead corpus.
    swept rather than chosen, because discordance is unknown before a screening
    run and Rule 1 forbids inventing it.
 
-   **This is now fixed for A1, and by the corpus rather than by argument.** The
-   vendored instrument gives **527 usable pairs** (627 records, minus the
-   Unix-only `code` family), so A1's MDE is **4–8pp**, or **8.4pp** at the stated
-   design effect of 2.0. Against a literature effect of −39%, A1 is powered with
-   roughly a fivefold margin, and a flat A1 would be a real result rather than an
-   artefact. A2 is *not* covered by this: it needs a fixed turn count, and the
-   largest single shard-count stratum is 233 records (MDE 6–12pp), which is still
-   comfortable but is a different number and must be stated as its own.
+   **This is now fixed for A1, and by the corpus rather than by argument** — but
+   at a smaller item count than first written here, and the correction is the
+   instructive part.
+
+   > **Corrected the same day.** An earlier version of this paragraph said
+   > **527 usable pairs**. That is the count of records that are not the
+   > Unix-only `code` family, and it silently assumed the *full* condition could
+   > be reconstructed by joining the shards. **It cannot.** Joined shards read as
+   > a bulleted decomposition, not as the original question — for one `database`
+   > record the full question is *"which countries' tv channels are playing some
+   > cartoon written by Todd Casey?"* against joined shards beginning *"tv
+   > channels airing cartoons determine which countries…"*. Pairing those would
+   > have compared sharded delivery against **a third instruction we wrote**,
+   > while calling it the published design. Caught by checking the field rather
+   > than assuming it.
+
+   A full-setting instruction has to come from a field, and the schema is
+   per-family:
+
+   | Family | n | Full-setting field | Usable for A1 |
+   |---|---|---|---|
+   | `actions` | 105 | `fully_specified_question` | **yes** |
+   | `database` | 107 | `fully_specified_question` | **yes** |
+   | `math` | 103 | `question` | **yes** |
+   | `summary` | 92 | `query` — but the task also carries `documents`, so `query` alone may not be the instruction | **undecided** |
+   | `data2text` | 120 | none; the input is a table | **no** |
+   | `code` | 100 | split `prompt` (45) / `question_content` (55) | excluded anyway (Unix-only eval) |
+
+   So **A1 is 315 pairs**, giving an MDE of **5.4–9.9pp**, or **7.6–13.9pp** at
+   the stated design effect of 2.0. Against −39% that is still a wide margin and
+   a flat A1 would still be a real result — the conclusion survives, the number
+   did not. `summary` is left undecided rather than folded in, because deciding
+   it is choosing what the full instruction *is*, and that is exactly the kind of
+   parameter Rule 1 forbids inventing.
+
+   A2 is *not* covered by any of this: it needs a fixed turn count, and the
+   largest single shard-count stratum is 233 records (MDE 6–12pp) before the
+   full-instruction constraint is even applied.
 
    As written, this falsifier turned an underpowered null into a
    programme-terminating decision — the same "build first, check the premise
