@@ -304,8 +304,9 @@ they were consolidated the same day they were written (see Track M).
 | S4 | `timing.md` — the undo price, the real deadline, what waiting buys | in the bundle |
 | S5 | a council / adversarial-review procedure — argue the positions before deciding | named in the founding brief, not written |
 | S6 | a clarify-or-decide procedure — ask for more, or decide under incomplete information | named in the founding brief, not written |
-| S7 | Re-derive each of the above from Track K's catalogue, or mark it invented | pending K |
-| S8 | **A retirement rule.** "Daily use is evidence" currently has no failure condition — no threshold at which use retires a procedure. Define one: a procedure the maintainer disables for N consecutive days is marked `WITHDRAWN` in `SCORECARD.md`. Evidence that cannot come out negative is not evidence. | not written |
+| S7 | Re-derive each of the above from Track K's catalogue, or mark it invented | **done 2026-08-12.** `cascade`, `timing` and `fit` trace to named frameworks; `ledger` is invented outright. None of the four traces to a framework with strong prescriptive evidence — see [`DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md) |
+| S8 | **A retirement rule.** "Daily use is evidence" currently has no failure condition — no threshold at which use retires a procedure. Evidence that cannot come out negative is not evidence. | **done 2026-08-12.** 14 consecutive days disabled → `WITHDRAWN`, clocked from a dated `notebook/` line. Blocks the plugin through the existing promotion gate, not a second mechanism, so it operates rather than being written down |
+| S9 | **`ledger.md` is first in line for replacement.** It is the one procedure with no external support, and Track K6 ranks *elicited confidence* above it on evidence — the only candidate whose parent intervention has medium-to-large controlled effects in humans | opened by K |
 
 **The maintainer's daily use is evidence.** Not publishable as a headline, and
 the fastest signal available: a skill that fires when it should not, or produces
