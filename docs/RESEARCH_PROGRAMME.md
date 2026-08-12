@@ -372,18 +372,38 @@ a sub-agent report, and keep `--tools ""` at every node. The real Task tool is
 ecologically truer and experimentally useless — we could not hold anything
 fixed. It returns in Track F as a validity check, not as the instrument.
 
-**Instrument falsifier.** If `--resume` does not actually place prior turns in
-the model's context — verifiable by token accounting, `cache_read` must climb
-turn over turn — the multi-turn venue is dead on this backend and we need a
-different one before anything else proceeds.
+> **Resolved 2026-08-11, before any of this ran — and the falsifier was wrong.**
+> Multi-turn already works, **under the full isolation stack with no flag
+> relaxed**. `--no-session-persistence` blocks `--resume`, which is
+> cross-process; it does not block multi-turn, because with `--input-format
+> stream-json` turns go to one live subprocess's stdin and context carries
+> in-process. Reproduced: turn 3 recalled a codeword from turn 1 with an
+> unrelated turn between, `input_tokens` 179 → 410 → 513.
+>
+> **The original falsifier read "`cache_read` must climb turn over turn".
+> `cache_read` was 0 on every turn while context demonstrably carried** —
+> caching is a billing optimisation, not a transcript mechanism, and short turns
+> never reach the threshold. Run as written, 0.1 would have declared a healthy
+> venue dead.
+>
+> So **Track 0 is not a hard gate for A1 and A2.** The transport is ~80 lines of
+> `Popen` plus JSONL. Track A's real prerequisite is the MDE calculation, not
+> the harness. Full record in
+> [`notebook/2026-08-11-multi-turn-already-worked.md`](../notebook/2026-08-11-multi-turn-already-worked.md).
+
+**Instrument falsifier, corrected.** Prior turns are in context iff
+**`input_tokens` climbs monotonically** *and* a behavioural recall check passes.
+Two independent signals, because the first can be explained by a longer question
+and the second by a lucky guess. `cache_read` is not evidence either way.
 
 | # | Experiment | Cost |
 |---|---|---|
-| 0.1 | Session-resume canary: state a constraint at turn 1, verify at turn *n* it is still in context *and* still honoured. Token accounting proves presence; behaviour is a separate measurement. | ~$1 |
+| 0.1 | ~~Session-resume canary~~ **Done.** Multi-turn canary passed under full isolation; falsifier corrected. Remaining work is to fold the `stream-json` transport into `providers/claude_code.py` beside the existing single-shot path. | done |
 | 0.2 | Scripted orchestrator: 1 orchestrator + 3 sub-agents, per-node run records, end to end. | ~$1 |
 | 0.3 | Isolation canary at every node, including sub-agents, with a planted `CLAUDE.md`. | ~$1 |
 | 0.4 | Budget ledger and wall-clock accounting over a call *tree* rather than a call. | free |
-| 0.5 | `RunRecord` gains node identity, parent, turn index, and a trace id. Old records must fail loudly, not silently vanish. | free |
+| 0.5 | `RunRecord` gains node identity, parent, turn index, and a trace id — **using OpenTelemetry GenAI semantic-convention attribute names** (`gen_ai.operation.name`, `gen_ai.agent.name`, `gen_ai.conversation.id`, `gen_ai.usage.*`, `gen_ai.evaluation.*`), with parent/child span nesting giving node parent and turn index for free. `opentelemetry-api` + `opentelemetry-sdk` is a 4-package pure-Python Apache-2.0 closure; `ConsoleSpanExporter(out=file)` opens **no socket**. Hand-rolling a trace schema when a vendor-neutral one exists is a real weakness, and MAST-style attribution needs structured traces regardless. **Adopt the names, not the package's constants**: the spec is status `Development`, zero releases, Schema URL `TODO`, and has already renamed `gen_ai.system` → `gen_ai.provider.name`. Hardcode the strings in one module, pin the SDK, record the semconv commit SHA per run. Old records must fail loudly, not silently vanish. | free |
+| 0.6 | **Assert on the `system/init` event**, which `--output-format stream-json --verbose` emits as a free machine-readable isolation receipt: `tools`, `skills`, `agents`, `memory_paths`, `apiKeySource`. Strictly better evidence than inferring isolation from a response. Two channels it advertises are **latent, not active** — with `--tools ""` there is no Task tool to reach the six declared agents and no memory tool to write the auto-memory path (tested: nothing was created). **Both go live the moment `--tools` is relaxed, which Track F plans.** The auto-memory path is keyed on the working directory, so it would become a cross-run state channel that a checkpointed run cannot see. Mitigation: fresh cwd per run, plus an assertion on `memory_paths`. `--bare` would disable auto-memory and is unusable — it forces `ANTHROPIC_API_KEY` auth and never reads OAuth. | free |
 
 **Depends on.** Nothing. This is the gate on everything else.
 
@@ -416,7 +436,7 @@ any skill work. That is a real finding and it gets written up as one.
 
 | # | Experiment | Design | Prediction registered before |
 |---|---|---|---|
-| A1 | **Multi-turn drop** | The 12 existing casefiles, delivered whole vs sharded across ~6 turns. Same content, same tokens, only delivery differs. | yes |
+| A1 | **Multi-turn drop** | **Adopt the published instrument rather than authoring one.** arXiv:2505.06120 released its sharded corpus and simulator — `github.com/microsoft/lost_in_conversation` (MIT) and `sharded_instructions_600.json` (CDLA-Permissive-2.0): 600 pre-sharded instructions, 7 task families, plus the sharding prompts and simulated-user agent. This *is* the A1 design, peer-reviewed, and it removes the activity with this repo's worst track record — three discarded corpora, 21/21 key errors. Needs a `model_claude_code.py` shim against their `generate()` interface; their only backend is OpenAI. Skip the `code` task (Unix-only eval). **The "~6 turns" figure was mine and has no source** — the paper sweeps 2→8 and reports no mean; measure it from the JSON. | yes |
 | A2 | **Recency over-weighting** | Decisive fact placed at first / middle / last turn, total turns fixed. Flat means no recency effect here and Track C changes shape. | yes |
 | A3 | **Handoff loss** | Sub-agent reads the documents and reports; orchestrator decides from the report alone vs from raw documents. The gap is compression loss. Also: *which* facts survive. | yes |
 | A4 | **Does delegating even help?** | One agent with everything vs orchestrator + sub-agents, same task. If single wins, the skill's job changes from "delegate better" to "know when not to delegate." | yes |
