@@ -29,6 +29,21 @@ The rule is deliberately narrow. An identifier cited in passing needs a
 bibliography entry and nothing more. It is only when a **number** appears
 alongside it that a verbatim quote becomes mandatory, because that is the only
 construction in which the citation is doing arithmetic work.
+
+**The baseline is where the known-unchecked claims are, and it is not neutral.**
+On 2026-08-12 the eight baselined identifiers that assert a number were fetched
+and read. Two were wrong: one paper's scale was another paper's, and one figure
+was in no version of the paper it was attributed to. Six of eight is a better
+rate than the morning that motivated this module, and it is not a rate anyone
+should be comfortable exempting from a check. See
+``notebook/2026-08-12-the-baseline-was-where-the-errors-were.md``.
+
+**A ``quote`` field is not read against the number beside it**, and cannot be.
+The gate checks that someone opened the paper; whether the sentence they copied
+supports the figure is a judgement no regex makes. Resolving a baseline entry
+therefore means reading what the identifier was cited *for*, not only what it is
+— on 2026-08-12 that distinction was the difference between fixing a retracted
+percentage and giving it a green tick.
 """
 
 from __future__ import annotations
