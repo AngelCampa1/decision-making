@@ -34,6 +34,7 @@ from decision_evals.providers.claude_code import (  # noqa: E402
     IsolationError,
 )
 from decision_evals.providers.claude_code import run as cli_run  # noqa: E402
+from decision_evals.scorers.bfcl import CALL_FORMAT  # noqa: E402
 from decision_evals.sharded import (  # noqa: E402
     FINAL_TURN,
     FULL_INSTRUCTION_FIELD,
@@ -73,14 +74,25 @@ SYSTEM_PROMPT = (
 )
 
 
-def system_prompt_for(item: ShardedInstruction) -> str:
+def system_prompt_for(item: ShardedInstruction, *, call_format: bool = False) -> str:
     """The shared preamble plus whatever this family cannot be answered without.
 
     Still identical across the two conditions of a pair -- it is a function of
     the item, never of the condition.
+
+    Args:
+        call_format: Ask ``actions`` items for a parseable call, so BFCL's own
+            AST match applies instead of the naming floor. It changes the task
+            and both arms carry it. Restricted to ``actions`` because it names
+            "the available functions": on a word problem it is noise, and noise
+            added to one family and not another is a confound with family.
     """
-    context = task_context(item)
-    return f"{SYSTEM_PROMPT}\n\n{context}" if context else SYSTEM_PROMPT
+    parts = [SYSTEM_PROMPT]
+    if context := task_context(item):
+        parts.append(context)
+    if call_format and item.task == "actions":
+        parts.append(CALL_FORMAT)
+    return "\n\n".join(parts)
 
 
 #: Fixed so the pilot is reproducible and so nobody can reselect until the
@@ -127,6 +139,11 @@ def main() -> int:
         help="comma-separated families to run; the draw is unchanged, only filtered",
     )
     parser.add_argument(
+        "--call-format",
+        action="store_true",
+        help="ask actions items for a parseable call, enabling BFCL's own AST match",
+    )
+    parser.add_argument(
         "--tag",
         default="pilot",
         help="checkpoint name. Change it whenever --per-family or --families changes",
@@ -149,6 +166,7 @@ def main() -> int:
     print(plan.describe())
     print(f"closing instruction: {'yes' if closing else 'no'}")
     print(f"families: {', '.join(families) if families else 'all'}")
+    print(f"call format: {'yes' if args.call_format else 'no'}")
     print(f"checkpoint: {checkpoint.relative_to(REPO_ROOT)}\n")
 
     # Resuming across a change to either prompt would append records made under
@@ -156,7 +174,7 @@ def main() -> int:
     # would show it. That is how the first pilot ran forty pairs with no schema
     # and no function list; the second time it should refuse rather than resume.
     if checkpoint.exists():
-        wanted = {system_prompt_for(item) for item in items}
+        wanted = {system_prompt_for(item, call_format=args.call_format) for item in items}
         for record in load_records(checkpoint):
             mismatch = (
                 "closing instruction"
@@ -179,7 +197,7 @@ def main() -> int:
 
     for index, item in enumerate(items, start=1):
         conversation_id = f"pilot-{item.task_id}"
-        system = system_prompt_for(item)
+        system = system_prompt_for(item, call_format=args.call_format)
 
         with tempfile.TemporaryDirectory() as cwd:
             # -- full: the fully-specified question, one call ------------------
