@@ -443,6 +443,50 @@ is a legitimate result — but they are pre-registered *as* null confirmations, 
 last, and they may not be reported as a search for an effect. Spending a horse
 race on prose polish is how a project looks busy while measuring nothing.
 
+**L6 now has its first real candidate, from measurement rather than invention —
+2026-08-12.** The five-repeat trigger run found two items the router gets
+*stably* wrong, and reading them turned up a defect legible in `SKILL.md`'s own
+table without any data: **`cascade` claims "the order" and `timing` claims
+"when"**, which in ordinary use are one idea. Only `timing`'s row carries the
+clause that separates them — *the direction is settled* — and `cascade`'s does
+not say that its own direction is still open.
+
+The variant to test is therefore stated and **not applied**: give the `cascade`
+row the direction-not-yet-settled clause. Editing it now would tune the skill
+against the measurement that motivated it, which is the whole reason L6 has a
+holdout. See
+[`notebook/2026-08-12-cascade-and-timing-collide-in-the-table.md`](../notebook/2026-08-12-cascade-and-timing-collide-in-the-table.md).
+
+One caution carried with it: **`p06`, the other stably-wrong item, is at least
+partly a trigger-set defect** — `fit` and `cascade` both read correctly off the
+table for that case, and the model picked `cascade`. Allowing multiple acceptable
+routes is a set-wide decision over all fourteen routed cases, made by someone who
+has not seen which two failed, and it must happen before any L6 round is scored
+on routing.
+
+**And routing cannot be the outcome any of these are scored on — measured
+2026-08-12, and it is an instrument falsifier, not a disappointment.** The
+trigger set has **14 routed items**. Pairwise across the five repeats, the
+discordance floor from sampling noise alone is `p_discordant` = **0.157** — about
+2.2 items flip between two runs of the *identical* skill. `required_pairs` then
+asks for **95 pairs** to detect a 10pp routing effect, and refuses a 20pp one as
+arithmetically impossible at that discordance.
+
+The exact test is harsher than that approximation. One-sided McNemar needs **5
+discordant pairs all one way**; under the null the expected count is 2.2 and the
+real size of the test is **0.0015** against a nominal 0.05. Ceiling check: a
+*perfect* variant — routes all fourteen right, breaks nothing — clears the bar in
+**three of five** draws, power ≈ 0.6 on the best intervention that could exist.
+
+So: **score L5 on firing** (73 items, precision 0.942 / recall 0.878 / FPR 0.018,
+70 of 73 stable across five repeats — a real instrument, and trigger breadth is
+about firing anyway), **or grow the routed stratum to ~95 items and price that
+before authoring item fifteen**, or report routing descriptively with intervals
+and no p-value. What may not happen is a Track L round scored on 14-item routing
+and written up as a null: that null would be a property of the sample size and
+would be indistinguishable from a finding about skills. Working:
+[`notebook/2026-08-12-routing-cannot-be-scored-on-fourteen-items.md`](../notebook/2026-08-12-routing-cannot-be-scored-on-fourteen-items.md).
+
 **L6 is the one that changes what the skills are.** SkillRevise describes
 expert-authored skills as costly and misaligned with how models actually execute,
 and one-shot LLM-generated skills as "syntactically correct but behaviorally
