@@ -57,12 +57,19 @@ positive:
     route: fit
 
   # -- cascade: the action looks fine; the worry is what it starts -----------
+  # p07 and p08 were rewritten on 2026-08-12 after the first run routed both of
+  # them to `timing`. They had said "resign on Friday" and "now or not at all" --
+  # I had written temporal language into the two cases meant to test consequence
+  # reasoning, so the confusion was partly a defect in the set. The versions
+  # below carry no time word at all. `cascade` and `timing` may still be the
+  # confusable pair; this makes that a finding about the router rather than
+  # about my phrasing.
   - id: p07
-    turn: "I want to resign on Friday. I was also going to raise the safety thing with HR next month. Should I go ahead?"
+    turn: "I want to resign. I was also going to raise the safety complaint with HR, and I haven't yet. Should I go ahead?"
     why: the action ends the standing to do the other thing, which is the real question
     route: cascade
   - id: p08
-    turn: "If I tell my co-founder I'm unhappy, what does that set off? Should I say it now or not at all?"
+    turn: "If I tell my co-founder I'm unhappy, what does that set off? Should I say it at all?"
     why: explicitly about downstream consequences of an action
     route: cascade
   - id: p09

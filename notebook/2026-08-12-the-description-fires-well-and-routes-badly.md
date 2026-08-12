@@ -107,11 +107,52 @@ the cost of consolidation is not that the skill fires wrongly, it is that having
 fired, it reads the wrong file. Which is a *different* failure from shadowing,
 and a cheaper one to fix — it lives in the router table, not in the description.
 
+## Second run, same day — and it is the more useful one
+
+`p07` and `p08` were repaired to carry no time word, and the whole set re-run.
+
+| | Run 1 | Run 2 |
+|---|---|---|
+| precision | 0.941 | **1.000** |
+| recall | 0.889 | 0.833 |
+| false-positive rate | 0.018 | **0.000** |
+| **routing accuracy** | **0.643** | **0.643** |
+| routing confusions | p03, p06, p07, p08, x-n22 | p03, p06, p07, x-n20, x-n22 |
+
+**Routing accuracy is identical to three decimal places and the errors are not
+the same errors.** `p08` was fixed by the repair; `p06` moved from
+cascade→timing; `x-n20` newly failed. The false positive `n11` also flipped to
+correct without anything about it changing.
+
+So the repair did what it was supposed to and **the aggregate did not move at
+all.** The right reading is not that the repair failed. It is that
+
+> **the per-item verdicts are unstable across runs while the aggregate is
+> stable.**
+
+That is the aptitude-versus-unreliability decomposition
+([arXiv:2505.06120](https://arxiv.org/abs/2505.06120)) arriving in a third
+place — after the multi-turn literature and after the orchestrator ablation this
+morning. The mean is a real quantity; the individual confusions are close to
+noise, and reading a story into "cascade confuses with timing" from one run
+would have been reading noise.
+
+**Every number in this entry is n=1 and should be treated as such.** The two
+runs together are n=2, and they disagree on four of seventy-three items while
+agreeing on the summary.
+
+Which also means the thing I flagged for the maintainer needs restating more
+carefully. Across the two runs the promoted cases fired like this: `x-n20` fired
+once, `x-n21` never, `x-n22` never. That is not five cases with a verdict — it is
+one stable non-firing pair, one coin flip, and two that fired both times.
+
 ## Next
 
-- **Repair `p07` and `p08`** so they do not smuggle timing language into cascade
-  cases, then re-run. The routing number should not be cited until then.
-- **Put `x-n21`/`x-n22` to the maintainer.** Two defensible readings, and both
-  the label and the description are mine.
-- **Repeats.** One call per case. Track I says most of the variance in a repeated
-  call is scatter, and every number above is n=1.
+- **Repeats, and they are now the priority.** Two runs already show the item
+  verdicts moving. `repeats_for_reliability` in `stats/reliability.py` exists to
+  size this; nothing here should be quoted until it has.
+- **Put `x-n21`/`x-n22` to the maintainer.** Neither fired in either run. Both
+  the label and the description are mine, and this is the class of call that
+  produced 21 of 21 scored errors here.
+- **`fired but routed nowhere`** showed up in both runs and is a cheap abort
+  condition the skill does not currently name.
