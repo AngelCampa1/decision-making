@@ -72,3 +72,8 @@ results/track-a/
 # the durable record of what they showed lives in notebook/ as it does for
 # results/calibration/.
 results/track-0/
+
+# Live trigger checkpoint. Resumable and appended to on every re-run, so the
+# same reasons as results/calibration/ apply. Completed runs are published as
+# results/<skill>/<date>-<sha7>/ with the numbers they produced.
+results/triggers/
