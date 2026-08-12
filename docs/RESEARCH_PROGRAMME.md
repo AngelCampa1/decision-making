@@ -540,6 +540,38 @@ turns is not a fixed-length instrument, so any per-item comparison has to carry
 turn count as a covariate rather than assume it away — and A2, which holds total
 turns fixed while moving a fact, cannot simply reuse A1's items.
 
+**A1 pilot, 2026-08-12 — and forty of its sixty records were void.** The run
+completed cleanly: 30 pairs, 190 generations, 0 failures, all 30 conversations
+accumulating. But `database` was asked for SQL with no schema in the prompt and
+`actions` was asked to call a function with none offered. Both families carry
+that material in the corpus (`schema_sql`, `function`); the runner never rendered
+it. Those twenty items were unanswerable, not hard.
+
+It survived a first reading because the traces are good. Asked which countries'
+TV channels air a Todd Casey cartoon, with no database, the model said it has no
+access to TV listings and suggested IMDb — the right answer to the question it
+was actually asked.
+
+Three things follow, and they outlast the pilot:
+
+- **`math` was not "the only family with a mechanical key".** It was the only
+  family whose task was fully delivered; a word problem carries its own numbers.
+  The `p_discordant` = 0.10 measured on it stands, and it is still near ceiling.
+- **A run can be clean and void at once.** Every instrument check passed. What
+  was missing was a check that the task arrived, which is now `TASK_CONTEXT_FIELD`
+  — declared per family, no default, refusing to run an item that is declared to
+  need context and does not carry it.
+- **`ShardedRecord` stores the system prompt verbatim.** The defect lived there
+  and nothing in the record showed it.
+
+**Neither `database` nor `actions` can be graded here even repaired.** Spider's
+metric is execution accuracy and the databases are not vendored; BFCL's is an AST
+match on a parsed call, and nothing in the run asks for a parseable call.
+Substituting for either is authoring a key while pointing at a vendored one, so
+they report format compliance and, for `database`, a string match labelled as a
+lower bound. **Any A1 effect size will rest on `math` alone unless a family with
+an available metric is added** — which is a corpus decision, not a scoring one.
+
 **Depends on.** Track 0.
 
 **Done when.** Five notebook entries, each with its numeric prediction written

@@ -112,3 +112,28 @@ above. Ten pairs is ten pairs.
    reasoning.
 3. **Whether `math` should be in the grid at all.** At ceiling it contributes
    cost and no information.
+
+---
+
+## Correction, same day: forty of these sixty records were void
+
+Not edited above, per the notebook rule. What is written there about `math`
+stands. What is written about `actions` and `database` does not, and the reason
+is not in this entry's data.
+
+Both families were run without the material the task needs. `database` was asked
+for SQL with no schema in the prompt; `actions` was asked to call a function with
+none offered. The corpus carries both — `schema_sql`, `function` — and the runner
+never rendered them. Twenty items, forty records, unanswerable rather than hard.
+
+Everything this entry says about the instrument still holds: the conversations
+accumulated, the receipts were clean, nothing failed. **That is the part worth
+keeping.** A run can pass every instrument check and still measure nothing,
+because no check asked whether the task had arrived.
+
+And it corrects a sentence above. `math` was called the only family with a
+mechanical key. It was the only family whose task was fully delivered, which is
+why it was the only one that looked scorable — a word problem carries its own
+numbers. The two claims point at the same ten items and are not the same claim.
+
+Re-run prediction: [2026-08-12-repaired-pilot-prediction.md](2026-08-12-repaired-pilot-prediction.md).
