@@ -54,7 +54,13 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from decision_evals.corpora import load_corpus  # noqa: E402
 from decision_evals.scorers import bfcl  # noqa: E402
-from decision_evals.sharded import FULL, SHARDED, ShardedRecord, load_records  # noqa: E402
+from decision_evals.sharded import (  # noqa: E402
+    FULL,
+    SHARDED,
+    ShardedRecord,
+    final_responses_comparable,
+    load_records,
+)
 
 CHECKPOINT_DIR = REPO_ROOT / "results" / "track-a"
 
@@ -433,6 +439,21 @@ def main() -> int:
 
     records = load_records(checkpoint)
     failed = instrument_checks(records)
+
+    # Every report below reads ``final_response``. If the run has no closing
+    # instruction that field is a whole answer in one arm and a last shard in
+    # the other, and any figure computed from it is a turn-count proxy. Refuse
+    # rather than print one -- see ``final_responses_comparable``.
+    if (reason := final_responses_comparable(records)) is not None:
+        print("\n" + "=" * 72)
+        print("NOT SCORED -- final responses are not comparable across conditions")
+        print("=" * 72)
+        print(f"  {reason}")
+        print("\n  Every measure in this script reads final_response. Scoring it here")
+        print("  would compare full's whole answer against sharded's last shard,")
+        print("  which measures turn count and not the intervention.")
+        return 1
+
     provisional_math_match(records, args.limit)
     database_report(records, args.limit)
     actions_report(records, args.limit)

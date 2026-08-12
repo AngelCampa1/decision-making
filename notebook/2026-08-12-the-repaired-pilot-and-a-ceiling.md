@@ -124,3 +124,26 @@ is exactly the judgement call the metric was built to avoid making.
 It is labelled a lower bound and it prints every mismatch, so it did its job. But
 it should never be summarised without those traces, and it should not appear in
 any table that a reader could mistake for accuracy.
+
+---
+
+## Appended 2026-08-12: re-checked under the final-turn defect, and it holds
+
+Later the same day, [a 50-pair `actions` run was voided](2026-08-12-the-actions-effect-was-the-scorer-reading-one-turn.md)
+because the scorer reads `final_response`, and without a closing instruction that
+is a whole answer in `full` and a last shard in `sharded`. **This pilot ran
+without a closing instruction too** — 0 of its 30 sharded records carry one — so
+every number above was computed on the same defective measurement and had to be
+re-checked rather than assumed safe.
+
+**The `math` conclusion survives unchanged.** Recomputed: both arms correct on
+10/10, `p_discordant` still 0.000. And it is not luck. GSM8K's last shard *is*
+the final question, so the last turn's answer is the task's answer by
+construction; the artifact has nothing to bite on. BFCL's `parallel` shards split
+one multi-call request and then trail into confirmations, which is why `actions`
+was destroyed by it and `math` was not.
+
+So "A1 `math` is closed as a venue" stands. The reason it stands is now recorded,
+because the next family added to this instrument needs to be checked for the same
+property before it is trusted — and `scripts/analyse_pilot.py` now refuses to
+score any run lacking a closing instruction rather than leaving that to memory.

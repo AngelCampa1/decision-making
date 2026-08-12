@@ -29,7 +29,7 @@ that is not in it has no A1 pair and is excluded loudly.
 from __future__ import annotations
 
 import json
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Final
@@ -185,6 +185,49 @@ class ShardedRecord:
         """
         counts = self.prompt_tokens_by_turn
         return list(counts) == sorted(counts)
+
+
+def final_responses_comparable(records: Iterable[ShardedRecord]) -> str | None:
+    """Whether ``final_response`` means the same thing in both conditions.
+
+    Returns ``None`` when it does, or a sentence saying why not.
+
+    A scorer that reads ``final_response`` is comparing one arm's *whole answer*
+    against the other arm's *last shard* unless a closing instruction was sent.
+    ``full`` has one turn, so its final response is everything it said.
+    A ``sharded`` conversation has four to ten, and without :data:`FINAL_TURN`
+    the last of them answers a sub-question with no reason to restate what was
+    said three turns earlier.
+
+    This is not hypothetical. On 2026-08-12 a 50-pair ``actions`` run scored
+    ``full`` 45/50 against ``sharded`` 23/50 on function naming, with discordance
+    24-to-2 in the predicted direction — a clean replication, and entirely this
+    defect. Crediting a name anywhere in the conversation moved ``sharded`` to
+    47/50 and reversed the direction. Neither number was right: final-only
+    penalises the arm for not repeating itself, anywhere rewards it for having
+    more turns to say it in, and both are reading turn count, which is the
+    independent variable.
+
+    So the guard is on the run, not on the scorer's arithmetic. A run without a
+    closing instruction cannot be scored on its final responses at all, and
+    saying that in one line beats printing a plausible number.
+    """
+    offenders = sorted(
+        {
+            r.task_id
+            for r in records
+            if r.condition == SHARDED and r.n_turns > 1 and not r.final_turn
+        }
+    )
+    if not offenders:
+        return None
+    shown = ", ".join(offenders[:3])
+    more = f" (+{len(offenders) - 3} more)" if len(offenders) > 3 else ""
+    return (
+        f"{len(offenders)} sharded conversation(s) carry no closing instruction, so their "
+        f"final response answers the last shard while full's answers the whole task. "
+        f"Re-run with --final-turn. Offenders: {shown}{more}"
+    )
 
 
 def full_instruction(instruction: ShardedInstruction) -> str:

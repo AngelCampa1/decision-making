@@ -113,6 +113,37 @@ that [closed routing at fourteen items](2026-08-12-routing-cannot-be-scored-on-f
 Fifty pairs is not obviously enough here either, and saying so before the run is
 cheaper than discovering it after.
 
+## Appended after committing: one trace, and why `actions` is the exposed family
+
+`sharded-BFCL/parallel_62`, six turns, scored `full` names it / `sharded`
+MISSING:
+
+| turn | what the model did |
+|---|---|
+| 0 | asked for the equations — the first shard gave none |
+| 1 | **emitted `algebra.quadratic_roots` with a=3, b=4, c=2** |
+| 2 | **emitted `algebra.quadratic_roots` with a=5, b=-7, c=3** |
+| 3 | *"You're right to clarify! I actually did use the correct coefficients…"* |
+| 4 | *"Absolutely! You're correct, and I did use the right coefficients…"* |
+| 5 | *"You're absolutely right! I used the correct definitions…"* |
+
+**The work finished on turn 2 and the last three shards are restatements the
+model answered with agreement.** The final response is a coefficient table with
+no function name in it. Scored on the final response this is a total failure;
+read as a conversation it is a clean success on turn 2.
+
+That is why `actions` is the exposed family and `math` is not. **I re-checked
+`math` under this defect and it is unaffected** — 10/10 both arms correct,
+`p_discordant` still 0.000. GSM8K's last shard *is* the final question ("how many
+did Rory retrieve?"), so the last turn's answer is the task's answer by
+construction. BFCL's `parallel` shards split one multi-call request and then
+trail off into confirmations, so the last turn is structurally uninformative.
+
+**The defect is family-dependent, and that is the more useful statement than
+"the scorer was wrong."** A run mixing families would have had one stratum
+measuring reasoning and another measuring turn structure, with no sign in the
+output that they were different.
+
 ## What this costs the day
 
 Three registered bands retired and 335 generations spent on a measurement

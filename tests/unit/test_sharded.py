@@ -28,6 +28,7 @@ from decision_evals.sharded import (
     ShardedRunError,
     append_record,
     completed_keys,
+    final_responses_comparable,
     full_instruction,
     load_records,
     pairable,
@@ -434,6 +435,73 @@ class TestRunSharded:
             conversation_id="c",
         )
         assert not record.prompt_tokens_climb
+
+
+class TestFinalResponsesComparable:
+    """The guard on the defect that voided a 50-pair run on 2026-08-12.
+
+    Without a closing instruction, ``final_response`` is a whole answer in
+    ``full`` and a last shard in ``sharded``, so any measure built on it reads
+    turn count. This is the check that refuses instead of printing a number.
+    """
+
+    def _record(
+        self, condition: str, *, n_turns: int, final_turn: str | None, task_id: str = "t1"
+    ) -> ShardedRecord:
+        return ShardedRecord(
+            task_id=task_id,
+            task="actions",
+            condition=condition,
+            model="m",
+            n_turns=n_turns,
+            final_response="x",
+            turn_responses=("x",) * max(n_turns, 1),
+            prompt_tokens_by_turn=tuple(range(100, 100 + max(n_turns, 1))),
+            output_tokens_by_turn=(1,) * max(n_turns, 1),
+            cost_usd=0.0,
+            duration_ms=0,
+            conversation_id="c",
+            final_turn=final_turn,
+        )
+
+    def test_a_closing_instruction_makes_them_comparable(self) -> None:
+        records = [
+            self._record(FULL, n_turns=1, final_turn=FINAL_TURN),
+            self._record(SHARDED, n_turns=6, final_turn=FINAL_TURN),
+        ]
+        assert final_responses_comparable(records) is None
+
+    def test_a_multi_turn_run_without_one_is_refused(self) -> None:
+        records = [
+            self._record(FULL, n_turns=1, final_turn=None),
+            self._record(SHARDED, n_turns=6, final_turn=None),
+        ]
+        reason = final_responses_comparable(records)
+        assert reason is not None
+        assert "--final-turn" in reason
+        assert "t1" in reason
+
+    def test_a_single_turn_sharded_item_is_not_an_offender(self) -> None:
+        """One shard means the last shard *is* the whole task. Nothing to fix."""
+        records = [
+            self._record(FULL, n_turns=1, final_turn=None),
+            self._record(SHARDED, n_turns=1, final_turn=None),
+        ]
+        assert final_responses_comparable(records) is None
+
+    def test_offenders_are_counted_and_truncated(self) -> None:
+        records = [
+            self._record(SHARDED, n_turns=5, final_turn=None, task_id=f"t{i}") for i in range(6)
+        ]
+        reason = final_responses_comparable(records)
+        assert reason is not None
+        assert reason.startswith("6 sharded")
+        assert "+3 more" in reason
+
+    def test_the_full_arm_alone_never_offends(self) -> None:
+        """``full`` is one turn by construction, whatever the flag said."""
+        records = [self._record(FULL, n_turns=1, final_turn=None)]
+        assert final_responses_comparable(records) is None
 
 
 class TestNoScoring:
