@@ -47,7 +47,23 @@ from decision_evals.sharded import (  # noqa: E402
     task_context,
 )
 
-CHECKPOINT = REPO_ROOT / "results" / "track-a" / "pilot.jsonl"
+CHECKPOINT_DIR = REPO_ROOT / "results" / "track-a"
+
+
+def checkpoint_for(tag: str) -> Path:
+    """Where a run writes. ``--tag`` exists because the draw is not nested.
+
+    ``rng.sample(pool, 40)`` is not a superset of ``rng.sample(pool, 10)`` from
+    the same seed, so raising ``--per-family`` produces a *different* ten items
+    rather than thirty more. Resuming into the same file would silently mix two
+    draws, and every downstream count would be over a sample nobody chose.
+
+    The system-prompt guard below would not catch that -- the prompts are
+    identical, it is the items that differ -- so the separation has to be by
+    path.
+    """
+    return CHECKPOINT_DIR / f"{tag}.jsonl"
+
 
 #: Identical in both conditions. Anything that differs between them is a
 #: confound with the thing under test, so the system prompt must not.
@@ -72,8 +88,18 @@ def system_prompt_for(item: ShardedInstruction) -> str:
 SEED = 20260811
 
 
-def select(instructions: list[ShardedInstruction], per_family: int) -> list[ShardedInstruction]:
-    """A stratified, seeded sample: equal counts from each pairable family."""
+def select(
+    instructions: list[ShardedInstruction],
+    per_family: int,
+    families: tuple[str, ...] | None = None,
+) -> list[ShardedInstruction]:
+    """A stratified, seeded sample: equal counts from each pairable family.
+
+    ``families`` filters **after** the draw, never during it. One RNG walks the
+    families in sorted order, so skipping one would shift what every later family
+    draws -- and a run restricted to ``actions`` would then not be a subset of the
+    full run it is meant to extend.
+    """
     rng = random.Random(SEED)
     chosen: list[ShardedInstruction] = []
     for family in sorted(FULL_INSTRUCTION_FIELD):
@@ -81,7 +107,9 @@ def select(instructions: list[ShardedInstruction], per_family: int) -> list[Shar
             (item for item in instructions if item.task == family), key=lambda i: i.task_id
         )
         chosen.extend(rng.sample(pool, min(per_family, len(pool))))
-    return chosen
+    if families is None:
+        return chosen
+    return [item for item in chosen if item.task in families]
 
 
 def main() -> int:
@@ -93,23 +121,43 @@ def main() -> int:
         action="store_true",
         help="send the closing instruction to both conditions (one extra sharded turn)",
     )
+    parser.add_argument(
+        "--families",
+        default="",
+        help="comma-separated families to run; the draw is unchanged, only filtered",
+    )
+    parser.add_argument(
+        "--tag",
+        default="pilot",
+        help="checkpoint name. Change it whenever --per-family or --families changes",
+    )
     args = parser.parse_args()
 
     closing = FINAL_TURN if args.final_turn else None
+    families = tuple(f.strip() for f in args.families.split(",") if f.strip()) or None
+    if families and (unknown := set(families) - set(FULL_INSTRUCTION_FIELD)):
+        print(f"unknown famil(ies): {sorted(unknown)}. Known: {sorted(FULL_INSTRUCTION_FIELD)}")
+        return 1
+
+    checkpoint = checkpoint_for(args.tag)
     corpus = load_corpus(REPO_ROOT, check_hash=False)
-    items = select(pairable(corpus), args.per_family)
+    items = select(pairable(corpus), args.per_family, families)
+    if not items:
+        print("no items selected")
+        return 1
     plan = plan_run(items, final_turn=args.final_turn)
     print(plan.describe())
     print(f"closing instruction: {'yes' if closing else 'no'}")
-    print(f"checkpoint: {CHECKPOINT.relative_to(REPO_ROOT)}\n")
+    print(f"families: {', '.join(families) if families else 'all'}")
+    print(f"checkpoint: {checkpoint.relative_to(REPO_ROOT)}\n")
 
     # Resuming across a change to either prompt would append records made under
     # different conditions to the ones already there, and nothing downstream
     # would show it. That is how the first pilot ran forty pairs with no schema
     # and no function list; the second time it should refuse rather than resume.
-    if CHECKPOINT.exists():
+    if checkpoint.exists():
         wanted = {system_prompt_for(item) for item in items}
-        for record in load_records(CHECKPOINT):
+        for record in load_records(checkpoint):
             mismatch = (
                 "closing instruction"
                 if record.final_turn != closing
@@ -119,13 +167,13 @@ def main() -> int:
             )
             if mismatch:
                 print(
-                    f"*** {CHECKPOINT.name} holds records made with a different {mismatch} "
+                    f"*** {checkpoint.name} holds records made with a different {mismatch} "
                     f"({record.task_id}). Resuming would pool two runs into one file. "
                     "Move it aside."
                 )
                 return 1
 
-    done = completed_keys(CHECKPOINT)
+    done = completed_keys(checkpoint)
     started = time.time()
     failures = 0
 
@@ -146,7 +194,7 @@ def main() -> int:
                         conversation_id=conversation_id,
                         final_turn=closing,
                     )
-                    append_record(CHECKPOINT, record)
+                    append_record(checkpoint, record)
                 except CliError as exc:
                     failures += 1
                     print(f"  [{index}] full FAILED {item.task_id}: {exc}")
@@ -166,7 +214,7 @@ def main() -> int:
                         # a receipt that changed mid-run is exactly the silent
                         # confound the gate exists for.
                         chat.receipt.assert_isolated()
-                    append_record(CHECKPOINT, record)
+                    append_record(checkpoint, record)
                     if not record.prompt_tokens_climb:
                         print(f"  [{index}] WARNING {item.task_id}: prompt tokens did not climb")
                 except IsolationError as exc:

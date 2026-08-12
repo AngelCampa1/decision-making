@@ -55,7 +55,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 from decision_evals.corpora import load_corpus  # noqa: E402
 from decision_evals.sharded import FULL, SHARDED, ShardedRecord, load_records  # noqa: E402
 
-CHECKPOINT = REPO_ROOT / "results" / "track-a" / "pilot.jsonl"
+CHECKPOINT_DIR = REPO_ROOT / "results" / "track-a"
 
 #: GSM8K states its reference answer after a `####` marker and nowhere else.
 _GOLD = re.compile(r"####\s*(-?[\d,]+(?:\.\d+)?)")
@@ -361,13 +361,15 @@ def actions_report(records: list[ShardedRecord], limit: int) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=6, help="concordant pairs to print")
+    parser.add_argument("--tag", default="pilot", help="which checkpoint in results/track-a/")
     args = parser.parse_args()
 
-    if not CHECKPOINT.exists():
-        print(f"no checkpoint at {CHECKPOINT}")
+    checkpoint = CHECKPOINT_DIR / f"{args.tag}.jsonl"
+    if not checkpoint.exists():
+        print(f"no checkpoint at {checkpoint}")
         return 1
 
-    records = load_records(CHECKPOINT)
+    records = load_records(checkpoint)
     failed = instrument_checks(records)
     provisional_math_match(records, args.limit)
     database_report(records, args.limit)
