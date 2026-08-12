@@ -10,6 +10,7 @@ import yaml
 from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.triggers import (
     TriggerSetError,
+    _check_routes,
     check_trigger_sets,
     evaluate,
     evaluate_routing,
@@ -298,3 +299,75 @@ class TestCorrespondence:
         (tmp_path / "datasets" / "triggers").mkdir(parents=True)
         (tmp_path / "datasets" / "triggers" / "real.yaml").write_text("[]", encoding="utf-8")
         assert any("expected a mapping" in i for i in check_trigger_sets(tmp_path))
+
+
+class TestRouteLabelsMatchTheRouterTable:
+    """A label aimed at a procedure that does not exist scores as a model failure.
+
+    Added after M4 and M5 made the router table load-bearing in two places at
+    once: the arms are built from it and the labels point at it.
+    """
+
+    SKILL = """---
+name: demo
+description: >-
+  Use when deciding. Routes to one of four procedures. Do not use for lookups.
+---
+
+| What is hard | Read | What it produces |
+|---|---|---|
+| A pile arrived | `ledger.md` | a list |
+| It may not fit | `fit.md` | the answer |
+"""
+
+    def _skill(self, tmp_path: Path) -> Path:
+        directory = tmp_path / "skills" / "demo"
+        directory.mkdir(parents=True)
+        path = directory / "SKILL.md"
+        path.write_text(self.SKILL, encoding="utf-8")
+        return path
+
+    def _triggers(self, tmp_path: Path, route: str) -> Path:
+        directory = tmp_path / "datasets" / "triggers"
+        directory.mkdir(parents=True)
+        path = directory / "demo.yaml"
+        path.write_text(
+            "skill: demo\n"
+            "positive:\n"
+            f"  - id: p01\n    turn: Should I take it?\n    why: a decision\n    route: {route}\n"
+            "negative:\n"
+            "  - id: n01\n    turn: What is the capital of France?\n    why: a lookup\n",
+            encoding="utf-8",
+        )
+        return path
+
+    def test_a_route_in_the_table_is_accepted(self, tmp_path: Path) -> None:
+        skill = self._skill(tmp_path)
+        triggers = self._triggers(tmp_path, "ledger")
+        assert _check_routes(load_trigger_set(triggers), skill, triggers) == []
+
+    def test_a_route_that_is_not_a_procedure_is_reported(self, tmp_path: Path) -> None:
+        skill = self._skill(tmp_path)
+        triggers = self._triggers(tmp_path, "cascade")
+        issues = _check_routes(load_trigger_set(triggers), skill, triggers)
+        assert len(issues) == 1
+        assert "'cascade'" in issues[0]
+        assert "fit, ledger" in issues[0]
+
+    def test_a_skill_with_no_router_table_is_not_an_error(self, tmp_path: Path) -> None:
+        skill = self._skill(tmp_path)
+        skill.write_text(self.SKILL.split("| What is hard")[0], encoding="utf-8")
+        triggers = self._triggers(tmp_path, "anything")
+        assert _check_routes(load_trigger_set(triggers), skill, triggers) == []
+
+    def test_a_missing_skill_file_is_not_an_error_here(self, tmp_path: Path) -> None:
+        """That is ``check_trigger_sets``' job, and it reports it separately."""
+        triggers = self._triggers(tmp_path, "ledger")
+        absent = tmp_path / "skills" / "gone" / "SKILL.md"
+        assert _check_routes(load_trigger_set(triggers), absent, triggers) == []
+
+    def test_the_shipped_trigger_set_passes(self) -> None:
+        repo = Path(__file__).resolve().parents[2]
+        triggers = repo / "datasets" / "triggers" / "decision-making.yaml"
+        skill = repo / "skills" / "decision-making" / "SKILL.md"
+        assert _check_routes(load_trigger_set(triggers), skill, triggers) == []

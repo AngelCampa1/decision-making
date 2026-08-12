@@ -23,6 +23,9 @@ from typing import Final
 
 import yaml
 
+from decision_evals.skills import parse_skill
+from decision_evals.unbundle import UnbundleError, router_rows
+
 
 @dataclass(frozen=True)
 class TriggerCase:
@@ -278,4 +281,31 @@ def check_trigger_sets(repo_root: Path) -> list[str]:
                 "and precision is the number that decides whether a skill is worth "
                 "having installed."
             )
+        issues.extend(_check_routes(trigger_set, skills_dir / name / "SKILL.md", path))
     return issues
+
+
+def _check_routes(trigger_set: TriggerSet, skill_path: Path, path: Path) -> list[str]:
+    """Every declared route must name a procedure the skill's router table offers.
+
+    Added 2026-08-12, after Tracks M4 and M5 made it load-bearing. Those arms are
+    built by :func:`~decision_evals.unbundle.router_rows` reading the same table
+    these labels point at, so a renamed procedure file would leave every routing
+    label aimed at nothing **while every number kept computing** -- accuracy would
+    simply fall, and it would look like a model result.
+
+    A skill whose body carries no router table is not an error. Most skills will
+    not have one; the check applies where there is something to check against.
+    """
+    try:
+        rows = router_rows(parse_skill(skill_path).body)
+    except (OSError, UnbundleError):
+        return []
+    known = {row.name for row in rows}
+    return [
+        f"{path}: case {case.id!r} routes to {case.route!r}, which is not a procedure in "
+        f"{skill_path.parent.name}'s router table ({', '.join(sorted(known))}). "
+        "A label pointing at a procedure that does not exist scores as a model failure."
+        for case in trigger_set.cases
+        if case.route is not None and case.route not in known
+    ]
