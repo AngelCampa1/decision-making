@@ -38,14 +38,13 @@ sub-agent experiment least deserves.
 from __future__ import annotations
 
 import json
-import tempfile
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Final
 
 from decision_evals.budget import BudgetLedger, estimate_cost_usd
-from decision_evals.providers.claude_code import CliResult, Conversation
+from decision_evals.providers.claude_code import CliResult, Conversation, isolated_cwd
 from decision_evals.telemetry import (
     OP_INVOKE_AGENT,
     OP_INVOKE_WORKFLOW,
@@ -203,7 +202,7 @@ def _default_runner(model: str) -> tuple[NodeRunner, Callable[[], int]]:
     def run_node(system_prompt: str, prompt: str, node_name: str) -> CliResult:
         nonlocal asserted
         with (
-            tempfile.TemporaryDirectory() as cwd,
+            isolated_cwd("de-node-") as cwd,
             Conversation(system_prompt=system_prompt, model=model, cwd=cwd) as chat,
         ):
             result = chat.send(prompt)

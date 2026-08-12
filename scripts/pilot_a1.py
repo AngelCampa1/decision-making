@@ -20,7 +20,6 @@ from __future__ import annotations
 import argparse
 import random
 import sys
-import tempfile
 import time
 from pathlib import Path
 
@@ -32,6 +31,7 @@ from decision_evals.providers.claude_code import (  # noqa: E402
     CliError,
     Conversation,
     IsolationError,
+    isolated_cwd,
 )
 from decision_evals.providers.claude_code import run as cli_run  # noqa: E402
 from decision_evals.scorers.bfcl import CALL_FORMAT  # noqa: E402
@@ -199,7 +199,7 @@ def main() -> int:
         conversation_id = f"pilot-{item.task_id}"
         system = system_prompt_for(item, call_format=args.call_format)
 
-        with tempfile.TemporaryDirectory() as cwd:
+        with isolated_cwd("de-pilot-") as cwd:
             # -- full: the fully-specified question, one call ------------------
             if (item.task_id, "full") not in done:
                 try:

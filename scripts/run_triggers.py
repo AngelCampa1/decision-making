@@ -33,7 +33,6 @@ import argparse
 import json
 import re
 import sys
-import tempfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -45,6 +44,7 @@ from decision_evals.providers.claude_code import (  # noqa: E402
     CliError,
     Conversation,
     IsolationError,
+    isolated_cwd,
 )
 from decision_evals.skills import parse_skill  # noqa: E402
 from decision_evals.triggers import (  # noqa: E402
@@ -141,7 +141,7 @@ def decision(text: str) -> Verdict:
 def ask(description: str, case: TriggerCase, model: str, system: str) -> Verdict:
     prompt = f"## Tool description\n\n{description}\n\n## User message\n\n{case.turn}"
     with (
-        tempfile.TemporaryDirectory() as cwd,
+        isolated_cwd("de-trigger-") as cwd,
         Conversation(system_prompt=system, model=model, cwd=cwd) as chat,
     ):
         result = chat.send(prompt)

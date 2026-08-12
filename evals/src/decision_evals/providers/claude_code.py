@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import tempfile
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Final
@@ -45,6 +46,33 @@ ISOLATION_FLAGS: Final[tuple[str, ...]] = (
     '{"mcpServers":{}}',
     "--no-session-persistence",
 )
+
+
+def isolated_cwd(prefix: str = "de-") -> tempfile.TemporaryDirectory[str]:
+    """A throwaway working directory for one call, safe to clean up on Windows.
+
+    Every call runs in a fresh directory because the CLI's auto-memory path is
+    keyed on cwd, so a shared directory would let one call's state reach the
+    next. That part is not optional.
+
+    ``ignore_cleanup_errors=True`` is, and it is here because of a real loss.
+    On 2026-08-12 a 365-call trigger run died at call 348 with
+
+        PermissionError: [WinError 32] The process cannot access the file
+        because it is being used by another process
+
+    raised by ``TemporaryDirectory.__exit__``. Windows refuses to remove a
+    directory a process still holds, and the CLI subprocess does not always
+    release its cwd before the context manager returns. **The calls had all
+    succeeded**; the run died tidying up after them.
+
+    A leaked directory under the system temp folder costs nothing and the OS
+    reclaims it. Losing a run to a cleanup race costs hours of quota. Only the
+    checkpoint saved that one, and a script without a checkpoint would have lost
+    everything.
+    """
+    return tempfile.TemporaryDirectory(prefix=prefix, ignore_cleanup_errors=True)
+
 
 #: Text the CLI returns when the stored OAuth credential has been revoked. The
 #: CLI reports ``loggedIn: true`` in this state, so the response body is the
