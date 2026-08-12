@@ -755,6 +755,20 @@ Both defects had already produced a publishable-looking false replication
 spider databases means downloading a third-party dataset, which is not a decision
 an agent makes unattended.
 
+**One consequence for the rest of Track A, and it is good news.** A1 compares a
+**one-turn** arm against a **six-turn** arm, which is why no object is
+comparable. **A2 does not**: it holds total turns fixed and moves a decisive fact
+between positions, so both arms have the same turn count, the same shards and the
+same place for the answer to land. A2 is immune to the defect that closed A1 by
+construction, and it is the next A-track experiment for that reason as well as
+its own.
+
+What A2 still needs is **headroom**, which is option 3 rather than option 2. A
+position effect cannot be seen at 10/10, and `math` sits at 10/10 in both arms —
+so A2 inherits A1's need for harder items even though it escapes A1's
+measurement problem. Those are two separate blockers and only one of them has
+been solved.
+
 Also recorded: prediction 7 of that run was **unscoreable as written**. It asked
 for `p_discordant` on families that have no correctness measure here, which was
 known when it was registered. A pre-registered band needs the estimator named,
