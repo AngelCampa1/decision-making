@@ -9,6 +9,7 @@ historical four-skill tree as an arm.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import ClassVar
 
 import pytest
 
@@ -17,7 +18,9 @@ from decision_evals.unbundle import (
     DESCRIPTION_VARIANTS,
     Procedure,
     UnbundleError,
+    covering,
     description_variant,
+    entries,
     four_arm,
     router_rows,
     shared_scope,
@@ -183,3 +186,77 @@ class TestDescriptionVariants:
     def test_a_moved_marker_raises_rather_than_guessing(self) -> None:
         with pytest.raises(UnbundleError, match="marker"):
             description_variant("Some description with no markers at all.", "opener-only")
+
+
+class TestEntries:
+    """Track M5's partition. Deterministic in n, and a superset of M4's arm."""
+
+    FOUR = """
+| What is hard | Read | What it produces |
+|---|---|---|
+| A pile arrived | `ledger.md` | a list |
+| It may not fit | `fit.md` | the generic answer |
+| It starts things | `cascade.md` | the chain |
+| The question is when | `timing.md` | the undo price |
+"""
+
+    def test_n_equal_to_the_row_count_is_the_four_arm(self) -> None:
+        assert entries(DESCRIPTION, self.FOUR, 4) == four_arm(DESCRIPTION, self.FOUR)
+
+    def test_n_one_is_a_single_entry_covering_everything(self) -> None:
+        out = entries(DESCRIPTION, self.FOUR, 1)
+        assert list(out) == ["ledger-fit-cascade-timing"]
+
+    def test_the_partition_is_contiguous_and_even(self) -> None:
+        assert list(entries(DESCRIPTION, self.FOUR, 2)) == ["ledger-fit", "cascade-timing"]
+
+    def test_an_uneven_split_front_loads_the_extra(self) -> None:
+        assert list(entries(DESCRIPTION, self.FOUR, 3)) == ["ledger-fit", "cascade", "timing"]
+
+    def test_every_procedure_appears_exactly_once_at_every_n(self) -> None:
+        for n in range(1, 5):
+            covered = [p for name in entries(DESCRIPTION, self.FOUR, n) for p in name.split("-")]
+            assert sorted(covered) == ["cascade", "fit", "ledger", "timing"], n
+
+    @pytest.mark.parametrize("n", [0, 5])
+    def test_an_n_outside_the_table_raises(self, n: int) -> None:
+        with pytest.raises(UnbundleError, match="n must be"):
+            entries(DESCRIPTION, self.FOUR, n)
+
+    def test_or_is_the_only_word_added(self) -> None:
+        def words(text: str) -> set[str]:
+            return {w.strip(".,`|") for w in text.lower().split()} - {""}
+
+        allowed = words(DESCRIPTION + " " + self.FOUR) | {"produces", "or"}
+        for n in range(1, 5):
+            for text in entries(DESCRIPTION, self.FOUR, n).values():
+                assert words(text) <= allowed, n
+
+    def test_the_shipped_skill_partitions_at_every_n(self) -> None:
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        for n in range(1, 5):
+            assert len(entries(description, document.body, n)) == n
+
+
+class TestCovering:
+    ENTRIES: ClassVar[dict[str, str]] = {"ledger-fit": "...", "cascade-timing": "..."}
+
+    @pytest.mark.parametrize(
+        ("procedure", "expected"),
+        [
+            ("ledger", "ledger-fit"),
+            ("fit", "ledger-fit"),
+            ("cascade", "cascade-timing"),
+            ("timing", "cascade-timing"),
+        ],
+    )
+    def test_finds_the_entry_holding_the_procedure(self, procedure: str, expected: str) -> None:
+        assert covering(self.ENTRIES, procedure) == expected
+
+    def test_an_uncovered_procedure_is_none(self) -> None:
+        assert covering(self.ENTRIES, "premortem") is None
+
+    def test_a_partial_name_does_not_match(self) -> None:
+        """``fit`` must not match ``benefit``; the split is on the separator."""
+        assert covering({"benefit-analysis": "..."}, "fit") is None

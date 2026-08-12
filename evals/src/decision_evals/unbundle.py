@@ -173,5 +173,88 @@ def four_arm(description: str, body: str) -> dict[str, str]:
     Raises:
         UnbundleError: if the table or the scope markers cannot be found.
     """
+    return entries(description, body, len(router_rows(body)))
+
+
+def entries(description: str, body: str, n: int) -> dict[str, str]:
+    """The four procedures redistributed across ``n`` entries — Track M5.
+
+    M4 raced 1 against 4 and found them level on firing while 4 routed better.
+    M5 asks the shape of that: **where does the curve turn?** One entry, two, or
+    four, with the same four procedures behind them either way.
+
+    The partition is **contiguous in table order** and as even as possible, so it
+    is a function of ``n`` alone. Choosing *which* procedures to group would be a
+    second manipulation — pairing `cascade` with `timing` rather than with
+    `ledger` is a hypothesis about their overlap, and it is M5's follow-up rather
+    than a free parameter here.
+
+    An entry covering several procedures lists their conditions in table order,
+    joined by *"or"*, and its products likewise. That is the one join this module
+    performs and it is declared: ``or`` is the only word added, it appears in
+    every multi-procedure entry, and so it cannot differentiate them.
+
+    **A confound this cannot remove, stated rather than hidden.** Mechanical
+    joining reads worse than a human would write. At ``n=4`` every entry is one
+    clean clause; at ``n=2`` each is *"…what it spends or the direction is
+    settled and the question is when"*. So an n=2 disadvantage may be **prose
+    quality rather than entry count**, and the only clean contrast in the whole
+    curve is n=1 against n=4, where both arms are equally clumsy or equally not.
+    Any middle point is suggestive and must be reported as such — writing four
+    fluent merged descriptions would fix the prose and reintroduce exactly the
+    authoring problem the module exists to avoid.
+
+    Args:
+        description: the bundle's ``description`` frontmatter field.
+        body: the bundle's markdown body, carrying the router table.
+        n: how many entries to produce, from 1 to the number of rows.
+
+    Returns:
+        ``n`` entries, keyed by the joined names of the procedures they cover,
+        in table order.
+
+    Raises:
+        UnbundleError: on an ``n`` outside the table's size, or if the table or
+            the scope markers cannot be found.
+    """
+    rows = router_rows(body)
+    if not 1 <= n <= len(rows):
+        raise UnbundleError(f"n must be 1..{len(rows)} for a {len(rows)}-row table, got {n}")
     opener, exclusions = shared_scope(description)
-    return {row.name: row.description(opener, exclusions) for row in router_rows(body)}
+
+    # Contiguous, as even as possible: the first `len(rows) % n` groups get one
+    # extra row. Deterministic in n, which is the point.
+    size, extra = divmod(len(rows), n)
+    groups: list[list[Procedure]] = []
+    start = 0
+    for index in range(n):
+        stop = start + size + (1 if index < extra else 0)
+        groups.append(rows[start:stop])
+        start = stop
+
+    out: dict[str, str] = {}
+    for group in groups:
+        merged = Procedure(
+            name="-".join(row.name for row in group),
+            condition=" or ".join(row.condition[0].lower() + row.condition[1:] for row in group),
+            product=" or ".join(row.product for row in group),
+        )
+        out[merged.name] = merged.description(opener, exclusions)
+    return out
+
+
+def covering(names: dict[str, str], procedure: str) -> str | None:
+    """Which entry covers ``procedure``, or ``None`` if none does.
+
+    Scoring an M5 arm needs this: at n=2 a case labelled ``ledger`` is routed
+    correctly when the model picks the entry *containing* ``ledger``, not one
+    named ``ledger``.
+
+    **Accuracy across different ``n`` is not comparable and must not be plotted
+    as one curve without saying so** — a 2-way choice has chance 0.5 and a 4-way
+    choice has chance 0.25. Firing is the comparable outcome.
+    """
+    for name in names:
+        if procedure in name.split("-"):
+            return name
+    return None
