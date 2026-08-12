@@ -29,6 +29,37 @@ shadowing at n=4, and this repository has not either. Track M4 in
 would settle it, and until it runs, one-entry-not-four is a judgement call
 wearing a citation.
 
+**M4 ran on 2026-08-12 and the citation has been replaced by a measurement that
+does not support it.** 365 calls, 73 cases × 5 repeats, both arms, with the
+four-skill arm's descriptions *derived* from this bundle rather than written, so
+that only structure varied:
+
+| | one entry | four entries |
+|---|---|---|
+| firing accuracy, 73 paired items | 0.956 | 0.951 — **paired Wilcoxon p = 0.83** |
+| false-positive rate | 0.018 | **0.000** |
+| recall | **0.878** | 0.800 |
+| routing accuracy | 0.686 ± 0.108 | **0.786 ± 0.051** |
+
+**Shadowing did not appear at four.** The stated mechanism — four descriptions
+that all read as "help me decide" colliding — was not observed, and these four
+share an opener and an exclusion list by construction. Four entries also *routed
+better*, most sharply on the two items diagnosed that morning as **router-table**
+defects (`p07` 1/5 → 5/5, `p03` 1/5 → 3/5), which was predicted in writing before
+the run.
+
+The trade is structural: with four entries, declining to name a tool *is*
+declining to fire, so the arm never fires on a message it cannot route — fewer
+false positives, more misses. Neither arm dominates, and which one is better
+depends on whether a missed decision or an unwanted interruption is the more
+expensive error, which nobody here has written down.
+
+**So the block below stays, and its justification changes.** One entry is not
+retired on one run at one model tier — that would be acting on the measurement
+that motivated the question. But the 202-skill result may no longer be cited as
+though it reached down to four.
+[`notebook/2026-08-12-m4-shadowing-did-not-appear-at-four.md`](notebook/2026-08-12-m4-shadowing-did-not-appear-at-four.md).
+
 ---
 
 ## Copy this into your project's `AGENTS.md` or `CLAUDE.md`
