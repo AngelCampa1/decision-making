@@ -61,3 +61,9 @@ results/calibration/
 # the data is not.
 datasets/vendor/*.json
 !datasets/vendor/*.lock.json
+
+# Live Track A checkpoints. Same reason as results/calibration/: an append-only
+# working file cannot be meaningfully committed mid-run, and on Windows cannot be
+# committed at all while the writer holds it. Completed runs are published
+# deliberately.
+results/track-a/
