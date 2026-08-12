@@ -192,6 +192,45 @@ to ask for more information versus decide under incomplete information).
 **Done when** `docs/DECISION_FRAMEWORKS.md` exists and every current skill is
 either traced to a documented framework or explicitly marked as invented.
 
+#### First pass done, 2026-08-12 — [`docs/DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md)
+
+Eleven frameworks catalogued and graded on *prescriptive* evidence rather than
+popularity. K5 is still open; K2's *none located* rows still want a database
+search. Four results bear on what the rest of the programme should build.
+
+**The pre-mortem's famous "30%" is a count of reasons generated, not a measure
+of decision quality.** Mitchell, Russo & Pennington did not assess the quality
+of the reasons. So *a procedure that makes a model produce more considerations
+is not thereby a procedure that makes it decide better* — and more
+considerations is precisely what a structured skill most easily produces and
+what a careless metric most easily rewards. This is the same conflation that
+already bit probe-07 from the other direction.
+
+**The best-evidenced framework in the table is under active challenge.**
+Hauenstein et al. (2025, *Psychological Science*) re-analysed the Good Judgment
+Project under IRT and concluded the training and teaming effects may not be
+real. Calibration training is still the strongest candidate *and* is one
+re-analysis away from the rest.
+
+**Calibration has no counterpart among the four shipped procedures.** Nothing in
+`decision-making` elicits a probability, so nothing can be scored for
+calibration — while `stats/calibration.py` is property-tested at 100% coverage
+and has never been called. That makes **elicited confidence the top-ranked skill
+candidate**: the only one whose parent intervention has medium-to-large
+controlled effects in humans, it needs no new corpus, and it converts a list of
+considerations into a number that can be scored.
+
+**The audit:** `cascade`, `timing` and `fit` trace to documented frameworks;
+`ledger` is invented outright. None of the four traces to a framework with
+strong prescriptive evidence.
+
+**And a mid-range shadowing observation fell out of K3.**
+[`cc-thinking-skills`](https://github.com/tjboudreaux/cc-thinking-skills) is a
+**28-skill** library whose own README declines to claim an accuracy gain and
+reports one provisional result below its own utility margin. Track M4 is
+extrapolating from 202 skills down towards four; 28 is the only point anyone has
+in between, and it comes with an installer who abandoned it.
+
 ### Track M — Skill design: how a skill should be built
 
 **Question.** Given content worth having, what is the right *shape* to put it
