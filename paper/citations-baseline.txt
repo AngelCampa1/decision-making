@@ -3,24 +3,13 @@
 # `quote` field added. THIS LIST MAY ONLY SHRINK: `de check` fails when an entry
 # here no longer has an outstanding issue, so a resolved line must be deleted.
 #
-# Seeded 2026-08-11 with 27 identifiers. 2026-08-12: the eight that
-# asserted a number were fetched first-hand and removed; two of them were wrong. Every NEW citation is gated immediately.
-1909.03004
-2303.08774
-2303.16634
-2309.01431
-2403.12744
-2406.07791
-2410.02736
-2410.21819
-2411.15287
-2502.08788
-2506.22316
-2508.02087
-2509.22856
-2509.23055
-2511.08798
-2512.01420
-2603.10123
-2604.23178
-2605.18882
+# Seeded 2026-08-11 with 27 identifiers.
+#
+# EMPTY since 2026-08-12. All 27 were fetched first-hand from arXiv and given
+# bibliography entries with author lists. The eight that assert a number were
+# read for the number too, and two of those were wrong -- see
+# notebook/2026-08-12-the-baseline-was-where-the-errors-were.md.
+#
+# The file stays rather than being deleted, because an empty exemption list is a
+# claim worth being able to see: every governed citation is gated now, and any
+# line added below is a decision to stop checking one.
