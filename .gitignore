@@ -16,8 +16,11 @@ build/
 coverage.json
 htmlcov/
 
-# Inspect AI logs are large; the curated ones live under results/ and are committed
-# deliberately by `de confirm`, never picked up incidentally.
+# Run logs are large; the curated ones live under results/ and are committed
+# deliberately by `de confirm`, never picked up incidentally. (`*.eval` is the
+# Inspect AI log extension, kept as a belt-and-braces entry even though the
+# inspect-ai dependency has been removed -- an ignore rule for a file we no
+# longer produce costs nothing, and an untracked 100MB log costs a lot.)
 logs/
 *.eval
 

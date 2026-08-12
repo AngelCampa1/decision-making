@@ -21,10 +21,13 @@ dependencies = [
     "typer>=0.15",
 ]
 
-[project.optional-dependencies]
-# Kept separate: the stats/generators/lint layers must work without a model backend,
-# so `de check` can run with zero LLM dependencies installed.
-harness = ["inspect-ai>=0.3.100"]
+# No optional dependencies. `inspect-ai` was declared here from the task #6 spike
+# that compared it against a hand-rolled `claude -p` provider; the provider won,
+# and the declaration outlived the decision without ever being imported. A
+# dependency nothing imports is a claim about the design that the code contradicts
+# -- anyone reading pyproject would reasonably conclude this harness is built on
+# Inspect. It is not: see providers/claude_code.py and the Track 0 design call to
+# script the orchestrator rather than use a framework's dispatch.
 
 [project.scripts]
 de = "decision_evals.cli:app"
@@ -96,7 +99,7 @@ packages = ["decision_evals"]
 
 [[tool.mypy.overrides]]
 # These ship without complete stubs.
-module = ["statsmodels.*", "scipy.*", "inspect_ai.*"]
+module = ["statsmodels.*", "scipy.*"]
 ignore_missing_imports = true
 
 # --------------------------------------------------------------------------- #
