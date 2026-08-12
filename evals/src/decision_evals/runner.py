@@ -227,15 +227,46 @@ def preflight(*, model: str, cwd: str) -> None:
 
 
 def load_records(checkpoint: Path) -> list[RunRecord]:
-    """Read a checkpoint back for analysis."""
+    """Read a checkpoint back for analysis.
+
+    A JSON parse failure on the *final* line is tolerated: a run killed
+    mid-write leaves a partial line, and that is both expected and recoverable.
+    Everything else is refused.
+
+    A well-formed line that does not fit :class:`RunRecord` used to be skipped
+    silently, which meant adding a column made every earlier record disappear
+    and the analysis reported a run that had not happened. Since the next change
+    to ``RunRecord`` is a set of stratum columns for the long corpus, that
+    failure was queued rather than hypothetical.
+
+    Raises:
+        RunError: A record does not match the current schema, or a line is
+            unparseable somewhere other than at the end of the file.
+    """
     if not checkpoint.exists():
         return []
+
+    lines = checkpoint.read_text(encoding="utf-8").splitlines()
     records: list[RunRecord] = []
-    for line in checkpoint.read_text(encoding="utf-8").splitlines():
-        try:
-            records.append(RunRecord(**json.loads(line)))
-        except (json.JSONDecodeError, TypeError):
+    for number, line in enumerate(lines, start=1):
+        if not line.strip():
             continue
+        try:
+            payload = json.loads(line)
+        except json.JSONDecodeError as exc:
+            if number == len(lines):
+                break  # a partial final write; the run was killed here
+            raise RunError(
+                f"{checkpoint}:{number} is not JSON and is not the last line, so it is "
+                f"corruption rather than an interrupted write: {exc}"
+            ) from exc
+        try:
+            records.append(RunRecord(**payload))
+        except TypeError as exc:
+            raise RunError(
+                f"{checkpoint}:{number} does not match the current RunRecord schema: {exc}\n"
+                "Move the checkpoint aside and re-run rather than analysing a subset."
+            ) from exc
     return records
 
 

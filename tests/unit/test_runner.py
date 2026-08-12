@@ -162,10 +162,17 @@ def test_an_absent_checkpoint_is_an_empty_one(tmp_path: Path) -> None:
     assert load_records(tmp_path / "nothing.jsonl") == []
 
 
-def test_unreadable_records_are_skipped_on_load(tmp_path: Path) -> None:
+def test_unreadable_records_stop_the_analysis(tmp_path: Path) -> None:
+    """This used to assert the records were silently skipped.
+
+    That was the bug: a checkpoint of unreadable lines returned an empty list and
+    an analysis over nothing, which is indistinguishable in the summary from a
+    run that produced nothing.
+    """
     checkpoint = tmp_path / "run.jsonl"
     checkpoint.write_text('not json\n{"item_id": "a"}\n', encoding="utf-8")
-    assert load_records(checkpoint) == []
+    with pytest.raises(RunError, match="not JSON"):
+        load_records(checkpoint)
 
 
 # -- failure handling -------------------------------------------------------
@@ -351,3 +358,69 @@ def test_a_short_item_is_still_affordable_under_the_derived_estimate(
         ledger=BudgetLedger(limit_usd=1.0),
     )
     assert len(records) == len(items)
+
+
+def test_a_record_from_an_older_schema_is_refused_loudly(tmp_path: Path) -> None:
+    """Adding a stratum column must not make every earlier record vanish.
+
+    load_records swallowed TypeError, so a schema change silently returned an
+    empty list and the analysis reported a run that had not happened. The next
+    change to RunRecord is a set of stratum columns for the long corpus, so this
+    is about to matter.
+    """
+    checkpoint = tmp_path / "run.jsonl"
+    checkpoint.write_text('{"item_id": "rel-001-v0", "arm": "off"}\n', encoding="utf-8")
+
+    with pytest.raises(RunError, match="schema"):
+        load_records(checkpoint)
+
+
+def test_a_truncated_final_line_is_tolerated(items: list[Item], tmp_path: Path) -> None:
+    """A crash mid-write leaves a partial line; that is expected and recoverable.
+
+    A well-formed record with the wrong columns is not, which is the distinction
+    the old blanket except could not draw.
+    """
+    checkpoint = tmp_path / "run.jsonl"
+    run_arm(
+        items[:1],
+        ARM,
+        model="haiku",
+        checkpoint=checkpoint,
+        call=_answers_correctly(items),
+        ledger=BudgetLedger(limit_usd=1.0),
+    )
+    with checkpoint.open("a", encoding="utf-8") as handle:
+        handle.write('{"item_id": "rel-')
+
+    assert len(load_records(checkpoint)) == 1
+
+
+def test_unparseable_json_before_the_last_line_is_refused(tmp_path: Path) -> None:
+    """Corruption in the middle of a file is not a partial write."""
+    checkpoint = tmp_path / "run.jsonl"
+    checkpoint.write_text("not json\nalso not json\n", encoding="utf-8")
+
+    with pytest.raises(RunError, match="not JSON"):
+        load_records(checkpoint)
+
+
+def test_blank_lines_in_a_checkpoint_are_ignored(items: list[Item], tmp_path: Path) -> None:
+    """An editor, a crash, or a manual inspection can leave one behind.
+
+    A blank line is not corruption and must not stop an analysis that a whole
+    day of quota paid for.
+    """
+    checkpoint = tmp_path / "run.jsonl"
+    run_arm(
+        items[:2],
+        ARM,
+        model="haiku",
+        checkpoint=checkpoint,
+        call=_answers_correctly(items),
+        ledger=BudgetLedger(limit_usd=1.0),
+    )
+    body = checkpoint.read_text(encoding="utf-8").splitlines()
+    checkpoint.write_text(f"{body[0]}\n\n{body[1]}\n", encoding="utf-8")
+
+    assert len(load_records(checkpoint)) == 2
