@@ -158,3 +158,11 @@ If you are an agent contributing here rather than a user installing the skills:
   silently makes every earlier number incomparable with every later one.
 - `notebook/` is append-only and dated. Predictions go in *before* runs. If a
   prediction turns out wrong, the entry says so rather than being edited.
+- **A registered band names its estimator, not just its number.** Three
+  pre-registration slips happened here on 2026-08-12 alone: a band asking for
+  `p_discordant` on two task families that have no correctness measure available,
+  so it could not be scored at all; an entry written after its run had started;
+  and a 365-call run launched with no bands at all. Each was recorded rather than
+  quietly dropped, which is the minimum — but the fix is upstream. Before
+  starting a run, write down what will be computed, from which records, by which
+  function. If that sentence cannot be written, the run is not ready.
