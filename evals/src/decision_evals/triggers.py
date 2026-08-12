@@ -16,6 +16,8 @@ not — precision against easy negatives is free and means nothing.
 
 from __future__ import annotations
 
+import json
+import re
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -25,6 +27,10 @@ import yaml
 
 from decision_evals.skills import parse_skill
 from decision_evals.unbundle import UnbundleError, router_rows
+
+#: The four procedures the shipped router offers. The default whitelist for
+#: :func:`decision`; an M5 arm overrides it with its own entry names.
+PROCEDURES: Final = ("ledger", "fit", "cascade", "timing")
 
 
 @dataclass(frozen=True)
@@ -309,3 +315,46 @@ def _check_routes(trigger_set: TriggerSet, skill_path: Path, path: Path) -> list
         for case in trigger_set.cases
         if case.route is not None and case.route not in known
     ]
+
+
+_JSON = re.compile(r"\{[^{}]*\}")
+
+
+Verdict = tuple[bool | None, str | None, float | None]
+
+
+def decision(text: str, allowed: tuple[str, ...] = PROCEDURES) -> Verdict:
+    """Parse the verdict, returning ``(None, None, None)`` when format was ignored.
+
+    Unparseable answers are counted and excluded rather than read as "did not
+    fire". A model that will not answer in the format has told us about format
+    compliance, and scoring that silence as a negative would flatter precision.
+
+    ``p_fire`` is returned as ``None`` when absent or out of ``[0, 1]``, and its
+    absence never invalidates the verdict: a run that asked for a probability and
+    got a usable decision without one has produced a firing observation and no
+    forecast, which is exactly what should be recorded.
+    """
+    match = _JSON.search(text)
+    if not match:
+        return None, None, None
+    try:
+        payload = json.loads(match.group())
+    except json.JSONDecodeError:
+        return None, None, None
+    fired = payload.get("fire")
+    if not isinstance(fired, bool):
+        return None, None, None
+    # The four-skill arm names a tool where the one-entry arm names a procedure.
+    # They are the same four strings and the same question, so they land in the
+    # same column and the two arms stay comparable on one metric.
+    procedure = payload.get("procedure", payload.get("tool"))
+    raw = payload.get("p_fire")
+    p_fire = float(raw) if isinstance(raw, int | float) and 0.0 <= raw <= 1.0 else None
+    # ``allowed`` is a parameter because the offered names are not always the
+    # four procedures. An M5 arm at n=2 offers ``ledger-fit`` and
+    # ``cascade-timing``, and a hard-coded whitelist silently nulled all 365 of
+    # them on 2026-08-12: the run finished clean, firing was unaffected, and
+    # routing read 0.000 because every answer had been discarded rather than
+    # because the model had failed.
+    return fired, procedure if procedure in allowed else None, p_fire

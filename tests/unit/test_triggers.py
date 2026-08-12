@@ -12,6 +12,7 @@ from decision_evals.triggers import (
     TriggerSetError,
     _check_routes,
     check_trigger_sets,
+    decision,
     evaluate,
     evaluate_routing,
     load_trigger_set,
@@ -371,3 +372,38 @@ description: >-
         triggers = repo / "datasets" / "triggers" / "decision-making.yaml"
         skill = repo / "skills" / "decision-making" / "SKILL.md"
         assert _check_routes(load_trigger_set(triggers), skill, triggers) == []
+
+
+class TestVerdictParsingHonoursTheOfferedNames:
+    """The whitelist that voided a 365-call run on 2026-08-12.
+
+    ``decision`` filtered the named tool against the four procedure names. An
+    M5 arm at n=2 offers ``ledger-fit`` and ``cascade-timing``, so every answer
+    was discarded: the run finished clean, firing was unaffected, and routing
+    read 0.000 because nothing had been recorded rather than because the model
+    had failed.
+    """
+
+    def test_a_procedure_name_is_kept_by_default(self) -> None:
+        assert decision('{"fire": true, "procedure": "ledger"}') == (True, "ledger", None)
+
+    def test_a_merged_entry_name_is_kept_when_offered(self) -> None:
+        text = '{"fire": true, "tool": "ledger-fit"}'
+        assert decision(text, ("ledger-fit", "cascade-timing")) == (True, "ledger-fit", None)
+
+    def test_a_merged_entry_name_is_dropped_when_not_offered(self) -> None:
+        """The old behaviour, kept deliberately: an unoffered name is not a route."""
+        assert decision('{"fire": true, "tool": "ledger-fit"}') == (True, None, None)
+
+    def test_a_name_outside_the_offered_set_is_dropped(self) -> None:
+        assert decision('{"fire": true, "tool": "premortem"}', ("ledger-fit",)) == (
+            True,
+            None,
+            None,
+        )
+
+    def test_firing_survives_a_dropped_name(self) -> None:
+        """Why the void run's firing numbers were still usable."""
+        fired, procedure, _ = decision('{"fire": false, "tool": "ledger-fit"}')
+        assert fired is False
+        assert procedure is None

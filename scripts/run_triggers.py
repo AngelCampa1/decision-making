@@ -38,7 +38,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from pathlib import Path
 
@@ -57,6 +56,8 @@ from decision_evals.skills import parse_skill  # noqa: E402
 from decision_evals.triggers import (  # noqa: E402
     TRIGGERS_DIR,
     TriggerCase,
+    Verdict,
+    decision,
     evaluate,
     evaluate_routing,
     load_trigger_set,
@@ -143,42 +144,6 @@ SYSTEM_FOUR = (
     "any of them."
 )
 
-_JSON = re.compile(r"\{[^{}]*\}")
-
-
-Verdict = tuple[bool | None, str | None, float | None]
-
-
-def decision(text: str) -> Verdict:
-    """Parse the verdict, returning ``(None, None, None)`` when format was ignored.
-
-    Unparseable answers are counted and excluded rather than read as "did not
-    fire". A model that will not answer in the format has told us about format
-    compliance, and scoring that silence as a negative would flatter precision.
-
-    ``p_fire`` is returned as ``None`` when absent or out of ``[0, 1]``, and its
-    absence never invalidates the verdict: a run that asked for a probability and
-    got a usable decision without one has produced a firing observation and no
-    forecast, which is exactly what should be recorded.
-    """
-    match = _JSON.search(text)
-    if not match:
-        return None, None, None
-    try:
-        payload = json.loads(match.group())
-    except json.JSONDecodeError:
-        return None, None, None
-    fired = payload.get("fire")
-    if not isinstance(fired, bool):
-        return None, None, None
-    # The four-skill arm names a tool where the one-entry arm names a procedure.
-    # They are the same four strings and the same question, so they land in the
-    # same column and the two arms stay comparable on one metric.
-    procedure = payload.get("procedure", payload.get("tool"))
-    raw = payload.get("p_fire")
-    p_fire = float(raw) if isinstance(raw, int | float) and 0.0 <= raw <= 1.0 else None
-    return fired, procedure if procedure in PROCEDURES else None, p_fire
-
 
 def four_arm_block(descriptions: dict[str, str]) -> str:
     """The four tools, rendered as the prompt's tool section.
@@ -191,7 +156,20 @@ def four_arm_block(descriptions: dict[str, str]) -> str:
     return "\n\n".join(f"### {name}\n\n{text}" for name, text in descriptions.items())
 
 
-def ask(description: str, case: TriggerCase, model: str, system: str) -> Verdict:
+def ask(
+    description: str,
+    case: TriggerCase,
+    model: str,
+    system: str,
+    allowed: tuple[str, ...] = PROCEDURES,
+) -> tuple[Verdict, str]:
+    """The verdict **and the raw reply**.
+
+    The raw text is returned so it can be stored, because on 2026-08-12 a parser
+    whitelist discarded every answer in a 365-call run and the records kept
+    nothing to recover from — the run had to be repeated. ``ShardedRecord`` had
+    already learned this and says so in its own docstring; this runner had not.
+    """
     header = "Tool descriptions" if system is SYSTEM_FOUR else "Tool description"
     prompt = f"## {header}\n\n{description}\n\n## User message\n\n{case.turn}"
     with (
@@ -200,7 +178,7 @@ def ask(description: str, case: TriggerCase, model: str, system: str) -> Verdict
     ):
         result = chat.send(prompt)
         chat.receipt.assert_isolated()
-    return decision(result.text)
+    return decision(result.text, allowed), result.text
 
 
 CHECKPOINT = REPO_ROOT / "results" / "triggers" / "verdicts.jsonl"
@@ -254,12 +232,13 @@ def collect(
             for index, case in enumerate(cases):
                 if (case.id, repeat) in done:
                     continue
+                allowed = tuple(entry_names) if entry_names else PROCEDURES
                 try:
-                    fired, procedure, p_fire = ask(description, case, model, system)
+                    (fired, procedure, p_fire), raw = ask(description, case, model, system, allowed)
                 except IsolationError:
                     raise
                 except CliError as error:
-                    fired, procedure, p_fire = None, None, None
+                    fired, procedure, p_fire, raw = None, None, None, str(error)
                     print(f"  r{repeat} {case.id}: call failed -- {error}")
                 # ``covers`` is the routing outcome that survives a changing
                 # entry count: at n=2 the model names ``ledger-fit`` and the
@@ -279,6 +258,7 @@ def collect(
                     "p_fire": p_fire,
                     "should_fire": case.should_fire,
                     "route": case.route,
+                    "raw": raw,
                 }
                 handle.write(json.dumps(row) + "\n")
                 handle.flush()
