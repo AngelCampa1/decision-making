@@ -266,6 +266,48 @@ read when it fires.
 single long skill with extra steps, and the honest move is to merge the four
 procedures into one body or split them back into separately-triggered skills.
 
+#### M2 and M3, first measurement — 2026-08-12
+
+73 cases, two full runs, Haiku, 0 unparseable, 0 isolation failures. Details in
+[`notebook/2026-08-12-the-description-fires-well-and-routes-badly.md`](../notebook/2026-08-12-the-description-fires-well-and-routes-badly.md).
+
+| | Run 1 | Run 2 |
+|---|---|---|
+| precision | 0.941 | 1.000 |
+| recall | 0.889 | 0.833 |
+| false-positive rate | 0.018 | 0.000 |
+| **routing accuracy** | **0.643** | **0.643** |
+
+**M2 is answered and the answer is good.** The description interrupts between 0
+and 2% of ordinary turns, across 55 negatives each built to carry a trigger's
+surface features. Availability is not this skill's problem.
+
+**M3 is answered less comfortably.** 0.643 against 0.25 chance — clear of the
+falsifier above, well short of good. So the bundle is not a single skill wearing
+four, and it is not routing reliably either.
+
+**And the two runs disagree on which items they get wrong while agreeing on the
+aggregate to three decimal places.** Repairing two mislabelled cases fixed one
+confusion and introduced another, leaving the number untouched. That is Track
+I's decomposition in a third venue, and it means **the confusion pattern is
+noise at n=1** — "cascade confuses with timing" was a story read out of one run.
+Repeats come before any of this is quoted; `repeats_for_reliability` exists to
+size them.
+
+**What it points at, if it survives repeats.** The cost of consolidation is not
+that the skill fires wrongly — it is that, having fired, it reads the wrong file.
+That is a different failure from shadowing and a cheaper one: it lives in the
+router table, not in the description. **M4 should therefore be re-scoped**, since
+racing one-entry against four-skills was framed around a firing-precision cost
+that this measurement does not find.
+
+**Two things for the maintainer.** `fired but routed nowhere` appeared in both
+runs and is a cheap abort condition `SKILL.md` does not name. And two trigger
+cases promoted the same morning — *"The build is green. Can I deploy?"* and
+*"The disk is at 99%. Do we need to act?"* — never fired in either run; both the
+label and the description are mine, which is the class of call that produced 21
+of 21 scored errors here.
+
 ---
 
 # Part 2 — The product
