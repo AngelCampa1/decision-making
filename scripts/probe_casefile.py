@@ -516,6 +516,77 @@ def score(case: Casefile, parsed: Parsed) -> Scored:
 # run loop
 
 
+def rescore(checkpoint: Path, cases: list[Casefile]) -> list[tuple[dict[str, Any], Scored]]:
+    """Re-score stored responses under the current scorer.
+
+    Every run writes the model's full response alongside its score, which makes a
+    scorer change re-checkable for nothing: no quota, no wall-clock, and the same
+    bytes the model actually produced. That is the whole reason the response is
+    kept, and this is the first time it has been needed.
+
+    Returns:
+        Pairs of (row as originally recorded, score under the current rules), in
+        checkpoint order.
+    """
+    by_id = {case.case_id: case for case in cases}
+    pairs: list[tuple[dict[str, Any], Scored]] = []
+    for line in checkpoint.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        case = by_id.get(row["case_id"])
+        if case is None:
+            raise SystemExit(f"{row['case_id']} is in {checkpoint} but not in {PROBE_DIR}")
+        pairs.append((row, score(case, parse_response(row["response"]))))
+    return pairs
+
+
+def report_rescore(checkpoint: Path, cases: list[Casefile]) -> int:
+    """Print what the scorer change did to a run that already happened."""
+    pairs = rescore(checkpoint, cases)
+    if not pairs:
+        print(f"no records in {checkpoint}", file=sys.stderr)
+        return 2
+
+    # The no-menu and bare runs have no action identifiers to parse, so every
+    # required action reads as missing and admissibility is 0.000 by
+    # construction. Printing that number next to a real one is how an artefact
+    # gets cited as a result.
+    if "nomenu" in checkpoint.name or "bare" in checkpoint.name:
+        print(f"\n{'=' * 66}\n{checkpoint.name} -- {len(pairs)} cases (hand-read)\n{'=' * 66}")
+        print("  Recommendations here are free text: no action ids, so admissibility")
+        print("  and the graded outcome are artefacts of the parser, not scores.")
+        print(
+            f"  named an unknown    {sum(1 for _, s in pairs if s.named_an_unknown) / len(pairs):.3f}"
+        )
+        print("  Everything else in this run is read by hand.")
+        return 0
+
+    was = sum(1 for row, _ in pairs if row["admissible"]) / len(pairs)
+    now = sum(1 for _, s in pairs if s.admissible) / len(pairs)
+    graded = sum(s.graded for _, s in pairs) / len(pairs)
+    named = sum(1 for _, s in pairs if s.named_an_unknown) / len(pairs)
+
+    print(f"\n{'=' * 66}\n{checkpoint.name} -- {len(pairs)} cases\n{'=' * 66}")
+    print(f"  admissibility was   {was:.3f}")
+    print(f"  admissibility now   {now:.3f}   ({now - was:+.3f})")
+    print(f"  graded admissibility {graded:.3f}")
+    print(f"  named an unknown    {named:.3f}")
+
+    flipped = [(row, s) for row, s in pairs if row["admissible"] != s.admissible]
+    if flipped:
+        print(f"\n  {len(flipped)} case(s) changed verdict:")
+        for row, scored in flipped:
+            direction = "FAIL -> ok" if scored.admissible else "ok -> FAIL"
+            print(f"    {row['case_id']:<28} {direction}   pivot_ok={scored.pivot_ok}")
+
+    spread = {round(s.graded, 3) for _, s in pairs}
+    print(f"\n  distinct graded values: {len(spread)} of {len(pairs)}")
+    if len(spread) <= 2:
+        print("  the graded outcome is near-constant here too -- record that in the prediction")
+    return 0
+
+
 def completed(checkpoint: Path) -> set[str]:
     if not checkpoint.exists():
         return set()
@@ -534,6 +605,12 @@ def main() -> int:
     parser.add_argument("--case", default="", help="run a single case id, for a smoke run")
     parser.add_argument("--budget", type=float, default=2.0)
     parser.add_argument("--report-only", action="store_true")
+    parser.add_argument(
+        "--rescore",
+        default="",
+        metavar="CHECKPOINT",
+        help="re-score a stored run under the current scorer and print the delta; spends nothing",
+    )
     parser.add_argument(
         "--validate-only", action="store_true", help="check the answer key, spend nothing"
     )
@@ -563,6 +640,9 @@ def main() -> int:
     print(f"{len(cases)} casefiles validated", flush=True)
     if args.validate_only:
         return 0
+
+    if args.rescore:
+        return report_rescore(Path(args.rescore), cases)
 
     if args.case:
         cases = [c for c in cases if c.case_id == args.case]
@@ -662,20 +742,33 @@ def main() -> int:
 
 
 def report() -> int:
+    """Score the stored responses under the *current* scorer and print the gates.
+
+    Scored here rather than read back from the ``admissible`` field the run
+    recorded. A stored verdict is a verdict under whatever the rules were that
+    day, so trusting it would leave the repository reporting two different
+    numbers for one run depending on which command was typed -- and after the
+    pivot conjunct came out of admissibility, those two numbers differ by 0.417.
+    The response text is on disk precisely so the current rules always win.
+    """
     if not CHECKPOINT.exists():
         print("no records", file=sys.stderr)
         return 2
-    rows = [
-        json.loads(line) for line in CHECKPOINT.read_text(encoding="utf-8").splitlines() if line
-    ]
-    if not rows:
+
+    pairs = rescore(CHECKPOINT, load_casefiles())
+    if not pairs:
         print("no records", file=sys.stderr)
         return 2
+    rows = [
+        {**asdict(scored), "graded": scored.graded, "model": row["model"], "cost": row["cost_usd"]}
+        for row, scored in pairs
+    ]
 
     admissible = sum(1 for r in rows if r["admissible"]) / len(rows)
+    graded = sum(r["graded"] for r in rows) / len(rows)
     print(f"\n{'=' * 66}\ncasefile probe -- {len(rows)} cases")
     print(f"model: {sorted({r['model'] for r in rows})}")
-    print(f"spend: ${sum(r['cost_usd'] for r in rows):.3f}")
+    print(f"spend: ${sum(r['cost'] for r in rows):.3f}")
     print("=" * 66)
 
     deep = [r for r in rows if isinstance(r["trap_order"], int) and r["trap_order"] >= 2]
@@ -684,8 +777,9 @@ def report() -> int:
     gate1 = admissible < ADMISSIBILITY_CEILING
     gate2 = deep_trap_rate > 0.0
 
+    print(f"\ngraded admissibility  {graded:.3f}")
     print(
-        f"\nGATE 1 headroom       admissibility {admissible:.3f}   "
+        f"GATE 1 headroom       admissibility {admissible:.3f}   "
         f"need < {ADMISSIBILITY_CEILING}   {'PASS' if gate1 else 'FAIL'}"
     )
     print(
