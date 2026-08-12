@@ -592,8 +592,44 @@ metric is execution accuracy and the databases are not vendored; BFCL's is an AS
 match on a parsed call, and nothing in the run asks for a parseable call.
 Substituting for either is authoring a key while pointing at a vendored one, so
 they report format compliance and, for `database`, a string match labelled as a
-lower bound. **Any A1 effect size will rest on `math` alone unless a family with
-an available metric is added** — which is a corpus decision, not a scoring one.
+lower bound.
+
+**Re-run 2026-08-12, and it closes `math` as an A1 venue.** 30 pairs, 180
+generations, 0 failures, $1.45. The repair is visible in one number: `database`
+went from prose about TV listings to **10/10 producing SQL in both conditions**.
+
+| Family | Measure | Discordant | full | sharded |
+|---|---|---|---|---|
+| `math` | correct (GSM8K key) | **0/10** | 10 | 10 |
+| `database` | produced SQL | 0/10 | 10 | 10 |
+| `actions` | named the required function | **2/10** | 10 | 8 |
+
+**`p_discordant` on `math` is 0.000, so the family has no power at any sample
+size** — McNemar's effect is bounded by the discordant share. The first pilot's
+0.10 was one item, and repeating the identical condition got that item right;
+`math` per-item agreement across the two runs is 19/20, so the aggregate was
+stable and the single disagreement *was* the entire signal. Third appearance of
+the aptitude-versus-unreliability split ([arXiv:2505.06120](https://arxiv.org/abs/2505.06120)),
+and the cleanest.
+
+**The signal is in `actions`, which inverts the earlier reading.** Two of ten
+pairs discordant on function-naming, both in the paper's direction (p = 0.25
+exact at n=10, nowhere near significant, and the only non-zero discordance the
+pilot produced). `math` looked like the family to build on only because it was
+the one whose task had been delivered; with all three delivered it is the one
+with nothing left to measure.
+
+So A1 cannot be sized from `math`. Three options, and the choice is a corpus
+decision: size on `actions` function-naming and accept a capability floor as the
+outcome; vendor the spider databases so execution accuracy becomes available;
+or find harder `math` items, since GSM8K at 10/10 is not the hard end of
+anything. **None of this says the multi-turn effect is absent — it says this
+venue cannot currently see it**, which is a Phase 0 result rather than a finding.
+
+Also recorded: prediction 7 of that run was **unscoreable as written**. It asked
+for `p_discordant` on families that have no correctness measure here, which was
+known when it was registered. A pre-registered band needs the estimator named,
+not only the number.
 
 **Depends on.** Track 0.
 
