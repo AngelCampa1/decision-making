@@ -74,10 +74,26 @@ so a mid-experiment change surfaces as an error rather than as noise.
 | MCP | `--strict-mcp-config --mcp-config '{"mcpServers":{}}'` |
 | Settings sources | `--setting-sources ""` — **the load-bearing isolation control.** Measured: a planted `CLAUDE.md` is still injected under a full `--system-prompt` replacement, and this flag alone blocks it. See [the canary ablation](../notebook/2026-08-10-isolation-canary.md) |
 | Other skills | Excluded by the empty settings sources; asserted by test |
+| Isolation receipt | The CLI's `system`/`init` event, parsed and asserted **per conversation**. Carries the tool list, the skill list, declared agents, memory file paths, the API-key source, the resolved model and the cwd |
 
 The skill under test is the only intervention. Anything else in scope would be a
 confound, and the tool budget is zero so that "the agent looked it up" can never
 be an explanation for a difference between arms.
+
+**The receipt is a stronger control than the flags, and it is new.** Every row
+above it describes what was *requested*. The `init` event describes what the CLI
+actually loaded, and the two can differ — a flag can be renamed, deprecated, or
+silently ignored by a version bump, and nothing in a passing run would show it.
+`InitReceipt.assert_isolated()` raises if any tool or any skill is present.
+
+It is asserted once per conversation rather than once per run. A receipt that
+changed partway through a multi-turn item is exactly the confound the check
+exists for, and a per-run assertion cannot see it.
+
+**Two disclosed gaps in the receipt.** It does *not* raise on declared
+sub-agents, because Track B deliberately runs them; an arm that should have none
+must check that field itself. And a receipt only reports what the CLI chose to
+put in the event — absence of a field is not evidence of absence of the thing.
 
 ### C — Context
 
@@ -85,7 +101,9 @@ be an explanation for a difference between arms.
 | --- | --- |
 | System prompt | `--system-prompt` — **full replacement**, arm-specific |
 | In-situ arm | `--append-system-prompt` on top of the default prompt |
-| Session persistence | `--no-session-persistence` — every item is a cold start |
+| Session persistence | `--no-session-persistence` — every **item** is a cold start. It does *not* prevent multi-turn; see below |
+| Multi-turn transport | `--input-format stream-json` with `--output-format stream-json --verbose`. Turns are written to one live subprocess's stdin and context carries in-process |
+| Prompt delivery | **stdin, always.** Never an argv element: Windows caps a command line near 32 KB and a 100k-token casefile is ~400 KB, so every long call would have died as a `CliError` and been triaged as infrastructure |
 | `CLAUDE.md` discovery | Blocked by the scratch cwd, and **proven by a canary test** rather than assumed |
 | Item rendering | Byte-exact prompt text published with results, per Biderman et al. (arXiv:2405.14782) |
 
@@ -103,6 +121,19 @@ The ablation behind the table above is why `--system-prompt` is listed as an
 experimental control and not as an isolation mechanism. Replacing the system
 prompt governs what the model is *told*; it does not govern what the model
 *discovers*.
+
+**`--no-session-persistence` does not make multi-turn impossible, and reading it
+that way would have killed a whole track.** It blocks the *cross-process*
+channel: `--resume` cannot pick a session back up, and there is no transcript on
+disk between calls. Turns delivered to a single live process over
+`--input-format stream-json` are unaffected, because the accumulation happens
+inside that process and never touches persistence. Verified live rather than
+argued: across three turns the prompt grew 179 → 334 → 422 tokens and turn three
+recalled a nonce word planted in turn one.
+
+The distinction is worth stating precisely because the disclosure above says
+"every item is a cold start" and that remains true. **Items** are cold starts;
+**turns within an item** are not, and are not meant to be.
 
 ### S — Scheduling
 
@@ -124,12 +155,32 @@ changed in between, including the served model.
 | Output format | `--output-format json` — returns `total_cost_usd`, `usage`, resolved model id |
 | Answer contract | `--json-schema` |
 | Transcripts | Full transcripts published, not just scores |
-| Token accounting | Input and output tokens per item; medians and **p90/p99** reported |
+| Token accounting | Input and output tokens per item; medians and **p90/p99** reported. "Input" means `input_tokens + cache_creation_input_tokens + cache_read_input_tokens` — see below |
+| Cache split | The three components are kept separately as well as summed |
 
 Tail percentiles are reported because the AGENTS.md impact study
 (arXiv:2601.20404) found the benefit of an instruction artifact concentrates in a
 small number of expensive runs rather than spreading uniformly. A mean-only report
 can hide the entire effect.
+
+**`usage.input_tokens` is not the prompt, and this disclosure would have been
+wrong by three orders of magnitude without saying so.** It is the *uncached
+remainder*. A 380 KB casefile reported **10** input tokens while
+`cache_creation_input_tokens` carried the other 24,285 and the cost tracked the
+real figure. Reporting `input_tokens` alone would have put ~10 in the token
+column of every long item — and the error would have grown with prompt length,
+so it would have been correlated with the independent variable in exactly the
+stratum this section exists to describe.
+
+**Two things the cache is not.** It is not a transcript channel: across a
+verified three-turn conversation `cache_read_input_tokens` measured **0** on
+every turn while context demonstrably carried, so cache reads are not the
+mechanism by which turns accumulate and their absence is not evidence that they
+did not. And it is not a change in what was sampled: on a second repeat of an
+item the identical prompt arrives as `cache_read`, which moves cost without
+moving the observation. That is why the split is published rather than only the
+sum — a cost difference between two repeats of one item is a billing artifact,
+and a reader given only `total_cost_usd` could not tell.
 
 ### V — Verification
 
