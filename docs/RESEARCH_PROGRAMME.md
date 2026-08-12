@@ -195,8 +195,31 @@ either traced to a documented framework or explicitly marked as invented.
 #### First pass done, 2026-08-12 — [`docs/DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md)
 
 Eleven frameworks catalogued and graded on *prescriptive* evidence rather than
-popularity. K5 is still open; K2's *none located* rows still want a database
-search. Four results bear on what the rest of the programme should build.
+popularity. K2's *none located* rows still want a database search. Four results
+bear on what the rest of the programme should build.
+
+**K5 is closed, and the audit found two more misattributions.** All 27 baselined
+identifiers were fetched first-hand: 67 cited, 67 in the bibliography, 0
+exempted. Of the eight that assert a number, six survive — In-Context Prompting's
+three failure-rate pairs, PerspectiveGap's 17.2% and 62.0%, and MAST's 14 modes /
+1600+ traces / κ=0.88 are exact. Two do not:
+
+- **Xu & Wu is 30 tasks and 2 models, not "86 tasks, 11 domains".** That was
+  SkillsBench's scale, misremembered — and SkillsBench is 87 tasks and 8 domains,
+  so both halves were wrong, in the direction that made the smaller paper look
+  larger. The **+18 to +36pp** in `CLAUDE.md` and `AGENTS.md` is correct: it is
+  the union of the two models' ranges.
+- **The 30–50% context-rot figure is not in arXiv:2606.29718.** Not in the
+  abstract, not in the PDF, not in any secondary summary. That paper establishes
+  *premature termination* — models giving up before the window is full, at a rate
+  rising with context length — and its own headline number is a 2.6–4.9% gain
+  from filtering. The figure was load-bearing for Track G's entire premise, which
+  now says so.
+
+Neither is a defect a presence check finds: both identifiers resolve and both
+papers are on the subject they were cited for. And neither was caught by the
+gate, because both were **baselined** — which is the finding about the gate. See
+[`notebook/2026-08-12-the-baseline-was-where-the-errors-were.md`](../notebook/2026-08-12-the-baseline-was-where-the-errors-were.md).
 
 **The pre-mortem's famous "30%" is a count of reasons generated, not a measure
 of decision quality.** Mitchell, Russo & Pennington did not assess the quality
