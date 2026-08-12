@@ -889,6 +889,26 @@ The primary is an elicited quantity (months of runway, a threshold, a notice
 period), not a flip, because flip-rate scores conditional advice — the best
 available answer — as failure.
 
+**The construct has a name and a literature, and Track H should use them —
+found 2026-08-12, Track K second pass.** What the triplet measures is
+**informed values-congruent choice**: does the choice match what *this person*
+actually values, given that they understand the options. That is not a coinage
+here. It is a validated outcome in the patient decision aids literature, where a
+2024 Cochrane review of **209 RCTs and 107,698 participants** reports **RR 1.75
+(CI 1.44–2.13) across 21 trials**, moderate certainty — alongside high-certainty
+effects on knowledge, accurate risk perception and decisional conflict. See
+[`DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md) row 12.
+
+So: **adopt the name and the construct, do not import the effect size.** Those
+are health treatment and screening decisions, delivered to patients around a
+clinical consultation by a static tool; nothing licenses transferring RR 1.75 to
+an LLM answering a question about a job offer. What it buys is that Track H's
+primary stops being a metric invented here to escape flip-rate, and becomes an
+operationalisation of a construct with thirty years of instrument development
+behind it — including the *decisional conflict* scale, which measures whether
+someone feels able to choose and is the nearest published thing to what a
+decision skill is actually for.
+
 In a sub-agent system this gets a second question the single-call venue could
 not ask: **does the personal context survive the handoff?** A sub-agent that
 summarises a life into a report is exactly where tailoring dies.
