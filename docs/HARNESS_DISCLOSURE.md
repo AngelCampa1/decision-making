@@ -63,7 +63,8 @@ so a mid-experiment change surfaces as an error rather than as noise.
 | Auth | Subscription OAuth. **No API key.** `--bare` is unusable: its help states auth is strictly `ANTHROPIC_API_KEY`/`apiKeyHelper` and OAuth is never read. See *Preconditions* below — this is the harness's most fragile assumption |
 | Sampling parameters | **Not exposed.** No temperature control — see [`LIMITATIONS.md`](LIMITATIONS.md) |
 | Repeats | ≥2 independent runs per cell; variance reported |
-| Working directory | A scratch directory **outside `D:\code`** |
+| Working directory | A fresh temporary directory **per call**, outside `D:\code`, via `providers.claude_code.isolated_cwd`. The CLI's auto-memory path is keyed on cwd, so a shared directory would let one call's state reach the next |
+| Temp-directory cleanup | **Errors ignored.** On Windows the CLI subprocess does not reliably release its cwd before the directory is removed, and a 365-call run died at call 348 with `WinError 32` — raised by the cleanup, after every call had succeeded. Leaked directories are left for the OS to reclaim |
 
 ### T — Tools
 
