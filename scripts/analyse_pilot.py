@@ -53,6 +53,7 @@ sys.path.insert(0, str(REPO_ROOT / "evals" / "src"))
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from decision_evals.corpora import load_corpus  # noqa: E402
+from decision_evals.scorers import bfcl  # noqa: E402
 from decision_evals.sharded import FULL, SHARDED, ShardedRecord, load_records  # noqa: E402
 
 CHECKPOINT_DIR = REPO_ROOT / "results" / "track-a"
@@ -304,15 +305,20 @@ def database_report(records: list[ShardedRecord], limit: int) -> None:
 
 
 def actions_report(records: list[ShardedRecord], limit: int) -> None:
-    """Whether the required functions were named. Not whether the call was right.
+    """Two measures, and which one applies depends on what the run asked for.
 
-    BFCL grades by parsing the response into a call and matching it against the
-    reference AST. Nothing here asks the model to emit a parseable call -- the
-    system prompt says "give your best final answer" -- so a parse-based score
-    would measure format compliance with a contract that was never stated, and
-    report it as reasoning.
+    **Naming** — were the required function names present anywhere in the reply?
+    A floor: name ``create_histogram``, get both bin counts wrong, still a hit.
+    It is the only measure available to a run whose system prompt asked for
+    prose, which is what the pilot asked for.
 
-    The names come from the vendored reference answer, so no key is authored.
+    **BFCL's AST match** — the published metric, from
+    :mod:`decision_evals.scorers.bfcl`, needing a parseable call. Reported here
+    whenever one is present, and the parse rate is printed first, because a low
+    parse rate means this half is measuring format compliance rather than
+    reasoning and the naming number is the one to read.
+
+    Both read the vendored ``reference_answer``. Neither authors a key.
     """
     corpus = {i.task_id: i for i in load_corpus(REPO_ROOT, check_hash=False)}
     by_key = {(r.task_id, r.condition): r for r in records}
@@ -323,6 +329,9 @@ def actions_report(records: list[ShardedRecord], limit: int) -> None:
     print("=" * 72)
 
     named = {FULL: 0, SHARDED: 0}
+    parsed = {FULL: 0, SHARDED: 0}
+    graded = {FULL: 0, SHARDED: 0}
+    discordant_named = discordant_graded = 0
     pairs = 0
     shown = 0
 
@@ -331,31 +340,84 @@ def actions_report(records: list[ShardedRecord], limit: int) -> None:
         shard = by_key.get((task_id, SHARDED))
         if full is None or shard is None:
             continue
-        wanted = required_functions(corpus[task_id].payload.get("reference_answer"))
+        reference_answer = corpus[task_id].payload.get("reference_answer")
+        wanted = required_functions(reference_answer)
         if not wanted:
             continue
+        try:
+            reference = bfcl.parse_reference(reference_answer)
+        except bfcl.BfclParseError:
+            reference = []
         pairs += 1
+
         outcome = {}
         for condition, record in ((FULL, full), (SHARDED, shard)):
             hits = [name for name in dict.fromkeys(wanted) if name in record.final_response]
             complete = len(hits) == len(dict.fromkeys(wanted))
             named[condition] += complete
-            outcome[condition] = (hits, complete)
+
+            ast_match: bool | None = None
+            reasons: tuple[str, ...] = ()
+            if reference:
+                try:
+                    result = bfcl.match(bfcl.parse_response(record.final_response), reference)
+                except bfcl.BfclParseError:
+                    ast_match = None
+                else:
+                    parsed[condition] += 1
+                    ast_match = result.matched
+                    reasons = result.reasons
+                    graded[condition] += result.matched
+            outcome[condition] = (hits, complete, ast_match, reasons)
 
         differs = outcome[FULL][1] != outcome[SHARDED][1]
-        if shown < limit or differs:
+        differs_graded = (
+            outcome[FULL][2] is not None
+            and outcome[SHARDED][2] is not None
+            and outcome[FULL][2] != outcome[SHARDED][2]
+        )
+        discordant_named += differs
+        discordant_graded += differs_graded
+
+        if shown < limit or differs or differs_graded:
             shown += 1
-            print(f"\n--- {task_id}{'  [DISCORDANT]' if differs else ''}")
+            flags = "  ".join(
+                f"[{label}]"
+                for label, on in (("DISCORDANT-named", differs), ("DISCORDANT-ast", differs_graded))
+                if on
+            )
+            print(f"\n--- {task_id}  {flags}")
             print(f"    wanted   {sorted(set(wanted))}")
             for condition in (FULL, SHARDED):
-                hits, complete = outcome[condition]
-                print(f"    {condition:<8} {'all' if complete else 'MISSING':<8} named {hits}")
+                hits, complete, ast_match, reasons = outcome[condition]
+                verdict = {True: "AST ok ", False: "AST NO ", None: "no call"}[ast_match]
+                print(f"    {condition:<8} {'all' if complete else 'MISSING':<8} {verdict} {hits}")
+                for reason in reasons[:2]:
+                    print(f"             {reason[:150]}")
 
-    print(f"\npairs                       {pairs}")
+    print(f"\npairs                          {pairs}")
     for condition in (FULL, SHARDED):
-        print(f"  {condition:<8} named every function  {named[condition]}/{pairs}")
-    print("\nThis is a floor on capability and a ceiling on nothing. A response that")
-    print("names create_histogram and gets both bin counts wrong is counted here.")
+        print(f"  {condition:<8} named every function   {named[condition]}/{pairs}")
+    print(f"\n  discordant on naming         {discordant_named}/{pairs}")
+    if pairs:
+        print(f"  p_discordant (naming)        {discordant_named / pairs:.3f}")
+    print("\nNaming is a floor on capability. A response that names create_histogram")
+    print("and gets both bin counts wrong is counted as a hit above.")
+
+    total_parsed = parsed[FULL] + parsed[SHARDED]
+    print(f"\n  responses carrying a parseable call  {total_parsed}/{2 * pairs}")
+    if total_parsed == 0:
+        print("  This run asked for prose, so BFCL's own metric does not apply to it.")
+        return
+    for condition in (FULL, SHARDED):
+        print(
+            f"  {condition:<8} AST match  {graded[condition]}/{parsed[condition]} parsed"
+            f"  ({graded[condition]}/{pairs} of pairs)"
+        )
+    print(f"  discordant on AST match      {discordant_graded}/{pairs}")
+    if total_parsed < 2 * pairs * 0.9:
+        print("\n  *** parse rate below 90%. The AST half is measuring format compliance,")
+        print("  *** not reasoning. Read the naming number instead.")
 
 
 def main() -> int:
