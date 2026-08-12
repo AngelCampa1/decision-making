@@ -12,7 +12,7 @@ description: >-
 license: Apache-2.0
 compatibility: ">=1.0"
 metadata:
-  version: 0.2.0
+  version: 0.2.1
   status: experimental
   verdict: UNTESTED
   primary_metric: decision_admissibility
@@ -53,6 +53,12 @@ particular decision — not on its subject.
 Ask what would most change the answer if you got it wrong. That names the
 procedure. If nothing obvious separates them, the pile is usually the problem —
 start with `ledger.md`.
+
+**If no procedure fits, that is the answer.** Not being able to name one is
+usually a sign this is a lookup, a technical judgement, or a request for
+information wearing a decision's phrasing — go back to *Abort if* and answer
+directly. The pile-is-the-problem default above is for a real decision with
+several plausible entry points, not a way to pick something when none applies.
 
 More than one can apply. When they do, run them in this order, because each one
 feeds the next: **ledger → fit → cascade → timing.** You cannot tell what fits a
