@@ -109,9 +109,14 @@ subscription stated. Writing "we spent $250" would be false.
 If you are an agent contributing here rather than a user installing the skills:
 
 - **The experiment programme lives in
-  [`docs/superpowers/plans/2026-08-11-long-context-experiment.md`](docs/superpowers/plans/2026-08-11-long-context-experiment.md)**
-  — where we are, where we want to be, and the phased tasks. Start there before
-  proposing experiment work.
+  [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md)** — the goal, what
+  the literature already settles, and eleven tracks you can be pointed at. Start
+  there before proposing experiment work. Track 0 blocks everything and Track A
+  is the one that runs first.
+- The long-context experiment
+  ([`docs/superpowers/plans/2026-08-11-long-context-experiment.md`](docs/superpowers/plans/2026-08-11-long-context-experiment.md))
+  is now **Track G** and its pilot-library authoring is on hold. Read it for the
+  gate machinery, not for the priority.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
   coverage floors, skill validation. There is no cloud CI. Run it before you
   believe anything works.
