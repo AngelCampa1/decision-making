@@ -15,13 +15,21 @@ none of them together:
 | accumulates over turns | accumulation has been *rendered*, never *lived* |
 | delegates to sub-agents | never attempted |
 
-This document is the pointable index. Each track below states a question, what
-would kill it, the experiments inside it, and what "done" means. Point at a
-track and there is enough here to work for days without asking what next.
+**How to read this.** Fifteen tracks in eight parts. Each track states a
+question, what would kill it, the experiments inside it, and what "done" means —
+point at one and there is enough here to work for days without asking what next.
+Track letters (`K`, `A`, `0`…) are **stable identifiers**, referenced from commit
+messages and the task list; they are not an order. **The parts are the order**,
+and [The tracks](#the-tracks) is the index.
+
+**Two lanes, and they run in parallel.** The *product* lane (Part 2) ships skills
+people install and use, and never waits on the research lane. The *research* lane
+(Parts 3–6) validates them. A project where the second gates the first produces
+a paper with a skill attached; this one is meant to be both. See
+[Sequencing](#sequencing).
 
 **This is bigger than one paper.** Tracks C, D and E could each carry one. The
-programme is sequenced so that the cheapest disconfirming evidence arrives
-first.
+programme is ordered so that the cheapest disconfirming evidence arrives first.
 
 ---
 
@@ -81,17 +89,21 @@ Measured elsewhere. We do not re-measure these; we check they hold on our stack
 | Orchestration is not free | [In-Context Prompting Obsoletes Agent Orchestration](https://arxiv.org/pdf/2604.27891) | for procedural tasks a single well-prompted call matches multi-agent |
 | Orchestrator prompting already shown to help | [PerspectiveGap](https://arxiv.org/pdf/2606.08878) | prior art — we must be sharper than "prompting the orchestrator helps" |
 
-Two corrections to our own records follow from this and are tasks, not
-footnotes:
+**A caution about this table, learned by getting it wrong.** The first draft
+collapsed the two skills rows into one, on the assumption that a search result
+describing "SkillsBench" was the paper already cited. They are two different real
+papers with different scales and different numbers, and the merge turned a
+correct figure into an incorrect one — in the product file, in this document, and
+in a notebook entry. Both identifiers were resolved against arxiv.org before this
+version. **A search-result summary is not the paper**, and two similarly-named
+papers on one topic is the normal case. Track K5 makes `de check` enforce it.
 
-- `CLAUDE.md` and `AGENTS.md` cite SkillsBench as "+18 to +36pp". The paper's
-  headline is **+16.6pp** average. Verify against the paper and correct both
-  files and any notebook entry that repeats it.
-- The plan in `docs/superpowers/plans/2026-08-11-long-context-experiment.md`
-  argues repeats are near-worthless because between-item variance dominates.
-  That is correct for estimating a **mean** and exactly wrong for estimating
-  **reliability**, which the multi-turn result says is where the effect lives.
-  See Track I.
+One correction to our own records follows from this table and is a task, not a
+footnote: the plan in
+`docs/superpowers/plans/2026-08-11-long-context-experiment.md` argues repeats are
+near-worthless because between-item variance dominates. That is correct for
+estimating a **mean** and exactly wrong for estimating **reliability**, which the
+multi-turn result says is where the effect lives. See Track I.
 
 ---
 
@@ -119,7 +131,36 @@ whether the damage came from turns or from delegation.
 
 ---
 
-## Track K — Decision frameworks: the review this project skipped
+## The tracks
+
+| Part | Track | |
+|---|---|---|
+| **1. What is already known** | `K` | Decision frameworks: the review this project skipped |
+|  | `M` | Skill design: how a skill should be built |
+| **2. The product** | `S` | Ship the skills |
+|  | `L` | Skill variants: which formulation is best |
+| **3. The instrument** | `0` | Instrument |
+| **4. Does the failure exist** | `A` | Replication |
+|  | `B` | Attribution |
+| **5. Where a skill helps** | `C` | Evidence aggregation |
+|  | `D` | Delegation quality |
+|  | `E` | Handoff fidelity |
+| **6. Confirmation** | `F` | End-to-end |
+| **7. Cross-cutting** | `G` | Volume (demoted) |
+|  | `H` | Tailoring, and life decisions |
+|  | `I` | Reliability as a first-class outcome |
+| **8. Output** | `J` | Write-up and release |
+
+Track letters are stable identifiers, not an order — they are referenced from
+commit messages and the task list. **The parts are the order.**
+
+---
+
+# Part 1 — What is already known
+
+Free, no instrument, and it changes what everything else is testing. Runs first.
+
+### Track K — Decision frameworks: the review this project skipped
 
 **Question.** What is already known about how to make good decisions, and which
 of it can be written down as a skill?
@@ -151,41 +192,7 @@ to ask for more information versus decide under incomplete information).
 **Done when** `docs/DECISION_FRAMEWORKS.md` exists and every current skill is
 either traced to a documented framework or explicitly marked as invented.
 
----
-
-## Track L — Skill variants: which formulation is best
-
-**Question.** For one target failure, which way of writing the skill works best?
-
-**Why it matters.** The brief asked to test "different types of skills and
-variations, finding the most optimal one." The current design compares one skill
-against control, placebo and chain-of-thought — it never compares **skill A
-against skill B for the same job**. Without that there is no basis for saying a
-skill is good, only that it is better than nothing.
-
-SkillsBench gives a directional prior worth testing here: **focused 2–3 module
-skills outperform comprehensive documentation.** Every skill in this repo is
-already short, so that prediction is testable and cheap.
-
-| # | Variant axis | Example |
-|---|---|---|
-| L1 | **Framework** | the same failure targeted via a ledger, a pre-mortem, or a reference class |
-| L2 | **Length** | 400 words vs 1,200 vs 150 |
-| L3 | **Output shape** | a fixed block template vs free prose vs a checklist |
-| L4 | **Framing** | procedure ("do this") vs diagnostic ("check whether") vs question list |
-| L5 | **Trigger breadth** | narrow description vs broad, measured on false-fire rate as well as on help |
-
-**This is a horse race, and it needs the multiplicity machinery already built.**
-`stats/multiplicity.py` exists and has never been used in anger. Winner's curse
-is the standing threat: with five variants the best one is biased upward, so the
-winner is re-run on a fresh holdout before it is called best.
-
-**Done when** one target failure has ≥3 authored variants, a pre-registered
-comparison, and a winner replicated on a holdout.
-
----
-
-## Track M — Skill design: how a skill should be built
+### Track M — Skill design: how a skill should be built
 
 **Question.** Given content worth having, what is the right *shape* to put it
 in — one skill or several, how long, how bundled, how described?
@@ -222,7 +229,11 @@ procedures into one body or split them back into separately-triggered skills.
 
 ---
 
-## Track S — Ship the skills
+# Part 2 — The product
+
+Ships continuously and is never gated on the research. This is half the point of the repository.
+
+### Track S — Ship the skills
 
 **Question.** What can the maintainer, and anyone else, install and use today?
 
@@ -266,9 +277,66 @@ casefiles with an option menu, not personal decisions, so the skill is still
 worth having and worth testing. But if any of the four comes back `NULL`, this
 is the one to bet on.
 
+### Track L — Skill variants: which formulation is best
+
+**Question.** For one target failure, which way of writing the skill works best?
+
+**Why it matters.** The brief asked to test "different types of skills and
+variations, finding the most optimal one." The current design compares one skill
+against control, placebo and chain-of-thought — it never compares **skill A
+against skill B for the same job**. Without that there is no basis for saying a
+skill is good, only that it is better than nothing.
+
+**The axes are not equally worth running, and the priors say so.** Attaching a
+published prior to each one before spending anything is the difference between a
+horse race and a fishing trip.
+
+| # | Variant axis | Example | Published prior | Weight |
+|---|---|---|---|---|
+| **L6** | **Revision against failure traces** — run it, read what went wrong, edit the skill, re-run | one skill, five rounds | **+25.6pp** (36.05 → 61.63), 3 benchmarks, 5 LLMs — [arXiv:2606.01139](https://arxiv.org/abs/2606.01139) | **primary** |
+| **L1** | **Framework** — genuinely different content for the same failure | a ledger vs a pre-mortem vs a reference class | curated beats self-generated by **+16.6pp**; self-generated ≈0 or negative — [2602.12670](https://arxiv.org/abs/2602.12670) | **primary** |
+| **L5** | **Trigger breadth** — the description, which controls whether it fires at all | narrow vs broad, scored on false-fire *and* miss rate | availability is the dominant term, **+18–36pp** — [2605.31408](https://arxiv.org/abs/2605.31408) | **primary** |
+| L2 | Length | 150 vs 400 vs 1,200 words | ~+0.7pp, intervals crossing zero | confirm the null |
+| L3 | Output shape | block template vs prose vs checklist | same | confirm the null |
+| L4 | Framing | procedure vs diagnostic vs question list | same | confirm the null |
+
+**L2–L4 are phrasing, and phrasing is the axis the evidence says does not move.**
+They are not dropped — replicating a published null on our own stack is cheap and
+is a legitimate result — but they are pre-registered *as* null confirmations, run
+last, and they may not be reported as a search for an effect. Spending a horse
+race on prose polish is how a project looks busy while measuring nothing.
+
+**L6 is the one that changes what the skills are.** SkillRevise describes
+expert-authored skills as costly and misaligned with how models actually execute,
+and one-shot LLM-generated skills as "syntactically correct but behaviorally
+weak." Every skill in this repository is one-shot LLM-generated. The loop is:
+run on held-out items → read every failure → make one execution-anchored edit →
+re-run → keep it only if it verifies.
+
+**The overfitting guard is not optional here.** Revising a skill against traces
+from the items you then evaluate it on is fitting the test set, and it would
+produce a large, real, meaningless number. Revision traces come from one item
+pool and the verdict comes from another, drawn before revision starts and not
+looked at until the end.
+
+**L1 draws its candidates from Track K6**, not from invention. That is the whole
+point of doing the frameworks review first.
+
+**Winner's curse is the standing threat.** With several variants the best one is
+biased upward, so the winner is re-run on a fresh holdout before it is called
+best. `stats/multiplicity.py` exists, is property-tested at 100% coverage, and
+has never been used in anger.
+
+**Done when** one target failure has ≥3 authored variants plus a revision loop, a
+pre-registered comparison, and a winner replicated on a holdout it never saw.
+
 ---
 
-## Track 0 — Instrument
+# Part 3 — The instrument
+
+Blocks the measurement. Does not block the product.
+
+### Track 0 — Instrument
 
 **Question.** Can this stack run a genuinely multi-turn, genuinely delegating
 system under experimental control?
@@ -314,7 +382,11 @@ isolation canary passes at every node; `de check` green.
 
 ---
 
-## Track A — Replication
+# Part 4 — Does the failure exist
+
+Before asking whether a skill fixes a failure, show the failure happens here. Three corpora were built without this.
+
+### Track A — Replication
 
 **Question.** Do the failures the literature reports actually happen on our
 stack, our models, our tasks?
@@ -345,9 +417,7 @@ any skill work. That is a real finding and it gets written up as one.
 *before* the run, and one table saying which effects reproduce and how big they
 are on our stack.
 
----
-
-## Track B — Attribution
+### Track B — Attribution
 
 **Question.** When the system produces a bad decision, which node caused it?
 
@@ -374,7 +444,11 @@ reported, and the amendment rate is under 20%.
 
 ---
 
-## Track C — Evidence aggregation
+# Part 5 — Where a skill helps
+
+Parallel once Part 4 reports. Each is independently pointable.
+
+### Track C — Evidence aggregation
 
 **The orchestrator's judgment over what came back.** Skill under test:
 `evidence-ledger`. This is the user's "last message" complaint stated as a
@@ -394,9 +468,7 @@ degradation exists" and is reported as one.
 
 **Depends on.** Tracks 0, A2, A3, B.
 
----
-
-## Track D — Delegation quality
+### Track D — Delegation quality
 
 **What to ask, who to ask, and whether to believe the answer.** MAST's largest
 category (41.8% design and specification, 21.3% verification and termination).
@@ -413,9 +485,7 @@ category (41.8% design and specification, 21.3% verification and termination).
 **Depends on.** Tracks 0, A4, B. **D1 gates the rest** — if brief quality does
 not predict outcome, there is nothing for a delegation skill to improve.
 
----
-
-## Track E — Handoff fidelity
+### Track E — Handoff fidelity
 
 **The unexplored cell: install the skill on the *reporting* side.** Every design
 in this repository so far assumes the skill goes on the decider. If compression
@@ -436,7 +506,11 @@ systems has, and it is answerable in four cells.
 
 ---
 
-## Track F — End-to-end
+# Part 6 — Confirmation
+
+Runs only after Part 5 finds a mechanism worth confirming.
+
+### Track F — End-to-end
 
 The daily-use claim. One score for the whole system, confirmatory only, run
 **after** C/D/E have identified a mechanism worth confirming. Includes the real
@@ -451,7 +525,11 @@ reported with effect sizes and intervals and no p-values.
 
 ---
 
-## Track G — Volume (demoted)
+# Part 7 — Cross-cutting
+
+Not phases. Each one runs inside the tracks above.
+
+### Track G — Volume (demoted)
 
 The long-context experiment, reframed. It is no longer the headline; it is one
 interaction term: **does context length make the turn and handoff effects
@@ -474,9 +552,7 @@ Two findings from that plan carry forward regardless:
   probe-casefile documents contain zero dates, so realistically-dated padding is
   a perfect tell. Any corpus authored from here on puts dates in both.
 
----
-
-## Track H — Tailoring, and life decisions
+### Track H — Tailoring, and life decisions
 
 The design brief this repository exists for: *any decision AI helps a human make
 needs to be tailored to that human's context.* Not a separate venue — a task
@@ -508,9 +584,7 @@ summarises a life into a report is exactly where tailoring dies.
 one sentence why the generic answer is wrong here, citing only the governing
 fact? If not, it is a preference survey and it is cut.
 
----
-
-## Track I — Reliability as a first-class outcome
+### Track I — Reliability as a first-class outcome
 
 Cross-cutting, and a direct consequence of the multi-turn result: the
 degradation is **increased unreliability rather than lost aptitude**. A
@@ -526,7 +600,11 @@ nearly a constant in our data.
 
 ---
 
-## Track J — Write-up and release
+# Part 8 — Output
+
+The artifact someone else can re-run.
+
+### Track J — Write-up and release
 
 Paper, datasheet, harness disclosure, artifact. The verdict vocabulary and the
 promotion gate carry over: no skill enters `plugin/skills/` while carrying
@@ -558,38 +636,49 @@ Unchanged, and they apply to every track:
 
 ## Sequencing
 
-```text
-  Track K  Decision frameworks   <- FIRST. Free, no instrument, and it changes
-     |                              what every other track is testing.
-     |                              The review the project skipped.
-     |
-  Track S  Ship the skills       <- parallel from day one, never downstream.
-     |                              Write them, use them, label them honestly,
-     |                              harvest each finding into a revision.
-     |
-  Track 0  Instrument            <- blocks the measurement, not the skills
-     |
-  Track A  Replication           <- ~1200 calls, hours not days
-     |                              can kill or redirect the whole programme
-     |
-  Track L  Skill variants        <- the horse race the brief asked for:
-     |                              which formulation wins, not just
-     |                              whether one beats nothing
-     |
-  Track B  Attribution           <- runs on Track A's traces
-     |
-     +--> Track C  Evidence aggregation   \
-     +--> Track D  Delegation quality      >  parallel, each pointable
-     +--> Track E  Handoff fidelity       /
-     |
-  Track F  End-to-end            <- confirmatory, after a mechanism exists
-     |
-  Track J  Write-up
+Two lanes. The product lane never waits on the research lane — that separation is
+what makes this dual-purpose rather than a paper with a skill attached.
 
-  Track G  Volume        woven into C/E as an interaction; library on hold
-  Track H  Tailoring     a task family inside C/D/E/F
-  Track I  Reliability   an outcome in every experiment
+```text
+  PART 1   K  frameworks      free, no instrument, changes what
+           M  skill design    everything downstream is testing
+              |
+     +--------+--------------------------------+
+     |                                         |
+  RESEARCH LANE                          PRODUCT LANE  (PART 2)
+     |                                         |
+  PART 3  0  instrument                   S  ship the skills
+     |       blocks measurement                |  install, use, label honestly
+     |       not the product                   |
+     |                                         L  variants + revision
+  PART 4  A  replication                       |  revise against traces,
+     |       ~1200 calls, hours not days       |  race frameworks, tune the
+     |       can kill or redirect all of it    |  description
+     |                                         |
+        B  attribution                         |
+     |       runs on A's traces                |
+     |                                         |
+  PART 5  C  evidence aggregation  \           |
+        D  delegation quality       > parallel |
+        E  handoff fidelity        /           |
+     |                                         |
+  PART 6  F  end-to-end  <- only after a mechanism exists
+     |                                         |
+     +--------------------+--------------------+
+                          |
+  PART 8  J  write-up and artifact
+
+  PART 7  cross-cutting, inside every track above
+          G  volume       an interaction term; library authoring on hold
+          H  tailoring    a task family, not a venue
+          I  reliability  an outcome reported everywhere, not a track to finish
 ```
+
+**Findings cross the lanes both ways.** Every research result is harvested into a
+skill revision the week it lands, and every misfire the maintainer hits in daily
+use is a candidate item for the corpus. A finding that never reaches the skill,
+and a skill complaint that never reaches the corpus, both mean the lanes have
+come apart.
 
 ---
 
