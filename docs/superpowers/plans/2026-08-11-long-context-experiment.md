@@ -1195,7 +1195,27 @@ git add scripts/separability.py tests/unit/test_separability.py && git commit -m
 - Create: `datasets/library/tax/` (~25 documents)
 - Create: `datasets/library/employment/` (~25 documents)
 
-**Scale:** enough to reach 100k tokens for four cores, not the full 250-per-domain library. That comes in Milestone F, after the gate says it is worth building.
+**Scale — and the plan's arithmetic was wrong here by more than tenfold.**
+
+A 100k-token prompt is 400,000 characters of padding. The twelve pilot documents authored so far average 938 characters and total 11,256 — they reach **2,814 tokens**. The gap is not marginal:
+
+| Target | Chars needed | Documents drawn (at 938 ch) | Documents drawn (at 4,000 ch) |
+|---|---|---|---|
+| 10k | 40,000 | 43 | 10 |
+| 40k | 160,000 | 171 | 40 |
+| **100k** | **400,000** | **426** | **100** |
+
+Under the 30% domination cap those become libraries of 1,421 and 333 respectively. The cap is now a parameter, and the Phase 0 pilot may relax it because it computes no standard errors — so the pilot floor is the *drawn* count, not the capped one.
+
+**So the pilot needs roughly 100–120 documents of ~4,000 characters per domain to reach a 100k anchor.** That is about 480,000 characters of authored professional prose per domain, and it is the real cost of Milestone C. The plan's "~25 documents per domain" would not have reached 3k tokens.
+
+This is authoring cost, not quota cost. The model-call gates (Tasks 11, 12, 14) are ~$21 notional between them and cannot run at all until the library exists.
+
+Three ways to close it, and the choice belongs to whoever is paying the authoring:
+
+1. **Author the full pilot library** — ~120 documents × 2 domains at ~4,000 chars. Keeps the 100k anchor, which is the length the canary proved and the length the hypothesis is about.
+2. **Lower the top anchor** to what a smaller library supports — 40k needs 40 documents per domain at 4,000 chars. Cheaper, and 40k is still four times anything this project has measured, but it tests a weaker version of the claim.
+3. **Fewer, longer documents** — facility agreements, handbooks and statute extracts run to 10,000+ characters legitimately. 100k then needs 40 documents. Realistic for authorities and schedules, not for correspondence, so it skews the register mix toward exactly the high-salience end the separability gate is most sensitive to.
 
 **The authoring rule, and it is not the obvious one.** Padding must be **on-topic at the client level, off-topic at the decision level** — a tax matter file full of documents about the same client that have nothing to do with whether this year's amendment reopens the look-back window. Off-topic padding would repeat the GSM-NoOp mistake, where a distractor a reasonable reader folds into the calculation is not a distractor at all.
 
