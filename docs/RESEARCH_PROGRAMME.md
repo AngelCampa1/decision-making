@@ -711,6 +711,50 @@ or find harder `math` items, since GSM8K at 10/10 is not the hard end of
 anything. **None of this says the multi-turn effect is absent — it says this
 venue cannot currently see it**, which is a Phase 0 result rather than a finding.
 
+**`actions` closed too, later on 2026-08-12, after three runs and 1,105
+generations. Option 1 above is dead.** Not for lack of an effect — because
+**no object is comparable across the arms.** The scorer reads `final_response`;
+`full` has one turn and `sharded` has five to eleven. Four different objects were
+tried on the same 100 responses and each gave a different verdict:
+
+| what is scored | `full` | `sharded` |
+|---|---|---|
+| final response, no closing turn | 45 named | 23 |
+| final response, **with** closing turn | 50 named / 47 AST | **4 / 1** |
+| the **last shard's** reply | 50 / 47 | 27 / 13 |
+| naming anywhere in the conversation | 50 | ~49 |
+| the union of all calls emitted | — | breaks BFCL's bijection: 8 calls against a reference of 4 |
+
+**The number that ends it: of the 23 sharded conversations whose last shard
+carried no parseable call, 23 had emitted one earlier.** No exceptions. The arm
+is not failing to call — it calls, correctly formatted, and then keeps talking.
+
+And **no wording escapes it.** *"Give your final answer now, complete and
+self-contained"* means *the calls* in an arm that has said nothing yet and *a
+summary of the results* in an arm that made them four turns ago. Both arms get
+both instructions and resolve them differently because they are in different
+states, and the state difference **is** the independent variable. An instruction
+demanding the calls be repeated at the end would measure whether a model restates
+finished work.
+
+So the two closures are different and must not be merged in the write-up:
+**`math` answers the question and says no** (`p_discordant` = 0.000, a real
+measurement); **`actions` says the question cannot be put this way** (the
+measurement does not exist).
+
+**What survives is instrument, and it is not nothing.** `--call-format` took the
+single-turn arm from 18/43 parsed to **50/50 named and 47/50 matching on BFCL's
+own published AST metric**, so the harness can grade this family — it just cannot
+pair it. Two guards now encode the defect rather than a memory of it:
+`final_responses_comparable` refuses a run with no closing instruction, and
+`actions_report` refuses the paired naming comparison without a call contract.
+Both defects had already produced a publishable-looking false replication
+(45/50 against 23/50, discordance 24-to-2 in the predicted direction).
+
+**Option 2 is now the leading one and it needs the maintainer**: vendoring the
+spider databases means downloading a third-party dataset, which is not a decision
+an agent makes unattended.
+
 Also recorded: prediction 7 of that run was **unscoreable as written**. It asked
 for `p_discordant` on families that have no correctness measure here, which was
 known when it was registered. A pre-registered band needs the estimator named,
