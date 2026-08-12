@@ -32,6 +32,7 @@ from decision_evals.providers.claude_code import preflight as cli_preflight
 from decision_evals.providers.claude_code import run as cli_run
 from decision_evals.scorers.answer import score_item
 from decision_evals.solvers.arms import ArmPrompt, render_item
+from decision_evals.telemetry import RECORD_SCHEMA_VERSION, NodeIdentity
 
 #: How a call is made. Injected so the loop is testable without a model, and so
 #: the dev arena can substitute a local backend without a second run loop.
@@ -40,7 +41,19 @@ CallFn = Callable[[str, str, bool], CliResult]
 
 @dataclass(frozen=True)
 class RunRecord:
-    """One item, in one arm, with everything needed to analyse or re-check it."""
+    """One item, in one arm, with everything needed to analyse or re-check it.
+
+    The trailing fields carry position in a run tree, named after the
+    OpenTelemetry GenAI semantic conventions (see :mod:`decision_evals.telemetry`
+    for why the names are pinned rather than imported).
+
+    They default rather than being required, and the reason is not convenience.
+    Every record in ``results/`` was written by a single ``claude -p`` call,
+    which genuinely has no parent and no turn index — ``None`` is the true value
+    for those runs, not a placeholder. ``schema_version`` defaults to 1 so an
+    older record loads describing itself accurately instead of claiming to be
+    something it is not.
+    """
 
     item_id: str
     template_id: str
@@ -58,6 +71,13 @@ class RunRecord:
     output_tokens: int
     duration_ms: int
     response: str
+
+    schema_version: int = 1
+    conversation_id: str | None = None
+    node_name: str | None = None
+    node_id: str | None = None
+    parent_node_id: str | None = None
+    turn_index: int | None = None
 
 
 class RunError(RuntimeError):
@@ -107,10 +127,15 @@ def run_arm(
     call: CallFn,
     ledger: BudgetLedger,
     expected_cost_usd: float | None = None,
+    identity: NodeIdentity | None = None,
 ) -> list[RunRecord]:
     """Run one arm over a set of items, resuming from any checkpoint.
 
     Args:
+        identity: Where these calls sit in a run tree. ``None`` for the
+            single-call venue, which is what every run to date has been; the
+            record's node columns then stay ``None``, which is the truth about
+            such a run rather than a gap in it.
         expected_cost_usd: What to authorise per call. ``None`` -- the default --
             derives it from the length of the prompt actually about to be sent.
             The flat 0.05 this replaced under-counted a 100k-token casefile by
@@ -151,7 +176,7 @@ def run_arm(
             except Exception as exc:
                 raise RunError(f"stopping before {item.item_id}: {exc}") from exc
 
-            record = _run_one(item, arm, model=model, call=call, prompt=prompt)
+            record = _run_one(item, arm, model=model, call=call, prompt=prompt, identity=identity)
             ledger = ledger.record(record.cost_usd)
             handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
             handle.flush()
@@ -159,7 +184,15 @@ def run_arm(
     return produced
 
 
-def _run_one(item: Item, arm: ArmPrompt, *, model: str, call: CallFn, prompt: str) -> RunRecord:
+def _run_one(
+    item: Item,
+    arm: ArmPrompt,
+    *,
+    model: str,
+    call: CallFn,
+    prompt: str,
+    identity: NodeIdentity | None = None,
+) -> RunRecord:
     try:
         result = call(prompt, arm.system_prompt, arm.append)
     except AuthenticationError as exc:
@@ -171,10 +204,26 @@ def _run_one(item: Item, arm: ArmPrompt, *, model: str, call: CallFn, prompt: st
         # A single call failing is an infrastructure zero, not a model failure,
         # and not a reason to abandon the run.
         score = score_item(item, "", infrastructure_error=True)
-        return _record(item, arm, model=model, score=score, result=None, response=str(exc))
+        return _record(
+            item,
+            arm,
+            model=model,
+            score=score,
+            result=None,
+            response=str(exc),
+            identity=identity,
+        )
 
     score = score_item(item, result.text)
-    return _record(item, arm, model=result.model, score=score, result=result, response=result.text)
+    return _record(
+        item,
+        arm,
+        model=result.model,
+        score=score,
+        result=result,
+        response=result.text,
+        identity=identity,
+    )
 
 
 def _record(
@@ -185,6 +234,7 @@ def _record(
     score: object,
     result: CliResult | None,
     response: str,
+    identity: NodeIdentity | None = None,
 ) -> RunRecord:
     from decision_evals.scorers.answer import Score
 
@@ -206,6 +256,12 @@ def _record(
         output_tokens=result.output_tokens if result else 0,
         duration_ms=result.duration_ms if result else 0,
         response=response,
+        schema_version=RECORD_SCHEMA_VERSION,
+        conversation_id=identity.conversation_id if identity else None,
+        node_name=identity.node_name if identity else None,
+        node_id=identity.node_id if identity else None,
+        parent_node_id=identity.parent_node_id if identity else None,
+        turn_index=identity.turn_index if identity else None,
     )
 
 
