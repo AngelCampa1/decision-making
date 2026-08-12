@@ -409,6 +409,9 @@ class Scored:
     trap_hit: bool = False
     unjustified_hit: bool = False
     pivot_ok: bool = False
+    named_an_unknown: bool = False
+    required_taken: float = 0.0
+    forbidden_avoided: float = 1.0
     exposure_ok: bool = False
     exposure_said: str | None = None
     exposure_first_order: bool = False
@@ -416,6 +419,26 @@ class Scored:
     condition_recall: float = 0.0
     blocks_complete: bool = False
     blocks_found: list[str] = field(default_factory=list)
+
+    @property
+    def graded(self) -> float:
+        """Admissibility's components, averaged rather than conjoined.
+
+        Three equally weighted terms: the fraction of required actions taken,
+        the fraction of forbidden actions avoided, and recall on the governing
+        conditions.
+
+        Binary admissibility is close to a constant on this corpus -- 0/12
+        prohibited actions and 0/12 traps taken -- so once the pivot conjunct
+        comes out it carries roughly one bit. The graded version separates two
+        admissible answers of different quality, which is what a paired slope
+        test needs and what the binary primary cannot supply.
+
+        It is also the metric with a chance of catching the likely signature of
+        degradation under long context, which is not a wrong answer but a
+        longer, hedgier one that covers more branches.
+        """
+        return (self.required_taken + self.forbidden_avoided + self.condition_recall) / 3.0
 
 
 def score(case: Casefile, parsed: Parsed) -> Scored:
@@ -433,6 +456,14 @@ def score(case: Casefile, parsed: Parsed) -> Scored:
     else:
         pivot_ok = parsed.missing.strip().upper().startswith("NONE")
 
+    # Secondary, and the honest version of what the pivot conjunct was reaching
+    # for. Naming a determinative unknown is competent behaviour whether or not
+    # it is the unknown I happened to write down. Five of six probe failures
+    # turned on that distinction and twice the model's unknown was the better
+    # one -- on probe-09 it named the exact fact s.46(3) turns on.
+    stated = parsed.missing.strip()
+    named_an_unknown = bool(stated) and not stated.upper().startswith("NONE")
+
     exposure_truth = str(case.raw["exposure"]["band"])
     first_order = case.raw["exposure"].get("first_order_wrong_answer")
 
@@ -442,11 +473,21 @@ def score(case: Casefile, parsed: Parsed) -> Scored:
     precision = hits / len(voted_governing) if voted_governing else 0.0
     recall = hits / len(governing) if governing else 0.0
 
-    # The primary. A response is admissible when it does everything the case
-    # makes mandatory, nothing it makes prohibited (which already includes every
-    # action foreclosed downstream and every action licensed only by a
-    # non-governing condition), and names the pivot when the case has one.
-    admissible = not missing_required and not took_prohibited and pivot_ok
+    unjustified_hit = bool(recommended & set(case.by_failure_kind("unjustified")))
+
+    # The primary. Three conjuncts, all objective, none of them a judgement
+    # about which unknown mattered most: everything the case makes mandatory,
+    # nothing it makes prohibited, and nothing the governing conditions do not
+    # license.
+    admissible = not missing_required and not took_prohibited and not unjustified_hit
+
+    # The same three, ungated, for the graded outcome. A case with nothing
+    # required or nothing forbidden scores those terms full rather than zero --
+    # there was no opportunity to fail them.
+    required_taken = (len(required) - len(missing_required)) / len(required) if required else 1.0
+    forbidden = set(case.by_status("prohibited")) | set(case.by_failure_kind("unjustified"))
+    hit_forbidden = recommended & forbidden
+    forbidden_avoided = (len(forbidden) - len(hit_forbidden)) / len(forbidden) if forbidden else 1.0
 
     return Scored(
         case_id=case.case_id,
@@ -456,8 +497,11 @@ def score(case: Casefile, parsed: Parsed) -> Scored:
         missing_required=missing_required,
         took_prohibited=took_prohibited,
         trap_hit=bool(recommended & set(case.by_failure_kind("trap"))),
-        unjustified_hit=bool(recommended & set(case.by_failure_kind("unjustified"))),
+        unjustified_hit=unjustified_hit,
         pivot_ok=pivot_ok,
+        named_an_unknown=named_an_unknown,
+        required_taken=required_taken,
+        forbidden_avoided=forbidden_avoided,
         exposure_ok=parsed.exposure == exposure_truth,
         exposure_said=parsed.exposure,
         exposure_first_order=parsed.exposure is not None and parsed.exposure == first_order,
