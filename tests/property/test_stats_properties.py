@@ -10,7 +10,9 @@ Four properties carry most of the weight:
 * the Murphy decomposition identity, which catches essentially every possible
   decomposition bug in one assertion;
 * agreement between our McNemar implementation and ``scipy``'s binomial test;
-* agreement between our Benjamini-Hochberg and ``statsmodels``';
+* internal agreement between Benjamini-Hochberg's rejection flags and its
+  adjusted values (the step-up itself is ``statsmodels``' -- see
+  ``stats/multiplicity.py``);
 * the cluster bootstrap reducing exactly to an item bootstrap when every cluster
   is a singleton.
 """
@@ -22,7 +24,6 @@ import pytest
 from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 from scipy import stats as scipy_stats
-from statsmodels.stats.multitest import multipletests
 
 from decision_evals.stats import (
     aptitude_unreliability,
@@ -339,10 +340,19 @@ class TestDesignEffect:
 
 class TestBenjaminiHochberg:
     @given(st.lists(probabilities, min_size=1, max_size=40))
-    def test_matches_statsmodels(self, p_values) -> None:
+    def test_rejections_agree_with_the_adjusted_values(self, p_values) -> None:
+        """The step-up defines rejection on the sorted sequence, and the adjusted
+        values are reported separately. Anyone reading a result will assume the
+        two agree; this is the assertion that they do.
+
+        This replaced a test that compared our own step-up against statsmodels.
+        That implementation is gone -- `benjamini_hochberg` now calls
+        statsmodels -- and a test asserting statsmodels equals itself proves
+        nothing.
+        """
         result = benjamini_hochberg(p_values, q=0.10)
-        _, expected, _, _ = multipletests(p_values, alpha=0.10, method="fdr_bh")
-        assert np.allclose(result.q_values, expected)
+        assert result.rejected == tuple(q <= 0.10 for q in result.q_values)
+        assert result.n_rejected == sum(result.rejected)
 
     @given(st.lists(probabilities, min_size=1, max_size=40))
     def test_adjusted_values_never_shrink(self, p_values) -> None:
