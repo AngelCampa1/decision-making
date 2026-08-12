@@ -164,6 +164,11 @@ output = "coverage.json"
 # Track A1's runner. Its refusals are the design: the full condition may never
 # be built from joined shards, and no record may carry a verdict.
 "decision_evals/sharded.py" = { line = 100.0, branch = 100.0 }
+# The scripted call tree, and the instrument for Tracks B through F. Every
+# uncovered branch here is an attribution this repository could make and get
+# wrong: an ablation that silently did nothing, a receipt that was never
+# asserted at a leaf, a transformed report the record does not mention.
+"decision_evals/orchestrator.py" = { line = 100.0, branch = 100.0 }
 # The three fairness invariants live here: format contract in every arm, option
 # menu held constant, placebo matched. Each fails silently if it regresses.
 "decision_evals/solvers" = { line = 100.0, branch = 100.0 }
