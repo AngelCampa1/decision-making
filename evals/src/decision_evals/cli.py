@@ -16,10 +16,12 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Final
 
 import typer
 
 from decision_evals.citations import census, check_citations, load_baseline
+from decision_evals.stats import minimum_detectable_effect
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
@@ -286,6 +288,64 @@ def validate_manifests_step() -> StepResult:
     if failed:
         return StepResult(name, False, f"{len(failed)} manifest(s) rejected")
     return StepResult(name, True)
+
+
+#: Item counts worth pricing. 12 is the old probe corpus, 30 the long-context
+#: plan's core count, 233 the largest single shard-count stratum in the vendored
+#: corpus, 527 that corpus minus the Unix-only `code` family, 627 all of it.
+POWER_ROWS: Final[tuple[int, ...]] = (12, 30, 100, 233, 527, 627)
+
+#: Discordance is the input people guess wrong, so it is swept rather than
+#: chosen. Nothing here picks a value; the reader picks the column.
+POWER_COLUMNS: Final[tuple[float, ...]] = (0.15, 0.20, 0.30, 0.40, 0.50)
+
+
+@app.command()
+def power(
+    design_effect: float = typer.Option(
+        1.0, "--design-effect", help="Clustering inflation. 2.0 is the stated design effect."
+    ),
+    alpha: float = typer.Option(0.05, help="Type I error rate."),
+    target_power: float = typer.Option(0.80, "--power", help="Target power."),
+) -> None:
+    """Print the minimum detectable effect across item counts and discordance.
+
+    A table rather than a number, and deliberately so. The MDE needs
+    ``p_discordant``, which is not known before a screening run, and the first
+    standing rule in the work order is that an invented parameter is
+    indistinguishable from a measured one three days later. So the parameter is
+    swept and the reader picks the column.
+
+    This is what the Track A falsifier needs beside it. "Track A came back flat"
+    only kills anything if the MDE was below the effect the literature reports;
+    without that second half, an underpowered null reads as a finding.
+    """
+    _echo_header("minimum detectable effect")
+    typer.echo(f"alpha={alpha}, power={target_power}, design_effect={design_effect}, one-sided\n")
+
+    header = "  n_pairs |" + "".join(f"  p_d={p:.2f}" for p in POWER_COLUMNS)
+    typer.echo(header)
+    typer.echo("  " + "-" * (len(header) - 2))
+    for n_pairs in POWER_ROWS:
+        cells = ""
+        for p_discordant in POWER_COLUMNS:
+            try:
+                result = minimum_detectable_effect(
+                    n_pairs,
+                    p_discordant,
+                    alpha=alpha,
+                    power=target_power,
+                    design_effect=design_effect,
+                )
+            except ValueError:
+                # Not an error: at this size no effect is detectable at all,
+                # which is the useful answer and says do not run the study.
+                cells += "     n/a"
+            else:
+                cells += f"   {100 * result.effect:5.1f}"
+        typer.echo(f"  {n_pairs:>7} |{cells}")
+
+    typer.echo("\n  values are percentage points; n/a = no effect is detectable at any size")
 
 
 @app.command()

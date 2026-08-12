@@ -345,3 +345,38 @@ class TestFetch:
         result = runner.invoke(app, ["fetch"])
         assert result.exit_code != 0
         assert called == []
+
+
+class TestPower:
+    """The MDE table.
+
+    The headline figures are pinned here because they are transcribed into
+    `docs/RESEARCH_PROGRAMME.md`, and a hand-copied power figure is the same
+    class of error as a hand-copied citation.
+    """
+
+    def test_it_prints_a_table(self) -> None:
+        result = runner.invoke(app, ["power"])
+        assert result.exit_code == 0
+        assert "n_pairs" in result.output
+        assert "percentage points" in result.output
+
+    def test_twelve_items_cannot_detect_most_effects(self) -> None:
+        """The finding: at the old corpus size, most columns are undetectable."""
+        result = runner.invoke(app, ["power"])
+        twelve = next(
+            line for line in result.output.splitlines() if line.strip().startswith("12 |")
+        )
+        assert twelve.count("n/a") == 4
+
+    def test_the_vendored_corpus_size_is_well_powered(self) -> None:
+        from decision_evals.stats import minimum_detectable_effect
+
+        # 527 = 627 records minus the Unix-only `code` family.
+        assert minimum_detectable_effect(527, 0.30).effect * 100 < 10.0
+
+    def test_the_design_effect_option_inflates_the_mde(self) -> None:
+        plain = runner.invoke(app, ["power"]).output
+        clustered = runner.invoke(app, ["power", "--design-effect", "2.0"]).output
+        assert plain != clustered
+        assert "design_effect=2.0" in clustered

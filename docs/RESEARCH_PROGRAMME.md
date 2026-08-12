@@ -767,9 +767,40 @@ Written down now so a null is a result rather than a fourth dead corpus.
 
    The arithmetic, using this repo's own `stats/power.required_pairs`: detecting
    a 12pp drop at 80% power needs roughly **127 pairs**, or ~254 once the stated
-   design effect of ~2.0 is applied. **Track A has 12 items**, which are also the
-   clustering unit, so the cluster bootstrap runs on 12 clusters. A flat Track A
-   is therefore the *expected* result whether or not the effect is real.
+   design effect of ~2.0 is applied. **Track A had 12 items**, which are also the
+   clustering unit, so the cluster bootstrap ran on 12 clusters. A flat Track A
+   would therefore have been the *expected* result whether or not the effect was
+   real.
+
+   **Computed 2026-08-11, and it is worse than "underpowered".** Run
+   `python -m uv run de power`; the table is regenerated rather than transcribed,
+   because a hand-copied power figure is the same class of error as a hand-copied
+   citation.
+
+   | n_pairs | p_d=0.15 | p_d=0.20 | p_d=0.30 | p_d=0.40 | p_d=0.50 |
+   |---|---|---|---|---|---|
+   | **12** | n/a | n/a | n/a | n/a | **46.5** |
+   | 30 | n/a | 19.6 | 24.0 | 27.7 | 31.0 |
+   | 100 | 9.5 | 11.0 | 13.5 | 15.6 | 17.4 |
+   | 233 | 6.3 | 7.3 | 8.9 | 10.3 | 11.5 |
+   | **527** | **4.2** | **4.8** | **5.9** | **6.8** | **7.6** |
+   | 627 | 3.8 | 4.4 | 5.4 | 6.3 | 7.0 |
+
+   Percentage points. `n/a` means **no effect of any size is detectable** at that
+   item count. At 12 items every column but the last is `n/a`, and the last is
+   46.5pp — larger than the entire −39% the multi-turn paper reports. The 12-item
+   corpus could not have detected the effect it was built to detect. `p_d` is
+   swept rather than chosen, because discordance is unknown before a screening
+   run and Rule 1 forbids inventing it.
+
+   **This is now fixed for A1, and by the corpus rather than by argument.** The
+   vendored instrument gives **527 usable pairs** (627 records, minus the
+   Unix-only `code` family), so A1's MDE is **4–8pp**, or **8.4pp** at the stated
+   design effect of 2.0. Against a literature effect of −39%, A1 is powered with
+   roughly a fivefold margin, and a flat A1 would be a real result rather than an
+   artefact. A2 is *not* covered by this: it needs a fixed turn count, and the
+   largest single shard-count stratum is 233 records (MDE 6–12pp), which is still
+   comfortable but is a different number and must be stated as its own.
 
    As written, this falsifier turned an underpowered null into a
    programme-terminating decision — the same "build first, check the premise
