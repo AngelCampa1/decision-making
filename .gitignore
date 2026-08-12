@@ -67,3 +67,8 @@ datasets/vendor/*.json
 # committed at all while the writer holds it. Completed runs are published
 # deliberately.
 results/track-a/
+
+# Track 0 instrument checkpoints. Complete runs, but re-running appends, and
+# the durable record of what they showed lives in notebook/ as it does for
+# results/calibration/.
+results/track-0/
