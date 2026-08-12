@@ -26,7 +26,7 @@ from decision_evals.arenas import (
     assert_split_allowed,
     policy_for,
 )
-from decision_evals.budget import BudgetError, BudgetLedger, project_cost
+from decision_evals.budget import BudgetError, BudgetLedger, estimate_cost_usd, project_cost
 from decision_evals.prereg import (
     Preregistration,
     PreregistrationError,
@@ -355,3 +355,34 @@ def test_a_call_that_would_overrun_is_refused_before_it_happens() -> None:
     """Checked before the call, so the limit is a limit rather than a report."""
     with pytest.raises(BudgetError, match="past the"):
         BudgetLedger(limit_usd=10.0, spent_usd=9.0).assert_can_afford(1.01)
+
+
+# -- cost estimation --------------------------------------------------------
+
+
+def test_a_long_prompt_is_authorised_at_more_than_a_short_one() -> None:
+    assert estimate_cost_usd(prompt_chars=400_000) > 20 * estimate_cost_usd(prompt_chars=1_500)
+
+
+def test_the_estimate_never_falls_below_the_floor() -> None:
+    assert estimate_cost_usd(prompt_chars=0) == pytest.approx(0.005)
+
+
+@pytest.mark.parametrize(
+    ("achieved_tokens", "observed_usd"),
+    [(1_533, 0.0052), (25_489, 0.0298), (63_313, 0.0714), (101_142, 0.2296)],
+)
+def test_the_estimate_covers_every_call_the_canary_actually_made(
+    achieved_tokens: int, observed_usd: float
+) -> None:
+    """An authorisation that under-counts is a budget that is not a budget.
+
+    Canary filler measured 6.01 chars/token; the estimator assumes 4.0. The
+    mismatch is deliberate and one-directional -- it over-estimates.
+    """
+    assert estimate_cost_usd(prompt_chars=int(achieved_tokens * 6.0)) >= observed_usd
+
+
+def test_a_negative_length_is_a_bug_not_a_free_call() -> None:
+    with pytest.raises(BudgetError, match="cannot be negative"):
+        estimate_cost_usd(prompt_chars=-1)

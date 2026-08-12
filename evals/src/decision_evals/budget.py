@@ -14,6 +14,7 @@ dollars are the real budget.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Final
 
 
 class BudgetError(RuntimeError):
@@ -41,6 +42,46 @@ def project_cost(*, n_items: int, n_arms: int, repeats: int = 2, usd_per_item: f
     if usd_per_item <= 0:
         raise BudgetError(f"usd_per_item must be positive, got {usd_per_item}")
     return n_items * n_arms * repeats * usd_per_item
+
+
+#: Notional dollars per prompt token, taken from the most expensive call the
+#: long canary made ($0.2296 for 101,142 tokens = $2.27e-6) and rounded up. It
+#: is an upper bound on purpose: this figure authorises a call *before* it is
+#: made, and an authorisation that under-counts is not a budget.
+_USD_PER_TOKEN: Final = 2.5e-6
+
+#: Conservative chars-per-token. Canary filler measured 6.01; real casefile
+#: prose tokenises worse and lands nearer 4. Assuming 4 over-estimates the token
+#: count for anything more repetitive than prose, which is the direction an
+#: authorisation should err in.
+_CHARS_PER_TOKEN: Final = 4.0
+
+#: Below this, per-call overhead dominates and the linear model under-reads.
+_FLOOR_USD: Final = 0.005
+
+
+def estimate_cost_usd(*, prompt_chars: int) -> float:
+    """Project one call's notional cost from the length of its prompt.
+
+    The ledger authorises before the call, so this must never read low. Every
+    constant here is set to over-estimate, and the test suite pins that against
+    the four real calls the long canary made.
+
+    The figure it returns is notional -- an API-equivalent price on a
+    subscription where nothing is billed per call -- so it is a burn meter for
+    quota consumption rather than a spend cap. It has to scale with length all
+    the same: the flat $0.05 it replaces under-counted a 100k-token prompt
+    roughly fivefold, and the ledger would have authorised a run it could not
+    finish.
+
+    Raises:
+        BudgetError: A negative length. Silently clamping would authorise a call
+            at the floor when the caller's length arithmetic is broken.
+    """
+    if prompt_chars < 0:
+        raise BudgetError(f"prompt_chars cannot be negative, got {prompt_chars}")
+    tokens = prompt_chars / _CHARS_PER_TOKEN
+    return max(tokens * _USD_PER_TOKEN, _FLOOR_USD)
 
 
 @dataclass(frozen=True)

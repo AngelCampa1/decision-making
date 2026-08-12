@@ -25,7 +25,7 @@ from collections.abc import Callable, Iterable, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from decision_evals.budget import BudgetLedger
+from decision_evals.budget import BudgetLedger, estimate_cost_usd
 from decision_evals.generators.generate import Item
 from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
 from decision_evals.providers.claude_code import preflight as cli_preflight
@@ -106,9 +106,17 @@ def run_arm(
     checkpoint: Path,
     call: CallFn,
     ledger: BudgetLedger,
-    expected_cost_usd: float = 0.05,
+    expected_cost_usd: float | None = None,
 ) -> list[RunRecord]:
     """Run one arm over a set of items, resuming from any checkpoint.
+
+    Args:
+        expected_cost_usd: What to authorise per call. ``None`` -- the default --
+            derives it from the length of the prompt actually about to be sent.
+            The flat 0.05 this replaced under-counted a 100k-token casefile by
+            roughly fivefold, and the ledger authorises *before* the call, so the
+            shortfall would have surfaced as a run that stopped mid-stratum.
+            Pass a number to pin it, which the budget tests do.
 
     Returns:
         The records produced *by this invocation*. Records already on disk from
@@ -128,12 +136,22 @@ def run_arm(
         for item in items:
             if (item.item_id, arm.arm) in done:
                 continue
+
+            # Rendered once. The string that was measured is the string that is
+            # sent, because measuring one and sending another is how a length
+            # experiment stops being about length.
+            prompt = render_item(item)
+            authorised = (
+                expected_cost_usd
+                if expected_cost_usd is not None
+                else estimate_cost_usd(prompt_chars=len(prompt) + len(arm.system_prompt))
+            )
             try:
-                ledger.assert_can_afford(expected_cost_usd)
+                ledger.assert_can_afford(authorised)
             except Exception as exc:
                 raise RunError(f"stopping before {item.item_id}: {exc}") from exc
 
-            record = _run_one(item, arm, model=model, call=call)
+            record = _run_one(item, arm, model=model, call=call, prompt=prompt)
             ledger = ledger.record(record.cost_usd)
             handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
             handle.flush()
@@ -141,9 +159,9 @@ def run_arm(
     return produced
 
 
-def _run_one(item: Item, arm: ArmPrompt, *, model: str, call: CallFn) -> RunRecord:
+def _run_one(item: Item, arm: ArmPrompt, *, model: str, call: CallFn, prompt: str) -> RunRecord:
     try:
-        result = call(render_item(item), arm.system_prompt, arm.append)
+        result = call(prompt, arm.system_prompt, arm.append)
     except AuthenticationError as exc:
         raise RunError(
             f"authentication failed at {item.item_id}. The run is stopped rather than "

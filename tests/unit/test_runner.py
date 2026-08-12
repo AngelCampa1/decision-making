@@ -310,3 +310,44 @@ def test_arms_interleave_per_item(items: list[Item]) -> None:
     pairs = iter_items(items[:3], arms)
     assert [arm.arm for _, arm in pairs] == ["off", "cot", "off", "cot", "off", "cot"]
     assert [item.item_id for item, _ in pairs[:2]] == [items[0].item_id] * 2
+
+
+def test_a_long_item_is_authorised_at_more_than_the_old_flat_rate(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """The flat $0.05 default under-counted a 100k prompt roughly fivefold.
+
+    A ledger with room for one flat-rate call must refuse a long item rather
+    than authorising it and discovering the shortfall afterwards.
+    """
+    long_fact = items[0].facts[0].model_copy(update={"text": "x" * 400_000})
+    long_item = items[0].model_copy(update={"facts": [long_fact]})
+
+    def never_called(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del prompt, system_prompt, append
+        raise AssertionError("the ledger should have refused before the call")
+
+    with pytest.raises(RunError, match="stopping before"):
+        run_arm(
+            [long_item],
+            ARM,
+            model="haiku",
+            checkpoint=tmp_path / "run.jsonl",
+            call=never_called,
+            ledger=BudgetLedger(limit_usd=0.06),
+        )
+
+
+def test_a_short_item_is_still_affordable_under_the_derived_estimate(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """The estimate must not be so conservative that ordinary items stop running."""
+    records = run_arm(
+        items,
+        ARM,
+        model="haiku",
+        checkpoint=tmp_path / "run.jsonl",
+        call=_answers_correctly(items),
+        ledger=BudgetLedger(limit_usd=1.0),
+    )
+    assert len(records) == len(items)
