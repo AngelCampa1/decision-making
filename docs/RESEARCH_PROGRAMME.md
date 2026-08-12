@@ -457,6 +457,20 @@ against the measurement that motivated it, which is the whole reason L6 has a
 holdout. See
 [`notebook/2026-08-12-cascade-and-timing-collide-in-the-table.md`](../notebook/2026-08-12-cascade-and-timing-collide-in-the-table.md).
 
+**A second instance landed the same day, and two instances make it one
+hypothesis.** `p03` (*"six people replied in the group chat and they disagree —
+what should I actually do?"*, labelled `ledger`) routes to `fit` three times in
+five. `fit` needs a fact about the person that would overturn the generic answer
+and `p03` states none, so unlike `p06` this is a genuine failure — and its cause
+is that **the pile is made of advice, and "advice" appears in exactly one row of
+the table, `fit`'s.** `ledger`'s row says "a pile of context" and never says what
+a pile can be made of, though `SKILL.md`'s `description` field lists the kinds.
+
+So both table defects are **the same mechanism: a row matched on a word it
+contains rather than on the condition it states.** That is the L6 candidate —
+one edit class, two instances, neither applied. See
+[`notebook/2026-08-12-p03-and-the-only-row-that-says-advice.md`](../notebook/2026-08-12-p03-and-the-only-row-that-says-advice.md).
+
 One caution carried with it: **`p06`, the other stably-wrong item, is at least
 partly a trigger-set defect** — `fit` and `cascade` both read correctly off the
 table for that case, and the model picked `cascade`. Allowing multiple acceptable
