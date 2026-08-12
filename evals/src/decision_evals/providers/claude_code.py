@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Final
 
@@ -57,6 +58,15 @@ _TOO_LONG_MARKER: Final = "prompt is too long"
 
 class CliError(RuntimeError):
     """The CLI returned an error, or returned something unparseable."""
+
+
+class IsolationError(CliError):
+    """The CLI declared capabilities the experiment does not permit.
+
+    Separate from :class:`CliError` because it is not a failed call. The call
+    would have succeeded; what is wrong is that it would have been measuring a
+    different venue, and that is a reason to stop a run rather than score it.
+    """
 
 
 class PromptTooLongError(CliError):
@@ -121,6 +131,7 @@ def build_command(
     model: str,
     in_situ: bool = False,
     json_schema: str | None = None,
+    streaming: bool = False,
 ) -> list[str]:
     """Assemble a fully isolated ``claude -p`` invocation.
 
@@ -151,6 +162,10 @@ def build_command(
             isolated, because isolation comes from ``--setting-sources ""``
             rather than from replacing the prompt.
         json_schema: Optional answer schema, passed to ``--json-schema``.
+        streaming: Build the multi-turn form instead. Turns then arrive as
+            JSON lines on stdin of one live process and the CLI answers with an
+            event stream, which is how context carries across turns without
+            ``--resume``. See :class:`Conversation`.
 
     Returns:
         Argument vector suitable for :func:`subprocess.run` without a shell.
@@ -165,12 +180,111 @@ def build_command(
         "--model",
         model,
         *ISOLATION_FLAGS,
-        "--output-format",
-        "json",
     ]
+    if streaming:
+        # `--input-format stream-json` requires the streaming output form, and
+        # `--verbose` is what makes the CLI emit the system/init event that
+        # Track 0.6 asserts isolation from.
+        command += [
+            "--input-format",
+            "stream-json",
+            "--output-format",
+            "stream-json",
+            "--verbose",
+        ]
+    else:
+        command += ["--output-format", "json"]
     if json_schema is not None:
         command += ["--json-schema", json_schema]
     return command
+
+
+def user_event(text: str) -> str:
+    """One turn, as the JSON line the CLI expects on stdin."""
+    return json.dumps(
+        {
+            "type": "user",
+            "message": {"role": "user", "content": [{"type": "text", "text": text}]},
+        }
+    )
+
+
+@dataclass(frozen=True)
+class InitReceipt:
+    """The ``system``/``init`` event: a machine-readable isolation receipt.
+
+    Strictly better evidence than inferring isolation from a response. The CLI
+    states, before any generation, exactly which tools, skills and agents it
+    loaded and where it would write memory.
+
+    **Two of these fields are latent rather than active, and the distinction
+    matters.** Under ``--tools ""`` the CLI still *declares* its built-in
+    subagents and an auto-memory path, but there is no Task tool to reach the
+    agents and no memory tool to write the path — tested, nothing was created.
+    Both go live the moment ``--tools`` is relaxed, which Track F plans. The
+    memory path is keyed on the working directory, so it would become a
+    cross-run state channel that a checkpointed record cannot see. Hence
+    :meth:`assert_isolated` gates on ``tools`` and the rest is recorded.
+    """
+
+    tools: tuple[str, ...] = ()
+    skills: tuple[str, ...] = ()
+    agents: tuple[str, ...] = ()
+    memory_paths: tuple[str, ...] = ()
+    api_key_source: str = ""
+    model: str = ""
+    cwd: str = ""
+    session_id: str = ""
+
+    @property
+    def tools_disabled(self) -> bool:
+        """Whether the CLI loaded no tools at all."""
+        return not self.tools
+
+    def assert_isolated(self) -> None:
+        """Refuse a run whose declared capabilities exceed what was intended.
+
+        Raises:
+            IsolationError: Tools were loaded, or a skill was picked up from
+                disk. Either one silently changes what is being measured, and
+                both are invisible in a response body.
+        """
+        if self.tools:
+            raise IsolationError(
+                f"the CLI loaded {len(self.tools)} tool(s): {sorted(self.tools)}. "
+                'Every measurement in this repository assumes `--tools ""`; a run with '
+                "tools available is a different venue, not a noisier one."
+            )
+        if self.skills:
+            raise IsolationError(
+                f"the CLI loaded skill(s) from disk: {sorted(self.skills)}. The arm's "
+                "system prompt is supposed to be the only skill content in context."
+            )
+
+
+def parse_init_receipt(event: dict[str, Any]) -> InitReceipt:
+    """Read a ``system``/``init`` event into an :class:`InitReceipt`.
+
+    Absent keys become empty rather than raising: the event is the CLI's, its
+    shape is not ours to require, and a missing field must not stop a run that
+    is otherwise fine. What *is* enforced is :meth:`InitReceipt.assert_isolated`,
+    and an absent ``tools`` key reads as no tools, which is the safe direction.
+    """
+
+    def strings(key: str) -> tuple[str, ...]:
+        value = event.get(key)
+        return tuple(str(item) for item in value) if isinstance(value, list) else ()
+
+    return InitReceipt(
+        tools=strings("tools"),
+        skills=strings("skills"),
+        agents=strings("agents"),
+        memory_paths=strings("memory_paths"),
+        api_key_source=str(event.get("apiKeySource", "")),
+        model=str(event.get("model", "")),
+        cwd=str(event.get("cwd", "")),
+        session_id=str(event.get("session_id", "")),
+    )
 
 
 def parse_result(payload: dict[str, Any]) -> CliResult:
@@ -317,6 +431,146 @@ def run(
     if not isinstance(payload, dict):
         raise CliError(f"CLI emitted non-object JSON: {payload!r}")
     return parse_result(payload)
+
+
+class Conversation:
+    """A live multi-turn session against one CLI subprocess.
+
+    **This is the whole V2 venue, and it needed no flag relaxed.** Track 0's
+    original reading was that ``--no-session-persistence`` blocked multi-turn.
+    It does not: that flag blocks ``--resume``, which is *cross-process*. With
+    ``--input-format stream-json`` the turns go to one live process's stdin and
+    context carries in-process, under the full isolation stack.
+
+    The falsifier written for this was also wrong and is worth keeping visible.
+    It required ``cache_read`` to climb turn over turn; measured, ``cache_read``
+    stayed at **0** on every turn while turn 3 recalled a codeword from turn 1.
+    Caching is a billing optimisation, not a transcript mechanism. Run as
+    written, that gate would have declared a healthy venue dead. The corrected
+    signal is ``input_tokens`` climbing monotonically *plus* a behavioural
+    recall check — two independent signals, because a longer question explains
+    the first and a lucky guess explains the second.
+
+    Usage::
+
+        with Conversation(system_prompt=..., model="haiku", cwd=tmp) as chat:
+            chat.receipt.assert_isolated()
+            first = chat.send("Remember MARMALADE-7.")
+            third = chat.send("What was the codeword?")
+
+    Args:
+        spawn: Injected process factory, so the transport is testable without a
+            model. Defaults to :func:`subprocess.Popen`.
+    """
+
+    def __init__(
+        self,
+        *,
+        system_prompt: str,
+        model: str,
+        cwd: str,
+        in_situ: bool = False,
+        timeout: float = 900.0,
+        spawn: Callable[[list[str], str], Any] | None = None,
+    ) -> None:
+        self._timeout = timeout
+        self._turn_index = 0
+        command = build_command(
+            system_prompt=system_prompt, model=model, in_situ=in_situ, streaming=True
+        )
+        factory = spawn if spawn is not None else _spawn
+        self._process = factory(command, cwd)
+        if self._process.stdin is None or self._process.stdout is None:
+            raise CliError("the CLI subprocess exposed no stdin/stdout pipe")
+        self._receipt: InitReceipt | None = None
+
+    @property
+    def turn_index(self) -> int:
+        """How many turns have completed. 0 before the first :meth:`send`."""
+        return self._turn_index
+
+    @property
+    def receipt(self) -> InitReceipt:
+        """The isolation receipt, available once the first turn has been sent.
+
+        Raises:
+            CliError: No ``system``/``init`` event has arrived yet.
+        """
+        if self._receipt is None:
+            raise CliError("no system/init event has been seen yet; send a turn first")
+        return self._receipt
+
+    def send(self, text: str) -> CliResult:
+        """Deliver one turn and read until the CLI reports a result.
+
+        Blocks until a ``result`` event arrives or the stream ends. Events other
+        than ``result`` and ``system``/``init`` are ignored rather than
+        collected: this transport exists to carry turns, and a partial-message
+        stream is the CLI's business.
+
+        Raises:
+            CliError: The stream ended without a result, which means the process
+                died mid-turn.
+            AuthenticationError: Via :func:`parse_result`.
+        """
+        assert self._process.stdin is not None  # narrowed in __init__
+        assert self._process.stdout is not None
+        self._process.stdin.write(user_event(text) + "\n")
+        self._process.stdin.flush()
+
+        for line in self._process.stdout:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            try:
+                event = json.loads(stripped)
+            except json.JSONDecodeError:
+                # The CLI interleaves human-readable lines under --verbose.
+                continue
+            if not isinstance(event, dict):
+                continue
+            if event.get("type") == "system" and event.get("subtype") == "init":
+                self._receipt = parse_init_receipt(event)
+            if event.get("type") == "result":
+                self._turn_index += 1
+                return parse_result(event)
+
+        raise CliError(
+            f"the CLI stream ended without a result on turn {self._turn_index + 1}; "
+            "the process died mid-turn"
+        )
+
+    def close(self) -> None:
+        """Close stdin and wait for the process to exit."""
+        if self._process.stdin is not None and not self._process.stdin.closed:
+            self._process.stdin.close()
+        self._process.wait(timeout=self._timeout)
+
+    def __enter__(self) -> Conversation:
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        self.close()
+
+
+def _spawn(command: list[str], cwd: str) -> Any:
+    """Start the CLI with pipes, decoding explicitly.
+
+    ``encoding`` and ``errors`` are set for the same reason as in :func:`run`:
+    ``text=True`` alone decodes with the locale codec, and on Windows that is
+    cp1252, where one curly quote raises inside subprocess's reader thread.
+    """
+    return subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        cwd=cwd,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        bufsize=1,
+    )
 
 
 def preflight(*, model: str, cwd: str) -> CliResult:
