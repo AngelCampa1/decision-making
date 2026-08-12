@@ -18,6 +18,7 @@ from decision_evals.corpora import ShardedInstruction
 from decision_evals.providers.claude_code import CliResult
 from decision_evals.sharded import (
     EXCLUDED_FAMILIES,
+    FINAL_TURN,
     FULL,
     FULL_INSTRUCTION_FIELD,
     SHARDED,
@@ -146,6 +147,11 @@ class TestPlan:
         assert "1 pairs" in text
         assert "excluded" not in text
 
+    def test_a_closing_turn_is_priced_before_the_run_not_after(self) -> None:
+        items = [_instruction("math", question="q")]
+        assert plan_run(items, final_turn=True).sharded_turns == 4
+        assert plan_run(items, final_turn=True).full_calls == 1
+
     def test_pairable_preserves_input_order(self) -> None:
         items = [
             _instruction("data2text"),
@@ -178,6 +184,101 @@ class TestRunFull:
             conversation_id="c1",
         )
         assert record.model == "claude-haiku-4-5-20251001"
+
+
+class TestClosingTurn:
+    """The closing instruction is unconditional, matched, and recorded."""
+
+    def test_the_sharded_arm_gets_it_as_one_further_turn(self) -> None:
+        item = _instruction("math", question="q")
+        chat = FakeConversation(["ok", "ok", "hmm", "180 miles"])
+        record = run_sharded(
+            item,
+            system_prompt="s",
+            conversation=chat,  # type: ignore[arg-type]
+            conversation_id="c1",
+            final_turn=FINAL_TURN,
+        )
+        assert chat.sent == [*item.shards, FINAL_TURN]
+        assert record.n_turns == 4
+        assert record.final_response == "180 miles"
+
+    def test_the_full_arm_gets_the_same_sentence_in_its_one_prompt(self) -> None:
+        sent: list[str] = []
+
+        def call(prompt: str, system: str) -> CliResult:
+            sent.append(prompt)
+            return _result("42 miles")
+
+        record = run_full(
+            _instruction("math", question="How far by 3pm?"),
+            system_prompt="s",
+            call=call,
+            conversation_id="c1",
+            final_turn=FINAL_TURN,
+        )
+        assert sent == [f"How far by 3pm?\n\n{FINAL_TURN}"]
+        assert record.n_turns == 1
+
+    def test_it_is_sent_to_every_conversation_not_only_the_ones_that_stalled(self) -> None:
+        """A model already answering still gets it.
+
+        Sending it only where the model 'did not answer' would require deciding
+        that it did not answer, which is a scoring act on raw output.
+        """
+        chat = FakeConversation(["ok", "ok", "180 miles", "180 miles"])
+        run_sharded(
+            _instruction("math", question="q"),
+            system_prompt="s",
+            conversation=chat,  # type: ignore[arg-type]
+            conversation_id="c1",
+            final_turn=FINAL_TURN,
+        )
+        assert chat.sent[-1] == FINAL_TURN
+
+    def test_the_text_is_on_the_record_so_two_runs_are_not_pooled_by_accident(self) -> None:
+        chat = FakeConversation(["ok", "ok", "x", "y"])
+        with_turn = run_sharded(
+            _instruction("math", question="q"),
+            system_prompt="s",
+            conversation=chat,  # type: ignore[arg-type]
+            conversation_id="c1",
+            final_turn=FINAL_TURN,
+        )
+        without = run_sharded(
+            _instruction("math", question="q"),
+            system_prompt="s",
+            conversation=FakeConversation(["ok", "ok", "x"]),  # type: ignore[arg-type]
+            conversation_id="c2",
+        )
+        assert with_turn.final_turn == FINAL_TURN
+        assert without.final_turn is None
+        assert with_turn.shard_turns == without.shard_turns == 3
+        assert with_turn.n_turns != without.n_turns
+
+    def test_an_older_checkpoint_line_still_loads(self, tmp_path: Path) -> None:
+        """The column is additive: records written before it exist are readable."""
+        line = json.dumps(
+            {
+                "task_id": "sharded-math-1",
+                "task": "math",
+                "condition": SHARDED,
+                "model": "m",
+                "n_turns": 3,
+                "final_response": "x",
+                "turn_responses": ["a", "b", "x"],
+                "prompt_tokens_by_turn": [1, 2, 3],
+                "output_tokens_by_turn": [1, 1, 1],
+                "cost_usd": 0.1,
+                "duration_ms": 5,
+                "conversation_id": "c1",
+            }
+        )
+        path = tmp_path / "old.jsonl"
+        path.write_text(line + "\n", encoding="utf-8")
+        (record,) = load_records(path)
+        assert record.final_turn is None
+        assert record.shard_turns == 3
 
 
 class TestRunSharded:

@@ -35,9 +35,11 @@ from decision_evals.providers.claude_code import (  # noqa: E402
 )
 from decision_evals.providers.claude_code import run as cli_run  # noqa: E402
 from decision_evals.sharded import (  # noqa: E402
+    FINAL_TURN,
     FULL_INSTRUCTION_FIELD,
     append_record,
     completed_keys,
+    load_records,
     pairable,
     plan_run,
     run_full,
@@ -74,13 +76,33 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--per-family", type=int, default=10)
     parser.add_argument("--model", default="haiku")
+    parser.add_argument(
+        "--final-turn",
+        action="store_true",
+        help="send the closing instruction to both conditions (one extra sharded turn)",
+    )
     args = parser.parse_args()
 
+    closing = FINAL_TURN if args.final_turn else None
     corpus = load_corpus(REPO_ROOT, check_hash=False)
     items = select(pairable(corpus), args.per_family)
-    plan = plan_run(items)
+    plan = plan_run(items, final_turn=args.final_turn)
     print(plan.describe())
+    print(f"closing instruction: {'yes' if closing else 'no'}")
     print(f"checkpoint: {CHECKPOINT.relative_to(REPO_ROOT)}\n")
+
+    # Resuming across a change of this flag would append records made under a
+    # different instruction to the ones already there, and nothing downstream
+    # would show it. The two are separate runs.
+    if CHECKPOINT.exists():
+        existing = {record.final_turn for record in load_records(CHECKPOINT)}
+        if existing and existing != {closing}:
+            print(
+                f"*** {CHECKPOINT.name} holds records made with a different closing "
+                f"instruction ({sorted(str(e) for e in existing)}). Resuming would pool "
+                "two runs. Move it aside or drop --final-turn."
+            )
+            return 1
 
     done = completed_keys(CHECKPOINT)
     started = time.time()
@@ -100,6 +122,7 @@ def main() -> int:
                             prompt, system_prompt=system, model=args.model, cwd=cwd
                         ),
                         conversation_id=conversation_id,
+                        final_turn=closing,
                     )
                     append_record(CHECKPOINT, record)
                 except CliError as exc:
@@ -117,6 +140,7 @@ def main() -> int:
                             system_prompt=SYSTEM_PROMPT,
                             conversation=chat,
                             conversation_id=conversation_id,
+                            final_turn=closing,
                         )
                         # Isolation is asserted per conversation, not per run:
                         # a receipt that changed mid-run is exactly the silent

@@ -64,6 +64,30 @@ EXCLUDED_FAMILIES: Final[dict[str, str]] = {
 FULL: Final = "full"
 SHARDED: Final = "sharded"
 
+#: A closing instruction both conditions may carry, verbatim.
+#:
+#: It exists because of a question that has no good answer once the data is in:
+#: *does a final turn that asks a question instead of answering count as wrong?*
+#: Judging that after the fact means classifying responses into "answer attempt"
+#: and "not one", which is a scoring act on raw output and is exactly what
+#: standing rule 3 forbids this module from doing.
+#:
+#: So it is moved before the run and made unconditional. Every conversation gets
+#: the same closing turn whether or not the model was already answering, and the
+#: full condition gets the same sentence appended to its single prompt. Nothing
+#: is classified, the arms carry identical instructions, and a model that still
+#: does not answer has produced a finding rather than an ambiguity.
+#:
+#: **It is not free, and the write-up must say which way it cuts.** The extra
+#: turn is an extra generation, and only the sharded arm gets one -- the full
+#: condition is one call by definition. So this hands the sharded arm a chance to
+#: recover that the full arm never needed, which biases *against* the paper's
+#: effect. Runs that use it and runs that do not are not comparable, which is why
+#: the text is recorded on the record rather than assumed.
+FINAL_TURN: Final = (
+    "Give your final answer now, complete and self-contained, without asking any further questions."
+)
+
 
 class ShardedRunError(RuntimeError):
     """The A1 run cannot proceed."""
@@ -102,6 +126,18 @@ class ShardedRecord:
     conversation_id: str
     schema_version: int = RECORD_SCHEMA_VERSION
     error: str | None = None
+    final_turn: str | None = None
+
+    @property
+    def shard_turns(self) -> int:
+        """Turns that carried a shard, excluding any closing instruction.
+
+        ``n_turns`` counts generations, because generations are the unit of the
+        quota and of the paper's mechanism. This one counts the instruction, so
+        a run made with :data:`FINAL_TURN` and a run made without it can be
+        compared on the same axis.
+        """
+        return self.n_turns - (1 if self.final_turn else 0)
 
     @property
     def prompt_tokens_climb(self) -> bool:
@@ -215,13 +251,19 @@ class RunPlan:
         return "\n".join(lines)
 
 
-def plan_run(instructions: Sequence[ShardedInstruction], *, repeats: int = 1) -> RunPlan:
+def plan_run(
+    instructions: Sequence[ShardedInstruction], *, repeats: int = 1, final_turn: bool = False
+) -> RunPlan:
     """Price a run in calls and turns.
 
     Args:
         repeats: Repeats per item. Above 1 this is a reliability design, and
             :mod:`decision_evals.stats.reliability` prices how many are needed
             to estimate a spread rather than a mean.
+        final_turn: Whether a closing instruction will be sent -- see
+            :data:`FINAL_TURN`. It costs one extra generation per sharded
+            conversation and nothing in the full condition, so the price of the
+            run is not the same and the plan must say so before it is approved.
 
     Raises:
         ValueError: ``repeats`` below 1.
@@ -237,7 +279,7 @@ def plan_run(instructions: Sequence[ShardedInstruction], *, repeats: int = 1) ->
         n_pairs=len(usable),
         full_calls=len(usable) * repeats,
         sharded_conversations=len(usable) * repeats,
-        sharded_turns=sum(item.n_turns for item in usable) * repeats,
+        sharded_turns=sum(item.n_turns + (1 if final_turn else 0) for item in usable) * repeats,
         excluded=excluded,
     )
 
@@ -252,6 +294,7 @@ def run_full(
     system_prompt: str,
     call: SingleCallFn,
     conversation_id: str,
+    final_turn: str | None = None,
 ) -> ShardedRecord:
     """Deliver the whole instruction in one call.
 
@@ -259,8 +302,18 @@ def run_full(
     read back off the result -- an argument here would be a second source of
     truth for the same column, and the caller could set it to something the CLI
     did not actually run.
+
+    Args:
+        final_turn: A closing instruction -- see :data:`FINAL_TURN`. Appended to
+            the prompt rather than sent separately, because this condition is one
+            call by definition. Whatever is passed here must be passed to
+            :func:`run_sharded` for the same pair or the arms differ by an
+            instruction as well as by delivery.
     """
-    result = call(full_instruction(instruction), system_prompt)
+    prompt = full_instruction(instruction)
+    if final_turn:
+        prompt = f"{prompt}\n\n{final_turn}"
+    result = call(prompt, system_prompt)
     return ShardedRecord(
         task_id=instruction.task_id,
         task=instruction.task,
@@ -274,6 +327,7 @@ def run_full(
         cost_usd=result.cost_usd,
         duration_ms=result.duration_ms,
         conversation_id=conversation_id,
+        final_turn=final_turn,
     )
 
 
@@ -283,12 +337,19 @@ def run_sharded(
     system_prompt: str,
     conversation: Conversation,
     conversation_id: str,
+    final_turn: str | None = None,
 ) -> ShardedRecord:
     """Deliver the shards one per turn down a live conversation.
 
     The caller owns the :class:`Conversation` so that its isolation receipt can
     be asserted before any turn is scored, and so a failure closes one
     conversation rather than the run.
+
+    Args:
+        final_turn: A closing instruction sent as one further turn after the last
+            shard -- see :data:`FINAL_TURN`. Sent **unconditionally**, never only
+            when the model appeared not to answer: deciding that it appeared not
+            to answer is the classification this module refuses to make.
 
     Raises:
         ShardedRunError: The turns did not all resolve to the same model. A
@@ -301,7 +362,8 @@ def run_sharded(
     models: list[str] = []
     cost = 0.0
     duration = 0
-    for shard in instruction.shards:
+    turns = [*instruction.shards, final_turn] if final_turn else list(instruction.shards)
+    for shard in turns:
         result = conversation.send(shard)
         texts.append(result.text)
         prompts.append(result.input_tokens)
@@ -331,6 +393,7 @@ def run_sharded(
         cost_usd=cost,
         duration_ms=duration,
         conversation_id=conversation_id,
+        final_turn=final_turn,
     )
 
 
