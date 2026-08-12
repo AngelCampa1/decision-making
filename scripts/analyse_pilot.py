@@ -32,6 +32,12 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "evals" / "src"))
 
+# This script's entire job is printing model text back to a human, and model
+# text contains check marks, em dashes and degree signs. Windows' console codec
+# is cp1252 and raises on all of them, so a run would die partway through the
+# traces it exists to show -- which is the moment the reader most needs it not to.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 from decision_evals.corpora import load_corpus  # noqa: E402
 from decision_evals.sharded import FULL, SHARDED, ShardedRecord, load_records  # noqa: E402
 
