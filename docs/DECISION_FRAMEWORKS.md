@@ -1,6 +1,6 @@
 # Decision frameworks: the review this project skipped
 
-**Track K1–K4, K6.** Status: **first pass, 2026-08-12.** Every number below was
+**Track K1–K4, K6.** Status: **two passes, both 2026-08-12.** Every number below was
 checked against a source on that date; every framework without a number is
 marked with what was *not* found rather than left blank.
 
@@ -62,8 +62,9 @@ them is the single most useful thing in this document.
 | Decision analysis / MAUT | Decompose into attributes, weight, and score | Strong normative case. Evidence that decomposition improves *outcomes* rather than consistency is thin | **normative, not prescriptive** |
 | Satisficing vs maximising | Stop at good-enough rather than search for best | Schwartz et al.'s work is **correlational** and its outcome is wellbeing and regret, not decision quality | **misfit for our purpose** |
 | Option value / reversibility | Spend effort in proportion to how hard a choice is to undo | Grounded in real-options theory; the popular "one-way and two-way doors" form has **no controlled evaluation located** | **theory-backed, untested as advice** |
+| **Patient decision aids** | A structured tool that states the options, their outcomes, and elicits what the person values, before the choice | **Stacey et al. 2024, Cochrane: 209 RCTs, 107,698 participants.** Knowledge MD +11.90/100 (CI 10.60–13.19; 107 trials), accurate risk perception RR 1.94 (CI 1.61–2.34; 25 trials), decisional conflict (uninformed) MD −10.02 (CI −12.31 to −7.74; 58 trials) — all **high-certainty**. Informed values-congruent choice RR 1.75 (CI 1.44–2.13; 21 trials), moderate-certainty | **strongly supported, in a different domain** |
 
-### The three findings that change what this project should build
+### The four findings that change what this project should build
 
 **1. The pre-mortem's headline number does not say what everyone says it says.**
 Mitchell, Russo & Pennington found that imagining an event has already occurred
@@ -99,6 +100,48 @@ find.** They are, without exception, the four most likely to be found in a
 corporate deck. Kepner-Tregoe, WRAP, and OODA are the frameworks a model asked
 to "use a decision framework" would most readily reach for, and they are the
 ones with the least behind them.
+
+**4. Added 2026-08-12: the strongest evidence in the whole table is in a
+literature nobody in this field cites, and it is not a framework.** Patient
+decision aids are the one form of structured decision support that has been
+tested at scale: **209 randomised trials, 107,698 participants**, meta-analysed
+in a 2024 Cochrane review, with three high-certainty effects and one
+moderate-certainty one. Nothing else in the table is within two orders of
+magnitude of that evidence base.
+
+**The transfer is not automatic and must not be written as if it were.** These
+are health treatment and screening decisions, delivered to patients, usually
+around a clinical consultation, by a static tool rather than a conversational
+model. None of that is a life-or-work decision handled by an LLM. The grade in
+the table therefore says *strongly supported, **in a different domain***, and
+that qualifier is load-bearing.
+
+**What transfers regardless is the outcome vocabulary, and that is worth more
+here than another framework.** This project has struggled to say what "decision
+quality" even means, and has been reduced to admissibility conjuncts and
+naming floors. This literature has spent thirty years answering exactly that
+question and has validated instruments for it:
+
+| construct | what it measures | Cochrane result |
+|---|---|---|
+| **knowledge** | does the person know the options and their outcomes | MD +11.90/100, high certainty |
+| **accurate risk perception** | are their probability estimates right | RR 1.94, high certainty |
+| **decisional conflict — uninformed subscale** | do they feel they lack the information to choose | MD −10.02, high certainty |
+| **informed values-congruent choice** | does the choice match what *this person* actually values | RR 1.75, moderate certainty |
+
+**The last row is the construct this repository was founded on.** The brief was
+*"any decision ai helps the human make needs to be tailored to that human
+context"*, and `fit.md` is the procedure for it. Values-congruent choice is that
+idea, operationalised, measured across 21 trials, with a positive effect. That is
+a far better target than "did the recommendation flip", which
+[Track H's plan already rejected](../docs/superpowers/plans/) for punishing
+conditional answers.
+
+**Actionable, and small:** Track H should adopt *informed values-congruent
+choice* as its named primary construct rather than inventing one, and cite where
+it comes from. Track K6 should rank it alongside elicited confidence. Neither
+requires believing the health effect size transfers — only that the construct is
+better defined than anything authored here.
 
 ---
 
@@ -219,9 +262,28 @@ candidate that has a literature.
 
 ## What is still open in Track K
 
-- **K2 is a first pass.** Eleven frameworks, one search session. The rows graded
-  *none located* deserve a real database search before anyone writes *none
+- **K2 had a second pass on 2026-08-12 and nothing changed.** Kepner-Tregoe,
+  WRAP and OODA were searched again with queries restricted to PubMed, PsycNET,
+  ScienceDirect, SpringerLink, Wiley, Taylor & Francis, SAGE and Google Scholar.
+  **No controlled evaluation of any of the three was found**, so all three rows
+  stand at *none located*. What the pass returned instead was consultancy
+  marketing for KT, book summaries for WRAP, and simulation/modelling papers for
+  OODA (e.g. [arXiv:2203.15502](https://arxiv.org/abs/2203.15502), a red-vs-blue
+  game analysis) — none of which evaluates the loop as advice to a human.
+
+  **This is still not a systematic review and must not be described as one.**
+  There is no full-text database access here, so the searches hit indexed
+  abstracts and public landing pages only. *None located* remains a statement
+  about the search. What it now means is *two sessions, the second
+  domain-restricted*, which is stronger than it was and weaker than *none
   exists*.
+
+  The productive result of the second pass was finding the **patient decision
+  aids** literature, which is now row 12 of the catalogue and is the
+  best-evidenced entry in it. Searching for evaluations of named frameworks kept
+  returning nothing; searching for evaluations of *structured decision support*
+  returned 209 trials. **The frameworks were the wrong search key**, and that is
+  worth recording for whoever does the third pass.
 - **K4's right-hand column is mostly `unknown`** and stays that way until Track A
   returns. This document should be re-read against those results rather than
   filed.
@@ -251,3 +313,17 @@ candidate that has a literature.
   (abstract not retrievable — 403; the summary above is from search results and
   the row is graded accordingly)
 - `cc-thinking-skills` — <https://github.com/tjboudreaux/cc-thinking-skills>
+
+## Sources checked on 2026-08-12 (second pass)
+
+- Stacey, Lewis, Smith et al. (2024), *Decision aids for people facing health
+  treatment or screening decisions*, **Cochrane Database of Systematic Reviews**
+  — 209 RCTs, 107,698 participants —
+  <https://pubmed.ncbi.nlm.nih.gov/38284415/>
+- Searched and **found nothing evaluative**: Kepner-Tregoe rational process,
+  WRAP / Heath & Heath *Decisive* (2013), OODA loop. Queries restricted to
+  PubMed, PsycNET, ScienceDirect, SpringerLink, Wiley, Taylor & Francis, SAGE
+  and Google Scholar.
+- Nearest OODA hit, and it is not an evaluation of the loop as advice:
+  *Analysis of OODA Loop based on Adversarial for Complex Game Environments* —
+  <https://arxiv.org/abs/2203.15502>
