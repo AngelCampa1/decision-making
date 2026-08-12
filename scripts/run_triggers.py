@@ -64,8 +64,9 @@ from decision_evals.triggers import (  # noqa: E402
 from decision_evals.unbundle import (  # noqa: E402
     DESCRIPTION_VARIANTS,
     UnbundleError,
+    covering,
     description_variant,
-    four_arm,
+    entries,
 )
 
 PROCEDURES = ("ledger", "fit", "cascade", "timing")
@@ -235,6 +236,7 @@ def collect(
     *,
     system: str = SYSTEM,
     checkpoint: Path = CHECKPOINT,
+    entry_names: dict[str, str] | None = None,
 ) -> dict[tuple[str, int], dict[str, object]]:
     """Run every case `repeats` times, checkpointing after each call.
 
@@ -259,11 +261,21 @@ def collect(
                 except CliError as error:
                     fired, procedure, p_fire = None, None, None
                     print(f"  r{repeat} {case.id}: call failed -- {error}")
+                # ``covers`` is the routing outcome that survives a changing
+                # entry count: at n=2 the model names ``ledger-fit`` and the
+                # label is ``ledger``, so equality is the wrong test. Computed
+                # mechanically by ``covering`` -- no judgement is applied to a
+                # response here.
+                covers: bool | None = None
+                if case.route:
+                    wanted = covering(entry_names, case.route) if entry_names else case.route
+                    covers = procedure is not None and procedure == wanted
                 row = {
                     "case": case.id,
                     "repeat": repeat,
                     "fired": fired,
                     "procedure": procedure,
+                    "covers": covers,
                     "p_fire": p_fire,
                     "should_fire": case.should_fire,
                     "route": case.route,
@@ -412,6 +424,11 @@ def main() -> int:
         help="M4: one entry with a router, or the same four procedures as four tools",
     )
     parser.add_argument(
+        "--entries",
+        type=int,
+        help="M5: spread the four procedures across N entries. --arm four is N=4",
+    )
+    parser.add_argument(
         "--description",
         choices=DESCRIPTION_VARIANTS,
         default="full",
@@ -419,13 +436,21 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    if args.arm == "four" and args.confidence:
-        print("--arm four and --confidence are two changes to the response contract.")
+    if args.arm == "four" and args.entries is not None:
+        print("--arm four is --entries 4. Pass one of them, not both.")
+        return 1
+    n_entries: int | None = 4 if args.arm == "four" else args.entries
+
+    # One manipulation per run. --description changes the trigger text;
+    # --entries and --confidence change the response contract. Two at once
+    # measures neither, and the run would look clean while doing it.
+    if n_entries is not None and args.confidence:
+        print("An entry-count arm and --confidence are two changes to the contract.")
         print("Run them separately or the run measures neither.")
         return 1
-    if args.description != "full" and (args.arm == "four" or args.confidence):
-        print("--description varies the trigger text; --arm and --confidence vary the")
-        print("response contract. Two manipulations in one run measure neither.")
+    if args.description != "full" and (n_entries is not None or args.confidence):
+        print("--description varies the trigger text; --entries and --confidence vary")
+        print("the response contract. Two manipulations in one run measure neither.")
         return 1
 
     trigger_set = load_trigger_set(REPO_ROOT / TRIGGERS_DIR / f"{args.skill}.yaml")
@@ -438,14 +463,15 @@ def main() -> int:
         print(f"cannot build the {args.description} description: {error}")
         return 1
 
-    if args.arm == "four":
+    entry_names: dict[str, str] | None = None
+    if n_entries is not None:
         try:
-            descriptions = four_arm(description, document.body)
+            entry_names = entries(description, document.body, n_entries)
         except UnbundleError as error:
-            print(f"cannot build the four-skill arm: {error}")
+            print(f"cannot build a {n_entries}-entry arm: {error}")
             return 1
-        description = four_arm_block(descriptions)
-        print(f"four-skill arm: {', '.join(descriptions)}")
+        description = four_arm_block(entry_names)
+        print(f"{n_entries}-entry arm: {', '.join(entry_names)}")
 
     print(
         f"{args.skill}: {len(trigger_set.positives)} positive, {len(trigger_set.negatives)} negative"
@@ -454,8 +480,13 @@ def main() -> int:
 
     system = SYSTEM_CONFIDENCE if args.confidence else SYSTEM
     checkpoint = CHECKPOINT_CONFIDENCE if args.confidence else CHECKPOINT
-    if args.arm == "four":
-        system, checkpoint = SYSTEM_FOUR, CHECKPOINT_FOUR
+    if n_entries is not None:
+        system = SYSTEM_FOUR
+        checkpoint = (
+            CHECKPOINT_FOUR
+            if n_entries == 4
+            else CHECKPOINT.with_name(f"verdicts-{n_entries}-entries.jsonl")
+        )
     if args.description != "full":
         checkpoint = CHECKPOINT.with_name(f"verdicts-{args.description}.jsonl")
     try:
@@ -466,6 +497,7 @@ def main() -> int:
             args.repeats,
             system=system,
             checkpoint=checkpoint,
+            entry_names=entry_names,
         )
     except IsolationError as error:
         print(f"ISOLATION FAILURE, stopping: {error}")
