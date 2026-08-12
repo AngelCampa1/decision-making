@@ -78,7 +78,7 @@ Measured elsewhere. We do not re-measure these; we check they hold on our stack
 | Finding | Source | Number |
 |---|---|---|
 | Single-turn → multi-turn accuracy collapse | [LLMs Get Lost In Multi-Turn Conversation](https://arxiv.org/abs/2505.06120) | **−39% average across six generation tasks** (abstract, verbatim). Per-model figures are in Table 1 and are **not** quoted here until read from the table — an earlier draft carried 85.4 → 70.0 for Claude 3.7 Sonnet, which is reportedly the *Math task alone* against a six-task average of 78.0 → 65.6. Venue unverified. |
-| The collapse is *unreliability*, not lost aptitude | ibid. | same model, same question, answers scatter |
+| The collapse is *unreliability*, not lost aptitude | ibid. | §4.2, read 2026-08-11: aptitude `A^90 = percentile_90(S)` drops **16%** and the paper calls that non-significant; unreliability `U^90_10 = percentile_90(S) − percentile_10(S)` rises **112%**. So roughly seven-eighths of the −39% is scatter. Implemented in `stats/reliability.py`; see Track I. |
 | Mechanism: anchor early, then over-weight the latest turn | ibid. | — |
 | Multi-agent failure taxonomy | [MAST](https://arxiv.org/abs/2503.13657) | 14 modes, 1600+ traces, κ=0.88 — all three verified. **The category percentages are not in the paper.** An earlier draft carried 41.8 / 36.9 / 21.3; aggregating the per-mode rates in Figure 1 gives roughly **44.3 / 32.4 / 23.5**, and any figure used must be labelled "our aggregation of MAST Figure 1". MAST's traces are 7 frameworks on coding and maths — transfer to a 4-node decision task is an assumption, not a finding. |
 | Summarisation is not neutral compression | [When Summaries Distort Decisions](https://arxiv.org/html/2606.29251) | different summarisers move identical evidence toward opposite decisions |
@@ -632,12 +632,31 @@ degradation is **increased unreliability rather than lost aptitude**. A
 mean-only metric will under-detect it, and binary admissibility is already
 nearly a constant in our data.
 
-| # | Work |
-|---|---|
-| I1 | `stats/reliability.py` — within-item scatter, at the repo's 100% line+branch floor with property tests, matching `paired.py`. |
-| I2 | Every experiment reports scatter alongside its mean. |
-| I3 | Power re-derived for a reliability outcome. Repeats are *not* worthless here, which reverses the argument in the long-context plan. |
-| I4 | A skill that reduces variance without moving the mean is a **result**, not a null. Pre-register it as a primary-eligible outcome so it cannot be discovered post hoc. |
+**How lopsided, now that the numbers have been read rather than paraphrased.**
+Aptitude falls **16%** and the source calls that non-significant; unreliability
+rises **112%**. Roughly seven-eighths of the headline −39% lives in the spread.
+Every measurement this repository has taken is a mean, so a mean-only design was
+pointed at the smaller and less significant component. That does not explain the
+three nulls on its own — the corpora were also short, single-turn and
+underpowered — but it is the first account that predicts *which* number comes
+back flat.
+
+| # | Work | Status |
+|---|---|---|
+| I1 | `stats/reliability.py` — the §4.2 estimators (`aptitude_unreliability`), a per-item extension whose `scatter` array feeds a paired test directly (`per_item_reliability`), and the two repeat-count questions (`repeats_for_reliability`, `repeats_for_scatter_precision`). 100% line+branch, 7 property tests. | **done** |
+| I2 | Every experiment reports scatter alongside its mean. **Nothing calls the module yet** — I1 is a tool, not a result. | pending |
+| I3 | Power re-derived for a reliability outcome. | see below |
+| I4 | A skill that reduces variance without moving the mean is a **result**, not a null. Pre-register it as a primary-eligible outcome so it cannot be discovered post hoc. | pending |
+
+**I3, stated sharply enough to act on.** The long-context plan argues repeats are
+near-worthless because between-item variance dominates within-item sampling
+variance. That is right for a **mean** and wrong for a **spread**: at one repeat
+the within-item scatter is not imprecise, it is *undefined*, and
+`per_item_reliability` refuses `n_repeats=1` rather than returning a silent zero.
+The two questions have different answers — at ICC 0.6 a mean outcome reaches
+reliability 0.8 in **2** repeats, while estimating a per-item spread to a relative
+standard error of 0.25 takes **9**. A 4.5× difference in run count follows from
+the choice of outcome alone, so it has to be settled before a grid is sized.
 
 ---
 

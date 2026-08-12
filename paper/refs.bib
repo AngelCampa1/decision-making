@@ -493,8 +493,21 @@
              significantly lower performance in multi-turn conversations than
              single-turn, with an average drop of 39% across six generation
              tasks ... a minor loss in aptitude and a significant increase in
-             unreliability},
-  note    = {Verified from the abstract 2026-08-11. Per-model figures are in
+             unreliability
+             ---
+             [Sec. 4.2, read 2026-08-11] Aptitude: A^90 = percentile_90(S).
+             Unreliability: U^90_10 = percentile_90(S) - percentile_10(S).
+             "Model aptitude degrades in a non-significant way between the full
+             and sharded settings, with an average drop of 16%" ...
+             "unreliability skyrockets with an average increase of 112% (more
+             than doubling)" ... "we experimented with 15 LLMs, running N=10
+             simulations for each pair of model and simulation type"},
+  note    = {Verified from the abstract 2026-08-11. The Sec. 4.2 definitions and
+             the 16%/112% split were read from the full text the same day and
+             are implemented in stats/reliability.py. The aggregation level of
+             S -- pooled across instructions, or per instruction -- was NOT
+             confirmed, which is why per_item_reliability is labelled our
+             extension rather than a reimplementation. Per-model figures are in
              Table 1 and are NOT quoted here -- an earlier draft carried
              85.4 -> 70.0 for Claude 3.7 Sonnet, reportedly the Math task alone
              against a six-task average of 78.0 -> 65.6. Read the table before

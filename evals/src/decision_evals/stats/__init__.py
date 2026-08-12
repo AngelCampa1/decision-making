@@ -49,6 +49,15 @@ from decision_evals.stats.paired import (
     paired_permutation_test,
 )
 from decision_evals.stats.power import PowerResult, minimum_detectable_effect, required_pairs
+from decision_evals.stats.reliability import (
+    PerItemReliability,
+    ReliabilityResult,
+    aptitude_unreliability,
+    per_item_reliability,
+    repeat_reliability,
+    repeats_for_reliability,
+    repeats_for_scatter_precision,
+)
 
 __all__ = [
     "BenjaminiHochbergResult",
@@ -56,8 +65,11 @@ __all__ = [
     "ClusterBootstrapResult",
     "McNemarResult",
     "MurphyDecomposition",
+    "PerItemReliability",
     "PermutationResult",
     "PowerResult",
+    "ReliabilityResult",
+    "aptitude_unreliability",
     "benjamini_hochberg",
     "brier_score",
     "cluster_bootstrap_diff",
@@ -70,7 +82,11 @@ __all__ = [
     "minimum_detectable_effect",
     "murphy_decomposition",
     "paired_permutation_test",
+    "per_item_reliability",
     "reliability_curve",
+    "repeat_reliability",
+    "repeats_for_reliability",
+    "repeats_for_scatter_precision",
     "required_pairs",
     "smooth_calibration_error",
 ]

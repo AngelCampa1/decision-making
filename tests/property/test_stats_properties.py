@@ -25,6 +25,7 @@ from scipy import stats as scipy_stats
 from statsmodels.stats.multitest import multipletests
 
 from decision_evals.stats import (
+    aptitude_unreliability,
     benjamini_hochberg,
     brier_score,
     cluster_bootstrap_diff,
@@ -35,6 +36,10 @@ from decision_evals.stats import (
     minimum_detectable_effect,
     murphy_decomposition,
     paired_permutation_test,
+    per_item_reliability,
+    repeat_reliability,
+    repeats_for_reliability,
+    repeats_for_scatter_precision,
     required_pairs,
     smooth_calibration_error,
 )
@@ -45,6 +50,12 @@ _SLOW = settings(deadline=None, max_examples=50, suppress_health_check=[HealthCh
 
 probabilities = st.floats(min_value=0.0, max_value=1.0, allow_nan=False, allow_infinity=False)
 binary = st.sampled_from([0.0, 1.0])
+
+# Scores for the reliability tests. Bounded well away from the float extremes:
+# the shift and scale identities are exact in real arithmetic and only
+# approximately so in binary floating point, and enormous magnitudes turn a real
+# identity into a spurious failure about representation.
+scores_1d = st.floats(min_value=-1e3, max_value=1e3, allow_nan=False, allow_infinity=False)
 
 
 @st.composite
@@ -408,3 +419,67 @@ class TestPower:
             required_pairs(effect, p_discordant, power=0.95).n_pairs
             >= required_pairs(effect, p_discordant, power=0.80).n_pairs
         )
+
+
+class TestReliability:
+    """Aptitude and unreliability.
+
+    The round-trip property below is the one that earns its keep: a bare
+    ``ceil`` on the Spearman-Brown inverse over-charges a repeat whenever the
+    exact solution is an integer, and an example-based test only catches that if
+    the author happens to pick such a pair. This catches it across the space.
+    """
+
+    @given(st.lists(scores_1d, min_size=1, max_size=60), st.floats(-50.0, 50.0))
+    def test_unreliability_is_shift_invariant(self, values: list[float], shift: float) -> None:
+        """A spread does not move when everything moves together."""
+        base = aptitude_unreliability(values)
+        shifted = aptitude_unreliability([v + shift for v in values])
+        assert shifted.unreliability == pytest.approx(base.unreliability, abs=1e-6)
+        assert shifted.aptitude == pytest.approx(base.aptitude + shift, abs=1e-6)
+
+    @given(st.lists(scores_1d, min_size=1, max_size=60), st.floats(0.01, 20.0))
+    def test_unreliability_is_scale_equivariant(self, values: list[float], scale: float) -> None:
+        base = aptitude_unreliability(values)
+        scaled = aptitude_unreliability([v * scale for v in values])
+        assert scaled.unreliability == pytest.approx(base.unreliability * scale, rel=1e-6)
+
+    @given(st.lists(scores_1d, min_size=1, max_size=60))
+    def test_unreliability_is_never_negative(self, values: list[float]) -> None:
+        assert aptitude_unreliability(values).unreliability >= 0.0
+
+    @given(st.lists(scores_1d, min_size=1, max_size=40), st.integers(2, 8))
+    def test_per_item_rows_agree_with_the_scalar_estimator(
+        self, values: list[float], n_repeats: int
+    ) -> None:
+        """Cross-implementation agreement between our extension and the paper's."""
+        n_items = max(1, len(values) // n_repeats)
+        matrix = np.resize(np.asarray(values, dtype=float), (n_items, n_repeats))
+        per_item = per_item_reliability(matrix)
+        for row in range(n_items):
+            expected = aptitude_unreliability(matrix[row])
+            assert per_item.aptitude[row] == pytest.approx(expected.aptitude)
+            assert per_item.scatter[row] == pytest.approx(expected.unreliability)
+
+    @given(st.floats(0.01, 0.99), st.integers(1, 200))
+    def test_spearman_brown_is_bounded_and_monotone(self, icc: float, k: int) -> None:
+        value = repeat_reliability(icc, k)
+        assert 0.0 <= value <= 1.0
+        assert value >= repeat_reliability(icc, 1)
+        assert value <= repeat_reliability(icc, k + 1)
+
+    @given(st.floats(0.01, 0.99), st.floats(0.01, 0.99))
+    def test_repeats_for_reliability_returns_the_smallest_sufficient_count(
+        self, icc: float, target: float
+    ) -> None:
+        """Sufficient, and minimal. The second half is what the ceil bug broke."""
+        k = repeats_for_reliability(icc, target)
+        assert repeat_reliability(icc, k) >= target - 1e-12
+        if k > 1:
+            assert repeat_reliability(icc, k - 1) < target
+
+    @given(st.floats(0.001, 0.999))
+    def test_scatter_precision_is_monotone_and_at_least_two(self, rse: float) -> None:
+        k = repeats_for_scatter_precision(rse)
+        assert k >= 2
+        assert repeats_for_scatter_precision(min(rse * 2, 0.999)) <= k
