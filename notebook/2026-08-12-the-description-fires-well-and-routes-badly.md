@@ -156,3 +156,24 @@ one stable non-firing pair, one coin flip, and two that fired both times.
   produced 21 of 21 scored errors here.
 - **`fired but routed nowhere`** showed up in both runs and is a cheap abort
   condition the skill does not currently name.
+
+---
+
+**Superseded, 2026-08-12.** Five repeats now exist:
+[2026-08-12-five-repeats-firing-is-stable-routing-is-not.md](2026-08-12-five-repeats-firing-is-stable-routing-is-not.md).
+
+Two claims above do not survive.
+
+**"The per-item verdicts are unstable while the aggregate is stable."** True of
+firing — 70 of 73 items return the identical verdict five times running. **False
+of routing**, whose per-run accuracy has sd 0.108 over five repeats (mean 0.686,
+range 0.571–0.857). The two runs recorded above both read 0.643, and I took that
+agreement as the aggregate holding still. At that spread it was a coincidence.
+
+**The confusion tables.** The specific per-run confusion lists above are mostly
+noise. What survives repeats is narrower and more useful: `p06` is never routed
+correctly in five attempts and `p07` almost never, both drifting to `timing`.
+Those two are router-table defects. The rest of the lists are draws.
+
+The `x-n21`/`x-n22` flag stands and is now firmer: 0/5 each, against 5/5 for the
+other three promoted cases. A stable disagreement rather than a coin flip.

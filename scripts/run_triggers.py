@@ -257,10 +257,16 @@ def report_stability(
     for entry in unstable_route:
         print(f"      {entry}")
 
+    # `aptitude` and `scatter` are one value PER ITEM -- that is the whole point
+    # of the per-item estimator, and the reason it can feed a paired test. The
+    # first version of this printed them as scalars and died on the format
+    # string, after all 365 calls had been made.
     result = per_item_reliability(scores)
+    unsteady = int(np.count_nonzero(result.scatter))
     print(f"\n  ICC                   {result.icc:.3f}")
-    print(f"  aptitude (p90)        {result.aptitude:.3f}")
-    print(f"  scatter (p90-p10)     {result.scatter:.3f}")
+    print(f"  aptitude (p90)  mean  {float(np.mean(result.aptitude)):.3f}")
+    print(f"  scatter (p90-p10) mean {float(np.mean(result.scatter)):.3f}")
+    print(f"  items with any scatter {unsteady}/{result.n_items}")
     for target in (0.8, 0.9):
         try:
             k = repeats_for_reliability(result.icc, target)

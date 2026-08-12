@@ -309,27 +309,54 @@ surface features. Availability is not this skill's problem.
 falsifier above, well short of good. So the bundle is not a single skill wearing
 four, and it is not routing reliably either.
 
-**And the two runs disagree on which items they get wrong while agreeing on the
-aggregate to three decimal places.** Repairing two mislabelled cases fixed one
-confusion and introduced another, leaving the number untouched. That is Track
-I's decomposition in a third venue, and it means **the confusion pattern is
-noise at n=1** — "cascade confuses with timing" was a story read out of one run.
-Repeats come before any of this is quoted; `repeats_for_reliability` exists to
-size them.
+#### M2 and M3, five repeats — 2026-08-12, and this supersedes the table above
 
-**What it points at, if it survives repeats.** The cost of consolidation is not
-that the skill fires wrongly — it is that, having fired, it reads the wrong file.
+365 calls (73 × 5), 0 unparseable, 0 isolation failures.
+[`notebook/2026-08-12-five-repeats-firing-is-stable-routing-is-not.md`](../notebook/2026-08-12-five-repeats-firing-is-stable-routing-is-not.md).
+
+| | mean | sd | range |
+|---|---|---|---|
+| precision | **0.942** | 0.039 | 0.889–1.000 |
+| recall | **0.878** | 0.025 | 0.833–0.889 |
+| false-positive rate | **0.018** | 0.013 | 0.000–0.036 |
+| **routing accuracy** | **0.686** | **0.108** | 0.571–0.857 |
+
+**Firing is stable: 70 of 73 items return the identical verdict five times
+running.** ICC 0.741, so `repeats_for_reliability` asks for **4 repeats** at
+r = 0.9. One is not enough for anything on this instrument.
+
+**Routing is not stable, and the earlier reading was wrong.** The two single runs
+above both landed on 0.643 and I took that agreement as the aggregate holding
+still. At sd = 0.108 over five repeats it was a coincidence: repeat 0 of this run
+alone reads 0.857. So *"per-item verdicts move while the aggregate is stable"* is
+true of firing and false of routing.
+
+**The cascade/timing confusion survives repeats, in two specific items.** Seven
+of fourteen labelled items route correctly 5/5. Two are stably wrong: `p06` is
+never routed to `fit` in five attempts and `p07` reaches `cascade` once, both
+drifting to `timing` — and `p07` had already been repaired to remove its time
+words, so the repair was not the issue. Those two are router-table defects. The
+rest of any single run's confusion list is noise.
+
+**Recall is 0.878 or 0.988 depending on two labels of mine.** `x-n21` (*"The disk
+is at 99%. Do we need to act?"*) and `x-n22` (*"The build is green. Can I
+deploy?"*) fire **0/5** each and are the set's only misses; excluding them takes
+recall to 0.988 with precision and FPR unchanged. Of the five cases promoted out
+of `evidence-ledger`'s negatives, three fire 5/5 and these two fire 0/5, with
+nothing in between — so this is a **stable disagreement, not a coin flip**. Both
+readings still stand (the promotion was wrong, or the router widened on paper and
+not in behaviour) and repeats cannot separate them. It is a label decision and it
+belongs to the maintainer.
+
+**What it points at.** The cost of consolidation is not that the skill fires
+wrongly — it is that, having fired, it reads the wrong file. 0.942 against 0.686.
 That is a different failure from shadowing and a cheaper one: it lives in the
 router table, not in the description. **M4 should therefore be re-scoped**, since
 racing one-entry against four-skills was framed around a firing-precision cost
 that this measurement does not find.
 
-**Two things for the maintainer.** `fired but routed nowhere` appeared in both
-runs and is a cheap abort condition `SKILL.md` does not name. And two trigger
-cases promoted the same morning — *"The build is green. Can I deploy?"* and
-*"The disk is at 99%. Do we need to act?"* — never fired in either run; both the
-label and the description are mine, which is the class of call that produced 21
-of 21 scored errors here.
+`fired but routed nowhere` appeared in every run and is now named in `SKILL.md`
+as an abort condition (v0.2.1).
 
 ---
 
