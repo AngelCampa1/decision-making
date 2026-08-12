@@ -34,6 +34,8 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Final
 
+import yaml
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 #: Above this, the padding is transparent and the manipulation is cosmetic.
@@ -50,6 +52,15 @@ FEATURES: Final[tuple[str, ...]] = (
     "mean_sentence_length",  # padding hedges, and hedging is long
     "type_token_ratio",  # padding repeats itself
 )
+
+#: Words per window for the standardised type-token ratio.
+#:
+#: Raw TTR falls mechanically with document length, so an unstandardised version
+#: measures how long a document is rather than how varied its vocabulary is --
+#: the exact confound every other feature is divided per-hundred-words to avoid.
+#: The first run of this gate scored 0.776 on raw TTR and the reading "my padding
+#: repeats itself" was half length artefact.
+_TTR_WINDOW: Final = 100
 
 _WORD: Final = re.compile(r"\b[\w'-]+\b")
 _NUMERAL: Final = re.compile(r"\b\d[\d,]*(?:\.\d+)?\b")
@@ -87,8 +98,25 @@ def _features_of(body: str) -> dict[str, float]:
         )
         if sentences
         else 0.0,
-        "type_token_ratio": len(set(words)) / len(words) if words else 0.0,
+        "type_token_ratio": _standardised_ttr(words),
     }
+
+
+def _standardised_ttr(words: list[str]) -> float:
+    """Mean type-token ratio over fixed-size windows.
+
+    Raw TTR is a length measure in disguise: a 200-word note will beat a
+    2,000-word schedule on vocabulary variety whatever either of them says.
+    Averaging over windows of :data:`_TTR_WINDOW` removes that, so the feature
+    reports variety rather than brevity.
+    """
+    if not words:
+        return 0.0
+    windows = [words[i : i + _TTR_WINDOW] for i in range(0, len(words), _TTR_WINDOW)]
+    # A trailing stub is dropped rather than measured: a 7-word remainder scores
+    # 1.0 on variety and says nothing.
+    full = [window for window in windows if len(window) == _TTR_WINDOW] or windows[:1]
+    return statistics.fmean(len(set(window)) / len(window) for window in full)
 
 
 def feature_auc(
@@ -133,11 +161,22 @@ def _folded_auc(
 
 
 def _read(directory: Path) -> list[tuple[str, str]]:
-    return [
-        (path.stem, path.read_text(encoding="utf-8"))
-        for path in sorted(directory.rglob("*.md"))
-        if path.is_file()
-    ]
+    """Every document under ``directory``, as (id, body).
+
+    Markdown files are one document each. Casefile YAML carries its documents in
+    a list, and those are read out individually -- comparing a whole casefile
+    against a single padding note would be comparing document *counts*, which is
+    a feature of the corpus rather than of the prose.
+    """
+    documents: list[tuple[str, str]] = []
+    for path in sorted(directory.rglob("*.md")):
+        if path.is_file():
+            documents.append((path.stem, path.read_text(encoding="utf-8")))
+    for path in sorted(directory.rglob("*.yaml")):
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+        for document in raw.get("documents", []):
+            documents.append((f"{path.stem}:{document['id']}", document["body"]))
+    return documents
 
 
 def main() -> int:
@@ -163,8 +202,17 @@ def main() -> int:
     pooled = max(per_feature.values())
 
     print(f"{len(core)} core documents against {len(padding)} padding documents\n")
+    print(f"  {'feature':<22} {'AUC':>6}  {'core':>8} {'padding':>8}  direction")
     for name, value in sorted(per_feature.items(), key=lambda pair: -pair[1]):
-        print(f"  {name:<22} {value:.3f}")
+        core_median = statistics.median(vector[name] for vector in core_features)
+        padding_median = statistics.median(vector[name] for vector in padding_features)
+        # Direction matters for the fix even though it does not for the gate: a
+        # padding corpus that is reliably *denser* in dates is as findable as one
+        # that is thinner, but the two need opposite edits.
+        direction = "core higher" if core_median > padding_median else "padding higher"
+        print(
+            f"  {name:<22} {value:>6.3f}  {core_median:>8.2f} {padding_median:>8.2f}  {direction}"
+        )
 
     print(f"\npooled (best single feature)  {pooled:.3f}   need <= {AUC_CEILING}")
     if pooled > AUC_CEILING:
