@@ -289,6 +289,46 @@ read when it fires.
 single long skill with extra steps, and the honest move is to merge the four
 procedures into one body or split them back into separately-triggered skills.
 
+#### M4, built and running — 2026-08-12
+
+**The four-skill arm exists and nothing in it was written.**
+`decision_evals.unbundle` composes each of the four descriptions mechanically
+from the shipped bundle: **condition** and **product** verbatim from that
+procedure's router-table row, **opener** and **exclusions** verbatim from the
+bundle's own `description` and given to all four unchanged. The four
+descriptions are the one description's parts, redistributed.
+
+A test asserts that **no word appears in any composed description that is not
+already in the bundle** — one declared exception, the connective *"Produces"*,
+which is identical across all four and so cannot differentiate them. That test
+is the operational form of M4's own instruction to vary structure and nothing
+else, and it fails loudly if prose is ever invented.
+
+`run_triggers.py --arm four` runs it, on its own checkpoint, and refuses
+`--confidence` alongside: two changes to the response contract in one run
+measure neither. The four-arm answer names a `tool` where the one-arm names a
+`procedure`; they are the same four strings and land in the same column, so the
+arms score on one metric.
+
+**Scored on firing, not routing**, per
+[the power check](../notebook/2026-08-12-routing-cannot-be-scored-on-fourteen-items.md).
+Routing at 14 items cannot reject at any effect size worth having, so its band
+is registered as descriptive with no p-value. Firing has 73 items and 70 of 73
+stable across five repeats.
+
+**The band that matters is the false-positive rate.** Four overlapping
+descriptions should each look plausible for a wider set of messages than one
+scoped description, so shadowing at n=4 should appear as *firing when it should
+not* — arm `four`'s FPR above arm `one`'s 0.018. **If it does not rise, the
+one-entry choice bought nothing measurable at four descriptions**, and the
+copy-paste block in `AGENTS.md` should say so rather than continuing to justify
+itself with a 202-skill citation. Prediction registered before the run in
+[`notebook/2026-08-12-m4-prediction-one-entry-against-four.md`](../notebook/2026-08-12-m4-prediction-one-entry-against-four.md).
+
+**What it cannot show: anything about n=202.** Four is four. A null is evidence
+that shadowing has not begun at four descriptions on this instrument, not
+evidence against the published result.
+
 #### M2 and M3, first measurement — 2026-08-12
 
 73 cases, two full runs, Haiku, 0 unparseable, 0 isolation failures. Details in
