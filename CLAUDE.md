@@ -82,17 +82,18 @@ Claude-specific keys live in the plugin overlay.
 
 ## What is actually proven
 
-**Nothing yet.** All four skills carry `verdict: UNTESTED` and ship as
-`experimental`. See [`SCORECARD.md`](SCORECARD.md) for the verdict vocabulary
-and what each one licenses you to claim.
+**Nothing yet.** `decision-making` carries `verdict: UNTESTED` and ships as
+`experimental`, and so do all four procedures inside it. See
+[`SCORECARD.md`](SCORECARD.md) for the verdict vocabulary and what each one
+licenses you to claim.
 
-That is not false modesty and it is not a reason to avoid them — use them if
-they help you. A verdict governs the *public claim*, not whether a skill is
-usable, and `UNTESTED` blocks entry to the shipped plugin rather than blocking
-`cp -r skills/* .claude/skills/`. It is the difference between "we have not shown this works" and
-"this works", and the whole point of the repository is to keep those two
-statements apart. A skill may not enter the shipped plugin while carrying
-`UNTESTED`; `de check` enforces that rather than trusting anyone to remember it.
+That is not false modesty and it is not a reason to avoid it — use it if it
+helps you. A verdict governs the *public claim*, not whether a skill is usable:
+`UNTESTED` blocks entry to the shipped plugin, not `cp -r skills/*
+.claude/skills/`. The distinction is the whole point of the repository — "we
+have not shown this works" and "this works" are different statements, and
+keeping them apart is the job. `de check` enforces the promotion rule rather
+than trusting anyone to remember it.
 
 ---
 
@@ -143,6 +144,10 @@ If you are an agent contributing here rather than a user installing the skills:
   ([`docs/superpowers/plans/2026-08-11-long-context-experiment.md`](docs/superpowers/plans/2026-08-11-long-context-experiment.md))
   is now **Track G** and its pilot-library authoring is on hold. Read it for the
   gate machinery, not for the priority.
+- **If you are running unattended for hours or days, read
+  [`docs/AUTONOMOUS_WORK_ORDER.md`](docs/AUTONOMOUS_WORK_ORDER.md) first.** It
+  says what may run without a human and what to stop for. Every rule in it
+  exists because that failure already happened here.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
   coverage floors, skill validation. There is no cloud CI. Run it before you
   believe anything works.

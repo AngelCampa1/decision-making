@@ -1,0 +1,33 @@
+# Citations made before the gate in evals/src/decision_evals/citations.py existed.
+# Exempt until the paper has been re-read and either a bib entry or a verbatim
+# `quote` field added. THIS LIST MAY ONLY SHRINK: `de check` fails when an entry
+# here no longer has an outstanding issue, so a resolved line must be deleted.
+#
+# Seeded 2026-08-11 with 27 identifiers. Every NEW citation is gated immediately.
+1909.03004
+2303.08774
+2303.16634
+2305.14975
+2309.01431
+2403.12744
+2406.07791
+2410.02736
+2410.21819
+2411.15287
+2502.08788
+2503.13657
+2506.22316
+2508.02087
+2509.22856
+2509.23055
+2511.08798
+2512.01420
+2601.10338
+2601.20404
+2603.10123
+2604.23178
+2604.27891
+2605.18882
+2605.31408
+2606.08878
+2606.29718

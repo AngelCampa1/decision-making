@@ -19,6 +19,8 @@ from pathlib import Path
 
 import typer
 
+from decision_evals.citations import census, check_citations, load_baseline
+
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 # Commit attribution is load-bearing here: the commit history is the
@@ -146,6 +148,7 @@ def check(
         _run("mypy", [python, "-m", "mypy"]),
         lint_skills_step(),
         validate_manifests_step(),
+        check_citations_step(),
     ]
 
     if not fast:
@@ -173,6 +176,40 @@ def check(
         )
 
     raise typer.Exit(_summarise(results))
+
+
+def check_citations_step() -> StepResult:
+    """Bind every cited arXiv identifier to the bibliography.
+
+    Presence alone is not the check. Three numbers were misattributed here on
+    2026-08-11 while citing real papers that existed and said something
+    adjacent, so a number asserted beside an identifier additionally requires a
+    verbatim ``quote`` in the bib entry. See
+    :mod:`decision_evals.citations` for the three cases.
+
+    The census is printed rather than asserted in prose: two drafts of the
+    programme carried hand-counted totals and both were wrong, because the
+    figure moves with which directories you happen to glob.
+    """
+    name = "citations"
+    _echo_header(name)
+
+    cited, in_bib, missing = census(REPO_ROOT)
+    baselined = len(load_baseline(REPO_ROOT))
+    typer.echo(
+        f"{cited} identifier(s) cited, {in_bib} in the bibliography, "
+        f"{missing} unresolved ({baselined} baselined)"
+    )
+
+    issues = check_citations(REPO_ROOT)
+    if not issues:
+        return StepResult(name, True)
+
+    for issue in issues[:20]:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    if len(issues) > 20:
+        typer.echo(f"  ... and {len(issues) - 20} more")
+    return StepResult(name, False, f"{len(issues)} issue(s)")
 
 
 def lint_skills_step() -> StepResult:

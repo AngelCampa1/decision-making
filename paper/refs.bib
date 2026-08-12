@@ -477,3 +477,133 @@
   year      = {1999},
   note      = {Source of Analysis of Competing Hypotheses}
 }
+
+% ---------------------------------------------------------------------------
+% Verified 2026-08-11 against arxiv.org. `quote` holds the verbatim sentence a
+% number in our prose comes from; an entry without one may be cited but no
+% figure may be asserted beside it. See evals/src/decision_evals/citations.py
+% for why a presence check is not enough.
+% ---------------------------------------------------------------------------
+
+@article{laban2025lost,
+  title   = {{LLMs} Get Lost In Multi-Turn Conversation},
+  journal = {arXiv preprint arXiv:2505.06120},
+  year    = {2025},
+  quote   = {all the top open- and closed-weight LLMs we test exhibit
+             significantly lower performance in multi-turn conversations than
+             single-turn, with an average drop of 39% across six generation
+             tasks ... a minor loss in aptitude and a significant increase in
+             unreliability},
+  note    = {Verified from the abstract 2026-08-11. Per-model figures are in
+             Table 1 and are NOT quoted here -- an earlier draft carried
+             85.4 -> 70.0 for Claude 3.7 Sonnet, reportedly the Math task alone
+             against a six-task average of 78.0 -> 65.6. Read the table before
+             citing either. Venue unverified. Code and the 600 pre-sharded
+             instructions released: github.com/microsoft/lost_in_conversation
+             (MIT), data CDLA-Permissive-2.0}
+}
+
+@article{cemri2025mast,
+  title   = {Why Do Multi-Agent {LLM} Systems Fail?},
+  journal = {arXiv preprint arXiv:2503.13657},
+  year    = {2025},
+  note    = {MAST: 14 failure modes in 3 categories, 1600+ annotated traces,
+             inter-annotator kappa 0.88 -- all three verified. NO QUOTE FIELD
+             DELIBERATELY: the category percentages 41.8/36.9/21.3 that an
+             earlier draft carried are not in the paper. Aggregating the
+             per-mode rates in Figure 1 gives roughly 44.3/32.4/23.5, and any
+             figure used must be labelled as our aggregation. Traces are 7 MAS
+             frameworks on coding and maths; transfer to a decision task is an
+             assumption. Data on HF as mcemri/MAD, CC-BY-4.0; the code
+             repository carries no LICENSE file}
+}
+
+@article{skillsbench2026li,
+  title   = {{SkillsBench}: Benchmarking How Well Agent Skills Work Across
+             Diverse Tasks},
+  journal = {arXiv preprint arXiv:2602.12670},
+  year    = {2026},
+  quote   = {87 tasks across 8 domains paired with curated Skills and
+             deterministic verifiers ... Curated Skills raise the average pass
+             rate from 33.9% to 50.5% (+16.6 percentage points; 25.5%
+             normalized gain)},
+  note    = {Verified 2026-08-11. DISTINCT from arXiv:2605.31408, which is a
+             different real paper on the same topic -- conflating the two is
+             how a correct figure was "corrected" into a wrong one. Curated vs
+             NO-SKILL is the +16.6pp contrast; self-generated skills are -1.3pp
+             vs no-skill. Apache-2.0; 7,308 public trajectories on HuggingFace}
+}
+
+@article{shadowing2026,
+  title   = {More Skills, Worse Agents? Skill Shadowing Degrades Performance
+             When Expanding Skill Libraries},
+  journal = {arXiv preprint arXiv:2605.24050},
+  year    = {2026},
+  quote   = {performance degrades as libraries grow -- by up to 21% when
+             scaling from a small set of helpful skills to a 202-skill library},
+  note    = {Verified from the abstract 2026-08-11. THE REGIME IS 202 SKILLS.
+             The figures "90% -> 13.6% at 11,100 candidates" are this paper
+             QUOTING Gan and Sun 2025 on TOOL selection, not its own finding,
+             and must not be attributed here. Shadowing dominates context
+             overhead, which the paper calls small and indistinguishable from
+             zero}
+}
+
+@article{skillrevise2026,
+  title   = {{SkillRevise}: Improving {LLM}-Authored Agent Skills via
+             Trace-Conditioned Skill Revision},
+  journal = {arXiv preprint arXiv:2606.01139},
+  year    = {2026},
+  quote   = {improved the base agent's success rate from 36.05% to 61.63%},
+  note    = {Verified 2026-08-11. +25.6pp across three benchmarks and five
+             LLMs. Measured on SkillsBench, which has EXECUTABLE verification;
+             this repository's decision tasks do not, so the prior does not
+             transfer cleanly. Describes one-shot LLM-generated skills as
+             syntactically correct but behaviorally weak -- which is what every
+             skill here currently is. MIT, but 3 stars and one day of commits}
+}
+
+@article{perspectivegap2026,
+  title   = {{PerspectiveGap}: A Benchmark for Multi-Agent Orchestration
+             Prompting},
+  journal = {arXiv preprint arXiv:2606.08878},
+  year    = {2026},
+  note    = {NO QUOTE FIELD: reported figures (17.2% average combined pass
+             rate, best model 62.0%) come from an adversarial reviewer's read,
+             not a first-hand fetch. Verify before asserting any number.
+             Direction is established and is the opposite of what an earlier
+             draft said: it shows models are BAD at orchestration prompting,
+             not that prompting the orchestrator helps. Use as a baseline and
+             item source for Tracks D and E}
+}
+
+@article{incontext2026,
+  title   = {In-Context Prompting Obsoletes Agent Orchestration for Procedural
+             Tasks},
+  journal = {arXiv preprint arXiv:2604.27891},
+  year    = {2026},
+  note    = {NO QUOTE FIELD: the failure-rate pairs (11.5% vs 24%, 0.5% vs 9%,
+             5% vs 17%) come from an adversarial reviewer's read. Verify before
+             asserting. "for Procedural Tasks" is the entire scope and must not
+             be dropped from the title}
+}
+
+@article{summaries2026,
+  title   = {When Summaries Distort Decisions: Information Fidelity in
+             {LLM}-Compressed Financial Analysis},
+  journal = {arXiv preprint arXiv:2606.29251},
+  year    = {2026},
+  note    = {NO QUOTE FIELD: no figure fetched first-hand. Source domain is
+             FINANCIAL analysis specifically -- Track E3 proposes to replicate
+             the effect in our domain and must say what the source domain was}
+}
+
+@article{recency2025rerank,
+  title   = {Do Large Language Models Favor Recent Content? A Study on Recency
+             Bias in {LLM}-Based Reranking},
+  journal = {arXiv preprint arXiv:2509.11353},
+  year    = {2025},
+  note    = {NO QUOTE FIELD: the reported shifts (up to 4.78 years, up to 95
+             rank positions, 7 models) come from a search summary. Verify
+             before asserting}
+}

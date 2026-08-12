@@ -184,3 +184,50 @@ class TestRunStep:
         import sys
 
         assert cli._run("passing", [sys.executable, "-c", "pass"]).passed
+
+
+class TestCheckCitationsStep:
+    """The gate step, including the truncation branch.
+
+    Worth testing rather than trusting: this step is the only thing standing
+    between a misattributed figure and the file the repository calls the
+    product, and it was added after three such figures shipped.
+    """
+
+    @staticmethod
+    def _repo(root: Path, *, doc: str, bib: str, baseline: str = "") -> None:
+        (root / "docs").mkdir(exist_ok=True)
+        (root / "docs" / "x.md").write_text(doc, encoding="utf-8")
+        (root / "paper").mkdir(exist_ok=True)
+        (root / "paper" / "refs.bib").write_text(bib, encoding="utf-8")
+        (root / "paper" / "citations-baseline.txt").write_text(baseline, encoding="utf-8")
+
+    _BIB = "@article{a,\n journal = {arXiv preprint arXiv:2605.24050},\n quote = {x}\n}\n"
+
+    def test_passes_when_every_citation_resolves(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        self._repo(tmp_path, doc="Degrades 21% (arXiv:2605.24050).", bib=self._BIB)
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        assert cli.check_citations_step().passed
+
+    def test_fails_on_a_number_without_a_quote(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        bib = "@article{a,\n journal = {arXiv preprint arXiv:2605.24050}\n}\n"
+        self._repo(tmp_path, doc="Degrades 21% (arXiv:2605.24050).", bib=bib)
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = cli.check_citations_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
+
+    def test_truncates_a_long_issue_list(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """A wall of 60 identical lines buries the first one, which is the useful one."""
+        doc = "\n".join(f"arXiv:26{index:02d}.11111" for index in range(25))
+        self._repo(tmp_path, doc=doc, bib=self._BIB)
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = cli.check_citations_step()
+        assert not result.passed
+        assert "25 issue(s)" in result.detail

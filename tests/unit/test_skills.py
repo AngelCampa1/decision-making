@@ -72,12 +72,12 @@ def _write(
 
 def test_the_shipped_skill_validates() -> None:
     """The real artifact, not a fixture. If this fails, the skill is broken."""
-    assert validate_skill(REPO_ROOT / "skills" / "evidence-ledger" / "SKILL.md") == []
+    assert validate_skill(REPO_ROOT / "skills" / "decision-making" / "SKILL.md") == []
 
 
 def test_the_shipped_skill_uses_only_portable_fields() -> None:
     """A skill that errors in six tools is Claude-Code-shaped, not portable."""
-    document = parse_skill(REPO_ROOT / "skills" / "evidence-ledger" / "SKILL.md")
+    document = parse_skill(REPO_ROOT / "skills" / "decision-making" / "SKILL.md")
     assert set(document.frontmatter) <= STANDARD_FIELDS
 
 
