@@ -62,6 +62,16 @@ DEPTH_BAND: Final[tuple[float, float]] = (0.30, 0.60)
 #: Enforced by refusing a draw the library is too small to serve, which is the
 #: actionable form: it says author more documents rather than reporting a
 #: standard error that is quietly wrong.
+#:
+#: The arithmetic is unforgiving and the plan under-estimated it by roughly
+#: tenfold. A 100k-token prompt needs 400,000 characters of padding; at a
+#: realistic 4,000 characters per document that is 100 documents drawn, so the
+#: cap demands a library of 333. The pilot was scoped at 25 per domain.
+#:
+#: It is a parameter rather than a constant because the constraint is about
+#: *standard errors across cells*, and the Phase 0 pilot computes none -- twelve
+#: cells, read by hand, no inference. Relaxing it there is correct; relaxing it
+#: for the confirmatory grid is not, and the default says which is which.
 MAX_CELL_SHARE: Final = 0.30
 
 #: Numerals of at least this many digits are treated as load-bearing figures.
@@ -172,6 +182,7 @@ def draw(
     target_tokens: int,
     seed: int,
     core_chars: int = 0,
+    max_cell_share: float = MAX_CELL_SHARE,
 ) -> list[Document]:
     """Deterministically select padding summing to roughly ``target_tokens``.
 
@@ -209,18 +220,26 @@ def draw(
         )
 
     share = len(drawn) / len(library)
-    if share > MAX_CELL_SHARE:
+    if share > max_cell_share:
         raise PaddingError(
             f"a draw of {len(drawn)} from a library of {len(library)} puts every document "
-            f"in {share:.0%} of cells, past the {MAX_CELL_SHARE:.0%} cap. One document that "
+            f"in {share:.0%} of cells, past the {max_cell_share:.0%} cap. One document that "
             f"perturbs truth would then contaminate that many cells at once and the "
             f"standard errors would be wrong in the anti-conservative direction. "
-            f"The library needs at least {int(len(drawn) / MAX_CELL_SHARE)} documents."
+            f"The library needs at least {int(len(drawn) / max_cell_share)} documents, "
+            f"or pass max_cell_share=1.0 if this run computes no standard errors."
         )
     return drawn
 
 
-def assemble(core: Core, library: list[Document], *, target_tokens: int, seed: int) -> str:
+def assemble(
+    core: Core,
+    library: list[Document],
+    *,
+    target_tokens: int,
+    seed: int,
+    max_cell_share: float = MAX_CELL_SHARE,
+) -> str:
     """Core plus a padding draw, rendered as one prompt.
 
     The governing documents are distributed inside :data:`DEPTH_BAND`, and the
@@ -231,7 +250,13 @@ def assemble(core: Core, library: list[Document], *, target_tokens: int, seed: i
         PaddingError: The draw fails, or a padding document repeats something the
             governing chain turns on.
     """
-    padding = draw(library, target_tokens=target_tokens, seed=seed, core_chars=core.chars)
+    padding = draw(
+        library,
+        target_tokens=target_tokens,
+        seed=seed,
+        core_chars=core.chars,
+        max_cell_share=max_cell_share,
+    )
 
     violations = invariance_violations(core, padding)
     if violations:
@@ -240,14 +265,27 @@ def assemble(core: Core, library: list[Document], *, target_tokens: int, seed: i
     return _weave(core, padding) + f"\n\n{'=' * 60}\n\n{core.question}\n"
 
 
-def ablate(core: Core, library: list[Document], *, target_tokens: int, seed: int) -> str:
+def ablate(
+    core: Core,
+    library: list[Document],
+    *,
+    target_tokens: int,
+    seed: int,
+    max_cell_share: float = MAX_CELL_SHARE,
+) -> str:
     """The same prompt with every core document removed.
 
     Feeds the padding-only gate: ask the question anyway and see whether the
     model declines or answers confidently from padding alone. A confident answer
     means the padding carries signal, whatever the mechanical check said.
     """
-    padding = draw(library, target_tokens=target_tokens, seed=seed, core_chars=core.chars)
+    padding = draw(
+        library,
+        target_tokens=target_tokens,
+        seed=seed,
+        core_chars=core.chars,
+        max_cell_share=max_cell_share,
+    )
     body = "".join(document.rendered + "\n" for document in padding)
     return body + f"\n\n{'=' * 60}\n\n{core.question}\n"
 

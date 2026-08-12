@@ -269,3 +269,19 @@ def test_the_low_anchor_is_unbanded_and_that_is_not_a_failure() -> None:
     # so the first governing document opens the prompt.
     assert pad.governing_depths(prompt, core)[0] == 0.0
     assert all(depth < 1.0 for depth in pad.governing_depths(prompt, core))
+
+
+def test_the_domination_cap_can_be_relaxed_for_a_run_that_computes_no_errors() -> None:
+    """The cap protects standard errors across cells. The Phase 0 pilot computes
+    none -- twelve cells, read by hand -- so relaxing it there is correct, and
+    the default is what says which runs may.
+
+    The arithmetic is worth stating: 100k tokens is 400,000 characters, which at
+    a realistic 4,000 characters per document is 100 drawn and a library of 333.
+    The pilot was scoped at 25 per domain, so the plan was out by tenfold.
+    """
+    with pytest.raises(pad.PaddingError, match="past the 30% cap"):
+        pad.draw(_fat_library(12), target_tokens=40_000, seed=1)
+
+    drawn = pad.draw(_fat_library(12), target_tokens=40_000, seed=1, max_cell_share=1.0)
+    assert drawn
