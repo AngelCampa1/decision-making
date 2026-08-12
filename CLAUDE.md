@@ -166,3 +166,11 @@ If you are an agent contributing here rather than a user installing the skills:
   quietly dropped, which is the minimum — but the fix is upstream. Before
   starting a run, write down what will be computed, from which records, by which
   function. If that sentence cannot be written, the run is not ready.
+- **And the estimator must be checked against the arm structure, not only against
+  the records.** On 2026-08-12 a 50-pair run produced 45/50 against 23/50 with
+  discordance 24-to-2 in the predicted direction — a clean replication, and
+  entirely an artefact of a scorer reading `final_response` when one arm had a
+  single turn and the other had six. Crediting the whole conversation reversed
+  the direction. Before a run: does the scorer read the *same object* in every
+  arm? A measure that is legitimate for one arm can be a turn-count proxy for
+  another.
