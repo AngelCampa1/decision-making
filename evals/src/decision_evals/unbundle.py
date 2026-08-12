@@ -113,6 +113,53 @@ def shared_scope(description: str) -> tuple[str, str]:
     return flat[:cut].strip(), flat[start:].strip()
 
 
+#: Track L5's variants, and every one is a **subtraction** from the shipped
+#: description rather than a rewrite of it.
+#:
+#: L5 asks which way of writing a trigger is best, and it is a *primary* axis
+#: because availability dominates whether a skill helps at all (+18 to 36pp,
+#: [arXiv:2605.31408](https://arxiv.org/abs/2605.31408)). It is also the only
+#: skill-variant axis this repository can currently power: firing has 73 items
+#: and is stable across repeats, where routing has 14 and cannot reject.
+#:
+#: Subtraction, not rewriting, for the same reason `four_arm` derives rather than
+#: authors. Three variants each removing one named part answers *what does that
+#: part buy* — three fresh descriptions would answer *which prose did I like*.
+DESCRIPTION_VARIANTS: Final = ("full", "no-exclusions", "opener-only", "no-opener")
+
+
+def description_variant(description: str, variant: str) -> str:
+    """One L5 arm, built by deleting a named part of the shipped description.
+
+    * ``full`` — as shipped. The control.
+    * ``no-exclusions`` — the "Do not use for…" list deleted. **The direct test
+      of whether the clause authors agonise over does anything at all**; if the
+      false-positive rate does not move, the exclusion list is decoration.
+    * ``opener-only`` — the *when to use it* sentence alone, with both the
+      routing summary and the exclusions gone. The narrowest description that
+      still says what the skill is for.
+    * ``no-opener`` — the routing summary and exclusions with the *when to use
+      it* sentence deleted. The mirror of ``opener-only``, and the arm that says
+      which half carries the firing decision.
+
+    Raises:
+        UnbundleError: on an unknown variant, or a description whose markers have
+            moved so that the split would have to be guessed.
+    """
+    if variant not in DESCRIPTION_VARIANTS:
+        raise UnbundleError(f"unknown variant {variant!r}; known: {DESCRIPTION_VARIANTS}")
+    flat = " ".join(description.split())
+    if variant == "full":
+        return flat
+    opener, exclusions = shared_scope(description)
+    middle = flat[len(opener) : flat.find(exclusions)].strip()
+    if variant == "no-exclusions":
+        return f"{opener} {middle}".strip()
+    if variant == "opener-only":
+        return opener
+    return f"{middle} {exclusions}".strip()
+
+
 def four_arm(description: str, body: str) -> dict[str, str]:
     """Name-to-description for the unbundled arm.
 

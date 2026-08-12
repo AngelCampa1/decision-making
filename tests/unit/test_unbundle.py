@@ -14,8 +14,10 @@ import pytest
 
 from decision_evals.skills import parse_skill
 from decision_evals.unbundle import (
+    DESCRIPTION_VARIANTS,
     Procedure,
     UnbundleError,
+    description_variant,
     four_arm,
     router_rows,
     shared_scope,
@@ -135,3 +137,49 @@ class TestAgainstTheShippedSkill:
         assert row.description("Use when.", "Not for lookups.") == (
             "Use when. The pile is large. Produces a list. Not for lookups."
         )
+
+
+class TestDescriptionVariants:
+    """Track L5. Every arm must be a deletion, never a rewrite."""
+
+    def test_full_is_the_description_flattened(self) -> None:
+        assert description_variant(DESCRIPTION, "full") == " ".join(DESCRIPTION.split())
+
+    def test_no_exclusions_drops_only_the_exclusions(self) -> None:
+        text = description_variant(DESCRIPTION, "no-exclusions")
+        assert "Do not use for" not in text
+        assert text.startswith("Use when someone is deciding something.")
+        assert "Routes to one of four procedures." in text
+
+    def test_opener_only_is_the_opener(self) -> None:
+        opener, _ = shared_scope(DESCRIPTION)
+        assert description_variant(DESCRIPTION, "opener-only") == opener
+
+    def test_no_opener_drops_only_the_opener(self) -> None:
+        text = description_variant(DESCRIPTION, "no-opener")
+        assert "Use when someone is deciding" not in text
+        assert text.startswith("Routes to one of four procedures.")
+        assert text.endswith("Do not use for lookups.")
+
+    @pytest.mark.parametrize("variant", DESCRIPTION_VARIANTS)
+    def test_no_variant_adds_a_word(self, variant: str) -> None:
+        """The falsifiable form of "these are subtractions"."""
+
+        def words(text: str) -> set[str]:
+            return {w.strip(".,`|") for w in text.lower().split()} - {""}
+
+        assert words(description_variant(DESCRIPTION, variant)) <= words(DESCRIPTION)
+
+    @pytest.mark.parametrize("variant", DESCRIPTION_VARIANTS)
+    def test_every_variant_builds_from_the_shipped_skill(self, variant: str) -> None:
+        document = parse_skill(SHIPPED)
+        text = description_variant(str(document.frontmatter["description"]), variant)
+        assert 100 < len(text) < 1024, variant
+
+    def test_an_unknown_variant_raises(self) -> None:
+        with pytest.raises(UnbundleError, match="unknown variant"):
+            description_variant(DESCRIPTION, "shorter")
+
+    def test_a_moved_marker_raises_rather_than_guessing(self) -> None:
+        with pytest.raises(UnbundleError, match="marker"):
+            description_variant("Some description with no markers at all.", "opener-only")

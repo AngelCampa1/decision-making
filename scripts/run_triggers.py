@@ -61,7 +61,12 @@ from decision_evals.triggers import (  # noqa: E402
     evaluate_routing,
     load_trigger_set,
 )
-from decision_evals.unbundle import UnbundleError, four_arm  # noqa: E402
+from decision_evals.unbundle import (  # noqa: E402
+    DESCRIPTION_VARIANTS,
+    UnbundleError,
+    description_variant,
+    four_arm,
+)
 
 PROCEDURES = ("ledger", "fit", "cascade", "timing")
 
@@ -406,16 +411,32 @@ def main() -> int:
         default="one",
         help="M4: one entry with a router, or the same four procedures as four tools",
     )
+    parser.add_argument(
+        "--description",
+        choices=DESCRIPTION_VARIANTS,
+        default="full",
+        help="L5: which part of the shipped description to delete. Own checkpoint",
+    )
     args = parser.parse_args()
 
     if args.arm == "four" and args.confidence:
         print("--arm four and --confidence are two changes to the response contract.")
         print("Run them separately or the run measures neither.")
         return 1
+    if args.description != "full" and (args.arm == "four" or args.confidence):
+        print("--description varies the trigger text; --arm and --confidence vary the")
+        print("response contract. Two manipulations in one run measure neither.")
+        return 1
 
     trigger_set = load_trigger_set(REPO_ROOT / TRIGGERS_DIR / f"{args.skill}.yaml")
     document = parse_skill(REPO_ROOT / "skills" / args.skill / "SKILL.md")
     description = str(document.frontmatter["description"]).strip()
+
+    try:
+        description = description_variant(description, args.description)
+    except UnbundleError as error:
+        print(f"cannot build the {args.description} description: {error}")
+        return 1
 
     if args.arm == "four":
         try:
@@ -435,6 +456,8 @@ def main() -> int:
     checkpoint = CHECKPOINT_CONFIDENCE if args.confidence else CHECKPOINT
     if args.arm == "four":
         system, checkpoint = SYSTEM_FOUR, CHECKPOINT_FOUR
+    if args.description != "full":
+        checkpoint = CHECKPOINT.with_name(f"verdicts-{args.description}.jsonl")
     try:
         done = collect(
             trigger_set,
