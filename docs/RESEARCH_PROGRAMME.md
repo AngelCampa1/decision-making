@@ -1315,7 +1315,7 @@ back flat.
 | # | Work | Status |
 |---|---|---|
 | I1 | `stats/reliability.py` — the §4.2 estimators (`aptitude_unreliability`), a per-item extension whose `scatter` array feeds a paired test directly (`per_item_reliability`), and the two repeat-count questions (`repeats_for_reliability`, `repeats_for_scatter_precision`). 100% line+branch, 7 property tests. | **done** |
-| I2 | Every experiment reports scatter alongside its mean. **Nothing calls the module yet** — I1 is a tool, not a result. | pending |
+| I2 | Every experiment reports scatter alongside its mean. ~~**Nothing calls the module yet** — I1 is a tool, not a result.~~ **Half true, corrected 2026-08-13.** `per_item_reliability` and `repeats_for_reliability` are called by `run_triggers.report_stability` and have already produced published numbers and a design change: ICC 0.833 (M5) and 0.852 (M6), and the resulting "future trigger arms run 2 repeats, not 5". `aptitude_unreliability` — the §4.2 estimator, the one the multi-turn finding actually lives in — still has **no caller**, and cannot have one until a venue produces per-item score distributions under two conditions. That is Track A, not a wiring job. | partly done |
 | I3 | Power re-derived for a reliability outcome. | see below |
 | I4 | A skill that reduces variance without moving the mean is a **result**, not a null. Pre-register it as a primary-eligible outcome so it cannot be discovered post hoc. | pending |
 
