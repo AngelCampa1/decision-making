@@ -1,8 +1,9 @@
 # Decision frameworks: the review this project skipped
 
-**Track K1–K4, K6.** Status: **two passes, both 2026-08-12.** Every number below was
-checked against a source on that date; every framework without a number is
-marked with what was *not* found rather than left blank.
+**Track K1–K4, K6.** Status: **three passes — two on 2026-08-12, a third on
+2026-08-13.** Every number below was checked against a source on the date of its
+pass; every framework without a number is marked with what was *not* found
+rather than left blank.
 
 ---
 
@@ -284,6 +285,48 @@ candidate that has a literature.
   returning nothing; searching for evaluations of *structured decision support*
   returned 209 trials. **The frameworks were the wrong search key**, and that is
   worth recording for whoever does the third pass.
+- **The third pass ran on 2026-08-13 and took the second pass's advice.** It
+  searched for controlled evaluations of *LLM-assisted decision making* rather
+  than of named frameworks, and the two trials it found say opposite things,
+  which is the point.
+
+  | | Goh et al. 2024 | Agweyu et al. 2026 |
+  |---|---|---|
+  | design | RCT, 92 physicians, 5 vignettes, expert rubrics | cluster-RCT, 16 Kenyan primary care facilities, 103 clinical officers, **9,691 patients** |
+  | setting | simulated cases | real consultations |
+  | process measure | management reasoning **43.0% vs 35.7%, +6.5pp, p < 0.001** | appropriate diagnosis recorded, **aOR 1.74, p < 0.001** |
+  | outcome measure | — | treatment failure **2.2% vs 2.0%, aOR 0.77, p = 0.13** |
+
+  **The process measure moved in both. The one outcome measure did not.** The
+  larger, more realistic, more expensive trial is the one that found nothing —
+  and it found nothing *while* showing the intervention visibly changed how the
+  work was written down.
+
+  Two things follow for this repository, and both are uncomfortable.
+
+  **First, it is the exact shape of every result here so far.** M4, M5 and L5
+  each moved where the skill sits on a precision/recall frontier and none moved
+  how well it discriminates; the probe casefiles took zero of 27 traps; `math`
+  returned `p_discordant` 0.000. A programme whose outcome measures keep
+  refusing to move, while its process measures move readily, should expect
+  Tracks C through F to land where Agweyu did. **That expectation belongs in the
+  pre-registrations before those tracks run, not in their discussions
+  afterwards.**
+
+  **Second, Goh is the strongest located evidence for Track H specifically.**
+  The gain was largest in *case-specific* domains (+6.2pp, 95% CI 2.4–9.9,
+  p = 0.002), and the authors attribute it to physicians considering patient
+  context they would otherwise skip. That is the tailoring construct, measured,
+  in a randomized trial, with a positive result — which is more than any
+  framework in the catalogue has. It does not validate the `fit` procedure, and
+  it is not evidence about life decisions. It establishes that **the axis is
+  real and moves under assistance**, which was previously an assumption of the
+  founding brief.
+
+  A caveat that has to travel with both: 19.5% full adherence in Agweyu, and an
+  expert panel judging clinician decisions unjustified in 71.6% of the sampled
+  encounters. **Advice given is not advice taken**, and every skill measurement
+  in this repository is of advice given.
 - **K4's right-hand column is mostly `unknown`** and stays that way until Track A
   returns. This document should be re-read against those results rather than
   filed.
@@ -327,3 +370,18 @@ candidate that has a literature.
 - Nearest OODA hit, and it is not an evaluation of the loop as advice:
   *Analysis of OODA Loop based on Adversarial for Complex Game Environments* —
   <https://arxiv.org/abs/2203.15502>
+
+## Sources checked on 2026-08-13 (third pass)
+
+Search key was *LLM-assisted decision making, controlled trials* rather than the
+named frameworks, per the second pass's own conclusion. Both verified first-hand
+and entered in `paper/refs.bib` with verbatim quotes.
+
+- Goh, Gallo, Strong, Weng, Kerman, Freed, Cool, Kanjee, Lane, Parsons, Ahuja,
+  Horvitz, Yang, Milstein, Olson, Hom, Chen & Rodman (2024), *Large Language
+  Model Influence on Management Reasoning: A Randomized Controlled Trial*,
+  **medRxiv 2024.08.05.24311485** —
+  <https://pmc.ncbi.nlm.nih.gov/articles/PMC11326321/>
+- Agweyu et al. (2026), *Generative AI-enabled clinical decision support system
+  in primary care: a pragmatic, cluster-randomized trial*, **Nature Medicine** —
+  <https://www.nature.com/articles/s41591-026-04503-6>
