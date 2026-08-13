@@ -39,7 +39,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable, Sequence
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 from typing import Final
 
@@ -315,6 +315,164 @@ def run_tree(
         ledger=ledger,
         receipts_asserted=receipts() if receipts else 0,
     )
+
+
+def pin(result: TreeResult) -> dict[str, str]:
+    """What each sub-agent's parent read, keyed by node name.
+
+    The input to :func:`run_ablation`. Takes the report *as the orchestrator saw
+    it* rather than the raw response, because that is the thing an ablation has
+    to hold fixed -- if a control arm was itself running a transform, pinning the
+    untransformed text would silently change two things.
+    """
+    return {
+        record.node_name: record.report_seen_by_parent
+        for record in result.records
+        if record.node_name != ROOT and record.report_seen_by_parent is not None
+    }
+
+
+def _dispatched(result: TreeResult) -> frozenset[str]:
+    """Every sub-agent the tree ran, ablated or not."""
+    return frozenset(record.node_name for record in result.records if record.node_name != ROOT)
+
+
+def pinned_dispatches(
+    dispatches: Sequence[Dispatch], pinned: dict[str, str], *, ablate: str
+) -> tuple[Dispatch, ...]:
+    """Rebuild a fan-out so that exactly one report changes.
+
+    Every surviving node's ``transform`` is replaced by a constant returning its
+    pinned text, and the ablated node's returns ``None``. The sub-agents still
+    run -- the tree is unchanged in shape, cost and isolation -- but nothing they
+    say on this pass can reach the orchestrator, so the orchestrator's input
+    differs from the control in one place by construction rather than by luck.
+
+    Raises:
+        OrchestratorError: ``ablate`` is not one of the dispatch names, or a
+            surviving node has no pinned text. Both would produce a run that
+            looks like an ablation and is not.
+    """
+    names = [dispatch.name for dispatch in dispatches]
+    if ablate not in names:
+        raise OrchestratorError(
+            f"cannot ablate {ablate!r}: the tree dispatches {names}. An ablation naming a "
+            "node that is not there would run as a plain control and be recorded as an arm."
+        )
+    missing = sorted(set(names) - {ablate} - set(pinned))
+    if missing:
+        raise OrchestratorError(
+            f"no pinned report for {missing}. An unpinned surviving node resamples, and "
+            "then two things differ between the arms rather than one -- which is the "
+            "defect on 2026-08-12 where a sub-agent answered on the control pass and "
+            "declined on the ablation pass from an identical prompt."
+        )
+    return tuple(
+        replace(
+            dispatch,
+            transform=_constant(None if dispatch.name == ablate else pinned[dispatch.name]),
+        )
+        for dispatch in dispatches
+    )
+
+
+def _constant(value: str | None) -> ReportTransform:
+    """A transform that ignores what the node said. The pinning primitive."""
+
+    def transform(_: str) -> str | None:
+        return value
+
+    return transform
+
+
+def ablation_is_identified(control: TreeResult, ablated: TreeResult, *, ablate: str) -> str | None:
+    """Whether exactly one node's parent-visible input moved between two arms.
+
+    The check that would have caught the first ablation run here. That run
+    re-dispatched every sub-agent, and ``customer-impact`` answered on the
+    control pass and declined on the ablation pass **from the identical
+    prompt** -- so two things differed and nothing in the records could say
+    which caused the orchestrator to change its mind. What it measured was
+    resampling, which is Track I's scatter finding arriving somewhere it was not
+    wanted.
+
+    Returns ``None`` when the arms are identified, and otherwise the reason.
+    """
+    before, after = pin(control), pin(ablated)
+    # Node *names*, not pinned reports: a node that was ablated and a node that
+    # was never dispatched both drop out of `pin`, and those are different runs.
+    # The heading for an ablated report is still rendered, so an arm that simply
+    # omits the dispatch is narrower by one and is a fan-out manipulation
+    # wearing an ablation's name.
+    dispatched_before = _dispatched(control)
+    dispatched_after = _dispatched(ablated)
+    if dispatched_before != dispatched_after:
+        return (
+            f"the two arms dispatched different nodes: {sorted(dispatched_before)} against "
+            f"{sorted(dispatched_after)}. Fan-out width is then a second manipulation, and "
+            "an ablated node is still dispatched -- its heading is rendered carrying "
+            f"{ABLATED!r}."
+        )
+    if ablate in after:
+        return (
+            f"{ablate!r} still reached the orchestrator in the ablated arm. An ablation "
+            "whose report survives is a control that cost twice as much."
+        )
+    shared = sorted(set(before) & set(after))
+    moved = [name for name in shared if before[name] != after[name]]
+    if moved:
+        return (
+            f"{len(moved)} surviving node(s) presented a different report to the "
+            f"orchestrator: {moved}. Only {ablate!r} may differ, or the comparison "
+            "measures resampling as well as the ablation."
+        )
+    return None
+
+
+def run_ablation(
+    control: TreeResult,
+    *,
+    ablate: str,
+    task: str,
+    orchestrator_system_prompt: str,
+    orchestrator_template: str,
+    dispatches: Sequence[Dispatch],
+    conversation_id: str,
+    ledger: BudgetLedger,
+    model: str = "haiku",
+    runner: NodeRunner | None = None,
+    receipts: Callable[[], int] | None = None,
+) -> TreeResult:
+    """Run the ablated arm of a tree, pinned to a control, and refuse it if it is not identified.
+
+    Track 0.7, and it is a rule rather than an experiment: **an ablation must
+    hold the surviving inputs fixed.** The rule was written into the programme
+    on 2026-08-12 and had no implementation, so the only thing stopping the next
+    ablation from repeating the first one was somebody remembering -- which is
+    the same bet this repository has now lost four times on answer keys.
+
+    The guard runs *after* the call rather than before, because pinning could in
+    principle be defeated by a transform supplied in ``dispatches``, and a check
+    that only inspects the plan cannot see that. It costs one comparison of
+    strings already in memory.
+
+    Raises:
+        OrchestratorError: The ablation is not identified against its control.
+    """
+    result = run_tree(
+        task=task,
+        orchestrator_system_prompt=orchestrator_system_prompt,
+        orchestrator_template=orchestrator_template,
+        dispatches=pinned_dispatches(dispatches, pin(control), ablate=ablate),
+        conversation_id=conversation_id,
+        ledger=ledger,
+        model=model,
+        runner=runner,
+        receipts=receipts,
+    )
+    if (reason := ablation_is_identified(control, result, ablate=ablate)) is not None:
+        raise OrchestratorError(reason)
+    return result
 
 
 def _record(

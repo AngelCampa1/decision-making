@@ -22,9 +22,13 @@ from decision_evals.orchestrator import (
     OrchestratorError,
     TreeResult,
     _default_runner,
+    ablation_is_identified,
     append_records,
     load_records,
+    pin,
+    pinned_dispatches,
     render_reports,
+    run_ablation,
     run_tree,
     summarise,
 )
@@ -349,3 +353,133 @@ class TestDefaultRunner:
         assert result.n_nodes == 3
         assert len(asserted) == 3
         assert result.receipts_asserted == 3
+
+
+class TestAblationPinning:
+    """Track 0.7. The rule existed in the programme and nothing implemented it.
+
+    The first ablation this repository ran re-dispatched every sub-agent, and
+    `customer-impact` answered on the control pass and declined on the ablation
+    pass from an identical prompt. Two things differed and the records could not
+    say which moved the orchestrator.
+    """
+
+    def _control(self, runner: ScriptedRunner) -> TreeResult:
+        return _run(_dispatches("a", "b", "c"), runner)
+
+    def _ablate(
+        self, control: TreeResult, runner: ScriptedRunner, *, ablate: str = "b"
+    ) -> TreeResult:
+        return run_ablation(
+            control,
+            ablate=ablate,
+            task="decide",
+            orchestrator_system_prompt="root",
+            orchestrator_template=TEMPLATE,
+            dispatches=_dispatches("a", "b", "c"),
+            conversation_id="c2",
+            ledger=BudgetLedger(limit_usd=10.0),
+            runner=runner,
+        )
+
+    def test_pin_takes_what_the_parent_read_not_what_the_node_said(self) -> None:
+        """A control arm may itself transform. Pinning the raw text would move two things."""
+        dispatches = [
+            Dispatch(name="a", system_prompt="s", prompt="do a", transform=lambda _: "REWRITTEN"),
+            Dispatch(name="b", system_prompt="s", prompt="do b"),
+        ]
+        control = _run(dispatches, ScriptedRunner({"a": "original", "b": "from b"}))
+        assert pin(control) == {"a": "REWRITTEN", "b": "from b"}
+
+    def test_the_orchestrator_is_ablated_by_exactly_one_report(self) -> None:
+        control = self._control(ScriptedRunner({"a": "A1", "b": "B1", "c": "C1"}))
+        # Every sub-agent resamples into a different answer, which is the
+        # condition the first ablation ran under.
+        ablated = self._ablate(control, ScriptedRunner({"a": "A2", "b": "B2", "c": "C2"}))
+        assert pin(ablated) == {"a": "A1", "c": "C1"}
+        assert ABLATED in ablated.records[-1].prompt
+        assert "A1" in ablated.records[-1].prompt
+        assert "A2" not in ablated.records[-1].prompt
+
+    def test_the_records_still_hold_what_the_node_actually_said(self) -> None:
+        """Pinning must not erase the resampled response, only what the parent read."""
+        control = self._control(ScriptedRunner({"a": "A1", "b": "B1", "c": "C1"}))
+        ablated = self._ablate(control, ScriptedRunner({"a": "A2", "b": "B2", "c": "C2"}))
+        node_a = next(r for r in ablated.records if r.node_name == "a")
+        assert node_a.response == "A2"
+        assert node_a.report_seen_by_parent == "A1"
+        assert node_a.was_transformed
+
+    def test_ablating_a_node_that_is_not_dispatched_is_refused(self) -> None:
+        control = self._control(ScriptedRunner({}))
+        with pytest.raises(OrchestratorError, match="cannot ablate"):
+            self._ablate(control, ScriptedRunner({}), ablate="absent")
+
+    def test_an_unpinned_surviving_node_is_refused(self) -> None:
+        with pytest.raises(OrchestratorError, match="no pinned report"):
+            pinned_dispatches(_dispatches("a", "b"), {"a": "A1"}, ablate="a")
+
+    def test_a_surviving_report_that_moved_is_refused_after_the_call(self) -> None:
+        """The guard reads the records, so a transform inside `dispatches` cannot defeat it.
+
+        This is the 2026-08-12 run exactly: `b` is properly ablated, and `a` was
+        left to resample.
+        """
+        control = self._control(ScriptedRunner({"a": "A1", "b": "B1", "c": "C1"}))
+        unpinned = _run(
+            [
+                Dispatch(name="a", system_prompt="s", prompt="do a"),
+                Dispatch(name="b", system_prompt="s", prompt="do b", transform=lambda _: None),
+                Dispatch(name="c", system_prompt="s", prompt="do c", transform=lambda _: "C1"),
+            ],
+            ScriptedRunner({"a": "A9", "b": "B9", "c": "C9"}),
+        )
+        reason = ablation_is_identified(control, unpinned, ablate="b")
+        assert reason is not None
+        assert "measures resampling" in reason
+        assert "['a']" in reason
+
+    def test_an_ablation_whose_report_survived_is_refused(self) -> None:
+        control = self._control(ScriptedRunner({"a": "A1", "b": "B1", "c": "C1"}))
+        assert ablation_is_identified(control, control, ablate="b") is not None
+
+    def test_dropping_the_dispatch_instead_of_the_report_is_refused(self) -> None:
+        """An ablated node is still dispatched and its heading still rendered.
+
+        Omitting it makes the arm narrower by one, which is a fan-out
+        manipulation wearing an ablation's name — and it is indistinguishable
+        from a correct ablation to a check that reads only the pinned reports,
+        because both drop out of `pin`.
+        """
+        control = self._control(ScriptedRunner({"a": "A1", "b": "B1", "c": "C1"}))
+        narrower = _run(_dispatches("a", "b"), ScriptedRunner({"a": "A1", "b": "B1"}))
+        reason = ablation_is_identified(control, narrower, ablate="c")
+        assert reason is not None
+        assert "different nodes" in reason
+
+    def test_a_pinned_ablation_is_identified(self) -> None:
+        """The estimator returns None as well as a reason, which is the check."""
+        control = self._control(ScriptedRunner({"a": "A1", "b": "B1", "c": "C1"}))
+        ablated = self._ablate(control, ScriptedRunner({"a": "A2", "b": "B2", "c": "C2"}))
+        assert ablation_is_identified(control, ablated, ablate="b") is None
+
+    def test_run_ablation_refuses_a_result_that_is_not_identified(self) -> None:
+        """The post-call guard, reached by handing it a tree the control did not run.
+
+        Pinning makes an ablation identified by construction, so this is the
+        path where the caller's own `dispatches` disagree with the control —
+        which reads as an ablation and is a fan-out change.
+        """
+        control = self._control(ScriptedRunner({"a": "A1", "b": "B1", "c": "C1"}))
+        with pytest.raises(OrchestratorError, match="different nodes"):
+            run_ablation(
+                control,
+                ablate="b",
+                task="decide",
+                orchestrator_system_prompt="root",
+                orchestrator_template=TEMPLATE,
+                dispatches=_dispatches("a", "b"),
+                conversation_id="c3",
+                ledger=BudgetLedger(limit_usd=10.0),
+                runner=ScriptedRunner({"a": "A1", "b": "B1"}),
+            )
