@@ -8,6 +8,8 @@ historical four-skill tree as an arm.
 
 from __future__ import annotations
 
+import re
+from collections import Counter
 from pathlib import Path
 from typing import ClassVar
 
@@ -21,12 +23,20 @@ from decision_evals.unbundle import (
     covering,
     description_variant,
     entries,
+    entries_grouped,
     four_arm,
     router_rows,
     shared_scope,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _words(built: dict[str, str]) -> list[str]:
+    """Every word across all entries, for the multiset comparison M6 rests on."""
+    return re.findall(r"[a-z']+", " ".join(built.values()).lower())
+
+
 SHIPPED = REPO_ROOT / "skills" / "decision-making" / "SKILL.md"
 
 BODY = """
@@ -260,3 +270,77 @@ class TestCovering:
     def test_a_partial_name_does_not_match(self) -> None:
         """``fit`` must not match ``benefit``; the split is on the separator."""
         assert covering({"benefit-analysis": "..."}, "fit") is None
+
+
+class TestEntriesGrouped:
+    """M6: which procedures share an entry, at a count the grouping fixes.
+
+    M5's partition is contiguous in table order, which is what makes its arm a
+    function of ``n`` alone -- and which silently pairs ``cascade`` with
+    ``timing``, the two rows diagnosed as colliding before any of it ran. A
+    confusion inside one entry cannot be observed, so M5's routing number is
+    partly the collision being hidden. This is how that gets varied.
+    """
+
+    SPLIT = (("ledger", "cascade"), ("fit", "timing"))
+
+    def test_it_reproduces_the_contiguous_partition(self) -> None:
+        """``entries`` is this function with the grouping table order gives."""
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        assert entries(description, document.body, 2) == entries_grouped(
+            description, document.body, (("ledger", "fit"), ("cascade", "timing"))
+        )
+
+    def test_an_alternative_pairing_uses_the_same_words(self) -> None:
+        """The manipulation is the grouping and nothing else.
+
+        Both arms are the same four rows merged two ways, so the multiset of
+        words across all entries must be identical. If it ever is not, the arm
+        has started varying prose as well as grouping and cannot be read.
+        """
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        contiguous = entries(description, document.body, 2)
+        split = entries_grouped(description, document.body, self.SPLIT)
+        assert list(split) == ["ledger-cascade", "fit-timing"]
+        assert Counter(_words(contiguous)) == Counter(_words(split))
+
+    def test_clause_order_stays_table_order(self) -> None:
+        """Regrouping must not smuggle in a reordering of the merged sentence."""
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        built = entries_grouped(
+            description, document.body, (("timing", "ledger"), ("fit",), ("cascade",))
+        )
+        assert "ledger-timing" in built
+
+    def test_a_missing_procedure_is_rejected(self) -> None:
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        with pytest.raises(UnbundleError, match="must cover every procedure"):
+            entries_grouped(description, document.body, (("ledger", "cascade"),))
+
+    def test_a_repeated_procedure_is_rejected(self) -> None:
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        with pytest.raises(UnbundleError, match="more than one group"):
+            entries_grouped(
+                description, document.body, (("ledger", "cascade"), ("ledger", "fit", "timing"))
+            )
+
+    def test_a_name_the_table_lacks_is_rejected(self) -> None:
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        with pytest.raises(UnbundleError, match="not in the router table"):
+            entries_grouped(
+                description, document.body, (("ledger", "premortem"), ("fit", "cascade", "timing"))
+            )
+
+    def test_an_empty_group_is_rejected(self) -> None:
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        with pytest.raises(UnbundleError, match="empty group"):
+            entries_grouped(
+                description, document.body, ((), ("ledger", "fit", "cascade", "timing"))
+            )

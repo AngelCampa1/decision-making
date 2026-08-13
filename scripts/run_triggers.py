@@ -70,6 +70,7 @@ from decision_evals.unbundle import (  # noqa: E402
     covering,
     description_variant,
     entries,
+    entries_grouped,
 )
 
 #: The judge sees the skill's own description and router table and nothing else.
@@ -409,6 +410,14 @@ def main() -> int:
         help="M5: spread the four procedures across N entries. --arm four is N=4",
     )
     parser.add_argument(
+        "--pairing",
+        help=(
+            "M6: which procedures share an entry, at a count this fixes. "
+            "Groups separated by commas, names within a group by '+', e.g. "
+            "'ledger+cascade,fit+timing'. Must cover every procedure once"
+        ),
+    )
+    parser.add_argument(
         "--description",
         choices=DESCRIPTION_VARIANTS,
         default="full",
@@ -419,7 +428,16 @@ def main() -> int:
     if args.arm == "four" and args.entries is not None:
         print("--arm four is --entries 4. Pass one of them, not both.")
         return 1
+    # --pairing fixes the count by naming the groups, so --entries would either
+    # agree redundantly or contradict it. Refusing both keeps the arm's identity
+    # in one place.
+    if args.pairing is not None and (args.entries is not None or args.arm == "four"):
+        print("--pairing already fixes the entry count. Pass one of them, not both.")
+        return 1
+    grouping = [group.split("+") for group in args.pairing.split(",")] if args.pairing else None
     n_entries: int | None = 4 if args.arm == "four" else args.entries
+    if grouping is not None:
+        n_entries = len(grouping)
 
     # One manipulation per run. --description changes the trigger text;
     # --entries and --confidence change the response contract. Two at once
@@ -446,7 +464,11 @@ def main() -> int:
     entry_names: dict[str, str] | None = None
     if n_entries is not None:
         try:
-            entry_names = entries(description, document.body, n_entries)
+            entry_names = (
+                entries_grouped(description, document.body, grouping)
+                if grouping is not None
+                else entries(description, document.body, n_entries)
+            )
         except UnbundleError as error:
             print(f"cannot build a {n_entries}-entry arm: {error}")
             return 1
@@ -462,11 +484,17 @@ def main() -> int:
     checkpoint = CHECKPOINT_CONFIDENCE if args.confidence else CHECKPOINT
     if n_entries is not None:
         system = SYSTEM_FOUR
-        checkpoint = (
-            CHECKPOINT_FOUR
-            if n_entries == 4
-            else CHECKPOINT.with_name(f"verdicts-{n_entries}-entries.jsonl")
-        )
+        if grouping is not None:
+            # Named after the arm, not after n: two M6 pairings share a count and
+            # must never share a checkpoint.
+            stem = "-".join("+".join(group) for group in grouping)
+            checkpoint = CHECKPOINT.with_name(f"verdicts-pairing-{stem}.jsonl")
+        else:
+            checkpoint = (
+                CHECKPOINT_FOUR
+                if n_entries == 4
+                else CHECKPOINT.with_name(f"verdicts-{n_entries}-entries.jsonl")
+            )
     if args.description != "full":
         checkpoint = CHECKPOINT.with_name(f"verdicts-{args.description}.jsonl")
     try:

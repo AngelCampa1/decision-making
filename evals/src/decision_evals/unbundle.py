@@ -37,6 +37,7 @@ reader assume otherwise.
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Final
 
@@ -220,24 +221,78 @@ def entries(description: str, body: str, n: int) -> dict[str, str]:
     rows = router_rows(body)
     if not 1 <= n <= len(rows):
         raise UnbundleError(f"n must be 1..{len(rows)} for a {len(rows)}-row table, got {n}")
-    opener, exclusions = shared_scope(description)
 
     # Contiguous, as even as possible: the first `len(rows) % n` groups get one
     # extra row. Deterministic in n, which is the point.
     size, extra = divmod(len(rows), n)
-    groups: list[list[Procedure]] = []
+    grouping: list[tuple[str, ...]] = []
     start = 0
     for index in range(n):
         stop = start + size + (1 if index < extra else 0)
-        groups.append(rows[start:stop])
+        grouping.append(tuple(row.name for row in rows[start:stop]))
         start = stop
+    return entries_grouped(description, body, grouping)
 
+
+def entries_grouped(
+    description: str, body: str, grouping: Sequence[Sequence[str]]
+) -> dict[str, str]:
+    """The procedures redistributed across an **explicitly chosen** grouping — M6.
+
+    M5 held the count fixed and let the partition fall out of table order, so its
+    arm was a function of ``n`` alone. That deliberately left *which* procedures
+    share an entry unmeasured, and it is not a neutral choice: the router table
+    gives *order* to `cascade` and *when* to `timing`, and those two were
+    diagnosed as colliding on 2026-08-12 before any of this ran. M5's contiguous
+    partition puts the colliding pair **inside one entry**, where a confusion
+    between them cannot be observed at all.
+
+    M6 varies the grouping at fixed ``n`` to find out how much of M5's routing
+    number was the collision being hidden.
+
+    Clause order within an entry stays **table order** whatever the grouping, so
+    that regrouping does not smuggle in a second manipulation of how the merged
+    sentence reads.
+
+    Args:
+        description: the bundle's ``description`` frontmatter field.
+        body: the bundle's markdown body, carrying the router table.
+        grouping: the procedure names per entry. Must partition the table
+            exactly — every row once, no row twice, no name the table lacks.
+
+    Returns:
+        One entry per group, keyed by the joined names of the procedures it
+        covers, each group's names in table order.
+
+    Raises:
+        UnbundleError: if ``grouping`` is not an exact partition of the table.
+    """
+    rows = router_rows(body)
+    order = {row.name: index for index, row in enumerate(rows)}
+
+    flat = [name for group in grouping for name in group]
+    if any(not group for group in grouping):
+        raise UnbundleError("an empty group is not an entry")
+    unknown = sorted(set(flat) - set(order))
+    if unknown:
+        raise UnbundleError(f"not in the router table: {', '.join(unknown)}")
+    if len(flat) != len(set(flat)):
+        raise UnbundleError("a procedure appears in more than one group")
+    missing = sorted(set(order) - set(flat))
+    if missing:
+        # Dropping a procedure would change what the arm can do, not how it is
+        # grouped, and the two would be inseparable in the result.
+        raise UnbundleError(f"grouping must cover every procedure, missing: {', '.join(missing)}")
+
+    opener, exclusions = shared_scope(description)
+    by_name = {row.name: row for row in rows}
     out: dict[str, str] = {}
-    for group in groups:
+    for group in grouping:
+        ordered = [by_name[name] for name in sorted(group, key=lambda name: order[name])]
         merged = Procedure(
-            name="-".join(row.name for row in group),
-            condition=" or ".join(row.condition[0].lower() + row.condition[1:] for row in group),
-            product=" or ".join(row.product for row in group),
+            name="-".join(row.name for row in ordered),
+            condition=" or ".join(row.condition[0].lower() + row.condition[1:] for row in ordered),
+            product=" or ".join(row.product for row in ordered),
         )
         out[merged.name] = merged.description(opener, exclusions)
     return out
