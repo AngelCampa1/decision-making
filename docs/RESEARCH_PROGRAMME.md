@@ -284,7 +284,7 @@ read when it fires.
 | M3 | Measure whether routing works: given a decision, does the model read the *right* one of the four files? A router that always reads `ledger.md` is one skill wearing four. |
 | M4 | Race one-entry-with-routing against four-separate-skills. **Build the four-skill arm from the *current* procedure files** — the four bodies verbatim, wrapped in four `SKILL.md` files with four descriptions — so that structure and description are the only things that vary. Do **not** use the historical four-skill tree at `9a16b18` as an arm: the prose has moved since, and a race against it would vary structure, content and description at once, which is uninterpretable for a question about structure. This is the experiment that would justify or overturn the one-entry choice, which is currently an extrapolation from a 202-skill regime down to four. |
 | M5 | Bundle-size curve: 2 procedures, 4, 8. Where does routing accuracy break? **Run at n=2 on 2026-08-12** — see below. n=8 needs four procedures that do not exist. |
-| M6 | **Which** procedures are paired, holding the count fixed. **Run 2026-08-13** — see below. It retired `covers` as a cross-arm routing measure. |
+| M6 | **Which** procedures are paired, holding the count fixed. **All three partitions at n=2 run 2026-08-13** — see below. It retired `covers` as a routing measure and left M3 with no estimator on a merged arm. |
 
 **Hypothesis falsifier.** If routing accuracy is at chance, the bundle is a
 single long skill with extra steps, and the honest move is to merge the four
@@ -329,6 +329,48 @@ itself with a 202-skill citation. Prediction registered before the run in
 **What it cannot show: anything about n=202.** Four is four. A null is evidence
 that shadowing has not begun at four descriptions on this instrument, not
 evidence against the published result.
+
+#### M6b, the third partition, completing the set — 2026-08-13
+
+146 calls. Results in
+[`results/decision-making/2026-08-13-5ccedb9-m6b-third-partition/`](../results/decision-making/2026-08-13-5ccedb9-m6b-third-partition/),
+outcome in
+[`notebook/2026-08-13-m6b-the-merged-entry-is-not-the-union-of-its-parts.md`](../notebook/2026-08-13-m6b-the-merged-entry-is-not-the-union-of-its-parts.md).
+
+There are exactly three ways to split four procedures into two entries of two,
+and all three are now run. They are word-multiset identical to each other.
+
+| partition | `covers` | firing accuracy | FPR |
+|---|---|---|---|
+| `ledger-fit` / `cascade-timing` | 0.743 | 0.940 | 0.000 |
+| `ledger-cascade` / `fit-timing` | **0.857** | 0.952 | 0.000 |
+| `ledger-timing` / `fit-cascade` | **0.571** | 0.945 | 0.009 |
+
+**A 28.6-point range on identical vocabulary**, larger than any effect this
+track has looked for, produced entirely by which two procedures share a box.
+Firing does not move across any of it: p = 0.893 against M5, p = 0.564 against
+M6.
+
+**And the mechanism is stronger than M6 concluded.** `p01` and `p02` are the
+cleanest positives in the set and both are labelled `ledger`. Under two
+partitions the model names the entry containing `ledger`. Under
+`ledger-timing` it unanimously names **`fit-cascade`** — the entry that does not
+contain it. Joining `ledger`'s *"a pile of context arrived"* to `timing`'s *"the
+direction is settled and the question is when"* produces a sentence that stops
+attracting pile-of-context messages. **A merged entry does not inherit its
+parts' pull**, which is a fact about how descriptions are read and which neither
+M4 nor M5 could have shown, since both varied count rather than composition.
+
+Two published claims are corrected in place as a result. **`covers` is retired**
+and M3 — *does routing work* — has no estimator on a merged arm; the honest
+options are to score routing only at n=4, or to add a response-contract arm
+where the model names a procedure inside the entry it chose. And **the n=2
+false-positive floor is low, not structural**: M5's write-up said "floor" on two
+arms reading 0.000, and the third reads 0.009.
+
+**Firing has now survived five manipulations** — structure (M4), content (L5),
+count (M5), composition twice (M6, M6b) — without moving. That is the M track's
+result and it is far better supported than anything about routing.
 
 #### M6, run at n=2 under a second partition — 2026-08-13
 

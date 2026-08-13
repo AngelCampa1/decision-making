@@ -60,6 +60,14 @@ It is not comparable across `n` (chance moves) and — this run's finding — **
 comparable across groupings at the same `n` either.** M5's 0.743 stands as
 measured and cannot be read as how well a two-entry arm routes.
 
+> **Extended 2026-08-13 by [M6b](../2026-08-13-5ccedb9-m6b-third-partition/).**
+> The third and final partition reads **0.571**, so the complete set at n=2 is
+> 0.571 / 0.743 / 0.857 — a **28.6-point range** on identical vocabulary. And
+> the mechanism is stronger than "boundaries forgive confusions": on `p01` and
+> `p02`, both labelled `ledger`, the third arm unanimously names the entry that
+> does **not** contain `ledger`. A merged entry does not inherit its parts'
+> pull.
+
 `p07`, the item the `cascade`/`timing` collision was diagnosed on and the
 per-item diagnostic named before the run, is **1.0 in both arms**. Every arm
 that does not show the model the router table gets it right. The collision is a

@@ -243,6 +243,7 @@ class TestItReproducesThePublishedNumbers:
             ("2026-08-12-615f7cb-four-arm", 0.951, 0.800, 0.000),
             ("2026-08-12-c2673c5-m5-two-entries", 0.940, 0.756, 0.000),
             ("2026-08-13-82b4ab8-m6-pairing", 0.952, 0.806, 0.000),
+            ("2026-08-13-5ccedb9-m6b-third-partition", 0.945, 0.806, 0.009),
         ],
     )
     def test_firing_matches_the_published_readme(
@@ -262,6 +263,7 @@ class TestItReproducesThePublishedNumbers:
         [
             ("2026-08-12-c2673c5-m5-two-entries", 0.743, 0.897),
             ("2026-08-13-82b4ab8-m6-pairing", 0.857, 1.000),
+            ("2026-08-13-5ccedb9-m6b-third-partition", 0.571, 0.696),
         ],
     )
     def test_covers_matches_both_published_denominators(
@@ -296,5 +298,11 @@ class TestItReproducesThePublishedNumbers:
         m6 = RESULTS / "2026-08-13-82b4ab8-m6-pairing" / "verdicts.jsonl"
         if not (m5.exists() and m6.exists()):  # pragma: no cover - both are committed
             pytest.skip("results not published")
-        gap = covers_rates(load_arm(m6)).over_labelled - covers_rates(load_arm(m5)).over_labelled
-        assert gap > 0.10, "the two partitions differ by more than ten points on covers"
+        m6b = RESULTS / "2026-08-13-5ccedb9-m6b-third-partition" / "verdicts.jsonl"
+        rates = [
+            covers_rates(load_arm(path)).over_labelled for path in (m5, m6, m6b) if path.exists()
+        ]
+        assert len(rates) == 3, "all three partitions at n=2 are published"
+        assert max(rates) - min(rates) > 0.25, (
+            "the complete partition set at n=2 spans more than twenty-five points"
+        )

@@ -33,6 +33,11 @@ structurally — with separate entries, declining to name a tool *is* declining 
 fire. That mechanism is not an artefact of four-way choice: it appears at two, at
 0.000, in all five repeats.
 
+> **Corrected 2026-08-13 by [M6b](../2026-08-13-5ccedb9-m6b-third-partition/).**
+> "Floor" was stronger than two arms licensed. The third partition of the same
+> four procedures reads FPR **0.009** — `n07` false-fires once. The rate at n=2
+> is very low and is **not** structurally zero.
+
 **Recall is not monotone in entry count** (0.878 → 0.756 → 0.800) and this run
 does not claim it is. n=2 is also the arm with the worst prose — mechanical
 joining reads worse than a human would write, which was
