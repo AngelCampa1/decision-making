@@ -10,6 +10,7 @@ import yaml
 from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.triggers import (
     PROCEDURES,
+    TriggerSet,
     TriggerSetError,
     _check_routes,
     check_trigger_sets,
@@ -440,3 +441,70 @@ class TestRoutingIsByName:
         """No entries means no arm to grade; the caller's ``is not None`` gate
         decides, and this must not raise."""
         assert routing_is_by_name(())
+
+
+class TestASecondRouteIsAllowed:
+    """The maintainer's 2026-08-13 decision, and the rule attached to it.
+
+    Three of fourteen labelled turns had a second defensible route, and scoring
+    it as a fault measured the answer key rather than the model. The rule is
+    that a second route needs a written defence and that the whole set is
+    reviewed at once -- not only the turns that failed.
+    """
+
+    def _set(self, tmp_path: Path, route: object) -> TriggerSet:
+        payload = {
+            "skill": "x",
+            "positive": [{"id": "p1", "turn": "t", "why": "w", "route": route}],
+            "negative": [{"id": "n1", "turn": "u", "why": "w"}],
+        }
+        return load_trigger_set(_write(tmp_path / "s.yaml", payload))
+
+    def test_a_scalar_route_still_loads(self, tmp_path: Path) -> None:
+        """The older one-route form is not a migration."""
+        case = self._set(tmp_path, "ledger").positives[0]
+        assert case.routes == ("ledger",)
+        assert case.route == "ledger"
+
+    def test_a_list_loads_as_several_acceptable_routes(self, tmp_path: Path) -> None:
+        case = self._set(tmp_path, ["cascade", "timing"]).positives[0]
+        assert case.routes == ("cascade", "timing")
+        assert case.route == "cascade", "reports print one name; scoring accepts either"
+
+    def test_either_declared_route_scores_correct(self, tmp_path: Path) -> None:
+        trigger_set = self._set(tmp_path, ["cascade", "timing"])
+        for chosen in ("cascade", "timing"):
+            assert evaluate_routing(trigger_set, lambda _, c=chosen: c).accuracy == 1.0
+
+    def test_an_undeclared_route_is_still_wrong(self, tmp_path: Path) -> None:
+        report = evaluate_routing(self._set(tmp_path, ["cascade", "timing"]), lambda _: "ledger")
+        assert report.accuracy == 0.0
+        assert report.confusions == (("p1", "cascade or timing", "ledger"),)
+
+    def test_naming_nothing_is_still_wrong(self, tmp_path: Path) -> None:
+        report = evaluate_routing(self._set(tmp_path, ["cascade", "timing"]), lambda _: None)
+        assert report.accuracy == 0.0
+
+    def test_an_empty_list_is_refused(self, tmp_path: Path) -> None:
+        """`route: []` would read as "no acceptable route", which is not a label."""
+        with pytest.raises(TriggerSetError, match="one procedure name"):
+            self._set(tmp_path, [])
+
+    def test_a_repeated_route_is_refused(self, tmp_path: Path) -> None:
+        with pytest.raises(TriggerSetError, match="lists a route twice"):
+            self._set(tmp_path, ["timing", "timing"])
+
+    def test_every_second_route_in_the_shipped_set_carries_its_defence(self) -> None:
+        """The rule is enforced, not remembered.
+
+        A second route that nobody had to argue for is how an answer key gets
+        widened until it stops disagreeing with anything.
+        """
+        for case in load_trigger_set(SET_PATH).positives:
+            if len(case.routes) > 1:
+                assert "second acceptable route" in case.why, case.id
+
+    def test_the_shipped_set_still_has_fourteen_labelled_turns(self) -> None:
+        """Widening a label must not quietly add or drop one."""
+        labelled = [case for case in load_trigger_set(SET_PATH).positives if case.routes]
+        assert len(labelled) == 14

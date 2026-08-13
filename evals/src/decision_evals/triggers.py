@@ -58,20 +58,38 @@ class TriggerCase:
     """One turn, and whether the skill should fire on it.
 
     Attributes:
-        route: Which procedure inside the skill this turn should select, or
-            ``None`` where the skill's own router is genuinely open. A secondary
-            label: firing at all is the primary quantity, and a report giving
-            routing accuracy without precision has answered the easier question.
-            ``None`` cases are *excluded* from routing accuracy rather than
-            guessed at, because a forced label on an ambiguous turn measures the
-            author's taste.
+        routes: Which procedures inside the skill this turn may select. Empty
+            where the skill's own router is genuinely open. A secondary label:
+            firing at all is the primary quantity, and a report giving routing
+            accuracy without precision has answered the easier question. Open
+            cases are *excluded* from routing accuracy rather than guessed at,
+            because a forced label on an ambiguous turn measures the author's
+            taste.
+
+            **More than one route is allowed, and that is a 2026-08-13 decision
+            by the maintainer rather than a convenience.** Three of the fourteen
+            labelled turns had a second defensible route, and scoring it as a
+            fault measured the answer key. The rule attached to the decision is
+            that a second route needs a written sentence defending it, in
+            ``why``, and that the whole set is reviewed at once — not only the
+            turns that failed.
     """
 
     id: str
     turn: str
     should_fire: bool
     why: str
-    route: str | None = None
+    routes: tuple[str, ...] = ()
+
+    @property
+    def route(self) -> str | None:
+        """The first acceptable route, or ``None`` where the router is open.
+
+        Kept because reports and confusion tables want one name to print. It is
+        **not** the scoring rule: :func:`evaluate_routing` accepts any member of
+        ``routes``.
+        """
+        return self.routes[0] if self.routes else None
 
 
 @dataclass(frozen=True)
@@ -148,13 +166,31 @@ def load_trigger_set(path: Path) -> TriggerSet:
                     "the skill should not fire on has no procedure to route to, and a route "
                     "here would be counted as a routing decision that never happens."
                 )
+            # A scalar and a list both work, so the older one-route form keeps
+            # loading unchanged and a second route is an addition rather than a
+            # migration of every case.
+            if route is None:
+                routes: tuple[str, ...] = ()
+            elif isinstance(route, str):
+                routes = (route,)
+            elif isinstance(route, list) and route:
+                routes = tuple(str(name) for name in route)
+                if len(set(routes)) != len(routes):
+                    raise TriggerSetError(
+                        f"{path}: case {entry['id']!r} lists a route twice: {routes!r}"
+                    )
+            else:
+                raise TriggerSetError(
+                    f"{path}: case {entry['id']!r} has route {route!r}. Give one procedure "
+                    "name, or a non-empty list of them, or omit the key."
+                )
             cases.append(
                 TriggerCase(
                     id=str(entry["id"]),
                     turn=str(entry["turn"]),
                     should_fire=should_fire,
                     why=str(entry["why"]),
-                    route=None if route is None else str(route),
+                    routes=routes,
                 )
             )
     if not cases:
@@ -246,15 +282,19 @@ def evaluate_routing(trigger_set: TriggerSet, route: Callable[[str], str | None]
     correct = incorrect = unlabelled = 0
     confusions: list[tuple[str, str, str]] = []
     for case in trigger_set.positives:
-        if case.route is None:
+        if not case.routes:
             unlabelled += 1
             continue
         chosen = route(case.turn)
-        if chosen == case.route:
+        # Any declared route counts. A turn with two defensible procedures is
+        # easier to hit than a turn with one, and the accuracy is not comparable
+        # against a run made before this rule -- which is why the rule was
+        # applied to the whole set at once rather than to the turns that failed.
+        if chosen is not None and chosen in case.routes:
             correct += 1
         else:
             incorrect += 1
-            confusions.append((case.id, case.route, chosen or "(none)"))
+            confusions.append((case.id, " or ".join(case.routes), chosen or "(none)"))
     return RoutingReport(
         correct=correct,
         incorrect=incorrect,
@@ -329,11 +369,12 @@ def _check_routes(trigger_set: TriggerSet, skill_path: Path, path: Path) -> list
         return []
     known = {row.name for row in rows}
     return [
-        f"{path}: case {case.id!r} routes to {case.route!r}, which is not a procedure in "
+        f"{path}: case {case.id!r} routes to {name!r}, which is not a procedure in "
         f"{skill_path.parent.name}'s router table ({', '.join(sorted(known))}). "
         "A label pointing at a procedure that does not exist scores as a model failure."
         for case in trigger_set.cases
-        if case.route is not None and case.route not in known
+        for name in case.routes
+        if name not in known
     ]
 
 

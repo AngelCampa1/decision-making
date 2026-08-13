@@ -66,8 +66,12 @@ positive:
   # about my phrasing.
   - id: p07
     turn: "I want to resign. I was also going to raise the safety complaint with HR, and I haven't yet. Should I go ahead?"
-    why: the action ends the standing to do the other thing, which is the real question
-    route: cascade
+    why: >-
+      the action ends the standing to do the other thing, which is the real
+      question. timing is a second acceptable route from 2026-08-13: resigning is
+      already settled, so the live question is which of two acts goes first, and
+      the router's timing row covers a settled direction whose question is when.
+    route: [cascade, timing]
   - id: p08
     turn: "If I tell my co-founder I'm unhappy, what does that set off? Should I say it at all?"
     why: explicitly about downstream consequences of an action
@@ -84,8 +88,11 @@ positive:
     route: timing
   - id: p11
     turn: "We're definitely doing the migration. Is there any reason not to start it this quarter?"
-    why: the choice is made; this is about the moment
-    route: timing
+    why: >-
+      the choice is made; this is about the moment. cascade is a second
+      acceptable route from 2026-08-13: "any reason not to" asks what starting
+      now forecloses, which is the cascade row.
+    route: [timing, cascade]
 
   # -- fires, but the router is genuinely open --------------------------------
   - id: p12
@@ -105,23 +112,31 @@ positive:
   # the router's timing row almost verbatim.
   - id: x-n20
     turn: "The tests are failing. Should I fix them before merging?"
-    why: "direction settled (merge), the question is only when"
-    route: timing
+    why: >-
+      direction settled (merge), the question is only when. cascade is a second
+      acceptable route from 2026-08-13: merging on failing tests sets off
+      consequences a reader may reasonably want traced first.
+    route: [timing, cascade]
   - id: x-n22
     turn: "The build is green. Can I deploy?"
-    why: "matches the router's timing row almost verbatim: the choice is made"
-    route: timing
+    why: >-
+      the choice is made, so the router's timing row matches almost verbatim.
+      Kept as a positive on 2026-08-13 against four versions that all declined
+      to fire: a green build answers whether the code compiles and not whether
+      to ship. Dependencies, prerequisites, who needs telling and the
+      maintenance window are all open, and that is the thing a person wants
+      help thinking through. cascade is a second acceptable route for the same reason.
+    route: [timing, cascade]
   - id: x-n23
     turn: "This dependency has a critical CVE. Patch now?"
-    why: "patch now or later is a timing question with an undo price"
-    route: timing
+    why: >-
+      patch now or later is a timing question with an undo price. cascade is a
+      second acceptable route from 2026-08-13: patching a critical dependency can
+      break what depends on it, and that chain is the other half of the choice.
+    route: [timing, cascade]
   - id: x-n03
     turn: "Should I learn Rust?"
     why: "a real decision about their own time, with no dominant difficulty"
-    route: ~
-  - id: x-n21
-    turn: "The disk is at 99%. Do we need to act?"
-    why: "a live operational decision, and which procedure fits is open"
     route: ~
   #
   # All five `x-n*` cases above are **provisional**, and they stay in the set.
@@ -141,6 +156,14 @@ positive:
 negative:
   # Each of these wears a trigger's surface features. Firing here costs tokens
   # and turns an answerable question into a detour.
+  - id: x-n21
+    turn: "The disk is at 99%. Do we need to act?"
+    why: >-
+      moved here from the positives on 2026-08-13. The question asked has an
+      obvious answer -- a disk at 99% needs action -- so there is no trade-off
+      to weigh. The nuance is in *how* to act, and the turn does not ask that.
+      This is the line against x-n22, which keeps its positive label: there the
+      question looks settled and is not.
   - id: n01
     turn: "Should I use a list or a set here if I need membership tests in a loop?"
     why: says "should I" and asks for a recommendation, but it is a technical lookup with a known answer
