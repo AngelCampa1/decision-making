@@ -6,6 +6,10 @@ harness that measures whether they actually work.
 > **Status: pre-alpha. No skill in this repository has been validated yet.**
 > The harness is being built first, deliberately. Until a skill carries a
 > verdict in [`SCORECARD.md`](SCORECARD.md), treat it as an untested hypothesis.
+>
+> **[`docs/STATUS.md`](docs/STATUS.md) is the ledger** — every run on record,
+> what it showed, which measurements turned out to be broken, and which tracks
+> are still untouched.
 
 ## Why this exists
 
