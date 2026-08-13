@@ -126,7 +126,46 @@ def shared_scope(description: str) -> tuple[str, str]:
 #: Subtraction, not rewriting, for the same reason `four_arm` derives rather than
 #: authors. Three variants each removing one named part answers *what does that
 #: part buy* — three fresh descriptions would answer *which prose did I like*.
-DESCRIPTION_VARIANTS: Final = ("full", "no-exclusions", "opener-only", "no-opener")
+#: L5's arms. Each deletes a named part of the shipped description and adds
+#: nothing, which is what lets a test assert they are subtractions.
+DELETION_VARIANTS: Final = ("full", "no-exclusions", "opener-only", "no-opener")
+
+#: L7's arms — 2026-08-13. **These are authored, and that is a real cost.**
+#:
+#: The maintainer chose eagerness and named what the skill should key on:
+#: stakes, real consequences, complexity, nuance. No deletion of the shipped
+#: description produces that, so for the first time in Tracks L and M the arm
+#: text is written rather than derived, which reintroduces exactly the authoring
+#: problem those tracks were built to avoid.
+#:
+#: What is held constant instead: both arms keep the routing summary and the
+#: exclusion list **verbatim**, so they differ from each other and from `full`
+#: in the opener alone. L5 measured those two clauses at −5.8pp and −3.7pp of
+#: false firing, and the point of L7 is to reach eagerness without paying that.
+#: The two openers are matched in length to within **10%** (observed 6%), and a
+#: test enforces that rather than trusting this comment. L5 ruled out length as
+#: the driver across its own four arms; it did not rule it out here, so the
+#: control is kept and its real tolerance is stated instead of a rounder one.
+AUTHORED_VARIANTS: Final = ("stakes-named", "stakes-shown")
+
+DESCRIPTION_VARIANTS: Final = DELETION_VARIANTS + AUTHORED_VARIANTS
+
+#: Names the criteria and drops the illustrative quotes.
+_OPENER_NAMED: Final = (
+    "Use when someone is trying to decide something and wants help deciding it, "
+    "and the choice has stakes — it is costly to undo, several things pull "
+    "against each other, or it lands on someone else. Also use for a pile of "
+    "context ending in a question about what to do."
+)
+
+#: Keeps the quote form and swaps in quotes that carry stakes, without naming
+#: the criteria. The contrast with ``stakes-named`` is *tell* against *show*.
+_OPENER_SHOWN: Final = (
+    "Use when someone is trying to decide something and wants help deciding it — "
+    '"should I take the offer", "do I raise this now or wait", "is it worth the '
+    'risk", "what does this commit us to", or a pile of context ending in a '
+    "question about what to do."
+)
 
 
 def description_variant(description: str, variant: str) -> str:
@@ -154,6 +193,12 @@ def description_variant(description: str, variant: str) -> str:
         return flat
     opener, exclusions = shared_scope(description)
     middle = flat[len(opener) : flat.find(exclusions)].strip()
+    if variant in AUTHORED_VARIANTS:
+        # The routing summary and the exclusions go through verbatim. Only the
+        # opener is replaced, so L7 asks whether eagerness is reachable without
+        # deleting the two clauses L5 measured as doing the work.
+        replacement = _OPENER_NAMED if variant == "stakes-named" else _OPENER_SHOWN
+        return f"{replacement} {middle} {exclusions}".strip()
     if variant == "no-exclusions":
         return f"{opener} {middle}".strip()
     if variant == "opener-only":

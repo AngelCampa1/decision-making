@@ -17,6 +17,10 @@ import pytest
 
 from decision_evals.skills import parse_skill
 from decision_evals.unbundle import (
+    _OPENER_NAMED,
+    _OPENER_SHOWN,
+    AUTHORED_VARIANTS,
+    DELETION_VARIANTS,
     DESCRIPTION_VARIANTS,
     Procedure,
     UnbundleError,
@@ -174,8 +178,8 @@ class TestDescriptionVariants:
         assert text.startswith("Routes to one of four procedures.")
         assert text.endswith("Do not use for lookups.")
 
-    @pytest.mark.parametrize("variant", DESCRIPTION_VARIANTS)
-    def test_no_variant_adds_a_word(self, variant: str) -> None:
+    @pytest.mark.parametrize("variant", DELETION_VARIANTS)
+    def test_no_deletion_variant_adds_a_word(self, variant: str) -> None:
         """The falsifiable form of "these are subtractions"."""
 
         def words(text: str) -> set[str]:
@@ -344,3 +348,54 @@ class TestEntriesGrouped:
             entries_grouped(
                 description, document.body, ((), ("ledger", "fit", "cascade", "timing"))
             )
+
+
+class TestAuthoredVariants:
+    """L7's arms, and the constraints that stand in for derivation.
+
+    These are the first arm texts in Tracks L and M that were *written*. That
+    reintroduces the authoring problem those tracks avoid by construction, so
+    what can be enforced is enforced here instead of promised in a docstring.
+    """
+
+    @pytest.mark.parametrize("variant", AUTHORED_VARIANTS)
+    def test_the_routing_summary_and_exclusions_go_through_verbatim(self, variant: str) -> None:
+        """The whole point of L7: eagerness without deleting what L5 measured."""
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        flat = " ".join(description.split())
+        opener, exclusions = shared_scope(description)
+        middle = flat[len(opener) : flat.find(exclusions)].strip()
+
+        built = description_variant(description, variant)
+        assert middle in built
+        assert exclusions in built
+
+    @pytest.mark.parametrize("variant", AUTHORED_VARIANTS)
+    def test_the_shipped_opener_is_gone(self, variant: str) -> None:
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        opener, _ = shared_scope(description)
+        assert opener not in description_variant(description, variant)
+
+    def test_the_two_openers_are_matched_on_length(self) -> None:
+        """Length is a live confound between two authored texts.
+
+        L5 ruled it out across its own arms by deleting named parts. Nothing
+        rules it out between two sentences someone wrote, so it is controlled.
+        """
+        ratio = len(_OPENER_NAMED) / len(_OPENER_SHOWN)
+        assert abs(ratio - 1) <= 0.10, f"openers differ by {abs(ratio - 1):.0%}"
+
+    def test_the_two_arms_differ_only_in_the_opener(self) -> None:
+        document = parse_skill(SHIPPED)
+        description = str(document.frontmatter["description"])
+        named = description_variant(description, "stakes-named")
+        shown = description_variant(description, "stakes-shown")
+        assert named.replace(_OPENER_NAMED, "") == shown.replace(_OPENER_SHOWN, "")
+
+    def test_named_states_a_criterion_and_shown_does_not(self) -> None:
+        """The manipulation is tell against show, asserted rather than assumed."""
+        assert "stakes" in _OPENER_NAMED
+        assert "stakes" not in _OPENER_SHOWN
+        assert _OPENER_SHOWN.count('"') >= 6, "shown carries example turns"
