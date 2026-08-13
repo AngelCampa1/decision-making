@@ -69,5 +69,6 @@ earlier phrasing was stronger than two arms licensed and is corrected in place.
 python scripts/run_triggers.py --pairing "ledger+timing,fit+cascade" --repeats 2
 ```
 
+**Answer key:** [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml) **v1**. Not comparable with a v2 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made.
 Prediction: [`notebook/2026-08-13-m6b-prediction-the-third-partition-and-a-mechanism-that-names-one-item.md`](../../../notebook/2026-08-13-m6b-prediction-the-third-partition-and-a-mechanism-that-names-one-item.md).
 Outcome: [`notebook/2026-08-13-m6b-the-merged-entry-is-not-the-union-of-its-parts.md`](../../../notebook/2026-08-13-m6b-the-merged-entry-is-not-the-union-of-its-parts.md).

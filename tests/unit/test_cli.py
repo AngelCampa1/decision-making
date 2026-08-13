@@ -17,11 +17,18 @@ from decision_evals.cli import (
     StepResult,
     _summarise,
     app,
+    check_decisions_step,
     check_git_identity,
+    check_provenance_step,
+    check_wiring_step,
     lint_skills_step,
     validate_manifests_step,
 )
 from decision_evals.corpora import CorpusError
+from decision_evals.decisions import DecisionIssue
+from decision_evals.provenance import ProvenanceIssue, discover_runs
+from decision_evals.provenance import RunRecord as ProvenanceRun
+from decision_evals.wiring import WiringIssue
 
 runner = CliRunner()
 
@@ -380,3 +387,104 @@ class TestPower:
         clustered = runner.invoke(app, ["power", "--design-effect", "2.0"]).output
         assert plain != clustered
         assert "design_effect=2.0" in clustered
+
+
+class TestProvenanceStep:
+    """The gate over published run records.
+
+    Exercised against the real repository rather than a fixture, because the
+    claim worth pinning is that the tree it ships with satisfies its own rule —
+    the same reason `check_git_identity` is tested that way above.
+    """
+
+    def test_the_repository_passes_its_own_provenance_gate(self) -> None:
+        assert check_provenance_step().passed
+
+    def test_it_fails_when_a_run_is_defective(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli, "check_provenance", lambda root, git: [ProvenanceIssue("results/x", "broken")]
+        )
+        result = check_provenance_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
+
+    def test_a_stale_index_fails_the_step(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """A run published without appearing in the index is a failing build."""
+        monkeypatch.setattr(cli, "index_is_current", lambda root: False)
+        assert not check_provenance_step().passed
+
+    def test_index_regenerates_the_file(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = runner.invoke(app, ["index"])
+        assert result.exit_code == 0
+        assert (tmp_path / "docs" / "RUN_INDEX.md").is_file()
+
+
+class TestGitFacts:
+    def test_a_commit_is_its_own_ancestor(self) -> None:
+        """What lets a run register its prediction in the commit that runs it."""
+        head = cli._git_output(["rev-parse", "--short", "HEAD"])
+        assert head is not None
+        assert cli._is_ancestor(head, head)
+
+    def test_an_unknown_commit_is_not_an_ancestor(self) -> None:
+        assert not cli._is_ancestor("0" * 40, "HEAD")
+
+    def test_it_reports_unavailable_outside_a_repository(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        assert not cli._gather_git_facts([]).available
+
+    def test_it_dates_the_real_predictions(self) -> None:
+        facts = cli._gather_git_facts(discover_runs(cli.REPO_ROOT))
+        assert facts.available
+        assert facts.first_commit
+        assert facts.ancestry
+
+    def test_a_run_without_a_readme_is_skipped(self, tmp_path: Path) -> None:
+        run = ProvenanceRun(path="results/x/y", name="y", readme=tmp_path / "gone.md", jsonl=())
+        assert cli._gather_git_facts([run]).first_commit == {}
+
+
+class TestWiringStep:
+    def test_the_repository_passes_its_own_wiring_gate(self) -> None:
+        assert check_wiring_step().passed
+
+    def test_it_fails_on_an_inert_integrity_lock(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli, "check_wiring", lambda root: [WiringIssue("decision_evals.prereg", "inert")]
+        )
+        result = check_wiring_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
+
+
+class TestDecisionsStep:
+    def test_the_repository_explains_its_own_governed_commits(self) -> None:
+        assert check_decisions_step().passed
+
+    def test_it_fails_on_an_unexplained_commit(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli, "check_decisions", lambda root, governed: [DecisionIssue("d43c490", "unexplained")]
+        )
+        result = check_decisions_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
+
+    def test_governed_commits_are_found_in_the_real_history(self) -> None:
+        commits = cli._governed_commits()
+        assert commits
+        assert all(len(commit.sha) == 7 and commit.date.count("-") == 2 for commit in commits)
+
+    def test_no_governed_commits_outside_a_repository(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.setattr(cli, "_git_output", lambda args: None)
+        assert cli._governed_commits() == []
+
+    def test_a_malformed_log_line_is_skipped(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(cli, "_git_output", lambda args: "no-pipes-here\nabc1234|2026-08-13|x")
+        assert [c.sha for c in cli._governed_commits()] == ["abc1234"]

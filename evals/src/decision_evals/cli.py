@@ -21,7 +21,26 @@ from typing import Final
 import typer
 
 from decision_evals.citations import census, check_citations, load_baseline
+from decision_evals.decisions import GOVERNED as DECISION_PATHS
+from decision_evals.decisions import GovernedCommit, check_decisions
+from decision_evals.decisions import census as decisions_census
+from decision_evals.docs import census as docs_census
+from decision_evals.docs import check_docs
+from decision_evals.provenance import (
+    INDEX_PATH,
+    GitFacts,
+    ProvenanceIssue,
+    check_provenance,
+    discover_runs,
+    index_is_current,
+    prediction_links,
+    render_index,
+)
+from decision_evals.provenance import RunRecord as ProvenanceRun
+from decision_evals.provenance import census as provenance_census
 from decision_evals.stats import minimum_detectable_effect
+from decision_evals.wiring import census as census_wiring
+from decision_evals.wiring import check_wiring
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
@@ -152,6 +171,10 @@ def check(
         check_triggers_step(),
         validate_manifests_step(),
         check_citations_step(),
+        check_provenance_step(),
+        check_wiring_step(),
+        check_decisions_step(),
+        check_docs_step(),
     ]
 
     if not fast:
@@ -258,6 +281,202 @@ def check_citations_step() -> StepResult:
         typer.secho(f"  {issue}", fg=typer.colors.RED)
     if len(issues) > 20:
         typer.echo(f"  ... and {len(issues) - 20} more")
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def _gather_git_facts(runs: list[ProvenanceRun]) -> GitFacts:
+    """Collect the commit facts the provenance gate needs.
+
+    Shelled out for here rather than inside :mod:`decision_evals.provenance`, so
+    that every refusal branch in that module stays testable without a fixture
+    repository — the same split :class:`~decision_evals.prereg.RepoState` uses.
+
+    When git is unavailable the commit-order rule is skipped rather than
+    failed. A source tarball is not a defective run record, and a gate that
+    fails on unpacking is a gate somebody turns off.
+    """
+    if not (REPO_ROOT / ".git").exists() or _git_output(["rev-parse", "HEAD"]) is None:
+        return GitFacts(available=False, first_commit={}, ancestry=frozenset())
+
+    first_commit: dict[str, str] = {}
+    pairs: set[tuple[str, str]] = set()
+    for run in runs:
+        if not run.readme.is_file():
+            continue
+        text = run.readme.read_text(encoding="utf-8")
+        for link in prediction_links(text):
+            if link not in first_commit:
+                # --diff-filter=A lists the commits that *added* the path; the
+                # last line is the earliest, which is when it was registered.
+                log = _git_output(["log", "--diff-filter=A", "--format=%h", "--", link])
+                if log:
+                    first_commit[link] = log.splitlines()[-1].strip()
+            added = first_commit.get(link)
+            if added and run.commit and _is_ancestor(added, run.commit):
+                pairs.add((added, run.commit))
+    return GitFacts(available=True, first_commit=first_commit, ancestry=frozenset(pairs))
+
+
+def _is_ancestor(ancestor: str, descendant: str) -> bool:
+    """Whether one commit is an ancestor of another, or the same commit.
+
+    ``git merge-base --is-ancestor`` treats a commit as its own ancestor, which
+    is what lets a run register its prediction in the very commit it runs at —
+    the normal case here, and correct: the prediction is still in the tree
+    before the data exists.
+    """
+    try:
+        completed = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+            cwd=REPO_ROOT,
+            check=False,
+            capture_output=True,
+        )
+    except OSError:
+        return False
+    return completed.returncode == 0
+
+
+def check_provenance_step() -> StepResult:
+    """Every published run states its answer key and registered its prediction.
+
+    Added 2026-08-13. The run READMEs were the only part of the method with no
+    gate: everything around them is checked while the record of what was run,
+    against which labels, and what was predicted first was maintained by
+    remembering. Three defects of that shape are already on the record, and the
+    one this gate cannot repair is baselined by name.
+    """
+    name = "run provenance"
+    _echo_header(name)
+
+    runs, baselined = provenance_census(REPO_ROOT)
+    typer.echo(f"{runs} published run(s), {baselined} baselined")
+
+    issues = check_provenance(REPO_ROOT, _gather_git_facts(discover_runs(REPO_ROOT)))
+
+    if not index_is_current(REPO_ROOT):
+        typer.secho(
+            f"  {INDEX_PATH} is stale. Run `de index`. It is generated so that it "
+            "cannot drift the way a hand-maintained index does.",
+            fg=typer.colors.RED,
+        )
+        issues = [*issues, ProvenanceIssue(INDEX_PATH, "stale")]
+
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        if issue.run != INDEX_PATH:
+            typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+@app.command()
+def index() -> None:
+    """Regenerate `docs/RUN_INDEX.md` from the published run records."""
+    target = REPO_ROOT / INDEX_PATH
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(render_index(REPO_ROOT), encoding="utf-8", newline="\n")
+    typer.secho(f"wrote {INDEX_PATH}", fg=typer.colors.GREEN)
+
+
+def _governed_commits() -> list[GovernedCommit]:
+    """Commits that touched the answer key or the shipped skill.
+
+    Empty outside a git repository, which makes the step a no-op rather than a
+    failure — a source tarball has no history to check against.
+    """
+    log = _git_output(["log", "--format=%h|%ad|%s", "--date=short", "--", *DECISION_PATHS])
+    if not log:
+        return []
+    commits: list[GovernedCommit] = []
+    for line in log.splitlines():
+        sha, _, rest = line.partition("|")
+        date, _, subject = rest.partition("|")
+        if sha and date:
+            commits.append(GovernedCommit(sha=sha, date=date, subject=subject))
+    return commits
+
+
+def check_decisions_step() -> StepResult:
+    """Every change to the answer key or the shipped skill is explained.
+
+    Added 2026-08-13. Maintainer rationale was recorded in commit bodies, which
+    are good and are not greppable by topic. A label move is invisible in a
+    checkpoint and shifts every number computed from it, so the reasoning has to
+    live somewhere a reader of the numbers can reach.
+    """
+    name = "decision register"
+    _echo_header(name)
+
+    governed = _governed_commits()
+    commits, entries, baselined = decisions_census(REPO_ROOT, governed)
+    typer.echo(f"{commits} governed commit(s), {entries} entries, {baselined} baselined")
+
+    issues = check_decisions(REPO_ROOT, governed)
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def check_wiring_step() -> StepResult:
+    """Every module with a coverage floor is reachable from an entry point.
+
+    Added 2026-08-13, after ``prereg.py`` was found carrying a 100% line and
+    branch floor under the heading "Integrity locks" with no caller anywhere,
+    while ``CLAUDE.md`` recorded four pre-registration slips its refusal
+    branches exist to prevent. A tested refusal that nothing calls is inert,
+    and nothing in the gate distinguished it from a working one.
+    """
+    name = "integrity wiring"
+    _echo_header(name)
+
+    floored, reachable, declared = census_wiring(REPO_ROOT)
+    typer.echo(f"{floored} floored module(s), {reachable} reachable, {declared} declared unwired")
+
+    issues = check_wiring(REPO_ROOT)
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def check_docs_step() -> StepResult:
+    """Every command and path the living documentation names actually exists.
+
+    Added 2026-08-13, after an audit found the README telling readers to run
+    ``de screen`` and ``de confirm`` -- neither a command -- and advertising a
+    ``preregistration/`` directory that has never existed, while omitting
+    ``paper/`` and ``scripts/``. ``SCORECARD.md`` had already corrected a
+    fourth of the same shape, ``de report``. Four instances, none caught by
+    anything, because documentation was the last obligation here checked by
+    reading it.
+
+    Registered limitation: this reads whether a reference resolves, never
+    whether the sentence around it is true. ``docs/PROTOCOL.md`` §3 described a
+    refusal that had never run, in the present indicative, with every path in
+    it correct. That defect is invisible to this step.
+    """
+    name = "documentation"
+    _echo_header(name)
+
+    files, components, absent = docs_census(REPO_ROOT)
+    typer.echo(
+        f"{files} living doc(s), {components} component(s) listed, "
+        f"{absent} command(s) declared absent"
+    )
+
+    commands = {
+        command.name or (command.callback.__name__ if command.callback else "")
+        for command in app.registered_commands
+    }
+    issues = check_docs(REPO_ROOT, commands - {""})
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
     return StepResult(name, False, f"{len(issues)} issue(s)")
 
 

@@ -96,5 +96,6 @@ defect of the table, not of the descriptions.
 python scripts/run_triggers.py --pairing "ledger+cascade,fit+timing" --repeats 2
 ```
 
+**Answer key:** [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml) **v1**. Not comparable with a v2 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made.
 Prediction: [`notebook/2026-08-12-m6-prediction-the-collision-was-inside-the-entry.md`](../../../notebook/2026-08-12-m6-prediction-the-collision-was-inside-the-entry.md).
 Outcome: [`notebook/2026-08-12-m6-covers-went-up-and-the-measure-does-not-survive-it.md`](../../../notebook/2026-08-12-m6-covers-went-up-and-the-measure-does-not-survive-it.md).

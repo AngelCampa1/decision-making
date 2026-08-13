@@ -231,6 +231,37 @@ If you are an agent contributing here rather than a user installing the skills:
   refusal with no caller is inert, and the gate reports green either way.
   Intentional gaps go in `[tool.decision-evals.unwired]` with the condition that
   would close them.
+- **The documentation is checked mechanically, and it catches a reference that
+  does not resolve — not a description that is wrong.** `de check` refuses a
+  `de <cmd>` naming a command that does not exist, a markdown link or repository
+  path that does not exist, and a README component table that disagrees with the
+  directory listing. It was added on 2026-08-13 after the README was found
+  telling readers to run `de screen` and `de confirm` — neither a command — and
+  advertising a `preregistration/` directory that has never existed, while
+  omitting `paper/` and `scripts/`; `SCORECARD.md` had already corrected a
+  fourth of the same shape, `de report`. Four instances, one file each, none
+  caught by anything, because documentation was the last obligation here checked
+  by reading it.
+
+  **What the gate cannot see is the failure that motivated it.**
+  `docs/PROTOCOL.md` §3 described a refusal that has never run, in the present
+  indicative, with every path in it correct. So: *prose describing a mechanism
+  must name the arena it runs in and the tense it runs in.* If a gate is scoped
+  to `confirm` and `confirm` has never run, the sentence says **will refuse**,
+  not *refuses*. That one is on you; nothing checks it.
+
+  Scope is the living documentation — root `*.md` and `docs/*.md`. `notebook/`,
+  `results/**/README.md` and `docs/DECISIONS.md` are excluded **on purpose**:
+  they are dated records of what was true when written, and a decision that
+  removed a file necessarily names the file it removed. Do not "fix" a stale
+  reference in any of them. Deliberately absent commands go in
+  `[tool.decision-evals.docs-absent-commands]`, which may only shrink.
+- **A published run updates `docs/STATUS.md` in the same change.** It is the
+  ledger and it is hand-maintained, so it is the one file that drifts silently:
+  on 2026-08-13 its summary line read "six results, five measurements" while the
+  two tables underneath it listed seven and eight. A count in prose that is not
+  recomputed from the table below it is a hand-maintained number like any other.
+  Corrections there are appended, not rewritten.
 - Commits must be attributed to the GitHub noreply address; `de check` refuses
   otherwise.
 - Golden files pin the generated corpus byte-exact. Regenerating them needs

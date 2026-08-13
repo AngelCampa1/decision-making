@@ -1,0 +1,348 @@
+"""The documentation gate.
+
+The failure this guards is the one every other integrity rule here already had
+a gate for. On 2026-08-13 the README told readers to run ``de screen`` and
+``de confirm``, neither a command, and advertised a ``preregistration/``
+directory that has never existed, while omitting ``paper/`` and ``scripts/``.
+``SCORECARD.md`` had already corrected a fourth of the same shape, ``de
+report``. Four instances, one file each, none caught by anything.
+
+Two tests exist because the first implementation was wrong in ways that read as
+plausible. Resolving a backticked repository path against the *linking file*
+rather than the repository root reported every correct path in ``docs/`` as
+broken — 40 confident false positives. And scanning ``docs/DECISIONS.md``
+demanded an edit to a dated register whose entry for ``8541d46`` names the file
+that commit deleted, which is correct history.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from decision_evals.docs import (
+    DocIssue,
+    census,
+    check_command_references,
+    check_component_table,
+    check_docs,
+    check_path_references,
+    code_fragments,
+    component_entries,
+    link_targets,
+    load_absent_commands,
+    repo_paths,
+    scanned_files,
+)
+
+COMMANDS = {"check", "index", "mirror"}
+
+
+def _repo(tmp_path: Path, files: dict[str, str], dirs: tuple[str, ...] = ()) -> Path:
+    """A repository with documentation files and top-level directories."""
+    for relative, body in files.items():
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(body, encoding="utf-8")
+    for name in dirs:
+        (tmp_path / name).mkdir(parents=True, exist_ok=True)
+    return tmp_path
+
+
+def _readme(components: tuple[str, ...] = (), extra: str = "") -> str:
+    rows = "\n".join(f"| `{name}/` | purpose |" for name in components)
+    return (
+        "# title\n\n"
+        "## What's actually here\n\n"
+        "| Component | Purpose |\n| --- | --- |\n"
+        f"{rows}\n\n{extra}"
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Which files are read
+# --------------------------------------------------------------------------- #
+
+
+def test_scans_the_root_and_docs_but_not_the_notebook(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": "x",
+            "docs/PROTOCOL.md": "x",
+            "notebook/2026-08-11-an-entry.md": "`de report` was fine then",
+            "results/decision-making/run/README.md": "x",
+        },
+    )
+    names = [path.name for path in scanned_files(repo)]
+    assert names == ["README.md", "PROTOCOL.md"]
+
+
+def test_the_decision_register_is_excluded(tmp_path: Path) -> None:
+    """A decision that removed a file necessarily names the file it removed."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/DECISIONS.md": "`datasets/triggers/evidence-ledger.yaml` was deleted",
+            "docs/STATUS.md": "x",
+        },
+        dirs=("datasets",),
+    )
+    assert [path.name for path in scanned_files(repo)] == ["STATUS.md"]
+    assert check_path_references(repo) == []
+
+
+def test_a_directory_named_like_a_document_is_not_read(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": "x"}, dirs=("weird.md",))
+    assert [path.name for path in scanned_files(repo)] == ["README.md"]
+
+
+# --------------------------------------------------------------------------- #
+# Code fragments
+# --------------------------------------------------------------------------- #
+
+
+def test_reads_both_inline_spans_and_fenced_blocks() -> None:
+    text = "Run `de check` first.\n\n```bash\nuv run de index\n```\n"
+    fragments = code_fragments(text)
+    assert "uv run de index\n" in fragments
+    assert "de check" in fragments
+
+
+def test_a_fenced_block_is_not_also_read_as_inline_spans() -> None:
+    """Backticks inside a fence would otherwise be re-parsed as span delimiters."""
+    assert code_fragments("```\na `b` c\n```\n") == ["a `b` c\n"]
+
+
+# --------------------------------------------------------------------------- #
+# Commands
+# --------------------------------------------------------------------------- #
+
+
+def test_a_real_command_passes(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme(extra="Run `uv run de check`.")})
+    assert check_command_references(repo, COMMANDS) == []
+
+
+def test_a_command_that_does_not_exist_is_refused(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme(extra="Run `de confirm`.")})
+    issues = check_command_references(repo, COMMANDS)
+    assert [issue.where for issue in issues] == ["README.md"]
+    assert "`de confirm` is not a command" in issues[0].message
+
+
+def test_the_same_bad_command_twice_in_one_file_reports_once(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme(extra="`de confirm` and `de confirm`.")})
+    assert len(check_command_references(repo, COMMANDS)) == 1
+
+
+def test_a_declared_absent_command_may_be_named(tmp_path: Path) -> None:
+    """`SCORECARD.md` has to be able to say that `de report` never existed."""
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": _readme(extra="There is no `de report`."),
+            "pyproject.toml": '[tool.decision-evals.docs-absent-commands]\n"report" = "never built"\n',
+        },
+    )
+    assert check_command_references(repo, COMMANDS) == []
+
+
+def test_a_declared_absent_command_that_becomes_real_is_refused(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": _readme(extra="Run `de index`."),
+            "pyproject.toml": '[tool.decision-evals.docs-absent-commands]\n"index" = "not built"\n',
+        },
+    )
+    issues = check_command_references(repo, COMMANDS)
+    assert issues == [
+        DocIssue(
+            "pyproject.toml",
+            "`de index` is declared absent and is now a real command. Delete the entry "
+            "— a note that outlives the situation it describes is how the last two "
+            "dead integrity modules stayed invisible.",
+        )
+    ]
+
+
+def test_a_declared_absent_command_nobody_mentions_is_refused(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": _readme(),
+            "pyproject.toml": '[tool.decision-evals.docs-absent-commands]\n"ghost" = "why"\n',
+        },
+    )
+    issues = check_command_references(repo, COMMANDS)
+    assert "named nowhere in the documentation" in issues[0].message
+
+
+# --------------------------------------------------------------------------- #
+# The absent register
+# --------------------------------------------------------------------------- #
+
+
+def test_no_pyproject_means_no_declarations(tmp_path: Path) -> None:
+    assert load_absent_commands(tmp_path) == {}
+
+
+def test_a_non_table_on_the_way_down_is_tolerated(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"pyproject.toml": 'tool = "not a table"\n'})
+    assert load_absent_commands(repo) == {}
+
+
+def test_a_non_table_at_the_leaf_is_tolerated(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {"pyproject.toml": '[tool.decision-evals]\ndocs-absent-commands = "nope"\n'},
+    )
+    assert load_absent_commands(repo) == {}
+
+
+# --------------------------------------------------------------------------- #
+# Paths
+# --------------------------------------------------------------------------- #
+
+
+def test_absolute_and_anchor_links_are_not_paths() -> None:
+    text = "[a](https://example.com) [b](#section) [c](mailto:x@y.z) [d](docs/STATUS.md)"
+    assert link_targets(text) == {"docs/STATUS.md"}
+
+
+def test_a_link_resolves_against_the_linking_file(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"docs/A.md": "[b](B.md)", "docs/B.md": "x"})
+    assert check_path_references(repo) == []
+
+
+def test_a_backticked_repo_path_resolves_against_the_root(tmp_path: Path) -> None:
+    """Resolving this against `docs/` is the bug that produced 40 false positives."""
+    repo = _repo(tmp_path, {"docs/A.md": "see `skills/decision-making/`"}, dirs=("skills",))
+    (repo / "skills" / "decision-making").mkdir()
+    assert check_path_references(repo) == []
+
+
+def test_a_link_that_does_not_resolve_is_refused(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"docs/A.md": "[b](GONE.md)"})
+    issues = check_path_references(repo)
+    assert "`GONE.md` does not exist" in issues[0].message
+
+
+def test_an_anchor_is_stripped_before_resolving(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"docs/A.md": "[b](B.md#part)", "docs/B.md": "x"})
+    assert check_path_references(repo) == []
+
+
+def test_only_paths_under_a_real_top_level_directory_are_resolved() -> None:
+    top = {"docs", "skills"}
+    assert repo_paths(["decision_evals.triggers"], top) == set()
+    assert repo_paths(["vendor/thing.yaml"], top) == set()
+    assert repo_paths(["docs/STATUS.md"], top) == {"docs/STATUS.md"}
+
+
+def test_illustrative_paths_are_not_resolved() -> None:
+    top = {"results"}
+    assert repo_paths(["results/<skill>/<date>/README.md"], top) == set()
+    assert repo_paths(["results/**/summary.json"], top) == set()
+    assert repo_paths(["uv run de check"], top) == set()
+
+
+# --------------------------------------------------------------------------- #
+# The component table
+# --------------------------------------------------------------------------- #
+
+
+def test_a_table_matching_the_tree_passes(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme(("docs", "skills"))}, dirs=("docs", "skills"))
+    assert check_component_table(repo) == []
+
+
+def test_a_listed_component_that_does_not_exist_is_refused(tmp_path: Path) -> None:
+    """The defect the check was written for."""
+    repo = _repo(
+        tmp_path,
+        {"README.md": _readme(("docs", "preregistration"))},
+        dirs=("docs",),
+    )
+    issues = check_component_table(repo)
+    assert "lists `preregistration/`, which is not a directory" in issues[0].message
+
+
+def test_an_existing_component_that_is_not_listed_is_refused(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme(("docs",))}, dirs=("docs", "paper"))
+    issues = check_component_table(repo)
+    assert "`paper/` exists and the component table does not list it" in issues[0].message
+
+
+def test_dot_directories_are_not_components(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme(("docs",))}, dirs=("docs", ".github", ".venv"))
+    assert check_component_table(repo) == []
+
+
+def test_a_missing_readme_is_refused(tmp_path: Path) -> None:
+    assert check_component_table(tmp_path) == [DocIssue("README.md", "the README is missing")]
+    assert component_entries(tmp_path) == []
+
+
+def test_a_readme_without_the_section_is_refused(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": "# title\n\nno table here\n"})
+    issues = check_component_table(repo)
+    assert "has no `## What's actually here` section" in issues[0].message
+    assert component_entries(repo) == []
+
+
+def test_the_table_ends_at_the_next_heading(tmp_path: Path) -> None:
+    """A directory named in a later section is not a component."""
+    repo = _repo(
+        tmp_path,
+        {"README.md": _readme(("docs",), extra="## Later\n\n| `notthis/` | no |\n")},
+        dirs=("docs",),
+    )
+    assert component_entries(repo) == ["docs"]
+
+
+def test_the_table_may_be_the_last_section(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme(("docs",))}, dirs=("docs",))
+    assert component_entries(repo) == ["docs"]
+
+
+def test_a_cell_without_a_trailing_slash_is_not_a_component(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {"README.md": "## What's actually here\n\n| `de check` | not a directory |\n"},
+    )
+    assert component_entries(repo) == []
+
+
+# --------------------------------------------------------------------------- #
+# Composition
+# --------------------------------------------------------------------------- #
+
+
+def test_check_docs_runs_all_three(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {"README.md": _readme(("docs", "gone"), extra="Run `de nope`.\n\n[x](MISSING.md)")},
+        dirs=("docs",),
+    )
+    messages = " ".join(issue.message for issue in check_docs(repo, COMMANDS))
+    assert "is not a command" in messages
+    assert "does not exist" in messages
+    assert "is not a directory" in messages
+
+
+def test_census_counts_files_components_and_declarations(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": _readme(("docs",)),
+            "docs/STATUS.md": "x",
+            "pyproject.toml": '[tool.decision-evals.docs-absent-commands]\n"report" = "why"\n',
+        },
+        dirs=("docs",),
+    )
+    assert census(repo) == (2, 1, 1)
+
+
+def test_an_issue_reads_as_a_line() -> None:
+    assert str(DocIssue("README.md", "broken")) == "README.md: broken"

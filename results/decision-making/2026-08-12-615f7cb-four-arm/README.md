@@ -95,5 +95,6 @@ repository has never written down.
 python scripts/run_triggers.py --arm four --repeats 5
 ```
 
+**Answer key:** [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml) **v1**. Not comparable with a v2 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made.
 Prediction: [`notebook/2026-08-12-m4-prediction-one-entry-against-four.md`](../../../notebook/2026-08-12-m4-prediction-one-entry-against-four.md).
 Outcome: [`notebook/2026-08-12-m4-shadowing-did-not-appear-at-four.md`](../../../notebook/2026-08-12-m4-shadowing-did-not-appear-at-four.md).

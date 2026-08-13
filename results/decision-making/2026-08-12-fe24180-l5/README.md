@@ -91,5 +91,6 @@ not one measurement under two names.
 python scripts/run_triggers.py --description no-opener --repeats 5
 ```
 
+**Answer key:** [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml) **v1**. Not comparable with a v2 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made.
 Prediction: [`notebook/2026-08-12-l5-prediction-what-each-part-of-a-description-buys.md`](../../../notebook/2026-08-12-l5-prediction-what-each-part-of-a-description-buys.md).
 Outcome: [`notebook/2026-08-12-l5-the-boilerplate-does-the-work.md`](../../../notebook/2026-08-12-l5-the-boilerplate-does-the-work.md).

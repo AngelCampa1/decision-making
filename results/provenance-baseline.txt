@@ -1,0 +1,30 @@
+# Published run records exempt from the provenance gate.
+#
+# One run directory name per line, `#` for comments. Same semantics as
+# `paper/citations-baseline.txt`: exempt, and it MAY ONLY SHRINK. `de check`
+# fails when a listed run no longer has an issue, because a baseline that does
+# not shrink when work is done has stopped measuring anything.
+#
+# A line here is not "this is fine". It is "this defect is on the record and
+# nobody is pretending otherwise".
+
+# 365 calls, published 2026-08-12, with a write-up and no prediction entry.
+# This is the run CLAUDE.md describes as "a 365-call run launched with no bands
+# at all" -- one of four pre-registration slips that day, and the reason the
+# provenance gate exists. It cannot be repaired: a prediction written now would
+# postdate its data, which is the precise thing the gate refuses. It stays
+# baselined and published, because deleting it would destroy the evidence that
+# the failure happened.
+2026-08-12-40b6ba5
+
+# Not a skill run: the 2026-08-10 control-arm difficulty calibration, published
+# before this convention existed. Its provenance is real but lives in
+# `config.json` rather than a README -- corpus commit 0345304, both gate
+# results, `superseded_by` and `why_kept` are all recorded there, and the
+# write-up is `notebook/2026-08-10-the-baseline-number-and-two-more-defective-items.md`.
+# It carries no run commit and no prediction because the corpus it measures no
+# longer exists on main and cannot be regenerated. Writing it a README now
+# would mean authoring a run record after the fact, which is the shape of thing
+# this gate exists to refuse. Remove this line only if the directory is ever
+# re-published under the `<date>-<sha7>` convention.
+2026-08-10-baseline-corpus

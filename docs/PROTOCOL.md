@@ -55,11 +55,36 @@ expected; carrying that iteration into the verdict is not.
 
 ## 3. Pre-registration
 
+**Two mechanisms, and only one of them has ever run.** This section said
+otherwise until 2026-08-13, describing the unbuilt one in the present tense
+while every call on record went through neither. The correction is in
+[`notebook/2026-08-13-the-gate-that-was-documented-and-never-ran.md`](../notebook/2026-08-13-the-gate-that-was-documented-and-never-ran.md).
+
+### 3a. For `dev` and `screen` runs — the standing mechanism
+
+**A dated notebook prediction, committed before the run.** This is what every
+run in `results/` is registered by, and it is enforced: `de check`'s run
+provenance step refuses a published run whose README carries no `Prediction:`
+line, and refuses one whose prediction was not committed at or before the
+commit the run was made at. The commit graph is the whole check — a prediction
+that cannot be shown to predate its data is not evidence, it is a story with a
+date on it.
+
+The same step requires a run to declare the answer-key version its numbers were
+computed under, and refuses a README whose declared version disagrees with the
+records beside it.
+
+One run is baselined out of this rule by name, with its reason written down:
+`results/decision-making/2026-08-12-40b6ba5/`, the 365-call run published with
+no prediction. See [`results/provenance-baseline.txt`](../results/provenance-baseline.txt).
+
+### 3b. For `confirm` runs — built, tested, and never yet used
+
 Committed before any confirmation run, as `preregistration/<skill>-v<n>.yaml`:
 hypothesis, primary metric, item count, minimum detectable effect, alpha, guards,
 stopping rule, plus `skill_sha256` and `analysis_script_sha256`.
 
-A confirmation run refuses to start unless:
+A confirmation run **will refuse** to start unless:
 
 1. the pre-registration file is committed and not dirty;
 2. its commit is an ancestor of `HEAD` and predates everything in
@@ -68,6 +93,15 @@ A confirmation run refuses to start unless:
 4. `analysis_script_sha256` matches the analysis code;
 5. the recorded baseline accuracy falls inside the difficulty band;
 6. the projected cost is within budget.
+
+**The future tense is load-bearing.** `decision_evals.prereg` implements all six
+refusals and carries a 100% line-and-branch coverage floor, and **no caller
+reaches it.** No `preregistration/` file exists, because no confirmation run has
+been made — every call on record is a `screen`-tier trigger measurement. The
+module is declared under `[tool.decision-evals.unwired]` in `pyproject.toml`
+with the condition that would wire it, and `de check`'s integrity wiring step
+fails if that declaration is ever removed while the module stays unreachable —
+or if it stays after the module becomes reachable.
 
 Editing one word of a skill after pre-registration aborts the run with a diff.
 Proceeding requires writing `-v2.yaml`, which is a new, dated, visible commit.

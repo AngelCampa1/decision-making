@@ -33,5 +33,5 @@ not elicit one), `should_fire`, `route`.
 python scripts/run_triggers.py --repeats 5
 ```
 
-Labels: [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml).
+**Answer key:** [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml) **v1**. Not comparable with a v2 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made.
 Write-up: [`notebook/2026-08-12-five-repeats-firing-is-stable-routing-is-not.md`](../../../notebook/2026-08-12-five-repeats-firing-is-stable-routing-is-not.md).

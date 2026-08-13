@@ -100,5 +100,6 @@ repeats rather than 5.
 python scripts/run_triggers.py --entries 2 --repeats 5
 ```
 
+**Answer key:** [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml) **v1**. Not comparable with a v2 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made.
 Prediction: [`notebook/2026-08-12-m5-prediction-where-the-curve-turns.md`](../../../notebook/2026-08-12-m5-prediction-where-the-curve-turns.md).
 Outcome: [`notebook/2026-08-12-m5-the-floor-is-at-two-and-the-recall-curve-is-not-monotone.md`](../../../notebook/2026-08-12-m5-the-floor-is-at-two-and-the-recall-curve-is-not-monotone.md).

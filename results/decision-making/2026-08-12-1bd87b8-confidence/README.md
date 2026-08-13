@@ -91,6 +91,6 @@ both ways.
 python scripts/run_triggers.py --confidence
 ```
 
-Labels: [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml).
+**Answer key:** [`datasets/triggers/decision-making.yaml`](../../../datasets/triggers/decision-making.yaml) **v1**. Not comparable with a v2 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made.
 Prediction: [`notebook/2026-08-12-first-forecast-prediction.md`](../../../notebook/2026-08-12-first-forecast-prediction.md).
 Outcome: [`notebook/2026-08-12-the-first-forecast-outcome.md`](../../../notebook/2026-08-12-the-first-forecast-outcome.md).
