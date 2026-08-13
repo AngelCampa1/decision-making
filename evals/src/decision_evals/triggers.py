@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import json
 import re
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
@@ -31,6 +31,26 @@ from decision_evals.unbundle import UnbundleError, router_rows
 #: The four procedures the shipped router offers. The default whitelist for
 #: :func:`decision`; an M5 arm overrides it with its own entry names.
 PROCEDURES: Final = ("ledger", "fit", "cascade", "timing")
+
+
+def routing_is_by_name(offered: Iterable[str]) -> bool:
+    """Whether exact-name routing accuracy means anything for this arm.
+
+    :func:`evaluate_routing` compares the tool the model named against the
+    labelled procedure, string against string. That is a routing measure only
+    when the arm *offers* the procedure names. An M5 arm at n=2 offers
+    ``ledger-fit`` and ``cascade-timing``, so no answer can match and the report
+    reads ``accuracy 0.000`` — not because routing failed but because nothing
+    could have counted.
+
+    This is the parser whitelist defect one layer out. On 2026-08-12 that bug
+    discarded the offered names on the way *in* and voided 365 calls; this one
+    grades them on the way *out* against names the arm never offered. Both
+    produce a clean run and a zero. The outcome that survives a changing entry
+    count is ``covers`` — did the named entry contain the labelled procedure —
+    and its chance level moves with ``n``, so it is not comparable across arms.
+    """
+    return all(name in PROCEDURES for name in offered)
 
 
 @dataclass(frozen=True)

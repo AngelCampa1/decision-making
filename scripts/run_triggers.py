@@ -54,6 +54,7 @@ from decision_evals.providers.claude_code import (  # noqa: E402
 )
 from decision_evals.skills import parse_skill  # noqa: E402
 from decision_evals.triggers import (  # noqa: E402
+    PROCEDURES,
     TRIGGERS_DIR,
     TriggerCase,
     Verdict,
@@ -61,6 +62,7 @@ from decision_evals.triggers import (  # noqa: E402
     evaluate,
     evaluate_routing,
     load_trigger_set,
+    routing_is_by_name,
 )
 from decision_evals.unbundle import (  # noqa: E402
     DESCRIPTION_VARIANTS,
@@ -69,8 +71,6 @@ from decision_evals.unbundle import (  # noqa: E402
     description_variant,
     entries,
 )
-
-PROCEDURES = ("ledger", "fit", "cascade", "timing")
 
 #: The judge sees the skill's own description and router table and nothing else.
 #: Not the procedure bodies: what the harness has in context when it decides
@@ -524,12 +524,27 @@ def main() -> int:
         print(f"  missed: {', '.join(report.missed)}")
 
     print(f"\n{'=' * 60}\nROUTING  (secondary -- the easier question)\n{'=' * 60}")
-    print(
-        f"  accuracy   {routing.accuracy:.3f} over {routing.n_scored} labelled "
-        f"({routing.unlabelled} excluded as open)"
-    )
-    for case_id, wanted, got in routing.confusions:
-        print(f"    {case_id}: wanted {wanted}, got {got}")
+    if entry_names is not None and not routing_is_by_name(entry_names):
+        # Exact-name accuracy here is guaranteed 0.000 and says nothing: this arm
+        # offers entry names the labels cannot equal. Report ``covers`` instead.
+        landed = [row for row in done.values() if row["covers"] is not None]
+        hits = sum(1 for row in landed if row["covers"])
+        chance = 1 / len(entry_names)
+        print(f"  NOT REPORTED as accuracy -- this arm offers {', '.join(entry_names)},")
+        print("  which no label can equal. Exact-name accuracy would read 0.000")
+        print("  whatever the model did. The outcome for this arm is `covers`.")
+        print(
+            f"\n  covers     {hits / len(landed):.3f} over {len(landed)} fired, labelled "
+            f"call(s), chance {chance:.3f}"
+        )
+        print("  Not comparable across n: chance moves with the number of entries.")
+    else:
+        print(
+            f"  accuracy   {routing.accuracy:.3f} over {routing.n_scored} labelled "
+            f"({routing.unlabelled} excluded as open)"
+        )
+        for case_id, wanted, got in routing.confusions:
+            print(f"    {case_id}: wanted {wanted}, got {got}")
 
     print(f"\nexcluded {len(unparseable)}: {', '.join(unparseable) or 'none'}")
     return 0

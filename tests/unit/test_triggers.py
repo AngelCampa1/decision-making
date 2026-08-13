@@ -9,6 +9,7 @@ import yaml
 
 from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.triggers import (
+    PROCEDURES,
     TriggerSetError,
     _check_routes,
     check_trigger_sets,
@@ -16,6 +17,7 @@ from decision_evals.triggers import (
     evaluate,
     evaluate_routing,
     load_trigger_set,
+    routing_is_by_name,
 )
 
 #: The set for the skill that ships. It was `evidence-ledger.yaml` until
@@ -407,3 +409,34 @@ class TestVerdictParsingHonoursTheOfferedNames:
         fired, procedure, _ = decision('{"fire": false, "tool": "ledger-fit"}')
         assert fired is False
         assert procedure is None
+
+
+class TestRoutingIsByName:
+    """The same defect one layer out, found scoring M5 on 2026-08-12.
+
+    The two-entry run finished clean and its report read ``routing accuracy
+    0.000`` over 14 labelled items. Nothing had failed: the arm offers
+    ``ledger-fit`` and ``cascade-timing``, the labels say ``ledger`` and
+    ``cascade``, and no answer the model could give would have matched. The
+    parser bug discarded the offered names on the way in; this one graded them
+    against names never offered on the way out. Both read as a total failure.
+    """
+
+    def test_the_shipped_procedure_names_are_gradeable_by_name(self) -> None:
+        assert routing_is_by_name(PROCEDURES)
+
+    def test_a_four_entry_arm_is_gradeable_by_name(self) -> None:
+        """n=4 partitions one procedure per entry, so the names coincide."""
+        assert routing_is_by_name(("ledger", "fit", "cascade", "timing"))
+
+    def test_a_two_entry_arm_is_not(self) -> None:
+        assert not routing_is_by_name(("ledger-fit", "cascade-timing"))
+
+    def test_one_unmatchable_name_is_enough(self) -> None:
+        """A partition need not be uniform; any merged entry voids the measure."""
+        assert not routing_is_by_name(("ledger", "fit", "cascade-timing"))
+
+    def test_an_empty_offer_is_vacuously_by_name(self) -> None:
+        """No entries means no arm to grade; the caller's ``is not None`` gate
+        decides, and this must not raise."""
+        assert routing_is_by_name(())

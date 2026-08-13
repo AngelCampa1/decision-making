@@ -283,7 +283,8 @@ read when it fires.
 | M2 | Measure false-fire rate: how often does `decision-making` activate when it should not, and how often does it miss? This is the number the description controls and nothing in this repo measures it yet. |
 | M3 | Measure whether routing works: given a decision, does the model read the *right* one of the four files? A router that always reads `ledger.md` is one skill wearing four. |
 | M4 | Race one-entry-with-routing against four-separate-skills. **Build the four-skill arm from the *current* procedure files** — the four bodies verbatim, wrapped in four `SKILL.md` files with four descriptions — so that structure and description are the only things that vary. Do **not** use the historical four-skill tree at `9a16b18` as an arm: the prose has moved since, and a race against it would vary structure, content and description at once, which is uninterpretable for a question about structure. This is the experiment that would justify or overturn the one-entry choice, which is currently an extrapolation from a 202-skill regime down to four. |
-| M5 | Bundle-size curve: 2 procedures, 4, 8. Where does routing accuracy break? |
+| M5 | Bundle-size curve: 2 procedures, 4, 8. Where does routing accuracy break? **Run at n=2 on 2026-08-12** — see below. n=8 needs four procedures that do not exist. |
+| M6 | **Which** procedures are paired, holding the count fixed. M5's partition is contiguous by construction so that the arm is a function of `n` alone; pairing `cascade` with `timing` is a hypothesis about their overlap, and the router table already collides on exactly those two. |
 
 **Hypothesis falsifier.** If routing accuracy is at chance, the bundle is a
 single long skill with extra steps, and the honest move is to merge the four
@@ -328,6 +329,48 @@ itself with a 202-skill citation. Prediction registered before the run in
 **What it cannot show: anything about n=202.** Four is four. A null is evidence
 that shadowing has not begun at four descriptions on this instrument, not
 evidence against the published result.
+
+#### M5, run at n=2 — 2026-08-12
+
+365 calls, 73 cases × 5 repeats, one arm. Results in
+[`results/decision-making/2026-08-12-c2673c5-m5-two-entries/`](../results/decision-making/2026-08-12-c2673c5-m5-two-entries/),
+outcome in
+[`notebook/2026-08-12-m5-the-floor-is-at-two-and-the-recall-curve-is-not-monotone.md`](../notebook/2026-08-12-m5-the-floor-is-at-two-and-the-recall-curve-is-not-monotone.md).
+
+| | n=1 | **n=2** | n=4 |
+|---|---|---|---|
+| firing accuracy | 0.956 | **0.940** | 0.951 |
+| false-positive rate | 0.018 | **0.000** | 0.000 |
+| recall | 0.878 | **0.756** | 0.800 |
+
+**The conservatism floor is reached at two entries.** M4's zero FPR was
+explained structurally — with separate entries, declining to name a tool *is*
+declining to fire — and that mechanism is not an artefact of a four-way choice.
+Five of six registered bands hit; the miss is recall, and **recall is not
+monotone in entry count**, which this run does not claim to explain. n=2 is also
+the arm with the worst prose, a confound registered before the run, so the clean
+contrast in the curve remains M4's n=1 against n=4.
+
+**Together M4 and M5 say entry count does not change how well this description
+selects — only how conservative the selection is.** Three runs on 2026-08-12
+(M4 by structure, L5 by content, M5 by count) moved firing accuracy nowhere and
+each moved the arm along a precision/recall frontier. **Which point on that
+frontier is wanted is a product decision nobody has made**, and it now blocks the
+interpretation of every arm this track has run.
+
+**Two instrument defects, both of which produced a plausible number rather than
+a crash.** The parser whitelist discarded the offered entry names on the way in
+and voided 365 calls; the routing report then graded the offered names on the way
+out against names the arm never offered, printing `accuracy 0.000`. Both are
+fixed with tests (`decision(text, allowed)`, `routing_is_by_name`). **The lesson
+for the rest of the programme is that this harness fails silently and correctly-
+shaped**, so every new outcome needs a check that its estimator can, in
+principle, return a non-zero value for this arm.
+
+**Reliability, and a design change it earns.** ICC 0.833, 3 of 73 items with any
+scatter, and the voided run agrees with the repaired one on 355 of 365 firing
+decisions. `repeats_for_reliability` asks for 2 repeats at r=0.9. **Future
+trigger arms run 2 repeats, not 5**, and spend the quota on more arms.
 
 #### M2 and M3, first measurement — 2026-08-12
 

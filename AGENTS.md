@@ -54,6 +54,17 @@ false positives, more misses. Neither arm dominates, and which one is better
 depends on whether a missed decision or an unwanted interruption is the more
 expensive error, which nobody here has written down.
 
+**M5 then ran the same four procedures across two entries, and the floor is
+already there at two** — FPR 0.000 in all five repeats, firing accuracy 0.940
+against the bundle's 0.956 (paired Wilcoxon p = 0.50). So the effect is not a
+four-way artefact. Recall is *not* monotone in entry count (0.878 → 0.756 →
+0.800) and M5 does not claim to explain that; n=2 is also the arm with the worst
+prose, a confound registered before the run.
+
+**Across M4, M5 and L5: nothing moved how well this description discriminates.
+Structure, content and entry count each moved only where on the
+precision/recall frontier it sits.**
+
 **So the block below stays, and its justification changes.** One entry is not
 retired on one run at one model tier — that would be acting on the measurement
 that motivated the question. But the 202-skill result may no longer be cited as
@@ -189,14 +200,25 @@ If you are an agent contributing here rather than a user installing the skills:
   silently makes every earlier number incomparable with every later one.
 - `notebook/` is append-only and dated. Predictions go in *before* runs. If a
   prediction turns out wrong, the entry says so rather than being edited.
-- **A registered band names its estimator, not just its number.** Three
-  pre-registration slips happened here on 2026-08-12 alone: a band asking for
-  `p_discordant` on two task families that have no correctness measure available,
-  so it could not be scored at all; an entry written after its run had started;
-  and a 365-call run launched with no bands at all. Each was recorded rather than
+- **A registered band names its estimator and its denominator, not just its
+  number.** Four pre-registration slips happened here on 2026-08-12 alone: a band
+  asking for `p_discordant` on two task families that have no correctness measure
+  available, so it could not be scored at all; an entry written after its run had
+  started; a 365-call run launched with no bands at all; and M5's `covers` band,
+  which named the measure but not what it divided by — 0.743 over all labelled
+  calls, 0.895 over the calls that fired. Both fell inside the band, so that one
+  cost nothing, which is luck rather than method. Each was recorded rather than
   quietly dropped, which is the minimum — but the fix is upstream. Before
-  starting a run, write down what will be computed, from which records, by which
-  function. If that sentence cannot be written, the run is not ready.
+  starting a run, write down what will be computed, from which records, over
+  which denominator, by which function. If that sentence cannot be written, the
+  run is not ready.
+- **An estimator that cannot return a non-zero value is not a measurement, and
+  it does not announce itself.** Two defects in the trigger instrument on
+  2026-08-12 each produced a clean run, a full checkpoint and a plausible zero:
+  a parser whitelist that discarded every tool name an n=2 arm could offer, and a
+  routing report that graded those names against names the arm never offered.
+  Nothing crashed and firing was correct in both. **Before believing an outcome,
+  check that some possible response would have scored above zero for this arm.**
 - **And the estimator must be checked against the arm structure, not only against
   the records.** On 2026-08-12 a 50-pair run produced 45/50 against 23/50 with
   discordance 24-to-2 in the predicted direction — a clean replication, and
