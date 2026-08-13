@@ -97,13 +97,27 @@ NEGATIVES_PER_POSITIVE: Final = 2
 #: ``MAX_LENGTH_SEPARABILITY = 0.70`` would have passed it.
 SEPARABILITY_BAND: Final = (0.40, 0.60)
 
-#: How accurate a depth-2 decision stump over :data:`FEATURES` may be.
+#: How far a depth-2 stump over :data:`FEATURES` may beat the majority class.
 #:
 #: A battery of single features misses interactions: "long **and** first-person"
 #: could solve a corpus where neither alone does. The stump is fitted and scored
 #: on the same data on purpose -- it is an upper bound on what a shortcut can
 #: reach, so optimism is the conservative direction here.
-MAX_STUMP_ACCURACY: Final = 0.70
+#:
+#: **Lift, not accuracy, and the absolute version this replaces was a scale
+#: error I made and then measured.** The first form of this gate was a flat
+#: ``MAX_STUMP_ACCURACY = 0.70``, borrowed from the AUC target. Accuracy is not
+#: comparable across corpora with different base rates: version 2 was 77%
+#: negative, so predicting "never fire" scored 0.767 there, while version 3 is
+#: two negatives per positive and the same empty rule scores 0.667. A flat
+#: threshold therefore asked version 3 for 3.3 points of headroom and version 2
+#: for 13.3, which is not one gate.
+#:
+#: 0.10 is the accuracy analogue of the +/-0.10 the per-feature AUC band already
+#: allows, so the two gates say the same thing on their own scales. For
+#: reference, version 2's word-count ruler scored 0.890 against a 0.767 baseline
+#: -- a lift of **0.123**, which is the defect this whole track exists to remove.
+MAX_STUMP_LIFT: Final = 0.10
 
 _WORD = re.compile(r"[A-Za-z']+")
 _SHOULD = re.compile(r"\bshould (?:i|we)\b", re.IGNORECASE)
@@ -412,10 +426,24 @@ def _check_shortcuts(trigger_set: TriggerSet, path: Path) -> list[str]:
         if not low <= score <= high
     ]
     stump = stump_accuracy(trigger_set)
-    if stump > MAX_STUMP_ACCURACY:
+    baseline = majority_baseline(trigger_set)
+    if stump - baseline > MAX_STUMP_LIFT + 1e-9:
         issues.append(
-            f"{path}: a depth-2 stump over the feature battery reaches {stump:.3f} accuracy, "
-            f"above {MAX_STUMP_ACCURACY}. Two questions about punctuation and word counts "
-            "should not get most of the way to the answer."
+            f"{path}: a depth-2 stump over the feature battery reaches {stump:.3f} accuracy "
+            f"against a majority-class baseline of {baseline:.3f} -- a lift of "
+            f"{stump - baseline:.3f}, above {MAX_STUMP_LIFT}. Two questions about punctuation "
+            "and word counts should not get most of the way to the answer."
         )
     return issues
+
+
+def majority_baseline(trigger_set: TriggerSet) -> float:
+    """Accuracy of always guessing the commoner label.
+
+    The number every other accuracy in a trigger report should be read against,
+    and it is not 0.5. At two negatives per positive, "never fire" scores 0.667
+    while looking like a model that has learnt caution.
+    """
+    positives = len(trigger_set.positives)
+    total = len(trigger_set.cases)
+    return max(positives, total - positives) / total if total else 0.0

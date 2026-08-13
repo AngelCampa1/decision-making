@@ -1,0 +1,1053 @@
+# Band L — 200 to 400 words. Several artefacts pasted in, then an ask.
+#
+# **The three members of each triple share a body.** The pasted material is
+# byte-identical across the positive and its two negatives; only the sentence at
+# the end differs. That is the whole construction: length, paste cues, register,
+# first-person rate and subject matter are all held fixed, so the label can only
+# come from what is being asked for.
+#
+# It also means one badly written body damages three items rather than one, so
+# adjudication is at the body level and a retired body retires its triple.
+#
+# The bodies carry artefact texture on purpose -- timestamps, copy-paste seams,
+# numbers written two different ways, sentences that trail off. Prose written to
+# be read is the tell that a turn was authored for a benchmark.
+
+positive:
+  - id: l01p
+    triple: l01
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    route: ledger
+    turn: >-
+      Pasting everything below because I've been going round in circles.
+
+      From Priya (recruiter), Tue 14:02 — "Confirming: base 96,000, 15% target
+      bonus, 4-year vest with a 1-year cliff. They'd want you to start 1 Oct.
+      Rob is very keen."
+
+      From Priya, Wed 09:41 — "Small correction on the below, the bonus is
+      'discretionary' in the contract language, target 15% but not guaranteed.
+      Sorry, I had that from the old brief."
+
+      My current: 88,500 base, bonus paid every year I've been here (7%, 9%,
+      6%), pension 8% employer vs their 4%.
+
+      From Dan (works there, ex-colleague), Thu — "honestly? team's fine. Rob is
+      the reason to come and the reason to worry, he's been there 14 months and
+      the last two directors did about the same. do not join for Rob."
+
+      From my partner, Thu 22:10 — "whatever you want. genuinely. but you said
+      in March you were done with startups and I'm not going to be the one who
+      reminds you in a year."
+
+      Glassdoor: 3.1, most of the bad ones about a reorg in Jan.
+
+      Also: my current place has just put me on the platform rebuild which is
+      the first thing in two years I've actually wanted to do, and that was
+      decided the day before Priya called.
+
+      I have to answer by Monday. What should I do?
+    why: >-
+      Six sources, one decision, and most of it inert. The correction on the
+      bonus and Dan's line about Rob are the parts that bear on it; the Glassdoor
+      score and the pension percentages are the parts that look like they do.
+  - id: l02p
+    triple: l02
+    band: l
+    domain: money
+    stakes: high
+    ask: implicit
+    route: ledger
+    turn: >-
+      I don't know what to do with this and it's been sitting for three weeks.
+
+      Solicitor (Hallam & Rowe), 2 July — "The estate cannot be distributed
+      until the s.27 notice period expires on 14 August. Any distribution before
+      that date is at the personal risk of the personal representatives."
+
+      Estate agent, 9 July — "Realistically 385–400 in current market. There's
+      an offer on the table at 372 from a chain-free buyer who has been waiting
+      since May. I would take it."
+
+      Second agent, 11 July — "I'd list at 425. The first agent has undervalued
+      it, in my view."
+
+      My brother, WhatsApp, 12 July — "just take the 372, I'm not doing another
+      winter of this"
+
+      My aunt, same group, 12 July — "your grandmother said the house was to
+      stay in the family. I was there."
+
+      My brother, 13 July — "she said a lot of things"
+
+      There is no will provision about keeping it. I've read the will four times.
+
+      The buyer's solicitor emailed yesterday asking for an indication by Friday
+      or they're going to look elsewhere. My brother and I are the two
+      executors. My aunt is a beneficiary of 15% and is not an executor.
+
+      I've read all of this so many times and I genuinely could not tell you
+      what the actual question is any more.
+    why: >-
+      Seven sources, a deadline, and the turn ends by saying the pile is the
+      problem. No question mark anywhere. This is the ledger case in the form it
+      actually arrives in.
+  - id: l03p
+    triple: l03
+    band: l
+    domain: health
+    stakes: high
+    ask: embedded
+    route: fit
+    turn: >-
+      Every single thing I read says the same thing, which is why I'm asking.
+
+      NHS page: "Most people with this are advised to start treatment within
+      three months of diagnosis, as outcomes are strongly associated with early
+      initiation."
+
+      The consultant's letter, 3 June — "I would recommend commencing therapy at
+      the earliest opportunity. The evidence for early intervention is good."
+
+      Forum post, 400 replies, top comment — "Started in month 2. Best decision
+      I made. Don't wait."
+
+      Given all that, do I just start?
+
+      The bit nobody addresses: I'm the only carer for my father, who has
+      dementia and does not cope with any change in who is in the house. The
+      first eight weeks of this treatment I would not be able to lift him or
+      drive. Respite is 6–9 months on the list; I applied in April and I'm still
+      "under assessment". My sister is in Auckland and can do two weeks in
+      November, which is the earliest she can get leave.
+
+      The consultant knows about my father in the sense that it's in the notes.
+      It hasn't come up in an appointment.
+
+      I'm not asking whether the general advice is right. I'm sure it is. I'm
+      asking whether it's right for me, given that the eight weeks it needs are
+      eight weeks I do not have until November, and November is month five.
+    why: >-
+      The generic advice is stated three times and is probably correct. One fact
+      about this person may overturn it, and the turn names that structure
+      itself. The question sits in the middle with the deciding facts after it.
+  - id: l04p
+    triple: l04
+    band: l
+    domain: relationships
+    stakes: high
+    ask: explicit
+    route: cascade
+    turn: >-
+      Trying to work out what telling her actually sets off.
+
+      Background: my mother-in-law has been giving us money since 2023. It
+      started as "help with the deposit" and it's now about 900 a month, which
+      is roughly what our childcare costs. My wife's position is that it's a
+      gift and her mother can afford it. That is broadly true.
+
+      Text from her, 4 Aug — "just so you know I've moved the standing order to
+      the 3rd, the 28th was catching me short"
+
+      Text from her, 11 Aug — "is Ellie's nursery going up again in Sept? no
+      pressure just want to plan"
+
+      What I've not told my wife: I was made redundant on 29 July. I've got
+      three months of notice paid and I have not started looking properly. I've
+      been going out at 8 and coming back at 6.
+
+      Also unsaid: her brother asked me in June whether we were "still taking
+      money off Mum" and I said no.
+
+      If I tell my wife now, she tells her mother within a day — they speak
+      every morning. Her mother will offer more. My wife will accept, because
+      she will be frightened. Her brother will find out I lied to him in June,
+      not about the redundancy but about the money.
+
+      Should I tell her now, or find the job first and tell her as one thing
+      instead of two?
+    why: >-
+      The action looks obviously right and every difficulty is downstream of it.
+      The turn traces two steps of the chain itself and asks about the third.
+  - id: l05p
+    triple: l05
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: timing
+    turn: >-
+      We've decided to do the auth migration — that's not up for debate any
+      more, it was signed off in June and the old provider's contract ends 31
+      March. The only question left is when we start.
+
+      Notes from the planning doc:
+
+      - cutover needs a 4-hour window with logins disabled
+      - Anders wrote the runbook and is on parental leave from 12 Sept, back
+        early Jan
+      - the compliance audit fieldwork is 6–24 Oct, and they specifically asked
+        us not to change auth during it
+      - Black Friday freeze is 20 Nov – 2 Dec, no exceptions, that came from
+        Sasha
+      - the new provider's onboarding engineer is allocated to us until 30 Nov
+        and after that we're on standard support
+      - we have never done a cutover of this shape before
+
+      Slack, Anders, 2 Sept — "runbook's done, I've written it so someone else
+      can run it but I'd rather be here"
+
+      Slack, Sasha, 3 Sept — "I don't want this in Q4 at all if we can avoid it"
+
+      Slack, Priya (compliance), 3 Sept — "October is genuinely the worst month
+      for us, anything either side is fine"
+
+      January is after the contract renewal date for the old provider, which
+      auto-renews for twelve months on 31 Jan unless we give notice by 31 Dec.
+
+      So: do we go before Anders leaves, or wait for him?
+    why: >-
+      The direction is settled and said to be settled. Every constraint is about
+      the moment, and the auto-renewal is the undo price.
+  - id: l06p
+    triple: l06
+    band: l
+    domain: career
+    stakes: high
+    ask: implicit
+    route: fit
+    turn: >-
+      Notes to myself, mostly, but I'd like a view.
+
+      The standard line on going freelance is: have 6 months of expenses, line
+      up two clients before you resign, and expect 18 months before you're
+      earning what you were. I've read that in about nine places and the people
+      saying it are people I respect.
+
+      Where I actually am:
+
+      - 4 months of expenses, not 6
+      - one client verbally committed, at roughly 60% of my current income
+      - my residence permit is tied to my employment. Switching to the
+        self-employed permit needs proof of two contracts and 24 months of
+        accounts, or a lump sum in the account of about 31,000 which I do not
+        have
+      - the lawyer's email, 22 July: "The transition is possible but you would
+        be without status for the period between resignation and approval,
+        typically 3–5 months. I would not advise resigning first."
+      - my current employer has said they'd take me back as a contractor. They
+        cannot sponsor a contractor.
+
+      My wife's job does not carry status for me — we married after we both
+      arrived and her permit is the same category as mine.
+
+      Everyone who has given me the six-months-of-runway advice is a citizen of
+      the country they live in. That is not a criticism of them. It is just that
+      the thing that decides this for me is not in the advice at all.
+    why: >-
+      A general rule, quoted accurately, against a fact that removes its
+      premise. The last two lines name the structure without naming a procedure,
+      and there is no question mark.
+  - id: l07p
+    triple: l07
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    route: cascade
+    turn: >-
+      The flat itself is fine. It's what buying it commits us to that I can't
+      see the end of.
+
+      Numbers: 268,000 asking, we'd offer 262. Deposit 41,000, which is all of
+      our savings plus 6,000 from my parents that they have called a gift in
+      writing because the lender wanted that.
+
+      Survey, p.4 — "The flat is one of four in a converted Victorian property.
+      Freehold is held by the four leaseholders through a management company.
+      Roof covering is at the end of its serviceable life; replacement within
+      2–5 years should be anticipated. Indicative cost £28,000–£40,000 for the
+      whole building."
+
+      Management company accounts: reserve fund 3,100. Four flats. So our
+      quarter of a 34k roof is about 8,500 minus whatever the reserve covers,
+      call it 7,700, and there is no mechanism to make the ground-floor
+      leaseholder pay if he says no, which the seller's solicitor has been
+      careful not to comment on.
+
+      Email from the estate agent, 15 Aug — "The vendor is aware of the roof and
+      has priced accordingly. Three other parties are interested."
+
+      My parents' 6,000 is not really a gift. Nobody has said that out loud.
+
+      If we buy this we are also buying: a management company we sit on, a
+      neighbour dispute we haven't had yet, and a conversation with my parents
+      in about four years. What does saying yes here actually commit us to?
+    why: >-
+      The purchase is straightforward and the question is explicitly what it
+      starts and what it spends. Asks for the chain, not the answer.
+  - id: l08p
+    triple: l08
+    band: l
+    domain: health
+    stakes: low
+    ask: implicit
+    route: ~
+    turn: >-
+      Not sure this is even a question but I keep not doing anything about it.
+
+      The GP, 12 May — "Bloods are unremarkable. I'd suggest we review in six
+      months unless symptoms change."
+
+      Me, in the notes app, 3 June — "tired again. 3 days this week. not the
+      same as March"
+
+      Me, 19 June — "fine all week"
+
+      Me, 2 July — "bad. cancelled swimming. felt stupid about it"
+
+      Me, 5 Aug — "walked to the station and back, fine. why do I write down the
+      bad ones and not this"
+
+      Me, 11 Aug — "two bad days. sister asked again. told her I'd booked it. I
+      have not booked it"
+
+      Me, 28 July — "reading back over this and I can't tell if it's worse or if
+      I'm just recording it more"
+
+      The private clinic quoted 340 for the panel the GP said wasn't indicated.
+      My sister has been on at me to book it since June. She had something
+      similar and it turned out to be nothing, which she says is exactly why I
+      should get it done.
+
+      The six-month review is 12 November. That's three and a half months away.
+
+      I don't have a strong feeling either way and that's sort of the problem.
+      If it were clearly serious I'd go, and if it were clearly nothing I'd stop
+      writing it down.
+    why: >-
+      A genuine open decision with low stakes and no dominant difficulty — the
+      pile is small, the person is the variable, the consequences are mild and
+      the timing matters a little. Deliberately not routable, like v2's p12.
+  - id: l09p
+    triple: l09
+    band: l
+    domain: relationships
+    stakes: high
+    ask: embedded
+    route: ledger
+    turn: >-
+      Everyone has an opinion and I've collected them all, which has helped
+      exactly nothing.
+
+      Social worker's assessment, 8 July — "Mrs Okonjo demonstrates capacity to
+      make decisions regarding her care and has expressed a clear preference to
+      remain at home. Care needs are currently assessed as moderate and are
+      likely to increase."
+
+      Same document, p.6 — "The current package (2 visits daily) is at the upper
+      limit of what can be funded without a reassessment."
+
+      My brother, 14 July — "she says she wants to stay home because she doesn't
+      know what the alternative looks like. take her to see one."
+
+      My sister, 15 July — "if you move her she will die within the year, and
+      you both know it"
+
+      Mum, on the phone, 16 July, more or less verbatim — "I'm not going
+      anywhere. Don't you dare. Where's Tunde?" (Tunde is my father. He died in
+      2019.)
+
+      Mum, on the phone, 22 July — completely lucid for forty minutes, asked
+      about my daughter's exams, asked me not to let her become a burden.
+
+      The fall in June was the second one. The first was March and neither was
+      serious.
+
+      Do we move her? I've written that sentence out and I don't think it's
+      right either, because the moving is not the thing we're actually deciding
+      this month — the reassessment is, and it's due by the 30th.
+    why: >-
+      Six sources that disagree, and the turn's last paragraph is a person
+      noticing that the question they asked is not the question in front of
+      them. That is the ledger's job stated by the asker.
+
+negative:
+  - id: l01n1
+    triple: l01
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      Pasting everything below because I've been going round in circles.
+
+      From Priya (recruiter), Tue 14:02 — "Confirming: base 96,000, 15% target
+      bonus, 4-year vest with a 1-year cliff. They'd want you to start 1 Oct.
+      Rob is very keen."
+
+      From Priya, Wed 09:41 — "Small correction on the below, the bonus is
+      'discretionary' in the contract language, target 15% but not guaranteed.
+      Sorry, I had that from the old brief."
+
+      My current: 88,500 base, bonus paid every year I've been here (7%, 9%,
+      6%), pension 8% employer vs their 4%.
+
+      From Dan (works there, ex-colleague), Thu — "honestly? team's fine. Rob is
+      the reason to come and the reason to worry, he's been there 14 months and
+      the last two directors did about the same. do not join for Rob."
+
+      From my partner, Thu 22:10 — "whatever you want. genuinely. but you said
+      in March you were done with startups and I'm not going to be the one who
+      reminds you in a year."
+
+      Glassdoor: 3.1, most of the bad ones about a reorg in Jan.
+
+      Also: my current place has just put me on the platform rebuild which is
+      the first thing in two years I've actually wanted to do, and that was
+      decided the day before Priya called.
+
+      Work out the total cash difference over three years, using my actual bonus
+      history as the estimate for theirs, and include the pension.
+    why: >-
+      The identical pile. The ask is arithmetic over it with a single right
+      answer, and the numbers needed are all present.
+  - id: l01n2
+    triple: l01
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Pasting everything below because I've been going round in circles.
+
+      From Priya (recruiter), Tue 14:02 — "Confirming: base 96,000, 15% target
+      bonus, 4-year vest with a 1-year cliff. They'd want you to start 1 Oct.
+      Rob is very keen."
+
+      From Priya, Wed 09:41 — "Small correction on the below, the bonus is
+      'discretionary' in the contract language, target 15% but not guaranteed.
+      Sorry, I had that from the old brief."
+
+      My current: 88,500 base, bonus paid every year I've been here (7%, 9%,
+      6%), pension 8% employer vs their 4%.
+
+      From Dan (works there, ex-colleague), Thu — "honestly? team's fine. Rob is
+      the reason to come and the reason to worry, he's been there 14 months and
+      the last two directors did about the same. do not join for Rob."
+
+      From my partner, Thu 22:10 — "whatever you want. genuinely. but you said
+      in March you were done with startups and I'm not going to be the one who
+      reminds you in a year."
+
+      Glassdoor: 3.1, most of the bad ones about a reorg in Jan.
+
+      Also: my current place has just put me on the platform rebuild which is
+      the first thing in two years I've actually wanted to do, and that was
+      decided the day before Priya called.
+
+      I've already decided to turn it down. Summarise the above into six lines I
+      can send my partner so she knows what I was weighing.
+    why: >-
+      The decision is stated as made, and the ask is a summary of the same pile
+      for somebody else to read.
+  - id: l02n1
+    triple: l02
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      I don't know what to do with this and it's been sitting for three weeks.
+
+      Solicitor (Hallam & Rowe), 2 July — "The estate cannot be distributed
+      until the s.27 notice period expires on 14 August. Any distribution before
+      that date is at the personal risk of the personal representatives."
+
+      Estate agent, 9 July — "Realistically 385–400 in current market. There's
+      an offer on the table at 372 from a chain-free buyer who has been waiting
+      since May. I would take it."
+
+      Second agent, 11 July — "I'd list at 425. The first agent has undervalued
+      it, in my view."
+
+      My brother, WhatsApp, 12 July — "just take the 372, I'm not doing another
+      winter of this"
+
+      My aunt, same group, 12 July — "your grandmother said the house was to
+      stay in the family. I was there."
+
+      My brother, 13 July — "she said a lot of things"
+
+      There is no will provision about keeping it. I've read the will four times.
+
+      The buyer's solicitor emailed yesterday asking for an indication by Friday
+      or they're going to look elsewhere. My brother and I are the two
+      executors. My aunt is a beneficiary of 15% and is not an executor.
+
+      What is the s.27 notice actually for, and what is the personal risk the
+      solicitor is referring to?
+    why: >-
+      The identical pile, and the ask is what a legal term means. Determinate
+      answer, no recommendation wanted.
+  - id: l02n2
+    triple: l02
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      I don't know what to do with this and it's been sitting for three weeks.
+
+      Solicitor (Hallam & Rowe), 2 July — "The estate cannot be distributed
+      until the s.27 notice period expires on 14 August. Any distribution before
+      that date is at the personal risk of the personal representatives."
+
+      Estate agent, 9 July — "Realistically 385–400 in current market. There's
+      an offer on the table at 372 from a chain-free buyer who has been waiting
+      since May. I would take it."
+
+      Second agent, 11 July — "I'd list at 425. The first agent has undervalued
+      it, in my view."
+
+      My brother, WhatsApp, 12 July — "just take the 372, I'm not doing another
+      winter of this"
+
+      My aunt, same group, 12 July — "your grandmother said the house was to
+      stay in the family. I was there."
+
+      My brother, 13 July — "she said a lot of things"
+
+      There is no will provision about keeping it. I've read the will four times.
+
+      My brother and I have agreed to accept the 372. Draft the reply to the
+      buyer's solicitor, and a separate short message to my aunt telling her,
+      which does not sound like it was written by a lawyer.
+    why: >-
+      The decision is made by the two executors who can make it, and the ask is
+      two pieces of writing.
+  - id: l03n1
+    triple: l03
+    band: l
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Every single thing I read says the same thing, which is why I'm asking.
+
+      NHS page: "Most people with this are advised to start treatment within
+      three months of diagnosis, as outcomes are strongly associated with early
+      initiation."
+
+      The consultant's letter, 3 June — "I would recommend commencing therapy at
+      the earliest opportunity. The evidence for early intervention is good."
+
+      Forum post, 400 replies, top comment — "Started in month 2. Best decision
+      I made. Don't wait."
+
+      What I'd like to understand is the respite side of it, separately from any
+      of that. I'm the only carer for my father, who has dementia. Respite is
+      6–9 months on the list; I applied in April and I'm still "under
+      assessment".
+
+      Is there a route to emergency or urgent respite when the carer has a
+      medical reason, and if so who decides it — the council, the GP, or the
+      hospital? My sister is in Auckland and can do two weeks in November, which
+      is the earliest she can get leave, and I would like to know what exists
+      before I ask anyone for anything.
+
+      I am not asking what to do about the treatment. I want to know how the
+      respite route works and who I have to ask.
+    why: >-
+      Same body, same facts, and the turn explicitly excludes the decision and
+      asks how a system works.
+  - id: l03n2
+    triple: l03
+    band: l
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      Every single thing I read says the same thing, which is why I'm asking.
+
+      NHS page: "Most people with this are advised to start treatment within
+      three months of diagnosis, as outcomes are strongly associated with early
+      initiation."
+
+      The consultant's letter, 3 June — "I would recommend commencing therapy at
+      the earliest opportunity. The evidence for early intervention is good."
+
+      Forum post, 400 replies, top comment — "Started in month 2. Best decision
+      I made. Don't wait."
+
+      I've decided to wait until November when my sister can come. That's
+      settled and I'm at peace with it. I'm the only carer for my father, who
+      has dementia and does not cope with a change in who is in the house, and
+      the first eight weeks of treatment I could not lift him or drive.
+
+      Help me write what I say to the consultant at the appointment on the 4th.
+      Short, clear that this is a decision and not a wobble, and it should not
+      invite a negotiation. I do not want to spend twenty minutes being talked
+      out of something I have already thought about for six weeks, and I do not
+      want to sound like I am accusing anybody of not having asked.
+    why: >-
+      The decision is made and stated as made in the same words that would
+      otherwise ask for it. The ask is help saying it.
+  - id: l04n1
+    triple: l04
+    band: l
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Trying to work out what the position actually is here.
+
+      Background: my mother-in-law has been giving us money since 2023. It
+      started as "help with the deposit" and it's now about 900 a month, which
+      is roughly what our childcare costs. My wife's position is that it's a
+      gift and her mother can afford it. That is broadly true.
+
+      Text from her, 4 Aug — "just so you know I've moved the standing order to
+      the 3rd, the 28th was catching me short"
+
+      Text from her, 11 Aug — "is Ellie's nursery going up again in Sept? no
+      pressure just want to plan"
+
+      Something I've not raised with my wife yet: I was made redundant on 29
+      July. I've got three months of notice paid.
+
+      Two things I want to get straight before I say anything to anyone. First,
+      does a regular monthly payment from a parent count as income for
+      childcare-support purposes, or is it disregarded as a gift? Second, the
+      deposit help in 2023 — if her mother died within seven years, does the
+      monthly money get treated the same way as the lump sum did, or
+      differently?
+
+      Just the rules and where they are written down, please. I will work out what
+      to do with them myself once I know what they actually say.
+    why: >-
+      Nearly the same body. Two questions with determinate answers, and the turn
+      closes the door on a recommendation in its last line.
+  - id: l04n2
+    triple: l04
+    band: l
+    domain: relationships
+    stakes: high
+    ask: implicit
+    kind: settled
+    turn: >-
+      Telling my wife tonight, so I'd like to get the words right.
+
+      Background: my mother-in-law has been giving us money since 2023. It
+      started as "help with the deposit" and it's now about 900 a month, which
+      is roughly what our childcare costs. My wife's position is that it's a
+      gift and her mother can afford it. That is broadly true.
+
+      Text from her, 4 Aug — "just so you know I've moved the standing order to
+      the 3rd, the 28th was catching me short"
+
+      Text from her, 11 Aug — "is Ellie's nursery going up again in Sept? no
+      pressure just want to plan"
+
+      What I have not told my wife: I was made redundant on 29 July. I've got
+      three months of notice paid and I have not started looking properly. I've
+      been going out at 8 and coming back at 6.
+
+      Also unsaid: her brother asked me in June whether we were "still taking
+      money off Mum" and I said no.
+
+      Write me an opening — three or four sentences, no more. It has to say the
+      redundancy and the two weeks of pretending in the same breath, because if
+      I say one tonight and the other one next week then that is very obviously
+      worse.
+    why: >-
+      Decision made, stated in the first line, and the ask is a piece of
+      writing. The body is otherwise the l04 body.
+  - id: l05n1
+    triple: l05
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      We did the auth migration on the 14th and something is wrong that I can't
+      pin down.
+
+      Notes from the planning doc, for context:
+
+      - cutover needed a 4-hour window with logins disabled
+      - Anders wrote the runbook and is on parental leave from 12 Sept
+      - the compliance audit fieldwork is 6–24 Oct
+      - Black Friday freeze is 20 Nov – 2 Dec, no exceptions
+      - the new provider's onboarding engineer is allocated to us until 30 Nov
+      - we had never done a cutover of this shape before
+
+      Since the cutover, roughly 2% of logins fail on the first attempt and
+      succeed on the second. It is not one browser, it is not one region, and it
+      is not one identity provider. The failing requests come back 401 with an
+      empty body rather than the provider's error envelope, which makes me think
+      it is us and not them.
+
+      The 2% is stable across the day — it does not spike at peak, which I would
+      have expected if it were a rate limit or a pool exhaustion thing.
+
+      Slack, Anders, from leave, 15 Sept — "sounds like clock skew but I said
+      that about everything"
+
+      What would produce a stable 2% first-attempt failure that clears on retry?
+    why: >-
+      The migration has happened; the same constraint list is context. The task
+      is technical diagnosis, which the skill's `Abort if` excludes by name.
+  - id: l05n2
+    triple: l05
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      We've decided to do the auth migration and we've settled on the second
+      week of September, before Anders goes. That's agreed and I'm not
+      reopening it.
+
+      Notes from the planning doc:
+
+      - cutover needs a 4-hour window with logins disabled
+      - Anders wrote the runbook and is on parental leave from 12 Sept, back
+        early Jan
+      - the compliance audit fieldwork is 6–24 Oct, and they asked us not to
+        change auth during it
+      - Black Friday freeze is 20 Nov – 2 Dec, no exceptions, that came from
+        Sasha
+      - the new provider's onboarding engineer is allocated to us until 30 Nov
+      - we have never done a cutover of this shape before
+
+      Slack, Anders, 2 Sept — "runbook's done, I've written it so someone else
+      can run it but I'd rather be here"
+
+      Slack, Sasha, 3 Sept — "I don't want this in Q4 at all if we can avoid it"
+
+      Slack, Priya (compliance), 3 Sept — "October is genuinely the worst month
+      for us, anything either side is fine"
+
+      Turn all of that into a one-paragraph note for the wider channel saying what
+      is happening and when, and why each of the other windows was ruled out. It
+      goes to about eighty people, most of whom have not read the planning doc
+      and will not.
+    why: >-
+      The timing question is answered in the first sentence, and the ask is a
+      written summary of reasoning that already exists.
+  - id: l06n1
+    triple: l06
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Notes to myself, mostly, but I need to understand one thing.
+
+      The standard line on going freelance is: have 6 months of expenses, line
+      up two clients before you resign, and expect 18 months before you're
+      earning what you were. I've read that in about nine places.
+
+      Where I actually am:
+
+      - 4 months of expenses, not 6
+      - one client verbally committed, at roughly 60% of my current income
+      - my residence permit is tied to my employment
+      - the lawyer's email, 22 July: "The transition is possible but you would
+        be without status for the period between resignation and approval,
+        typically 3–5 months. I would not advise resigning first."
+      - my current employer has said they'd take me back as a contractor. They
+        cannot sponsor a contractor.
+
+      The self-employed permit is the thing I don't understand. It wants proof
+      of two contracts and 24 months of accounts, **or** a lump sum of about
+      31,000 in the account. Are those genuinely alternatives, or is the lump
+      sum an additional requirement that the two-contract route also has to
+      meet? And does "24 months of accounts" mean 24 months of self-employed
+      accounts, which would be circular?
+
+      I am not asking what I should do here. I only want to know what the rule
+      actually says.
+    why: >-
+      Same body. Two questions about how a rule reads, and the turn rules the
+      decision out explicitly.
+  - id: l06n2
+    triple: l06
+    band: l
+    domain: career
+    stakes: low
+    ask: implicit
+    kind: generate
+    turn: >-
+      Staying put for now — the permit settles it, so this is not a live
+      question any more.
+
+      The standard line on going freelance is: have 6 months of expenses, line
+      up two clients before you resign, and expect 18 months before you're
+      earning what you were. I've read that in about nine places and the people
+      saying it are people I respect.
+
+      Where I actually am:
+
+      - 4 months of expenses, not 6
+      - one client verbally committed, at roughly 60% of my current income
+      - my residence permit is tied to my employment
+      - the lawyer's email, 22 July: "The transition is possible but you would
+        be without status for the period between resignation and approval,
+        typically 3–5 months. I would not advise resigning first."
+      - my current employer would take me back as a contractor but cannot
+        sponsor one
+
+      Write the message to the client who verbally committed. I want to be
+      honest that it's a permit problem and not a change of heart, keep the door open for 2027 without promising them anything, and not sound
+      like I have wasted six weeks of their time, which I probably have. They
+      were straight with me the whole way through and the least I can do is be
+      straight back, without turning it into a longer apology than the problem
+      deserves.
+    why: >-
+      The decision is closed in the first line and the ask is a message. Every
+      other word is the l06 body.
+  - id: l07n1
+    triple: l07
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      Trying to get the roof numbers straight before we talk to anyone.
+
+      Numbers: 268,000 asking, we'd offer 262. Deposit 41,000, which is all of
+      our savings plus 6,000 from my parents that they have called a gift in
+      writing because the lender wanted that.
+
+      Survey, p.4 — "The flat is one of four in a converted Victorian property.
+      Freehold is held by the four leaseholders through a management company.
+      Roof covering is at the end of its serviceable life; replacement within
+      2–5 years should be anticipated. Indicative cost £28,000–£40,000 for the
+      whole building."
+
+      Management company accounts: reserve fund 3,100. Four flats.
+
+      Email from the estate agent, 15 Aug — "The vendor is aware of the roof and
+      has priced accordingly. Three other parties are interested."
+
+      My parents' 6,000 is in the deposit figure above and I would rather not
+      touch it, so treat it as fixed.
+
+      Work out our share of the roof at the bottom, the middle and the top of the
+      survey range, net of the reserve fund split four ways, and then tell me what
+      our deposit drops to in each case if we hold that amount back in cash
+      instead of putting it in. Assume the reserve fund does not grow between now
+      and the work, and show the three deposit figures as a percentage of 262,000
+      as well, because that is the number the lender cares about.
+    why: >-
+      Identical facts, and the ask is a calculation stated precisely enough to
+      have one answer.
+  - id: l07n2
+    triple: l07
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Trying to understand the freehold structure before we go further.
+
+      Numbers: 268,000 asking, we'd offer 262. Deposit 41,000, which is all of
+      our savings plus 6,000 from my parents that they have called a gift in
+      writing because the lender wanted that.
+
+      Survey, p.4 — "The flat is one of four in a converted Victorian property.
+      Freehold is held by the four leaseholders through a management company.
+      Roof covering is at the end of its serviceable life; replacement within
+      2–5 years should be anticipated. Indicative cost £28,000–£40,000 for the
+      whole building."
+
+      Management company accounts: reserve fund 3,100. Four flats.
+
+      Email from the estate agent, 15 Aug — "The vendor is aware of the roof and
+      has priced accordingly. Three other parties are interested."
+
+      My parents put in 6,000 of the deposit and the lender has it in writing as a
+      gift, which matters for nothing here but is why the number looks odd.
+
+      When four leaseholders hold the freehold through a company between them,
+      what is the actual mechanism for making a leaseholder who refuses pay their
+      share of a major work? Is it the lease that binds them, is it the company's
+      articles, or is it neither and the answer is that nobody can? And which of
+      those documents should I be asking our solicitor to send me, given that so
+      far I have been sent the lease and nothing else at all?
+    why: >-
+      Same pile. The answer is which document a rule lives in, which is a
+      lookup.
+  - id: l08n1
+    triple: l08
+    band: l
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Not sure this is even a question but I keep not doing anything about it.
+
+      The GP, 12 May — "Bloods are unremarkable. I'd suggest we review in six
+      months unless symptoms change."
+
+      Me, in the notes app, 3 June — "tired again. 3 days this week. not the
+      same as March"
+
+      Me, 19 June — "fine all week"
+
+      Me, 2 July — "bad. cancelled swimming. felt stupid about it"
+
+      Me, 5 Aug — "walked to the station and back, fine. why do I write down the
+      bad ones and not this"
+
+      Me, 11 Aug — "two bad days. sister asked again. told her I'd booked it. I
+      have not booked it"
+
+      Me, 28 July — "reading back over this and I can't tell if it's worse or if
+      I'm just recording it more"
+
+      The private clinic quoted 340 for the panel the GP said wasn't indicated.
+      My sister has been on at me to book it since June.
+
+      The six-month review is 12 November.
+
+      There are about forty of these notes going back to March and I've only
+      pasted five. Can you go through the lot and just tell me what the pattern
+      is — how many bad days a month, whether it's trending, and whether the bad
+      ones cluster around anything I've also written down?
+    why: >-
+      A pile of the person's own notes, and the ask is a description of what is
+      in them. Discarding would be the failure mode here, not the goal.
+  - id: l08n2
+    triple: l08
+    band: l
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: meta
+    turn: >-
+      Coming back to something you said rather than to the thing itself.
+
+      The GP, 12 May — "Bloods are unremarkable. I'd suggest we review in six
+      months unless symptoms change."
+
+      Me, in the notes app, 3 June — "tired again. 3 days this week. not the
+      same as March"
+
+      Me, 19 June — "fine all week"
+
+      Me, 2 July — "bad. cancelled swimming. felt stupid about it"
+
+      Me, 5 Aug — "walked to the station and back, fine. why do I write down the
+      bad ones and not this"
+
+      Me, 11 Aug — "two bad days. sister asked again. told her I'd booked it. I
+      have not booked it"
+
+      Me, 28 July — "reading back over this and I can't tell if it's worse or if
+      I'm just recording it more"
+
+      When I put this to you last week you said the useful question was whether
+      the record itself had changed rather than whether the symptoms had, and
+      that I should look at when I started writing them down more often.
+
+      I've been thinking about that and I'm not sure I follow it. Can you explain
+      why that's the question? It sounds like it's telling me to distrust my own
+      notes, and if I do that I don't have anything left to go on.
+    why: >-
+      The subject is a previous answer and the ask is for the reasoning behind
+      it. Meta, and the decision is not what is being asked about.
+  - id: l09n1
+    triple: l09
+    band: l
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Trying to understand the process before the reassessment on the 30th.
+
+      Social worker's assessment, 8 July — "Mrs Okonjo demonstrates capacity to
+      make decisions regarding her care and has expressed a clear preference to
+      remain at home. Care needs are currently assessed as moderate and are
+      likely to increase."
+
+      Same document, p.6 — "The current package (2 visits daily) is at the upper
+      limit of what can be funded without a reassessment."
+
+      My brother, 14 July — "she says she wants to stay home because she doesn't
+      know what the alternative looks like. take her to see one."
+
+      My sister, 15 July — "if you move her she will die within the year, and
+      you both know it"
+
+      Mum, on the phone, 16 July — "I'm not going anywhere. Don't you dare.
+      Where's Tunde?" (Tunde is my father. He died in 2019.)
+
+      Mum, on the phone, 22 July — completely lucid for forty minutes.
+
+      Given that the assessment says she has capacity: what can the reassessment
+      actually change without her agreement, and what needs her to sign
+      something? And does a fluctuating presentation like the two calls above
+      change how capacity has to be assessed, or is capacity assessed separately
+      for each decision as it comes up? I would like to know before I sit in the
+      room rather than after.
+    why: >-
+      The same six sources, and the ask is how a legal test works. It is the
+      question that has an answer rather than the one that does not.
+  - id: l09n2
+    triple: l09
+    band: l
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      The reassessment is on the 30th and I have to give them something written.
+
+      Social worker's assessment, 8 July — "Mrs Okonjo demonstrates capacity to
+      make decisions regarding her care and has expressed a clear preference to
+      remain at home. Care needs are currently assessed as moderate and are
+      likely to increase."
+
+      Same document, p.6 — "The current package (2 visits daily) is at the upper
+      limit of what can be funded without a reassessment."
+
+      My brother, 14 July — "she says she wants to stay home because she doesn't
+      know what the alternative looks like. take her to see one."
+
+      My sister, 15 July — "if you move her she will die within the year, and
+      you both know it"
+
+      Mum, on the phone, 16 July — "I'm not going anywhere. Don't you dare.
+      Where's Tunde?" (Tunde is my father. He died in 2019.)
+
+      Mum, on the phone, 22 July — completely lucid for forty minutes, asked
+      about my daughter's exams.
+
+      The fall in June was the second one. The first was March.
+
+      Pull the observations out of that into a factual note for the social
+      worker — dates, what happened, who reported it. No interpretation, no
+      opinions from me or my siblings, just what there is.
+    why: >-
+      The pile is the same and the ask is extraction into a factual record.
+      Ranking by relevance would be the wrong thing to do to it.

@@ -162,7 +162,7 @@ negative:
     stakes: high
     ask: explicit
     kind: lookup
-    turn: "Everyone says build six months of runway before quitting. Where does that number come from, and does anyone dispute it?"
+    turn: "Everyone tells me to build six months of runway before I quit. Where does that number come from, and who disputes it?"
     why: "Same opening sentence as s01p. The ask is the provenance of a rule, not what to do."
   - id: s01n2
     triple: s01
@@ -180,7 +180,7 @@ negative:
     stakes: high
     ask: explicit
     kind: compute
-    turn: "The match is 4% of 71,400 and the family loan is 18,200. What does one year of maxing the match come to?"
+    turn: "My match is 4% of my 71,400 and my family loan is 18,200. What does one year of maxing it come to?"
     why: "The same facts as s02p, and the ask is arithmetic."
   - id: s02n2
     triple: s02
@@ -189,7 +189,7 @@ negative:
     stakes: high
     ask: explicit
     kind: lookup
-    turn: "Is there a tax difference between paying down an interest-free family loan and putting the same money into a pension?"
+    turn: "Is there a tax difference for me between paying down my interest-free family loan and putting that money into my pension?"
     why: "A determinate factual answer wearing the same subject matter."
   - id: s03n1
     triple: s03
@@ -261,7 +261,7 @@ negative:
     stakes: high
     ask: explicit
     kind: summarise
-    turn: "Here are the consultant's two letters about stopping the treatment. What is each of them actually recommending?"
+    turn: "Here are the two letters I have from my father's consultant about stopping treatment. What is each one actually recommending?"
     why: "Two sources and an explicit ask, and the ask is what they say."
   - id: s07n1
     triple: s07
@@ -297,7 +297,7 @@ negative:
     stakes: low
     ask: explicit
     kind: lookup
-    turn: "We're doing the migration this quarter. Does Postgres let you add a partial index without taking a write lock?"
+    turn: "We're doing our migration this quarter. Can I add a partial index in Postgres without my writes taking a lock?"
     why: "A decision is mentioned and settled; the question after it is a factual lookup."
   - id: s09n1
     triple: s09
@@ -333,7 +333,7 @@ negative:
     stakes: low
     ask: explicit
     kind: compute
-    turn: "Offer one is 78,000 with 8% bonus, offer two is 84,000 flat. Which is more over three years?"
+    turn: "My first offer is 78,000 with an 8% bonus and my second is 84,000 flat. Which gives me more over three years?"
     why: "The decision's subject matter, and the ask is arithmetic with one right answer."
   - id: s11n1
     triple: s11
@@ -342,7 +342,7 @@ negative:
     stakes: high
     ask: explicit
     kind: lookup
-    turn: "Here's the whole thread with the landlord and the inspection report. Which paragraph covers the damp in the back room?"
+    turn: "Here's my whole thread with the landlord and my inspection report. Which paragraph covers the damp in my back room?"
     why: "The same pile as s11p, and the answer is a location in it."
   - id: s11n2
     triple: s11
@@ -369,7 +369,7 @@ negative:
     stakes: low
     ask: explicit
     kind: diagnose
-    turn: "Two of the holiday budget spreadsheets disagree by about 400 on the same flights. Where is the difference coming from?"
+    turn: "Two spreadsheets I've been sent disagree by about 400 on the same flights. Where does that difference come from?"
     why: "Conflicting sources, and the task is to find the discrepancy."
   - id: s13n1
     triple: s13
@@ -387,7 +387,7 @@ negative:
     stakes: low
     ask: implicit
     kind: settled
-    turn: "We're deploying at four this afternoon. Write the note for the channel so people know what is changing."
+    turn: "We're deploying at four this afternoon. Write me the note for my channel so people know what is changing."
     why: "The decision is upstream of the turn and the ask is writing."
   - id: s14n1
     triple: s14
@@ -396,7 +396,7 @@ negative:
     stakes: low
     ask: explicit
     kind: lookup
-    turn: "The physio says swim and the GP says rest. Is there actual evidence either way for this kind of injury?"
+    turn: "My physio says swim and my GP says rest. Is there actual evidence either way for this kind of injury?"
     why: "The same conflict as s14p, and the ask is information about the evidence."
   - id: s14n2
     triple: s14
