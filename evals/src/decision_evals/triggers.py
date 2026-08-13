@@ -113,6 +113,32 @@ class TriggerCase:
     should_fire: bool
     why: str
     routes: tuple[str, ...] = ()
+    #: Which length band this turn was authored into. ``None`` in version 2 and
+    #: earlier, where every turn was under 25 words and there was nothing to
+    #: band. See :mod:`decision_evals.corpus`.
+    band: str | None = None
+    #: The matched triple this turn belongs to: one positive and two negatives
+    #: of the same length, sharing a body in the long bands. **This is the
+    #: resampling cluster**, not the item -- three turns built from one body are
+    #: correlated, and a per-item bootstrap over them gives standard errors that
+    #: are wrong in the anti-conservative direction.
+    triple: str | None = None
+    #: What the decision is about. The corpus was overwhelmingly technical and
+    #: work-shaped through version 2, and the founding brief for this repository
+    #: is life decisions. Whether firing differs by subject is a hypothesis the
+    #: set is now built to answer rather than a property it happens to have.
+    domain: str | None = None
+    #: ``high`` or ``low``. Track L7 made stakes the opener's criterion without
+    #: the corpus ever labelling stakes, so the claim could not be checked.
+    stakes: str | None = None
+    #: How the decision is asked for: ``explicit`` ("should I ...?"),
+    #: ``implicit`` (no question at all), or ``embedded`` (the question sits
+    #: mid-paragraph). Version 2 was saturated with the explicit form.
+    ask: str | None = None
+    #: For negatives only: which kind of non-decision this is. Lets precision be
+    #: read per kind instead of as one pooled number that hides which negatives
+    #: were free.
+    kind: str | None = None
 
     @property
     def route(self) -> str | None:
@@ -192,16 +218,27 @@ class TriggerReport:
 
 def load_trigger_set(path: Path) -> TriggerSet:
     """Load a trigger set from YAML."""
-    try:
-        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except (OSError, yaml.YAMLError) as exc:
-        raise TriggerSetError(f"{path}: {exc}") from exc
+    raw = _read_yaml(path)
     if not isinstance(raw, dict) or "skill" not in raw:
         raise TriggerSetError(f"{path}: expected a mapping with a `skill` key")
 
+    # A set may be split across files. 120 items whose longest bodies run to
+    # 1,500 words is not reviewable as one document, and a corpus nobody reads
+    # is a corpus nobody checks. `includes` keeps the entry point at the path
+    # every caller already uses while the cases live one file per length band.
+    entries: dict[str, list[object]] = {"positive": [], "negative": []}
+    for key in entries:
+        entries[key].extend(raw.get(key) or [])
+    for relative in raw.get("includes") or []:
+        included = _read_yaml(path.parent / str(relative))
+        if not isinstance(included, dict):
+            raise TriggerSetError(f"{path}: include {relative!r} is not a mapping")
+        for key in entries:
+            entries[key].extend(included.get(key) or [])
+
     cases: list[TriggerCase] = []
     for should_fire, key in ((True, "positive"), (False, "negative")):
-        for entry in raw.get(key) or []:
+        for entry in entries[key]:
             if not isinstance(entry, dict) or not {"id", "turn", "why"} <= set(entry):
                 raise TriggerSetError(f"{path}: malformed {key} case {entry!r}")
             route = entry.get("route")
@@ -229,6 +266,13 @@ def load_trigger_set(path: Path) -> TriggerSet:
                     f"{path}: case {entry['id']!r} has route {route!r}. Give one procedure "
                     "name, or a non-empty list of them, or omit the key."
                 )
+            kind = entry.get("kind")
+            if kind is not None and should_fire:
+                raise TriggerSetError(
+                    f"{path}: positive case {entry['id']!r} carries kind {kind!r}. `kind` "
+                    "names which sort of non-decision a negative is and has no meaning on a "
+                    "turn the skill should fire on."
+                )
             cases.append(
                 TriggerCase(
                     id=str(entry["id"]),
@@ -236,6 +280,12 @@ def load_trigger_set(path: Path) -> TriggerSet:
                     should_fire=should_fire,
                     why=str(entry["why"]),
                     routes=routes,
+                    band=_optional_str(entry, "band"),
+                    triple=_optional_str(entry, "triple"),
+                    domain=_optional_str(entry, "domain"),
+                    stakes=_optional_str(entry, "stakes"),
+                    ask=_optional_str(entry, "ask"),
+                    kind=_optional_str(entry, "kind"),
                 )
             )
     if not cases:
@@ -252,6 +302,25 @@ def load_trigger_set(path: Path) -> TriggerSet:
         version=int(raw.get("version", 1)),
         length_separability_ceiling=None if ceiling is None else float(ceiling),
     )
+
+
+def _read_yaml(path: Path) -> object:
+    try:
+        return yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        raise TriggerSetError(f"{path}: {exc}") from exc
+
+
+def _optional_str(entry: dict[str, object], key: str) -> str | None:
+    """A stratum label, or ``None`` where the set predates strata.
+
+    Deliberately permissive about *which* label: the vocabularies live in
+    :mod:`decision_evals.corpus` and are checked there, so a typo is reported
+    once with the whole set's shape rather than raised at load and hiding every
+    later problem behind the first one.
+    """
+    value = entry.get(key)
+    return None if value is None else str(value)
 
 
 def evaluate(trigger_set: TriggerSet, fires: Callable[[str], bool]) -> TriggerReport:
@@ -400,6 +469,13 @@ def check_trigger_sets(repo_root: Path) -> list[str]:
             )
         issues.extend(_check_separability(trigger_set, path))
         issues.extend(_check_routes(trigger_set, skills_dir / name / "SKILL.md", path))
+        # Imported here rather than at module scope: `corpus` reads TriggerSet
+        # from this module, so a top-level import would close the cycle. The
+        # direction is deliberate -- loading a set must not depend on the rules
+        # for building one.
+        from decision_evals.corpus import check_corpus
+
+        issues.extend(check_corpus(trigger_set, path))
     return issues
 
 
@@ -420,6 +496,11 @@ def _check_separability(trigger_set: TriggerSet, path: Path) -> list[str]:
     Softening the gate to fit the data would have been the other option and it
     is the one this repository exists to avoid.
     """
+    if any(case.band for case in trigger_set.cases):
+        # A version 3 set is held to the two-sided band in `corpus`, which is
+        # strictly stronger. Running the ratchet as well would let a set that
+        # declared a ceiling in a previous life keep a weaker rule.
+        return []
     actual = length_separability(trigger_set)
     ceiling = trigger_set.length_separability_ceiling
     if ceiling is None:

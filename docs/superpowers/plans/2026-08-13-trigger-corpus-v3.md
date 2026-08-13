@@ -239,6 +239,69 @@ short, none of them an actual pile.
 
 ---
 
+## The threat that no gate above touches: a model is writing it
+
+The turns are hand-authored, one at a time, not generated from templates — the
+`rel-*` corpus is template-generated with computed ground truth and this one
+cannot be, because *"is this a decision"* has no computable answer.
+
+**That is not the sharp version of the objection, and the sharp version stands.**
+A model is authoring the corpus that will be used to evaluate a model of the
+same family. I write a positive the way I would recognise a positive. Every
+accuracy figure this corpus produces is inflated by that, in a direction nothing
+inside the corpus can measure.
+
+There is no evidence this is fine. The evidence available points the other way,
+and some of it is first-hand and in this repository:
+
+- **21 of 21 scored failures across three corpora were my answer key**, not the
+  model. That is the strongest evidence here and it is about exactly this.
+- The long-context plan already treats model-authored padding as a threat
+  serious enough to gate on — the detectability probe — for this reason.
+- `SkillsBench`, already cited in `CLAUDE.md`: self-generated skills score ≈0 or
+  negative.
+- There is published work on self-preference in LLM-as-judge setups (models
+  scoring their own generations higher). It is **not cited here** because it has
+  not been verified first-hand, which is a Track K job and the rule `de check`
+  enforces.
+
+**Blind adjudication does not fix this.** The adjudicator is also a model. It
+catches a wrong label; it cannot catch a turn written in the register a model
+finds legible.
+
+### The fix is a control, not a disclaimer
+
+**A human-authored holdout.** The maintainer writes — or supplies from real
+messages — a set of turns under the same grid, labelled by them, never seen by
+me before authoring is closed. Every arm is then reported twice:
+
+| | model-authored items | human-authored holdout |
+|---|---|---|
+| firing accuracy per arm | | |
+| arm ordering | | |
+
+- **Orderings agree** → the authoring threat is bounded, and it is bounded by a
+  measurement rather than by an argument.
+- **Orderings disagree** → the model-authored corpus is decoration, and we know
+  it rather than publishing on it.
+
+Twenty turns is enough to see a reversal. The cheapest good source is real
+messages that already exist rather than turns written to order, because a turn
+written *for* a benchmark is the artefact under suspicion whoever writes it.
+
+### What the corpus licenses until that holdout exists
+
+It is a **relative** instrument. Every arm sees identical items, so comparisons
+*between* arms are valid and that is what Tracks L and M ask for.
+
+It licenses **no absolute claim** about behaviour on real user messages. A
+sentence like *"the shipped description fires correctly 94% of the time"* is not
+available from this corpus at any point, and was not available from version 2
+either. That distinction is the same one `SCORECARD.md` draws between a verdict
+and a usable skill, and it is the reason this repository exists.
+
+---
+
 ## What must not change at the same time
 
 A corpus change plus a description change plus a label change is three

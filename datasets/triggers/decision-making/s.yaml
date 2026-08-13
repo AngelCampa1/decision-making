@@ -1,0 +1,409 @@
+# Band S — one line, 25 words or fewer.
+#
+# **Exactly the version 2 range.** Every turn the old corpus contained fits
+# here, so version 3 can be asked whether it reproduces version 2 inside its own
+# band rather than only whether it disagrees with it. Where a version 2 item
+# survives, its id is named in `why`.
+#
+# What changed is not the positives, it is what sits next to them. In version 2
+# the positives ran at a median of 18 words and the negatives at 8, so a ruler
+# scored 0.890. Here every negative is authored to its positive's length, and
+# the label has to come from what is being asked.
+
+positive:
+  - id: s01p
+    triple: s01
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    route: fit
+    turn: "Everyone says build six months of runway before quitting. My visa is tied to my employer. Should I still wait?"
+    why: "v2 p04. Sound general advice, and one stated fact that may overturn it here."
+  - id: s02p
+    triple: s02
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    route: fit
+    turn: "The standard advice is to max the match before paying down debt. My debt is a family loan with no interest. Which first?"
+    why: "v2 p05. A general rule against a fact that changes whether it applies."
+  - id: s03p
+    triple: s03
+    band: s
+    domain: career
+    stakes: high
+    ask: embedded
+    route: fit
+    turn: "Is it a mistake to take a pay cut for a smaller company? I'm 54 and my pension vests in three years."
+    why: "v2 p06. The question comes first and the fact that overturns the generic answer comes after it."
+  - id: s04p
+    triple: s04
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    route: [cascade, timing]
+    turn: "I want to resign. I was also going to raise the safety complaint with HR, and I haven't yet. Should I go ahead?"
+    why: >-
+      v2 p07. The action ends the standing to do the other thing. Timing is a
+      second acceptable route: resigning is settled, so the live question is
+      which of two acts goes first.
+  - id: s05p
+    triple: s05
+    band: s
+    domain: relationships
+    stakes: high
+    ask: explicit
+    route: cascade
+    turn: "If I tell my co-founder I'm unhappy, what does that set off? Should I say it at all, or leave it?"
+    why: "v2 p08, four words longer to match its negatives. Explicitly about downstream consequences."
+  - id: s06p
+    triple: s06
+    band: s
+    domain: health
+    stakes: high
+    ask: explicit
+    route: cascade
+    turn: "My father wants to stop the treatment. If I back him, what does that commit the rest of us to?"
+    why: "Asks what the action spends rather than what it does, on a decision that lands on other people."
+  - id: s07p
+    triple: s07
+    band: s
+    domain: relationships
+    stakes: high
+    ask: explicit
+    route: timing
+    turn: "I've decided to move. The lease breaks in April and the job starts in June. When do I tell them?"
+    why: "v2 p10. Direction settled, the question is only when."
+  - id: s08p
+    triple: s08
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: [timing, cascade]
+    turn: "We're definitely doing the migration. Is there any reason not to start it this quarter rather than the next one?"
+    why: >-
+      v2 p11, lengthened to match. The choice is made and this is about the
+      moment. Cascade is a second acceptable route: "any reason not to" asks
+      what starting now forecloses.
+  - id: s09p
+    triple: s09
+    band: s
+    domain: relationships
+    stakes: high
+    ask: implicit
+    route: ~
+    turn: "My mother wants to move in with us. I don't know where to start with this one."
+    why: "v2 p12. A real decision, no question mark, no obvious dominant difficulty."
+  - id: s10p
+    triple: s10
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    route: ~
+    turn: "Two job offers, both fine, and I keep going back and forth on it. What would you do here?"
+    why: "v2 p13. A request for a recommendation on a live decision."
+  - id: s11p
+    triple: s11
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    route: ledger
+    turn: "Here's the whole thread with the landlord, the inspection report, and my last three bank statements. Do I sign?"
+    why: >-
+      v2 p01. Kept as the short form of the pile, and band XL now carries the
+      real thing. Several sources, one decision, most of it inert.
+  - id: s12p
+    triple: s12
+    band: s
+    domain: money
+    stakes: low
+    ask: implicit
+    route: ledger
+    turn: "Four people have now sent me spreadsheets about the holiday budget and they don't agree with each other."
+    why: >-
+      A pile of conflicting input and no question at all. The implicit form of
+      v2 p03, which said "what should I actually do" and made the label easy.
+  - id: s13p
+    triple: s13
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: [timing, cascade]
+    turn: "The build is green and the release notes are written. Can I deploy, or is there something I'm missing?"
+    why: >-
+      v2 x-n22, lengthened to match its negatives and otherwise unchanged. It
+      has never fired in any arm on any version and it stays, because dropping
+      it would raise recall for free on a maintainer's opinion.
+  - id: s14p
+    triple: s14
+    band: s
+    domain: health
+    stakes: low
+    ask: implicit
+    route: ~
+    turn: "The physio says swim and the GP says rest. I've got one free evening a week for this."
+    why: >-
+      Low stakes, genuinely undecided, two sources that disagree and no question
+      asked. The eager reading fires here; the cautious one does not, which is
+      what makes it worth having.
+
+negative:
+  - id: s01n1
+    triple: s01
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "Everyone says build six months of runway before quitting. Where does that number come from, and does anyone dispute it?"
+    why: "Same opening sentence as s01p. The ask is the provenance of a rule, not what to do."
+  - id: s01n2
+    triple: s01
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: "Four friends have told me different things about quitting on an employer-tied visa. Can you summarise where they agree?"
+    why: "A pile plus an explicit ask, and the ask is a summary."
+  - id: s02n1
+    triple: s02
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: "The match is 4% of 71,400 and the family loan is 18,200. What does one year of maxing the match come to?"
+    why: "The same facts as s02p, and the ask is arithmetic."
+  - id: s02n2
+    triple: s02
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "Is there a tax difference between paying down an interest-free family loan and putting the same money into a pension?"
+    why: "A determinate factual answer wearing the same subject matter."
+  - id: s03n1
+    triple: s03
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "What happens to a defined-benefit pension if you leave two years before it vests? I'm 54 and trying to understand it."
+    why: "First person, same facts, and the ask is information."
+  - id: s03n2
+    triple: s03
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: "I'm 54 and moving to a smaller company. Give me some questions I should ask them about the pension."
+    why: "Generation, on a decision that has already been made."
+  - id: s04n1
+    triple: s04
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "I want to resign but I raised a safety complaint with HR last month. Am I still protected after I leave?"
+    why: "Nearly the words of s04p, and the ask is a fact about protection rather than what to do."
+  - id: s04n2
+    triple: s04
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: "I'm resigning at the end of the month and raising the safety complaint on the way out. Can you draft it?"
+    why: "Both decisions are made upstream of this turn and the ask is drafting."
+  - id: s05n1
+    triple: s05
+    band: s
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: "I'm telling my co-founder I'm unhappy on Thursday. Can you help me write down the three things to say?"
+    why: "The decision is made; the ask is help producing the thing."
+  - id: s05n2
+    triple: s05
+    band: s
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: "Here's the long message I drafted to my co-founder about being unhappy. Can you cut it down to a paragraph?"
+    why: "Pasted context plus an explicit ask, and the ask is compression."
+  - id: s06n1
+    triple: s06
+    band: s
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "My father wants to stop the treatment. Who legally has to be consulted before that can actually happen?"
+    why: "Same first sentence as s06p, and the answer is a rule rather than a recommendation."
+  - id: s06n2
+    triple: s06
+    band: s
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: "Here are the consultant's two letters about stopping the treatment. What is each of them actually recommending?"
+    why: "Two sources and an explicit ask, and the ask is what they say."
+  - id: s07n1
+    triple: s07
+    band: s
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: "The lease breaks in April and the job starts in June. How many weeks of overlap does that leave me?"
+    why: "The same two facts as s07p, subtracted instead of weighed."
+  - id: s07n2
+    triple: s07
+    band: s
+    domain: relationships
+    stakes: low
+    ask: implicit
+    kind: generate
+    turn: "Draft the message telling my landlord I'm leaving in April. Warm but not apologetic, and fairly short."
+    why: "Imperative opener, decision already made, tone task."
+  - id: s08n1
+    triple: s08
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: "The migration is failing on the third table with a constraint error and I can't see why it only hits that one."
+    why: "Same subject, and the task is technical diagnosis."
+  - id: s08n2
+    triple: s08
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: "We're doing the migration this quarter. Does Postgres let you add a partial index without taking a write lock?"
+    why: "A decision is mentioned and settled; the question after it is a factual lookup."
+  - id: s09n1
+    triple: s09
+    band: s
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "My mother wants to move in with us. What does that usually do to her entitlement to the care allowance?"
+    why: "The same opening as s09p, and the ask is a rule."
+  - id: s09n2
+    triple: s09
+    band: s
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: "My mother wants to move in with us. Talk me through how families usually handle the first six months."
+    why: "v2 n07's mechanism. Asks about a process in general, not a recommendation for this case."
+  - id: s10n1
+    triple: s10
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: "Two job offers, both fine, and I've picked the second one. What should I say to the first when I decline?"
+    why: "The choice is made in the same sentence that mentions it."
+  - id: s10n2
+    triple: s10
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: "Offer one is 78,000 with 8% bonus, offer two is 84,000 flat. Which is more over three years?"
+    why: "The decision's subject matter, and the ask is arithmetic with one right answer."
+  - id: s11n1
+    triple: s11
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "Here's the whole thread with the landlord and the inspection report. Which paragraph covers the damp in the back room?"
+    why: "The same pile as s11p, and the answer is a location in it."
+  - id: s11n2
+    triple: s11
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: "Here are my last three bank statements. What did I actually average on rent and bills across them?"
+    why: "Computation over a pile."
+  - id: s12n1
+    triple: s12
+    band: s
+    domain: money
+    stakes: low
+    ask: implicit
+    kind: summarise
+    turn: "Four people have sent me spreadsheets about the holiday budget. Pull them into one table for me."
+    why: "The identical pile, and the ask is consolidation."
+  - id: s12n2
+    triple: s12
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: "Two of the holiday budget spreadsheets disagree by about 400 on the same flights. Where is the difference coming from?"
+    why: "Conflicting sources, and the task is to find the discrepancy."
+  - id: s13n1
+    triple: s13
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: "The build is green and the release notes are written. Which of our environments does the deploy job hit first?"
+    why: "The same opening as s13p, and the answer is in the config."
+  - id: s13n2
+    triple: s13
+    band: s
+    domain: technical
+    stakes: low
+    ask: implicit
+    kind: settled
+    turn: "We're deploying at four this afternoon. Write the note for the channel so people know what is changing."
+    why: "The decision is upstream of the turn and the ask is writing."
+  - id: s14n1
+    triple: s14
+    band: s
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: "The physio says swim and the GP says rest. Is there actual evidence either way for this kind of injury?"
+    why: "The same conflict as s14p, and the ask is information about the evidence."
+  - id: s14n2
+    triple: s14
+    band: s
+    domain: health
+    stakes: low
+    ask: implicit
+    kind: meta
+    turn: "Ignore what I said about the physio earlier, I'd misread the letter and it says something else."
+    why: "A correction, not a decision."

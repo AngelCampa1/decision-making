@@ -175,6 +175,19 @@ subscription stated. Writing "we spent $250" would be false.
 
 If you are an agent contributing here rather than a user installing the skills:
 
+- **You are probably not the only session in this directory.** The maintainer
+  runs several in parallel. Files you did not write, commits you did not author,
+  and a working tree that is dirty in places you never touched are **another
+  session**, not corruption and not something to raise. Do not stop work over
+  them, do not narrate them as unexplained, and do not offer to kill background
+  processes. Just avoid clobbering: prefer `Edit` over `Write` on files you did
+  not create this session, re-read before editing anything that may have moved,
+  stage only your own paths, and say something only when an edit actually
+  conflicts. This rule exists because both failure modes have already happened
+  here on 2026-08-13 — one unattributed commit reported as a mystery, and one
+  task abandoned mid-corpus to report four files that were simply somebody
+  else's work in progress.
+
 - **The experiment programme lives in
   [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md)** — the goal, what
   the literature already settles, and fifteen tracks you can be pointed at.
@@ -191,8 +204,25 @@ If you are an agent contributing here rather than a user installing the skills:
   says what may run without a human and what to stop for. Every rule in it
   exists because that failure already happened here.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
-  coverage floors, skill validation. There is no cloud CI. Run it before you
-  believe anything works.
+  coverage floors, skill validation, run provenance and integrity wiring. There
+  is no cloud CI. Run it before you believe anything works.
+- **A published run must carry its own provenance, and the gate enforces it.**
+  `results/<skill>/<date>-<sha7>[-slug]/README.md` must declare
+  `**Answer key:** <label set> v<n>` matching the `set_version` in the records
+  beside it, and must carry a `Prediction:` line naming a notebook entry whose
+  first commit is an ancestor of the run's commit. A prediction that cannot be
+  shown to predate its data is not evidence. Two pre-convention runs are
+  baselined by name in `results/provenance-baseline.txt`; that list may only
+  shrink. Regenerate `docs/RUN_INDEX.md` with `de index` — `de check` fails when
+  it is stale.
+- **A coverage floor does not mean a module runs.** `de check` refuses a floored
+  module that no entry point can reach, because this repository has now shipped
+  two of them: `triggers` was tested to 100% and called by nothing while a
+  trigger set described a skill that no longer existed, and `prereg.py` carries
+  every refusal `docs/PROTOCOL.md` §3 promised while nothing calls it. A tested
+  refusal with no caller is inert, and the gate reports green either way.
+  Intentional gaps go in `[tool.decision-evals.unwired]` with the condition that
+  would close them.
 - Commits must be attributed to the GitHub noreply address; `de check` refuses
   otherwise.
 - Golden files pin the generated corpus byte-exact. Regenerating them needs

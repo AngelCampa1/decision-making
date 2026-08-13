@@ -1,0 +1,479 @@
+# Band M — a short paragraph, 40 to 90 words.
+#
+# The band version 2 skipped entirely. It is where the ask stops being the whole
+# turn and starts sitting inside context, which is how most people actually
+# write: a few sentences of situation, then the question, then sometimes more
+# situation after it.
+#
+# Nothing here is carried over. All thirty turns are new.
+
+positive:
+  - id: m01p
+    triple: m01
+    band: m
+    domain: career
+    stakes: high
+    ask: explicit
+    route: fit
+    turn: >-
+      I keep reading that you should never take a counter-offer, that the trust
+      is gone and you'll be out within a year anyway. The thing is my manager is
+      the one who made the counter, she's the reason I stayed this long, and the
+      new place is a team of four people I've never met. Should I be treating
+      that rule as advice for me?
+    why: >-
+      A general rule stated in full, then two facts about this person that may
+      overturn it. The ask names the rule and asks whether it applies.
+  - id: m02p
+    triple: m02
+    band: m
+    domain: money
+    stakes: high
+    ask: implicit
+    route: ledger
+    turn: >-
+      My sister sent me the solicitor's letter, my mother forwarded the estate
+      agent's valuation, and there's a WhatsApp group where three cousins have
+      each said something different about what my grandmother wanted. The house
+      sale needs an answer from me by the end of next week and honestly I have
+      read all of it twice and I still could not tell you what the actual
+      question is.
+    why: >-
+      Four sources, a deadline, and no question mark anywhere. The turn says the
+      pile is the problem without asking anything, which is the implicit form of
+      the ledger case.
+  - id: m03p
+    triple: m03
+    band: m
+    domain: health
+    stakes: high
+    ask: explicit
+    route: cascade
+    turn: >-
+      Occupational health have offered to write to my employer about the
+      adjustments. It would probably get me the change in hours, which I need.
+      But it puts the diagnosis on a file that my line manager can see, and
+      there's a promotion round in the spring that she sits on. If I let them
+      send it, what else does that touch?
+    why: >-
+      The action is straightforward and the whole question is what it sets in
+      motion. Asks what it spends rather than what it does.
+  - id: m04p
+    triple: m04
+    band: m
+    domain: relationships
+    stakes: high
+    ask: embedded
+    route: timing
+    turn: >-
+      We've agreed we're separating. That part is settled and neither of us is
+      trying to reopen it. The question is when we tell his parents, because his
+      father is having the second operation in March and his mother has already
+      booked the whole family in for Easter. Do we say it before Easter or after
+      it? Either way somebody finds out from someone else first.
+    why: >-
+      Direction settled, stated as settled, and the question is only when. It
+      sits mid-paragraph with a sentence after it.
+  - id: m05p
+    triple: m05
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: cascade
+    turn: >-
+      We're thinking of moving the scheduled jobs off the main database onto
+      their own instance. On its own it's a small change and the migration is
+      maybe a day. What I keep getting stuck on is that the reporting team reads
+      from a replica of that database, and nobody has asked them. Should we go
+      ahead and do it?
+    why: >-
+      A small action whose consequences reach a team not in the room. The
+      technical framing does not make it a technical judgement.
+  - id: m06p
+    triple: m06
+    band: m
+    domain: career
+    stakes: high
+    ask: implicit
+    route: ~
+    turn: >-
+      I've been offered the role in Lisbon. It's more money, it's the work I
+      said I wanted three years ago, and my partner has said she'll come. Her
+      mother is not well. My daughter starts secondary school in September and
+      has exactly one friend. I have until Friday and I have not been able to
+      hold all of it in my head at once.
+    why: >-
+      A real decision with a deadline, several things pulling against each
+      other, and no question asked at all.
+  - id: m07p
+    triple: m07
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    route: fit
+    turn: >-
+      Every guide says overpay the mortgage before you invest, given our rate.
+      What none of them seem to cover is that I'm self-employed with maybe four
+      months of work booked at any one time, and the overpayment isn't something
+      I can draw back out if a quarter goes badly. Does the standard answer
+      still hold for someone in that position?
+    why: >-
+      The generic answer is named and probably right in general. The fact that
+      may overturn it is stated. The ask is explicitly whether it holds here.
+  - id: m08p
+    triple: m08
+    band: m
+    domain: health
+    stakes: low
+    ask: embedded
+    route: ~
+    turn: >-
+      The knee has been fine for six weeks now. Do I go back to running or give
+      it another month? The physio said eight weeks but also said to go by how
+      it feels, and it feels fine. I've got a half marathon in the calendar in
+      October that I'd have to start training for around now if I'm doing it.
+    why: >-
+      Low stakes, genuinely open, and the question sits in the second sentence
+      with the facts that bear on it arriving afterwards.
+  - id: m09p
+    triple: m09
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    route: timing
+    turn: >-
+      I'm going to tell my closest friend that I know about the affair. I'm not
+      asking whether to, I've thought about that for a month and I'm doing it.
+      What I can't work out is whether to do it before her birthday next weekend
+      or wait until after, when her sister is back and she won't be on her own.
+      When?
+    why: >-
+      The turn rules out the direction question in its own words. Only the
+      moment is open.
+  - id: m10p
+    triple: m10
+    band: m
+    domain: technical
+    stakes: low
+    ask: implicit
+    route: ledger
+    turn: >-
+      Three of us have now written docs about what to do with the events
+      pipeline. Mine says split it, Dev's says leave it and fix the consumer,
+      and the one from the platform team says both but in the other order.
+      They're all reasonable and they're all about four pages. We're supposed to
+      come out of Thursday with a direction and right now I couldn't say what we
+      actually disagree about.
+    why: >-
+      A pile of conflicting input, a deadline, and the stated difficulty is not
+      knowing what the disagreement is. No question mark.
+
+negative:
+  - id: m01n1
+    triple: m01
+    band: m
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      I keep reading that you should never take a counter-offer, that the trust
+      is gone and you'll be out within a year anyway. Where does that actually
+      come from? I'd like to know whether there's a real study behind the number
+      people quote or whether it's one recruiter's blog post that everybody has
+      been citing at each other since about 2011.
+    why: >-
+      The same opening sentence as m01p. The ask is the provenance of a claim,
+      which has a determinate answer.
+  - id: m01n2
+    triple: m01
+    band: m
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      I've decided to turn down the counter-offer and go to the new place. My
+      manager made the counter herself and she's the reason I stayed as long as
+      I did, so I don't want to be brisk about it. Can you help me write the
+      message? Warm, clear that it's settled, and not so apologetic that it
+      sounds like I might still be talked round.
+    why: >-
+      The same situation with the decision already made in the first sentence.
+      The ask is drafting.
+  - id: m02n1
+    triple: m02
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      My sister sent me the solicitor's letter, my mother forwarded the estate
+      agent's valuation, and there's a WhatsApp group where three cousins have
+      each said something different about what my grandmother wanted. Before I
+      do anything with any of it, can you just lay out who has said what, and
+      when they said it? I want the whole thing in one place rather than spread
+      out across four separate threads.
+    why: >-
+      The identical pile. The ask is consolidation, and the turn says explicitly
+      that it comes before anything else.
+  - id: m02n2
+    triple: m02
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      There's a solicitor's letter about my grandmother's house and a valuation
+      from the estate agent, and the two of them use different words for what
+      happens if one beneficiary won't sign. In the solicitor's letter, which
+      clause is the one that actually covers a beneficiary refusing to sign? I
+      think it's somewhere on the second page but I honestly can't tell which of
+      those paragraphs it is.
+    why: "A document plus a question, and the answer is a location inside it."
+  - id: m03n1
+    triple: m03
+    band: m
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Occupational health have offered to write to my employer about the
+      adjustments. Before I answer them I want to understand the rules: once
+      that letter exists, who is actually entitled to read it? Is my line
+      manager automatically one of the people on that list, or does it sit with
+      HR on its own unless somebody specifically asks for it to be passed
+      further than that?
+    why: >-
+      Same opening, and the ask is what the rule is. The turn even says the
+      information comes before the decision.
+  - id: m03n2
+    triple: m03
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      I've told occupational health to go ahead and write to my employer about
+      the adjustments, so that's happening. What I'd like is a list of the
+      questions I should be asking them before the letter goes, about what it
+      will say, who gets to see it, and how long it stays on file. Ten or so of
+      them, in the order I ought to be asking them.
+    why: "The decision is made in the first sentence. The ask is generation."
+  - id: m04n1
+    triple: m04
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      We've agreed we're separating and we'll be telling his parents in the
+      spring. Something I don't understand and would rather not ask the
+      solicitor about at their hourly rate: does the date we actually separate
+      matter for anything official, or is it only the date that one of us files
+      the paperwork that counts? I have seen both stated confidently and would
+      rather know which is right.
+    why: "Same situation, and the question has a determinate legal answer."
+  - id: m04n2
+    triple: m04
+    band: m
+    domain: relationships
+    stakes: high
+    ask: implicit
+    kind: settled
+    turn: >-
+      We've agreed we're separating and we've settled on telling his parents
+      after Easter, once his father is through the second operation. Write me
+      something I can actually say to them. Short, kind, no detail about whose
+      idea it was, and it has to work whether or not his mother has already
+      guessed the whole thing, which knowing her she very probably has.
+    why: >-
+      Both the direction and the timing are settled by the second sentence. The
+      ask is a piece of writing.
+  - id: m05n1
+    triple: m05
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      We moved the scheduled jobs onto their own instance last week and since
+      then the reporting team's overnight refresh has been finishing about forty
+      minutes later than it used to. Nothing else changed that I know of and the
+      new instance is barely loaded. Why would splitting them out have made that
+      job slower rather than faster?
+    why: >-
+      The same change, already made, and the task is technical diagnosis of what
+      followed.
+  - id: m05n2
+    triple: m05
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      We're moving the scheduled jobs off the main database onto their own
+      instance. The reporting team reads from a replica. If the jobs write to
+      the primary from somewhere else, does replication lag on that replica
+      change at all, or is it only a function of how much is being written
+      overall? I can never remember which.
+    why: >-
+      A decision is mentioned and settled. The question after it is a factual
+      one about how replication works.
+  - id: m06n1
+    triple: m06
+    band: m
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      The role in Lisbon is 74,000 euros with a 10% bonus and four weeks of
+      unpaid August. I'm on 61,500 here with an 8% bonus and no unpaid leave.
+      Rent where we'd be looking is about 1,650 against the 1,900 we pay now.
+      Roughly what does the move do to what the two of us actually have left over
+      at the end of each month?
+    why: "The decision's own numbers, and the ask is arithmetic."
+  - id: m06n2
+    triple: m06
+    band: m
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      We're moving to Lisbon in September and my daughter will be starting
+      secondary school there. How does the school year actually work — when does
+      it start, and is there a point in the year after which they won't take a
+      new pupil into that year group? My Portuguese is nowhere near good enough
+      to read the ministry site and get it right.
+    why: "The move is settled in the first four words. The ask is information."
+  - id: m07n1
+    triple: m07
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      Our rate is 4.79% fixed until 2029 and the balance is 214,000 over
+      nineteen years. If we overpaid 400 a month from now, how much interest
+      does that actually save across the fix, and how many months does it take
+      off the end of the term? Assume the rate after 2029 is the same.
+    why: "Same subject matter, and the answer is a calculation with one right result."
+  - id: m07n2
+    triple: m07
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      We've decided to overpay the mortgage rather than invest, and I'm
+      self-employed so the income is lumpy. Two things I want to get right
+      before I set it up: what's the annual overpayment limit before the early
+      repayment charge bites, and does an overpayment reduce the term or the
+      monthly payment by default, if we don't say which?
+    why: >-
+      The decision is stated as made. Both questions have answers in the
+      mortgage terms.
+  - id: m08n1
+    triple: m08
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      The knee has been fine for six weeks and the physio said eight. What is
+      the actual reason for a fixed number of weeks with this kind of injury? I
+      understand it's about healing rather than pain, but I'd like to know what
+      is still going on in there at week six that isn't going on at week eight.
+    why: "The same facts as m08p, and the ask is to be told how something works."
+  - id: m08n2
+    triple: m08
+    band: m
+    domain: health
+    stakes: low
+    ask: implicit
+    kind: generate
+    turn: >-
+      I'm starting back to running next week after six weeks off with the knee,
+      building towards a half marathon in October. Put together a plan for the
+      first month. Three runs a week, nothing over an hour to start with, and
+      say what I should do on the days in between rather than leaving them blank.
+    why: >-
+      The decision is made in the first sentence and the ask is to produce a
+      training plan.
+  - id: m09n1
+    triple: m09
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      I've written three different versions of what I'm going to say to my
+      friend about the affair, over about a month, and they've got steadily
+      longer and worse. I'll paste them below. Can you tell me what the through
+      line is — the thing all three of them are actually trying to say, under
+      all the throat-clearing?
+    why: >-
+      A pile of the person's own drafts. The ask is what they have in common,
+      which is a summary.
+  - id: m09n2
+    triple: m09
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: meta
+    turn: >-
+      Earlier you said I should think about what I want to be true a year from
+      now before I say anything to her. I've been chewing on that and I'm not
+      sure I follow the reasoning. Can you explain why that's the question
+      rather than just whether it's true and whether she'd want to know?
+    why: >-
+      The subject is a previous answer rather than the decision. Meta, and the
+      person is asking to be shown the reasoning.
+  - id: m10n1
+    triple: m10
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Three of us have written docs about what to do with the events pipeline.
+      Mine says split it, Dev's says leave it and fix the consumer, and the
+      platform team's says both but in the other order. They're about four pages
+      each and none of them is badly written. Can you put together a one-page
+      summary of all three, for the people coming to the meeting on Thursday
+      who won't have read any of it?
+    why: >-
+      The identical pile as m10p, and the ask is a document for other people to
+      read.
+  - id: m10n2
+    triple: m10
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      The events pipeline does about 4.2 million messages a day at the moment
+      and the consumer is the part that falls over. If we split it into three
+      topics by event type, and the type mix is roughly 60/30/10, what does peak
+      throughput on the busiest topic look like against the 900 a second the consumer manages now? I want the number for the busiest single topic,
+      not the average across the three of them.
+    why: "The same system, and the ask is arithmetic about it."
