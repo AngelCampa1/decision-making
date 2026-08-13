@@ -65,6 +65,15 @@ structure, content, count, composition twice — and **not one moved how well it
 discriminates.** Every one moved only where it sits on the precision/recall
 frontier.
 
+**And a second reading of that through-line, added 2026-08-13.** The trigger
+corpus is separable by **turn length alone at AUC 0.850**, and a bare
+*"fire if ≥ 18 words"* rule scores **0.890** with no model. The best arm ever
+measured scores 0.956, so every result above was competing for about **six
+points over a ruler**. Five nulls is what a ceiling looks like. Neither reading
+is established and both must be reported until the corpus is rebuilt —
+[`the v3 plan`](superpowers/plans/2026-08-13-trigger-corpus-v3.md),
+[`the finding`](../notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words.md).
+
 ---
 
 ## Measurements caught being broken
@@ -95,6 +104,7 @@ Each now has a guard and tests: `final_responses_comparable`,
 | `p06` label (`fit` or `cascade`) | open — the model answers timing-ish in every arm |
 | Should routing allow several acceptable routes? | open — must be decided blind to which items failed |
 | Vendor the spider databases? | open — needs explicit permission, third-party download |
+| **Build trigger corpus v3?** | **planned, not started.** ~2,320 calls and ~11k words of authored bodies. Voids every v2 number by design. [Plan](superpowers/plans/2026-08-13-trigger-corpus-v3.md). |
 
 ---
 
