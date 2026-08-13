@@ -94,10 +94,21 @@ class TriggerCase:
 
 @dataclass(frozen=True)
 class TriggerSet:
-    """The positive and negative cases for one skill."""
+    """The positive and negative cases for one skill.
+
+    Attributes:
+        version: Which revision of the labels these cases are. **Runs made
+            against different versions are not comparable.** On 2026-08-13 one
+            turn moved from the positives to the negatives, and recall rose by
+            3 to 5 points on every arm already on disk without a single call
+            being re-made. A label change is a silent effect of exactly the kind
+            this repository keeps catching after the fact, so the version is
+            written into every record and checked at comparison time.
+    """
 
     skill: str
     cases: tuple[TriggerCase, ...]
+    version: int = 1
 
     @property
     def positives(self) -> tuple[TriggerCase, ...]:
@@ -200,7 +211,9 @@ def load_trigger_set(path: Path) -> TriggerSet:
     duplicates = sorted({i for i in ids if ids.count(i) > 1})
     if duplicates:
         raise TriggerSetError(f"{path}: duplicate case ids {duplicates}")
-    return TriggerSet(skill=str(raw["skill"]), cases=tuple(cases))
+    return TriggerSet(
+        skill=str(raw["skill"]), cases=tuple(cases), version=int(raw.get("version", 1))
+    )
 
 
 def evaluate(trigger_set: TriggerSet, fires: Callable[[str], bool]) -> TriggerReport:

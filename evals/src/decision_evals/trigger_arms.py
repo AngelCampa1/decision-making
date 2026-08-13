@@ -184,6 +184,32 @@ def covers_rates(records: Iterable[Record], *, n_entries: int | None = None) -> 
     )
 
 
+def label_versions_comparable(a: Iterable[Record], b: Iterable[Record]) -> str | None:
+    """Whether two arms were scored against the same revision of the labels.
+
+    On 2026-08-13 one turn moved from the positives to the negatives. **Recall
+    rose 3 to 5 points on every arm already on disk and not one call was
+    re-made.** A label change is invisible in a checkpoint, survives every
+    instrument check, and produces a clean improvement — which is the exact
+    failure shape this repository has now caught four times.
+
+    Records written before the version existed carry no ``set_version``. Those
+    are treated as version 1, which is what they are, rather than as unknown:
+    the alternative is a guard that never fires on the runs it was written for.
+    """
+    versions_a = {int(row.get("set_version", 1)) for row in a}
+    versions_b = {int(row.get("set_version", 1)) for row in b}
+    if len(versions_a | versions_b) <= 1:
+        return None
+    return (
+        f"these arms were scored against different label revisions: "
+        f"{sorted(versions_a)} against {sorted(versions_b)}. Moving one turn between "
+        f"the positives and the negatives changes recall on both arms with no call "
+        f"re-made, so the difference would not be a model result. Re-score the older "
+        f"arm against the current set first."
+    )
+
+
 def per_item_correctness(records: Iterable[Record]) -> dict[str, float]:
     """Per case id, the share of repeats where the arm's verdict matched its label.
 
@@ -219,7 +245,11 @@ def compare(a: Iterable[Record], b: Iterable[Record]) -> ArmComparison:
     """
     from scipy.stats import wilcoxon
 
-    left, right = per_item_correctness(a), per_item_correctness(b)
+    rows_a, rows_b = list(a), list(b)
+    if (reason := label_versions_comparable(rows_a, rows_b)) is not None:
+        raise ArmError(reason)
+
+    left, right = per_item_correctness(rows_a), per_item_correctness(rows_b)
     shared = sorted(set(left) & set(right))
     if not shared:
         raise ArmError("the two arms share no case ids")

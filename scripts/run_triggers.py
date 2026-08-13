@@ -57,6 +57,7 @@ from decision_evals.triggers import (  # noqa: E402
     PROCEDURES,
     TRIGGERS_DIR,
     TriggerCase,
+    TriggerSet,
     Verdict,
     decision,
     evaluate,
@@ -208,7 +209,7 @@ def load_done(path: Path) -> dict[tuple[str, int], dict[str, object]]:
 
 
 def collect(
-    trigger_set: object,
+    trigger_set: TriggerSet,
     description: str,
     model: str,
     repeats: int,
@@ -225,7 +226,7 @@ def collect(
     """
     done = load_done(checkpoint)
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
-    cases = trigger_set.cases  # type: ignore[attr-defined]
+    cases = trigger_set.cases
     total = len(cases) * repeats
 
     with checkpoint.open("a", encoding="utf-8") as handle:
@@ -256,6 +257,11 @@ def collect(
                     "fired": fired,
                     "procedure": procedure,
                     "covers": covers,
+                    # The label revision this verdict was scored against. A run
+                    # made before 2026-08-13 sits at version 1, where `x-n21`
+                    # was a positive; moving it raised recall 3-5pp on every arm
+                    # with no call re-made. Stored so a comparison can refuse.
+                    "set_version": trigger_set.version,
                     "p_fire": p_fire,
                     "should_fire": case.should_fire,
                     "route": case.route,

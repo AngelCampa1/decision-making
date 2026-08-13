@@ -18,6 +18,7 @@ from decision_evals.trigger_arms import (
     compare,
     covers_rates,
     format_comparison,
+    label_versions_comparable,
     load_arm,
     per_item_correctness,
     summarise,
@@ -306,3 +307,41 @@ class TestItReproducesThePublishedNumbers:
         assert max(rates) - min(rates) > 0.25, (
             "the complete partition set at n=2 spans more than twenty-five points"
         )
+
+
+class TestLabelVersionsComparable:
+    """The fourth defect of this shape, guarded before it could produce a number.
+
+    Moving `x-n21` from the positives to the negatives on 2026-08-13 raised
+    recall between 3 and 5 points on every arm on disk. No model was re-run. A
+    comparison spanning that change would have read as an improvement.
+    """
+
+    def test_two_arms_at_the_same_version_compare(self) -> None:
+        a = [
+            row("p1", fired=True, should_fire=True) | {"set_version": 2},
+            row("n1", fired=False, should_fire=False) | {"set_version": 2},
+        ]
+        assert label_versions_comparable(a, a) is None
+        assert compare(a, a).p_value == 1.0
+
+    def test_records_without_the_field_are_version_one(self) -> None:
+        """The runs the guard was written for predate the field."""
+        a = [row("p1", fired=True, should_fire=True)]
+        b = [row("p1", fired=True, should_fire=True) | {"set_version": 1}]
+        assert label_versions_comparable(a, b) is None
+
+    def test_a_mixed_comparison_is_refused(self) -> None:
+        a = [row("p1", fired=True, should_fire=True)]
+        b = [row("p1", fired=False, should_fire=True) | {"set_version": 2}]
+        assert label_versions_comparable(a, b) is not None
+        with pytest.raises(ArmError, match="different label revisions"):
+            compare(a, b)
+
+    def test_the_refusal_names_both_revisions(self) -> None:
+        a = [row("p1", fired=True, should_fire=True) | {"set_version": 1}]
+        b = [row("p1", fired=True, should_fire=True) | {"set_version": 3}]
+        reason = label_versions_comparable(a, b)
+        assert reason is not None
+        assert "[1]" in reason
+        assert "[3]" in reason

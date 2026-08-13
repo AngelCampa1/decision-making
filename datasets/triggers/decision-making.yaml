@@ -1,5 +1,13 @@
 # Trigger set for `decision-making`, the skill that actually ships.
 #
+# VERSION 2, 2026-08-13. `x-n21` moved from the positives to the negatives and
+# five turns gained a second acceptable route, both on maintainer decisions.
+# **Numbers from version 1 are not comparable with numbers from version 2.**
+# Moving one positive to the negatives raised recall on every arm by 3 to 5
+# points and raised the false-positive rate slightly, without any model being
+# re-run. The version is carried into every record the runner writes so that a
+# later comparison can refuse rather than average across the change.
+#
 # Written 2026-08-12, and it replaces nothing: the only trigger set on disk was
 # `evidence-ledger.yaml`, which names a skill that no longer exists. The four
 # procedures were consolidated behind one router on 2026-08-11 and the dataset
@@ -25,6 +33,7 @@
 # question. Cases where the router itself is genuinely ambiguous are marked
 # `route: ~` and excluded from routing accuracy rather than being guessed.
 
+version: 2
 skill: decision-making
 
 positive:

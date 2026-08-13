@@ -212,6 +212,18 @@ If you are an agent contributing here rather than a user installing the skills:
   starting a run, write down what will be computed, from which records, over
   which denominator, by which function. If that sentence cannot be written, the
   run is not ready.
+- **A change to the answer key is a change to every number ever computed from
+  it.** On 2026-08-13 one turn moved from the positives to the negatives, on a
+  maintainer decision that was correct. Recall rose 3 to 5 points on every arm
+  on disk and **not one call was re-made**; the shipped skill gained five points
+  it did nothing to earn. The checkpoints were valid, every instrument check
+  passed, the parse rate was 100%, and the number moved the way an author would
+  like. Unlike the three earlier defects of this shape it was **not a bug** —
+  which is what makes it worse, because nothing in a record distinguishes a
+  label correction from a model result. Version the key, stamp the version into
+  every record, and refuse to compare across versions
+  (`trigger_arms.label_versions_comparable`). Remembering does not work; the
+  count is four for four.
 - **An estimator that cannot return a non-zero value is not a measurement, and
   it does not announce itself.** Two defects in the trigger instrument on
   2026-08-12 each produced a clean run, a full checkpoint and a plausible zero:
