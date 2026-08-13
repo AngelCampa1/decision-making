@@ -14,10 +14,14 @@ skill* and is empty on purpose.
 
 ## The one-line version
 
-**Six results are in, five measurements were caught being broken, no skill has
-been evaluated end-to-end — and the instrument that produced every trigger
+**Seven results are in, eight measurements were caught being broken, no skill
+has been evaluated end-to-end — and the instrument that produced every trigger
 result turns out to be solvable at 0.890 by counting words, which is now
 [Track N](RESEARCH_PROGRAMME.md).**
+
+*The counts above read "six" and "five" until 2026-08-13, when both tables below
+had already grown past them. A summary line that is not recomputed from the
+table under it is a hand-maintained number like any other.*
 
 ---
 
@@ -26,7 +30,7 @@ result turns out to be solvable at 0.890 by counting words, which is now
 | family | calls | status |
 |---|---|---|
 | trigger arms (M4, M5, M6, M6b, L5, confidence, baseline) | **2,555** | the working instrument |
-| **L7** (`stakes-named`, `stakes-shown`) | **292** | **run and scored, not published** — see below |
+| **L7** (`stakes-named`, `stakes-shown`) | **292** | run, scored and **published** 2026-08-13 |
 | M5 first attempt, voided by a parser defect | 365 | kept as evidence |
 | Track A pilots (`math`, `actions`) | 420 | both venues closed |
 | calibration + `evidence-ledger` corpora | 560 | ceiling, closed |
@@ -93,15 +97,25 @@ plausible number. **None crashed.**
 | `covers` quoted without its denominator | 0.743 | or 0.895, depending |
 | `covers` compared across partitions | 0.743 vs 0.857 | 28.6-point range; the measure is retired |
 | the corpus itself, never audited | five arm comparisons | a ruler solves it at 0.890; the movable range was ~6 points → **Track N** |
-| the model tier is not in any record | every trigger number | `--model` is a CLI default and the tier survives only as prose in a hand-written README → **N8** |
+| the model tier is not in any record | every trigger number | `--model` is a CLI default and the tier survived only as prose in a hand-written README. **Closed 2026-08-13 (N8)**: `run_triggers.py` stamps `model`, and `models_comparable` refuses a comparison spanning tiers |
+| `summarise()` read `should_fire` from the record, so a single-arm report on a v1 checkpoint silently emitted v1 numbers | `full` at recall 0.878 beside `stakes-shown` at 0.912 | a v2 re-score puts `full` five points higher; the L7 table would have been wrong in the shipped arm's disfavour |
 
-Each of the first five has a guard and tests: `final_responses_comparable`,
-`decision(text, allowed)`, `routing_is_by_name`, `trigger_arms.covers_rates`.
-The last two are open and are Track N's job.
+Six of the eight have a guard and tests: `final_responses_comparable`,
+`decision(text, allowed)`, `routing_is_by_name`, `trigger_arms.covers_rates`,
+and — since N8 closed on 2026-08-13 — `models_comparable`. **Row six is the
+open one**, and it is Track N's whole job: nothing can guard a corpus against
+admitting a shortcut except rebuilding it.
+
+**The eighth is still open, and it is the sharpest, because a guard was already
+there and did not cover it.** `label_versions_comparable` refused the cross-arm comparison,
+which is the guard working. Nothing refuses a *single-arm* report — and a
+single-arm report is what goes in a README. The guard protects comparisons and
+not statements. Found while scoring L7; see
+[the entry](../notebook/2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier.md).
 
 **The pattern is the finding.** Not one of these was caught by a run failing.
 Every one was caught by somebody asking a question the instrument was not set up
-to answer — and two of the seven were the maintainer asking, not the tooling.
+to answer — and two of the eight were the maintainer asking, not the tooling.
 
 ---
 
@@ -128,7 +142,7 @@ became **[Track N](RESEARCH_PROGRAMME.md)** on 2026-08-13.
 |---|---|
 | **0** — instrument (transport) | ✅ done |
 | **I** — reliability | ✅ done |
-| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; N2 half authored (24 of 40 triples, S and M bands); N3–N8 open. Blocks every future L and M claim and retro-qualifies every past one. |
+| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — 40 triples, 120 items, all four bands (S 42, M 30, L 27, XL 21); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; N3–N7 open. Blocks every future L and M claim and retro-qualifies every past one. |
 | **K** — frameworks review | 🟡 three passes; K4 waits on Track A |
 | **M** — skill design | 🟡 M1–M6b done; M3 has no estimator on a merged arm; **all of it now carries the Track N caveat** |
 | **L** — skill variants | 🟡 L5 and **L7 run**; L7 unpublished; **same Track N caveat** |

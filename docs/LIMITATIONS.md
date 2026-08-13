@@ -69,6 +69,30 @@ in mixed batches to reduce this, but it is not eliminated.
 
 ## The datasets
 
+**The trigger corpus is 89% solvable by counting words, and every published
+trigger number sits on it.** Turn length alone separates the positives from the
+negatives at AUC 0.850; a bare *"fire if ≥ 18 words"* rule scores 0.890 with no
+model involved. The best arm ever measured here scores 0.956, so **the entire
+range any arm was competing over is about six points above a ruler.**
+
+Two consequences, and both must be reported until the corpus is rebuilt:
+
+- *Internal validity survives.* Every arm saw the same 73 turns, so the paired
+  comparisons between arms are still the comparisons they claim to be.
+- *The absolute numbers do not travel, and the standing interpretation has a
+  second reading.* "Five independent manipulations and not one moved
+  discrimination" is either a finding about skill descriptions or **what a
+  ceiling looks like**, and this corpus cannot separate those.
+
+The corpus was never audited for shortcuts before it was used, which is the
+sixth entry in [`STATUS.md`](STATUS.md)'s table of measurements caught being
+broken. The rebuild is [Track N](RESEARCH_PROGRAMME.md); the finding is
+[here](../notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words.md).
+
+**The model tier is in no record.** `--model` is a CLI default, so which tier
+produced a given trigger number survives only as prose in a hand-written README.
+Track N8.
+
 **We generate our own items, so we also own their biases.** Public benchmarks are
 contaminated, which is why we generate. The cost is that item realism rests on a
 10% human audit, and a template family that is subtly easier in the treatment's

@@ -16,6 +16,30 @@ What *is* enforced today is the promotion gate: `de lint` refuses to let a skill
 carrying `UNTESTED` or `WITHDRAWN` sit in `plugin/skills/`, and `de check` runs
 it. That check is real and has teeth. The table below does not.
 
+Four more checks over the method itself were added on 2026-08-13, each after the
+failure it prevents had already happened here: **run provenance** (a published
+run must state its answer-key version and name a prediction that can be shown to
+predate its data), **integrity wiring** (a module with a coverage floor that no
+entry point reaches is refused), **the decision register** (a change to the
+answer key or the shipped skill needs a written reason), and **documentation**
+(a `de` command or path that this repository does not have is refused). None of
+them can put a row in the table below. They govern whether a number is
+*traceable*, not whether it is *good*.
+
+## The caveat that qualifies every number on record
+
+Every measurement this repository has made is a **trigger** measurement — does
+the skill fire when it should — and all of them ran on a corpus that is **89%
+solvable by counting words** (AUC 0.850 on turn length alone; a bare "fire if
+≥ 18 words" rule scores 0.890 against a best measured arm of 0.956). The paired
+comparisons between arms remain valid; the absolute numbers do not travel, and
+"nothing moved discrimination" has a second reading, which is that this is what
+a ceiling looks like. The rebuild is Track N. See
+[`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
+
+None of this touches the table below, which is empty for a different and simpler
+reason: no skill has been measured on whether it improves a decision at all.
+
 ## Skills
 
 | Skill | Verdict | Primary metric | Effect | 95% CI | p | q (BH) | N | Model | Run |
