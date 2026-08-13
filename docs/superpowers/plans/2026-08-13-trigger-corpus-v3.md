@@ -1,5 +1,12 @@
 # Trigger corpus v3: real length, and a set a ruler cannot solve
 
+**This is Track N of
+[`docs/RESEARCH_PROGRAMME.md`](../../RESEARCH_PROGRAMME.md)**, in Part 3 — the
+instrument. It blocks the measurement and not the product, it retro-qualifies
+every Track L and Track M number on disk, and its experiments are numbered
+`N1`–`N8` there. This file is the design; the programme entry is the place it
+sits in the order.
+
 **2026-08-13. A plan, not a run.** Nothing here has been executed. It is written
 down first because the corpus is the answer key, and
 [`the last four pre-registration slips`](../../../CLAUDE.md) were all cases where

@@ -43,7 +43,16 @@ Three corpora were built and all three measured nothing:
 | `rel-*` rebuilt | ~700 tok | type-compatible colliding distractors | 0.971 |
 | `probe-*` casefiles | ~1,650 tok | trap order 1–3, four consequence kinds, three framings | **27 trap opportunities, zero taken**; admissibility 0.917 |
 
-A fourth was planned — the same casefiles padded to 100k tokens. It is not
+**A fourth corpus did produce results — and on 2026-08-13 it turned out to be
+measuring something else.** The 73-turn trigger set behind every Track L and
+Track M number is separable by **turn length alone at AUC 0.850**; a bare *"fire
+if ≥ 18 words"* rule scores **0.890** against a best-ever arm of 0.956. So the
+six-point band above a ruler is where five reported nulls were competing, and
+the corpus never contained the pile of context its `ledger` procedure exists
+for. **Track N** rebuilds it; the existing L and M comparisons stay valid
+against each other and stop being quotable on their own.
+
+A fifth was planned — the same casefiles padded to 100k tokens. It is not
 cancelled, but it is demoted to Track G, and the ~960k characters of library
 authoring it needs is **on hold** until Track A reports.
 
@@ -139,7 +148,8 @@ whether the damage came from turns or from delegation.
 |  | `M` | Skill design: how a skill should be built |
 | **2. The product** | `S` | Ship the skills |
 |  | `L` | Skill variants: which formulation is best |
-| **3. The instrument** | `0` | Instrument |
+| **3. The instrument** | `0` | Instrument: multi-turn and delegation |
+|  | `N` | The trigger corpus: is the instrument behind `L` and `M` a fair test? |
 | **4. Does the failure exist** | `A` | Replication |
 |  | `B` | Attribution |
 | **5. Where a skill helps** | `C` | Evidence aggregation |
@@ -255,6 +265,15 @@ extrapolating from 202 skills down towards four; 28 is the only point anyone has
 in between, and it comes with an installer who abandoned it.
 
 ### Track M — Skill design: how a skill should be built
+
+> **The same caveat as Track L, and it lands harder here.** M4, M5, M6 and M6b
+> each found no effect on firing accuracy, and the headline reading is that
+> structure, count and composition do not change discrimination. On a corpus a
+> ruler solves at 0.890 there were about six points to move. **Four nulls with
+> six points of headroom is not the same evidence as four nulls with fifty**,
+> and this document reported it as though it were. **Track N** is the fix; the
+> M results stand as internally valid comparisons and as nothing more until it
+> lands.
 
 **Question.** Given content worth having, what is the right *shape* to put it
 in — one skill or several, how long, how bundled, how described?
@@ -579,6 +598,13 @@ is the one to bet on.
 
 ### Track L — Skill variants: which formulation is best
 
+> **Every L result on disk was measured on a corpus a ruler solves at 0.890.**
+> L5 and L7 are internally valid — all arms saw identical items — but the
+> movable range above a word count was about six points, so an L null is
+> ambiguous between "phrasing does not matter" and "there was nowhere to move".
+> **Track N** is rebuilding the corpus; nothing here is retired and nothing here
+> may be quoted without that sentence attached.
+
 **Question.** For one target failure, which way of writing the skill works best?
 
 **Why it matters.** The brief asked to test "different types of skills and
@@ -700,6 +726,12 @@ pre-registered comparison, and a winner replicated on a holdout it never saw.
 
 Blocks the measurement. Does not block the product.
 
+**Two instruments, and only one of them was ever audited.** Track 0 is the
+transport — can this stack run a multi-turn, delegating system under control.
+Track N is the *corpus* that every Track L and Track M number was computed
+from, and until 2026-08-13 nobody had asked whether it was a fair test. It was
+not.
+
 ### Track 0 — Instrument
 
 **Question.** Can this stack run a genuinely multi-turn, genuinely delegating
@@ -764,6 +796,88 @@ and the second by a lucky guess. `cache_read` is not evidence either way.
 **Done when.** A canary trace shows turn-*n* context containing turn-1 content
 by token accounting; a 4-node scripted run completes with per-node records; the
 isolation canary passes at every node; `de check` green.
+
+---
+
+### Track N — The trigger corpus
+
+**Full design:
+[`docs/superpowers/plans/2026-08-13-trigger-corpus-v3.md`](superpowers/plans/2026-08-13-trigger-corpus-v3.md).**
+
+**Question.** Every Track L and Track M result was computed from one corpus of
+73 turns. Is that corpus a test of the thing it claims to test?
+
+**Why it matters — and this is not a hypothetical.** Asked for the first time
+on 2026-08-13, prompted by the maintainer pointing out that nothing in the set
+was longer than 25 words while real users write paragraphs. Two defects, and
+they are different problems that arrived together:
+
+- **Coverage.** No turn exceeded 23 words; 46 of 73 were ten words or fewer.
+  The `ledger` procedure exists for *"a pile of context ending in a question
+  about what to do"* and the corpus had never contained a pile — the longest
+  positive was one sentence *describing* one.
+- **A shortcut.** Positives ran at a median of 18 words and negatives at 8, so
+  turn length alone separated the labels at **AUC 0.850** and a bare *"fire if
+  ≥ 18 words"* rule scored **0.890 accuracy with no model involved.** The best
+  arm ever measured scored 0.956.
+
+**So every result in Tracks L and M was competing for about six points over a
+ruler**, and the through-line those tracks report — five manipulations of a
+description, none of which moved discrimination — now carries a second reading
+that cannot be dismissed: **there was six points of room, and five nulls is what
+a ceiling looks like.** Neither reading is established. Both are reported until
+this track closes.
+
+Fixing coverage without fixing the shortcut makes the shortcut worse — adding
+long positives to a set where long already means positive widens the gap — so
+both are fixed by one construction, the **matched triple**: one positive and two
+negatives written to the same length, sharing a body in the long bands and
+differing only in what is asked of it.
+
+Version 3 also stops being a single-question instrument. The same 120 calls per
+arm answer length, domain, stakes, ask form and negative kind, because each is a
+column on the case rather than a property the set happens to have.
+
+| # | Experiment | Cost | State |
+|---|---|---|---|
+| **N1** | **The shortcut battery.** `corpus.py`: eight trivial features, each held to a **two-sided** [0.40, 0.60] — the one-sided `MAX_LENGTH_SEPARABILITY = 0.70` it replaces would have passed a set at AUC 0.05, which is solved by a ruler pointing the other way — plus a depth-2 stump over all eight capped at 0.70, because a battery of singles misses interactions. | free | **done** |
+| **N2** | **Author the corpus.** 40 triples, 120 items, four bands (≤25 / 40–90 / 200–400 / 900–1500 words), 1:2 positive-to-negative in **every** band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | **S and M done** (24 triples, 72 turns); L and XL open |
+| **N3** | **Blind label adjudication.** Three independent instances label each turn with no access to mine. **Pre-registered kill: >20% label movement retires the corpus.** 21 of 21 scored failures across three corpora were the answer key, and a 1,200-word turn has fifty times the surface for that. | 360 calls | |
+| **N4** | **The human-authored holdout.** The threat no gate above touches: a model is authoring the corpus that will evaluate a model. Blind adjudication does not fix it — the adjudicator is also a model. The maintainer supplies ~20 turns, ideally real messages rather than turns written to order. Every arm is reported twice. **Orderings agree → the threat is bounded by a measurement. Orderings disagree → the model-authored corpus is decoration, and we know it.** | ~120 calls | |
+| **N5** | **Realism.** 10% human audit — 12 items, and the repository's realism audit has been at 0% since it was written down. Plus a descriptive machine probe on whether turns read as real or as authored-for-a-benchmark; **not** a gate, because "looks authored" has no ground truth and a gate without one is how a corpus gets tuned to a judge. | 40 calls | |
+| **N6** | **Confirmatory re-run** — `full`, `stakes-shown`, `opener-only` × 120 × 2 repeats. Two repeats, not five: ICC 0.83–0.85 (Track I). | 720 calls | |
+| **N7** | **Descriptive re-run** — the remaining five arms. | 1,200 calls | |
+| **N8** | **Stamp the model into the record.** `--model` is a CLI argument with a default and the tier survives only as prose in a hand-written README; the verdict records carry `case`, `fired`, `route`, `repeat` and no model at all. Same shape as the label-versioning defect: a run parameter that changes every number, recoverable only from someone remembering to type it. Needs a comparability guard beside `label_versions_comparable`. | free | |
+
+**Depends on.** Nothing. Like Track 0, it is a gate rather than a question.
+
+**Blocks.** Every *future* claim from Tracks L and M, and it retro-qualifies
+every past one. It does **not** block Track S — the skill ships and is usable
+either way, which is the distinction `SCORECARD.md` exists to draw.
+
+**Falsifiers.**
+
+1. **N1's gates cannot be met** without writing turns nobody would send. Then
+   the length–label correlation is intrinsic to the task — long messages really
+   are more often decisions — and that is a finding to report rather than
+   engineer around. The corpus ships with the honest AUC and every claim is
+   conditional on it.
+2. **N3 moves more than 20% of labels.** Corpus retired, not reported.
+3. **N4's orderings disagree.** Every trigger result in this repository becomes
+   a statement about model-authored text and nothing else.
+4. **Accuracy is flat across bands and the arms re-order anyway.** Then the
+   trigger instrument does not have the resolution for the questions Tracks L
+   and M have been asking it, which is a larger result than any of them.
+
+**Done when.** All eight features and the stump are inside their gates on a
+120-item set; adjudication is under the kill threshold; the holdout exists and
+has been run; N6 is published with its bands registered first; and every
+`results/**/README.md` carries the ruler caveat.
+
+**Neighbouring work, not duplicated here.** `provenance.py`, `wiring.py` and
+`de index` — gates on whether a published run has a prediction that predates it
+— were built in a parallel session and are the same class of fix aimed at the
+write-up rather than the corpus.
 
 ---
 
@@ -1226,9 +1340,17 @@ what makes this dual-purpose rather than a paper with a skill attached.
      |       blocks measurement                |  install, use, label honestly
      |       not the product                   |
      |                                         L  variants + revision
-  PART 4  A  replication                       |  revise against traces,
-     |       ~1200 calls, hours not days       |  race frameworks, tune the
-     |       can kill or redirect all of it    |  description
+     |  N  the trigger corpus                  |  revise against traces,
+     |       the instrument L and M already    |  race frameworks, tune the
+     |       ran on. a ruler solves it at      |  description
+     |       0.890, so every L and M null      |
+     |       has two readings until it lands   |
+     |            |                            |
+     |            +--- retro-qualifies --------+
+     |            |    every L and M number on disk
+  PART 4  A  replication                       |
+     |       ~1200 calls, hours not days       |
+     |       can kill or redirect all of it    |
      |                                         |
         B  attribution                         |
      |       runs on A's traces                |
@@ -1273,6 +1395,15 @@ how the work was written down and did not change what happened to the patients.
 each moved where the skill sits on a precision/recall frontier and none moved how
 well it discriminates; the probe casefiles took 0 of 27 traps; `math` returned
 `p_discordant` 0.000. Two independent lines of evidence now point the same way.
+
+**And a competing explanation for the trigger half of that, found 2026-08-13.**
+The corpus those nulls were measured on is solved to 0.890 by counting words,
+against a best arm of 0.956. A flat result is what a real null looks like *and*
+what a six-point ceiling looks like, and this document had no way to tell them
+apart because nobody had measured the ceiling. **Track N** measures it. Until it
+lands, "nothing about a description changes discrimination" is one of two live
+readings rather than the finding — which is the more important correction,
+because the sentence had already been written down as though it were settled.
 
 So the rule for Tracks C through F: **name the outcome measure and the process
 measure separately in the pre-registration, and state in advance that a process
@@ -1392,6 +1523,7 @@ What we may honestly say, at each stage, and not before.
 | After | We may claim |
 |---|---|
 | Track 0 | "We can run this experiment." Nothing about decisions. |
+| Track N | "A firing result is about the description and not about turn length." **Nothing above the ruler may be claimed before this row.** With `N4` on top: "and it holds on turns a human wrote." |
 | Track A | "These failure modes do / do not occur on frontier models in August 2026." |
 | Track B | "We can attribute a system failure to a node, with reported agreement." |
 | C / D / E | "A skill installed *here* changes *this* failure mode by *this much*." |
