@@ -20,6 +20,7 @@ from decision_evals.trigger_arms import (
     format_comparison,
     label_versions_comparable,
     load_arm,
+    models_comparable,
     per_item_correctness,
     summarise,
 )
@@ -345,3 +346,57 @@ class TestLabelVersionsComparable:
         assert reason is not None
         assert "[1]" in reason
         assert "[3]" in reason
+
+
+class TestModelsComparable:
+    """Track N8. The same defect one axis over from the label revision.
+
+    `--model` is an argument with a default that moves every number in a run,
+    and the tier survived only as prose in a hand-written README while the
+    verdict records carried no model at all.
+    """
+
+    def test_two_arms_on_the_same_model_compare(self) -> None:
+        a = [
+            row("p1", fired=True, should_fire=True) | {"model": "haiku"},
+            row("n1", fired=False, should_fire=False) | {"model": "haiku"},
+        ]
+        assert models_comparable(a, a) is None
+        assert compare(a, a).p_value == 1.0
+
+    def test_two_unstamped_arms_still_compare(self) -> None:
+        """Every published comparison predates the stamp and none is voided.
+
+        The guard knows nothing about these records and says nothing about
+        them, which is a different statement from saying they match.
+        """
+        a = [row("p1", fired=True, should_fire=True)]
+        b = [row("p1", fired=False, should_fire=True)]
+        assert models_comparable(a, b) is None
+
+    def test_a_stamped_arm_against_an_unstamped_one_is_refused(self) -> None:
+        """An absent model is unknown, not the default. Standing rule 1."""
+        a = [row("p1", fired=True, should_fire=True)]
+        b = [row("p1", fired=False, should_fire=True) | {"model": "haiku"}]
+        reason = models_comparable(a, b)
+        assert reason is not None
+        assert "does not mean the default tier" in reason
+        with pytest.raises(ArmError, match="records the model it ran on"):
+            compare(a, b)
+
+    def test_two_different_models_are_refused(self) -> None:
+        a = [row("p1", fired=True, should_fire=True) | {"model": "haiku"}]
+        b = [row("p1", fired=True, should_fire=True) | {"model": "sonnet"}]
+        reason = models_comparable(a, b)
+        assert reason is not None
+        assert "haiku" in reason
+        assert "sonnet" in reason
+        with pytest.raises(ArmError, match="ran on different models"):
+            compare(a, b)
+
+    def test_the_label_guard_runs_first(self) -> None:
+        """Both differ; the reported reason is the one already published about."""
+        a = [row("p1", fired=True, should_fire=True) | {"set_version": 1, "model": "haiku"}]
+        b = [row("p1", fired=True, should_fire=True) | {"set_version": 3, "model": "sonnet"}]
+        with pytest.raises(ArmError, match="different label revisions"):
+            compare(a, b)

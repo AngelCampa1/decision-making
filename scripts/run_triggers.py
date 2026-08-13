@@ -263,6 +263,12 @@ def collect(
                     # was a positive; moving it raised recall 3-5pp on every arm
                     # with no call re-made. Stored so a comparison can refuse.
                     "set_version": trigger_set.version,
+                    # The tier that produced it. Same defect as `set_version`,
+                    # one axis over: `--model` is an argument with a default, it
+                    # moves every number in the run, and until this line existed
+                    # the tier survived only as prose in a hand-written README.
+                    # `models_comparable` refuses a comparison that spans it.
+                    "model": model,
                     "p_fire": p_fire,
                     "should_fire": case.should_fire,
                     "route": case.route,

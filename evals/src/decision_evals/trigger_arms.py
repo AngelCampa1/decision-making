@@ -210,6 +210,57 @@ def label_versions_comparable(a: Iterable[Record], b: Iterable[Record]) -> str |
     )
 
 
+def models_comparable(a: Iterable[Record], b: Iterable[Record]) -> str | None:
+    """Whether two arms were produced by the same model tier.
+
+    Same defect as :func:`label_versions_comparable`, one axis over. ``--model``
+    is a command-line argument with a default, it changes every number in the
+    run, and until 2026-08-13 the tier survived only as prose in a hand-written
+    README while the verdict records carried ``case``, ``fired``, ``route``,
+    ``repeat`` and no model at all. A run made at a different tier is not a
+    result about a skill description, and nothing in a checkpoint said which
+    tier produced it.
+
+    **An absent ``model`` is unknown, not a default, and that is the difference
+    from the label guard.** There, a record written before versioning genuinely
+    *was* version 1, so defaulting told the truth. Here the tier could have been
+    overridden on the command line and the record would look identical, so
+    filling in ``haiku`` would be inventing a parameter — standing rule 1, and
+    the rule exists because an invented figure is indistinguishable from a
+    measured one three days later.
+
+    So the three cases are decided separately:
+
+    * **both unstamped** — allowed. Two records written before the stamp existed
+      are exactly as comparable as they were yesterday; the guard knows nothing
+      about them and pretends to know nothing. Refusing here would retroactively
+      void every comparison already published, on no evidence.
+    * **one stamped, one not** — refused. This is the transition where the risk
+      is real: a new run whose tier is recorded, against an old one whose tier
+      is a claim in prose.
+    * **both stamped and different** — refused.
+    """
+    models_a = {row.get("model") for row in a}
+    models_b = {row.get("model") for row in b}
+    seen = models_a | models_b
+    if seen <= {None} or len(seen) <= 1:
+        return None
+    named = sorted(str(model) for model in seen if model is not None)
+    if None in seen:
+        return (
+            f"one of these arms records the model it ran on ({', '.join(named)}) and the "
+            "other does not. An unstamped record does not mean the default tier -- "
+            "`--model` could have been passed and the record would look the same -- so "
+            "the two cannot be shown to have run on the same model, and a tier change "
+            "moves every number in the run."
+        )
+    return (
+        f"these arms ran on different models: {sorted(models_a, key=str)} against "
+        f"{sorted(models_b, key=str)}. `--model` changes every number in a run, so the "
+        "difference between them would not be a result about the description."
+    )
+
+
 def per_item_correctness(records: Iterable[Record]) -> dict[str, float]:
     """Per case id, the share of repeats where the arm's verdict matched its label.
 
@@ -247,6 +298,8 @@ def compare(a: Iterable[Record], b: Iterable[Record]) -> ArmComparison:
 
     rows_a, rows_b = list(a), list(b)
     if (reason := label_versions_comparable(rows_a, rows_b)) is not None:
+        raise ArmError(reason)
+    if (reason := models_comparable(rows_a, rows_b)) is not None:
         raise ArmError(reason)
 
     left, right = per_item_correctness(rows_a), per_item_correctness(rows_b)
