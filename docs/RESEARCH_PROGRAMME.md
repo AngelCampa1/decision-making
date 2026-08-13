@@ -284,7 +284,7 @@ read when it fires.
 | M3 | Measure whether routing works: given a decision, does the model read the *right* one of the four files? A router that always reads `ledger.md` is one skill wearing four. |
 | M4 | Race one-entry-with-routing against four-separate-skills. **Build the four-skill arm from the *current* procedure files** — the four bodies verbatim, wrapped in four `SKILL.md` files with four descriptions — so that structure and description are the only things that vary. Do **not** use the historical four-skill tree at `9a16b18` as an arm: the prose has moved since, and a race against it would vary structure, content and description at once, which is uninterpretable for a question about structure. This is the experiment that would justify or overturn the one-entry choice, which is currently an extrapolation from a 202-skill regime down to four. |
 | M5 | Bundle-size curve: 2 procedures, 4, 8. Where does routing accuracy break? **Run at n=2 on 2026-08-12** — see below. n=8 needs four procedures that do not exist. |
-| M6 | **Which** procedures are paired, holding the count fixed. M5's partition is contiguous by construction so that the arm is a function of `n` alone; pairing `cascade` with `timing` is a hypothesis about their overlap, and the router table already collides on exactly those two. |
+| M6 | **Which** procedures are paired, holding the count fixed. **Run 2026-08-13** — see below. It retired `covers` as a cross-arm routing measure. |
 
 **Hypothesis falsifier.** If routing accuracy is at chance, the bundle is a
 single long skill with extra steps, and the honest move is to merge the four
@@ -329,6 +329,44 @@ itself with a 202-skill citation. Prediction registered before the run in
 **What it cannot show: anything about n=202.** Four is four. A null is evidence
 that shadowing has not begun at four descriptions on this instrument, not
 evidence against the published result.
+
+#### M6, run at n=2 under a second partition — 2026-08-13
+
+146 calls, 73 cases × 2 repeats. Results in
+[`results/decision-making/2026-08-13-82b4ab8-m6-pairing/`](../results/decision-making/2026-08-13-82b4ab8-m6-pairing/),
+outcome in
+[`notebook/2026-08-12-m6-covers-went-up-and-the-measure-does-not-survive-it.md`](../notebook/2026-08-12-m6-covers-went-up-and-the-measure-does-not-survive-it.md).
+
+Same four procedures, same entry count, different partition:
+`ledger-cascade` / `fit-timing` against M5's `ledger-fit` / `cascade-timing`. The
+two arms are **word-multiset identical**, asserted by test. Five of six
+registered bands hit.
+
+**The band that failed was the experiment, and it failed upward.** `covers` was
+predicted to drop when the colliding pair was split; it rose, 0.743 → 0.857. The
+raw answers show the model did not change its mind — `p06` draws a
+*timing*-flavoured answer in both arms, and only the entry boundary moved, so
+under one partition it scores 0.2 and under the other 1.0.
+
+**So `covers` is a property of the partition as much as of the model, and it is
+retired as a cross-arm routing measure.** It is not comparable across `n`
+(chance moves) and not comparable across groupings at the same `n`. M5's 0.743
+stands as measured with its interpretation withdrawn; its results README is
+amended in place. **M3's question — does routing work — has no surviving
+estimator on any merged arm**, and the honest options are to score routing only
+at n=4 where entry names are labels, or to change the response contract so the
+model names a procedure inside the entry it picked. Neither is free.
+
+**Firing, meanwhile, is a clean null with the best-identified design in the
+repository.** 4 of 73 items differ, p = 0.273, on two arms that share every word.
+With M4 (structure, p = 0.83), M5 (count, p = 0.50) and L5 (content),
+**four independent manipulations of a skill description have now failed to move
+how well it discriminates.**
+
+And `p07` — the item the `cascade`/`timing` collision was diagnosed on, named as
+the per-item diagnostic before the run — is 1.0 in both arms. Every arm that does
+not show the model the router table gets it right. **The collision is a defect of
+the table, not of the descriptions**, confirmed from a second direction.
 
 #### M5, run at n=2 — 2026-08-12
 

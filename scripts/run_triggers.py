@@ -555,17 +555,31 @@ def main() -> int:
     if entry_names is not None and not routing_is_by_name(entry_names):
         # Exact-name accuracy here is guaranteed 0.000 and says nothing: this arm
         # offers entry names the labels cannot equal. Report ``covers`` instead.
+        # Both denominators, because M5 registered `covers` naming the measure
+        # and not what it divided by, and the two differ by 15pp. `landed` is
+        # every labelled call, a non-answer counting as a miss -- the
+        # denominator `evaluate_routing` uses for the arms that can be scored by
+        # name, and therefore the one that is reported.
         landed = [row for row in done.values() if row["covers"] is not None]
+        answered = [row for row in landed if row["fired"]]
         hits = sum(1 for row in landed if row["covers"])
         chance = 1 / len(entry_names)
         print(f"  NOT REPORTED as accuracy -- this arm offers {', '.join(entry_names)},")
         print("  which no label can equal. Exact-name accuracy would read 0.000")
         print("  whatever the model did. The outcome for this arm is `covers`.")
         print(
-            f"\n  covers     {hits / len(landed):.3f} over {len(landed)} fired, labelled "
-            f"call(s), chance {chance:.3f}"
+            f"\n  covers     {hits / len(landed):.3f} over {len(landed)} labelled call(s), "
+            f"chance {chance:.3f}"
         )
+        if answered:
+            print(
+                f"             {sum(1 for r in answered if r['covers']) / len(answered):.3f} "
+                f"over the {len(answered)} that fired -- reported for completeness, "
+                "not the registered denominator"
+            )
         print("  Not comparable across n: chance moves with the number of entries.")
+        print("  Not comparable across pairings either, which M6 measured: regrouping")
+        print("  changes which confusions the entry boundaries forgive.")
     else:
         print(
             f"  accuracy   {routing.accuracy:.3f} over {routing.n_scored} labelled "

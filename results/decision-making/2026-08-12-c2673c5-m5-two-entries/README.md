@@ -54,6 +54,17 @@ The first is reported, because it is the denominator the n=1 and n=4 arms use.
 **Chance here is 0.500 against a four-way arm's 0.250, so this must not be
 plotted on one curve with 0.686 and 0.786.**
 
+> **Amended 2026-08-13 after [M6](../2026-08-13-82b4ab8-m6-pairing/).** This
+> number stands as measured and **loses its interpretation.** M6 ran the same
+> four procedures at the same entry count under a different partition —
+> `ledger-cascade` / `fit-timing`, word-multiset identical to this arm — and
+> `covers` read **0.857**. The model did not route better; the entry boundaries
+> moved underneath it, so a different confusion was forgiven. `covers` is a
+> property of the partition as much as of the model, and 0.743 is *this
+> partition's* number rather than an estimate of how well a two-entry arm
+> routes. Firing was unaffected (p = 0.273), so everything above this section is
+> untouched.
+
 ## Reliability
 
 ICC **0.833**; 3 of 73 items show any scatter across five repeats;
