@@ -1,14 +1,14 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
-  "name": "decision-making",
+  "name": "decision-making-skills",
   "version": "0.1.0",
   "description": "Decision skills for agents, each shipped with the evidence for or against it. Skills appear here only after a confirmation run assigns them a verdict; an UNTESTED skill cannot be promoted into this directory.",
   "author": {
     "name": "Angel Campa",
     "url": "https://github.com/AngelCampa1"
   },
-  "homepage": "https://github.com/AngelCampa1/decision-making",
-  "repository": "https://github.com/AngelCampa1/decision-making",
+  "homepage": "https://github.com/AngelCampa1/decision-making-skills",
+  "repository": "https://github.com/AngelCampa1/decision-making-skills",
   "license": "Apache-2.0",
   "keywords": [
     "decision-making",

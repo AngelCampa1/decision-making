@@ -63,7 +63,7 @@ claimed and what exists is visible at every commit.
 ## Code and environment
 
 - [x] Code public from the first commit
-      — `github.com/AngelCampa1/decision-making`
+      — `github.com/AngelCampa1/decision-making-skills`
 - [x] Apache-2.0 for code; CC-BY-4.0 intended for the paper
 - [x] Dependencies pinned via `uv` lockfile
 - [x] Full local gate (`de check`) runs lint, types, tests, coverage floors

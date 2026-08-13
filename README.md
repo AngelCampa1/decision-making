@@ -1,4 +1,4 @@
-# decision-making
+# decision-making-skills
 
 Agent skills for making better decisions under uncertainty — and an evaluation
 harness that measures whether they actually work.

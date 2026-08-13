@@ -33,8 +33,8 @@ dependencies = [
 de = "decision_evals.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/AngelCampa1/decision-making"
-Repository = "https://github.com/AngelCampa1/decision-making"
+Homepage = "https://github.com/AngelCampa1/decision-making-skills"
+Repository = "https://github.com/AngelCampa1/decision-making-skills"
 
 [dependency-groups]
 dev = [
