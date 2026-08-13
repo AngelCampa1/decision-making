@@ -36,6 +36,20 @@
 version: 2
 skill: decision-making
 
+# How much of this set a ruler solves, declared rather than hidden.
+#
+# Positives run at a median of 18 words and negatives at 8, so turn length alone
+# separates the labels at AUC 0.850 and a bare "fire if >= 18 words" rule scores
+# 0.890 accuracy with no model involved. The target is 0.70. This set fails it,
+# found 2026-08-13 after the maintainer pointed out that real users write
+# paragraphs and nothing here is longer than 25 words.
+#
+# The number below is a RATCHET, not a threshold. It may only be lowered. New
+# turns that widen the length gap between the labels will fail `de check`.
+# Lowering it needs long negatives and short positives -- adding long positives
+# makes it worse.
+length_separability_ceiling: 0.851
+
 positive:
   # -- ledger: a pile arrived and it is unclear what the answer turns on ------
   - id: p01

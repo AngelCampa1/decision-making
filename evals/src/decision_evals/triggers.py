@@ -53,6 +53,39 @@ def routing_is_by_name(offered: Iterable[str]) -> bool:
     return all(name in PROCEDURES for name in offered)
 
 
+#: How separable a trigger set may be by turn length alone.
+#:
+#: The long-context plan set this gate at 0.70 for padding documents and never
+#: applied it to the trigger set. On 2026-08-13, prompted by the observation
+#: that real users write paragraphs, it was applied for the first time: the
+#: shipped set scores **0.85**, and a bare word-count threshold at 18 words
+#: classifies it at **0.890 accuracy with no model involved**.
+#:
+#: That does not invalidate the arm comparisons — every arm saw the same set —
+#: but it caps what any of them could have shown. The best arm measured 0.956,
+#: so **the whole movable range above a ruler is about six points**, and five
+#: manipulations finding nothing is exactly what a ceiling looks like.
+MAX_LENGTH_SEPARABILITY: Final = 0.70
+
+
+def length_separability(trigger_set: TriggerSet) -> float:
+    """How well turn length alone separates positives from negatives, as an AUC.
+
+    0.5 means length carries no signal. 1.0 means a ruler solves the set.
+
+    This is the concordance form of the Mann-Whitney statistic — the share of
+    positive/negative pairs the positive is longer in, with ties at a half —
+    computed directly rather than pulled from scikit-learn, which is not a
+    dependency here and must not become one for a five-line rank statistic.
+    """
+    positives = [len(case.turn.split()) for case in trigger_set.positives]
+    negatives = [len(case.turn.split()) for case in trigger_set.negatives]
+    if not positives or not negatives:
+        return 0.5
+    wins = sum(1.0 if p > n else 0.5 if p == n else 0.0 for p in positives for n in negatives)
+    return wins / (len(positives) * len(negatives))
+
+
 @dataclass(frozen=True)
 class TriggerCase:
     """One turn, and whether the skill should fire on it.
@@ -109,6 +142,7 @@ class TriggerSet:
     skill: str
     cases: tuple[TriggerCase, ...]
     version: int = 1
+    length_separability_ceiling: float | None = None
 
     @property
     def positives(self) -> tuple[TriggerCase, ...]:
@@ -211,8 +245,12 @@ def load_trigger_set(path: Path) -> TriggerSet:
     duplicates = sorted({i for i in ids if ids.count(i) > 1})
     if duplicates:
         raise TriggerSetError(f"{path}: duplicate case ids {duplicates}")
+    ceiling = raw.get("length_separability_ceiling")
     return TriggerSet(
-        skill=str(raw["skill"]), cases=tuple(cases), version=int(raw.get("version", 1))
+        skill=str(raw["skill"]),
+        cases=tuple(cases),
+        version=int(raw.get("version", 1)),
+        length_separability_ceiling=None if ceiling is None else float(ceiling),
     )
 
 
@@ -360,8 +398,48 @@ def check_trigger_sets(repo_root: Path) -> list[str]:
                 "and precision is the number that decides whether a skill is worth "
                 "having installed."
             )
+        issues.extend(_check_separability(trigger_set, path))
         issues.extend(_check_routes(trigger_set, skills_dir / name / "SKILL.md", path))
     return issues
+
+
+def _check_separability(trigger_set: TriggerSet, path: Path) -> list[str]:
+    """A ratchet on how much of the set a ruler can solve.
+
+    The shipped set sits at 0.850 against a 0.70 target, found on 2026-08-13.
+    Fixing it is a corpus job — roughly twenty long negatives and a few short
+    positives — and a gate that fails every commit until then would be bypassed
+    within the day, which is worse than no gate.
+
+    So the threshold does **not** move. What the set declares instead is the
+    value it is currently at, and the check fails if the real value goes
+    *above* it. The set cannot get more separable by accident, improving it
+    means lowering the declared number, and the distance from the target is
+    printed on every run so nobody has to remember.
+
+    Softening the gate to fit the data would have been the other option and it
+    is the one this repository exists to avoid.
+    """
+    actual = length_separability(trigger_set)
+    ceiling = trigger_set.length_separability_ceiling
+    if ceiling is None:
+        return (
+            []
+            if actual <= MAX_LENGTH_SEPARABILITY
+            else [
+                f"{path}: turn length alone separates the labels at AUC {actual:.3f}, above "
+                f"the {MAX_LENGTH_SEPARABILITY} target, and the set declares no ceiling. "
+                "Add `length_separability_ceiling` with the current value and a reason, or "
+                "add long negatives and short positives."
+            ]
+        )
+    if actual > ceiling + 1e-9:
+        return [
+            f"{path}: turn length now separates the labels at AUC {actual:.3f}, above the "
+            f"{ceiling:.3f} this set declared. The ratchet only turns down. New turns must "
+            "not widen the length gap between the labels."
+        ]
+    return []
 
 
 def _check_routes(trigger_set: TriggerSet, skill_path: Path, path: Path) -> list[str]:

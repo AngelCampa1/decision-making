@@ -13,10 +13,12 @@ from decision_evals.triggers import (
     TriggerSet,
     TriggerSetError,
     _check_routes,
+    _check_separability,
     check_trigger_sets,
     decision,
     evaluate,
     evaluate_routing,
+    length_separability,
     load_trigger_set,
     routing_is_by_name,
 )
@@ -508,3 +510,72 @@ class TestASecondRouteIsAllowed:
         """Widening a label must not quietly add or drop one."""
         labelled = [case for case in load_trigger_set(SET_PATH).positives if case.routes]
         assert len(labelled) == 14
+
+
+class TestLengthSeparability:
+    """How much of the set a ruler solves, found 2026-08-13.
+
+    The maintainer observed that real users write paragraphs and nothing in the
+    set exceeds 25 words. Checking that turned up a confound rather than only a
+    gap: positives run at a median of 18 words and negatives at 8, so a bare
+    word-count rule scores 0.890 accuracy with no model involved.
+    """
+
+    def _set(self, tmp_path: Path, positives: list[str], negatives: list[str]) -> TriggerSet:
+        payload = {
+            "skill": "x",
+            "positive": [{"id": f"p{i}", "turn": t, "why": "w"} for i, t in enumerate(positives)],
+            "negative": [{"id": f"n{i}", "turn": t, "why": "w"} for i, t in enumerate(negatives)],
+        }
+        return load_trigger_set(_write(tmp_path / "s.yaml", payload))
+
+    def test_identical_lengths_carry_no_signal(self, tmp_path: Path) -> None:
+        trigger_set = self._set(tmp_path, ["a b c", "d e f"], ["g h i", "j k l"])
+        assert length_separability(trigger_set) == 0.5
+
+    def test_longer_positives_score_above_a_half(self, tmp_path: Path) -> None:
+        trigger_set = self._set(tmp_path, ["a b c d e"], ["f"])
+        assert length_separability(trigger_set) == 1.0
+
+    def test_longer_negatives_score_below_a_half(self, tmp_path: Path) -> None:
+        trigger_set = self._set(tmp_path, ["a"], ["b c d e f"])
+        assert length_separability(trigger_set) == 0.0
+
+    def test_a_set_with_one_label_is_uninformative_rather_than_an_error(
+        self, tmp_path: Path
+    ) -> None:
+        payload = {"skill": "x", "positive": [{"id": "p1", "turn": "a b", "why": "w"}]}
+        assert length_separability(load_trigger_set(_write(tmp_path / "s.yaml", payload))) == 0.5
+
+    def test_the_shipped_set_is_where_the_notebook_says(self) -> None:
+        """0.850, recorded rather than rounded away."""
+        assert length_separability(load_trigger_set(SET_PATH)) == pytest.approx(0.850, abs=0.002)
+
+    def test_the_shipped_set_declares_a_ceiling_it_is_under(self) -> None:
+        trigger_set = load_trigger_set(SET_PATH)
+        assert trigger_set.length_separability_ceiling is not None
+        assert length_separability(trigger_set) <= trigger_set.length_separability_ceiling
+
+    def test_the_ceiling_is_a_ratchet_and_only_turns_down(self, tmp_path: Path) -> None:
+        """A new turn that widens the length gap must fail the check."""
+        payload = {
+            "skill": "decision-making",
+            "length_separability_ceiling": 0.60,
+            "positive": [{"id": "p1", "turn": "a b c d e f g h", "why": "w"}],
+            "negative": [{"id": "n1", "turn": "z", "why": "w"}],
+        }
+        trigger_set = load_trigger_set(_write(tmp_path / "s.yaml", payload))
+        issues = _check_separability(trigger_set, tmp_path / "s.yaml")
+        assert issues
+        assert "only turns down" in issues[0]
+
+    def test_a_set_over_target_with_no_ceiling_is_refused(self, tmp_path: Path) -> None:
+        """Silence is not a waiver. Declaring the number is."""
+        trigger_set = self._set(tmp_path, ["a b c d e f"], ["z"])
+        issues = _check_separability(trigger_set, tmp_path / "s.yaml")
+        assert issues
+        assert "declares no ceiling" in issues[0]
+
+    def test_a_set_under_the_target_needs_no_ceiling(self, tmp_path: Path) -> None:
+        trigger_set = self._set(tmp_path, ["a b c"], ["d e f"])
+        assert _check_separability(trigger_set, tmp_path / "s.yaml") == []

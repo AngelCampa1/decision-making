@@ -53,6 +53,7 @@ from decision_evals.providers.claude_code import (  # noqa: E402
     isolated_cwd,
 )
 from decision_evals.skills import parse_skill  # noqa: E402
+from decision_evals.trigger_arms import summarise  # noqa: E402
 from decision_evals.triggers import (  # noqa: E402
     PROCEDURES,
     TRIGGERS_DIR,
@@ -546,7 +547,22 @@ def main() -> int:
     report = evaluate(subset, lambda turn: verdicts[turn])
     routing = evaluate_routing(subset, lambda turn: routes[turn])
 
-    print(f"\n{'=' * 60}\nFIRING  (primary)\n{'=' * 60}")
+    # The header says which repeat, because it is repeat 0 only and that number
+    # is not the arm's rate. On 2026-08-13 this block printed "false-positive
+    # rate 0.000" for an arm whose rate across both repeats was 0.018 -- two
+    # negatives fired in repeat 1 and the headline could not see them. A
+    # plausible number with a silent denominator is this instrument's signature
+    # failure, and it had one more place to hide.
+    scope = "repeat 0 only" if args.repeats > 1 else "the single repeat"
+    print(f"\n{'=' * 60}\nFIRING  (primary) -- {scope}\n{'=' * 60}")
+    if args.repeats > 1:
+        every = summarise(list(done.values()))
+        print(
+            f"  ACROSS ALL {args.repeats} REPEATS: precision {every.precision:.3f}  "
+            f"recall {every.recall:.3f}  FPR {every.false_positive_rate:.3f}"
+        )
+        print(f"  never fired: {', '.join(every.missed) or 'none'}")
+        print("  ^ this is the arm's rate. The block below is one repeat of it.\n")
     print(f"  precision            {report.precision:.3f}")
     print(f"  recall               {report.recall:.3f}")
     print(f"  false-positive rate  {report.false_positive_rate:.3f}   <- the daily-use cost")
