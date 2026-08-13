@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+title: >-
+  decision-making-skills: agent skills for decisions under uncertainty, with a
+  harness that measures whether they work
+message: >-
+  If you cite this repository, please cite the software entry below. There is
+  no paper to cite yet: `paper/` is a draft, and no skill in this repository
+  carries a verdict. Please do not cite it as evidence that agent skills
+  improve decisions — see SCORECARD.md, which is empty on purpose.
+type: software
+authors:
+  - family-names: Campa
+    given-names: Angel
+    alias: AngelCampa1
+repository-code: https://github.com/AngelCampa1/decision-making-skills
+url: https://angelcampa1.github.io/decision-making-skills/
+abstract: >-
+  A markdown Agent Skill that routes a decision to one of four procedures —
+  evidence ledger, switching conditions, consequence cascade, decide-or-wait —
+  and a Python evaluation harness (`decision_evals`) that measures whether such
+  a skill actually changes behaviour. The harness is pre-registered and
+  placebo-controlled: every skill is measured against four arms on the same
+  items (off, on, a token- and structure-matched placebo, and plain
+  chain-of-thought), so that a skill beating nothing but not beating filler is
+  reported as a length effect. Statistics are exact and resampling-based, with
+  templates rather than items as the resampling unit, and calibration is
+  reported with the Murphy decomposition. Published results to date measure
+  skill *triggering* — whether a skill fires when it should — not decision
+  quality.
+keywords:
+  - agent skills
+  - LLM evaluation
+  - skill evaluation
+  - decision making
+  - pre-registration
+  - placebo control
+  - calibration
+  - AI agents
+  - reproducible research
+license: Apache-2.0
+version: 0.1.0
+date-released: "2026-08-13"

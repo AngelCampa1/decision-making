@@ -10,7 +10,32 @@ readme = "README.md"
 requires-python = ">=3.13"
 license = "Apache-2.0"
 authors = [{ name = "Angel Campa" }]
-keywords = ["evaluation", "agent-skills", "llm", "decision-making", "calibration"]
+keywords = [
+    "evaluation",
+    "agent-skills",
+    "llm",
+    "decision-making",
+    "calibration",
+    "skill-evaluation",
+    "pre-registration",
+    "placebo-controlled",
+    "ai-agents",
+]
+
+# Development Status is 2 - Pre-Alpha and stays there until a skill carries a
+# verdict. `SCORECARD.md` reads "proven: 0 / shipped: 0"; a classifier claiming
+# Beta would be the same overclaim one metadata layer down.
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Testing",
+    "Typing :: Typed",
+]
 
 dependencies = [
     "numpy>=2.1",
@@ -33,8 +58,11 @@ dependencies = [
 de = "decision_evals.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/AngelCampa1/decision-making-skills"
+Homepage = "https://angelcampa1.github.io/decision-making-skills/"
 Repository = "https://github.com/AngelCampa1/decision-making-skills"
+Documentation = "https://github.com/AngelCampa1/decision-making-skills/blob/main/docs/README.md"
+Issues = "https://github.com/AngelCampa1/decision-making-skills/issues"
+Changelog = "https://github.com/AngelCampa1/decision-making-skills/blob/main/docs/STATUS.md"
 
 [dependency-groups]
 dev = [
