@@ -1181,6 +1181,32 @@ come apart.
 
 Written down now so a null is a result rather than a fourth dead corpus.
 
+**0. The process measure moves and the outcome measure does not — and this has
+already happened to someone else, at scale.** Agweyu et al. (2026, *Nature
+Medicine*) cluster-randomized 103 clinical officers across 16 Kenyan primary care
+facilities over 9,691 patients. LLM assistance raised note quality across every
+domain and drove appropriate diagnosis to aOR 1.74 (p < 0.001). Treatment failure
+was 2.2% against 2.0%, aOR 0.77, **p = 0.13**. The intervention visibly changed
+how the work was written down and did not change what happened to the patients.
+
+**That is the shape of every result this repository has produced.** M4, M5 and L5
+each moved where the skill sits on a precision/recall frontier and none moved how
+well it discriminates; the probe casefiles took 0 of 27 traps; `math` returned
+`p_discordant` 0.000. Two independent lines of evidence now point the same way.
+
+So the rule for Tracks C through F: **name the outcome measure and the process
+measure separately in the pre-registration, and state in advance that a process
+gain with a flat outcome is a null for the skill, not a partial win.** Writing
+that after the run is how "the model produced a more thorough answer" becomes a
+finding. The counterweight is Goh et al. (2024) — +6.5pp on management reasoning,
++6.2pp on the case-specific domains — which is a process measure with an expert
+rubric behind it and is the strongest located evidence for Track H. Both are in
+[`docs/DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md).
+
+And the caveat that travels with both: clinicians **fully** adhered to the LLM's
+advice in 19.5% of encounters. Advice given is not advice taken, and every
+measurement in this repository is of advice given.
+
 1. **Track A comes back flat *and the MDE was below the effect the literature
    reports*.** Both halves are required, and the second half was missing from an
    earlier draft — which made this the most dangerous sentence in the document.
