@@ -841,7 +841,7 @@ column on the case rather than a property the set happens to have.
 | # | Experiment | Cost | State |
 |---|---|---|---|
 | **N1** | **The shortcut battery.** `corpus.py`: eight trivial features, each held to a **two-sided** [0.40, 0.60] — the one-sided `MAX_LENGTH_SEPARABILITY = 0.70` it replaces would have passed a set at AUC 0.05, which is solved by a ruler pointing the other way — plus a depth-2 stump over all eight capped at 0.70, because a battery of singles misses interactions. | free | **done** |
-| **N2** | **Author the corpus.** 40 triples, 120 items, four bands (≤25 / 40–90 / 200–400 / 900–1500 words), 1:2 positive-to-negative in **every** band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | **S and M done** (24 triples, 72 turns); L and XL open |
+| **N2** | **Author the corpus.** 40 triples, 120 items, four bands (≤25 / 40–90 / 200–400 / 900–1500 words), 1:2 positive-to-negative in **every** band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | **done** — 40 triples, 120 items, all four bands, every gate in N1 passing. See below |
 | **N3** | **Blind label adjudication.** Three independent instances label each turn with no access to mine. **Pre-registered kill: >20% label movement retires the corpus.** 21 of 21 scored failures across three corpora were the answer key, and a 1,200-word turn has fifty times the surface for that. | 360 calls | |
 | **N4** | **The human-authored holdout.** The threat no gate above touches: a model is authoring the corpus that will evaluate a model. Blind adjudication does not fix it — the adjudicator is also a model. The maintainer supplies ~20 turns, ideally real messages rather than turns written to order. Every arm is reported twice. **Orderings agree → the threat is bounded by a measurement. Orderings disagree → the model-authored corpus is decoration, and we know it.** | ~120 calls | |
 | **N5** | **Realism.** 10% human audit — 12 items, and the repository's realism audit has been at 0% since it was written down. Plus a descriptive machine probe on whether turns read as real or as authored-for-a-benchmark; **not** a gate, because "looks authored" has no ground truth and a gate without one is how a corpus gets tuned to a judge. | 40 calls | |
@@ -873,6 +873,48 @@ either way, which is the distinction `SCORECARD.md` exists to draw.
 120-item set; adjudication is under the kill threshold; the holdout exists and
 has been run; N6 is published with its bands registered first; and every
 `results/**/README.md` carries the ruler caveat.
+
+#### N2 closed, 2026-08-13 — and the gates it closed against had never run
+
+**120 items, 40 positives, 80 negatives, four bands.** The XL band is 7 triples
+of 900–1,500 words in which the positive and its two negatives share a
+byte-identical body and differ only in the closing ask, so `ledger` has for the
+first time been shown the pile of context it exists for. Working:
+[`notebook/2026-08-13-the-xl-band-and-two-rulers-that-cancelled.md`](../notebook/2026-08-13-the-xl-band-and-two-rulers-that-cancelled.md).
+
+**The corpus was outside every gate written for it.** `check_trigger_sets` globs
+`datasets/triggers/*.yaml`; the bands are one directory down. The shortcut
+battery, the stump and the balance rules could not see any of the 99 items
+already authored, and `de check` was green on every commit that added them. That
+is the **third** tested-with-no-caller defect on record — after `triggers` at
+100% coverage and `prereg.py`'s unreachable refusals — and the first found
+before anything had been published from it. A `_check_drafts` step now holds a
+corpus under construction to the live rules **without making it live**, because
+the entry point may not move before adjudication.
+
+**And a pooled AUC of 0.5 is not evidence that a band is clean.** `word_count`
+read 0.511 over the whole set while the L band sat at **0.769** and the XL band
+at **0.301** — one authoring habit seen from two sides, cancelling in the pool.
+Length inside a band is available at inference, so this was a real shortcut and
+not a bookkeeping curiosity. The depth-2 stump caught it at a lift of 0.117
+against a 0.100 cap; the per-feature battery could not, by construction. After
+re-mixing the ask lengths the set reads:
+
+| | | | |
+|---|---|---|---|
+| says_should_i 0.575 | first_person_rate 0.554 | word_count 0.511 | question_marks 0.500 |
+| imperative_opener 0.494 | paste_cues 0.489 | char_count 0.481 | type_token_ratio 0.471 |
+
+stump 0.750 against a majority baseline of 0.667 — **lift 0.083, cap 0.100.**
+
+**Per-band separability is reported and not gated, and the reason is arithmetic
+rather than convenience.** At 7 positives and 14 negatives an XL-band AUC rests
+on 98 pairs, a null standard error of ~0.137 under independent sampling, so a
+[0.40, 0.60] gate would fire on a clean corpus roughly half the time — eight
+times per band. The matched-triple construction makes the true null variance
+smaller than that by an unknown amount, so the figure bounds the noise rather
+than measuring it, and whether a per-band gate is affordable is **open**. What
+is not open is that the pooled number alone was hiding two rulers.
 
 **Neighbouring work, not duplicated here.** `provenance.py`, `wiring.py` and
 `de index` — gates on whether a published run has a prediction that predates it

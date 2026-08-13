@@ -7,10 +7,33 @@ every Track L and Track M number on disk, and its experiments are numbered
 `N1`–`N8` there. This file is the design; the programme entry is the place it
 sits in the order.
 
-**2026-08-13. A plan, not a run.** Nothing here has been executed. It is written
-down first because the corpus is the answer key, and
+**2026-08-13. A plan, not a run.** It is written down first because the corpus
+is the answer key, and
 [`the last four pre-registration slips`](../../../CLAUDE.md) were all cases where
 something got built before it got specified.
+
+> **Phases 0–4 are done, later the same day. Phases 5 onward are not.** All four
+> bands are authored — 40 triples, **120 items**, 40 positives and 80 negatives —
+> and every gate in §"The four gates" passes on the whole set, with the two
+> exceptions Gate 4 names as human work. The corpus is a **draft** and the entry
+> point every runner uses is still version 2, because blind adjudication (phase
+> 5) carries a kill that can retire it.
+>
+> Two things were learned building it and both are about the gates rather than
+> the turns:
+>
+> - **The gates were reading nothing.** `check_trigger_sets` globs
+>   `datasets/triggers/*.yaml` and the bands are one directory down, so 99
+>   authored items sat outside every check while `de check` reported green.
+>   Third instance of a tested check with no caller in this repository, and the
+>   first found before anything was published from it. Fixed by an `index.yaml`
+>   and a draft-corpus step.
+> - **A pooled AUC of 0.5 does not mean a band is clean.** `word_count` read
+>   0.511 over the set while the L band was at 0.769 and the XL band at 0.301 —
+>   the same authoring habit from two sides, cancelling. The depth-2 stump caught
+>   it and the per-feature battery could not.
+>
+> [`notebook/2026-08-13-the-xl-band-and-two-rulers-that-cancelled.md`](../../../notebook/2026-08-13-the-xl-band-and-two-rulers-that-cancelled.md).
 
 ## The two problems, stated separately
 

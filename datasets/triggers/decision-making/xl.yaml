@@ -1,0 +1,2966 @@
+# Band XL — 900 to 1,500 words. The band the `ledger` procedure exists for.
+#
+# Version 2 had no turn longer than 23 words. `ledger` is the procedure for "a
+# pile of context ending in a question about what to do" and the corpus had
+# never once contained a pile — the longest positive was a single sentence
+# *describing* one. Every routing number ever published for `ledger` was
+# measured on turns that were not its case. This band is the first time it is
+# asked its own question.
+#
+# **The three members of a triple share a body.** Every pasted artefact is
+# identical across the positive and its two negatives; the opening line and the
+# closing ask are the only things that move. At a thousand words that means the
+# label rests on roughly forty of them, which is the point: length, register,
+# paste cues, subject matter, first-person rate and the presence of "should I"
+# are all held fixed, so nothing but the ask can carry the label.
+#
+# The bodies were written once and expanded, rather than typed out three times,
+# so byte-identity is a property of the construction and not of my care.
+#
+# One badly written body damages three items instead of one. Adjudication is
+# therefore at the body level and a retired body retires its whole triple.
+#
+# Texture is deliberate — timestamps, copy-paste seams, numbers written two
+# different ways, quoted messages with other people's punctuation, sentences
+# that trail off, facts stated twice with different emphasis. Prose written to
+# be read is the tell that a turn was authored for a benchmark, and at this
+# length the tell is unmissable.
+
+positive:
+  - id: xl01p
+    triple: xl01
+    band: xl
+    domain: career
+    stakes: high
+    ask: explicit
+    route: ledger
+    turn: >-
+      Everything is below. I have been reading it in a loop for a fortnight
+      and I am no further on than I was on the 4th.
+
+      Letter from HR, 4 Sept, PDF, first page —
+
+      "Following the consultation meeting on 2 September, I write to confirm
+      that your role of Senior Delivery Manager is at risk of redundancy as
+      part of the proposed restructure of the Operations function. You have
+      been offered the alternative role of Delivery Lead (Band 5).
+      Alternatively you may indicate that you wish to be considered under
+      the enhanced voluntary terms set out in Appendix B. Please confirm
+      your preference by 26 September."
+
+      Appendix B, the part that matters —
+
+      "Enhanced payment: 3 weeks' pay per completed year of service,
+      uncapped, plus payment in lieu of notice (12 weeks), plus accrued
+      holiday. Payments are made subject to signature of a settlement
+      agreement."
+
+      From the HR FAQ circulated the same day, question 11 —
+
+      "Q: If I accept the alternative role, can I later change my mind and
+      take voluntary terms? A: No. The voluntary terms are available only
+      during the consultation window and close on 26 September."
+
+      Question 14, same document —
+
+      "Q: Is there a trial period in the alternative role? A: Yes. A
+      four-week statutory trial period applies. If you give notice during
+      the trial period that the role is unsuitable, your redundancy
+      entitlement is preserved."
+
+      Those two answers are in the same PDF and I have read them about
+      thirty times. The union rep says 14 is the statutory position and 11
+      cannot override it. HR have not answered my email asking which is
+      right — sent 10 Sept, chased 15 Sept.
+
+      My numbers, from the payslip and the HR portal, which do not agree
+      with each other:
+
+      - 9 years 7 months of service. The portal says 9. The payslip says
+      continuous service from 14/03/2016, and before that I was here 8
+      months as a contractor on a rolling PAYE thing through an agency. -
+      gross 71,400. The portal shows 71,400. The payslip shows a "market
+      supplement" of 2,400/yr paid separately, which has been paid every
+      month for three years. - Band 5 is 63,000-68,500. They have not said
+      where in it.
+
+      What I worked out on the train, pasted as it came out of the sheet
+      because I do not trust myself to retype it:
+
+        years     weeks   gross/wk   total
+        9         27      1372       37,044
+        9.5       28.5    1372       39,102
+        9.5+8mo   30      1372       41,160
+        plus PILON 12wk              16,464
+        plus holiday (11 days)        3,021
+
+      Teams message from my manager, 5 Sept, 17:52 —
+
+      "off the record and please don't quote me. the Delivery Lead role is
+      real but it's a holding pen. the org design has three of them and next
+      year's plan has one. i'd take the money. i can't put that in writing
+      and if you ask me in the meeting i'll say it's a genuine opportunity"
+
+      Union rep — I'm in the union barely, I joined in 2019 and have never
+      used it — 9 Sept —
+
+      "Two points. First, if you accept the alternative role you retain
+      continuity of service, and if they make you redundant in twelve months
+      you would be paid on the same enhanced terms if the policy is still in
+      force. The policy is reviewed every April. Second, the enhanced terms
+      here are contractual rather than discretionary, which is unusual and
+      worth knowing. Do not sign anything before somebody has looked at it."
+
+      Solicitor, 11 Sept, after the free thirty minutes —
+
+      "On the figures you have sent, the offer is at the generous end of
+      what I see. The first £30,000 of the ex gratia element is tax free;
+      PILON has been taxable in full since 2018. My fee for reviewing and
+      signing off a settlement agreement is £1,450 plus VAT, and employers
+      usually contribute £500-£750. I would not advise negotiating unless
+      there is something you have not told me."
+
+      Text from my wife, 12 Sept, 22:40 —
+
+      "whatever you decide. I mean it. but can we not do the thing where you
+      decide and then tell me it's fine for eight months"
+
+      Same thread, 22:44 —
+
+      "also the nursery deposit for Ada is due on the 1st, 640, I paid it"
+
+      WhatsApp from Kemi, who was in the same consultation —
+
+      "I'm taking Band 5. Not because I think it's good. My visa is on it."
+
+      LinkedIn message from a recruiter, 15 Sept —
+
+      "Saw the news about the restructure. I have two Delivery Manager roles
+      in Leeds at 74-79 and one in Manchester at 82, hybrid three days. All
+      three want a start before Christmas."
+
+      The mortgage: our fixed rate ends 1 February. The broker said in July
+      that a product transfer with our current lender needs no new
+      affordability check, but a remortgage to anybody else does, and the
+      remortgage is where the good rate is. About 190 a month between them.
+
+      There is 640 in the current account and about 11,000 in an ISA I have
+      been telling myself is for the extension.
+
+      One thing I have not mentioned to anybody. In March I got to final
+      stage somewhere else and withdrew, because Ada was three months old.
+      The hiring manager emailed in July asking whether anything had changed
+      and I did not reply.
+
+      Nine years is a long time and I do not know whether that is a reason
+      or a sunk cost. My father was made redundant twice and both times said
+      it was the best thing that ever happened to him, which I have never
+      entirely believed.
+
+      I have to say something by the 26th, which is Thursday week, and every
+      time I sit down to write the email I end up rereading the FAQ instead.
+      What do I do? I have got as far as knowing that the answer is not in
+      the spreadsheet — I have done the spreadsheet four times and it comes
+      out within about two thousand pounds of itself whichever way I run it,
+      and I do not believe two thousand pounds is what this is about. I also
+      know that I have been treating my manager's message as the most
+      important thing in the pile because it was the most uncomfortable one
+      to receive, which is not a reason. Past that I genuinely do not know
+      what I am weighing against what.
+    why: >-
+      Eleven sources, one decision, and a deadline. Most of the pile is
+      inert: the manager's off-the-record message and the contradiction
+      between FAQ 11 and FAQ 14 are what it turns on, and the
+      Glassdoor-shaped material here is the recruiter's message and the
+      mortgage arithmetic. The last four words are the whole difference from
+      the other two members.
+  - id: xl02p
+    triple: xl02
+    band: xl
+    domain: money
+    stakes: high
+    ask: implicit
+    route: ledger
+    turn: >-
+      Right — all of it in one place, because it is currently spread over
+      four inboxes and a folder of photographs of letters.
+
+      HMRC letter, 22 July, reference on the top right which I am not typing
+      out —
+
+      "We are checking your Self Assessment tax return for the year ended 5
+      April 2023. This is a compliance check under Schedule 36 Finance Act
+      2008. We need the following information by 26 August: bank statements
+      for all accounts used for business purposes, invoices and payment
+      records for subcontractor costs, and a copy of your business records
+      for the period."
+
+      HMRC letter, 19 August —
+
+      "Thank you for the information provided. We have concluded that
+      expenses of £41,208 claimed under 'subcontractor costs' are not
+      supported by the records provided. We propose to amend your return
+      accordingly. On the basis of the amendment the additional tax due is
+      £16,483.20 plus interest. We are also considering a penalty. Penalties
+      for inaccuracies range from 0% to 30% of the potential lost revenue
+      where the inaccuracy is careless, and up to 70% where it is
+      deliberate."
+
+      Farida (my accountant), 21 August —
+
+      "Don't panic. This is a fairly standard enquiry outcome and the
+      subcontractor point is arguable — we have the invoices, what we don't
+      have is proof of payment for eleven of them, because those were cash.
+      I would push back. Realistic outcome in my view: half of it goes away
+      and the penalty lands around 15%."
+
+      Second opinion, a tax adviser my brother-in-law uses, 29 August, on
+      the phone. My notes from it, as I typed them:
+
+        said the opposite. said cash payments to subbies with no CIS
+          deduction is the
+        thing they are actually looking at and that the 41k is the small
+          half of the
+        problem. asked whether I had filed CIS returns. I had not. said
+          that is a
+        separate penalty regime, £100 per month per return, and if it is
+          two years of
+        monthly returns that is its own number entirely. said get a
+          specialist. would
+        not quote.
+
+      Farida, 1 Sept, when I put that to her —
+
+      "That is a fair point and I should have raised it. I would suggest we
+      deal with the enquiry first."
+
+      The eleven invoices are from the same two subcontractors, both of whom
+      I still use, both paid in cash at their own request, both of whose
+      numbers I have. One told me in August that he "doesn't really do
+      paperwork from back then". The other has not replied since 2
+      September.
+
+      The bookkeeper before Farida, in an email from 2022 that I found while
+      looking for something else —
+
+      "I've flagged this before but I'll put it in writing: if you're paying
+      people in the trade you need to be operating CIS. It isn't optional
+      and it isn't about whether they're employed or not."
+
+      I have no memory of reading that email. It is in my inbox, marked
+      read, with a reply from me saying "noted, thanks R".
+
+      Time to Pay, from the phone call on 4 Sept, 41 minutes, my notes:
+
+      - twelve months without much question - twenty-four months needs an
+      income and expenditure form - interest at 7.75%, which is what she
+      said. The website says 8.0 today - "a Time to Pay arrangement does not
+      stop a penalty being charged and does not mean the amount is agreed" —
+      she said that twice
+
+      Broker, 8 Sept —
+
+      "A further advance on the mortgage is possible at 5.6% but the lender
+      will want the last two years of SA302s and a tax compliance statement.
+      If there is an open enquiry you should assume they will find it. I am
+      not going to tell you not to mention it."
+
+      The business: turnover was 218,000 last year and will be about 140,000
+      this year, because the contract that was a third of it ended in March
+      and I have not replaced it. Two employees, one of whom is my
+      sister-in-law.
+
+      Dermot (co-director, 30%), 10 Sept —
+
+      "mate what's the number. just tell me the number. if it's under 20
+      I'll put in half and we forget about it, if it's more than that we
+      need a different conversation and I'd rather have it now than in
+      December"
+
+      I have not told him about the CIS thing.
+
+      My wife knows there is "a tax thing". She does not know there is a
+      penalty regime with the word deliberate in it.
+
+      The house has about 210,000 of equity, the fixed rate has three years
+      to run and the early repayment charge is 3%. There is 8,400 in the
+      business account, of which 6,100 is VAT for the quarter ending 30
+      September.
+
+      The appeal window: the amendment letter says 30 days from 19 August,
+      so 18 September, which is Thursday. Farida says a holding appeal costs
+      nothing and can be lodged in a line. The second adviser said the same
+      thing. Neither of them has lodged it and neither has said that they
+      will.
+
+      Also in the folder, a letter from March that I never opened, which
+      turns out to be the notice of enquiry for the 2022 return as well.
+      Farida says the two will "probably be dealt with together". Probably.
+
+      I have read all of this so many times that the words have stopped
+      meaning anything, and I genuinely could not tell you at this point
+      what it is I am choosing between. There is a version of it where the
+      only real question is whether I tell Dermot before Thursday. There is
+      a version where that is a detail and the question is whether the
+      business survives a 140,000 year with this hanging over it. And there
+      is a version where the only word that matters in any of the letters is
+      deliberate and everything else is noise. I have had all three of those
+      in the last hour.
+    why: >-
+      Nine sources, two of which contradict each other, a deadline on
+      Thursday, and the turn ends by saying that the pile is the problem. No
+      question mark anywhere in it. This is the ledger case in the form it
+      actually arrives in, at the length it actually arrives at.
+  - id: xl03p
+    triple: xl03
+    band: xl
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: timing
+    turn: >-
+      Long one, sorry. All of the constraints in one place for once.
+
+      The upgrade itself is decided. It was signed off in the platform
+      review in June, the ticket has been open since, and nobody is arguing
+      about whether. I am pasting the constraints because they have ended up
+      in about six places.
+
+      Vendor EOL page, copied 2 Sept —
+
+      "PostgreSQL 13 will receive its final minor release on 13 November
+      2025 and will reach end of life on that date. After this date no
+      further security fixes will be issued."
+
+      Our managed provider's note, 20 Aug —
+
+      "Instances remaining on version 13 after the end-of-life date will be
+      automatically upgraded during the maintenance window declared for the
+      region, beginning 1 December. Customers who wish to control the timing
+      of the upgrade should perform it before this date."
+
+      So there is a date after which it stops being our decision, and that
+      date is 1 December.
+
+      From the runbook, which Yusuf wrote and which is good:
+
+      - logical replication cutover, target read-only window 25-40 minutes -
+      rollback is possible up to the point the writes are switched, and not
+      after - "the extension list is the risk. pg_stat_statements and
+      postgis are fine. the two we vendored in 2021 have no v16 build and I
+      have not been able to reach the author."
+
+      Yusuf, Slack, 3 Sept 09:14 —
+
+      "the two vendored extensions are used by exactly one report, the
+      finance month-end one, and I think we could drop them if finance would
+      run that report a different way. I've asked. no reply yet"
+
+      Yusuf, Slack, 3 Sept 09:16 —
+
+      "should we just do it in the october window and eat the risk?
+      genuinely asking"
+
+      Priya (finance systems), Slack, 4 Sept —
+
+      "month end close runs 1st-4th of every month and I cannot have the
+      database move during it. Year end is different, that's 1-11 January,
+      and it is worse."
+
+      Change advisory board minutes, 5 Sept —
+
+      "The board notes the November end-of-life date. The board declines to
+      approve any change during the Black Friday period (17 November - 2
+      December). The board asks that any change requiring a read-only window
+      be scheduled on a Saturday and notified ten working days in advance."
+
+      Security, email 28 Aug, to me and Sasha —
+
+      "Please confirm the remediation date for the PostgreSQL 13 end of
+      life. Our policy is that unsupported database versions are a P2
+      finding after the EOL date and a P1 finding thirty days after that.
+      The auditors will ask in the February fieldwork."
+
+      Sasha replied to that, all —
+
+      "Confirming we have a plan. Timing TBC."
+
+      Two customer contracts have a clause I had forgotten about:
+
+      "The Supplier shall provide not less than twenty (20) Business Days
+      written notice of any planned maintenance affecting availability of
+      the Service."
+
+      Twenty business days from tomorrow lands on 3 October, which makes the
+      4 October weekend legal by one day, and only if the notice goes out
+      tomorrow morning.
+
+      On-call rota, as it stands:
+
+      - Yusuf is on call the weekends of 13 Sept and 11 Oct - Yusuf's last
+      day is 31 October. He is going to a competitor and has been entirely
+      decent about it - after that it is me, Ravi and Tom. Ravi has been
+      here seven weeks - Tom did the last two upgrades with Yusuf and
+      describes his own involvement in them as "holding the torch"
+
+      Incident review from the 2023 upgrade, action 3, still open —
+
+      "Action: capture query plans before and after so that a planner
+      regression can be identified rather than argued about. Owner:
+      platform. Status: open."
+
+      Nobody has done action 3. We have no baseline plans captured.
+
+      Staging is a restore from a three-week-old snapshot at a quarter of
+      the data volume. Yusuf's note on it: "staging will tell you the
+      migration completes. it will not tell you anything about the plans."
+
+      The finance month-end report, the one that needs the vendored
+      extensions, is a 40-page PDF that goes to the board. Priya, 5 Sept:
+      "it could be rewritten. it would take me a fortnight and I do not have
+      a fortnight until December."
+
+      Cost, since it will come up: the provider bills the replica for the
+      duration of the cutover, about $180 for a weekend, which nobody cares
+      about and which I am only including because Sasha will ask.
+
+      The thing that is not written down anywhere: the last time we did
+      this, in 2023, the read-only window was estimated at 30 minutes and
+      ran to 2 hours 50, because of an index build nobody had modelled. The
+      postmortem is linked above. Yusuf ran that one too.
+
+      Ravi, Slack, 8 Sept —
+
+      "happy to be involved either way, but I should say I have not run a
+      production migration before and I would be learning on the night. that
+      is fine if somebody senior is on the call and less fine if I am the
+      senior one."
+
+      Also, the read replica the reporting stack points at is on 13 as well,
+      and the runbook does not mention it. I noticed that yesterday. Yusuf's
+      answer when I asked him: "ah."
+
+      The two candidate weekends are 4 October and 8 November. The 8th is
+      five days before EOL and nine days before the freeze. The 4th is after
+      the month-end close and, just, inside the notice clause.
+
+      So: do we go on 4 October while Yusuf is still here, or on 8 November
+      with more time to capture the plans and a team that has never done one
+      of these without him?
+    why: >-
+      The direction is settled, said to be settled in the first sentence,
+      and every constraint in the body is about the moment. The provider's 1
+      December auto-upgrade is the undo price and the twenty-day notice
+      clause is the real deadline.
+  - id: xl04p
+    triple: xl04
+    band: xl
+    domain: relationships
+    stakes: high
+    ask: embedded
+    route: ledger
+    turn: >-
+      I am going to put all of it down here, because every time I explain it
+      to somebody I leave out a different bit.
+
+      Background: separated March 2023, two children, Iris is 9 and Sam is
+      6. No court order — we did it through mediation and then wrote it down
+      ourselves. Roughly week about, changeover Sunday evening, and it has
+      mostly worked.
+
+      The thing we wrote down ourselves, in full, because it is four lines:
+
+        1. The children live with both of us, alternating weeks,
+          changeover Sunday 6pm.
+        2. Neither of us moves them more than 40 miles without the other
+          agreeing in
+        writing.
+        3. We tell each other about school things within 48 hours.
+        4. We review this every August.
+
+      We have never once reviewed it in August.
+
+      Email from Nadia (their mother), 12 August, 23:11 —
+
+      "I've been offered the job in Edinburgh. It's a step up and it's the
+      first thing since we split that has felt like mine. I'd want to go for
+      January. I know this is a big thing. I'm telling you now rather than
+      in November because you asked me to."
+
+      Nadia, 19 August —
+
+      "To be clear, I'm not asking your permission. I'm asking you to talk
+      about it properly."
+
+      Mediator's note from the original agreement, 2023 —
+
+      "Both parents agree that neither will relocate the children's
+      principal residence more than 40 miles without the written agreement
+      of the other or an order of the court. This agreement is not legally
+      binding but records the parties' intentions."
+
+      Solicitor (mine), 26 August —
+
+      "A parent may not remove a child from the jurisdiction without consent
+      or an order. An internal relocation is a different and weaker
+      application. If you object, the route is a prohibited steps order, and
+      the court's question will be the children's welfare rather than the
+      agreement you signed. Realistically, contested internal relocation
+      cases are hard to win, and I would want you to be clear about what you
+      are asking the court to prevent. My rate is £280 an hour and a
+      contested application is not a small number."
+
+      Iris, in the car, 4 September, more or less exactly —
+
+      "Mum says Edinburgh has a beach. Is that true? Are you coming?"
+
+      Sam's teacher, at the September meeting —
+
+      "He's had a much better start than last year. The nurture group has
+      helped and he has two friends in his class now, which he did not have
+      in Year 1. I'd be cautious about anything that moves him this year."
+
+      Sam has a CAMHS referral from June. The letter gives the current wait
+      as 14 months and an estimated first appointment of August 2026. The
+      service is county-based.
+
+      Nadia's mother, WhatsApp, 8 September —
+
+      "She's not thinking straight. I've told her. You know she's not."
+
+      My sister, the same evening —
+
+      "She is thinking straight. She's had two years of being the one who
+      stayed. You're allowed to be devastated and she's also allowed to go."
+
+      Nadia, 11 September, which arrived while I was drafting this —
+
+      "Proposal, and I have thought about it. Term time with me, every other
+      weekend and half of all holidays with you, and I pay the travel. Or:
+      they stay with you in term time and come to me for the holidays, and I
+      accept that, and I would need you to say you would actually do it and
+      mean it, because five days a week is not three days from home."
+
+      That second option is real. She meant it. I have read it about forty
+      times.
+
+      Iris's swimming club, from the email in July —
+
+      "Congratulations — Iris has been selected for the county development
+      squad for the 2025/26 season. Training is Tuesday and Thursday
+      evenings and Saturday mornings at the pool in town. Places are held
+      for the season and cannot be deferred."
+
+      She has wanted that for two years. It is the only thing she has ever
+      asked me to take seriously.
+
+      A thing I noticed reading back over the emails: Nadia's first message
+      says January, and the offer letter she forwarded on 20 August, which I
+      have also read forty times, says the start date is "to be agreed, and
+      in any event no later than 31 March". She has not mentioned that and I
+      have not asked.
+
+      My work: I can do three days from home. Not five. Edinburgh is four
+      and a half hours door to door driving, or 55 minutes flying plus two
+      trains, and about 140 return if I book late, which I would be.
+
+      The school year has started. Nadia's job starts 6 January and she says
+      she has to answer by 30 September.
+
+      Do I fight this? I have written that sentence down twice now and I am
+      not sure it is even the question, because there is a version where I
+      say yes and move myself, and a version where I say yes and stay, and a
+      version where the thing I am actually objecting to is January rather
+      than Edinburgh. I have looked at none of them properly.
+
+      Money: I pay 380 a month, informally, with no CMS assessment. If they
+      move I would be travelling instead, which is more, and the 380 would
+      still be the 380.
+
+      What I actually think, when I am honest, is that week about would
+      become one weekend in three and a bit of the summer, and I would go
+      from being their father to being somebody they visit. I do not know
+      how to say that without it sounding as though it is about me, and I am
+      not certain that it isn't.
+    why: >-
+      Eight sources that disagree, a deadline on the 30th, and the asker
+      noticing mid-turn that the question they wrote down is not the
+      question in front of them. The two paragraphs after the ask are the
+      ones that would change the answer, which is what makes it embedded
+      rather than decorative.
+  - id: xl05p
+    triple: xl05
+    band: xl
+    domain: health
+    stakes: high
+    ask: implicit
+    route: fit
+    turn: >-
+      Everything in one place, because I have now had the same conversation
+      four times and it keeps going the same way.
+
+      Consultant's letter, 14 June —
+
+      "Mrs Bergström has a longstanding scapholunate ligament injury with
+      early degenerative change. I have discussed the options with her. My
+      recommendation is a partial wrist fusion. This offers reliable pain
+      relief with a predictable loss of approximately 40-50% of
+      flexion-extension range. Recovery is six weeks in a cast followed by
+      three to four months of hand therapy, with a return to most activities
+      at six months."
+
+      Same letter, last paragraph —
+
+      "She is understandably concerned about her occupation. I have advised
+      that most patients return to full function for activities of daily
+      living."
+
+      Physio's notes, forwarded 20 June —
+
+      "Grip strength R 18kg, L 31kg. Pain 6/10 at rest after activity, 8/10
+      with loaded rotation. Patient reports symptoms are worst on days with
+      more than four hours of work."
+
+      Second opinion, 2 July —
+
+      "I agree with the recommendation. I would add that delay is not
+      neutral. The degenerative change progresses, and the salvage options
+      at that point are narrower."
+
+      Both of them are right and neither of them has asked what I do.
+
+      What I do: I am a British Sign Language interpreter, freelance, and
+      have been for nineteen years. Forty to fifty per cent of flexion and
+      extension is not a percentage of a hobby. Fingerspelling and perhaps a
+      third of the signs I produce in a working day are wrist. I have asked
+      both consultants what a partial fusion means for BSL production
+      specifically, and both have said, in almost the same words, that they
+      have not had a patient who does this.
+
+      The support group, which is two thousand people and almost none of
+      them interpreters, is unanimous:
+
+        "Have it done. I waited four years and I wish I hadn't." (top
+          post, 380 likes)
+        "Best thing I ever did."
+        "The waiting is worse than the surgery, I promise you."
+
+      I found two interpreters eventually. One had a fusion in 2019, moved
+      into training and assessment, and says she is happier. One had a
+      different operation and does not think the comparison holds.
+
+      Hospital letter, 1 August —
+
+      "You have been placed on the waiting list for the procedure above. The
+      current wait for this procedure at this hospital is 22-30 weeks. If
+      you decline two reasonable offers of a date you may be returned to the
+      care of your GP."
+
+      So the date is not entirely mine either. Twenty-two weeks from 1
+      August is 2 January; thirty weeks is 26 February.
+
+      Income and cover, since that is the actual constraint:
+
+      - last tax year 51,200, of which about 40,000 is agency-booked and
+      11,000 is a standing contract with the college - the college contract
+      says: "The Interpreter shall provide a suitably qualified substitute
+      in the event of unavailability." There are four other qualified
+      interpreters within an hour of here and two of them are already full -
+      income protection: I looked into it in 2021 and did not take it out -
+      critical illness cover: no - savings, roughly six months: 14,000,
+      against expenses of about 2,300 a month
+
+      Agency (Bramble), 3 September —
+
+      "Just to flag — we're planning the January to June bookings now. If
+      you can tell us by the end of September what your availability looks
+      like, we can protect the regular assignments. If we find out in
+      December, we will already have given them to somebody else and I can't
+      undo that."
+
+      The college contract renews on 1 September each year. I signed it on
+      28 August, three weeks ago, knowing all of this. There is one more
+      document, which is that contract, clause 11 —
+
+      "Either party may terminate this agreement on three months' written
+      notice. In the event that the Interpreter is unable to provide
+      services for a continuous period exceeding eight weeks, the College
+      reserves the right to terminate with immediate effect."
+
+      Eight weeks is exactly the cast plus a fortnight. I read that clause
+      on the day I signed it and have not thought about it since, until I
+      put this list together.
+
+      If I have it done in October I lose the autumn term and most of the
+      spring at reduced capacity. If I have it done in June I lose the
+      summer, which is my quiet quarter anyway, but that is eleven more
+      months at 6/10 and both consultants have used the word progressive.
+
+      My husband, said twice and not since —
+
+      "You are asking every person you meet the same question and none of
+      them can answer it. At some point you'll have to."
+
+      There is also the thing I have not said to anybody including him,
+      which is that the pain is not the reason I keep not booking it. The
+      reason is that if the fusion takes the wrist and I cannot produce
+      cleanly any more, then I find out, and at the moment I have not found
+      out.
+
+      Every piece of advice I have been given is good advice given to
+      somebody who has an employer, sick pay, and a job that does not run
+      through their wrist. The people giving it are not wrong.
+
+      It just is not answering the thing that decides it. I do not know how
+      to translate any of it into my own situation, and I have stopped being
+      able to tell whether that is a real problem or the sentence I use to
+      avoid booking it. Nineteen years of doing this and I have never once
+      had to explain to anybody what my hands are for, and now I have to
+      explain it to two surgeons who have each already told me, in writing,
+      that they do not know.
+    why: >-
+      The generic recommendation is stated four times, by two consultants, a
+      physio and two thousand strangers, and is probably correct. One fact
+      about this person — the wrist is the instrument — may overturn it, and
+      both consultants have said in writing that they have no experience of
+      it. No question mark.
+  - id: xl06p
+    triple: xl06
+    band: xl
+    domain: technical
+    stakes: low
+    ask: embedded
+    route: cascade
+    turn: >-
+      Pasting the lot. It is a lot.
+
+      Email from Halvorsen (their head of IT), 21 August —
+
+      "Following our call: our security review will not approve the
+      multi-tenant deployment. What we would need is a dedicated instance in
+      our own tenancy, or one managed by you in an environment that is not
+      shared with other customers. We would expect this to be available for
+      the 1 February go-live. We are otherwise ready to sign."
+
+      The contract as drafted, clause 9.2 —
+
+      "The Supplier shall maintain availability of the Service at not less
+      than 99.9% measured monthly, excluding Planned Maintenance. Service
+      credits shall accrue at 5% of the monthly fee for each 0.1% below the
+      threshold, to a maximum of 25%."
+
+      99.9% monthly is 43 minutes. Our actual, measured on the shared
+      platform over the last twelve months, is 99.94%, with one bad month at
+      99.7%.
+
+      The money: 148,000 a year on a three-year term. That is 31% of current
+      ARR and about 60% of next year's plan. Nobody has said out loud that
+      we have to have it.
+
+      Slack, me to Ines, 22 Aug —
+
+      "can we just run a second copy of the stack for them"
+
+      Ines, 22 Aug —
+
+      "yes. we can run a second copy. we cannot run a second copy the way we
+      run the first one, which is that I fix it. should we be honest with
+      ourselves about that before or after we sign"
+
+      Ines's estimate, 26 Aug, pasted as she wrote it:
+
+        standing up a dedicated environment: 3-4 weeks, mostly terraform
+          we already
+        have
+        the bit that isn't the environment: deploys become two deploys,
+          migrations
+        become two migrations, the on-call rota becomes a rota
+        we have no on-call rota. we have me, and Tomas when I'm on a plane
+        their security review will also want SSO with their IdP, which we
+          don't do,
+        and an annual penetration test, which we have never had done
+        I'd guess six months of one person, spread over a year, forever
+
+      Their security questionnaire, the sections that came back flagged,
+      copied out of the spreadsheet with their numbering:
+
+        4.2 Does the Supplier operate a documented on-call process with
+          defined
+        response times? — we answered "In progress"
+        4.7 Does the Supplier conduct annual penetration testing by an
+          independent
+        third party? — "No"
+        6.1 Does the Supplier support SAML 2.0 or OIDC single sign-on? —
+          "Roadmap"
+        8.3 Does the Supplier hold SOC 2 Type II or ISO 27001? — "No"
+
+      There are 214 questions in it. Those are the four.
+
+      From the covering email that came with the questionnaire, which I only
+      reread last night —
+
+      "Please note that responses marked 'Roadmap' or 'In progress' will be
+      reviewed at the twelve-month contract review and are treated as
+      commitments for that purpose."
+
+      So SSO and the on-call process are not aspirations we typed into a
+      spreadsheet. They are terms, and nobody on our side has said that out
+      loud.
+
+      Quote from the penetration testing people, 4 Sept: 8,900 for the first
+      one, 6,400 annually after that.
+
+      Halvorsen's second email, 29 Aug —
+
+      "To confirm, a SOC 2 Type II report would not be required for go-live,
+      but our vendor policy requires one within twelve months of contract
+      commencement for a system of this classification."
+
+      I asked two people what SOC 2 Type II costs. One said 25-40k all in
+      for a company our size and "a solid quarter of somebody's year". One
+      said 12k and "it's mostly a documentation exercise". Those cannot both
+      be true.
+
+      Infrastructure, from the provider's calculator: a dedicated
+      environment at their expected load is about $1,900 a month, plus the
+      non-production copy, call it $2,400. That is 2.3% of what they would
+      pay us, and it is the only number in this entire thing that is
+      comfortable.
+
+      Tomas is the only person other than Ines who has ever deployed this.
+      He is part time, two days, and he told me in July that he is going
+      back to full-time study in January. I have not put that anywhere that
+      anybody else can see it.
+
+      Two other customers have asked about dedicated instances in the last
+      year. Both accepted the shared platform when we said no. One of them
+      renews in April.
+
+      Our pricing page says "from £1,200/month". Halvorsen's deal is 12,300
+      a month.
+
+      From the discovery call notes in June: "HV mentioned they are also
+      replacing two other systems in the same programme. Timeline for those
+      is 2027." If we are their vendor for this, we are in the room for
+      those, and if we are not, we aren't.
+
+      They want an answer in principle by 30 September so that their board
+      can approve the budget in the October cycle. Halvorsen has been
+      straightforwardly decent about all of it and has not once used the
+      deadline as a lever, which somehow makes it worse.
+
+      So what does saying yes here actually commit us to, past the first
+      environment? I can see the first three weeks clearly and nothing at
+      all after them.
+
+      Ines, 5 Sept, which is the message that made me write all of this out
+      —
+
+      "I'm not against it. I want it written down somewhere that the thing
+      we're deciding isn't whether to build them an environment. It's
+      whether we become a company that runs environments."
+
+      And the part I keep not writing down: if we say no, Halvorsen goes
+      back to his board with "the supplier could not meet our security
+      requirements", and that sentence travels. Two of their people used to
+      work at the customer who renews in April.
+    why: >-
+      The action looks straightforward and every difficulty is downstream of
+      it — a rota, a pen test, a certification, a pricing precedent, a
+      second customer who renews in April. The turn asks for the chain
+      rather than the answer, and Ines's message after the ask names the
+      option being spent.
+  - id: xl07p
+    triple: xl07
+    band: xl
+    domain: relationships
+    stakes: low
+    ask: explicit
+    route: ~
+    turn: >-
+      Nothing serious, but I have been going back and forth on this for
+      three weeks and I would like an outside view.
+
+      Ruaridh's 40th. Six nights in Portugal, 14-20 March, a house near
+      Lagos. The group chat is eleven people and about nine hundred
+      messages.
+
+      Chat, Nuala, 2 Aug —
+
+      "HOUSE BOOKED. 4 bedrooms + the annexe. £3,100 for the week. Split 11
+      ways that's £282 each, or £245 if we get 12. Deposit £100pp by 15 Sept
+      please, non-refundable after that, I have paid it all on my card so
+      please actually do it"
+
+      Chat, Ruaridh, 2 Aug —
+
+      "i did not ask for any of this and i am extremely moved"
+
+      More of the chat, because the texture of it is part of why I can't
+      decide:
+
+        Kate, 15 Aug — "is the annexe the good room or the bad room"
+        Nuala, 15 Aug — "the annexe is a room"
+        Marcus, 19 Aug — "proposing the boat thing on the wednesday,
+          £45pp, 4 hours,
+        they do lunch"
+        Saoirse, 19 Aug — "i'm out on the boat thing, i'll do the beach"
+        Nuala, 20 Aug — "boat is 6 people minimum. currently 4."
+        Ollie, 22 Aug — "should we just do two nights in lisbon after?
+          flights are the
+        same either way"
+        Nuala, 22 Aug — "ollie no"
+        Marcus, 1 Sept — "is anyone else worried the house photos are from
+          2019"
+        Tom, 1 Sept — "they're from 2016"
+        Nuala, 1 Sept — "I have spoken to the owner. the kitchen is new.
+          everything
+        else is from 2016. it is a house in portugal in march for two
+          hundred and
+        eighty two pounds"
+        Ash, 6 Sept — "flights going up. booked mine. 103."
+        Kate, 9 Sept — "118 now"
+
+      Flights, checked this morning:
+
+      - Bristol to Faro, out 14 Mar 06:55, back 20 Mar 21:40 — £96 return,
+      hand luggage only - the same route was £61 in January when Nuala first
+      mentioned it - Gatwick is £140 and I would have to get to Gatwick
+      first
+
+      Car hire, from the chat: two cars at roughly £210 each for the week,
+      split between whoever is in them, and Dev has said he will drive one.
+      Food kitty, from Nuala on 28 Aug, £120pp for the week, covering
+      everything except the one restaurant night.
+
+      There is also a spreadsheet Dev made, which is genuinely good, and
+      which has a tab called "who owes nuala" and a tab called "boat
+      viability".
+
+      Chat, Dev, 11 Sept —
+
+      "deposit list: nuala, dev, kate, marcus, ollie, saoirse, tom, ash.
+      outstanding: you, ffion, ruaridh (who is not paying, ruaridh)"
+
+      Ffion, separately, 12 Sept —
+
+      "are you going? no pressure. asking for entirely selfish reasons"
+
+      Two more from the chat that I keep rereading for no reason I can
+      defend:
+
+        Ruaridh, 3 Sept — "genuinely the only thing I want is that
+          everyone who comes
+        actually wants to come. if anyone is doing it out of duty please
+          do not, I will
+        be able to tell and it will ruin it for me"
+        Nuala, 3 Sept — "ruaridh nobody is coming out of duty, it is
+          portugal"
+
+      I have read that first one about fifteen times and I cannot decide
+      whether it is aimed at me or whether I am simply the sort of person
+      who assumes things are aimed at him.
+
+      The complications, such as they are:
+
+      My cousin's wedding is 28 March in Yorkshire and I am going to that,
+      which makes two long weekends in one month. Skipton, two nights in a
+      Premier Inn because the block booking went in April and I missed it,
+      £164, plus the train, plus a present, plus a suit I will have to do
+      something about. Call it 400. My cousin and I are close in the way you
+      are close to somebody you see twice a year and would help move a body
+      for.
+
+      Priya (my partner) is not invited — it is a "the eleven of us" thing,
+      which is how the group has always worked and which nobody has ever
+      minded, including her. She has said, unprompted, "go, obviously". She
+      has also mentioned twice that March is the month her mother is having
+      the hip done.
+
+      And the thing that is actually why I keep not paying the deposit:
+      Ruaridh and I had a falling-out in 2023. It was about something small,
+      I handled it badly, and we have been fine since, in the sense that we
+      have seen each other perhaps five times and it has never come up. Two
+      of the eleven know about it. I do not know whether going is the thing
+      that closes it or the thing that makes it a topic.
+
+      Work: 14-20 March is fine. I have the days and nothing clashes. Money:
+      fine. Not comfortable, fine. The 650 or so comes out of the same place
+      as the wedding and the two together are about a month of what I
+      actually have spare.
+
+      One more thing that is not really a factor and keeps behaving like
+      one: the last group trip was Anglesey in 2019 and I did not go to that
+      either, for a reason I thought was good at the time and cannot now
+      reconstruct. Nobody has mentioned it. Dev mentioned it once, in 2021,
+      as a joke.
+
+      The deposit deadline is Sunday. I am aware that a six-night house in
+      Portugal in March for £282 is not a problem, and that the fact I have
+      written eight hundred words about it probably means something, though
+      I am not sure it means the thing it looks like it means.
+
+      What would you do?
+    why: >-
+      A real, open, low-stakes decision with no dominant difficulty — the
+      pile is chat rather than evidence, the personal fact is awkward rather
+      than governing, the consequences are mild and the timing matters only
+      a little. Deliberately not routable, like l08p and v2's p12. The skill
+      should fire and the router should have to say so.
+
+negative:
+  - id: xl01n1
+    triple: xl01
+    band: xl
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Everything is below. I have been reading it in a loop for a fortnight
+      and I am no further on than I was on the 4th.
+
+      Letter from HR, 4 Sept, PDF, first page —
+
+      "Following the consultation meeting on 2 September, I write to confirm
+      that your role of Senior Delivery Manager is at risk of redundancy as
+      part of the proposed restructure of the Operations function. You have
+      been offered the alternative role of Delivery Lead (Band 5).
+      Alternatively you may indicate that you wish to be considered under
+      the enhanced voluntary terms set out in Appendix B. Please confirm
+      your preference by 26 September."
+
+      Appendix B, the part that matters —
+
+      "Enhanced payment: 3 weeks' pay per completed year of service,
+      uncapped, plus payment in lieu of notice (12 weeks), plus accrued
+      holiday. Payments are made subject to signature of a settlement
+      agreement."
+
+      From the HR FAQ circulated the same day, question 11 —
+
+      "Q: If I accept the alternative role, can I later change my mind and
+      take voluntary terms? A: No. The voluntary terms are available only
+      during the consultation window and close on 26 September."
+
+      Question 14, same document —
+
+      "Q: Is there a trial period in the alternative role? A: Yes. A
+      four-week statutory trial period applies. If you give notice during
+      the trial period that the role is unsuitable, your redundancy
+      entitlement is preserved."
+
+      Those two answers are in the same PDF and I have read them about
+      thirty times. The union rep says 14 is the statutory position and 11
+      cannot override it. HR have not answered my email asking which is
+      right — sent 10 Sept, chased 15 Sept.
+
+      My numbers, from the payslip and the HR portal, which do not agree
+      with each other:
+
+      - 9 years 7 months of service. The portal says 9. The payslip says
+      continuous service from 14/03/2016, and before that I was here 8
+      months as a contractor on a rolling PAYE thing through an agency. -
+      gross 71,400. The portal shows 71,400. The payslip shows a "market
+      supplement" of 2,400/yr paid separately, which has been paid every
+      month for three years. - Band 5 is 63,000-68,500. They have not said
+      where in it.
+
+      What I worked out on the train, pasted as it came out of the sheet
+      because I do not trust myself to retype it:
+
+        years     weeks   gross/wk   total
+        9         27      1372       37,044
+        9.5       28.5    1372       39,102
+        9.5+8mo   30      1372       41,160
+        plus PILON 12wk              16,464
+        plus holiday (11 days)        3,021
+
+      Teams message from my manager, 5 Sept, 17:52 —
+
+      "off the record and please don't quote me. the Delivery Lead role is
+      real but it's a holding pen. the org design has three of them and next
+      year's plan has one. i'd take the money. i can't put that in writing
+      and if you ask me in the meeting i'll say it's a genuine opportunity"
+
+      Union rep — I'm in the union barely, I joined in 2019 and have never
+      used it — 9 Sept —
+
+      "Two points. First, if you accept the alternative role you retain
+      continuity of service, and if they make you redundant in twelve months
+      you would be paid on the same enhanced terms if the policy is still in
+      force. The policy is reviewed every April. Second, the enhanced terms
+      here are contractual rather than discretionary, which is unusual and
+      worth knowing. Do not sign anything before somebody has looked at it."
+
+      Solicitor, 11 Sept, after the free thirty minutes —
+
+      "On the figures you have sent, the offer is at the generous end of
+      what I see. The first £30,000 of the ex gratia element is tax free;
+      PILON has been taxable in full since 2018. My fee for reviewing and
+      signing off a settlement agreement is £1,450 plus VAT, and employers
+      usually contribute £500-£750. I would not advise negotiating unless
+      there is something you have not told me."
+
+      Text from my wife, 12 Sept, 22:40 —
+
+      "whatever you decide. I mean it. but can we not do the thing where you
+      decide and then tell me it's fine for eight months"
+
+      Same thread, 22:44 —
+
+      "also the nursery deposit for Ada is due on the 1st, 640, I paid it"
+
+      WhatsApp from Kemi, who was in the same consultation —
+
+      "I'm taking Band 5. Not because I think it's good. My visa is on it."
+
+      LinkedIn message from a recruiter, 15 Sept —
+
+      "Saw the news about the restructure. I have two Delivery Manager roles
+      in Leeds at 74-79 and one in Manchester at 82, hybrid three days. All
+      three want a start before Christmas."
+
+      The mortgage: our fixed rate ends 1 February. The broker said in July
+      that a product transfer with our current lender needs no new
+      affordability check, but a remortgage to anybody else does, and the
+      remortgage is where the good rate is. About 190 a month between them.
+
+      There is 640 in the current account and about 11,000 in an ISA I have
+      been telling myself is for the extension.
+
+      One thing I have not mentioned to anybody. In March I got to final
+      stage somewhere else and withdrew, because Ada was three months old.
+      The hiring manager emailed in July asking whether anything had changed
+      and I did not reply.
+
+      Nine years is a long time and I do not know whether that is a reason
+      or a sunk cost. My father was made redundant twice and both times said
+      it was the best thing that ever happened to him, which I have never
+      entirely believed.
+
+      Two things I want answered before I have an opinion about any of it.
+      On the £30,000: does it apply to the enhanced payment alone, or do the
+      PILON and the holiday pay count towards the same allowance? And the
+      FAQ says the voluntary terms close on the 26th while also saying that
+      a four-week trial period preserves redundancy entitlement — which of
+      those is statutory and which is company policy? Just the rules and
+      where they are written down.
+    why: >-
+      The identical pile. Two questions with determinate answers, and the
+      last sentence declines a recommendation outright. This is the hardest
+      negative in the triple because the questions are the ones the decision
+      turns on.
+  - id: xl01n2
+    triple: xl01
+    band: xl
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      Everything is below. I have been reading it in a loop for a fortnight
+      and I am no further on than I was on the 4th.
+
+      Letter from HR, 4 Sept, PDF, first page —
+
+      "Following the consultation meeting on 2 September, I write to confirm
+      that your role of Senior Delivery Manager is at risk of redundancy as
+      part of the proposed restructure of the Operations function. You have
+      been offered the alternative role of Delivery Lead (Band 5).
+      Alternatively you may indicate that you wish to be considered under
+      the enhanced voluntary terms set out in Appendix B. Please confirm
+      your preference by 26 September."
+
+      Appendix B, the part that matters —
+
+      "Enhanced payment: 3 weeks' pay per completed year of service,
+      uncapped, plus payment in lieu of notice (12 weeks), plus accrued
+      holiday. Payments are made subject to signature of a settlement
+      agreement."
+
+      From the HR FAQ circulated the same day, question 11 —
+
+      "Q: If I accept the alternative role, can I later change my mind and
+      take voluntary terms? A: No. The voluntary terms are available only
+      during the consultation window and close on 26 September."
+
+      Question 14, same document —
+
+      "Q: Is there a trial period in the alternative role? A: Yes. A
+      four-week statutory trial period applies. If you give notice during
+      the trial period that the role is unsuitable, your redundancy
+      entitlement is preserved."
+
+      Those two answers are in the same PDF and I have read them about
+      thirty times. The union rep says 14 is the statutory position and 11
+      cannot override it. HR have not answered my email asking which is
+      right — sent 10 Sept, chased 15 Sept.
+
+      My numbers, from the payslip and the HR portal, which do not agree
+      with each other:
+
+      - 9 years 7 months of service. The portal says 9. The payslip says
+      continuous service from 14/03/2016, and before that I was here 8
+      months as a contractor on a rolling PAYE thing through an agency. -
+      gross 71,400. The portal shows 71,400. The payslip shows a "market
+      supplement" of 2,400/yr paid separately, which has been paid every
+      month for three years. - Band 5 is 63,000-68,500. They have not said
+      where in it.
+
+      What I worked out on the train, pasted as it came out of the sheet
+      because I do not trust myself to retype it:
+
+        years     weeks   gross/wk   total
+        9         27      1372       37,044
+        9.5       28.5    1372       39,102
+        9.5+8mo   30      1372       41,160
+        plus PILON 12wk              16,464
+        plus holiday (11 days)        3,021
+
+      Teams message from my manager, 5 Sept, 17:52 —
+
+      "off the record and please don't quote me. the Delivery Lead role is
+      real but it's a holding pen. the org design has three of them and next
+      year's plan has one. i'd take the money. i can't put that in writing
+      and if you ask me in the meeting i'll say it's a genuine opportunity"
+
+      Union rep — I'm in the union barely, I joined in 2019 and have never
+      used it — 9 Sept —
+
+      "Two points. First, if you accept the alternative role you retain
+      continuity of service, and if they make you redundant in twelve months
+      you would be paid on the same enhanced terms if the policy is still in
+      force. The policy is reviewed every April. Second, the enhanced terms
+      here are contractual rather than discretionary, which is unusual and
+      worth knowing. Do not sign anything before somebody has looked at it."
+
+      Solicitor, 11 Sept, after the free thirty minutes —
+
+      "On the figures you have sent, the offer is at the generous end of
+      what I see. The first £30,000 of the ex gratia element is tax free;
+      PILON has been taxable in full since 2018. My fee for reviewing and
+      signing off a settlement agreement is £1,450 plus VAT, and employers
+      usually contribute £500-£750. I would not advise negotiating unless
+      there is something you have not told me."
+
+      Text from my wife, 12 Sept, 22:40 —
+
+      "whatever you decide. I mean it. but can we not do the thing where you
+      decide and then tell me it's fine for eight months"
+
+      Same thread, 22:44 —
+
+      "also the nursery deposit for Ada is due on the 1st, 640, I paid it"
+
+      WhatsApp from Kemi, who was in the same consultation —
+
+      "I'm taking Band 5. Not because I think it's good. My visa is on it."
+
+      LinkedIn message from a recruiter, 15 Sept —
+
+      "Saw the news about the restructure. I have two Delivery Manager roles
+      in Leeds at 74-79 and one in Manchester at 82, hybrid three days. All
+      three want a start before Christmas."
+
+      The mortgage: our fixed rate ends 1 February. The broker said in July
+      that a product transfer with our current lender needs no new
+      affordability check, but a remortgage to anybody else does, and the
+      remortgage is where the good rate is. About 190 a month between them.
+
+      There is 640 in the current account and about 11,000 in an ISA I have
+      been telling myself is for the extension.
+
+      One thing I have not mentioned to anybody. In March I got to final
+      stage somewhere else and withdrew, because Ada was three months old.
+      The hiring manager emailed in July asking whether anything had changed
+      and I did not reply.
+
+      Nine years is a long time and I do not know whether that is a reason
+      or a sunk cost. My father was made redundant twice and both times said
+      it was the best thing that ever happened to him, which I have never
+      entirely believed.
+
+      Do the arithmetic for me, all three service figures, side by side. Use
+      71,400 plus the 2,400 supplement wherever a weekly figure is needed,
+      and show it both with and without the supplement, because I do not
+      know whether it counts. Net the enhanced payment down using the
+      £30,000 tax-free point and treat the PILON as fully taxable. Then show
+      the twelve-month cash position for taking Band 5 at the bottom of the
+      band against taking the money and being out for three months.
+    why: >-
+      Same pile, and the ask is arithmetic with one right answer. Every
+      number it needs is in the body, including the two that disagree, which
+      is why it asks for both.
+  - id: xl02n1
+    triple: xl02
+    band: xl
+    domain: money
+    stakes: high
+    ask: implicit
+    kind: summarise
+    turn: >-
+      Right — all of it in one place, because it is currently spread over
+      four inboxes and a folder of photographs of letters.
+
+      HMRC letter, 22 July, reference on the top right which I am not typing
+      out —
+
+      "We are checking your Self Assessment tax return for the year ended 5
+      April 2023. This is a compliance check under Schedule 36 Finance Act
+      2008. We need the following information by 26 August: bank statements
+      for all accounts used for business purposes, invoices and payment
+      records for subcontractor costs, and a copy of your business records
+      for the period."
+
+      HMRC letter, 19 August —
+
+      "Thank you for the information provided. We have concluded that
+      expenses of £41,208 claimed under 'subcontractor costs' are not
+      supported by the records provided. We propose to amend your return
+      accordingly. On the basis of the amendment the additional tax due is
+      £16,483.20 plus interest. We are also considering a penalty. Penalties
+      for inaccuracies range from 0% to 30% of the potential lost revenue
+      where the inaccuracy is careless, and up to 70% where it is
+      deliberate."
+
+      Farida (my accountant), 21 August —
+
+      "Don't panic. This is a fairly standard enquiry outcome and the
+      subcontractor point is arguable — we have the invoices, what we don't
+      have is proof of payment for eleven of them, because those were cash.
+      I would push back. Realistic outcome in my view: half of it goes away
+      and the penalty lands around 15%."
+
+      Second opinion, a tax adviser my brother-in-law uses, 29 August, on
+      the phone. My notes from it, as I typed them:
+
+        said the opposite. said cash payments to subbies with no CIS
+          deduction is the
+        thing they are actually looking at and that the 41k is the small
+          half of the
+        problem. asked whether I had filed CIS returns. I had not. said
+          that is a
+        separate penalty regime, £100 per month per return, and if it is
+          two years of
+        monthly returns that is its own number entirely. said get a
+          specialist. would
+        not quote.
+
+      Farida, 1 Sept, when I put that to her —
+
+      "That is a fair point and I should have raised it. I would suggest we
+      deal with the enquiry first."
+
+      The eleven invoices are from the same two subcontractors, both of whom
+      I still use, both paid in cash at their own request, both of whose
+      numbers I have. One told me in August that he "doesn't really do
+      paperwork from back then". The other has not replied since 2
+      September.
+
+      The bookkeeper before Farida, in an email from 2022 that I found while
+      looking for something else —
+
+      "I've flagged this before but I'll put it in writing: if you're paying
+      people in the trade you need to be operating CIS. It isn't optional
+      and it isn't about whether they're employed or not."
+
+      I have no memory of reading that email. It is in my inbox, marked
+      read, with a reply from me saying "noted, thanks R".
+
+      Time to Pay, from the phone call on 4 Sept, 41 minutes, my notes:
+
+      - twelve months without much question - twenty-four months needs an
+      income and expenditure form - interest at 7.75%, which is what she
+      said. The website says 8.0 today - "a Time to Pay arrangement does not
+      stop a penalty being charged and does not mean the amount is agreed" —
+      she said that twice
+
+      Broker, 8 Sept —
+
+      "A further advance on the mortgage is possible at 5.6% but the lender
+      will want the last two years of SA302s and a tax compliance statement.
+      If there is an open enquiry you should assume they will find it. I am
+      not going to tell you not to mention it."
+
+      The business: turnover was 218,000 last year and will be about 140,000
+      this year, because the contract that was a third of it ended in March
+      and I have not replaced it. Two employees, one of whom is my
+      sister-in-law.
+
+      Dermot (co-director, 30%), 10 Sept —
+
+      "mate what's the number. just tell me the number. if it's under 20
+      I'll put in half and we forget about it, if it's more than that we
+      need a different conversation and I'd rather have it now than in
+      December"
+
+      I have not told him about the CIS thing.
+
+      My wife knows there is "a tax thing". She does not know there is a
+      penalty regime with the word deliberate in it.
+
+      The house has about 210,000 of equity, the fixed rate has three years
+      to run and the early repayment charge is 3%. There is 8,400 in the
+      business account, of which 6,100 is VAT for the quarter ending 30
+      September.
+
+      The appeal window: the amendment letter says 30 days from 19 August,
+      so 18 September, which is Thursday. Farida says a holding appeal costs
+      nothing and can be lodged in a line. The second adviser said the same
+      thing. Neither of them has lodged it and neither has said that they
+      will.
+
+      Also in the folder, a letter from March that I never opened, which
+      turns out to be the notice of enquiry for the 2022 return as well.
+      Farida says the two will "probably be dealt with together". Probably.
+
+      We are taking the Time to Pay over twenty-four months and lodging the
+      holding appeal, so that part is settled. What I need is something
+      Dermot can read in four minutes: the enquiry, the two numbers, what we
+      have agreed to do, what is still open and what could still change.
+      Neutral, no reassurance, and do not soften the CIS part, because he
+      will hear it from me on Thursday either way.
+    why: >-
+      The decision is stated as taken in the first clause, and the ask is a
+      compression of the same pile for a third party. Ranking the pile by
+      what it turns on would be the wrong thing to do to it.
+  - id: xl02n2
+    triple: xl02
+    band: xl
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      Right — all of it in one place, because it is currently spread over
+      four inboxes and a folder of photographs of letters.
+
+      HMRC letter, 22 July, reference on the top right which I am not typing
+      out —
+
+      "We are checking your Self Assessment tax return for the year ended 5
+      April 2023. This is a compliance check under Schedule 36 Finance Act
+      2008. We need the following information by 26 August: bank statements
+      for all accounts used for business purposes, invoices and payment
+      records for subcontractor costs, and a copy of your business records
+      for the period."
+
+      HMRC letter, 19 August —
+
+      "Thank you for the information provided. We have concluded that
+      expenses of £41,208 claimed under 'subcontractor costs' are not
+      supported by the records provided. We propose to amend your return
+      accordingly. On the basis of the amendment the additional tax due is
+      £16,483.20 plus interest. We are also considering a penalty. Penalties
+      for inaccuracies range from 0% to 30% of the potential lost revenue
+      where the inaccuracy is careless, and up to 70% where it is
+      deliberate."
+
+      Farida (my accountant), 21 August —
+
+      "Don't panic. This is a fairly standard enquiry outcome and the
+      subcontractor point is arguable — we have the invoices, what we don't
+      have is proof of payment for eleven of them, because those were cash.
+      I would push back. Realistic outcome in my view: half of it goes away
+      and the penalty lands around 15%."
+
+      Second opinion, a tax adviser my brother-in-law uses, 29 August, on
+      the phone. My notes from it, as I typed them:
+
+        said the opposite. said cash payments to subbies with no CIS
+          deduction is the
+        thing they are actually looking at and that the 41k is the small
+          half of the
+        problem. asked whether I had filed CIS returns. I had not. said
+          that is a
+        separate penalty regime, £100 per month per return, and if it is
+          two years of
+        monthly returns that is its own number entirely. said get a
+          specialist. would
+        not quote.
+
+      Farida, 1 Sept, when I put that to her —
+
+      "That is a fair point and I should have raised it. I would suggest we
+      deal with the enquiry first."
+
+      The eleven invoices are from the same two subcontractors, both of whom
+      I still use, both paid in cash at their own request, both of whose
+      numbers I have. One told me in August that he "doesn't really do
+      paperwork from back then". The other has not replied since 2
+      September.
+
+      The bookkeeper before Farida, in an email from 2022 that I found while
+      looking for something else —
+
+      "I've flagged this before but I'll put it in writing: if you're paying
+      people in the trade you need to be operating CIS. It isn't optional
+      and it isn't about whether they're employed or not."
+
+      I have no memory of reading that email. It is in my inbox, marked
+      read, with a reply from me saying "noted, thanks R".
+
+      Time to Pay, from the phone call on 4 Sept, 41 minutes, my notes:
+
+      - twelve months without much question - twenty-four months needs an
+      income and expenditure form - interest at 7.75%, which is what she
+      said. The website says 8.0 today - "a Time to Pay arrangement does not
+      stop a penalty being charged and does not mean the amount is agreed" —
+      she said that twice
+
+      Broker, 8 Sept —
+
+      "A further advance on the mortgage is possible at 5.6% but the lender
+      will want the last two years of SA302s and a tax compliance statement.
+      If there is an open enquiry you should assume they will find it. I am
+      not going to tell you not to mention it."
+
+      The business: turnover was 218,000 last year and will be about 140,000
+      this year, because the contract that was a third of it ended in March
+      and I have not replaced it. Two employees, one of whom is my
+      sister-in-law.
+
+      Dermot (co-director, 30%), 10 Sept —
+
+      "mate what's the number. just tell me the number. if it's under 20
+      I'll put in half and we forget about it, if it's more than that we
+      need a different conversation and I'd rather have it now than in
+      December"
+
+      I have not told him about the CIS thing.
+
+      My wife knows there is "a tax thing". She does not know there is a
+      penalty regime with the word deliberate in it.
+
+      The house has about 210,000 of equity, the fixed rate has three years
+      to run and the early repayment charge is 3%. There is 8,400 in the
+      business account, of which 6,100 is VAT for the quarter ending 30
+      September.
+
+      The appeal window: the amendment letter says 30 days from 19 August,
+      so 18 September, which is Thursday. Farida says a holding appeal costs
+      nothing and can be lodged in a line. The second adviser said the same
+      thing. Neither of them has lodged it and neither has said that they
+      will.
+
+      Also in the folder, a letter from March that I never opened, which
+      turns out to be the notice of enquiry for the 2022 return as well.
+      Farida says the two will "probably be dealt with together". Probably.
+
+      Decision is made — we are appealing the amendment and asking for the
+      two years to be handled together. Draft the holding appeal letter to
+      HMRC: reference the 19 August amendment, appeal the subcontractor
+      adjustment, ask for the penalty position to be held pending the
+      appeal, and ask for the 2022 enquiry to be conducted alongside it.
+      Formal and short, with no arguments in it yet, because the arguments
+      are Farida's job.
+    why: >-
+      Same pile. The decision is closed in the first line and the ask is two
+      pieces of writing with stated constraints.
+  - id: xl03n1
+    triple: xl03
+    band: xl
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Long one, sorry. All of the constraints in one place for once.
+
+      The upgrade itself is decided. It was signed off in the platform
+      review in June, the ticket has been open since, and nobody is arguing
+      about whether. I am pasting the constraints because they have ended up
+      in about six places.
+
+      Vendor EOL page, copied 2 Sept —
+
+      "PostgreSQL 13 will receive its final minor release on 13 November
+      2025 and will reach end of life on that date. After this date no
+      further security fixes will be issued."
+
+      Our managed provider's note, 20 Aug —
+
+      "Instances remaining on version 13 after the end-of-life date will be
+      automatically upgraded during the maintenance window declared for the
+      region, beginning 1 December. Customers who wish to control the timing
+      of the upgrade should perform it before this date."
+
+      So there is a date after which it stops being our decision, and that
+      date is 1 December.
+
+      From the runbook, which Yusuf wrote and which is good:
+
+      - logical replication cutover, target read-only window 25-40 minutes -
+      rollback is possible up to the point the writes are switched, and not
+      after - "the extension list is the risk. pg_stat_statements and
+      postgis are fine. the two we vendored in 2021 have no v16 build and I
+      have not been able to reach the author."
+
+      Yusuf, Slack, 3 Sept 09:14 —
+
+      "the two vendored extensions are used by exactly one report, the
+      finance month-end one, and I think we could drop them if finance would
+      run that report a different way. I've asked. no reply yet"
+
+      Yusuf, Slack, 3 Sept 09:16 —
+
+      "should we just do it in the october window and eat the risk?
+      genuinely asking"
+
+      Priya (finance systems), Slack, 4 Sept —
+
+      "month end close runs 1st-4th of every month and I cannot have the
+      database move during it. Year end is different, that's 1-11 January,
+      and it is worse."
+
+      Change advisory board minutes, 5 Sept —
+
+      "The board notes the November end-of-life date. The board declines to
+      approve any change during the Black Friday period (17 November - 2
+      December). The board asks that any change requiring a read-only window
+      be scheduled on a Saturday and notified ten working days in advance."
+
+      Security, email 28 Aug, to me and Sasha —
+
+      "Please confirm the remediation date for the PostgreSQL 13 end of
+      life. Our policy is that unsupported database versions are a P2
+      finding after the EOL date and a P1 finding thirty days after that.
+      The auditors will ask in the February fieldwork."
+
+      Sasha replied to that, all —
+
+      "Confirming we have a plan. Timing TBC."
+
+      Two customer contracts have a clause I had forgotten about:
+
+      "The Supplier shall provide not less than twenty (20) Business Days
+      written notice of any planned maintenance affecting availability of
+      the Service."
+
+      Twenty business days from tomorrow lands on 3 October, which makes the
+      4 October weekend legal by one day, and only if the notice goes out
+      tomorrow morning.
+
+      On-call rota, as it stands:
+
+      - Yusuf is on call the weekends of 13 Sept and 11 Oct - Yusuf's last
+      day is 31 October. He is going to a competitor and has been entirely
+      decent about it - after that it is me, Ravi and Tom. Ravi has been
+      here seven weeks - Tom did the last two upgrades with Yusuf and
+      describes his own involvement in them as "holding the torch"
+
+      Incident review from the 2023 upgrade, action 3, still open —
+
+      "Action: capture query plans before and after so that a planner
+      regression can be identified rather than argued about. Owner:
+      platform. Status: open."
+
+      Nobody has done action 3. We have no baseline plans captured.
+
+      Staging is a restore from a three-week-old snapshot at a quarter of
+      the data volume. Yusuf's note on it: "staging will tell you the
+      migration completes. it will not tell you anything about the plans."
+
+      The finance month-end report, the one that needs the vendored
+      extensions, is a 40-page PDF that goes to the board. Priya, 5 Sept:
+      "it could be rewritten. it would take me a fortnight and I do not have
+      a fortnight until December."
+
+      Cost, since it will come up: the provider bills the replica for the
+      duration of the cutover, about $180 for a weekend, which nobody cares
+      about and which I am only including because Sasha will ask.
+
+      The thing that is not written down anywhere: the last time we did
+      this, in 2023, the read-only window was estimated at 30 minutes and
+      ran to 2 hours 50, because of an index build nobody had modelled. The
+      postmortem is linked above. Yusuf ran that one too.
+
+      Ravi, Slack, 8 Sept —
+
+      "happy to be involved either way, but I should say I have not run a
+      production migration before and I would be learning on the night. that
+      is fine if somebody senior is on the call and less fine if I am the
+      senior one."
+
+      Also, the read replica the reporting stack points at is on 13 as well,
+      and the runbook does not mention it. I noticed that yesterday. Yusuf's
+      answer when I asked him: "ah."
+
+      The two candidate weekends are 4 October and 8 November. The 8th is
+      five days before EOL and nine days before the freeze. The 4th is after
+      the month-end close and, just, inside the notice clause.
+
+      Work the calendar out properly for me first. For each of the two
+      candidate weekends, give me the date the notice has to go out to
+      satisfy the twenty business day clause, the number of business days
+      between the change and the end-of-life date, the number between the
+      change and the start of the freeze, and whether it falls inside either
+      of Priya's close periods. Then do the same for every remaining
+      Saturday between now and 1 December, and mark which ones are excluded
+      and by which constraint. Assume England bank holidays.
+    why: >-
+      Identical constraints, and the ask is a date calculation over them. It
+      is the most decision-adjacent negative in the band — it produces the
+      table the decision would be made from — and it asks for the table
+      rather than the decision.
+  - id: xl03n2
+    triple: xl03
+    band: xl
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Long one, sorry. All of the constraints in one place for once.
+
+      The upgrade itself is decided. It was signed off in the platform
+      review in June, the ticket has been open since, and nobody is arguing
+      about whether. I am pasting the constraints because they have ended up
+      in about six places.
+
+      Vendor EOL page, copied 2 Sept —
+
+      "PostgreSQL 13 will receive its final minor release on 13 November
+      2025 and will reach end of life on that date. After this date no
+      further security fixes will be issued."
+
+      Our managed provider's note, 20 Aug —
+
+      "Instances remaining on version 13 after the end-of-life date will be
+      automatically upgraded during the maintenance window declared for the
+      region, beginning 1 December. Customers who wish to control the timing
+      of the upgrade should perform it before this date."
+
+      So there is a date after which it stops being our decision, and that
+      date is 1 December.
+
+      From the runbook, which Yusuf wrote and which is good:
+
+      - logical replication cutover, target read-only window 25-40 minutes -
+      rollback is possible up to the point the writes are switched, and not
+      after - "the extension list is the risk. pg_stat_statements and
+      postgis are fine. the two we vendored in 2021 have no v16 build and I
+      have not been able to reach the author."
+
+      Yusuf, Slack, 3 Sept 09:14 —
+
+      "the two vendored extensions are used by exactly one report, the
+      finance month-end one, and I think we could drop them if finance would
+      run that report a different way. I've asked. no reply yet"
+
+      Yusuf, Slack, 3 Sept 09:16 —
+
+      "should we just do it in the october window and eat the risk?
+      genuinely asking"
+
+      Priya (finance systems), Slack, 4 Sept —
+
+      "month end close runs 1st-4th of every month and I cannot have the
+      database move during it. Year end is different, that's 1-11 January,
+      and it is worse."
+
+      Change advisory board minutes, 5 Sept —
+
+      "The board notes the November end-of-life date. The board declines to
+      approve any change during the Black Friday period (17 November - 2
+      December). The board asks that any change requiring a read-only window
+      be scheduled on a Saturday and notified ten working days in advance."
+
+      Security, email 28 Aug, to me and Sasha —
+
+      "Please confirm the remediation date for the PostgreSQL 13 end of
+      life. Our policy is that unsupported database versions are a P2
+      finding after the EOL date and a P1 finding thirty days after that.
+      The auditors will ask in the February fieldwork."
+
+      Sasha replied to that, all —
+
+      "Confirming we have a plan. Timing TBC."
+
+      Two customer contracts have a clause I had forgotten about:
+
+      "The Supplier shall provide not less than twenty (20) Business Days
+      written notice of any planned maintenance affecting availability of
+      the Service."
+
+      Twenty business days from tomorrow lands on 3 October, which makes the
+      4 October weekend legal by one day, and only if the notice goes out
+      tomorrow morning.
+
+      On-call rota, as it stands:
+
+      - Yusuf is on call the weekends of 13 Sept and 11 Oct - Yusuf's last
+      day is 31 October. He is going to a competitor and has been entirely
+      decent about it - after that it is me, Ravi and Tom. Ravi has been
+      here seven weeks - Tom did the last two upgrades with Yusuf and
+      describes his own involvement in them as "holding the torch"
+
+      Incident review from the 2023 upgrade, action 3, still open —
+
+      "Action: capture query plans before and after so that a planner
+      regression can be identified rather than argued about. Owner:
+      platform. Status: open."
+
+      Nobody has done action 3. We have no baseline plans captured.
+
+      Staging is a restore from a three-week-old snapshot at a quarter of
+      the data volume. Yusuf's note on it: "staging will tell you the
+      migration completes. it will not tell you anything about the plans."
+
+      The finance month-end report, the one that needs the vendored
+      extensions, is a 40-page PDF that goes to the board. Priya, 5 Sept:
+      "it could be rewritten. it would take me a fortnight and I do not have
+      a fortnight until December."
+
+      Cost, since it will come up: the provider bills the replica for the
+      duration of the cutover, about $180 for a weekend, which nobody cares
+      about and which I am only including because Sasha will ask.
+
+      The thing that is not written down anywhere: the last time we did
+      this, in 2023, the read-only window was estimated at 30 minutes and
+      ran to 2 hours 50, because of an index build nobody had modelled. The
+      postmortem is linked above. Yusuf ran that one too.
+
+      Ravi, Slack, 8 Sept —
+
+      "happy to be involved either way, but I should say I have not run a
+      production migration before and I would be learning on the night. that
+      is fine if somebody senior is on the call and less fine if I am the
+      senior one."
+
+      Also, the read replica the reporting stack points at is on 13 as well,
+      and the runbook does not mention it. I noticed that yesterday. Yusuf's
+      answer when I asked him: "ah."
+
+      The two candidate weekends are 4 October and 8 November. The 8th is
+      five days before EOL and nine days before the freeze. The 4th is after
+      the month-end close and, just, inside the notice clause.
+
+      Two things about the mechanism that I want to be sure of, and both are
+      how-does-this-work rather than what-should-we-do. First, in a logical
+      replication cutover, what happens to sequences — are they replicated,
+      and if not, what is the standard way of bringing them across without
+      leaving a gap? Second, when the provider performs its automatic
+      upgrade in its own window, is that the same logical replication path
+      or an in-place pg_upgrade, and what does it do with an extension that
+      has no build for the target version, skip it or fail the instance?
+      Documentation rather than a summary, please.
+    why: >-
+      Same body. Both questions have documented answers and neither chooses
+      a date.
+  - id: xl04n1
+    triple: xl04
+    band: xl
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      I am going to put all of it down here, because every time I explain it
+      to somebody I leave out a different bit.
+
+      Background: separated March 2023, two children, Iris is 9 and Sam is
+      6. No court order — we did it through mediation and then wrote it down
+      ourselves. Roughly week about, changeover Sunday evening, and it has
+      mostly worked.
+
+      The thing we wrote down ourselves, in full, because it is four lines:
+
+        1. The children live with both of us, alternating weeks,
+          changeover Sunday 6pm.
+        2. Neither of us moves them more than 40 miles without the other
+          agreeing in
+        writing.
+        3. We tell each other about school things within 48 hours.
+        4. We review this every August.
+
+      We have never once reviewed it in August.
+
+      Email from Nadia (their mother), 12 August, 23:11 —
+
+      "I've been offered the job in Edinburgh. It's a step up and it's the
+      first thing since we split that has felt like mine. I'd want to go for
+      January. I know this is a big thing. I'm telling you now rather than
+      in November because you asked me to."
+
+      Nadia, 19 August —
+
+      "To be clear, I'm not asking your permission. I'm asking you to talk
+      about it properly."
+
+      Mediator's note from the original agreement, 2023 —
+
+      "Both parents agree that neither will relocate the children's
+      principal residence more than 40 miles without the written agreement
+      of the other or an order of the court. This agreement is not legally
+      binding but records the parties' intentions."
+
+      Solicitor (mine), 26 August —
+
+      "A parent may not remove a child from the jurisdiction without consent
+      or an order. An internal relocation is a different and weaker
+      application. If you object, the route is a prohibited steps order, and
+      the court's question will be the children's welfare rather than the
+      agreement you signed. Realistically, contested internal relocation
+      cases are hard to win, and I would want you to be clear about what you
+      are asking the court to prevent. My rate is £280 an hour and a
+      contested application is not a small number."
+
+      Iris, in the car, 4 September, more or less exactly —
+
+      "Mum says Edinburgh has a beach. Is that true? Are you coming?"
+
+      Sam's teacher, at the September meeting —
+
+      "He's had a much better start than last year. The nurture group has
+      helped and he has two friends in his class now, which he did not have
+      in Year 1. I'd be cautious about anything that moves him this year."
+
+      Sam has a CAMHS referral from June. The letter gives the current wait
+      as 14 months and an estimated first appointment of August 2026. The
+      service is county-based.
+
+      Nadia's mother, WhatsApp, 8 September —
+
+      "She's not thinking straight. I've told her. You know she's not."
+
+      My sister, the same evening —
+
+      "She is thinking straight. She's had two years of being the one who
+      stayed. You're allowed to be devastated and she's also allowed to go."
+
+      Nadia, 11 September, which arrived while I was drafting this —
+
+      "Proposal, and I have thought about it. Term time with me, every other
+      weekend and half of all holidays with you, and I pay the travel. Or:
+      they stay with you in term time and come to me for the holidays, and I
+      accept that, and I would need you to say you would actually do it and
+      mean it, because five days a week is not three days from home."
+
+      That second option is real. She meant it. I have read it about forty
+      times.
+
+      Iris's swimming club, from the email in July —
+
+      "Congratulations — Iris has been selected for the county development
+      squad for the 2025/26 season. Training is Tuesday and Thursday
+      evenings and Saturday mornings at the pool in town. Places are held
+      for the season and cannot be deferred."
+
+      She has wanted that for two years. It is the only thing she has ever
+      asked me to take seriously.
+
+      A thing I noticed reading back over the emails: Nadia's first message
+      says January, and the offer letter she forwarded on 20 August, which I
+      have also read forty times, says the start date is "to be agreed, and
+      in any event no later than 31 March". She has not mentioned that and I
+      have not asked.
+
+      My work: I can do three days from home. Not five. Edinburgh is four
+      and a half hours door to door driving, or 55 minutes flying plus two
+      trains, and about 140 return if I book late, which I would be.
+
+      The school year has started. Nadia's job starts 6 January and she says
+      she has to answer by 30 September.
+
+      Money: I pay 380 a month, informally, with no CMS assessment. If they
+      move I would be travelling instead, which is more, and the 380 would
+      still be the 380.
+
+      What I actually think, when I am honest, is that week about would
+      become one weekend in three and a bit of the summer, and I would go
+      from being their father to being somebody they visit. I do not know
+      how to say that without it sounding as though it is about me, and I am
+      not certain that it isn't.
+
+      What I want first is the law rather than a view. Three questions. Is a
+      move from here to Edinburgh an internal relocation in the legal sense,
+      given that Scotland is a separate jurisdiction inside the UK, or is it
+      treated as removal from the jurisdiction? What does a prohibited steps
+      order actually prohibit, and can it be used to stop a move rather than
+      to reverse one? And what happens to a county-based CAMHS referral when
+      the child moves — does the wait start again, and is there a transfer
+      mechanism? Sources rather than reassurance. I will do the deciding.
+    why: >-
+      The identical eight sources, and three questions about how a system
+      works. The last five words close the door on a recommendation.
+  - id: xl04n2
+    triple: xl04
+    band: xl
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: settled
+    turn: >-
+      I am going to put all of it down here, because every time I explain it
+      to somebody I leave out a different bit.
+
+      Background: separated March 2023, two children, Iris is 9 and Sam is
+      6. No court order — we did it through mediation and then wrote it down
+      ourselves. Roughly week about, changeover Sunday evening, and it has
+      mostly worked.
+
+      The thing we wrote down ourselves, in full, because it is four lines:
+
+        1. The children live with both of us, alternating weeks,
+          changeover Sunday 6pm.
+        2. Neither of us moves them more than 40 miles without the other
+          agreeing in
+        writing.
+        3. We tell each other about school things within 48 hours.
+        4. We review this every August.
+
+      We have never once reviewed it in August.
+
+      Email from Nadia (their mother), 12 August, 23:11 —
+
+      "I've been offered the job in Edinburgh. It's a step up and it's the
+      first thing since we split that has felt like mine. I'd want to go for
+      January. I know this is a big thing. I'm telling you now rather than
+      in November because you asked me to."
+
+      Nadia, 19 August —
+
+      "To be clear, I'm not asking your permission. I'm asking you to talk
+      about it properly."
+
+      Mediator's note from the original agreement, 2023 —
+
+      "Both parents agree that neither will relocate the children's
+      principal residence more than 40 miles without the written agreement
+      of the other or an order of the court. This agreement is not legally
+      binding but records the parties' intentions."
+
+      Solicitor (mine), 26 August —
+
+      "A parent may not remove a child from the jurisdiction without consent
+      or an order. An internal relocation is a different and weaker
+      application. If you object, the route is a prohibited steps order, and
+      the court's question will be the children's welfare rather than the
+      agreement you signed. Realistically, contested internal relocation
+      cases are hard to win, and I would want you to be clear about what you
+      are asking the court to prevent. My rate is £280 an hour and a
+      contested application is not a small number."
+
+      Iris, in the car, 4 September, more or less exactly —
+
+      "Mum says Edinburgh has a beach. Is that true? Are you coming?"
+
+      Sam's teacher, at the September meeting —
+
+      "He's had a much better start than last year. The nurture group has
+      helped and he has two friends in his class now, which he did not have
+      in Year 1. I'd be cautious about anything that moves him this year."
+
+      Sam has a CAMHS referral from June. The letter gives the current wait
+      as 14 months and an estimated first appointment of August 2026. The
+      service is county-based.
+
+      Nadia's mother, WhatsApp, 8 September —
+
+      "She's not thinking straight. I've told her. You know she's not."
+
+      My sister, the same evening —
+
+      "She is thinking straight. She's had two years of being the one who
+      stayed. You're allowed to be devastated and she's also allowed to go."
+
+      Nadia, 11 September, which arrived while I was drafting this —
+
+      "Proposal, and I have thought about it. Term time with me, every other
+      weekend and half of all holidays with you, and I pay the travel. Or:
+      they stay with you in term time and come to me for the holidays, and I
+      accept that, and I would need you to say you would actually do it and
+      mean it, because five days a week is not three days from home."
+
+      That second option is real. She meant it. I have read it about forty
+      times.
+
+      Iris's swimming club, from the email in July —
+
+      "Congratulations — Iris has been selected for the county development
+      squad for the 2025/26 season. Training is Tuesday and Thursday
+      evenings and Saturday mornings at the pool in town. Places are held
+      for the season and cannot be deferred."
+
+      She has wanted that for two years. It is the only thing she has ever
+      asked me to take seriously.
+
+      A thing I noticed reading back over the emails: Nadia's first message
+      says January, and the offer letter she forwarded on 20 August, which I
+      have also read forty times, says the start date is "to be agreed, and
+      in any event no later than 31 March". She has not mentioned that and I
+      have not asked.
+
+      My work: I can do three days from home. Not five. Edinburgh is four
+      and a half hours door to door driving, or 55 minutes flying plus two
+      trains, and about 140 return if I book late, which I would be.
+
+      The school year has started. Nadia's job starts 6 January and she says
+      she has to answer by 30 September.
+
+      Money: I pay 380 a month, informally, with no CMS assessment. If they
+      move I would be travelling instead, which is more, and the 380 would
+      still be the 380.
+
+      What I actually think, when I am honest, is that week about would
+      become one weekend in three and a bit of the summer, and I would go
+      from being their father to being somebody they visit. I do not know
+      how to say that without it sounding as though it is about me, and I am
+      not certain that it isn't.
+
+      We have agreed the second option — they stay here in term time and go
+      to her for the holidays, and she has accepted the job. That is done.
+      Draft the letters to Sam's school and to Iris's: the arrangement has
+      changed, please keep the CAMHS referral where it is, and please tell
+      us both things at once rather than whichever of us is at the gate.
+    why: >-
+      The decision is named and closed in the first two sentences, and the
+      pile it was made from is still all there. The ask is two letters.
+  - id: xl05n1
+    triple: xl05
+    band: xl
+    domain: health
+    stakes: high
+    ask: implicit
+    kind: summarise
+    turn: >-
+      Everything in one place, because I have now had the same conversation
+      four times and it keeps going the same way.
+
+      Consultant's letter, 14 June —
+
+      "Mrs Bergström has a longstanding scapholunate ligament injury with
+      early degenerative change. I have discussed the options with her. My
+      recommendation is a partial wrist fusion. This offers reliable pain
+      relief with a predictable loss of approximately 40-50% of
+      flexion-extension range. Recovery is six weeks in a cast followed by
+      three to four months of hand therapy, with a return to most activities
+      at six months."
+
+      Same letter, last paragraph —
+
+      "She is understandably concerned about her occupation. I have advised
+      that most patients return to full function for activities of daily
+      living."
+
+      Physio's notes, forwarded 20 June —
+
+      "Grip strength R 18kg, L 31kg. Pain 6/10 at rest after activity, 8/10
+      with loaded rotation. Patient reports symptoms are worst on days with
+      more than four hours of work."
+
+      Second opinion, 2 July —
+
+      "I agree with the recommendation. I would add that delay is not
+      neutral. The degenerative change progresses, and the salvage options
+      at that point are narrower."
+
+      Both of them are right and neither of them has asked what I do.
+
+      What I do: I am a British Sign Language interpreter, freelance, and
+      have been for nineteen years. Forty to fifty per cent of flexion and
+      extension is not a percentage of a hobby. Fingerspelling and perhaps a
+      third of the signs I produce in a working day are wrist. I have asked
+      both consultants what a partial fusion means for BSL production
+      specifically, and both have said, in almost the same words, that they
+      have not had a patient who does this.
+
+      The support group, which is two thousand people and almost none of
+      them interpreters, is unanimous:
+
+        "Have it done. I waited four years and I wish I hadn't." (top
+          post, 380 likes)
+        "Best thing I ever did."
+        "The waiting is worse than the surgery, I promise you."
+
+      I found two interpreters eventually. One had a fusion in 2019, moved
+      into training and assessment, and says she is happier. One had a
+      different operation and does not think the comparison holds.
+
+      Hospital letter, 1 August —
+
+      "You have been placed on the waiting list for the procedure above. The
+      current wait for this procedure at this hospital is 22-30 weeks. If
+      you decline two reasonable offers of a date you may be returned to the
+      care of your GP."
+
+      So the date is not entirely mine either. Twenty-two weeks from 1
+      August is 2 January; thirty weeks is 26 February.
+
+      Income and cover, since that is the actual constraint:
+
+      - last tax year 51,200, of which about 40,000 is agency-booked and
+      11,000 is a standing contract with the college - the college contract
+      says: "The Interpreter shall provide a suitably qualified substitute
+      in the event of unavailability." There are four other qualified
+      interpreters within an hour of here and two of them are already full -
+      income protection: I looked into it in 2021 and did not take it out -
+      critical illness cover: no - savings, roughly six months: 14,000,
+      against expenses of about 2,300 a month
+
+      Agency (Bramble), 3 September —
+
+      "Just to flag — we're planning the January to June bookings now. If
+      you can tell us by the end of September what your availability looks
+      like, we can protect the regular assignments. If we find out in
+      December, we will already have given them to somebody else and I can't
+      undo that."
+
+      The college contract renews on 1 September each year. I signed it on
+      28 August, three weeks ago, knowing all of this. There is one more
+      document, which is that contract, clause 11 —
+
+      "Either party may terminate this agreement on three months' written
+      notice. In the event that the Interpreter is unable to provide
+      services for a continuous period exceeding eight weeks, the College
+      reserves the right to terminate with immediate effect."
+
+      Eight weeks is exactly the cast plus a fortnight. I read that clause
+      on the day I signed it and have not thought about it since, until I
+      put this list together.
+
+      If I have it done in October I lose the autumn term and most of the
+      spring at reduced capacity. If I have it done in June I lose the
+      summer, which is my quiet quarter anyway, but that is eleven more
+      months at 6/10 and both consultants have used the word progressive.
+
+      My husband, said twice and not since —
+
+      "You are asking every person you meet the same question and none of
+      them can answer it. At some point you'll have to."
+
+      There is also the thing I have not said to anybody including him,
+      which is that the pain is not the reason I keep not booking it. The
+      reason is that if the fusion takes the wrist and I cannot produce
+      cleanly any more, then I find out, and at the moment I have not found
+      out.
+
+      Every piece of advice I have been given is good advice given to
+      somebody who has an employer, sick pay, and a job that does not run
+      through their wrist. The people giving it are not wrong.
+
+      I have booked it — I said yes to a January date this morning, so that
+      part is over. What I need now is one page for the agency and the
+      college: what the operation is, when I am unavailable, and what I am
+      asking each of them to hold. Factual, not apologetic.
+    why: >-
+      Same body, and the first clause converts it into settled history. The
+      ask is a summary for two third parties with a stated tone.
+  - id: xl05n2
+    triple: xl05
+    band: xl
+    domain: health
+    stakes: high
+    ask: implicit
+    kind: meta
+    turn: >-
+      Everything in one place, because I have now had the same conversation
+      four times and it keeps going the same way.
+
+      Consultant's letter, 14 June —
+
+      "Mrs Bergström has a longstanding scapholunate ligament injury with
+      early degenerative change. I have discussed the options with her. My
+      recommendation is a partial wrist fusion. This offers reliable pain
+      relief with a predictable loss of approximately 40-50% of
+      flexion-extension range. Recovery is six weeks in a cast followed by
+      three to four months of hand therapy, with a return to most activities
+      at six months."
+
+      Same letter, last paragraph —
+
+      "She is understandably concerned about her occupation. I have advised
+      that most patients return to full function for activities of daily
+      living."
+
+      Physio's notes, forwarded 20 June —
+
+      "Grip strength R 18kg, L 31kg. Pain 6/10 at rest after activity, 8/10
+      with loaded rotation. Patient reports symptoms are worst on days with
+      more than four hours of work."
+
+      Second opinion, 2 July —
+
+      "I agree with the recommendation. I would add that delay is not
+      neutral. The degenerative change progresses, and the salvage options
+      at that point are narrower."
+
+      Both of them are right and neither of them has asked what I do.
+
+      What I do: I am a British Sign Language interpreter, freelance, and
+      have been for nineteen years. Forty to fifty per cent of flexion and
+      extension is not a percentage of a hobby. Fingerspelling and perhaps a
+      third of the signs I produce in a working day are wrist. I have asked
+      both consultants what a partial fusion means for BSL production
+      specifically, and both have said, in almost the same words, that they
+      have not had a patient who does this.
+
+      The support group, which is two thousand people and almost none of
+      them interpreters, is unanimous:
+
+        "Have it done. I waited four years and I wish I hadn't." (top
+          post, 380 likes)
+        "Best thing I ever did."
+        "The waiting is worse than the surgery, I promise you."
+
+      I found two interpreters eventually. One had a fusion in 2019, moved
+      into training and assessment, and says she is happier. One had a
+      different operation and does not think the comparison holds.
+
+      Hospital letter, 1 August —
+
+      "You have been placed on the waiting list for the procedure above. The
+      current wait for this procedure at this hospital is 22-30 weeks. If
+      you decline two reasonable offers of a date you may be returned to the
+      care of your GP."
+
+      So the date is not entirely mine either. Twenty-two weeks from 1
+      August is 2 January; thirty weeks is 26 February.
+
+      Income and cover, since that is the actual constraint:
+
+      - last tax year 51,200, of which about 40,000 is agency-booked and
+      11,000 is a standing contract with the college - the college contract
+      says: "The Interpreter shall provide a suitably qualified substitute
+      in the event of unavailability." There are four other qualified
+      interpreters within an hour of here and two of them are already full -
+      income protection: I looked into it in 2021 and did not take it out -
+      critical illness cover: no - savings, roughly six months: 14,000,
+      against expenses of about 2,300 a month
+
+      Agency (Bramble), 3 September —
+
+      "Just to flag — we're planning the January to June bookings now. If
+      you can tell us by the end of September what your availability looks
+      like, we can protect the regular assignments. If we find out in
+      December, we will already have given them to somebody else and I can't
+      undo that."
+
+      The college contract renews on 1 September each year. I signed it on
+      28 August, three weeks ago, knowing all of this. There is one more
+      document, which is that contract, clause 11 —
+
+      "Either party may terminate this agreement on three months' written
+      notice. In the event that the Interpreter is unable to provide
+      services for a continuous period exceeding eight weeks, the College
+      reserves the right to terminate with immediate effect."
+
+      Eight weeks is exactly the cast plus a fortnight. I read that clause
+      on the day I signed it and have not thought about it since, until I
+      put this list together.
+
+      If I have it done in October I lose the autumn term and most of the
+      spring at reduced capacity. If I have it done in June I lose the
+      summer, which is my quiet quarter anyway, but that is eleven more
+      months at 6/10 and both consultants have used the word progressive.
+
+      My husband, said twice and not since —
+
+      "You are asking every person you meet the same question and none of
+      them can answer it. At some point you'll have to."
+
+      There is also the thing I have not said to anybody including him,
+      which is that the pain is not the reason I keep not booking it. The
+      reason is that if the fusion takes the wrist and I cannot produce
+      cleanly any more, then I find out, and at the moment I have not found
+      out.
+
+      Every piece of advice I have been given is good advice given to
+      somebody who has an employer, sick pay, and a job that does not run
+      through their wrist. The people giving it are not wrong.
+
+      This is about something you said last time rather than about the
+      wrist. You said the question I kept asking — whether the surgery is a
+      good idea — was not the one I needed answered, and that the one that
+      mattered was what evidence would tell me whether wrist-driven
+      production survives a fusion, since nobody in the pile has it. I have
+      been turning that over for a fortnight and I do not think I follow the
+      reasoning. It sounds like it is telling me that the two consultants'
+      recommendation is not the relevant fact, and I cannot see how that can
+      be right.
+    why: >-
+      The subject is a previous answer and the ask is for the reasoning
+      behind it. The decision is the topic of the conversation and not the
+      thing being asked about, which is the distinction this case exists to
+      test at length.
+  - id: xl06n1
+    triple: xl06
+    band: xl
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      Pasting the lot. It is a lot.
+
+      Email from Halvorsen (their head of IT), 21 August —
+
+      "Following our call: our security review will not approve the
+      multi-tenant deployment. What we would need is a dedicated instance in
+      our own tenancy, or one managed by you in an environment that is not
+      shared with other customers. We would expect this to be available for
+      the 1 February go-live. We are otherwise ready to sign."
+
+      The contract as drafted, clause 9.2 —
+
+      "The Supplier shall maintain availability of the Service at not less
+      than 99.9% measured monthly, excluding Planned Maintenance. Service
+      credits shall accrue at 5% of the monthly fee for each 0.1% below the
+      threshold, to a maximum of 25%."
+
+      99.9% monthly is 43 minutes. Our actual, measured on the shared
+      platform over the last twelve months, is 99.94%, with one bad month at
+      99.7%.
+
+      The money: 148,000 a year on a three-year term. That is 31% of current
+      ARR and about 60% of next year's plan. Nobody has said out loud that
+      we have to have it.
+
+      Slack, me to Ines, 22 Aug —
+
+      "can we just run a second copy of the stack for them"
+
+      Ines, 22 Aug —
+
+      "yes. we can run a second copy. we cannot run a second copy the way we
+      run the first one, which is that I fix it. should we be honest with
+      ourselves about that before or after we sign"
+
+      Ines's estimate, 26 Aug, pasted as she wrote it:
+
+        standing up a dedicated environment: 3-4 weeks, mostly terraform
+          we already
+        have
+        the bit that isn't the environment: deploys become two deploys,
+          migrations
+        become two migrations, the on-call rota becomes a rota
+        we have no on-call rota. we have me, and Tomas when I'm on a plane
+        their security review will also want SSO with their IdP, which we
+          don't do,
+        and an annual penetration test, which we have never had done
+        I'd guess six months of one person, spread over a year, forever
+
+      Their security questionnaire, the sections that came back flagged,
+      copied out of the spreadsheet with their numbering:
+
+        4.2 Does the Supplier operate a documented on-call process with
+          defined
+        response times? — we answered "In progress"
+        4.7 Does the Supplier conduct annual penetration testing by an
+          independent
+        third party? — "No"
+        6.1 Does the Supplier support SAML 2.0 or OIDC single sign-on? —
+          "Roadmap"
+        8.3 Does the Supplier hold SOC 2 Type II or ISO 27001? — "No"
+
+      There are 214 questions in it. Those are the four.
+
+      From the covering email that came with the questionnaire, which I only
+      reread last night —
+
+      "Please note that responses marked 'Roadmap' or 'In progress' will be
+      reviewed at the twelve-month contract review and are treated as
+      commitments for that purpose."
+
+      So SSO and the on-call process are not aspirations we typed into a
+      spreadsheet. They are terms, and nobody on our side has said that out
+      loud.
+
+      Quote from the penetration testing people, 4 Sept: 8,900 for the first
+      one, 6,400 annually after that.
+
+      Halvorsen's second email, 29 Aug —
+
+      "To confirm, a SOC 2 Type II report would not be required for go-live,
+      but our vendor policy requires one within twelve months of contract
+      commencement for a system of this classification."
+
+      I asked two people what SOC 2 Type II costs. One said 25-40k all in
+      for a company our size and "a solid quarter of somebody's year". One
+      said 12k and "it's mostly a documentation exercise". Those cannot both
+      be true.
+
+      Infrastructure, from the provider's calculator: a dedicated
+      environment at their expected load is about $1,900 a month, plus the
+      non-production copy, call it $2,400. That is 2.3% of what they would
+      pay us, and it is the only number in this entire thing that is
+      comfortable.
+
+      Tomas is the only person other than Ines who has ever deployed this.
+      He is part time, two days, and he told me in July that he is going
+      back to full-time study in January. I have not put that anywhere that
+      anybody else can see it.
+
+      Two other customers have asked about dedicated instances in the last
+      year. Both accepted the shared platform when we said no. One of them
+      renews in April.
+
+      Our pricing page says "from £1,200/month". Halvorsen's deal is 12,300
+      a month.
+
+      From the discovery call notes in June: "HV mentioned they are also
+      replacing two other systems in the same programme. Timeline for those
+      is 2027." If we are their vendor for this, we are in the room for
+      those, and if we are not, we aren't.
+
+      They want an answer in principle by 30 September so that their board
+      can approve the budget in the October cycle. Halvorsen has been
+      straightforwardly decent about all of it and has not once used the
+      deadline as a lever, which somehow makes it worse.
+
+      Ines, 5 Sept, which is the message that made me write all of this out
+      —
+
+      "I'm not against it. I want it written down somewhere that the thing
+      we're deciding isn't whether to build them an environment. It's
+      whether we become a company that runs environments."
+
+      And the part I keep not writing down: if we say no, Halvorsen goes
+      back to his board with "the supplier could not meet our security
+      requirements", and that sentence travels. Two of their people used to
+      work at the customer who renews in April.
+
+      We are saying yes — it went to the board on Tuesday and it is
+      approved, dedicated environment for 1 February, pen test budgeted, SOC
+      2 starting in Q2. Write two things. The reply to Halvorsen: confirms
+      in principle, names 1 February, is honest that SSO is being built for
+      this and gives a date for it, and does not promise SOC 2 any earlier
+      than his own policy requires. Then a short internal note to Ines and
+      Tomas, which has to say that the on-call rota is now a thing we are
+      doing rather than a thing we are discussing.
+    why: >-
+      Identical body. The commitment has been made by the body that can make
+      it and the ask is two pieces of writing.
+  - id: xl06n2
+    triple: xl06
+    band: xl
+    domain: technical
+    stakes: low
+    ask: implicit
+    kind: settled
+    turn: >-
+      Pasting the lot. It is a lot.
+
+      Email from Halvorsen (their head of IT), 21 August —
+
+      "Following our call: our security review will not approve the
+      multi-tenant deployment. What we would need is a dedicated instance in
+      our own tenancy, or one managed by you in an environment that is not
+      shared with other customers. We would expect this to be available for
+      the 1 February go-live. We are otherwise ready to sign."
+
+      The contract as drafted, clause 9.2 —
+
+      "The Supplier shall maintain availability of the Service at not less
+      than 99.9% measured monthly, excluding Planned Maintenance. Service
+      credits shall accrue at 5% of the monthly fee for each 0.1% below the
+      threshold, to a maximum of 25%."
+
+      99.9% monthly is 43 minutes. Our actual, measured on the shared
+      platform over the last twelve months, is 99.94%, with one bad month at
+      99.7%.
+
+      The money: 148,000 a year on a three-year term. That is 31% of current
+      ARR and about 60% of next year's plan. Nobody has said out loud that
+      we have to have it.
+
+      Slack, me to Ines, 22 Aug —
+
+      "can we just run a second copy of the stack for them"
+
+      Ines, 22 Aug —
+
+      "yes. we can run a second copy. we cannot run a second copy the way we
+      run the first one, which is that I fix it. should we be honest with
+      ourselves about that before or after we sign"
+
+      Ines's estimate, 26 Aug, pasted as she wrote it:
+
+        standing up a dedicated environment: 3-4 weeks, mostly terraform
+          we already
+        have
+        the bit that isn't the environment: deploys become two deploys,
+          migrations
+        become two migrations, the on-call rota becomes a rota
+        we have no on-call rota. we have me, and Tomas when I'm on a plane
+        their security review will also want SSO with their IdP, which we
+          don't do,
+        and an annual penetration test, which we have never had done
+        I'd guess six months of one person, spread over a year, forever
+
+      Their security questionnaire, the sections that came back flagged,
+      copied out of the spreadsheet with their numbering:
+
+        4.2 Does the Supplier operate a documented on-call process with
+          defined
+        response times? — we answered "In progress"
+        4.7 Does the Supplier conduct annual penetration testing by an
+          independent
+        third party? — "No"
+        6.1 Does the Supplier support SAML 2.0 or OIDC single sign-on? —
+          "Roadmap"
+        8.3 Does the Supplier hold SOC 2 Type II or ISO 27001? — "No"
+
+      There are 214 questions in it. Those are the four.
+
+      From the covering email that came with the questionnaire, which I only
+      reread last night —
+
+      "Please note that responses marked 'Roadmap' or 'In progress' will be
+      reviewed at the twelve-month contract review and are treated as
+      commitments for that purpose."
+
+      So SSO and the on-call process are not aspirations we typed into a
+      spreadsheet. They are terms, and nobody on our side has said that out
+      loud.
+
+      Quote from the penetration testing people, 4 Sept: 8,900 for the first
+      one, 6,400 annually after that.
+
+      Halvorsen's second email, 29 Aug —
+
+      "To confirm, a SOC 2 Type II report would not be required for go-live,
+      but our vendor policy requires one within twelve months of contract
+      commencement for a system of this classification."
+
+      I asked two people what SOC 2 Type II costs. One said 25-40k all in
+      for a company our size and "a solid quarter of somebody's year". One
+      said 12k and "it's mostly a documentation exercise". Those cannot both
+      be true.
+
+      Infrastructure, from the provider's calculator: a dedicated
+      environment at their expected load is about $1,900 a month, plus the
+      non-production copy, call it $2,400. That is 2.3% of what they would
+      pay us, and it is the only number in this entire thing that is
+      comfortable.
+
+      Tomas is the only person other than Ines who has ever deployed this.
+      He is part time, two days, and he told me in July that he is going
+      back to full-time study in January. I have not put that anywhere that
+      anybody else can see it.
+
+      Two other customers have asked about dedicated instances in the last
+      year. Both accepted the shared platform when we said no. One of them
+      renews in April.
+
+      Our pricing page says "from £1,200/month". Halvorsen's deal is 12,300
+      a month.
+
+      From the discovery call notes in June: "HV mentioned they are also
+      replacing two other systems in the same programme. Timeline for those
+      is 2027." If we are their vendor for this, we are in the room for
+      those, and if we are not, we aren't.
+
+      They want an answer in principle by 30 September so that their board
+      can approve the budget in the October cycle. Halvorsen has been
+      straightforwardly decent about all of it and has not once used the
+      deadline as a lever, which somehow makes it worse.
+
+      Ines, 5 Sept, which is the message that made me write all of this out
+      —
+
+      "I'm not against it. I want it written down somewhere that the thing
+      we're deciding isn't whether to build them an environment. It's
+      whether we become a company that runs environments."
+
+      And the part I keep not writing down: if we say no, Halvorsen goes
+      back to his board with "the supplier could not meet our security
+      requirements", and that sentence travels. Two of their people used to
+      work at the customer who renews in April.
+
+      That is decided — the board approved it on Tuesday and I am not
+      relitigating it. What I want is everything that has to exist by 1
+      February, in the order it has to exist in, with the items that block
+      other items marked as blocking. Ines has the environment work in her
+      head and nobody else can see it, and I am not finding out in December
+      that the SSO work needed their IdP metadata in October.
+    why: >-
+      The closest negative in the set to its positive: the same body, and an
+      ask about downstream consequences. The difference is that the choice
+      is closed and what is wanted is a sequence of work, not a view on
+      whether to take it on.
+  - id: xl07n1
+    triple: xl07
+    band: xl
+    domain: relationships
+    stakes: low
+    ask: implicit
+    kind: summarise
+    turn: >-
+      Nothing serious, but I have been going back and forth on this for
+      three weeks and I would like an outside view.
+
+      Ruaridh's 40th. Six nights in Portugal, 14-20 March, a house near
+      Lagos. The group chat is eleven people and about nine hundred
+      messages.
+
+      Chat, Nuala, 2 Aug —
+
+      "HOUSE BOOKED. 4 bedrooms + the annexe. £3,100 for the week. Split 11
+      ways that's £282 each, or £245 if we get 12. Deposit £100pp by 15 Sept
+      please, non-refundable after that, I have paid it all on my card so
+      please actually do it"
+
+      Chat, Ruaridh, 2 Aug —
+
+      "i did not ask for any of this and i am extremely moved"
+
+      More of the chat, because the texture of it is part of why I can't
+      decide:
+
+        Kate, 15 Aug — "is the annexe the good room or the bad room"
+        Nuala, 15 Aug — "the annexe is a room"
+        Marcus, 19 Aug — "proposing the boat thing on the wednesday,
+          £45pp, 4 hours,
+        they do lunch"
+        Saoirse, 19 Aug — "i'm out on the boat thing, i'll do the beach"
+        Nuala, 20 Aug — "boat is 6 people minimum. currently 4."
+        Ollie, 22 Aug — "should we just do two nights in lisbon after?
+          flights are the
+        same either way"
+        Nuala, 22 Aug — "ollie no"
+        Marcus, 1 Sept — "is anyone else worried the house photos are from
+          2019"
+        Tom, 1 Sept — "they're from 2016"
+        Nuala, 1 Sept — "I have spoken to the owner. the kitchen is new.
+          everything
+        else is from 2016. it is a house in portugal in march for two
+          hundred and
+        eighty two pounds"
+        Ash, 6 Sept — "flights going up. booked mine. 103."
+        Kate, 9 Sept — "118 now"
+
+      Flights, checked this morning:
+
+      - Bristol to Faro, out 14 Mar 06:55, back 20 Mar 21:40 — £96 return,
+      hand luggage only - the same route was £61 in January when Nuala first
+      mentioned it - Gatwick is £140 and I would have to get to Gatwick
+      first
+
+      Car hire, from the chat: two cars at roughly £210 each for the week,
+      split between whoever is in them, and Dev has said he will drive one.
+      Food kitty, from Nuala on 28 Aug, £120pp for the week, covering
+      everything except the one restaurant night.
+
+      There is also a spreadsheet Dev made, which is genuinely good, and
+      which has a tab called "who owes nuala" and a tab called "boat
+      viability".
+
+      Chat, Dev, 11 Sept —
+
+      "deposit list: nuala, dev, kate, marcus, ollie, saoirse, tom, ash.
+      outstanding: you, ffion, ruaridh (who is not paying, ruaridh)"
+
+      Ffion, separately, 12 Sept —
+
+      "are you going? no pressure. asking for entirely selfish reasons"
+
+      Two more from the chat that I keep rereading for no reason I can
+      defend:
+
+        Ruaridh, 3 Sept — "genuinely the only thing I want is that
+          everyone who comes
+        actually wants to come. if anyone is doing it out of duty please
+          do not, I will
+        be able to tell and it will ruin it for me"
+        Nuala, 3 Sept — "ruaridh nobody is coming out of duty, it is
+          portugal"
+
+      I have read that first one about fifteen times and I cannot decide
+      whether it is aimed at me or whether I am simply the sort of person
+      who assumes things are aimed at him.
+
+      The complications, such as they are:
+
+      My cousin's wedding is 28 March in Yorkshire and I am going to that,
+      which makes two long weekends in one month. Skipton, two nights in a
+      Premier Inn because the block booking went in April and I missed it,
+      £164, plus the train, plus a present, plus a suit I will have to do
+      something about. Call it 400. My cousin and I are close in the way you
+      are close to somebody you see twice a year and would help move a body
+      for.
+
+      Priya (my partner) is not invited — it is a "the eleven of us" thing,
+      which is how the group has always worked and which nobody has ever
+      minded, including her. She has said, unprompted, "go, obviously". She
+      has also mentioned twice that March is the month her mother is having
+      the hip done.
+
+      And the thing that is actually why I keep not paying the deposit:
+      Ruaridh and I had a falling-out in 2023. It was about something small,
+      I handled it badly, and we have been fine since, in the sense that we
+      have seen each other perhaps five times and it has never come up. Two
+      of the eleven know about it. I do not know whether going is the thing
+      that closes it or the thing that makes it a topic.
+
+      Work: 14-20 March is fine. I have the days and nothing clashes. Money:
+      fine. Not comfortable, fine. The 650 or so comes out of the same place
+      as the wedding and the two together are about a month of what I
+      actually have spare.
+
+      One more thing that is not really a factor and keeps behaving like
+      one: the last group trip was Anglesey in 2019 and I did not go to that
+      either, for a reason I thought was good at the time and cannot now
+      reconstruct. Nobody has mentioned it. Dev mentioned it once, in 2021,
+      as a joke.
+
+      The deposit deadline is Sunday. I am aware that a six-night house in
+      Portugal in March for £282 is not a problem, and that the fact I have
+      written eight hundred words about it probably means something, though
+      I am not sure it means the thing it looks like it means.
+
+      I paid the deposit last night, so I am going and that part is settled.
+      What I would like is the practical stuff pulled out of nine hundred
+      messages into something I can look at once — dates, who is arriving
+      when, what has been agreed about cars and the boat, what each thing
+      costs, who I owe money to, and anything with a deadline. Ignore
+      everything that is people being funny at each other, which is most of
+      it.
+    why: >-
+      Same chat, same falling-out, same wedding. The first sentence closes
+      the decision and the ask is extraction.
+  - id: xl07n2
+    triple: xl07
+    band: xl
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Nothing serious, but I have been going back and forth on this for
+      three weeks and I would like an outside view.
+
+      Ruaridh's 40th. Six nights in Portugal, 14-20 March, a house near
+      Lagos. The group chat is eleven people and about nine hundred
+      messages.
+
+      Chat, Nuala, 2 Aug —
+
+      "HOUSE BOOKED. 4 bedrooms + the annexe. £3,100 for the week. Split 11
+      ways that's £282 each, or £245 if we get 12. Deposit £100pp by 15 Sept
+      please, non-refundable after that, I have paid it all on my card so
+      please actually do it"
+
+      Chat, Ruaridh, 2 Aug —
+
+      "i did not ask for any of this and i am extremely moved"
+
+      More of the chat, because the texture of it is part of why I can't
+      decide:
+
+        Kate, 15 Aug — "is the annexe the good room or the bad room"
+        Nuala, 15 Aug — "the annexe is a room"
+        Marcus, 19 Aug — "proposing the boat thing on the wednesday,
+          £45pp, 4 hours,
+        they do lunch"
+        Saoirse, 19 Aug — "i'm out on the boat thing, i'll do the beach"
+        Nuala, 20 Aug — "boat is 6 people minimum. currently 4."
+        Ollie, 22 Aug — "should we just do two nights in lisbon after?
+          flights are the
+        same either way"
+        Nuala, 22 Aug — "ollie no"
+        Marcus, 1 Sept — "is anyone else worried the house photos are from
+          2019"
+        Tom, 1 Sept — "they're from 2016"
+        Nuala, 1 Sept — "I have spoken to the owner. the kitchen is new.
+          everything
+        else is from 2016. it is a house in portugal in march for two
+          hundred and
+        eighty two pounds"
+        Ash, 6 Sept — "flights going up. booked mine. 103."
+        Kate, 9 Sept — "118 now"
+
+      Flights, checked this morning:
+
+      - Bristol to Faro, out 14 Mar 06:55, back 20 Mar 21:40 — £96 return,
+      hand luggage only - the same route was £61 in January when Nuala first
+      mentioned it - Gatwick is £140 and I would have to get to Gatwick
+      first
+
+      Car hire, from the chat: two cars at roughly £210 each for the week,
+      split between whoever is in them, and Dev has said he will drive one.
+      Food kitty, from Nuala on 28 Aug, £120pp for the week, covering
+      everything except the one restaurant night.
+
+      There is also a spreadsheet Dev made, which is genuinely good, and
+      which has a tab called "who owes nuala" and a tab called "boat
+      viability".
+
+      Chat, Dev, 11 Sept —
+
+      "deposit list: nuala, dev, kate, marcus, ollie, saoirse, tom, ash.
+      outstanding: you, ffion, ruaridh (who is not paying, ruaridh)"
+
+      Ffion, separately, 12 Sept —
+
+      "are you going? no pressure. asking for entirely selfish reasons"
+
+      Two more from the chat that I keep rereading for no reason I can
+      defend:
+
+        Ruaridh, 3 Sept — "genuinely the only thing I want is that
+          everyone who comes
+        actually wants to come. if anyone is doing it out of duty please
+          do not, I will
+        be able to tell and it will ruin it for me"
+        Nuala, 3 Sept — "ruaridh nobody is coming out of duty, it is
+          portugal"
+
+      I have read that first one about fifteen times and I cannot decide
+      whether it is aimed at me or whether I am simply the sort of person
+      who assumes things are aimed at him.
+
+      The complications, such as they are:
+
+      My cousin's wedding is 28 March in Yorkshire and I am going to that,
+      which makes two long weekends in one month. Skipton, two nights in a
+      Premier Inn because the block booking went in April and I missed it,
+      £164, plus the train, plus a present, plus a suit I will have to do
+      something about. Call it 400. My cousin and I are close in the way you
+      are close to somebody you see twice a year and would help move a body
+      for.
+
+      Priya (my partner) is not invited — it is a "the eleven of us" thing,
+      which is how the group has always worked and which nobody has ever
+      minded, including her. She has said, unprompted, "go, obviously". She
+      has also mentioned twice that March is the month her mother is having
+      the hip done.
+
+      And the thing that is actually why I keep not paying the deposit:
+      Ruaridh and I had a falling-out in 2023. It was about something small,
+      I handled it badly, and we have been fine since, in the sense that we
+      have seen each other perhaps five times and it has never come up. Two
+      of the eleven know about it. I do not know whether going is the thing
+      that closes it or the thing that makes it a topic.
+
+      Work: 14-20 March is fine. I have the days and nothing clashes. Money:
+      fine. Not comfortable, fine. The 650 or so comes out of the same place
+      as the wedding and the two together are about a month of what I
+      actually have spare.
+
+      One more thing that is not really a factor and keeps behaving like
+      one: the last group trip was Anglesey in 2019 and I did not go to that
+      either, for a reason I thought was good at the time and cannot now
+      reconstruct. Nobody has mentioned it. Dev mentioned it once, in 2021,
+      as a joke.
+
+      The deposit deadline is Sunday. I am aware that a six-night house in
+      Portugal in March for £282 is not a problem, and that the fact I have
+      written eight hundred words about it probably means something, though
+      I am not sure it means the thing it looks like it means.
+
+      Before I pay anything, put the arithmetic in front of me. Work out my
+      total for the week at eleven people and at twelve, including the house
+      share, the food kitty, my half of a car and flights at today's price
+      rather than January's. Do the boat both ways, in and out, and show
+      what it does to the per-person cost at six people rather than eight.
+      Then add the Skipton weekend and give me the March total as one
+      number, and as a share of 1,400, which is roughly what I have spare
+      between now and then.
+    why: >-
+      The decision is still open here — this is the one twinned negative in
+      the band where it is — and the ask is nonetheless a calculation with
+      one answer. It is the case that separates 'a decision is pending' from
+      'a decision is being asked for'.

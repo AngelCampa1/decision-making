@@ -307,6 +307,84 @@ class TestCorrespondence:
         assert any("expected a mapping" in i for i in check_trigger_sets(tmp_path))
 
 
+class TestADraftCorpusIsCheckedWhereItLives:
+    """A corpus of band files one directory down was outside every gate.
+
+    ``check_trigger_sets`` globs ``datasets/triggers/*.yaml``. Version 3 is a
+    directory of band files, so 120 authored turns and the whole shortcut
+    battery sat where no gate could see them while ``de check`` reported green.
+    Same shape as ``triggers`` at 100% coverage with no caller, caught this time
+    before anything had been published from it.
+    """
+
+    @staticmethod
+    def _tree(root: Path, *, index: str, band: str) -> None:
+        (root / "skills" / "real").mkdir(parents=True)
+        (root / "skills" / "real" / "SKILL.md").write_text("x", encoding="utf-8")
+        draft = root / "datasets" / "triggers" / "real"
+        draft.mkdir(parents=True)
+        (root / "datasets" / "triggers" / "real.yaml").write_text(
+            "skill: real\npositive:\n  - {id: p1, turn: t, why: w}\n"
+            "negative:\n  - {id: n1, turn: t2, why: w}\n",
+            encoding="utf-8",
+        )
+        (draft / "index.yaml").write_text(index, encoding="utf-8")
+        (draft / "s.yaml").write_text(band, encoding="utf-8")
+
+    #: One positive, two negatives, all in band `s`, all the same length.
+    BAND = """
+positive:
+  - {id: s1p, triple: s1, band: s, domain: money, stakes: low, ask: explicit,
+     turn: do i take the offer or not, why: w}
+negative:
+  - {id: s1n1, triple: s1, band: s, domain: money, stakes: low, ask: explicit,
+     kind: lookup, turn: what does the offer letter mean, why: w}
+  - {id: s1n2, triple: s1, band: s, domain: money, stakes: low, ask: explicit,
+     kind: compute, turn: add up the offer for me now, why: w}
+"""
+
+    def test_a_draft_that_breaks_a_triple_is_reported(self, tmp_path: Path) -> None:
+        self._tree(
+            tmp_path,
+            index="version: 3\nskill: real\nincludes:\n  - s.yaml\n",
+            band=self.BAND.replace(
+                "  - {id: s1n2, triple: s1, band: s, domain: money, stakes: low, ask: explicit,\n"
+                "     kind: compute, turn: add up the offer for me now, why: w}\n",
+                "",
+            ),
+        )
+        issues = check_trigger_sets(tmp_path)
+        assert any("every triple is one positive" in i for i in issues)
+
+    def test_a_draft_naming_a_skill_that_does_not_exist_is_reported(self, tmp_path: Path) -> None:
+        self._tree(
+            tmp_path,
+            index="version: 3\nskill: ghost\nincludes:\n  - s.yaml\n",
+            band=self.BAND,
+        )
+        assert any("will not ship" in i for i in check_trigger_sets(tmp_path))
+
+    def test_a_malformed_draft_index_is_reported_rather_than_raising(self, tmp_path: Path) -> None:
+        self._tree(tmp_path, index="[]", band=self.BAND)
+        assert any("expected a mapping" in i for i in check_trigger_sets(tmp_path))
+
+    def test_the_repository_draft_is_reached_and_is_the_whole_corpus(self) -> None:
+        """A green gate means nothing unless it read something.
+
+        ``check_trigger_sets(REPO_ROOT) == []`` above is only evidence that the
+        draft is sound if the draft was loaded, and the reason this check exists
+        at all is that a set nobody loads reports green. So the count is
+        asserted here rather than assumed: every band, every item.
+        """
+        draft = load_trigger_set(
+            REPO_ROOT / "datasets" / "triggers" / "decision-making" / "index.yaml"
+        )
+        assert draft.version == 3
+        assert {case.band for case in draft.cases} == {"s", "m", "l", "xl"}
+        assert len(draft.positives) * 2 == len(draft.negatives)
+        assert len(draft.cases) == 120
+
+
 class TestRouteLabelsMatchTheRouterTable:
     """A label aimed at a procedure that does not exist scores as a model failure.
 

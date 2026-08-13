@@ -1,0 +1,29 @@
+# Trigger set version 3, under construction. **This is not the live set.**
+#
+# `datasets/triggers/decision-making.yaml` is still version 2 and is still what
+# `run_triggers.py` measures. Version 3 becomes live only after blind label
+# adjudication (Track N3), which carries a pre-registered kill: more than 20% of
+# labels moving retires the corpus rather than reporting it. Swapping the entry
+# point before that would publish on an unadjudicated answer key.
+#
+# What this file is for is the other half of the problem. The bands beside it
+# were authored with four gates written for them and **no caller** — the
+# `de check` scan globs `datasets/triggers/*.yaml` and the bands are one
+# directory down, so 120 authored items and the whole shortcut battery sat
+# outside the gate and it reported green. That is the third instance in this
+# repository of a check that exists and does not run (`triggers` at 100%
+# coverage called by nothing; `prereg.py`'s refusals with no caller), and this
+# time it was caught while the corpus was still being written rather than after
+# something had been published from it.
+#
+# So the index exists to be loaded. `check_trigger_sets` reads every
+# `datasets/triggers/*/index.yaml` and holds the set behind it to the same
+# corpus rules as a live one, without it being the set anything runs.
+
+version: 3
+skill: decision-making
+includes:
+  - s.yaml
+  - m.yaml
+  - l.yaml
+  - xl.yaml

@@ -469,13 +469,56 @@ def check_trigger_sets(repo_root: Path) -> list[str]:
             )
         issues.extend(_check_separability(trigger_set, path))
         issues.extend(_check_routes(trigger_set, skills_dir / name / "SKILL.md", path))
-        # Imported here rather than at module scope: `corpus` reads TriggerSet
-        # from this module, so a top-level import would close the cycle. The
-        # direction is deliberate -- loading a set must not depend on the rules
-        # for building one.
-        from decision_evals.corpus import check_corpus
+        issues.extend(_check_corpus_rules(trigger_set, path))
+    issues.extend(_check_drafts(triggers_dir, skills_dir, skills))
+    return issues
 
-        issues.extend(check_corpus(trigger_set, path))
+
+def _check_corpus_rules(trigger_set: TriggerSet, path: Path) -> list[str]:
+    # Imported here rather than at module scope: `corpus` reads TriggerSet from
+    # this module, so a top-level import would close the cycle. The direction is
+    # deliberate -- loading a set must not depend on the rules for building one.
+    from decision_evals.corpus import check_corpus
+
+    return check_corpus(trigger_set, path)
+
+
+def _check_drafts(
+    triggers_dir: Path, skills_dir: Path, skills: frozenset[str] | set[str]
+) -> list[str]:
+    """Hold a corpus under construction to the same rules as a live one.
+
+    A version 3 corpus is a directory of band files, because 120 items whose
+    longest bodies run to 1,500 words is not reviewable as one document. The
+    scan above globs ``datasets/triggers/*.yaml`` and therefore could not see
+    any of them: 120 authored turns and the entire shortcut battery sat outside
+    the gate while ``de check`` reported green.
+
+    That is the same failure as ``triggers`` at 100% coverage with no caller and
+    ``prereg.py``'s refusals with no caller, and it is the one this repository
+    keeps making. The difference this time is that it was found while the corpus
+    was still being authored rather than after a number had been published from
+    it, which is the only reason it costs nothing.
+
+    A draft is checked and is deliberately **not** made live: the entry point
+    every runner uses stays where it is until blind adjudication has run.
+    """
+    issues: list[str] = []
+    for index in sorted(triggers_dir.glob("*/index.yaml")):
+        try:
+            draft = load_trigger_set(index)
+        except TriggerSetError as error:
+            issues.append(str(error))
+            continue
+        if draft.skill not in skills:
+            issues.append(
+                f"{index.relative_to(triggers_dir.parent.parent).as_posix()}: names skill "
+                f"{draft.skill!r}, which is not in skills/. A corpus being built for a "
+                "skill that does not exist is measuring something that will not ship."
+            )
+            continue
+        issues.extend(_check_routes(draft, skills_dir / draft.skill / "SKILL.md", index))
+        issues.extend(_check_corpus_rules(draft, index))
     return issues
 
 
