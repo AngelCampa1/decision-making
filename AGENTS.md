@@ -215,6 +215,14 @@ If you are an agent contributing here rather than a user installing the skills:
   baselined by name in `results/provenance-baseline.txt`; that list may only
   shrink. Regenerate `docs/RUN_INDEX.md` with `de index` — `de check` fails when
   it is stale.
+- **A change to `datasets/triggers/` or `skills/` needs an entry in
+  [`docs/DECISIONS.md`](docs/DECISIONS.md).** Those are the answer key and the
+  product; a change to either moves numbers that are already published, and a
+  label move is invisible in a checkpoint. `de check` refuses a governed commit
+  with no entry, and refuses an entry naming a commit that touched neither path.
+  Commit bodies are not the store: the history is the pre-registration evidence
+  and cannot be rewritten, so a trailer somebody forgot would be permanently
+  unfixable.
 - **A coverage floor does not mean a module runs.** `de check` refuses a floored
   module that no entry point can reach, because this repository has now shipped
   two of them: `triggers` was tested to 100% and called by nothing while a
@@ -230,6 +238,15 @@ If you are an agent contributing here rather than a user installing the skills:
   silently makes every earlier number incomparable with every later one.
 - `notebook/` is append-only and dated. Predictions go in *before* runs. If a
   prediction turns out wrong, the entry says so rather than being edited.
+- **A recall band is set against the observed per-item ceiling, not a round
+  number.** Track L7 registered "at least one arm reaches recall >= 0.94" over
+  17 positives, which needs 16 of 17 — and `x-n22` has never fired in any arm on
+  any version, a fact stated in that same prediction's *"where I expect to be
+  wrong"* section. The ceiling was 0.941 and the band demanded perfection on
+  everything else. This is the fifth pre-registration defect on record and the
+  first that was visible **before** the run rather than after, which makes it
+  the cheapest one to have avoided. Compute the ceiling from the per-item
+  history, then set the band under it.
 - **A registered band names its estimator and its denominator, not just its
   number.** Four pre-registration slips happened here on 2026-08-12 alone: a band
   asking for `p_discordant` on two task families that have no correctness measure

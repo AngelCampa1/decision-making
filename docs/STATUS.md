@@ -62,7 +62,7 @@ billed per call. See [`CLAUDE.md`](../CLAUDE.md).
 | **M6 + M6b** | which two procedures share an entry? | **`covers` spans 28.6 points across the three partitions** of identical vocabulary. A merged entry does not inherit its parts' pull. |
 | **Track I** | how many repeats are needed? | ICC 0.83–0.85. **Two, not five.** Cut every later arm by 60%. |
 | **Track K** | does the decision literature support any of this? | 4 of 11 popular frameworks have **no located controlled evaluation**. Patient decision aids have 209 RCTs. LLM assistance moves process measures and did not move the one outcome measure tested. |
-| **L7** | can the description be eager without deleting the parts that work? | **Showing beat naming.** `stakes-shown` reaches **FPR 0.000 / recall 0.912**, precision 1.000, and dominates the previous best-precision arm on both axes. Bands 3 and 4 failed — no arm reached recall 0.94, and band 3 was unsettable because `x-n22` never fires anywhere, capping recall at 0.941. Band 6 passed unexpectedly: neither arm fires on tabs-vs-spaces or variable naming, so the stakes criterion reads content rather than sentence shape. **Run and scored; the write-up and `results/` directory do not exist yet.** |
+| **L7** | can the description be eager without deleting the parts that work? | **Showing beat naming.** `stakes-shown` reaches **FPR 0.000 / recall 0.912 / precision 1.000** and **dominates `no-opener` on both axes** — the first Pareto improvement of one arm over another here. The two openers are not distinguishable (p = 0.257). Band 4, the experiment, failed: **the precision/recall frontier is intact after seven arms.** Band 6 passed against expectation — both stakes openers score 0/2 on tabs-vs-spaces while `opener-only` fires 5/5, so the criterion reads content and not sentence shape. |
 
 **The through-line:** five independent manipulations of a skill description —
 structure, content, count, composition twice — and **not one moved how well it
@@ -149,15 +149,15 @@ became **[Track N](RESEARCH_PROGRAMME.md)** on 2026-08-13.
 
 The one category this file exists to stop growing quietly.
 
-| what | where it is | what is missing |
-|---|---|---|
-| **L7**, 292 calls, both arms | `results/triggers/verdicts-stakes-{named,shown}.jsonl`, tracked in git | the notebook outcome entry scoring the six registered bands, and a `results/decision-making/` directory with a README |
+**Empty.** L7 was the only entry and was published on 2026-08-13 —
+[`results/decision-making/2026-08-13-abb6862-l7-stakes/`](../results/decision-making/2026-08-13-abb6862-l7-stakes/).
 
-Everything else in `results/triggers/` corresponds to a published directory
-under `results/decision-making/`. `de index` and the provenance gate — built in
-a parallel session, see `evals/src/decision_evals/provenance.py` — check that a
-published run has a prediction that predates it; neither catches a run that was
-never published at all, which is what this table is for.
+Every checkpoint in `results/triggers/` now corresponds to a published directory
+under `results/decision-making/`. `de index` and the provenance gate — see
+`evals/src/decision_evals/provenance.py` — check that a published run has a
+prediction that predates it. Neither can see a run that was never published at
+all, which is what this table is for, and it is the reason to keep it here
+empty rather than delete it.
 
 ---
 
