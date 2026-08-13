@@ -175,6 +175,16 @@ subscription stated. Writing "we spent $250" would be false.
 
 If you are an agent contributing here rather than a user installing the skills:
 
+- **Read [`docs/AUTONOMOUS_WORK_ORDER.md`](docs/AUTONOMOUS_WORK_ORDER.md)
+  first — before this file's other bullets and before the programme.** It is
+  not a document about long unattended runs any more; it is *how work is done
+  here*, on a five-minute task as much as a five-day one. It carries the five
+  standing rules, the sub-agent and adversarial-review method, the confirmation
+  requirement, and the reason each exists — every one of them is a failure that
+  has already happened in this repository, with the reference so you can check
+  rather than take it on trust. The bullets below are pointers into it, not a
+  substitute for it.
+
 - **You are probably not the only session in this directory.** The maintainer
   runs several in parallel. Files you did not write, commits you did not author,
   and a working tree that is dirty in places you never touched are **another
@@ -216,10 +226,11 @@ If you are an agent contributing here rather than a user installing the skills:
   ([`docs/superpowers/plans/2026-08-11-long-context-experiment.md`](docs/superpowers/plans/2026-08-11-long-context-experiment.md))
   is now **Track G** and its pilot-library authoring is on hold. Read it for the
   gate machinery, not for the priority.
-- **If you are running unattended for hours or days, read
-  [`docs/AUTONOMOUS_WORK_ORDER.md`](docs/AUTONOMOUS_WORK_ORDER.md) first.** It
-  says what may run without a human and what to stop for. Every rule in it
-  exists because that failure already happened here.
+- **[`docs/AUTONOMOUS_WORK_ORDER.md`](docs/AUTONOMOUS_WORK_ORDER.md) governs
+  how the work runs**, and it is the first read above rather than a footnote
+  here. It no longer says what to stop for, because there is nothing to stop
+  for: it says how to keep going — derive the parameter or record the choice,
+  adjudicate the failures blind, run the grid, confirm the finding.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
   coverage floors, skill validation, run provenance and integrity wiring. There
   is no cloud CI. Run it before you believe anything works.
