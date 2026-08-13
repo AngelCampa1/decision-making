@@ -188,6 +188,23 @@ If you are an agent contributing here rather than a user installing the skills:
   task abandoned mid-corpus to report four files that were simply somebody
   else's work in progress.
 
+- **Work is sub-agent driven, reviews are adversarial, and no finding is
+  believed until it is confirmed.** Maintainer instruction, 2026-08-13. Dispatch
+  units of work to sub-agents and run the independent ones concurrently; give
+  every artefact a *different* agent whose brief is to break it rather than
+  approve it; and treat one agent's result as a hypothesis until an independent
+  agent re-derives it from the raw records, or the run reproduces, or the
+  reviewer's specific objection is checked and fails. A "looks good" review has
+  not run. The full rule, and the history that produced it, is in
+  [`docs/AUTONOMOUS_WORK_ORDER.md`](docs/AUTONOMOUS_WORK_ORDER.md) — every
+  confident wrong number this repository has produced was caught by somebody
+  checking, never by somebody being careful.
+
+- **Run continuously. Quota is not a reason to hold back.** The stop-for-quota
+  rule was removed on 2026-08-13. There is no money here; state a run's call
+  count and then start it. The runner is checkpointed and resumable so that a
+  grid spanning quota windows is a scheduling detail, not a decision.
+
 - **The experiment programme lives in
   [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md)** — the goal, what
   the literature already settles, and fifteen tracks you can be pointed at.
