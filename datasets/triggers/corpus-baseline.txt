@@ -36,42 +36,88 @@
 # was closed by moving a threshold. They are deleted rather than kept, which is
 # the may-only-shrink rule working in the direction it was written for.
 
-# ADDED 2026-08-13, and an addition is the exceptional case. These two are not
-# deferred work that somebody declined to do; they are a *pre-existing* defect
-# that became visible when the battery gained a check it did not have. The
-# matched within-triple statistic compares a positive against its own two
-# negatives over a shared body -- the only comparison a matched design actually
-# controls -- and it fires where the pooled AUC cannot.
+# CLOSED, 2026-08-14, both `word_count` entries. The 23 long-band triples that
+# were "mid-rebuild and unmerged" when the pair above was written (`l10`-`l22`,
+# `xl08`-`xl17`) are merged into `l.yaml` and `xl.yaml`. The corpus grows from
+# 192 items (64 triples) to 261 (87 triples) and both `word_count` findings go
+# with it: matched drops from 0.660 to 0.546, 1.09 null standard errors from
+# chance and back under the z = 3.0 gate (was 3.24). `s` and `m` are untouched
+# (0.604, 0.750, same triples). `l` moves from 0.778 to 0.455 and `xl` from
+# 0.393 to 0.294 -- both *below* chance now, not merely closer to it.
 #
-# `word_count`, turn and ask views: within its own triple the positive sits
-# above both its negatives in 0.660 of comparisons, 3.24 null standard errors
-# from chance. Per band: s 0.604, m 0.750, l 0.778, xl 0.393.
+# NOT THE PRESCRIBED FIX, AND SAID SO RATHER THAN LEFT IMPLICIT. The close-out
+# note above called for a rank roughly uniform across longest, middle and
+# shortest. Measured directly on the 23 new triples: positive-shortest 16,
+# positive-middle 5, positive-longest 2 -- the opposite skew from the 49-of-64
+# positive-longest bias the same note projected against, not a uniform split.
+# It closed `word_count` only because `l`/`xl` swinging hard toward
+# positive-shortest happened to average against `s`/`m`'s unchanged
+# positive-longest bias and land the pooled figure under the gate -- the same
+# mechanism, run in the other direction, that the entry below shows did not
+# cancel as cleanly on every feature.
+
+# ADDED 2026-08-14, uncovered by the same long-band merge that closed
+# `word_count` above (`l10`-`l22`, `xl08`-`xl17`, 261 items, 87 triples). Not
+# new features and not a new gate -- these three sat under z = 3.0 on the
+# pre-merge corpus and the merge pushed them over it. The mechanism is the one
+# the `word_count` entry above names directly: the 23 new triples are skewed
+# 16-of-23 positive-shortest against a projected uniform split, and that skew
+# shows up on every length-correlated feature, not only `word_count`.
 #
-# READ THOSE AGAINST THE POOLED FIGURE, WHICH IS THE POINT. Pooled AUC is 0.517
-# on the turn view and 0.502 on the ask -- as clean as this battery can print.
-# A pooled AUC ranks positives against negatives from *other* triples, where
-# body variation swamps the ask, so it is structurally blind to a rank held
-# inside a triple. `xl` at 0.393 pulls against `m` and `l` and cancels the rest
-# to innocence. This is the fourth pooled-cancellation recorded on 2026-08-13.
+# `sentence_count`, turn and ask views: the *matched* statistic stays quiet --
+# 0.480, 0.58 null standard errors, well inside chance -- but the *dispersion*
+# statistic does not: 3.82 null standard errors, above the z = 3.0 gate on
+# both views. That is the `cancel:` finding, not the `matched:` one: the
+# positive sits at an extreme of its own triple (highest or lowest sentence
+# count) far more often than chance while which extreme it sits at is
+# balanced enough that the directional average is near 0.5. Per band,
+# matched: s 0.552, m 0.625, l 0.432, xl 0.235 -- `s`/`m` above chance,
+# `l`/`xl` below, the same up/down split across bands that the pooled AUC has
+# already been shown to cancel elsewhere in this corpus. Pooled AUC 0.517
+# (turn), 0.466 (ask).
 #
-# WHAT IT DOES AND DOES NOT MEAN. An arm sees one turn and never sees the other
-# two members, so it cannot use a within-triple rank directly; this is a defect
-# in the *construction*, not a demonstrated exploit. Per-band pooled AUC
-# remains the exploitability measure. Both are real and neither substitutes for
-# the other, which is why this is baselined and printed rather than treated as
-# either fatal or fine.
+# `type_token_ratio`, ask view only: this one *is* a `matched:` finding --
+# 0.316 of comparisons, below chance, 4.27 null standard errors. Per band:
+# s 0.375, m 0.417, l 0.205, xl 0.235 -- below chance in every band, strongest
+# in `l` and `xl`, so this is not a cancellation the way `sentence_count` is;
+# the four bands agree on direction. Pooled AUC 0.389. The `turn` view of the
+# same feature sits at 2.93 null standard errors -- under the gate, and the
+# closest a checked-and-passing feature gets to it in this corpus.
 #
-# NOT FIXABLE TODAY. 23 long-band triples are mid-rebuild and unmerged. An
-# assignment rule pairing close rank with ask form was tried and *measured to
-# make it worse* -- only 15 of 64 positives are `embedded` and can carry
-# shortest or middle rank, so 49 of 64 are forced to positive-longest, which
-# projects ~0.766 against the observed 0.660.
+# WHAT IT DOES AND DOES NOT MEAN. Same reading as every entry above: an arm
+# sees one turn and not its triple-mates, so this is a defect in the
+# construction, not a demonstrated exploit, and per-band pooled AUC remains
+# the exploitability measure printed alongside it.
 #
-# CLOSED BY: a rank distribution for the positive that is roughly uniform
-# across longest, middle and shortest within its triple, reached by assignment
-# at authoring time rather than by editing negatives to hit a target -- four
-# generations of leak on 2026-08-13 came from per-item bounds pushed in one
-# direction. Any item whose ask changes needs re-adjudication, because the ask
-# is what the label rests on.
-datasets/triggers/decision-making/index.yaml|matched:turn:word_count
-datasets/triggers/decision-making/index.yaml|matched:ask:word_count
+# NOT FIXED BY RE-TUNING THE NEW TRIPLES. Pushing the 23 new positives back
+# toward positive-longest to flatten `sentence_count` and lift
+# `type_token_ratio` would re-open the `word_count` pair just closed above --
+# the four features move together because they are all reading the same
+# closing-sentence habit through different rulers. Per-item retuning against
+# whichever feature is currently over the line is the mechanism that produced
+# "four generations of leak" the closed `word_count` entry already named;
+# doing it again here would be the fifth.
+#
+# CLOSED BY: the same condition named for `word_count` above, applied
+# corpus-wide rather than to the 23 new triples alone -- a rank distribution
+# for the positive that is roughly uniform across longest, middle and
+# shortest within its triple, reached at authoring time, across all 87
+# triples rather than balanced band against band. Any item whose ask changes
+# needs re-adjudication, because the ask is what the label rests on.
+datasets/triggers/decision-making/index.yaml|cancel:turn:sentence_count
+
+# Same entry, `ask` view: same cause (the 23 new triples' positive-shortest
+# skew), same dispersion rather than mean-shift shape.
+#
+# CLOSED BY: the same condition immediately above -- a rank distribution for
+# the positive that is roughly uniform across longest, middle and shortest
+# within its triple, across all 87 triples.
+datasets/triggers/decision-making/index.yaml|cancel:ask:sentence_count
+
+# Same entry, `type_token_ratio` on `ask`: same cause, read through a third
+# ruler -- see the account above.
+#
+# CLOSED BY: the same condition immediately above -- a rank distribution for
+# the positive that is roughly uniform across longest, middle and shortest
+# within its triple, across all 87 triples.
+datasets/triggers/decision-making/index.yaml|matched:ask:type_token_ratio

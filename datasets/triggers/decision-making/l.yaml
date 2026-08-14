@@ -375,6 +375,680 @@ positive:
       noticing that the question they asked is not the question in front of
       them. That is the ledger's job stated by the asker.
 
+  - id: l10p
+    triple: l10
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    route: ledger
+    turn: >-
+      Everything that has come in about the rotation allocation, in the order it
+      came.
+
+      Deanery, 4 Feb — "Preferences for IMT3 posts close at 23:59 on Friday 13
+      February. Allocations are published on 9 March and are final. Swaps need
+      both trainees and the TPD."
+
+      The three regions in front of me: North West, Severn, Peninsula.
+
+      Fill rates from the published 2025 sheet: North West 100%, Severn 100%,
+      Peninsula 71%.
+
+      Dr Whelan (my supervisor), 6 Feb — "Severn is strongest for gastro numbers
+      and Bristol will get you the scope training. Peninsula gives you
+      independence earlier and fewer people watching."
+
+      The registrar who did Peninsula, 6 Feb — "the numbers thing was true in
+      2021 and people keep repeating it, I came out with 340 scopes"
+
+      Sam, 7 Feb — "Bristol I can do, the office has said yes in writing. Truro
+      is the one I can't, there's no lab within ninety minutes of it."
+
+      Two-bed rents from the ads I saved: Bristol 1,450, Liverpool 950, Truro
+      1,100.
+
+      Deanery, 10 Feb — "Please note that the Peninsula IMT3 post at Truro is
+      subject to confirmation of consultant cover and may be withdrawn before
+      allocation."
+
+      Mum's operation is on 3 March, in Southport, forty minutes from Aintree
+      and six hours from Truro.
+
+      The list has to be in by Friday, and by Friday I need a list I actually
+      believe in, so what is this really turning on?
+    why: >-
+      Eight sources arrive in seven days and only the closing date is agreed.
+      The closing sentence, "what is this really turning on?", is the ledger
+      question stated by the asker: the fill rates and the rents look decisive,
+      while the 10 Feb line saying the Truro post "may be withdrawn before
+      allocation" may be the item that actually settles the ranking.
+  - id: l11p
+    triple: l11
+    band: l
+    domain: money
+    stakes: low
+    ask: implicit
+    route: cascade
+    turn: >-
+      Everything from the car scheme, in the order it landed.
+
+      HR (Reward team), 12 Jan — "Your quote is confirmed as follows. Gross
+      sacrifice is 494 a month for a 36-month term, and that includes insurance,
+      servicing, tyres and breakdown. Lead time is currently 14 to 18 weeks."
+
+      From the quote sheet: P11D 42,500. Benefit-in-kind is charged at 3% of
+      P11D, and the sheet gives 3% for every year of the 36-month term.
+
+      My position from the payslip: I am a higher-rate taxpayer across all of
+      this, so the sacrifice comes out of pay taxed at 40%, with 2% employee
+      National Insurance on top of that.
+
+      Scheme terms, clause 9.2 — "Where employment ends for any reason other
+      than death or ill-health retirement, the employee is liable for an early
+      termination charge equal to four months' gross rental."
+
+      Slack, Dev, 14 Jan — "genuinely the best value thing this place does, mine
+      works out about 310 a month"
+
+      Slack, Priya, 14 Jan — "read 9.2 before you do anything. I left in year
+      two and it cost me the four months"
+
+      Mortgage broker, 19 Jan — "Lenders assess affordability on post-sacrifice
+      salary. A sacrifice of 494 a month reduces assessed income by 5,928 a
+      year. Your current product ends in October."
+
+      All-hands note, 20 Jan — "The consultation announced in November relates
+      to the Reading site only."
+
+      Letting agent, 22 Jan — "Any alteration to the parking area has to go to
+      the freeholder. Allow six weeks for an answer. I can't tell you which way
+      they will come down on it."
+
+      Charger quote from the installer: 1,149 fitted, less a 350 grant if the
+      freeholder signs in time.
+
+      The current car is a 2013 Golf. The MOT is due 3 March and the garage has
+      quoted 680 for the rear arch. Insurance is 61 a month and I put about 145
+      a month of petrol in it.
+
+      Electricity here is 24.5p a unit. The scheme's own figure is 3.8 miles a
+      unit and I do about 8,000 miles a year, most of it the same forty miles.
+
+      Signing this is signing up to three years of it, and the three years are
+      the part I can't get a clear view of.
+    why: >-
+      Taking the car is easy and cheap; the closing line, "the three years are
+      the part I can't get a clear view of", asks what saying yes commits to
+      rather than whether to say it. Clause 9.2, the 5,928 the broker takes off
+      the assessed income before October, the freeholder's six weeks and the
+      Golf's MOT are all consequences of the same signature, and the turn
+      contains no question mark.
+  - id: l12p
+    triple: l12
+    band: l
+    domain: health
+    stakes: high
+    ask: embedded
+    route: fit
+    turn: >-
+      The bits of paper and the messages that go with them.
+
+      Patient information leaflet, section 4.6 — "This medicine is not
+      recommended during pregnancy. If you are planning to become pregnant,
+      speak to your doctor about stopping it at least three months before you
+      start trying."
+
+      GP letter, 6 May — "I have advised Ms Bahri that the usual approach is to
+      withdraw the medication before conception, allowing a washout period, and
+      that this is best planned in advance."
+
+      Specialist nurse, voicemail, 11 May, written down as she said it — "the
+      team would want you off it for three months before you start trying, that
+      is the standard line, I'll get the consultant to write"
+
+      Forum, top reply, 96 upvotes — "Came off mine to try. Was completely fine.
+      Honestly, you will scare yourself reading this board."
+
+      Discharge summary, 22 October 2021 — "Admission followed planned
+      withdrawal of maintenance treatment nine weeks earlier. Symptoms recurred
+      from week six. Stabilised on reinstatement. Return to baseline function at
+      fourteen months."
+
+      My own note, 2 November 2021 — "nine weeks off it and then nearly three
+      weeks on Ward 12. I have never been that ill and I did not see any of it
+      coming."
+
+      I was 34 then and I am 39 now. The fertility clinic letter, 2 April, gives
+      "AMH 4.1 pmol/L, consistent with reduced ovarian reserve" and puts the
+      funded cycle waiting list at "approximately eleven months from referral".
+
+      Rob, 20 May — "whatever this turns into, I am not doing 2021 again and I
+      don't think you are either. I would take no baby over that."
+
+      The consultant's letter, 18 May, does not mention 2021. The admission was
+      under a different trust.
+
+      So do I come off it before we start trying? The advice fits the patient in
+      the leaflet, and I cannot tell if it fits this patient.
+    why: >-
+      The same instruction arrives three times and is very likely right in
+      general: the leaflet's "at least three months", the GP's "usual approach",
+      the nurse's "standard line". One fact about this person may overturn it
+      for her alone, and it is the fact the consultant's 18 May letter does not
+      mention. The question is put outright and the sentence after it is the one
+      that decides: "The advice fits the patient in the leaflet, and I cannot
+      tell if it fits this patient."
+
+  - id: l13p
+    triple: l13
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: timing
+    turn: >-
+      Everything that has come in about the upgrade, more or less in order.
+
+      Postgres 13, single primary, one read replica, about 900 GB on disk.
+
+      Vendor support notice, 12 June — "Community support for 13.x ended on 13
+      November 2025. Extended support from us runs to 30 June 2027 at the current rate
+      and rises 40 per cent after that."
+
+      Change calendar: the platform freeze runs Mon 16 November to Fri 22 January, no
+      schema changes, signed off by the CTO in March. Approved maintenance windows are
+      Sundays, 02:00 to 06:00.
+
+      Rehearsal on a restored copy, 4 August — pg_upgrade with --link finished in 11
+      minutes. Without --link it took 3 hours 40. The analyse afterwards took another
+      50 minutes on the rehearsal box, which is slower than production.
+
+      Slack, Dev (our DBA), 6 August — "the --link path is fine but there is no going
+      back once it runs, rollback is restore from backup and that is four hours
+      minimum on 900 GB"
+
+      Slack, Priya (support lead), 6 August — "November weekends are our worst by a
+      mile. December is dead, nobody files a ticket between the 20th and the 2nd."
+
+      Slack, Dev, 10 August — "one more thing, the replica has to be rebuilt from
+      scratch afterwards either way, six hours, and it cannot overlap the window"
+
+      The replica serves all reporting traffic and the nightly export that starts at
+      01:30. It has been running since the cluster was built in 2022 and has never
+      been rebuilt.
+
+      Two extensions need matching versions on the new major. PostGIS is at 3.1 here
+      and the packaged version on 17 is 3.4; the release notes list one breaking
+      change in a function we call in four places. pg_stat_statements is unchanged.
+
+      Dev has run a major upgrade before and nobody else here has. Dev is off in late
+      September.
+
+      Finance want the extended-support renewal answered by 30 September because it
+      sits on the same purchase order as the licences.
+
+      Which is it, the Sunday before the freeze starts or the first Sunday after the
+      freeze lifts, given that nothing else is open to us?
+    why: >-
+      The direction never has to be argued: what is put up for choice is a pair of
+      dates, "the Sunday before the freeze starts or the first Sunday after the freeze
+      lifts". Every cost in the body — the rollback, the six-hour replica rebuild, the
+      30 September renewal — is a price of the moment chosen.
+  - id: l14p
+    triple: l14
+    band: l
+    domain: relationships
+    stakes: high
+    ask: implicit
+    route: cascade
+    turn: >-
+      Setting all of it down, nothing left out and nothing tidied up.
+
+      Mia turned fifteen in June. She has lived with me since the split in 2019. Her
+      brother Sam is nine.
+
+      Mia, text, Sun 2 August — "i want to live at dads. not because of you. its
+      closer to school and hes not on nights any more"
+
+      Tom, email, Mon 3 August — "She rang me before she told you. I said she had to
+      tell you first. I am not going to pretend I do not want this, but I did not ask
+      for it."
+
+      The 2019 order says primary residence with me, alternate weekends and half of
+      each holiday with Tom. It says nothing about how that changes.
+
+      Her form tutor, July parents' evening — attendance 91 per cent, "quieter this
+      year, she was a different kid in year 9".
+
+      Sam, overheard on Tue 4 August — "is she coming back at weekends or is that it"
+
+      Tom is twenty minutes from the school. I am fifty minutes and two buses. He
+      works four on, four off, and the night shifts stopped in May.
+
+      Yes is a five-minute conversation with Tom, and then the order changes, and what
+      else changes with the order I cannot see from here.
+    why: >-
+      "Yes is a five-minute conversation with Tom" concedes the move in the first
+      clause and spends everything after it on what the move then sets going — the
+      order changing, and whatever changes with the order. No question mark appears
+      anywhere in the turn.
+  - id: l15p
+    triple: l15
+    band: l
+    domain: career
+    stakes: low
+    ask: embedded
+    route: fit
+    turn: >-
+      Collecting the returnship material in one place while it is still current.
+
+      I left engineering in 2017 when the twins were born. Nine years since, no paid
+      work, two years of school governor meetings that are on the CV in small letters.
+
+      The programme: sixteen weeks, paid at 32,000 pro rata, based in Reading, four
+      days on site. Applications close Friday 25 September. They say about a third of
+      each cohort is offered a permanent role at the end.
+
+      Their brochure, page 4 — "Returnships are designed for experienced professionals
+      coming back after a career break of two years or more. Our returners arrive with
+      current, transferable expertise and need only a short bridge into the
+      workplace."
+
+      Email from Nadia, who ran the 2024 cohort, 6 August — "Honest answer: the ones
+      who converted were the ones who could show recent evidence of currency. Two of
+      the eleven had gaps over five years and neither converted, though one of those
+      two had a shocking manager. Do not read much into eleven people."
+
+      My old manager, message, 7 August — "you'd walk it. the stack has moved but the
+      hard part was never the stack"
+
+      The application form wants a 300-word statement about the break itself.
+
+      Money: 32,000 pro rata is about 9,800 gross across the sixteen weeks. The care I
+      would need from five to six, four days a week, plus the train to Reading, is
+      about 2,900 of it.
+
+      Is nine years the same problem as two? Every line of that brochure assumes a
+      two-year gap, and a two-year gap is not the gap I have.
+    why: >-
+      The general rule is quoted and is probably sound — "a career break of two years
+      or more" — and it is one fact about this person, a nine-year gap, that may take
+      it apart. The question is put first and the fact that settles it lands after,
+      unanswered.
+
+  - id: l16p
+    triple: l16
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    route: ledger
+    turn: >-
+      The flood was on 3 January and this is everything that has come in since.
+
+      Loss adjuster's report, 22 January, section 4 — "Ingress to the ground
+      floor to a depth of approximately 400mm. Plaster, floor coverings, kitchen
+      carcasses and the boiler are affected. Drying will require a minimum of
+      eight weeks with commercial equipment in place."
+
+      Insurer's letter, 4 March — "We are pleased to offer a cash settlement in
+      full and final settlement of your claim: buildings £41,800, contents
+      £12,350, less the policy excess of £1,000. Total payable £53,150. This
+      offer remains open for 21 days from the date of this letter."
+
+      Policy schedule, page 2 — flood excess £1,000, alternative accommodation
+      limit £15,000, buildings sum insured £310,000.
+
+      Kerrigan & Sons, quote dated 19 February — £58,400 for the buildings work,
+      itemised over four pages, with a note at the end: "Excludes kitchen units
+      and appliances, which your insurer will treat as contents. Price held for
+      60 days."
+
+      The contents list I typed up: 62 items, £19,900 at replacement cost, about
+      half of it the kitchen and the rest books, my mother's rugs, and things
+      nobody has a receipt for.
+
+      Alternative accommodation: £6,200 paid out so far. The landlord of the
+      rental wants a further eight weeks at £460 a week or he re-lets it.
+
+      Broker's email, 6 March — "A cash settlement closes the claim. If the works
+      come in higher, there is no route back to the insurer. The alternative is
+      that they appoint their own contractor and carry that risk, but you lose
+      control of the specification and the timetable."
+
+      Neighbour at number 14, WhatsApp, 7 March — "we took the money. eleven
+      weeks and we were about 9k short at the end. their builder had the
+      Hallorans out till August though"
+
+      My sister, 5 March — "dad's insurer did this in 2019, he took the first
+      number and it was fine. different flood though and his kitchen was forty
+      years old"
+
+      The heating engineer flagged the boiler flue on 30 January. It is not in
+      the adjuster's report and not in Kerrigan's quote either.
+
+      The 21 days from 4 March run out on 25 March.
+
+      Everything I have is pasted above, so what in all of it actually decides
+      whether this offer is an offer worth taking or a number worth arguing?
+    why: >-
+      Ten sources, one claim, and the closing line asks which of them the answer
+      turns on — "what in all of it actually decides". The broker's "no route
+      back" and the boiler flue nobody has costed carry it; the neighbour's
+      eleven weeks and the 2019 story are volume.
+  - id: l17p
+    triple: l17
+    band: l
+    domain: technical
+    stakes: high
+    ask: implicit
+    route: ~
+    turn: >-
+      Notes and messages about the mail server, in the order they arrived.
+
+      The setup: one VPS at £14 a month, Postfix and Dovecot, built in 2016 by
+      Ruth, who is a trustee and the only person with the root password. Nine
+      mailboxes, one of them the safeguarding inbox. About 40GB of archive going
+      back to the first year.
+
+      Ruth, 11 May — "Happy to keep doing it. Two hours a month most months, and
+      the month it isn't two hours it's a whole Saturday. I'm 71, for what that's
+      worth."
+
+      Quote from Larch Digital, 2 June — nine mailboxes at £4.60 each per month,
+      migration included, "archive import billed at £340 one-off where the
+      mailbox total is over 25GB".
+
+      Google Workspace for Nonprofits is free at our size. I have read the
+      eligibility page twice and we qualify on both tests.
+
+      In March there were three bounces to the council's safeguarding address.
+      Adding an SPF record cleared them.
+
+      Kemi (trustee), 4 June — "I don't like our safeguarding mail sitting on a
+      box that only Ruth can get into. If she's ill for a fortnight we are locked
+      out of our own history."
+
+      Dawit (treasurer), 4 June — "I don't like it sitting on a company's servers
+      in another country either. We tell families that we hold it."
+
+      The funder's data schedule, clause 9.2 — "The grantee shall maintain a
+      named data controller and shall ensure that personal data is encrypted at
+      rest and in transit." Both setups meet that as far as I can read it.
+
+      The VPS is billed monthly and can be cancelled with a month's notice, so
+      nothing expires and nothing renews. Ruth is not going anywhere this year.
+
+      My own estimate of the migration: a weekend, or two weekends if the archive
+      fights.
+
+      I have read it back four times and it comes out level. Nothing in any of
+      that points one way, and nothing in it points the other way either, which
+      is where this has stalled.
+    why: >-
+      A real open decision where none of the four dominates, and the last line
+      asks for a view without asking a question. Ten short notes that agree, so
+      there is nothing for `ledger` to sift; no generic rule is quoted against a
+      fact about this charity, so `fit` has no rule to overturn; the consequences
+      stop at "a month's notice" and a £340 import, so `cascade` has a chain two
+      steps long; and "nothing expires and nothing renews", so `timing` has no
+      when to answer.
+  - id: l18p
+    triple: l18
+    band: l
+    domain: health
+    stakes: low
+    ask: embedded
+    route: timing
+    turn: >-
+      Everything I have been sent about the knee, plus the two dates that came
+      with it.
+
+      Mr Ives (orthopaedics), letter of 2 March — "Radiographs show
+      bone-on-bone change in the medial compartment. I am happy to list her for a
+      total knee replacement. Offered admission dates are Monday 13 April 2026
+      and Monday 5 October 2026."
+
+      Same letter, over the page — "Patients are typically walking without
+      sticks by six weeks and returning to full working days at around twelve
+      weeks. Declining both dates returns the patient to the routine list, which
+      is running at eleven months."
+
+      From the physio, 9 March — "Six weeks is the average and it is not a
+      promise. Stairs are the thing people underestimate."
+
+      Ellie's wedding is Saturday 12 September 2026, at a barn with a gravel
+      yard and no lift to the room the ceremony is in.
+
+      Ellie, WhatsApp, 11 March — "mum I mean this, dont plan it round me, I
+      will wheel you down the aisle myself and it will be the best photo anyone
+      gets that day"
+
+      Work: the tender I write goes in on Monday 15 June and I have written the
+      last four.
+
+      April plus twelve weeks is 6 July. October plus twelve weeks is 28
+      December.
+
+      Do I take April and write the tender at week nine, or take October? Either
+      date buys something and either date costs something, and the letters do not
+      price either one.
+    why: >-
+      The replacement itself is not in question — "I am happy to list her" — and
+      every artefact is about the moment instead. The undo price is stated in the
+      letter as "returns the patient to the routine list, which is running at
+      eleven months", which is what makes this timing rather than a choice
+      between two actions.
+
+  - id: l19p
+    triple: l19
+    band: l
+    domain: relationships
+    stakes: low
+    ask: explicit
+    route: ledger
+    turn: >-
+      The numbers and the messages are below, with nothing edited except surnames.
+
+      Booking confirmation, Casa Vento, Puglia, issued 4 February 2026 — "Total EUR
+      6,240. Deposit EUR 1,560 received 4 Feb. Balance EUR 4,680 due by 15 May 2026.
+      Party of nine."
+
+      Paid from my account: the 1,560 on 4 February, the 4,680 on 11 May.
+
+      The split we wrote down in the group chat in January was three households at
+      2,080 each. Mine, Priya's, Marcus's.
+
+      WhatsApp, "Puglia '26", Priya, 12 May — "sent mine just now, sorry it's late".
+      The 2,080 is on the statement the same day.
+
+      Marcus, 12 May — "will do this weekend"
+
+      Marcus, 26 May — "sorry mate payday is the 28th"
+
+      Marcus, 9 June — "you know I'm good for it"
+
+      Nothing since that one. We flew out on Saturday 20 June and came back on the
+      27th. He was there for the week, with Ana and the two boys, which is four of the
+      nine.
+
+      Mum, on the phone, 2 July, written down afterwards — "Please don't let this turn
+      into a thing. He had the car and then the boiler. He does not have it and he is
+      not going to say so."
+
+      Ana, direct message, Tuesday 14 July — "He told me in May that he'd paid you. I
+      only found out on Sunday. I have my own account and I can send you the 2,080 on
+      Friday if you tell me to, but he cannot know it came from me."
+
+      Priya, 21 July — "You are not the bank. Ask him for it in writing and copy me
+      in."
+
+      Ana works three days a week and the two boys are six and three.
+
+      In 2024, Sardinia, Marcus paid three weeks late and it was fine in the end. In
+      2022 he never paid the ferry money, about 300 between the three of us, and nobody
+      has mentioned it since.
+
+      The 2,080 came out of what was set aside for the kitchen, which is booked in for
+      the second week of October.
+
+      Reading it back, what does this turn on — the 2,080, or the fact that Ana knows
+      what Marcus told her instead of what Marcus told me?
+    why: >-
+      Messages from four people, two documents and two earlier holidays, all about one
+      unpaid 2,080, and the ask is which of them it turns on: "the 2,080, or the fact
+      that Ana knows what Marcus told her". A pile whose weighting is unknown to the
+      person holding it is the ledger case.
+  - id: l20p
+    triple: l20
+    band: l
+    domain: career
+    stakes: high
+    ask: implicit
+    route: cascade
+    turn: >-
+      Everything from the last two weeks, in the order it came in.
+
+      Email, Dilara (HR), Thursday 4 June 2026, 16:12 — "Confirming the outcome of the
+      panel: the Team Lead role is yours if you want it. Band 5, plus 7,400 on base,
+      effective 1 July. We would need your answer by Friday 19 June."
+
+      Same email, further down — "Direct reports: Sam, Ola, Rukmini, and the two
+      graduates starting in September."
+
+      Handbook, section 4.2 — "An employee taking up a new internal role serves a
+      six-month settling period. During it either party may end the arrangement, and
+      the employee returns to their previous role and band."
+
+      Sam, Slack, Friday 5 June — "congrats, genuinely. i put in for it too, you knew
+      that. i'm fine, ask me again in a month"
+
+      Ola, same afternoon — "so is Thursday pints still a thing or is it weird now"
+
+      Nadia (my manager), one-to-one, Monday 8 June, written down straight after — "The
+      part nobody warns you about is that you carry the old job for another four
+      months. I did."
+
+      Rukmini, 10 June — "is the roadmap still ours or does it go up to you"
+
+      Four years on this team. Sam has been on it seven. The four of us have had a
+      Slack group since 2022 that no manager has ever been in.
+
+      The 7,400 takes me over the line where the childcare account stops, which is
+      worth about 3,900 a year to us.
+
+      There is no other lead role open in the group this year, and the last two were
+      filled externally.
+
+      The Slack group I pasted in has four of us in it, and the day I take Band 5 that
+      Slack group has three.
+    why: >-
+      The role itself is not in dispute. What the ask puts forward as hard is a
+      consequence of taking it, "the day I take Band 5 that Slack group has three",
+      against a body where Sam applied too and the childcare account stops; the chain
+      is the difficulty, and no question mark appears in the turn.
+  - id: l21p
+    triple: l21
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: fit
+    turn: >-
+      Four repos, three engineers, and a fortnight of reading. All of it is below as I
+      took it down.
+
+      From a well-known engineering blog, 2019 — "A single repository removes the
+      cross-repo version dance entirely. At our scale, atomic commits across two
+      thousand projects are the whole point."
+
+      Same post, further on — "This requires investment: a build system that
+      understands the dependency graph, a CI layer that builds only what changed, and
+      at least one team that owns the tooling."
+
+      A conference talk write-up — "Every company I know of that split into many
+      repositories past three hundred engineers has regretted it."
+
+      Us: three engineers. Me, Tobi and Halla. Nobody owns tooling and nobody is going
+      to. Tobi has been here since the first commit, in 2023, and Halla joined in May.
+
+      The repos, with the CI suite time and the pushes on a normal working day:
+
+      - api, 4 minutes, 6 pushes
+
+      - web, 7 minutes, 9 pushes
+
+      - jobs, 3 minutes, 2 pushes
+
+      - shared-lib, 2 minutes, 3 pushes
+
+      There are 21 working days in the month we are looking at. The CI plan includes
+      3,000 minutes a month and charges 0.008 per minute after that. On one repo we
+      would not have selective builds for a long while, so every push runs all four
+      suites.
+
+      The actual friction: shared-lib gets a change, and then api and web have to be
+      bumped and released in the right order. That has gone wrong twice since March,
+      both times on a Friday afternoon.
+
+      Halla, 6 August — "i've only ever worked in a monorepo, i don't have a
+      comparison"
+
+      Tobi, 6 August — "the version dance is annoying twice a month, that's the whole
+      of it"
+
+      Since 3 August the web build has failed about one run in five with "ENOENT:
+      node_modules/.cache" and passed when it is run again. The lockfile has not
+      changed since July.
+
+      The advice is all written for a team of four hundred, so which bits of the advice
+      still hold when the team is three people?
+    why: >-
+      Three quoted sources agree and every one of them is written at a scale this team
+      is not: the ask is "which bits of the advice still hold when the team is three
+      people". Generic advice against one disqualifying fact about the asker is the fit
+      case.
+  - id: l22p
+    triple: l22
+    band: l
+    domain: money
+    stakes: high
+    ask: embedded
+    route: timing
+    turn: >-
+      All of it in one place, with the dates as they stand on the emails.
+
+      Mortgage statement, 1 July 2026 — balance outstanding 248,000, currently on the
+      lender's variable rate, 6.15%.
+
+      Broker, email, 27 July — "I can hold the five-year fix at 4.19% for you. Product
+      fee 999. The rate is held until 12 August, and after that I have to re-quote it."
+
+      Same email, lower down — "The early repayment charge is 5% of the balance in year
+      one and steps down a point a year. The product is portable, subject to a fresh
+      affordability assessment at the time."
+
+      We have an offer accepted on a house at 415,000. The structural survey on it is
+      booked for 20 August. Our own buyer's mortgage offer is dated 3 July and runs for
+      six months.
+
+      Father-in-law, Sunday 2 August — "they are not getting any cheaper, I would have
+      done it a fortnight ago"
+
+      Neighbour, same weekend, who works at a bank — "everyone I know has fixed"
+
+      The house was on at 429,000 in March and had one other offer, which fell through
+      in June.
+
+      Do we fix now or after the survey? Waiting costs me the rate, fixing costs me the
+      survey, and the survey is eight days the rate does not have.
+    why: >-
+      Neither sentence disputes fixing; the open question is which week. "Waiting costs
+      me the rate, fixing costs me the survey" states an undo price on both sides, and
+      the constraints behind it are dates: the rate held to 12 August, the survey on
+      the 20th, the buyer's offer running six months.
+
 negative:
   - id: l01n1
     triple: l01
@@ -1051,3 +1725,1339 @@ negative:
     why: >-
       The pile is the same and the ask is extraction into a factual record.
       Ranking by relevance would be the wrong thing to do to it.
+  - id: l10n1
+    triple: l10
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Everything that has come in about the rotation allocation, in the order it
+      came.
+
+      Deanery, 4 Feb — "Preferences for IMT3 posts close at 23:59 on Friday 13
+      February. Allocations are published on 9 March and are final. Swaps need
+      both trainees and the TPD."
+
+      The three regions in front of me: North West, Severn, Peninsula.
+
+      Fill rates from the published 2025 sheet: North West 100%, Severn 100%,
+      Peninsula 71%.
+
+      Dr Whelan (my supervisor), 6 Feb — "Severn is strongest for gastro numbers
+      and Bristol will get you the scope training. Peninsula gives you
+      independence earlier and fewer people watching."
+
+      The registrar who did Peninsula, 6 Feb — "the numbers thing was true in
+      2021 and people keep repeating it, I came out with 340 scopes"
+
+      Sam, 7 Feb — "Bristol I can do, the office has said yes in writing. Truro
+      is the one I can't, there's no lab within ninety minutes of it."
+
+      Two-bed rents from the ads I saved: Bristol 1,450, Liverpool 950, Truro
+      1,100.
+
+      Deanery, 10 Feb — "Please note that the Peninsula IMT3 post at Truro is
+      subject to confirmation of consultant cover and may be withdrawn before
+      allocation."
+
+      Mum's operation is on 3 March, in Southport, forty minutes from Aintree
+      and six hours from Truro.
+
+      Before I rank anything I want the swap rule straight. Which document
+      should I actually be reading for what a TPD-supported swap requires?
+    why: >-
+      Identical pile, and the turn wants a document rather than a ranking:
+      "Which document should I actually be reading for what a TPD-supported
+      swap requires?" The literal phrase "should I" carries no decision here,
+      which is the whole point of putting it in a negative.
+  - id: l10n2
+    triple: l10
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Everything that has come in about the rotation allocation, in the order it
+      came.
+
+      Deanery, 4 Feb — "Preferences for IMT3 posts close at 23:59 on Friday 13
+      February. Allocations are published on 9 March and are final. Swaps need
+      both trainees and the TPD."
+
+      The three regions in front of me: North West, Severn, Peninsula.
+
+      Fill rates from the published 2025 sheet: North West 100%, Severn 100%,
+      Peninsula 71%.
+
+      Dr Whelan (my supervisor), 6 Feb — "Severn is strongest for gastro numbers
+      and Bristol will get you the scope training. Peninsula gives you
+      independence earlier and fewer people watching."
+
+      The registrar who did Peninsula, 6 Feb — "the numbers thing was true in
+      2021 and people keep repeating it, I came out with 340 scopes"
+
+      Sam, 7 Feb — "Bristol I can do, the office has said yes in writing. Truro
+      is the one I can't, there's no lab within ninety minutes of it."
+
+      Two-bed rents from the ads I saved: Bristol 1,450, Liverpool 950, Truro
+      1,100.
+
+      Deanery, 10 Feb — "Please note that the Peninsula IMT3 post at Truro is
+      subject to confirmation of consultant cover and may be withdrawn before
+      allocation."
+
+      Mum's operation is on 3 March, in Southport, forty minutes from Aintree
+      and six hours from Truro.
+
+      Dr Whelan wants the regional stuff in one place. Boil the two deanery
+      emails down to four bullets I can paste back to her.
+    why: >-
+      Extraction from material already sitting in the turn: "Boil the two
+      deanery emails down to four bullets I can paste back to her." Which two
+      sources are wanted is named by the requester, so weighing the nine against
+      each other would be the wrong operation to perform here.
+  - id: l11n1
+    triple: l11
+    band: l
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Everything from the car scheme, in the order it landed.
+
+      HR (Reward team), 12 Jan — "Your quote is confirmed as follows. Gross
+      sacrifice is 494 a month for a 36-month term, and that includes insurance,
+      servicing, tyres and breakdown. Lead time is currently 14 to 18 weeks."
+
+      From the quote sheet: P11D 42,500. Benefit-in-kind is charged at 3% of
+      P11D, and the sheet gives 3% for every year of the 36-month term.
+
+      My position from the payslip: I am a higher-rate taxpayer across all of
+      this, so the sacrifice comes out of pay taxed at 40%, with 2% employee
+      National Insurance on top of that.
+
+      Scheme terms, clause 9.2 — "Where employment ends for any reason other
+      than death or ill-health retirement, the employee is liable for an early
+      termination charge equal to four months' gross rental."
+
+      Slack, Dev, 14 Jan — "genuinely the best value thing this place does, mine
+      works out about 310 a month"
+
+      Slack, Priya, 14 Jan — "read 9.2 before you do anything. I left in year
+      two and it cost me the four months"
+
+      Mortgage broker, 19 Jan — "Lenders assess affordability on post-sacrifice
+      salary. A sacrifice of 494 a month reduces assessed income by 5,928 a
+      year. Your current product ends in October."
+
+      All-hands note, 20 Jan — "The consultation announced in November relates
+      to the Reading site only."
+
+      Letting agent, 22 Jan — "Any alteration to the parking area has to go to
+      the freeholder. Allow six weeks for an answer. I can't tell you which way
+      they will come down on it."
+
+      Charger quote from the installer: 1,149 fitted, less a 350 grant if the
+      freeholder signs in time.
+
+      The current car is a 2013 Golf. The MOT is due 3 March and the garage has
+      quoted 680 for the rear arch. Insurance is 61 a month and I put about 145
+      a month of petrol in it.
+
+      Electricity here is 24.5p a unit. The scheme's own figure is 3.8 miles a
+      unit and I do about 8,000 miles a year, most of it the same forty miles.
+
+      Every figure for this is above. What do the sacrifice and the
+      benefit-in-kind together cost me net a month, and over 36 months?
+    why: >-
+      The pile is unchanged and the request is arithmetic with one right answer:
+      "What do the sacrifice and the benefit-in-kind together cost me net a
+      month, and over 36 months?" Verified: the sacrifice costs 494 x 0.58 =
+      286.52 a month after 40% tax and 2% employee National Insurance; the
+      benefit-in-kind is 42,500 x 3% = 1,275 a year, taxed at 40% = 510 a year =
+      42.50 a month; total 329.02 a month and 329.02 x 36 = 11,844.72 over the
+      term, and 494, 36, 40%, 2%, 42,500 and 3% are all stated in the body.
+  - id: l11n2
+    triple: l11
+    band: l
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      Everything from the car scheme, in the order it landed.
+
+      HR (Reward team), 12 Jan — "Your quote is confirmed as follows. Gross
+      sacrifice is 494 a month for a 36-month term, and that includes insurance,
+      servicing, tyres and breakdown. Lead time is currently 14 to 18 weeks."
+
+      From the quote sheet: P11D 42,500. Benefit-in-kind is charged at 3% of
+      P11D, and the sheet gives 3% for every year of the 36-month term.
+
+      My position from the payslip: I am a higher-rate taxpayer across all of
+      this, so the sacrifice comes out of pay taxed at 40%, with 2% employee
+      National Insurance on top of that.
+
+      Scheme terms, clause 9.2 — "Where employment ends for any reason other
+      than death or ill-health retirement, the employee is liable for an early
+      termination charge equal to four months' gross rental."
+
+      Slack, Dev, 14 Jan — "genuinely the best value thing this place does, mine
+      works out about 310 a month"
+
+      Slack, Priya, 14 Jan — "read 9.2 before you do anything. I left in year
+      two and it cost me the four months"
+
+      Mortgage broker, 19 Jan — "Lenders assess affordability on post-sacrifice
+      salary. A sacrifice of 494 a month reduces assessed income by 5,928 a
+      year. Your current product ends in October."
+
+      All-hands note, 20 Jan — "The consultation announced in November relates
+      to the Reading site only."
+
+      Letting agent, 22 Jan — "Any alteration to the parking area has to go to
+      the freeholder. Allow six weeks for an answer. I can't tell you which way
+      they will come down on it."
+
+      Charger quote from the installer: 1,149 fitted, less a 350 grant if the
+      freeholder signs in time.
+
+      The current car is a 2013 Golf. The MOT is due 3 March and the garage has
+      quoted 680 for the rear arch. Insurance is 61 a month and I put about 145
+      a month of petrol in it.
+
+      Electricity here is 24.5p a unit. The scheme's own figure is 3.8 miles a
+      unit and I do about 8,000 miles a year, most of it the same forty miles.
+
+      The order went in this morning, so the lease is happening. What does a
+      freeholder normally want to see before they will approve my charger
+      install?
+    why: >-
+      The lease is closed before the question starts: "The order went in this
+      morning, so the lease is happening." What the closing sentence wants is
+      procedural, about the parking space and not the car. No line in the
+      shared body forecloses taking the lease, so this position stays available
+      to the writer.
+  - id: l12n1
+    triple: l12
+    band: l
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      The bits of paper and the messages that go with them.
+
+      Patient information leaflet, section 4.6 — "This medicine is not
+      recommended during pregnancy. If you are planning to become pregnant,
+      speak to your doctor about stopping it at least three months before you
+      start trying."
+
+      GP letter, 6 May — "I have advised Ms Bahri that the usual approach is to
+      withdraw the medication before conception, allowing a washout period, and
+      that this is best planned in advance."
+
+      Specialist nurse, voicemail, 11 May, written down as she said it — "the
+      team would want you off it for three months before you start trying, that
+      is the standard line, I'll get the consultant to write"
+
+      Forum, top reply, 96 upvotes — "Came off mine to try. Was completely fine.
+      Honestly, you will scare yourself reading this board."
+
+      Discharge summary, 22 October 2021 — "Admission followed planned
+      withdrawal of maintenance treatment nine weeks earlier. Symptoms recurred
+      from week six. Stabilised on reinstatement. Return to baseline function at
+      fourteen months."
+
+      My own note, 2 November 2021 — "nine weeks off it and then nearly three
+      weeks on Ward 12. I have never been that ill and I did not see any of it
+      coming."
+
+      I was 34 then and I am 39 now. The fertility clinic letter, 2 April, gives
+      "AMH 4.1 pmol/L, consistent with reduced ovarian reserve" and puts the
+      funded cycle waiting list at "approximately eleven months from referral".
+
+      Rob, 20 May — "whatever this turns into, I am not doing 2021 again and I
+      don't think you are either. I would take no baby over that."
+
+      The consultant's letter, 18 May, does not mention 2021. The admission was
+      under a different trust.
+
+      One process question, separate from the above. Who runs a pre-conception
+      review, and who should I ask for one, the GP or the specialist team?
+    why: >-
+      Same body, and the turn asks who operates a service: "Who runs a
+      pre-conception review, and who should I ask for one, the GP or the
+      specialist team?" The answer is a route through a system and does not vary
+      with any fact above it, which is what makes the "should I" inert.
+  - id: l12n2
+    triple: l12
+    band: l
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      The bits of paper and the messages that go with them.
+
+      Patient information leaflet, section 4.6 — "This medicine is not
+      recommended during pregnancy. If you are planning to become pregnant,
+      speak to your doctor about stopping it at least three months before you
+      start trying."
+
+      GP letter, 6 May — "I have advised Ms Bahri that the usual approach is to
+      withdraw the medication before conception, allowing a washout period, and
+      that this is best planned in advance."
+
+      Specialist nurse, voicemail, 11 May, written down as she said it — "the
+      team would want you off it for three months before you start trying, that
+      is the standard line, I'll get the consultant to write"
+
+      Forum, top reply, 96 upvotes — "Came off mine to try. Was completely fine.
+      Honestly, you will scare yourself reading this board."
+
+      Discharge summary, 22 October 2021 — "Admission followed planned
+      withdrawal of maintenance treatment nine weeks earlier. Symptoms recurred
+      from week six. Stabilised on reinstatement. Return to baseline function at
+      fourteen months."
+
+      My own note, 2 November 2021 — "nine weeks off it and then nearly three
+      weeks on Ward 12. I have never been that ill and I did not see any of it
+      coming."
+
+      I was 34 then and I am 39 now. The fertility clinic letter, 2 April, gives
+      "AMH 4.1 pmol/L, consistent with reduced ovarian reserve" and puts the
+      funded cycle waiting list at "approximately eleven months from referral".
+
+      Rob, 20 May — "whatever this turns into, I am not doing 2021 again and I
+      don't think you are either. I would take no baby over that."
+
+      The consultant's letter, 18 May, does not mention 2021. The admission was
+      under a different trust.
+
+      The appointment is on the 9th and I need this written down. Two
+      sentences, opening on 2021, short enough that I can say them without
+      looking down at my hands.
+    why: >-
+      A drafting job over the same material, specified down to its length: "Two
+      sentences, opening on 2021, short enough that I can say them without
+      looking down at my hands." What has to reach the room is chosen already
+      and only the wording is being asked for.
+
+  - id: l13n1
+    triple: l13
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      Everything that has come in about the upgrade, more or less in order.
+
+      Postgres 13, single primary, one read replica, about 900 GB on disk.
+
+      Vendor support notice, 12 June — "Community support for 13.x ended on 13
+      November 2025. Extended support from us runs to 30 June 2027 at the current rate
+      and rises 40 per cent after that."
+
+      Change calendar: the platform freeze runs Mon 16 November to Fri 22 January, no
+      schema changes, signed off by the CTO in March. Approved maintenance windows are
+      Sundays, 02:00 to 06:00.
+
+      Rehearsal on a restored copy, 4 August — pg_upgrade with --link finished in 11
+      minutes. Without --link it took 3 hours 40. The analyse afterwards took another
+      50 minutes on the rehearsal box, which is slower than production.
+
+      Slack, Dev (our DBA), 6 August — "the --link path is fine but there is no going
+      back once it runs, rollback is restore from backup and that is four hours
+      minimum on 900 GB"
+
+      Slack, Priya (support lead), 6 August — "November weekends are our worst by a
+      mile. December is dead, nobody files a ticket between the 20th and the 2nd."
+
+      Slack, Dev, 10 August — "one more thing, the replica has to be rebuilt from
+      scratch afterwards either way, six hours, and it cannot overlap the window"
+
+      The replica serves all reporting traffic and the nightly export that starts at
+      01:30. It has been running since the cluster was built in 2022 and has never
+      been rebuilt.
+
+      Two extensions need matching versions on the new major. PostGIS is at 3.1 here
+      and the packaged version on 17 is 3.4; the release notes list one breaking
+      change in a function we call in four places. pg_stat_statements is unchanged.
+
+      Dev has run a major upgrade before and nobody else here has. Dev is off in late
+      September.
+
+      Finance want the extended-support renewal answered by 30 September because it
+      sits on the same purchase order as the licences.
+
+      The replica has fallen forty minutes behind every night since Tuesday. Our write
+      volume has not changed at all, so where is that lag actually coming from?
+    why: >-
+      Something is already broken: "The replica has fallen forty minutes behind every
+      night since Tuesday." The upgrade constraints are read here as background to a
+      fault, and technical diagnosis is what the skill's Abort clause excludes by
+      name.
+  - id: l13n2
+    triple: l13
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Everything that has come in about the upgrade, more or less in order.
+
+      Postgres 13, single primary, one read replica, about 900 GB on disk.
+
+      Vendor support notice, 12 June — "Community support for 13.x ended on 13
+      November 2025. Extended support from us runs to 30 June 2027 at the current rate
+      and rises 40 per cent after that."
+
+      Change calendar: the platform freeze runs Mon 16 November to Fri 22 January, no
+      schema changes, signed off by the CTO in March. Approved maintenance windows are
+      Sundays, 02:00 to 06:00.
+
+      Rehearsal on a restored copy, 4 August — pg_upgrade with --link finished in 11
+      minutes. Without --link it took 3 hours 40. The analyse afterwards took another
+      50 minutes on the rehearsal box, which is slower than production.
+
+      Slack, Dev (our DBA), 6 August — "the --link path is fine but there is no going
+      back once it runs, rollback is restore from backup and that is four hours
+      minimum on 900 GB"
+
+      Slack, Priya (support lead), 6 August — "November weekends are our worst by a
+      mile. December is dead, nobody files a ticket between the 20th and the 2nd."
+
+      Slack, Dev, 10 August — "one more thing, the replica has to be rebuilt from
+      scratch afterwards either way, six hours, and it cannot overlap the window"
+
+      The replica serves all reporting traffic and the nightly export that starts at
+      01:30. It has been running since the cluster was built in 2022 and has never
+      been rebuilt.
+
+      Two extensions need matching versions on the new major. PostGIS is at 3.1 here
+      and the packaged version on 17 is 3.4; the release notes list one breaking
+      change in a function we call in four places. pg_stat_statements is unchanged.
+
+      Dev has run a major upgrade before and nobody else here has. Dev is off in late
+      September.
+
+      Finance want the extended-support renewal answered by 30 September because it
+      sits on the same purchase order as the licences.
+
+      Turn the notes pasted above into six bullet points for the change ticket. The
+      change board will not read the raw notes, only my summary.
+    why: >-
+      "Turn the notes pasted above into six bullet points for the change ticket"
+      re-presents material that is already sitting in the turn, and the sentence after
+      it names who the shortened version is for.
+  - id: l14n1
+    triple: l14
+    band: l
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      Setting all of it down, nothing left out and nothing tidied up.
+
+      Mia turned fifteen in June. She has lived with me since the split in 2019. Her
+      brother Sam is nine.
+
+      Mia, text, Sun 2 August — "i want to live at dads. not because of you. its
+      closer to school and hes not on nights any more"
+
+      Tom, email, Mon 3 August — "She rang me before she told you. I said she had to
+      tell you first. I am not going to pretend I do not want this, but I did not ask
+      for it."
+
+      The 2019 order says primary residence with me, alternate weekends and half of
+      each holiday with Tom. It says nothing about how that changes.
+
+      Her form tutor, July parents' evening — attendance 91 per cent, "quieter this
+      year, she was a different kid in year 9".
+
+      Sam, overheard on Tue 4 August — "is she coming back at weekends or is that it"
+
+      Tom is twenty minutes from the school. I am fifty minutes and two buses. He
+      works four on, four off, and the night shifts stopped in May.
+
+      Write what I send Tom tonight. Two short paragraphs agreeing to the move from
+      September. Nothing in it that hands him the argument we never finished.
+    why: >-
+      "Write what I send Tom tonight" treats the move as given and asks for a piece of
+      writing; the two lines after it fix length and tone, and neither reopens whether
+      to agree.
+  - id: l14n2
+    triple: l14
+    band: l
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Setting all of it down, nothing left out and nothing tidied up.
+
+      Mia turned fifteen in June. She has lived with me since the split in 2019. Her
+      brother Sam is nine.
+
+      Mia, text, Sun 2 August — "i want to live at dads. not because of you. its
+      closer to school and hes not on nights any more"
+
+      Tom, email, Mon 3 August — "She rang me before she told you. I said she had to
+      tell you first. I am not going to pretend I do not want this, but I did not ask
+      for it."
+
+      The 2019 order says primary residence with me, alternate weekends and half of
+      each holiday with Tom. It says nothing about how that changes.
+
+      Her form tutor, July parents' evening — attendance 91 per cent, "quieter this
+      year, she was a different kid in year 9".
+
+      Sam, overheard on Tue 4 August — "is she coming back at weekends or is that it"
+
+      Tom is twenty minutes from the school. I am fifty minutes and two buses. He
+      works four on, four off, and the night shifts stopped in May.
+
+      Nobody has been near that order since 2019. Does changing it need a court
+      application, or does my agreement with Tom settle it at her age?
+    why: >-
+      One question about procedure, in two halves, over the same pile: whether varying
+      the arrangement needs "a court application" and what the parents' own agreement
+      can do. Verified: under the Children Act 1989 in England and Wales a child
+      arrangements order is varied either by an application to the court to vary or
+      discharge it or, in practice, by the agreement of everyone holding parental
+      responsibility, the order itself remaining in force until varied or discharged;
+      the wishes and feelings of a child of fifteen enter through the s.1(3)(a)
+      welfare checklist and are weighed, not decisive.
+  - id: l15n1
+    triple: l15
+    band: l
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Collecting the returnship material in one place while it is still current.
+
+      I left engineering in 2017 when the twins were born. Nine years since, no paid
+      work, two years of school governor meetings that are on the CV in small letters.
+
+      The programme: sixteen weeks, paid at 32,000 pro rata, based in Reading, four
+      days on site. Applications close Friday 25 September. They say about a third of
+      each cohort is offered a permanent role at the end.
+
+      Their brochure, page 4 — "Returnships are designed for experienced professionals
+      coming back after a career break of two years or more. Our returners arrive with
+      current, transferable expertise and need only a short bridge into the
+      workplace."
+
+      Email from Nadia, who ran the 2024 cohort, 6 August — "Honest answer: the ones
+      who converted were the ones who could show recent evidence of currency. Two of
+      the eleven had gaps over five years and neither converted, though one of those
+      two had a shocking manager. Do not read much into eleven people."
+
+      My old manager, message, 7 August — "you'd walk it. the stack has moved but the
+      hard part was never the stack"
+
+      The application form wants a 300-word statement about the break itself.
+
+      Money: 32,000 pro rata is about 9,800 gross across the sixteen weeks. The care I
+      would need from five to six, four days a week, plus the train to Reading, is
+      about 2,900 of it.
+
+      Condense what I pasted above into one paragraph, please. It is for my husband,
+      who has not read a word of any of this, and the money can stay out.
+    why: >-
+      "Condense what I pasted above into one paragraph, please" wants the same
+      material shortened for a reader who has not seen it, and dropping the money is
+      an editing instruction.
+  - id: l15n2
+    triple: l15
+    band: l
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: meta
+    turn: >-
+      Collecting the returnship material in one place while it is still current.
+
+      I left engineering in 2017 when the twins were born. Nine years since, no paid
+      work, two years of school governor meetings that are on the CV in small letters.
+
+      The programme: sixteen weeks, paid at 32,000 pro rata, based in Reading, four
+      days on site. Applications close Friday 25 September. They say about a third of
+      each cohort is offered a permanent role at the end.
+
+      Their brochure, page 4 — "Returnships are designed for experienced professionals
+      coming back after a career break of two years or more. Our returners arrive with
+      current, transferable expertise and need only a short bridge into the
+      workplace."
+
+      Email from Nadia, who ran the 2024 cohort, 6 August — "Honest answer: the ones
+      who converted were the ones who could show recent evidence of currency. Two of
+      the eleven had gaps over five years and neither converted, though one of those
+      two had a shocking manager. Do not read much into eleven people."
+
+      My old manager, message, 7 August — "you'd walk it. the stack has moved but the
+      hard part was never the stack"
+
+      The application form wants a 300-word statement about the break itself.
+
+      Money: 32,000 pro rata is about 9,800 gross across the sixteen weeks. The care I
+      would need from five to six, four days a week, plus the train to Reading, is
+      about 2,900 of it.
+
+      Nadia's email is the one I have read most often. Her whole case rests on eleven
+      people, and how much can eleven people tell me about a gap like mine?
+    why: >-
+      The subject is the pasted email and not the programme. "Her whole case rests on
+      eleven people" interrogates the inference inside text quoted in the body, and
+      asks what that inference can bear.
+
+  - id: l16n1
+    triple: l16
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      The flood was on 3 January and this is everything that has come in since.
+
+      Loss adjuster's report, 22 January, section 4 — "Ingress to the ground
+      floor to a depth of approximately 400mm. Plaster, floor coverings, kitchen
+      carcasses and the boiler are affected. Drying will require a minimum of
+      eight weeks with commercial equipment in place."
+
+      Insurer's letter, 4 March — "We are pleased to offer a cash settlement in
+      full and final settlement of your claim: buildings £41,800, contents
+      £12,350, less the policy excess of £1,000. Total payable £53,150. This
+      offer remains open for 21 days from the date of this letter."
+
+      Policy schedule, page 2 — flood excess £1,000, alternative accommodation
+      limit £15,000, buildings sum insured £310,000.
+
+      Kerrigan & Sons, quote dated 19 February — £58,400 for the buildings work,
+      itemised over four pages, with a note at the end: "Excludes kitchen units
+      and appliances, which your insurer will treat as contents. Price held for
+      60 days."
+
+      The contents list I typed up: 62 items, £19,900 at replacement cost, about
+      half of it the kitchen and the rest books, my mother's rugs, and things
+      nobody has a receipt for.
+
+      Alternative accommodation: £6,200 paid out so far. The landlord of the
+      rental wants a further eight weeks at £460 a week or he re-lets it.
+
+      Broker's email, 6 March — "A cash settlement closes the claim. If the works
+      come in higher, there is no route back to the insurer. The alternative is
+      that they appoint their own contractor and carry that risk, but you lose
+      control of the specification and the timetable."
+
+      Neighbour at number 14, WhatsApp, 7 March — "we took the money. eleven
+      weeks and we were about 9k short at the end. their builder had the
+      Hallorans out till August though"
+
+      My sister, 5 March — "dad's insurer did this in 2019, he took the first
+      number and it was fine. different flood though and his kitchen was forty
+      years old"
+
+      The heating engineer flagged the boiler flue on 30 January. It is not in
+      the adjuster's report and not in Kerrigan's quote either.
+
+      The 21 days from 4 March run out on 25 March.
+
+      What is the gap between the total payable and the builder's quote plus the
+      contents list? And how much of my accommodation limit is left after the
+      further eight weeks?
+    why: >-
+      Identical artefacts, and the ask is arithmetic with one answer: "the gap
+      between the total payable and the builder's quote plus the contents list".
+      Verified: 58,400 + 19,900 = 78,300 against the letter's 53,150, a gap of
+      25,150; and 15,000 less 6,200 less (8 weeks at 460 = 3,680) leaves 5,120,
+      with every input printed in the body above.
+  - id: l16n2
+    triple: l16
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      The flood was on 3 January and this is everything that has come in since.
+
+      Loss adjuster's report, 22 January, section 4 — "Ingress to the ground
+      floor to a depth of approximately 400mm. Plaster, floor coverings, kitchen
+      carcasses and the boiler are affected. Drying will require a minimum of
+      eight weeks with commercial equipment in place."
+
+      Insurer's letter, 4 March — "We are pleased to offer a cash settlement in
+      full and final settlement of your claim: buildings £41,800, contents
+      £12,350, less the policy excess of £1,000. Total payable £53,150. This
+      offer remains open for 21 days from the date of this letter."
+
+      Policy schedule, page 2 — flood excess £1,000, alternative accommodation
+      limit £15,000, buildings sum insured £310,000.
+
+      Kerrigan & Sons, quote dated 19 February — £58,400 for the buildings work,
+      itemised over four pages, with a note at the end: "Excludes kitchen units
+      and appliances, which your insurer will treat as contents. Price held for
+      60 days."
+
+      The contents list I typed up: 62 items, £19,900 at replacement cost, about
+      half of it the kitchen and the rest books, my mother's rugs, and things
+      nobody has a receipt for.
+
+      Alternative accommodation: £6,200 paid out so far. The landlord of the
+      rental wants a further eight weeks at £460 a week or he re-lets it.
+
+      Broker's email, 6 March — "A cash settlement closes the claim. If the works
+      come in higher, there is no route back to the insurer. The alternative is
+      that they appoint their own contractor and carry that risk, but you lose
+      control of the specification and the timetable."
+
+      Neighbour at number 14, WhatsApp, 7 March — "we took the money. eleven
+      weeks and we were about 9k short at the end. their builder had the
+      Hallorans out till August though"
+
+      My sister, 5 March — "dad's insurer did this in 2019, he took the first
+      number and it was fine. different flood though and his kitchen was forty
+      years old"
+
+      The heating engineer flagged the boiler flue on 30 January. It is not in
+      the adjuster's report and not in Kerrigan's quote either.
+
+      The 21 days from 4 March run out on 25 March.
+
+      We are turning the cash settlement down and asking them to appoint the
+      contractor. Draft that reply for me, flat and unrhetorical, with the
+      figures in a table.
+    why: >-
+      The route is chosen by the household in the ask's opening clause, "We are
+      turning the cash settlement down", and what is wanted after it is a
+      document. Nothing in the pile is denied by that: the broker names the
+      contractor option as the stated alternative, and the offer has not expired.
+  - id: l17n1
+    triple: l17
+    band: l
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      Notes and messages about the mail server, in the order they arrived.
+
+      The setup: one VPS at £14 a month, Postfix and Dovecot, built in 2016 by
+      Ruth, who is a trustee and the only person with the root password. Nine
+      mailboxes, one of them the safeguarding inbox. About 40GB of archive going
+      back to the first year.
+
+      Ruth, 11 May — "Happy to keep doing it. Two hours a month most months, and
+      the month it isn't two hours it's a whole Saturday. I'm 71, for what that's
+      worth."
+
+      Quote from Larch Digital, 2 June — nine mailboxes at £4.60 each per month,
+      migration included, "archive import billed at £340 one-off where the
+      mailbox total is over 25GB".
+
+      Google Workspace for Nonprofits is free at our size. I have read the
+      eligibility page twice and we qualify on both tests.
+
+      In March there were three bounces to the council's safeguarding address.
+      Adding an SPF record cleared them.
+
+      Kemi (trustee), 4 June — "I don't like our safeguarding mail sitting on a
+      box that only Ruth can get into. If she's ill for a fortnight we are locked
+      out of our own history."
+
+      Dawit (treasurer), 4 June — "I don't like it sitting on a company's servers
+      in another country either. We tell families that we hold it."
+
+      The funder's data schedule, clause 9.2 — "The grantee shall maintain a
+      named data controller and shall ensure that personal data is encrypted at
+      rest and in transit." Both setups meet that as far as I can read it.
+
+      The VPS is billed monthly and can be cancelled with a month's notice, so
+      nothing expires and nothing renews. Ruth is not going anywhere this year.
+
+      My own estimate of the migration: a weekend, or two weekends if the archive
+      fights.
+
+      Five bounces since the weekend, all to the council address again. What
+      would make our server, fine since we added the SPF record in March, fail
+      for exactly one recipient and still deliver to everyone else?
+    why: >-
+      The ask reports a symptom and then wants its cause: "fail for exactly one
+      recipient and still deliver to everyone else". `Abort if` names a technical
+      diagnosis first, so a skill that fires here has fired on a question about
+      SPF alignment over an unchanged set of notes.
+  - id: l17n2
+    triple: l17
+    band: l
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Notes and messages about the mail server, in the order they arrived.
+
+      The setup: one VPS at £14 a month, Postfix and Dovecot, built in 2016 by
+      Ruth, who is a trustee and the only person with the root password. Nine
+      mailboxes, one of them the safeguarding inbox. About 40GB of archive going
+      back to the first year.
+
+      Ruth, 11 May — "Happy to keep doing it. Two hours a month most months, and
+      the month it isn't two hours it's a whole Saturday. I'm 71, for what that's
+      worth."
+
+      Quote from Larch Digital, 2 June — nine mailboxes at £4.60 each per month,
+      migration included, "archive import billed at £340 one-off where the
+      mailbox total is over 25GB".
+
+      Google Workspace for Nonprofits is free at our size. I have read the
+      eligibility page twice and we qualify on both tests.
+
+      In March there were three bounces to the council's safeguarding address.
+      Adding an SPF record cleared them.
+
+      Kemi (trustee), 4 June — "I don't like our safeguarding mail sitting on a
+      box that only Ruth can get into. If she's ill for a fortnight we are locked
+      out of our own history."
+
+      Dawit (treasurer), 4 June — "I don't like it sitting on a company's servers
+      in another country either. We tell families that we hold it."
+
+      The funder's data schedule, clause 9.2 — "The grantee shall maintain a
+      named data controller and shall ensure that personal data is encrypted at
+      rest and in transit." Both setups meet that as far as I can read it.
+
+      The VPS is billed monthly and can be cancelled with a month's notice, so
+      nothing expires and nothing renews. Ruth is not going anywhere this year.
+
+      My own estimate of the migration: a weekend, or two weekends if the archive
+      fights.
+
+      Clause 9.2 is the part of the schedule I cannot pin down. Who counts as the
+      data controller once an outside provider holds the mailboxes, and in the
+      funder's register should we name them or us?
+    why: >-
+      A question about who a defined term applies to, closing on "in the
+      funder's register should we name them or us" — the phrase the shipped
+      description scans for, attached to a definition rather than to a choice.
+      Verified: under UK GDPR Article 4(7)
+      and 4(8) the charity that determines the purposes stays the controller and
+      a mail host acting on instructions is a processor, so the register names
+      the charity.
+  - id: l18n1
+    triple: l18
+    band: l
+    domain: health
+    stakes: low
+    ask: implicit
+    kind: settled
+    turn: >-
+      Everything I have been sent about the knee, plus the two dates that came
+      with it.
+
+      Mr Ives (orthopaedics), letter of 2 March — "Radiographs show
+      bone-on-bone change in the medial compartment. I am happy to list her for a
+      total knee replacement. Offered admission dates are Monday 13 April 2026
+      and Monday 5 October 2026."
+
+      Same letter, over the page — "Patients are typically walking without
+      sticks by six weeks and returning to full working days at around twelve
+      weeks. Declining both dates returns the patient to the routine list, which
+      is running at eleven months."
+
+      From the physio, 9 March — "Six weeks is the average and it is not a
+      promise. Stairs are the thing people underestimate."
+
+      Ellie's wedding is Saturday 12 September 2026, at a barn with a gravel
+      yard and no lift to the room the ceremony is in.
+
+      Ellie, WhatsApp, 11 March — "mum I mean this, dont plan it round me, I
+      will wheel you down the aisle myself and it will be the best photo anyone
+      gets that day"
+
+      Work: the tender I write goes in on Monday 15 June and I have written the
+      last four.
+
+      April plus twelve weeks is 6 July. October plus twelve weeks is 28
+      December.
+
+      The April date is taken, the hospital has it in writing, and the tender is
+      somebody else's this year. All I want now is a week-by-week list of what I
+      will not be able to do.
+    why: >-
+      The choice is closed in the ask's first clause — "The April date is taken"
+      — and what follows is a request for a schedule. The body offers 13 April as
+      one of two admission dates and never removes it, so nothing above
+      contradicts the sentence that closes it.
+  - id: l18n2
+    triple: l18
+    band: l
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Everything I have been sent about the knee, plus the two dates that came
+      with it.
+
+      Mr Ives (orthopaedics), letter of 2 March — "Radiographs show
+      bone-on-bone change in the medial compartment. I am happy to list her for a
+      total knee replacement. Offered admission dates are Monday 13 April 2026
+      and Monday 5 October 2026."
+
+      Same letter, over the page — "Patients are typically walking without
+      sticks by six weeks and returning to full working days at around twelve
+      weeks. Declining both dates returns the patient to the routine list, which
+      is running at eleven months."
+
+      From the physio, 9 March — "Six weeks is the average and it is not a
+      promise. Stairs are the thing people underestimate."
+
+      Ellie's wedding is Saturday 12 September 2026, at a barn with a gravel
+      yard and no lift to the room the ceremony is in.
+
+      Ellie, WhatsApp, 11 March — "mum I mean this, dont plan it round me, I
+      will wheel you down the aisle myself and it will be the best photo anyone
+      gets that day"
+
+      Work: the tender I write goes in on Monday 15 June and I have written the
+      last four.
+
+      April plus twelve weeks is 6 July. October plus twelve weeks is 28
+      December.
+
+      There is a lot more of the thread above than I have pasted, months of it.
+      Flatten all of it into one page: what happens, when, and how long I am off
+      my feet.
+    why: >-
+      Extraction, not advice: "Flatten all of it into one page" over admission
+      dates and recovery markers the letter has already printed. Ranking them by
+      importance would be the wrong operation, which is what separates this from
+      the ledger it sits beside.
+
+  - id: l19n1
+    triple: l19
+    band: l
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: meta
+    turn: >-
+      The numbers and the messages are below, with nothing edited except surnames.
+
+      Booking confirmation, Casa Vento, Puglia, issued 4 February 2026 — "Total EUR
+      6,240. Deposit EUR 1,560 received 4 Feb. Balance EUR 4,680 due by 15 May 2026.
+      Party of nine."
+
+      Paid from my account: the 1,560 on 4 February, the 4,680 on 11 May.
+
+      The split we wrote down in the group chat in January was three households at
+      2,080 each. Mine, Priya's, Marcus's.
+
+      WhatsApp, "Puglia '26", Priya, 12 May — "sent mine just now, sorry it's late".
+      The 2,080 is on the statement the same day.
+
+      Marcus, 12 May — "will do this weekend"
+
+      Marcus, 26 May — "sorry mate payday is the 28th"
+
+      Marcus, 9 June — "you know I'm good for it"
+
+      Nothing since that one. We flew out on Saturday 20 June and came back on the
+      27th. He was there for the week, with Ana and the two boys, which is four of the
+      nine.
+
+      Mum, on the phone, 2 July, written down afterwards — "Please don't let this turn
+      into a thing. He had the car and then the boiler. He does not have it and he is
+      not going to say so."
+
+      Ana, direct message, Tuesday 14 July — "He told me in May that he'd paid you. I
+      only found out on Sunday. I have my own account and I can send you the 2,080 on
+      Friday if you tell me to, but he cannot know it came from me."
+
+      Priya, 21 July — "You are not the bank. Ask him for it in writing and copy me
+      in."
+
+      Ana works three days a week and the two boys are six and three.
+
+      In 2024, Sardinia, Marcus paid three weeks late and it was fine in the end. In
+      2022 he never paid the ferry money, about 300 between the three of us, and nobody
+      has mentioned it since.
+
+      The 2,080 came out of what was set aside for the kitchen, which is booked in for
+      the second week of October.
+
+      Leave the money aside and take Priya's 21 July message. Why does she think
+      writing it down changes anything, and what am I meant to take from her second
+      line?
+    why: >-
+      The subject is a span quoted in the body, Priya's "You are not the bank. Ask him
+      for it in writing and copy me in.", and the ask is "Why does she think writing it
+      down changes anything" — an explanation of somebody else's argument, not a
+      recommendation about the money.
+  - id: l19n2
+    triple: l19
+    band: l
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      The numbers and the messages are below, with nothing edited except surnames.
+
+      Booking confirmation, Casa Vento, Puglia, issued 4 February 2026 — "Total EUR
+      6,240. Deposit EUR 1,560 received 4 Feb. Balance EUR 4,680 due by 15 May 2026.
+      Party of nine."
+
+      Paid from my account: the 1,560 on 4 February, the 4,680 on 11 May.
+
+      The split we wrote down in the group chat in January was three households at
+      2,080 each. Mine, Priya's, Marcus's.
+
+      WhatsApp, "Puglia '26", Priya, 12 May — "sent mine just now, sorry it's late".
+      The 2,080 is on the statement the same day.
+
+      Marcus, 12 May — "will do this weekend"
+
+      Marcus, 26 May — "sorry mate payday is the 28th"
+
+      Marcus, 9 June — "you know I'm good for it"
+
+      Nothing since that one. We flew out on Saturday 20 June and came back on the
+      27th. He was there for the week, with Ana and the two boys, which is four of the
+      nine.
+
+      Mum, on the phone, 2 July, written down afterwards — "Please don't let this turn
+      into a thing. He had the car and then the boiler. He does not have it and he is
+      not going to say so."
+
+      Ana, direct message, Tuesday 14 July — "He told me in May that he'd paid you. I
+      only found out on Sunday. I have my own account and I can send you the 2,080 on
+      Friday if you tell me to, but he cannot know it came from me."
+
+      Priya, 21 July — "You are not the bank. Ask him for it in writing and copy me
+      in."
+
+      Ana works three days a week and the two boys are six and three.
+
+      In 2024, Sardinia, Marcus paid three weeks late and it was fine in the end. In
+      2022 he never paid the ferry money, about 300 between the three of us, and nobody
+      has mentioned it since.
+
+      The 2,080 came out of what was set aside for the kitchen, which is booked in for
+      the second week of October.
+
+      Draft the message asking Marcus for the 2,080, copied to Priya. Short and plain,
+      and it must not read as though I have been sitting on this for weeks.
+    why: >-
+      "Draft the message asking Marcus for the 2,080" presupposes the approach and
+      requests a piece of writing; the remaining instruction is about tone. The body
+      neither states nor rules out that choice, so nothing contradicts it.
+  - id: l20n1
+    triple: l20
+    band: l
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Everything from the last two weeks, in the order it came in.
+
+      Email, Dilara (HR), Thursday 4 June 2026, 16:12 — "Confirming the outcome of the
+      panel: the Team Lead role is yours if you want it. Band 5, plus 7,400 on base,
+      effective 1 July. We would need your answer by Friday 19 June."
+
+      Same email, further down — "Direct reports: Sam, Ola, Rukmini, and the two
+      graduates starting in September."
+
+      Handbook, section 4.2 — "An employee taking up a new internal role serves a
+      six-month settling period. During it either party may end the arrangement, and
+      the employee returns to their previous role and band."
+
+      Sam, Slack, Friday 5 June — "congrats, genuinely. i put in for it too, you knew
+      that. i'm fine, ask me again in a month"
+
+      Ola, same afternoon — "so is Thursday pints still a thing or is it weird now"
+
+      Nadia (my manager), one-to-one, Monday 8 June, written down straight after — "The
+      part nobody warns you about is that you carry the old job for another four
+      months. I did."
+
+      Rukmini, 10 June — "is the roadmap still ours or does it go up to you"
+
+      Four years on this team. Sam has been on it seven. The four of us have had a
+      Slack group since 2022 that no manager has ever been in.
+
+      The 7,400 takes me over the line where the childcare account stops, which is
+      worth about 3,900 a year to us.
+
+      There is no other lead role open in the group this year, and the last two were
+      filled externally.
+
+      I want section 4.2 clear before Friday. If the arrangement ends at month three,
+      should I read that as an automatic return to my old band?
+    why: >-
+      "should I read that as an automatic return to my old band" is a request for what
+      one quoted clause means, answerable from section 4.2 as printed. The literal
+      should-I phrasing sits on a question with a determinate answer, which is the
+      point of the item.
+  - id: l20n2
+    triple: l20
+    band: l
+    domain: career
+    stakes: high
+    ask: implicit
+    kind: settled
+    turn: >-
+      Everything from the last two weeks, in the order it came in.
+
+      Email, Dilara (HR), Thursday 4 June 2026, 16:12 — "Confirming the outcome of the
+      panel: the Team Lead role is yours if you want it. Band 5, plus 7,400 on base,
+      effective 1 July. We would need your answer by Friday 19 June."
+
+      Same email, further down — "Direct reports: Sam, Ola, Rukmini, and the two
+      graduates starting in September."
+
+      Handbook, section 4.2 — "An employee taking up a new internal role serves a
+      six-month settling period. During it either party may end the arrangement, and
+      the employee returns to their previous role and band."
+
+      Sam, Slack, Friday 5 June — "congrats, genuinely. i put in for it too, you knew
+      that. i'm fine, ask me again in a month"
+
+      Ola, same afternoon — "so is Thursday pints still a thing or is it weird now"
+
+      Nadia (my manager), one-to-one, Monday 8 June, written down straight after — "The
+      part nobody warns you about is that you carry the old job for another four
+      months. I did."
+
+      Rukmini, 10 June — "is the roadmap still ours or does it go up to you"
+
+      Four years on this team. Sam has been on it seven. The four of us have had a
+      Slack group since 2022 that no manager has ever been in.
+
+      The 7,400 takes me over the line where the childcare account stops, which is
+      worth about 3,900 a year to us.
+
+      There is no other lead role open in the group this year, and the last two were
+      filled externally.
+
+      I took the role this morning. The only thing left is the first sentence I say to
+      Sam, and it needs to be short.
+    why: >-
+      "I took the role this morning" closes the career question in the first words of
+      the ask, and what remains is a sentence to write. The body reports only the offer
+      and the reactions to it, so it neither pre-empts nor forbids acceptance.
+  - id: l21n1
+    triple: l21
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      Four repos, three engineers, and a fortnight of reading. All of it is below as I
+      took it down.
+
+      From a well-known engineering blog, 2019 — "A single repository removes the
+      cross-repo version dance entirely. At our scale, atomic commits across two
+      thousand projects are the whole point."
+
+      Same post, further on — "This requires investment: a build system that
+      understands the dependency graph, a CI layer that builds only what changed, and
+      at least one team that owns the tooling."
+
+      A conference talk write-up — "Every company I know of that split into many
+      repositories past three hundred engineers has regretted it."
+
+      Us: three engineers. Me, Tobi and Halla. Nobody owns tooling and nobody is going
+      to. Tobi has been here since the first commit, in 2023, and Halla joined in May.
+
+      The repos, with the CI suite time and the pushes on a normal working day:
+
+      - api, 4 minutes, 6 pushes
+
+      - web, 7 minutes, 9 pushes
+
+      - jobs, 3 minutes, 2 pushes
+
+      - shared-lib, 2 minutes, 3 pushes
+
+      There are 21 working days in the month we are looking at. The CI plan includes
+      3,000 minutes a month and charges 0.008 per minute after that. On one repo we
+      would not have selective builds for a long while, so every push runs all four
+      suites.
+
+      The actual friction: shared-lib gets a change, and then api and web have to be
+      bumped and released in the right order. That has gone wrong twice since March,
+      both times on a Friday afternoon.
+
+      Halla, 6 August — "i've only ever worked in a monorepo, i don't have a
+      comparison"
+
+      Tobi, 6 August — "the version dance is annoying twice a month, that's the whole
+      of it"
+
+      Since 3 August the web build has failed about one run in five with "ENOENT:
+      node_modules/.cache" and passed when it is run again. The lockfile has not
+      changed since July.
+
+      Separate question, nothing to do with the repo layout. What makes a build fail
+      one run in five on a missing cache directory and pass when I rerun?
+    why: >-
+      "What makes a build fail one run in five on a missing cache directory" is a
+      technical diagnosis of something already broken since 3 August, which the shipped
+      skill's Abort clause excludes by name. The opening sentence puts the repo
+      decision out of scope.
+  - id: l21n2
+    triple: l21
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Four repos, three engineers, and a fortnight of reading. All of it is below as I
+      took it down.
+
+      From a well-known engineering blog, 2019 — "A single repository removes the
+      cross-repo version dance entirely. At our scale, atomic commits across two
+      thousand projects are the whole point."
+
+      Same post, further on — "This requires investment: a build system that
+      understands the dependency graph, a CI layer that builds only what changed, and
+      at least one team that owns the tooling."
+
+      A conference talk write-up — "Every company I know of that split into many
+      repositories past three hundred engineers has regretted it."
+
+      Us: three engineers. Me, Tobi and Halla. Nobody owns tooling and nobody is going
+      to. Tobi has been here since the first commit, in 2023, and Halla joined in May.
+
+      The repos, with the CI suite time and the pushes on a normal working day:
+
+      - api, 4 minutes, 6 pushes
+
+      - web, 7 minutes, 9 pushes
+
+      - jobs, 3 minutes, 2 pushes
+
+      - shared-lib, 2 minutes, 3 pushes
+
+      There are 21 working days in the month we are looking at. The CI plan includes
+      3,000 minutes a month and charges 0.008 per minute after that. On one repo we
+      would not have selective builds for a long while, so every push runs all four
+      suites.
+
+      The actual friction: shared-lib gets a change, and then api and web have to be
+      bumped and released in the right order. That has gone wrong twice since March,
+      both times on a Friday afternoon.
+
+      Halla, 6 August — "i've only ever worked in a monorepo, i don't have a
+      comparison"
+
+      Tobi, 6 August — "the version dance is annoying twice a month, that's the whole
+      of it"
+
+      Since 3 August the web build has failed about one run in five with "ENOENT:
+      node_modules/.cache" and passed when it is run again. The lockfile has not
+      changed since July.
+
+      Take the run times and the pushes above. If every push runs all four suites, how
+      many CI minutes is that a month, and what is my overage?
+    why: >-
+      "how many CI minutes is that a month, and what is my overage" has one answer, and
+      every input is printed above it. Verified: 20 pushes a day at 4+7+3+2 = 16
+      minutes each is 320 minutes a day, and 320 over 21 days is 6,720 minutes a month;
+      taking off the 3,000 included leaves 3,720 chargeable minutes at 0.008, or 29.76
+      on top of the plan, against 99 minutes a day, 2,079 a month and nothing
+      chargeable today.
+  - id: l22n1
+    triple: l22
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      All of it in one place, with the dates as they stand on the emails.
+
+      Mortgage statement, 1 July 2026 — balance outstanding 248,000, currently on the
+      lender's variable rate, 6.15%.
+
+      Broker, email, 27 July — "I can hold the five-year fix at 4.19% for you. Product
+      fee 999. The rate is held until 12 August, and after that I have to re-quote it."
+
+      Same email, lower down — "The early repayment charge is 5% of the balance in year
+      one and steps down a point a year. The product is portable, subject to a fresh
+      affordability assessment at the time."
+
+      We have an offer accepted on a house at 415,000. The structural survey on it is
+      booked for 20 August. Our own buyer's mortgage offer is dated 3 July and runs for
+      six months.
+
+      Father-in-law, Sunday 2 August — "they are not getting any cheaper, I would have
+      done it a fortnight ago"
+
+      Neighbour, same weekend, who works at a bank — "everyone I know has fixed"
+
+      The house was on at 429,000 in March and had one other offer, which fell through
+      in June.
+
+      Put the timing question aside for a moment. Using the balance and both rates,
+      what is a month of interest at each, and how many months does my 999 fee need?
+    why: >-
+      "what is a month of interest at each, and how many months does my 999 fee need"
+      is two determinate sums over printed inputs. Verified: 248,000 at 6.15% is 15,252
+      a year or 1,271.00 a month, at 4.19% it is 10,391.20 a year or 865.93 a month, a
+      gap of 405.07; the 999 fee is earned back inside the third month, since two
+      months of it is 810.13 and three is 1,215.20.
+  - id: l22n2
+    triple: l22
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      All of it in one place, with the dates as they stand on the emails.
+
+      Mortgage statement, 1 July 2026 — balance outstanding 248,000, currently on the
+      lender's variable rate, 6.15%.
+
+      Broker, email, 27 July — "I can hold the five-year fix at 4.19% for you. Product
+      fee 999. The rate is held until 12 August, and after that I have to re-quote it."
+
+      Same email, lower down — "The early repayment charge is 5% of the balance in year
+      one and steps down a point a year. The product is portable, subject to a fresh
+      affordability assessment at the time."
+
+      We have an offer accepted on a house at 415,000. The structural survey on it is
+      booked for 20 August. Our own buyer's mortgage offer is dated 3 July and runs for
+      six months.
+
+      Father-in-law, Sunday 2 August — "they are not getting any cheaper, I would have
+      done it a fortnight ago"
+
+      Neighbour, same weekend, who works at a bank — "everyone I know has fixed"
+
+      The house was on at 429,000 in March and had one other offer, which fell through
+      in June.
+
+      I am forwarding this to my wife tonight. Boil all of it down to five lines for me
+      to send, plain words, dates kept in.
+    why: >-
+      "Boil all of it down to five lines for me to send" is compression of material
+      that is already on the page, for a named reader, with the format specified.
+      Choosing what matters would be the wrong operation to perform on it.
