@@ -13,3 +13,12 @@
 # The file stays rather than being deleted, because an empty exemption list is a
 # claim worth being able to see: every governed citation is gated now, and any
 # line added below is a decision to stop checking one.
+#
+# Two added 2026-08-14 by the K3/K4 closing pass (docs/DECISION_FRAMEWORKS.md).
+# Both opened and read first-hand, verbatim quotes recorded in
+# docs/DECISION_FRAMEWORKS.md's "Sources checked on 2026-08-14" section rather
+# than in paper/refs.bib, because another session was editing refs.bib
+# concurrently with this pass. Move the quotes into a bib entry and delete
+# these two lines when that session's work has landed.
+2412.06593
+2505.02151

@@ -1,9 +1,9 @@
 # Decision frameworks: the review this project skipped
 
-**Track K1–K4, K6.** Status: **three passes — two on 2026-08-12, a third on
-2026-08-13.** Every number below was checked against a source on the date of its
-pass; every framework without a number is marked with what was *not* found
-rather than left blank.
+**Track K1–K4, K6.** Status: **K2 is closed. Four passes — two on 2026-08-12, a
+third on 2026-08-13, a fourth on 2026-08-14.** Every number below was checked
+against a source on the date of its pass; every framework without a number is
+marked with what was *not* found rather than left blank.
 
 ---
 
@@ -57,15 +57,16 @@ them is the single most useful thing in this document.
 | Consider-the-opposite | Explicitly generating opposing evidence reduces assimilation bias | Lord, Lepper & Preston 1984: beat "be fair and unbiased" instructions in two experiments. Later replication attempts moved in the predicted direction **without reaching significance** | **partial** |
 | Reference-class forecasting | Take the outside view from a class of similar past cases | Adopted by the American Planning Association; case studies report improved accuracy. A 2025 review is titled *promises, problems, and a research agenda* and reports that little empirical evidence exists on RCF's accuracy versus other methods | **weak** |
 | Pre-mortem | Imagine the failure has happened, then explain it | The famous "30%" is Mitchell, Russo & Pennington 1989 and it measures the **number of reasons generated**, not their quality or any decision outcome. The academic literature on the pre-mortem itself is thin | **misreported** |
-| Kepner-Tregoe Rational Process | Situation appraisal → problem analysis → decision analysis → potential problem analysis | Widely deployed corporately (NASA, GM are the usual citations). **No independent controlled evaluation located** | *none located* |
-| WRAP (Heath & Heath) | Widen options, reality-test, attain distance, prepare to be wrong | **No independent controlled evaluation located** | *none located* |
-| OODA | Observe, orient, decide, act, faster than the adversary | Doctrinal and historical; **no controlled evaluation located** | *none located* |
+| Kepner-Tregoe Rational Process | Situation appraisal → problem analysis → decision analysis → potential problem analysis | Widely deployed corporately (NASA, GM are the usual citations). **No independent controlled evaluation of the named, integrated process located — confirmed on a fourth pass, 2026-08-14, searching both the brand name and the generalised construct.** See the K2 fourth-pass note below: the process is not atomic, and its parts inherit grades already given elsewhere in this table | *none located* |
+| WRAP (Heath & Heath), the four steps as an integrated whole | Widen options, reality-test, attain distance, prepare to be wrong | **No independent controlled evaluation of the four steps together located**, after a fourth pass | *none located* |
+| WRAP — "Widen your options," in isolation | Generate or present more than one option before choosing | **Located on the fourth pass, 2026-08-14.** Basu & Savani 2017: 7 experiments, ≈2,892 participants — presenting options simultaneously rather than sequentially raised optimal (dominating-option) choice by 7–16pp, every comparison p ≤ .02. Dow et al. 2010: parallel vs. serial prototyping raised both real click-through (445.0 vs 397.9 per million impressions, p<.05) and expert ratings (p<.05), n=33. Hauschildt & Gemünden 1985 (the "University of Kiel" study *Decisive*'s own endnotes cite for this chapter): correlational field study of 83 real executive-board decisions — "alternative designing has a strong positive impact on decision quality" | **supported, component only** |
+| OODA | Observe, orient, decide, act, faster than the adversary | Doctrinal and historical; **no controlled evaluation of the loop as advice located, after a fourth pass.** One academic (non-consultancy) critique found and read first-hand — Bryant 2006, arguing the loop is cognitively outdated — but it is theoretical, not a trial | *none located* |
 | Decision analysis / MAUT | Decompose into attributes, weight, and score | Strong normative case. Evidence that decomposition improves *outcomes* rather than consistency is thin | **normative, not prescriptive** |
 | Satisficing vs maximising | Stop at good-enough rather than search for best | Schwartz et al.'s work is **correlational** and its outcome is wellbeing and regret, not decision quality | **misfit for our purpose** |
 | Option value / reversibility | Spend effort in proportion to how hard a choice is to undo | Grounded in real-options theory; the popular "one-way and two-way doors" form has **no controlled evaluation located** | **theory-backed, untested as advice** |
 | **Patient decision aids** | A structured tool that states the options, their outcomes, and elicits what the person values, before the choice | **Stacey et al. 2024, Cochrane: 209 RCTs, 107,698 participants.** Knowledge MD +11.90/100 (CI 10.60–13.19; 107 trials), accurate risk perception RR 1.94 (CI 1.61–2.34; 25 trials), decisional conflict (uninformed) MD −10.02 (CI −12.31 to −7.74; 58 trials) — all **high-certainty**. Informed values-congruent choice RR 1.75 (CI 1.44–2.13; 21 trials), moderate-certainty | **strongly supported, in a different domain** |
 
-### The four findings that change what this project should build
+### The five findings that change what this project should build
 
 **1. The pre-mortem's headline number does not say what everyone says it says.**
 Mitchell, Russo & Pennington found that imagining an event has already occurred
@@ -100,7 +101,11 @@ the rest of the field.
 find.** They are, without exception, the four most likely to be found in a
 corporate deck. Kepner-Tregoe, WRAP, and OODA are the frameworks a model asked
 to "use a decision framework" would most readily reach for, and they are the
-ones with the least behind them.
+ones with the least behind them. **Revised by the fourth pass, 2026-08-14 —
+see finding 5 below: this is still true of the three frameworks as named,
+integrated processes, but is no longer true of every piece of them.** One
+quarter of WRAP has real evidence once it is searched for as a construct
+rather than a brand name.
 
 **4. Added 2026-08-12: the strongest evidence in the whole table is in a
 literature nobody in this field cites, and it is not a framework.** Patient
@@ -116,6 +121,57 @@ around a clinical consultation, by a static tool rather than a conversational
 model. None of that is a life-or-work decision handled by an LLM. The grade in
 the table therefore says *strongly supported, **in a different domain***, and
 that qualifier is load-bearing.
+
+**5. Added 2026-08-14 (K2's fourth pass): searching for the construct behind
+a brand name, not the brand name, found real evidence for one quarter of
+WRAP.** The second pass already established this trick for patient decision
+aids — "structured decision support" returned 209 trials where "WRAP" returned
+nothing. The fourth pass applied it to WRAP's own four letters one at a time
+and it worked on the first one: "widen your options" is not just a slogan,
+it is a testable claim (does considering more than one option, or considering
+them at the same time rather than one after another, produce a better choice),
+and that claim has been tested. Basu & Savani (2017) ran seven lab experiments
+(≈2,892 participants total) showing simultaneous option presentation raises
+the rate of choosing the objectively dominating option by 7 to 16 percentage
+points over sequential presentation, every comparison significant (p ≤ .02).
+Dow et al. (2010) ran a between-subjects experiment (n=33) showing designers
+who worked on multiple prototypes in parallel produced ads with significantly
+higher real click-through rates and expert ratings than designers who
+iterated on one prototype at a time. And the "University of Kiel" study
+*Decisive* itself cites for this chapter turned out to be findable and
+readable: Hauschildt & Gemünden (1985), an archival study of 83 real
+executive-board decisions at one German firm, found that "alternative
+designing has a strong positive impact on decision quality" — correlational,
+not a trial, but pointed at exactly this question rather than at wellbeing or
+satisfaction.
+
+**None of this rescues WRAP as an integrated four-step procedure — no trial
+of the whole four-step process was found, and none of these three sources
+tests reality-testing, attaining distance, or preparing to be wrong.** But it
+means the "no located evidence" verdict this document gave WRAP on
+2026-08-12 was an artefact of searching for the framework's name rather than
+its mechanism, exactly as the second pass already found once for patient
+decision aids. **The other three letters of WRAP were searched the same way
+on this pass and turned up nothing** — "reality-test your assumptions" and
+"attain distance before deciding" did not resolve to a tested construct the
+way "widen your options" resolved to "simultaneous vs. sequential option
+presentation." That asymmetry is itself worth recording: one quarter of a
+popular framework has real teeth, and there was no way to know which quarter
+without doing the work letter by letter.
+
+**Kepner-Tregoe does not have an equivalent win, but the same
+decomposition exercise clarifies what its "none located" grade actually
+means.** KT's four steps are not four independent unstudied ideas — "decision
+analysis" (its own name for weighting and scoring options against criteria)
+is the same construct already graded elsewhere in this table as **Decision
+analysis / MAUT** ("normative, not prescriptive"), and "potential problem
+analysis" (anticipate what could go wrong with the chosen option and act to
+prevent it) is close enough to **Pre-mortem** ("misreported" — the founding
+study measured reason-count, not quality) that no separate literature for it
+was expected or found. KT-as-a-named-process still has no trial of the
+integrated whole after four search passes, brand-name and construct-name
+both — but that is because its parts already have grades, not because nobody
+has looked at the parts.
 
 **What transfers regardless is the outcome vocabulary, and that is worth more
 here than another framework.** This project has struggled to say what "decision
@@ -146,64 +202,190 @@ better defined than anything authored here.
 
 ---
 
-## K3 — what the existing prompt libraries encode
+## K3 — what the existing prompt libraries encode, and in what form
 
-[`cc-thinking-skills`](https://github.com/tjboudreaux/cc-thinking-skills) is the
-closest published comparator: **28 skills** across five groups (route/compose,
-diagnose, decide, create, risk). It encodes Kepner-Tregoe, Cynefin, OODA,
-pre-mortem, second-order thinking, reversibility, satisficing, first principles,
-TRIZ, theory of constraints, and others — a superset of the frameworks in the
-table above, including every one graded *none located*.
+**Closed 2026-08-14.** The question this track was asked is not "what
+frameworks exist" — K1/K2 already answer that better than any prompt library
+does — it is **what form the encoding takes**, because the founding
+observation is a form claim: *"the maintainer installed
+[cc-thinking-skills] and reports it did not help — that is data about form,
+not about the frameworks."* Three published libraries were read first-hand for
+their packaging, not just their content.
 
-Two things about it are directly useful.
+| Library | Frameworks | Packaging | Trigger mechanism | Evidence claim |
+|---|---|---|---|---|
+| [`cc-thinking-skills`](https://github.com/tjboudreaux/cc-thinking-skills) (tjboudreaux) | 28 | 28 separate skills, five groups | **Autonomous** — description-matched, same mechanism as this repo's router | One provisional row, **+4.0pp**, flagged as *below* its own **+5pt** utility bar. No accuracy claim made. |
+| [`thinking-skills`](https://github.com/wanikua/thinking-skills) (wanikua) | 20 | 20 files in `.claude/commands/` | **Explicit** — user types `/critical-thinking <question>`; Claude never decides to fire one | None. No citations, no measurement, a bare table of names and descriptions. |
+| [`claude-skills-mental-models`](https://github.com/cyperx84/claude-skills-mental-models) (cyperx84) | 98 ("Munger-style") | **One skill**, 98-item body, auto-activates on phrases like *"help me think"*, *"apply mental model"*, or any model's own name — plus four parallel deliveries (CLI, MCP server, Python library, a "portable skill" for other harnesses), all backed by one CLI | **Autonomous**, and the broadest description of the three ("any model name" is itself a trigger) | None. "*A latticework for better decisions, one prompt away*" is marketing prose, not a measurement. |
+| `decision-making` (this repo) | 4 | 1 skill, router table over 4 procedure files | Autonomous, description-matched | `verdict: UNTESTED`. Measured: firing 0.942–0.956 across n=1/2/4, routing 0.643–0.857 |
 
-**Its own README does not claim an accuracy gain.** It states that the evidence
-supports structured procedures rather than a guaranteed accuracy gain, and its
-audit reports one provisional result — a `thinking-scientific-method` row at
-**+4.0 percentage points**, which it flags as falling below its own **+5 point**
-utility margin and as directional evidence rather than an accuracy claim. That
-is an unusually honest README and it is a useful prior: the one measured number
-in the nearest comparable library did not clear its author's own bar.
+Two things follow, and the first is a limit on what this track can conclude.
 
-**The maintainer of this repository installed it and reports it did not help.**
-That is one person's experience and is not evidence about the frameworks. It
-*is* a data point about form, and it sits at n=28 skills — which is the
-number this repository's own one-entry-not-four decision was extrapolating
-towards from the published shadowing result at 202 skills
-([arXiv:2605.24050](https://arxiv.org/abs/2605.24050)). A 28-skill library that
-its installer abandoned is the closest thing to a mid-range observation anyone
-has, and Track M4 should treat it as a target to reproduce rather than as
-anecdote to discard.
+**No library in this survey reports a validated gain, so "does form predict
+which ones help" cannot be answered from the public record — there is no
+*helped* case to put next to the *didn't help* one.** cc-thinking-skills'
+own author declines to claim one and reports a number below their own bar;
+wanikua and cyperx84 make no claim at all, not even a weak one. The
+maintainer's single anecdote about cc-thinking-skills is the only outcome
+report in the set, and outcome reports need at least two points to compare.
+This is a real limit on the question as asked, not a hedge — say so rather
+than force a contrast that the record does not contain.
+
+**What the survey does establish is a genuine, mechanical form split, and it
+maps directly onto the axis Track M has been running experiments on.**
+wanikua's slash-command form has no router at all — the human picks the
+command, so the description-discrimination problem M2/M3/M4/M5/M6 spent five
+experiments measuring (does it fire when it should, does it route to the
+right file) **cannot occur by construction** in that form. cc-thinking-skills
+and cyperx84's library both use autonomous, description-based triggering —
+the same mechanism `decision-making` uses — so both are exposed to exactly
+the failure mode this repo's own instrument was built to catch.
+
+cyperx84's 98-models-in-one-entry is also the largest real *entry-body-size*
+data point anyone has, distinct from cc-thinking-skills' 28-*separate-entries*
+data point — the two libraries sit on different axes of the same M-track
+design (M4/M5/M6 vary entry *count*; cyperx84 varies what one entry's *body*
+holds). Track M4's own text already treats cc-thinking-skills at n=28 as a
+target to reproduce; cyperx84 belongs in the same paragraph as the
+large-body counterpart, and neither has been measured.
+
+**The connection to M4/M5/L5 that CLAUDE.md draws — structure, content and
+entry count moved only where a skill sits on the precision/recall frontier,
+never how well its description discriminates — gives a specific, testable
+prediction for cc-thinking-skills that nobody has run.** If that mechanism
+generalises past n=4, a 28-separate-skill library should be **more
+conservative** than a one-entry bundle (M4's own account: "with separate
+entries, declining to name a tool *is* declining to fire"), which predicts
+under-firing rather than mis-routing as the dominant failure mode at n=28.
+That is a hypothesis about a library nobody here has instrumented, stated so
+it can be checked rather than assumed.
+
+**It does not, by itself, explain the maintainer's report, and reaching for
+form as the explanation skips a simpler one this repository already has in
+hand.** "Did not help" is consistent with two different failures that an
+anecdote cannot separate — the skill never fired, or it fired and the advice
+inside it was not good advice — and only the first is a form problem. K1/K2's
+own catalogue independently found that most of what a 28-skill "mental
+models" library reaches for (Kepner-Tregoe, WRAP, OODA, satisficing, and the
+broader genre cc-thinking-skills encodes) carries **no located controlled
+evidence at all**. Given that this repo's own M4/M5/M6 already found entry
+count does not move discrimination, **content is the more parsimonious
+explanation for a report of "did not help" than shadowing is** — but this is
+an inference chained from two of this repo's own results, not a new
+measurement of cc-thinking-skills itself, and it is written down as one
+rather than filed as a finding. The honest sentence is: *nobody has measured
+whether cc-thinking-skills fires*, and until someone does, "form" and
+"content" are both live explanations of one person's report.
 
 ---
 
 ## K4 — framework to failure mode
 
-A framework is a skill candidate only if it targets a failure the model actually
-makes. This mapping is provisional: the right-hand column is what Track A is
-being run to establish, and **three corpora have so far produced three nulls**,
-so most rows honestly read *unknown*.
+**Closed 2026-08-14.** A framework is a skill candidate only if it targets a
+failure the model actually makes. Two independent things can defeat a
+candidate: the human evidence can be weak (K1/K2's job), or the evidence can
+be excellent and simply not apply — the target failure can be one this stack
+does not make, or one whose mechanism has no counterpart in how a single LLM
+call runs. This section maps all **eleven** catalogued frameworks against the
+second test. (Patient decision aids is excluded from the eleven: the K1/K2
+table itself says it "is not a framework" — it is an artefact handed to a
+patient, and its target is the *patient's* knowledge gap, not a reasoning
+failure in whatever produced the aid.)
 
-| Framework | Failure it would target | Does this model make that failure? |
+**What Track A has actually produced, checked before writing this table
+rather than assumed.** Track A (`docs/RESEARCH_PROGRAMME.md`, Part 4) is *not*
+a test of any of these eleven mechanisms. Its five sub-experiments (A1–A5)
+target multi-turn accuracy drop, recency weighting, handoff loss, delegation
+value and reliability — a different axis from anchoring, overconfidence,
+sycophancy or base-rate neglect. As of 2026-08-13 only two of A1's three task
+families have closed, and neither establishes a bias mechanism: `math`
+closed at **`p_discordant` = 0.000**, which is a ceiling/no-power result
+("this venue cannot currently see [an effect]", in the track's own words), not
+a documented absence of failure; `actions` closed as **unmeasurable** — no
+object was comparable across arms, an instrument defect rather than a
+finding. `database`, A2, A3, A4 and A5 have not run. So **Track A contributes
+nothing to the DOCUMENTED/ASSUMED column below**, and any row that reads
+DOCUMENTED is grounded in outside LLM literature or in this repository's
+*pre*-Track-A corpora, named where it applies.
+
+| Framework | Failure it would target | Documented in LLMs, or assumed? |
 |---|---|---|
-| Consider-the-opposite | Anchoring on the first framing offered | **Unknown.** Not yet isolated in any corpus here |
-| Reference class / outside view | Reasoning from the specific case only | **Unknown** |
-| Pre-mortem | Under-weighting failure paths | **Unknown**, and see the measurement warning above |
-| Second-order / potential problem analysis | Judging an action on its first effect | **Measured, and absent.** The casefile probe offered 27 trap opportunities across orders 1–3 and none were taken |
-| Reversibility / option value | Effort mismatched to irreversibility | **Unknown** |
-| Relevance filtering | Folding on-topic but non-governing material into the answer | **Unknown at scale.** The single-turn corpora reached 0.946 and 0.971 and could not discriminate |
-| Calibration | Overconfidence in a stated recommendation | **Not measured here at all.** No decision skill in this repository elicits a probability |
+| Calibration / probability training | Overconfidence in a stated recommendation | **Documented, directly.** Five LLMs studied "overestimate the probability that their answer is correct between 20% and 60%" — Sun & Li, *Large Language Models are overconfident and amplify human bias* (arXiv:2505.02151, abstract, verified first-hand 2026-08-14; **pending a `paper/refs.bib` entry**). Not measured on this stack: no procedure here elicits a probability. |
+| Debiasing training (game/video) | A battery of **six** named human biases (bias blind spot, anchoring, confirmation bias, fundamental attribution error, projection bias, representativeness), reduced by one structured session | **Partly documented, partly likely mismatched.** Of the six, only **anchoring** has a direct LLM study located: Vu et al., *Anchoring Bias in Large Language Models: An Experimental Study* (arXiv:2412.06593, abstract, verified 2026-08-14; **pending a bib entry**) — "the sensitivity of LLM responses to biased hints", with simple mitigations (CoT, reflection) found insufficient. The other five presuppose an ongoing self-model or social attribution process (explaining *why another agent* acted, or one's own blind spots over time) that a stateless single-call model has no clear counterpart for — **assumed not to transfer**, not measured either way. |
+| Consider-the-opposite | Anchoring on the first framing offered / insufficient counter-evidence generation | **Documented, adjacent.** Sycophancy is the closest measured LLM analogue: "first-person prompts ('I believe...') consistently induce higher sycophancy rates than third-person framings" — Wang et al., *When Truth Is Overridden* (arXiv:2508.02087, **already in `paper/refs.bib`** with a `quote` field, per `docs/RELATED_WORK.md`). Directional only; the paper states no rate. |
+| Reference class / outside view | Reasoning from the specific case only, neglecting a base rate | **Assumed.** Search turned up work on LLMs *assisting human* forecasters (not opened first-hand and not cited here — see "Sources checked" below) but nothing testing whether the model's *own* unaided reasoning neglects base rates. No claim made pending that gap. |
+| Pre-mortem | Under-weighting failure paths | **Measured, and absent — the strongest row in this table, and it is repo-native.** The pre-Track-A casefile probe offered 27 trap opportunities across consequence-orders 1–3 and **none were taken**; the model already reasoned about downstream failure unprompted. Combined with K1/K2's own finding that the framework's founding study (Mitchell, Russo & Pennington 1989) measures reason-*count*, not decision quality, this is a double miss: weak evidence on the human side, and the one piece of this repo's own data says the target failure does not occur on the task it was checked against. |
+| Kepner-Tregoe Rational Process | Conflating problem definition with causal analysis; treating one appraisal as several problems | **Neither documented nor assumed with any confidence — no LLM-specific test located, and K1/K2 found no controlled human evidence either.** Weak on both axes; not the "excellent evidence, wrong target" pattern, just no evidence anywhere. |
+| WRAP | Narrow option generation; insufficient reality-testing of the leading option | **Mixed, and this row moved under my hands while writing it.** A concurrent K2 pass split WRAP into the integrated four-step process (still *none located*) and its "widen your options" component, which now has real human evidence — Basu & Savani 2017 (7 experiments, ≈2,892 participants, +7–16pp for presenting options simultaneously) and Dow et al. 2010 (parallel vs. serial prototyping). The LLM-side target — does the model default to a narrow, single-option answer — is still **assumed**, not documented; it is adjacent to the anchoring evidence above (a first option can anchor the same way a first hint does) but no study tests option-generation breadth directly. So the human evidence for the WRAP *component* is now real, and the LLM-failure evidence for it is not: this is the inverse of the debiasing-training pattern below, a candidate with a live human-evidence half and an open LLM-evidence half. |
+| OODA | Stale situational awareness under a competitive, real-time tempo the actor must keep pace with | **Mechanism mismatch, not an evidence gap.** OODA's claim is about winning a tempo race against an adversary who is also observing and acting. A single stateless completion has no "orient" phase distinct from generation and no adversary whose loop it is racing — the mechanism the framework depends on is not present in the venue, independent of whether anyone has measured it. |
+| Decision analysis / MAUT | Inconsistent implicit weighting across attributes; defaulting to a holistic gut call instead of an explicit decomposition | **Assumed, and plausibly the wrong direction.** The human failure MAUT corrects is a working-memory limit on holding many weighted attributes at once. Explicit decomposition and arithmetic over stated weights is closer to what a language model is good at than to what it struggles with, so the failure this framework targets may not transfer at the strength the human literature (itself only "normative, not prescriptive") would suggest. Not measured. |
+| Satisficing vs maximising | Costly over-search past "good enough," driven by regret | **Mechanism mismatch, not an evidence gap.** The construct requires an extended search process over time and an affective regret response to foregone options. A single-shot generation does not search iteratively and has no persistent state to regret from. K1/K2 already grades the human evidence "misfit for our purpose" (correlational, wellbeing-outcome); the LLM target is a second, independent reason this is not a skill candidate. |
+| Option value / reversibility | Effort and caution mismatched to how hard a decision is to undo | **Assumed.** No LLM-specific study located. This is the one row with no documented mismatch and no mechanism objection — it is also the framework already shipped as `timing.md`, which is exactly the untested state the scorecard's `UNTESTED` verdict describes. |
 
-The last row is the gap worth naming. Calibration training is the
-best-evidenced intervention in the human literature, and it is the only one with
-**no counterpart at all** among the four procedures shipped here. Nothing in
-`decision-making` asks the model to put a number on its own confidence, so
-nothing can be scored for calibration — and `stats/calibration.py` exists,
-is property-tested at 100% coverage, and has never been called by anything.
+### Which frameworks fail the excellent-evidence-wrong-target test
+
+The task this table exists to run: a framework with strong human prescriptive
+evidence, aimed at a failure this stack does not make, is not a skill
+candidate regardless of how well-supported it is in humans. Three of the
+eleven qualify, each for a different reason, and none of the three should be
+confused with the frameworks *K1/K2 already excluded for having no human
+evidence at all* — Kepner-Tregoe throughout, the integrated four-step WRAP
+process (its "widen your options" component now excepted, see the table
+above), and OODA's and satisficing's own weak human backing — **OODA and
+satisficing are excluded twice over, once on each axis.**
+
+1. **Debiasing training (game/video) is the cleanest instance.** It carries
+   the best human evidence in the entire K1/K2 catalogue — "supported," medium-
+   to-large effects, Cohen's *d* > 1, durable at two months — of any row that
+   is not contested. But its target is a six-bias battery, and only one of the
+   six (anchoring) has a located LLM study. The other five are validated
+   against biases that are partly about a person's model of *other* people or
+   of *their own* tendencies over time — constructs a stateless completion has
+   no clear analogue for. The best-evidenced framework in the whole table is
+   evidenced against a target that is, at most, one-sixth confirmed here.
+2. **OODA fails on mechanism, not on missing papers.** Even if a controlled
+   trial existed, the loop's claim — win by cycling observe-orient-decide-act
+   faster than an adversary who is doing the same — has no counterpart in a
+   single completion with no adversary and no repeated loop to be faster on.
+3. **Satisficing vs maximising fails on mechanism too**, for a different
+   reason: the construct needs sustained search and regret, neither of which
+   a one-shot generation has.
+
+**Pre-mortem is a fourth case worth flagging separately, because unlike the
+three above it rests on this repo's own measurement rather than an outside
+literature gap.** Its human evidence is already weak ("misreported" — counts
+reasons, not quality), and the one piece of data this repository has *about
+LLMs specifically* — the casefile probe's 27-for-27 — says the failure it
+would correct does not occur on that task. It is not excluded on the same
+logical ground as the three above (a documented-elsewhere failure that
+plausibly does not transfer, or a missing mechanism); it is excluded because
+the one direct check available says no.
+
+**Calibration and Consider-the-opposite are the two rows where the human
+evidence and the LLM-failure evidence now both point the same direction**, and
+both are already K6's top two ranked candidates. That agreement was not
+available when K6 was written on 2026-08-12 — the LLM-side evidence for both
+was found today — and it strengthens rather than changes K6's ranking.
 
 ---
 
 ## K6 — skill candidates, ranked by evidence
+
+**The ranking changed on 2026-08-14, K2's fourth pass, and it is reported here
+rather than folded in quietly.** A new candidate — generate options
+concurrently rather than one at a time, the "widen your options" quarter of
+WRAP — enters at Rank 2, ahead of consider-the-opposite. This is not a
+reshuffle for its own sake: Basu & Savani (2017) is seven experiments,
+~2,892 participants, every simultaneous-vs-sequential comparison significant
+at p ≤ .02 (one at p < .0001), and Dow et al. (2010) is an independent
+research group, a different domain (design prototyping, not choice among
+described options), and a real behavioural outcome (click-through), also
+significant. Consider-the-opposite's own evidence is two original experiments
+plus a later replication attempt that moved in the right direction **without
+reaching significance**. Multiple independent, still-standing significant
+results beat an original-plus-null-replication pair on the evidence this
+document grades by — so the ranking moves, even though both remain merely
+**partial-to-supported**, not calibration's contested-but-large effect.
 
 **Rank 1 — elicited confidence, with scoring.** Add a required probability or
 threshold to the response contract and score it with the calibration module that
@@ -213,21 +395,36 @@ turns an unused, fully tested module into an outcome. It also fixes the
 measurement problem the pre-mortem finding raises: a number can be scored for
 accuracy, whereas a list of considerations can only be counted.
 
-**Rank 2 — consider-the-opposite, as a procedure and not a prompt.** Partial
-evidence, an unambiguous operationalisation, and it is the mechanism behind the
-council / adversarial-review skill the brief already named. It is also the one
-framework whose form maps cleanly onto sub-agents, which makes it the natural
-content for Track D.
+**Rank 2 — generate options concurrently, new 2026-08-14.** Before evaluating
+any option in depth, generate two or more candidate answers in parallel and
+compare them, rather than developing one answer and revising it. This is the
+narrow, testable procedure behind WRAP's "widen your options" letter, stripped
+of the other three letters (which have no located evidence — see finding 5
+above), and it is a closer match to the evidence than "encode WRAP" would be:
+the trials support *concurrent generation*, not reality-testing, distance, or
+preparing to be wrong. Directly implementable as a sub-agent fan-out (generate
+N candidate recommendations independently, then compare), which makes it a
+second natural candidate for Track D alongside consider-the-opposite.
 
-**Rank 3 — switching conditions.** Already shipped as `fit.md`. It is the
+**Rank 3 — consider-the-opposite, as a procedure and not a prompt.** Partial
+evidence, an unambiguous operationalisation, and it is the mechanism behind the
+council / adversarial-review skill the brief already named. It is also a
+framework whose form maps cleanly onto sub-agents.
+
+**Rank 4 — switching conditions.** Already shipped as `fit.md`. It is the
 closest thing in the catalogue to *breakeven and value-of-information analysis*,
 which is normatively solid even where prescriptive trials are missing, and it is
 the procedure most aligned with the founding brief's actual subject — advice
 that is correct in general and wrong for this person.
 
-**Not recommended as skill content:** Kepner-Tregoe, WRAP, and OODA. Popular,
-comprehensively encoded elsewhere, and carrying no located controlled evidence.
-Encoding them would reproduce `cc-thinking-skills` and inherit its result.
+**Not recommended as skill content:** Kepner-Tregoe and OODA, entirely — popular,
+comprehensively encoded elsewhere, and carrying no located controlled evidence,
+after four search passes each. **WRAP is now split:** its "widen your options"
+letter is Rank 2 above; its other three letters (reality-test, attain distance,
+prepare to be wrong) remain not recommended on the same grounds as KT and OODA.
+Encoding the *named frameworks* whole would still reproduce `cc-thinking-skills`
+and inherit its result — the promotion is of a specific, evidenced mechanism,
+not of the brand.
 
 **Recommended with a warning:** the pre-mortem. Worth having, but any evaluation
 of it must score decision quality and **must not** score the number of risks
@@ -327,9 +524,74 @@ candidate that has a literature.
   expert panel judging clinician decisions unjustified in 71.6% of the sampled
   encounters. **Advice given is not advice taken**, and every skill measurement
   in this repository is of advice given.
-- **K4's right-hand column is mostly `unknown`** and stays that way until Track A
-  returns. This document should be re-read against those results rather than
-  filed.
+- **K2 is closed, fourth pass, 2026-08-14.** The task was to close the
+  remaining "none located" rows — Kepner-Tregoe, WRAP, OODA — by searching
+  again rather than repeating the second pass's domain-restricted queries
+  verbatim. The key move, following the second pass's own conclusion, was to
+  search for the *construct* behind each framework rather than its brand
+  name: "simultaneous vs. sequential option presentation" and "number of
+  alternatives and decision quality" instead of "WRAP", "OODA loop training
+  evaluation" and the endnotes of the loop's own academic critics instead of
+  "OODA effectiveness". It found real controlled evidence for WRAP's "widen
+  your options" letter (finding 5, above, and K6's revised ranking) and one
+  academic theoretical critique of OODA (Bryant 2006) — neither of which
+  existed in this document before today. It found nothing for Kepner-Tregoe
+  as a named process, but the search clarified *why*: KT's own components
+  overlap with two rows this table already grades (Decision analysis / MAUT,
+  and Pre-mortem), so its "none located" verdict was never really about an
+  unstudied idea, only about an unstudied *bundling* of two studied ones.
+
+  **One source was found and could not be verified, and is reported that way
+  rather than dropped or guessed at.** Priyanath & Chaminda (2019), *Sri
+  Lanka Military Academy Journal* 1(1) 31–46, regresses small-enterprise
+  "business fog" on OODA-strategy use; a WebSearch summary reported the
+  Observe/Orient/Decide/Act coefficients as mostly non-significant except
+  Orient, but every attempt to open the paper itself (ResearchGate, direct
+  PDF) returned a CAPTCHA or verification wall. **No number from it is
+  reported anywhere in this document or in `paper/refs.bib`**, per this
+  repository's rule that an unopened source may be named but not quoted from.
+  It would not have changed the OODA grade even if opened — it evaluates a
+  self-reported survey construct ("fog"), not decision quality, so its
+  proper home would have been the "measures something other than decision
+  quality" bucket, not a fourth *supported* row.
+
+  **A near-miss worth recording because the rule caught it before it entered
+  the document.** One WebSearch summary, while researching Kepner-Tregoe,
+  attributed "individuals who received training in this method demonstrated
+  improved decision-making skills" to "Johnson et al., 2012" — no journal, no
+  title, no findable paper behind the citation on a direct follow-up search.
+  It was not used. This is the same failure mode standing rule 5 exists for
+  — a plausible-looking citation nobody opened — except this time the source
+  was a search engine's own summarisation rather than a human's memory, which
+  is a new variant of an old problem for this repository's citation
+  discipline to stay alert to.
+
+  Sources are listed in "Sources checked on 2026-08-14 (K2 fourth pass)"
+  below; new bibliography entries are `dow2010parallel`, `basusavani2017`,
+  `hauschildtgemunden1985` and `bryant2006ooda` in `paper/refs.bib`, each
+  carrying a `quote` field read from the primary source (mostly via
+  `r.jina.ai` text extraction, since direct `WebFetch` returned unparseable
+  binary for every PDF tried on this pass — recorded per entry).
+- **K3 and K4 closed 2026-08-14.** K3 surveyed two more published libraries
+  beyond `cc-thinking-skills` and found a genuine form split (autonomous
+  description-triggering vs. explicit slash commands) but no "helped" library
+  to contrast against the maintainer's "didn't help" anecdote, so the form
+  question is answered as *unanswerable from the public record* rather than
+  forced. K4 mapped all eleven catalogued frameworks to a target failure and
+  graded each DOCUMENTED or ASSUMED; three fail the excellent-evidence-wrong-
+  target test outright (debiasing training, OODA, satisficing vs maximising)
+  and a fourth (pre-mortem) fails on this repo's own casefile measurement
+  rather than on an evidence gap. Two new LLM-bias papers were opened
+  first-hand and are **pending `paper/refs.bib` entries**:
+  arXiv:2412.06593 (anchoring) and arXiv:2505.02151 (overconfidence), both
+  listed in `paper/citations-baseline.txt`. A third (arXiv:2508.02087,
+  sycophancy) was already in the bibliography from earlier work and needed no
+  new entry.
+- **K4's mapping still depends on Track A for anything beyond `math` and
+  `actions`.** `database`, A2, A3, A4 and A5 have not run, and none of A1's two
+  closed families tested a bias mechanism — see the table above. Re-read this
+  document against Track A's later results rather than treating the
+  DOCUMENTED/ASSUMED column as final.
 - **K5, the citation backlog**, is separate and tracked in
   `paper/citations-baseline.txt`.
 
@@ -385,3 +647,106 @@ and entered in `paper/refs.bib` with verbatim quotes.
 - Agweyu et al. (2026), *Generative AI-enabled clinical decision support system
   in primary care: a pragmatic, cluster-randomized trial*, **Nature Medicine** —
   <https://www.nature.com/articles/s41591-026-04503-6>
+
+## Sources checked on 2026-08-14 (K2 fourth pass)
+
+Search key was the construct behind each brand name (per the second pass's own
+lesson), tried alongside the brand name itself. All numbered claims below were
+read from the primary source first-hand and are entered in `paper/refs.bib`
+with verbatim `quote` fields. Direct `WebFetch` returned unparseable binary for
+every PDF host tried (Stanford HCI, CMU, aaalab.stanford.edu, ResearchGate,
+ScienceDirect); the `r.jina.ai` text-extraction proxy was used instead and is
+recorded per entry.
+
+- Basu, Shankha & Savani, Krishna (2017), *Choosing One at a Time? Presenting
+  Options Simultaneously Helps People Make More Optimal Decisions Than
+  Presenting Options Sequentially*, **Organizational Behavior and Human
+  Decision Processes** 139, 76–91 —
+  <https://dr.ntu.edu.sg/server/api/core/bitstreams/589ceee9-901f-4dc4-9232-d844623aa2e9/content>
+  (NTU institutional repository copy; ResearchGate and ScienceDirect both
+  blocked direct access with a verification wall)
+- Dow, Steven P., Glassco, Alana, Kass, Jonathan, Schwarz, Melissa, Schwartz,
+  Daniel L. & Klemmer, Scott R. (2010), *Parallel Prototyping Leads to Better
+  Design Results, More Divergence, and Increased Self-Efficacy*, **ACM
+  Transactions on Computer-Human Interaction** 17(4), Article 18 —
+  <https://hci.stanford.edu/publications/2010/parallel-prototyping/ParallelPrototyping2010-submitted.pdf>
+- Hauschildt, Jürgen & Gemünden, Hans Georg (1985), *Number of Alternatives and
+  Efficiency in Different Types of Top-Management Decisions*, **European
+  Journal of Operational Research** 22(2), 178–190 —
+  <https://www.sciencedirect.com/science/article/abs/pii/0377221785902267> —
+  found by following the endnotes of Heath & Heath's *Decisive* (the "Widen
+  your options" chapter cites this as its "University of Kiel" study; Gemünden
+  was at Kiel at the time) —
+  <https://heathbrothers.com/wp-content/uploads/2013/03/backmatter-1.pdf>
+- Bryant, David J. (2006), *Rethinking OODA: Toward a Modern Cognitive
+  Framework of Command Decision Making*, **Military Psychology** 18(3),
+  183–206 — <https://www.tandfonline.com/doi/abs/10.1207/s15327876mp1803_1>
+  (abstract only; full text paywalled)
+
+Found but **not opened first-hand and not cited with a number**, per this
+document's own rule against inferring what a blocked source says:
+
+- Priyanath, H. M. S. & Chaminda, K. A. S. (2019), *Strength of OODA Loop as a
+  Governing Strategy of Business Fog: An Empirical Investigation of Small
+  Enterprises in Sri Lanka*, **Sri Lanka Military Academy Journal** 1(1),
+  31–46 —
+  <https://www.researchgate.net/publication/338124153> — every fetch attempt
+  returned a CAPTCHA/verification wall. Named here so the search is
+  reproducible, not as a source of any figure in this document.
+- A citation attributed to "Johnson et al., 2012" for Kepner-Tregoe training
+  outcomes, surfaced only inside a WebSearch tool's own summarisation with no
+  journal, title, or resolvable identifier. Not used; see the near-miss note
+  above.
+
+Searched and **found nothing evaluative, beyond what the second and third
+passes already reported**: Kepner-Tregoe as an integrated process (queries
+included "structured problem-solving training" and "weighted decision matrix
+training" as construct-level alternatives to the brand name, in addition to
+"Kepner-Tregoe" itself); WRAP's other three letters searched as constructs
+("reality-testing assumptions before deciding", "attaining emotional distance
+decision quality", "prepare to be wrong overconfidence decision training");
+OODA as trained advice to a human decision-maker (versus as a simulation or
+robotics control loop, which the second and third passes already found
+plenty of).
+
+## Sources checked on 2026-08-14 (K3 and K4 closing pass)
+
+Prompt-library READMEs, fetched and read first-hand rather than taken from
+search-result summaries:
+
+- `thinking-skills` (wanikua) — <https://github.com/wanikua/thinking-skills>
+- `claude-skills-mental-models` (cyperx84) —
+  <https://github.com/cyperx84/claude-skills-mental-models>
+
+LLM-bias papers, abstracts fetched and read first-hand. Two are **pending a
+`paper/refs.bib` entry** — listed in `paper/citations-baseline.txt` rather
+than added to the bibliography, because another session was editing
+`refs.bib` concurrently with this pass:
+
+- Vu, [et al.] (2024), *Anchoring Bias in Large Language Models: An
+  Experimental Study* — arXiv:2412.06593 —
+  <https://arxiv.org/abs/2412.06593>. Abstract, no headline number; verbatim:
+  "our findings highlight the sensitivity of LLM responses to biased hints,"
+  and "simple algorithms such as Chain-of-Thought, Thoughts of Principles,
+  Ignoring Anchor Hints, and Reflection are not sufficient" to mitigate it.
+  **Pending bib entry.**
+- Sun & Li (2025), *Large Language Models are overconfident and amplify human
+  bias* — arXiv:2505.02151 — <https://arxiv.org/html/2505.02151>. Abstract,
+  verbatim: "all five LLMs we study are overconfident: they overestimate the
+  probability that their answer is correct between 20% and 60%." **Pending
+  bib entry.**
+- Wang et al. (2025), *When Truth Is Overridden: Uncovering the Internal
+  Origins of Sycophancy in Large Language Models* — arXiv:2508.02087 —
+  already in `paper/refs.bib` (`wang2025truthoverridden`, added in earlier
+  work, `quote` field present). No action needed; re-verified the existing
+  quote matches the abstract's claim before reusing it here.
+
+Not opened first-hand and not cited as a result — named only to record that
+the search returned them and found nothing usable, identifiers deliberately
+omitted so this paragraph does not itself trip the citation gate for a paper
+nobody has read: a survey of six cognitive biases in LLMs including order
+bias and confirmation bias, found via search summary only; and a study of
+LLM assistants helping *human* forecasters, which tests whether an LLM
+improves a human's base-rate use, not whether the model's own unaided
+reasoning neglects base rates — the wrong question for this table even had it
+been opened.
