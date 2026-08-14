@@ -266,6 +266,111 @@ reports one provisional result below its own utility margin. Track M4 is
 extrapolating from 202 skills down towards four; 28 is the only point anyone has
 in between, and it comes with an installer who abandoned it.
 
+#### K2 closed, fourth pass, 2026-08-12 → 2026-08-14 — [`docs/DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md#k1--k2--the-catalogue-graded-by-evidence)
+
+The line above — *"K2's `none located` rows still want a database search"* —
+is now stale; a fourth search pass on 2026-08-14 closed it. Kepner-Tregoe,
+WRAP and OODA were the three rows still marked `none located` after the
+second pass's domain-restricted queries and the third pass's pivot to
+LLM-assisted-decision-making trials (neither of which targeted these three
+directly). The fourth pass applied the second pass's own lesson —
+search for the *construct* behind a brand name, not the name — to all three,
+one component at a time rather than as a whole.
+
+**It worked once.** WRAP's "widen your options" letter has real controlled
+evidence: Basu & Savani (2017), seven lab experiments, ~2,892 participants,
+simultaneous-vs-sequential option presentation raises optimal (dominating-
+option) choice 7–16pp, every comparison p ≤ .02; and Dow et al. (2010),
+n=33, parallel-vs-serial prototyping raises real click-through and expert
+ratings, both p<.05. A correlational field study of 83 real executive
+decisions (Hauschildt & Gemünden 1985 — the actual paper behind the
+"University of Kiel" study *Decisive*'s own endnotes cite for this chapter)
+points the same direction. **WRAP as an integrated four-step process still
+has no trial of the whole**, and its other three letters stayed at *none
+located* even under construct-level search. K6's ranking now lists "generate
+options concurrently" as its own candidate, ahead of consider-the-opposite —
+see `docs/DECISION_FRAMEWORKS.md`'s K6 section for why the evidence
+comparison favours that order.
+
+**Kepner-Tregoe did not get an equivalent win**, but the decomposition
+exercise explains why the gap is not a literature nobody has searched: KT's
+"decision analysis" step is the same construct as this table's own
+**Decision analysis / MAUT** row, and its "potential problem analysis" step
+is the same shape as the **Pre-mortem** row. KT-as-a-named-process has no
+trial after four passes because its parts already have grades, not because
+nobody has looked at the parts.
+
+**OODA remains `none located` for the loop as advice to a human**, with one
+addition: an academic (not consultancy) source, Bryant (2006, *Military
+Psychology*), arguing the loop is no longer current with modern cognitive
+science — a theoretical critique, not a trial, so the grade does not move.
+One further source (Priyanath & Chaminda 2019, a Sri Lankan small-enterprise
+survey regressing "business fog" on OODA-strategy use) was found but never
+opened past a CAPTCHA wall on any fetch attempt, so no number from it appears
+anywhere in this repository, per standing rule 5.
+
+New bibliography entries: `dow2010parallel`, `basusavani2017`,
+`hauschildtgemunden1985`, `bryant2006ooda` — all in `paper/refs.bib` with a
+`quote` field read from the primary source. Full search log and a caught
+near-miss (a fabricated-looking "Johnson et al., 2012" citation surfaced by a
+WebSearch summary, never used) are in
+`docs/DECISION_FRAMEWORKS.md`'s "What is still open in Track K" and "Sources
+checked on 2026-08-14 (K2 fourth pass)" sections.
+
+#### K3 and K4 closed, 2026-08-14 — [`docs/DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md#k3--what-the-existing-prompt-libraries-encode-and-in-what-form)
+
+**K3 read two more public libraries first-hand beyond `cc-thinking-skills`,
+and the form question turned out to be unanswerable as posed, not merely
+open.** `thinking-skills` (wanikua, 20 frameworks as slash commands — no
+router, explicit invocation only) and `claude-skills-mental-models`
+(cyperx84, 98 models bundled into one autonomously-triggered skill plus four
+parallel delivery forms) both make **no accuracy claim at all**, joining
+cc-thinking-skills' own provisional number that sits below its own bar. So
+"is there a form difference between the libraries that help and the ones
+that don't" has no library in it that helped — the question needs two
+outcome points to compare and the public record supplies one. What the
+survey does find is a genuine, checkable form split: explicit slash-command
+invocation has no description-discrimination problem *by construction*,
+while cc-thinking-skills and cyperx84 both use the same autonomous-
+triggering mechanism `decision-making` does, and so are exposed to exactly
+what Track M's five experiments spent their budget measuring. A specific,
+stated-as-a-prediction reading of M4/M5/M6's own finding (entry count moves
+the frontier, not discrimination) says a 28-skill library should fail by
+under-firing rather than by mis-routing — untested against any real library,
+flagged as a hypothesis rather than filed as a result.
+
+**K4 mapped all eleven catalogued frameworks to a target LLM failure mode and
+graded each documented or assumed**, after first checking what Track A has
+actually produced rather than assuming coverage: A1's `math` and `actions`
+sub-families are the only two closed, neither establishes a bias mechanism
+(`math` is a ceiling/no-power null; `actions` is unmeasurable, an instrument
+defect), and `database`/A2–A5 have not run. Two new LLM-bias papers were
+opened first-hand and are **pending a `paper/refs.bib` entry** (in
+`paper/citations-baseline.txt` instead, since K2's session was mid-edit on
+`refs.bib`): anchoring (arXiv:2412.06593) and overconfidence
+(arXiv:2505.02151). A third, sycophancy (arXiv:2508.02087), was already in
+the bibliography.
+
+**Three frameworks fail the excellent-evidence-wrong-target test, and the
+sharpest is debiasing training (game/video)** — the single best-evidenced row
+in the whole K1/K2 catalogue, evidenced against a six-bias battery of which
+only anchoring (one-sixth) has a located LLM study; the other five presuppose
+a self-model or social-attribution process a stateless completion has no
+clear counterpart for. OODA and satisficing vs maximising fail on mechanism
+rather than missing papers — a real-time adversarial tempo loop and a
+sustained search-and-regret process both have no analogue in a single
+completion, independent of whether anyone ran a trial. A fourth case,
+pre-mortem, is excluded on this repo's own casefile-probe measurement (27
+trap opportunities, zero taken) rather than an outside evidence gap.
+Calibration and consider-the-opposite are the two rows where the human
+evidence and the newly-found LLM evidence now agree, strengthening rather
+than changing K6's existing top-two ranking.
+
+Full write-up, tables and sources in `docs/DECISION_FRAMEWORKS.md`'s K3 and
+K4 sections;
+[`notebook/2026-08-14-k3-and-k4-close-form-cannot-explain-an-anecdote-with-no-contrast.md`](../notebook/2026-08-14-k3-and-k4-close-form-cannot-explain-an-anecdote-with-no-contrast.md)
+has the full account.
+
 ### Track M — Skill design: how a skill should be built
 
 > **The same caveat as Track L, and it lands harder here.** M4, M5, M6 and M6b
