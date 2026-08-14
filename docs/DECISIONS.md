@@ -24,6 +24,50 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-14 — The ask cut stopped one word short of every shared body's newline
+
+**Commits:** `6707c38`
+
+`_shared_body` cut the raw byte-identical prefix of a triple's three turns
+back to the last SPACE so the remainder starts at a whole word. Every
+authored body ends with a NEWLINE before the ask, and a newline is not a
+space — the cut landed one word short of where the newline actually was, and
+that word ("believed." in the shipped XL band) leaked into every derived
+`ask` and `open` as their shared, constant opening word. A regression test
+was confirmed to fail against the pre-fix code before the fix landed.
+
+**What the bug had been hiding.** A feature reading a constant leaked word
+across an affected triple cannot separate anything and reads exactly 0.500 —
+indistinguishable from a clean pass. Once the leak stopped being constant,
+two matched within-triple findings crossed the z = 3.0 gate for the first
+time: `matched:open:question_marks` and `matched:open:terminal_question`,
+0.566 at 3.47 null SE pre-merge, baselined in `corpus-baseline.txt` with a
+`CLOSED BY` condition. `matched:turn:word_count` and `matched:ask:word_count`
+read bit-identically before and after this fix (0.66015625 both times) — the
+leaked word was present in all three members of an affected triple, so
+removing it shifts all three equally and a within-triple rank statistic
+cannot see a shift common to the whole triple. Both findings closed the same
+day, but by the concurrent long-band merge (`a38d2d8`, see the entry below),
+not by this fix.
+
+**The guard, checked against the day's other additions.** `sentence_count`
+(added earlier the same day alongside the `open` view) was inert in every
+view of the known-good fixture — its three fixed shapes all produced two
+sentences, so the feature could not move regardless of label. Fixed by giving
+one shape a third short sentence. The planted closing-leak fixture turned out
+to leak on `open` as well as `close`, symmetrically — reversing a
+two-sentence tail swaps which sentence is first exactly as much as which is
+last, and a constant sentence placed in front of the swap does not shield
+`open` because `_shared_body` folds anything that never varies into the body
+regardless of position. The baseline-narrowness test's helper was widened to
+capture every finding the fixture currently produces rather than a
+hand-picked subset that predated the `open` view.
+
+Full account, including the per-finding numbers before and after the
+concurrent merge: `notebook/2026-08-14-the-ask-derivation-bug-and-two-checks-it-had-been-hiding.md`.
+
+---
+
 ## 2026-08-14 — Twenty-three long-band triples, and a leak that closed sideways
 
 **Commits:** `a38d2d8`
