@@ -567,11 +567,12 @@ positive:
       The school year has started. Nadia's job starts 6 January and she says
       she has to answer by 30 September.
 
-      Do I fight this? I have written that sentence down twice now and I am
-      not sure it is even the question, because there is a version where I
-      say yes and move myself, and a version where I say yes and stay, and a
-      version where the thing I am actually objecting to is January rather
-      than Edinburgh. I have looked at none of them properly.
+      I keep starting this message and deleting it. Do I fight this? I have
+      written that sentence down twice now and I am not sure it is even the
+      question, because there is a version where I say yes and move myself,
+      and a version where I say yes and stay, and a version where the thing
+      I am actually objecting to is January rather than Edinburgh. I have
+      looked at none of them properly.
 
       Money: I pay 380 a month, informally, with no CMS assessment. If they
       move I would be travelling instead, which is more, and the 380 would
@@ -1000,7 +1001,7 @@ positive:
       written eight hundred words about it probably means something, though
       I am not sure it means the thing it looks like it means.
 
-      What would you do?
+      I have read all of the above back twice now. What would you do?
     why: >-
       A real, open, low-stakes decision with no dominant difficulty — the
       pile is chat rather than evidence, the personal fact is awkward rather
@@ -1491,9 +1492,8 @@ positive:
       Marianne heard it from the trust before she heard it from him, which
       is not a rule but is remembered here.
 
-      So which one, the May date or the October date? The letter is
-      written for the May date and the letter is written for the October
-      date.
+      The letter is written for the May date and the letter is written for
+      the October date. So which one, the May date or the October date?
     why: >-
       The resignation is not what is in play: "The letter is written for
       the May date and the letter is written for the October date" leaves
@@ -1845,8 +1845,9 @@ positive:
           on 30 September.
         - The migration guide has been opened 61 times. Twelve of those are me.
 
-      So when does the shutoff land, in the twenty-day gap before the vendor
-      date, or after the freeze and after the vendor date?
+      Nothing above answers that directly. So when does the shutoff land, in
+      the twenty-day gap before the vendor date, or after the freeze and
+      after the vendor date?
     why: >-
       The direction is already carried by the minute, "The board approved the
       retirement of catalog-v1", and every artefact after it is a constraint on
@@ -2467,8 +2468,9 @@ positive:
       other's estimate. Both estimates were built off the same spike branch and
       reviewed by the other person before they went in the sheet.
 
-      So: patch or rewrite, and how do you weigh a patch that leaves the rules table
-      against a rewrite that costs us fifteen more weeks?
+      I have gone back and forth on this more than anything else here. So:
+      patch or rewrite, and how do you weigh a patch that leaves the rules
+      table against a rewrite that costs us fifteen more weeks?
     why: >-
       The closing sentence sets "a patch that leaves the rules table" against "a
       rewrite that costs us fifteen more weeks", which is a straight choice between
@@ -2750,9 +2752,9 @@ negative:
       it was the best thing that ever happened to him, which I have never
       entirely believed.
 
-      Two things I want answered before I have an opinion about any of it.
       On the £30,000: does it apply to the enhanced payment alone, or do the
-      PILON and the holiday pay count towards the same allowance? And the
+      PILON and the holiday pay count towards the same allowance? Two things
+      I want answered before I have an opinion about any of it. And the
       FAQ says the voluntary terms close on the 26th while also saying that
       a four-week trial period preserves redundancy entitlement — which of
       those is statutory and which is company policy? Just the rules and
@@ -2892,7 +2894,7 @@ negative:
       it was the best thing that ever happened to him, which I have never
       entirely believed.
 
-      Do the arithmetic for me, all three service figures, side by side. Use
+      What is the arithmetic, all three service figures, side by side? Use
       71,400 plus the 2,400 supplement wherever a weekly figure is needed,
       and show it both with and without the supplement, because I do not
       know whether it counts. Net the enhanced payment down using the
@@ -3302,8 +3304,8 @@ negative:
       five days before EOL and nine days before the freeze. The 4th is after
       the month-end close and, just, inside the notice clause.
 
-      Work the calendar out properly for me first. For each of the two
-      candidate weekends, give me the date the notice has to go out to
+      What does the calendar actually say, worked out properly? For each of
+      the two candidate weekends, give me the date the notice has to go out to
       satisfy the twenty business day clause, the number of business days
       between the change and the end-of-life date, the number between the
       change and the start of the freeze, and whether it falls inside either
@@ -3448,11 +3450,11 @@ negative:
       five days before EOL and nine days before the freeze. The 4th is after
       the month-end close and, just, inside the notice clause.
 
-      Two things about the mechanism that I want to be sure of, and both are
-      how-does-this-work rather than what-should-we-do. First, in a logical
-      replication cutover, what happens to sequences — are they replicated,
-      and if not, what is the standard way of bringing them across without
-      leaving a gap? Second, when the provider performs its automatic
+      In a logical replication cutover, what happens to sequences — are they
+      replicated, and if not, what is the standard way of bringing them
+      across without leaving a gap? Two things about the mechanism that I
+      want to be sure of, and both are how-does-this-work rather than
+      what-should-we-do. Second, when the provider performs its automatic
       upgrade in its own window, is that the same logical replication path
       or an in-place pg_upgrade, and what does it do with an extension that
       has no build for the target version, skip it or fail the instance?
@@ -3575,6 +3577,10 @@ negative:
       The school year has started. Nadia's job starts 6 January and she says
       she has to answer by 30 September.
 
+      Is a move from here to Edinburgh an internal relocation in the legal
+      sense, given that Scotland is a separate jurisdiction inside the UK,
+      or is it treated as removal from the jurisdiction?
+
       Money: I pay 380 a month, informally, with no CMS assessment. If they
       move I would be travelling instead, which is more, and the 380 would
       still be the 380.
@@ -3585,14 +3591,12 @@ negative:
       how to say that without it sounding as though it is about me, and I am
       not certain that it isn't.
 
-      What I want first is the law rather than a view. Three questions. Is a
-      move from here to Edinburgh an internal relocation in the legal sense,
-      given that Scotland is a separate jurisdiction inside the UK, or is it
-      treated as removal from the jurisdiction? What does a prohibited steps
-      order actually prohibit, and can it be used to stop a move rather than
-      to reverse one? And what happens to a county-based CAMHS referral when
-      the child moves — does the wait start again, and is there a transfer
-      mechanism? Sources rather than reassurance. I will do the deciding.
+      What I want first is the law rather than a view. Three questions. What
+      does a prohibited steps order actually prohibit, and can it be used to
+      stop a move rather than to reverse one? And what happens to a
+      county-based CAMHS referral when the child moves — does the wait start
+      again, and is there a transfer mechanism? Sources rather than
+      reassurance. I will do the deciding.
     why: >-
       The identical eight sources, and three questions about how a system
       works. The last five words close the door on a recommendation.
@@ -4717,9 +4721,9 @@ negative:
       break" appears nine times across the two letters and does not mean the same
       thing in both.
 
-      One letter says pension sharing order and the other says attachment order.
-      Should I read those as two names for one thing, or do they do different
-      things?
+      Should I read a pension sharing order and an attachment order as two
+      names for one thing, or do they do different things? One letter says
+      pension sharing order and the other says attachment order.
     why: >-
       The one occurrence of "Should I" in this triple sits on a negative, and it
       opens "Should I read those as two names for one thing" — a question about what
@@ -5021,8 +5025,8 @@ negative:
       1:1 allocation, because the first time it came up she heard "trial" and heard
       "new drug" and I have not gone back over it since.
 
-      The protocol and the childminder's rate are both in there. What am I paying
-      Anna across the whole study, and how many visits does that come to?
+      What am I paying Anna across the whole study, and how many visits does
+      that come to? The protocol and the childminder's rate are both in there.
     why: >-
       The ask asks for a cost and a count and nothing else, scoped across the whole
       study: "What am I paying Anna across the whole study, and how many visits does
@@ -5911,8 +5915,8 @@ negative:
       Aisling is the cousin above, the one who moves to Berlin in
       September.
 
-      One thing on the mechanics. Does the clause the solicitor sent me
-      bite while their father is alive, or does it wait?
+      Does the clause the solicitor sent me bite while their father is
+      alive, or does it wait? One thing on the mechanics.
     why: >-
       "Does the clause the solicitor sent me bite while their father is
       alive" is a question about when an instrument operates, not about

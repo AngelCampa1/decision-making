@@ -364,13 +364,19 @@ class TestThePerBandBreakdownIsReported:
         """A pooled number that hides two rulers pointing opposite ways is how
         the XL band was missed the first time.
 
-        ``xl 0.235`` is ``sentence_count``'s current ``cancel:`` finding
+        ``xl 0.309`` is ``sentence_count``'s current ``cancel:`` finding
         (dispersion rather than mean-shift) -- see ``corpus-baseline.txt``.
-        Re-pin this to whatever band figure the live baseline names if the
-        long-band merge in progress moves it again.
+        Re-pinned 2026-08-14 from ``0.235``: the opener-leak fix
+        (``notebook/2026-08-14-the-opener-leak-closed-by-touching-both-
+        sides.md``) prepended a short lead-in sentence to several `xl`
+        positives so their ask no longer opened with a bare question, which
+        also raised their sentence count. The reporting mechanism (one
+        ``band value`` pair per band, comma-separated) is unchanged; only the
+        number moved, which is what a corpus edit is supposed to do. Re-pin
+        again if the corpus moves further.
         """
         issues = _messages(check_corpus(load_trigger_set(CORPUS), CORPUS))
-        assert any("xl 0.235" in issue for issue in issues)
+        assert any("xl 0.309" in issue for issue in issues)
 
     def test_a_band_with_no_cases_is_left_out_rather_than_reported_as_chance(self) -> None:
         assert {
@@ -586,33 +592,39 @@ class TestTheShippedBaseline:
     """The real file against the real corpus, and a third leak against both."""
 
     def test_it_defers_exactly_the_known_findings_and_nothing_else(self) -> None:
-        """Five, as of the 2026-08-14 long-band merge -- see ``corpus-baseline.txt``.
+        """Three, as of the 2026-08-14 opener-leak fix -- see ``corpus-baseline.txt``.
 
-        Two `word_count` findings closed the same day this count last changed
-        (the merge that grew the corpus to 87 triples pulled the matched
-        statistic back under the gate) and three opened: the newline-cut fix
-        un-pinned `open`'s ``question_marks``/``terminal_question``, and the
-        same merge's positive-shortest skew pushed `sentence_count` (both
-        views, as a `cancel:` dispersion finding) and `type_token_ratio` over
-        it. The corpus is still being merged as this file is edited, so this
-        count is a snapshot rather than a fact expected to hold indefinitely --
-        re-pin it against whatever `corpus-baseline.txt` names once that
-        settles.
+        Was five right after the 2026-08-14 long-band merge: two `word_count`
+        findings had just closed and three opened, including `open`'s
+        ``question_marks``/``terminal_question`` pair (the newline-cut fix had
+        un-pinned it). Two of those five close here: the opener-leak fix
+        (``notebook/2026-08-14-the-opener-leak-closed-by-touching-both-
+        sides.md``) balances the rate at which positives and negatives open
+        their ask with a question in `l`/`xl`, and ``question_marks``/
+        ``terminal_question`` on `open` stop reproducing. `sentence_count`
+        (both views, `cancel:` dispersion) and `type_token_ratio` (`ask`,
+        `matched:`) are unrelated to the opener and still open. The corpus is
+        still being worked on as this file is edited, so re-pin this count
+        against whatever `corpus-baseline.txt` names once that settles.
         """
         assert check_trigger_sets(REPO_ROOT) == []
         deferred = deferred_corpus_findings(REPO_ROOT)
-        assert len(deferred) == 5
+        assert len(deferred) == 3
         assert any(
             "'sentence_count' on the 'turn' view puts the positive at an extreme" in message
             for message in deferred
         )
         assert any(
+            "'sentence_count' on the 'ask' view puts the positive at an extreme" in message
+            for message in deferred
+        )
+        assert any(
             "'type_token_ratio' on the 'ask' view sits below" in message for message in deferred
         )
-        assert any(
+        assert not any(
             "'question_marks' on the 'open' view sits above" in message for message in deferred
         )
-        assert any(
+        assert not any(
             "'terminal_question' on the 'open' view sits above" in message for message in deferred
         )
 
