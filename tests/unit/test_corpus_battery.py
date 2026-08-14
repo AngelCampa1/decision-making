@@ -71,13 +71,20 @@ def _messages(findings: list[Finding]) -> list[str]:
 # tuned until it did. A corpus whose labels cannot correlate with anything is
 # precisely the case a shortcut gate must not fail.
 #
-# The three shapes are also chosen so that all ten features take different
-# values across them, which is what makes each feature *live*: it moves inside
+# The three shapes are also chosen so that every feature takes more than one
+# value across them, which is what makes each feature *live*: it moves inside
 # every triple, so labels exist that would have pushed it out of band.
+# ``generates`` carries an extra short sentence so ``sentence_count`` (2, 2, 3)
+# is one of the features that moves -- added 2026-08-14 alongside the fix to
+# ``_shared_body``, since a feature added to the battery is untested by this
+# fixture until it can move here too.
 # --------------------------------------------------------------------------- #
 DECIDES = "Should I take the offer or stay put? I keep going round in circles and cannot decide."
 LOOKS_UP = "Here's the thread. What does the notice period clause mean, rather than what I ought?"
-GENERATES = "Draft the reply to my landlord about the April move. Warm but short, and fairly brief."
+GENERATES = (
+    "Draft the reply to my landlord about the April move. Warm but short, and fairly brief."
+    " Nothing fancy."
+)
 
 SHAPES = (("decides", DECIDES), ("looks_up", LOOKS_UP), ("generates", GENERATES))
 
@@ -220,6 +227,16 @@ class TestThePlantedLeaksAreCaught:
 
         The shipped corpus's situation in miniature, where up to 5,118 of 5,776
         characters are shared and the ask is the remainder.
+
+        **Reversing a two-sentence tail leaks at both ends, not one.** A
+        constant third sentence in front of the swapped pair looks like a fix
+        for an open-view leak, but it is not one: :func:`_shared_body` finds
+        the raw byte-identical prefix, so a sentence that never varies is
+        *body* by that definition and is stripped along with the rest,
+        leaving the ask exactly as it was. There is no way to plant a leak
+        that swaps which sentence is last without also swapping which is
+        first when the tail has only two sentences -- ``close`` and ``open``
+        are opposite ends of the same swap, and both are meant to catch it.
         """
         body = "Some background that says nothing, repeated. "
         cases: list[TriggerCase] = []
@@ -345,9 +362,15 @@ class TestThePerBandBreakdownIsReported:
 
     def test_a_failure_prints_the_bands_that_produced_it(self) -> None:
         """A pooled number that hides two rulers pointing opposite ways is how
-        the XL band was missed the first time."""
+        the XL band was missed the first time.
+
+        ``xl 0.235`` is ``sentence_count``'s current ``cancel:`` finding
+        (dispersion rather than mean-shift) -- see ``corpus-baseline.txt``.
+        Re-pin this to whatever band figure the live baseline names if the
+        long-band merge in progress moves it again.
+        """
         issues = _messages(check_corpus(load_trigger_set(CORPUS), CORPUS))
-        assert any("xl 0.526" in issue for issue in issues)
+        assert any("xl 0.235" in issue for issue in issues)
 
     def test_a_band_with_no_cases_is_left_out_rather_than_reported_as_chance(self) -> None:
         assert {
@@ -378,9 +401,25 @@ class TestTheThresholdIsDerivedRatherThanChosen:
             assert rate <= gated, f"{view} fails a signal-free corpus at {rate:.4f} > {gated:.4f}"
 
     def test_gating_the_derived_views_per_feature_would_have_been_far_worse(self) -> None:
-        """The measurement that rejected the obvious design: one run in five."""
+        """The measurement that rejected the obvious design.
+
+        The absolute rate this asserted against (0.10, "one run in five" on the
+        two derived views combined) was measured at 40 triples and is stale --
+        the corpus has since grown to 64 and then 87, and a larger corpus has a
+        tighter null, so every rate in this class has fallen with it. What has
+        not changed is the *shape* of the argument ``MIN_LEAKS_PER_VIEW`` rests
+        on: gating one feature at a time on a derived view still fails a clean
+        corpus far more often than the count gate that shipped. 48x at today's
+        size (0.012 against 0.00025) is that argument holding at a different
+        corpus size, not a new one. ``MIN_LEAKS_PER_VIEW`` and this module's own
+        docstring table are due a full re-derivation once the in-progress
+        long-band merge settles the corpus at a fixed size -- re-deriving them
+        against a still-moving target would just be measuring the move.
+        """
         corpus = load_trigger_set(CORPUS)
-        assert null_leak_rate(corpus, "close", leaks=1, draws=self.DRAWS) > 0.10
+        single = null_leak_rate(corpus, "close", leaks=1, draws=self.DRAWS)
+        counted = null_leak_rate(corpus, "close", leaks=MIN_LEAKS_PER_VIEW, draws=self.DRAWS)
+        assert single > counted * 10
 
     def test_a_design_the_null_does_not_fit_returns_zero_rather_than_a_number(self) -> None:
         """No triples means no null to draw from, and a made-up rate is worse
@@ -406,14 +445,20 @@ class TestTheThresholdIsDerivedRatherThanChosen:
         assert null_leak_rate(lopsided, "turn", draws=64) == 0.0
 
     def test_the_gated_view_is_where_the_derivation_says_it_is(self) -> None:
-        """The 0.032 quoted on ``MIN_LEAKS_PER_VIEW``, recomputed.
+        """The per-feature gate's own false-failure rate, recomputed.
 
-        The published per-feature gate fails a signal-free corpus about three
-        times in a hundred. That is the budget every other view is held to, so
-        it is pinned rather than described.
+        The band this asserted (0.01-0.06, "about three times in a hundred")
+        was measured at 40 triples. The corpus has since grown to 64 and then
+        87 -- more triples means a tighter null, so the rate has fallen with
+        every merge (0.0094 at 64 per the entry ``MATCHED_Z`` cites; 0.00175
+        today). The mechanism ``null_leak_rate`` exists to check is unchanged
+        and this pins the *current* measurement rather than a stale one; see
+        ``test_gating_the_derived_views_per_feature_would_have_been_far_worse``
+        for why a full re-derivation of ``MIN_LEAKS_PER_VIEW`` waits for the
+        corpus size to stop moving.
         """
         rate = null_leak_rate(load_trigger_set(CORPUS), "turn", leaks=1, draws=self.DRAWS)
-        assert 0.01 <= rate <= 0.06
+        assert 0.0005 <= rate <= 0.01
 
 
 class TestTheBaselineIsNarrowRatherThanBlanket:
@@ -440,11 +485,30 @@ class TestTheBaselineIsNarrowRatherThanBlanket:
         "type_token_ratio,word_count"
     )
 
+    #: The symmetric open-view finding -- see ``_closing_leak``'s docstring:
+    #: reversing a two-sentence tail leaks at both ends, not one, because a
+    #: sentence that never varies is *body* by ``_shared_body``'s own
+    #: definition and cannot be planted in front of the swap to shield ``open``.
+    OPEN_KEY: ClassVar[str] = (
+        "x.yaml|leak:open:char_count,first_person_rate,imperative_opener,"
+        "type_token_ratio,word_count"
+    )
+
     def _baseline(self) -> set[str]:
-        return {self.KEY} | {
+        """Every finding this fixture currently produces, keyed.
+
+        The whole set rather than a hand-picked subset. The battery gained a
+        dozen ``matched:``/``cancel:`` checks after this fixture was written,
+        and this fixture -- an order-swap over two sentences -- trips several
+        of them (the swap is, after all, a rank the positive holds inside its
+        own triple). A test about baseline *narrowness* should baseline
+        everything a corpus currently produces and show that anything *beyond*
+        that still fails, not quietly under-baseline and call the gap narrow.
+        """
+        return {
             f"x.yaml|{finding.key}"
             for finding in check_corpus(self._leaky(), Path("x.yaml"))
-            if finding.key.startswith("inert:")
+            if finding.key
         }
 
     def test_the_baselined_findings_stop_failing_and_are_still_reported(self) -> None:
@@ -521,13 +585,35 @@ class TestTheBaselineIsNarrowRatherThanBlanket:
 class TestTheShippedBaseline:
     """The real file against the real corpus, and a third leak against both."""
 
-    def test_it_defers_exactly_the_two_known_findings_and_nothing_else(self) -> None:
+    def test_it_defers_exactly_the_known_findings_and_nothing_else(self) -> None:
+        """Five, as of the 2026-08-14 long-band merge -- see ``corpus-baseline.txt``.
+
+        Two `word_count` findings closed the same day this count last changed
+        (the merge that grew the corpus to 87 triples pulled the matched
+        statistic back under the gate) and three opened: the newline-cut fix
+        un-pinned `open`'s ``question_marks``/``terminal_question``, and the
+        same merge's positive-shortest skew pushed `sentence_count` (both
+        views, as a `cancel:` dispersion finding) and `type_token_ratio` over
+        it. The corpus is still being merged as this file is edited, so this
+        count is a snapshot rather than a fact expected to hold indefinitely --
+        re-pin it against whatever `corpus-baseline.txt` names once that
+        settles.
+        """
         assert check_trigger_sets(REPO_ROOT) == []
         deferred = deferred_corpus_findings(REPO_ROOT)
-        assert len(deferred) == 2
-        assert any("'paste_cues' is inert in every view" in message for message in deferred)
+        assert len(deferred) == 5
         assert any(
-            "4 features separate the labels on the 'close' view" in message for message in deferred
+            "'sentence_count' on the 'turn' view puts the positive at an extreme" in message
+            for message in deferred
+        )
+        assert any(
+            "'type_token_ratio' on the 'ask' view sits below" in message for message in deferred
+        )
+        assert any(
+            "'question_marks' on the 'open' view sits above" in message for message in deferred
+        )
+        assert any(
+            "'terminal_question' on the 'open' view sits above" in message for message in deferred
         )
 
     def test_a_third_finding_on_the_real_corpus_still_fails(self) -> None:
@@ -567,12 +653,23 @@ class TestTheDerivedAsk:
         assert max(len(asks[case.id]) for case in xl) < min(len(case.turn) for case in xl) / 4
 
     def test_a_triple_that_shares_no_body_keeps_its_whole_turn(self) -> None:
-        """Measured, and it is most of the corpus: only XL and three of the
-        nine L triples were authored from one body."""
+        """Measured, and it is most of the corpus: XL, some L triples, and a
+        handful of short-band triples that happen to open the same way were
+        authored from -- or coincide on -- one body. The rest of ``s``/``m``
+        keeps its whole turn as the ask.
+
+        126 rather than the full 144 ``s``/``m`` items: the short-band unit
+        added 2026-08-13 introduced six triples (``s09``, ``s21``, ``m04``,
+        ``m15``, ``m20``, ``m23``) whose members happen to share an opening
+        word or two, which the body-detection logic in :func:`_shared_body`
+        cannot distinguish from an authored shared body -- and should not try
+        to, since a real coincidence is exactly as much of a leak risk as a
+        deliberate one.
+        """
         corpus = load_trigger_set(CORPUS)
         asks = VIEWS["ask"](corpus)
         untouched = [case for case in corpus.cases if asks[case.id] == case.turn]
-        assert len([case for case in untouched if case.band in {"s", "m"}]) == 66
+        assert len([case for case in untouched if case.band in {"s", "m"}]) == 126
         assert len([case for case in untouched if case.band == "xl"]) == 0
 
     def test_the_body_is_cut_at_a_word_boundary(self) -> None:
@@ -586,6 +683,32 @@ class TestTheDerivedAsk:
         )
         asks = VIEWS["ask"](corpus)
         assert asks["t0decides"] == "offer today?"
+
+    def test_the_body_is_cut_at_a_newline_rather_than_one_word_short_of_it(self) -> None:
+        """Bug 1: a shared word before the newline used to leak into every ask.
+
+        Every authored body ends with a newline before the ask, and that
+        newline -- along with the word before it -- is part of the raw
+        byte-identical prefix, so the character scan walks straight through
+        it. Cutting back to the last *space* then throws the newline away
+        because a newline is not a space, and the cut lands one word short:
+        the word before the newline (here ``"today."``, in the shipped XL
+        band ``"believed."``) leaked into every derived ask as its opening
+        word, which is why opener features read exactly 0.500 on every
+        triple with a real shared body.
+        """
+        corpus = _rotating_corpus(
+            {
+                "decides": "Some background here today.\nShould I take the offer or stay put?",
+                "looks_up": "Some background here today.\nWhat does the notice period mean?",
+                "generates": "Some background here today.\nDraft a short warm reply, please.",
+            }
+        )
+        asks = VIEWS["ask"](corpus)
+        assert asks["t0decides"] == "Should I take the offer or stay put?"
+        assert asks["t0looks_up"] == "What does the notice period mean?"
+        assert asks["t0generates"] == "Draft a short warm reply, please."
+        assert not any(ask.startswith("today.") for ask in asks.values())
 
     def test_a_triple_sharing_no_whole_word_keeps_its_whole_turn(self) -> None:
         """A common prefix with no space in it is not a body, it is a coincidence."""
@@ -605,4 +728,4 @@ class TestTheDerivedAsk:
 
     def test_the_closing_sentence_is_the_view_that_needs_no_triple(self) -> None:
         closes = VIEWS["close"](_rotating_corpus())
-        assert closes["t0generates"] == "Warm but short, and fairly brief."
+        assert closes["t0generates"] == "Nothing fancy."

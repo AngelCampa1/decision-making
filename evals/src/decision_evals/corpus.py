@@ -244,12 +244,29 @@ def _turn_view(trigger_set: TriggerSet) -> dict[str, str]:
 
 
 def _shared_body(turns: Sequence[str]) -> str:
-    """The opening every member of a triple has byte for byte, to a word boundary.
+    """The opening every member of a triple has byte for byte, to a line boundary.
 
-    Cut back to the last space so the remainder starts at a word: the raw
-    common prefix of *"Should I tell her now"* and *"Should I take the offer"*
-    ends mid-word at ``"Should I t"``, and a feature over ``"ell her now"``
-    measures the cut rather than the ask.
+    Cut back to the last newline when the raw common prefix contains one, and
+    only fall back to the last space when it does not.
+
+    **The bug this replaced.** Every authored body ends with a newline before
+    the ask, and that newline -- along with the word before it, such as
+    ``"believed.\\n"`` -- is part of the raw byte-identical prefix: it is
+    common to all three members, so the character-by-character scan walks
+    straight through it. Cutting back to the last *space* then throws it away
+    anyway, because a newline is not a space and ``rfind(" ")`` cannot see one:
+    the cut lands one word short of the true boundary, and that word --
+    ``"believed."`` in the shipped XL band -- leaks into every derived ask as
+    its opening word. ``open`` read the same first word in all three members of
+    a triple every time, and ``imperative_opener``/``first_person_rate`` on
+    ``ask`` inherited the same constant. Cutting to the last newline instead
+    keeps the whole shared line -- including the trailing word before it --
+    in the body, where it belongs.
+
+    The space fallback is unchanged for triples with no newline in their
+    shared prefix: the raw common prefix of *"Should I tell her now"* and
+    *"Should I take the offer"* ends mid-word at ``"Should I t"``, and a
+    feature over ``"ell her now"`` measures the cut rather than the ask.
 
     Called with at least one turn: its only caller walks a cluster, and a
     cluster with no members does not exist. There is no guard for the empty
@@ -260,6 +277,9 @@ def _shared_body(turns: Sequence[str]) -> str:
     while length < limit and len({turn[length] for turn in turns}) == 1:
         length += 1
     head = turns[0][:length]
+    newline = head.rfind("\n")
+    if newline >= 0:
+        return head[: newline + 1]
     boundary = head.rfind(" ")
     return head[: boundary + 1] if boundary >= 0 else ""
 

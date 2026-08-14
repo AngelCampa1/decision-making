@@ -56,6 +56,68 @@
 # mechanism, run in the other direction, that the entry below shows did not
 # cancel as cleanly on every feature.
 
+# ADDED 2026-08-14, uncovered by fixing a measurement bug rather than by a new
+# check. `_shared_body` cut the shared prefix back to the last SPACE, and
+# every authored body ends with a NEWLINE before the ask -- the newline is not
+# a space, so the cut landed one word short and that word (`"believed."` in
+# the shipped XL band) leaked into every derived `ask` and `open` as their
+# common opening word. On the ~20 of 64 triples built from a real shared body,
+# `open`'s first sentence was therefore pinned identical across all three
+# members, contributing exactly 0.5 to the matched average for those triples
+# and diluting the pooled-across-triples matched statistic below the z = 3.0
+# gate. Fixing the cut to respect the newline (`corpus.py::_shared_body`)
+# un-pinned those ~20 triples and both findings below crossed the gate for the
+# first time -- they were not created by the fix, they were hidden by the bug
+# it replaced.
+#
+# `question_marks`, `open` view: within its own triple the positive's opener
+# carries a `?` above both its negatives' openers in 0.566 of comparisons,
+# 3.47 null standard errors from chance. Per band: s 0.573, m 0.500, l 0.556,
+# xl 0.786. Pooled AUC 0.566.
+#
+# `terminal_question`, `open` view: bit-identical to `question_marks` above --
+# 0.566 matched, 3.47 SE, same per-band breakdown, pooled AUC 0.566. Expected
+# rather than a coincidence: `_sentences` splits on `[.!?]`, so a `?` inside a
+# single sentence is overwhelmingly also its last character, and the two
+# features agree on nearly every opener in the corpus.
+#
+# WHAT IT DOES AND DOES NOT MEAN. Same reading as the two entries above: an
+# arm sees one turn and not its triple-mates, so this is a defect in the
+# construction rather than a demonstrated exploit, and per-band pooled AUC
+# remains the exploitability measure printed alongside it.
+#
+# CLOSED BY: a rank distribution for which triple member's opener poses the
+# question that is roughly uniform across the three positions within its
+# triple, reached at authoring time. This one may be harder to close than the
+# word-count pair without also touching negatives: a corpus whose positives
+# are decisions is going to open a real fraction of them with the question
+# itself, which is a property of what a decision *is*, not only of how this
+# corpus was written. Any item whose opener changes needs re-adjudication,
+# because the ask is what the label rests on.
+datasets/triggers/decision-making/index.yaml|matched:open:question_marks
+
+# Same entry, `terminal_question`: bit-identical numbers, same cause, same
+# rank distribution would close both at once since the two features agree on
+# almost every opener in the corpus (see above).
+#
+# CLOSED BY: the same condition as `matched:open:question_marks` immediately
+# above -- a rank distribution for which triple member's opener poses the
+# question that is roughly uniform across the three positions within its
+# triple.
+datasets/triggers/decision-making/index.yaml|matched:open:terminal_question
+
+# NUMBERS ABOVE ARE PRE-EXISTING, NOTED HERE RATHER THAN REWRITTEN. The
+# `question_marks` / `terminal_question` pair above was measured on the
+# 64-triple corpus. The same-day long-band merge (`l10`-`l22`, `xl08`-`xl17`,
+# see the `word_count` entry earlier in this file) moves both: matched 0.566
+# -> 0.629, 3.47 -> 6.12 null standard errors, `l` 0.556 -> 0.716, `xl` 0.786
+# -> 0.779 (`s`/`m` unaffected). The key still matches -- both findings are
+# still open, more so than when written -- so the gate still treats this pair
+# as baselined; only the comment's figures are now the pre-merge snapshot. Left
+# as the record of what the finding looked like when first crossed rather than
+# silently updated, since the entries above are the property of the session
+# that added them.
+
 # ADDED 2026-08-14, uncovered by the same long-band merge that closed
 # `word_count` above (`l10`-`l22`, `xl08`-`xl17`, 261 items, 87 triples). Not
 # new features and not a new gate -- these three sat under z = 3.0 on the
