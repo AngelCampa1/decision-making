@@ -14,14 +14,17 @@ skill* and is empty on purpose.
 
 ## The one-line version
 
-**Seven results are in, eight measurements were caught being broken, no skill
+**Seven results are in, ten measurements were caught being broken, no skill
 has been evaluated end-to-end — and the instrument that produced every trigger
-result turns out to be solvable at 0.890 by counting words, which is now
-[Track N](RESEARCH_PROGRAMME.md).**
+result was solvable at 0.890 by counting words, which is
+[Track N](RESEARCH_PROGRAMME.md) and is now rebuilt: the best shortcut on the
+261-item corpus is a stump at 0.701 against a 0.667 baseline, a lift of 0.034.**
 
-*The counts above read "six" and "five" until 2026-08-13, when both tables below
-had already grown past them. A summary line that is not recomputed from the
-table under it is a hand-maintained number like any other.*
+*The counts above read "six" and "five" until 2026-08-13, and "eight" until
+2026-08-14, each time because the tables below had already grown past them. A
+summary line that is not recomputed from the table under it is a hand-maintained
+number like any other — and it has now drifted twice, which says the lesson was
+recorded and not learned.*
 
 ---
 
@@ -147,6 +150,34 @@ not statements. Found while scoring L7; see
 Every one was caught by somebody asking a question the instrument was not set up
 to answer — and two of the eight were the maintainer asking, not the tooling.
 
+**Correction, 2026-08-14, appended. The count is ten, and the ninth is the
+largest of them**, because it is not a bug in a scorer — it is the wrong
+statistic, used by every gate since the corpus was designed.
+
+| defect | what it read | what was true |
+|---|---|---|
+| **pooled AUC used on a matched corpus** | `word_count` at 0.517, "as clean as this battery can print" | the matched within-triple statistic read 0.660 at 3.24 null SE. A pooled AUC ranks positives against negatives from *other* triples, where body variation swamps the ask, so it is structurally blind to a rank held inside a triple — two-thirds of its comparisons are between items sharing nothing |
+| `_shared_body` cut the common prefix back to the last **space**, and bodies end in a **newline** | opener features constant within every triple, reading exactly **0.500** | the body's final word leaked into every derived `ask` and became its first "sentence". Fifth inert-estimator instance, and it was in the module whose job is hunting inert estimators |
+
+**The corpus was built as a matched design and evaluated as an unmatched one.**
+Four separate pooled-cancellations were found by four separate people over
+2026-08-13, each after the fact; the matched statistic found all of them in one
+run. Row six above — "the corpus itself, never audited" — was the same failure
+seen from the other side.
+
+Neither statistic retires the other. Per-band pooled AUC is the *exploitability*
+measure: an arm sees one turn and never sees the other two members of its
+triple, so a within-triple rank is a defect in the construction rather than a
+demonstrated exploit. Both are gated and both are printed.
+
+**An eleventh is on record and is not counted here**, because it is a claim
+rather than a measurement: `stats/multiplicity.py` implements
+`benjamini_hochberg`, exports it, property-tests it, and **nothing calls it**,
+while `paper/CHECKLIST.md` ticked "multiplicity controlled". Fourth instance of
+a tested function with no caller. The wiring gate missed it because the module
+is *import*-reachable via `stats/__init__.py`; importable is not used. The box is
+now unticked.
+
 ---
 
 ## Where the corpus is, 2026-08-14
@@ -155,6 +186,45 @@ to answer — and two of the eight were the maintainer asking, not the tooling.
 triples by two same-day merges (24 short-band triples, 23 long-band ones). A
 separate session's own notebook entry has the merge detail and the battery
 before/after; not reproduced here.
+
+**A leak was found and closed the same day, and both halves are measured.** A
+20,000-draw permutation test over the battery's full family — 4 bands × 4 views
+× 11 features, 176 cells, band-restricted plain unpaired AUC, Benjamini–Hochberg
+corrected — run before and against the committed fix:
+
+| | cells crossing p<0.05 | expected by chance | surviving BH |
+|---|---|---|---|
+| before | 18 | 8.8 | **7** |
+| after | 10 | 8.8 | **0** |
+
+Five of the seven were one fact: `question_marks` and `terminal_question` on the
+`open` view read AUC **0.779 in XL and 0.716 in L**. Whether a turn's *first
+sentence* ends in a question mark separated the labels in the long bands at close
+to four cases in five — plain unpaired AUC inside a single band, on text the arm
+reads, with band membership self-evident from turn length. **Exploitable**,
+unlike the within-triple findings, and it confounded N6's Q1 directly.
+
+**By this test the corpus is now statistically indistinguishable from clean**,
+and nothing moved in to replace what was removed — which is what happened to the
+four previous generations of this defect. It was closed by moving *both* sides
+and keeping per-triple variety, never by a per-item rule.
+
+Two claims about the fix were raised and **refuted** by direct computation, both
+recorded because a refuted claim is worth as much here as a confirmed one. The
+target cells read AUC exactly 0.500, which is the signature of a *constant*
+feature that ties every comparison and cannot fail — that is how the
+`_shared_body` bug was caught. It is not that, and the check is not degenerate:
+only 8 of 22 L triples and 8 of 17 XL triples are internally homogeneous, so
+attainable AUC still reaches 0.807 in L against a dead-band requirement of 0.187.
+**The check can still fail on a regression.**
+
+**One discrepancy is open and is recorded rather than resolved.** Two independent
+sweeps of the same pre-fix corpus disagreed on how many cells survive BH — 7 by
+the measure above, 16 by another session's. It is not Monte Carlo noise (stable
+across seeds) and it is not the degenerate-cell denominator (7 either way, at
+m=176 and m=152). The likeliest explanation is that the two sweeps score
+different statistics — matched within-triple versus plain unpaired — which is
+precisely the distinction that produced defect nine. Unresolved.
 
 **192 of 261 items are now blind-adjudicated (N3 + this continuation), and
 seven adjudicated label moves are on record and unapplied:**
