@@ -384,13 +384,26 @@ negative:
         at all is that a set nobody loads reports green. So the count is
         asserted here rather than assumed: every band, every item.
         """
-        draft = load_trigger_set(
-            REPO_ROOT / "datasets" / "triggers" / "decision-making" / "index.yaml"
-        )
+        corpus = REPO_ROOT / "datasets" / "triggers" / "decision-making"
+        draft = load_trigger_set(corpus / "index.yaml")
         assert draft.version == 3
         assert {case.band for case in draft.cases} == {"s", "m", "l", "xl"}
         assert len(draft.positives) * 2 == len(draft.negatives)
-        assert len(draft.cases) == 120
+
+        # The count is *recomputed from the band files*, not pinned to a literal.
+        # A literal here was 120 and the corpus is 261; re-pinning it would have
+        # meant a test that passes by being edited every time the corpus grows,
+        # which is the same defect as a hand-maintained count in prose. What the
+        # check is for is that nothing is *missed* — the original bug globbed
+        # `datasets/triggers/*.yaml` and never saw the bands one directory down.
+        on_disk = 0
+        for band in sorted(corpus.glob("*.yaml")):
+            if band.name == "index.yaml":
+                continue
+            loaded = yaml.safe_load(band.read_text(encoding="utf-8"))
+            on_disk += len(loaded["positive"]) + len(loaded["negative"])
+        assert on_disk > 0, "no band file was read, so this check proves nothing"
+        assert len(draft.cases) == on_disk
 
 
 class TestRouteLabelsMatchTheRouterTable:
