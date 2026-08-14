@@ -24,6 +24,59 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-13 — Twenty-four short-band triples, and a statistic the design had always deserved
+
+**Commits:** `e07c5ef`
+
+`s.yaml` gains ten triples (`s15`–`s24`) and `m.yaml` fourteen. The corpus goes
+from 120 items to 192. **No label on an existing item changes here** — the three
+moves N3's adjudication found (`s02n2`, `s12p`, `xl05n2`) are recorded in the
+notebook and are deliberately *not* applied, because the key must move once, at
+the freeze, with the long-band rebuild in the same version bump. Two bumps means
+two sets of incomparable records.
+
+**Why the short bands and not the long ones.** A power analysis nobody had run
+before the corpus was authored: at the measured design effect of 1.63 the short
+arm is the binding constraint, and Fisher-exact confirms it — with `n_short`
+held at 24 triples, taking `n_long` to 400 still reaches only 0.798. Widening
+the long bands first would have bought nothing.
+
+**The extension closed both seeded entries in `datasets/triggers/corpus-baseline.txt`,
+and neither was closed by moving a threshold.** `paste_cues` is no longer inert
+in every view; the four-feature `close`-view leak no longer holds with that
+feature set. They are deleted rather than kept, which is the may-only-shrink
+rule working in the direction it was written for.
+
+**And it opened two, which is the exceptional case for that file.** The battery
+gained a matched within-triple check — a positive against its own two negatives,
+over the body they share, which is the only comparison a matched design actually
+controls. `word_count` sits above both its negatives in 0.660 of comparisons,
+3.24 null standard errors from chance, on both the `turn` and `ask` views. The
+pooled AUC over the same corpus is 0.517 and 0.502.
+
+**Read those two numbers together, because that is the finding.** A pooled AUC
+ranks positives against negatives from *other* triples, where body variation
+swamps the ask, so it is structurally blind to a rank held inside a triple. The
+corpus was built as a matched design and evaluated as an unmatched one, and
+every "the corpus is ruler-proof" claim on record rests on the wrong statistic.
+Four separate pooled-cancellations were found by four separate people over one
+day, each after the fact; the matched check found all of them in one run.
+
+**What it does not license.** An arm sees one turn and never sees the other two
+members of its triple, so it cannot use a within-triple rank directly. This is a
+defect in the *construction*, not a demonstrated exploit, and per-band pooled AUC
+remains the exploitability measure. Both are baselined and printed on every run
+rather than treated as either fatal or fine.
+
+**Not fixable in this change.** 23 long-band triples are mid-rebuild and
+unmerged. An assignment rule pairing close rank with ask form was tried and
+*measured to make it worse*: only 15 of 64 positives are `embedded` and can carry
+shortest or middle rank, so 49 of 64 would be forced to positive-longest, which
+projects ~0.766 against the observed 0.660. The close condition is a roughly
+uniform rank distribution reached by assignment at authoring time, never by
+editing negatives toward a target — four generations of leak on 2026-08-13 came
+from per-item bounds pushed in one direction.
+
 ## 2026-08-13 — The XL band, and two rulers that cancelled
 
 **Commits:** `74b7f5f`
