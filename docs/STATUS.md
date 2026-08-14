@@ -1,6 +1,6 @@
 # Status: what has been run, what it showed, what is left
 
-**Hand-maintained. Last updated 2026-08-13.** There is no generator behind this
+**Hand-maintained. Last updated 2026-08-14.** There is no generator behind this
 file and it does not pretend otherwise — see the note at the top of
 [`SCORECARD.md`](../SCORECARD.md) about a status file that claimed to be
 generated and was not.
@@ -40,6 +40,27 @@ table under it is a hand-maintained number like any other.*
 
 Notional cost only — everything runs on a Claude Max subscription, nothing is
 billed per call. See [`CLAUDE.md`](../CLAUDE.md).
+
+**Correction, 2026-08-13, appended. A whole run is missing from the table
+above.** N3's blind label adjudication ran on 2026-08-13 — 3 judges × 120 turns,
+**360 calls**, 0 unparseable — and this file did not mention it anywhere. The
+total was therefore **~4,600**, not ~4,240, counted from
+`results/triggers/adjudication.jsonl`.
+
+It is the largest single omission the ledger has had, and it is instructive
+about *which* runs go missing: N3 produced no arm comparison and no accuracy
+number, so it never passed through the reporting path that puts a family in
+this table. **A run that measures the instrument rather than the skill is
+exactly the run nobody records**, and N3 was the run that decided whether the
+corpus could be used at all.
+
+**Correction, 2026-08-14, appended.** The corpus grew to 261 items the same day
+(two merges, 24 short-band and 23 long-band triples), leaving 141 items with no
+adjudication record at all. `s` and `m` are now **fully adjudicated** — 216 more
+calls, 3 judges × 72 turns, 0 unparseable, `--only` scoped so `l`/`xl` (mid-edit
+by another session closing an `open`-view leak) were not touched. The total is
+therefore **~4,816**, not ~4,600. See
+[`2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md`](../notebook/2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md).
 
 ---
 
@@ -128,6 +149,40 @@ to answer — and two of the eight were the maintainer asking, not the tooling.
 
 ---
 
+## Where the corpus is, 2026-08-14
+
+**261 items, 87 triples** — s 24, m 24, l 22, xl 17. Grown from 120 items / 40
+triples by two same-day merges (24 short-band triples, 23 long-band ones). A
+separate session's own notebook entry has the merge detail and the battery
+before/after; not reproduced here.
+
+**192 of 261 items are now blind-adjudicated (N3 + this continuation), and
+seven adjudicated label moves are on record and unapplied:**
+
+| case | direction | votes | adjudicated |
+|---|---|---|---|
+| `s02n2` | negative → positive | (False, True, True) | 2026-08-13 (N3) |
+| `s12p` | positive → negative | (True, False, False) | 2026-08-13 (N3) |
+| `xl05n2` | negative → positive | (True, True, True) | 2026-08-13 (N3) |
+| `m14n2` | negative → positive | (True, True, True) | 2026-08-14 |
+| `m16n2` | negative → positive | (True, True, False) | 2026-08-14 |
+| `m18p` | positive → negative | (False, False, False) | 2026-08-14 |
+| `s19n2` | negative → positive | (True, True, False) | 2026-08-14 |
+
+None applied yet: moving a label bumps the answer-key version and invalidates
+every comparison across the boundary, so the key moves **once**, at the
+freeze, carrying all seven plus whatever N4–N7 still finds. Movement over the
+192 adjudicated so far is 7/192 = 0.036 against the pre-registered 0.20 kill —
+the corpus continues to survive it by a wide margin. Detail, per-band
+breakdown and inter-rater agreement:
+[`2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md`](../notebook/2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md).
+
+L and XL (69 of the 261 items) remain at N3's original coverage. A separate
+session is mid-edit on `l.yaml`/`xl.yaml`/`corpus-baseline.txt` closing an
+`open`-view leak, so their text is not stable enough to adjudicate against yet.
+
+---
+
 ## Open decisions that belong to the maintainer
 
 | decision | status |
@@ -151,7 +206,7 @@ became **[Track N](RESEARCH_PROGRAMME.md)** on 2026-08-13.
 |---|---|
 | **0** — instrument (transport) | ✅ done |
 | **I** — reliability | ✅ done |
-| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — 40 triples, 120 items, all four bands (S 42, M 30, L 27, XL 21); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; N3–N7 open. Blocks every future L and M claim and retro-qualifies every past one. |
+| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 partial** — S and M fully adjudicated (192 of 261 items total, 7 moves unapplied — see below), L/XL blocked on an in-progress `open`-view leak fix; N4–N7 open. Blocks every future L and M claim and retro-qualifies every past one. |
 | **K** — frameworks review | 🟡 three passes; K4 waits on Track A |
 | **M** — skill design | 🟡 M1–M6b done; M3 has no estimator on a merged arm; **all of it now carries the Track N caveat** |
 | **L** — skill variants | 🟡 L5 and **L7 run**; L7 unpublished; **same Track N caveat** |
