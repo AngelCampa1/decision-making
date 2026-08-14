@@ -36,14 +36,34 @@ claimed and what exists is visible at every commit.
       permutation (continuous)
 - [x] Intervals from a cluster bootstrap over templates, not items
 - [x] CLT deliberately avoided at this N, with the reason recorded
-- [x] Multiplicity controlled across pre-registered primaries (BH, q = 0.10)
+- [ ] Multiplicity controlled across pre-registered primaries (BH, q = 0.10)
+      — `benjamini_hochberg` is implemented, 100%-covered and exported from
+      `stats/__init__.py`
+      ([`../evals/src/decision_evals/stats/multiplicity.py`](../evals/src/decision_evals/stats/multiplicity.py)),
+      but no production code calls it: no confirmation run has produced a
+      family of primary p-values yet for it to correct. Implemented-but-unused
+      is not "controlled". The corpus shortcut battery does not need this —
+      `MATCHED_Z = 3.0` is p = 0.0027 two-sided against 176 band×view×feature
+      cells, ≈0.47 expected false findings, approximately FDR-safe by
+      construction, independently of BH
+      ([`../notebook/2026-08-14-the-battery-searches-176-cells-and-nobody-had-costed-that.md`](../notebook/2026-08-14-the-battery-searches-176-cells-and-nobody-had-costed-that.md)).
+      What remains open is the actual pre-registered-primaries family, which
+      cannot be corrected before it exists.
 - [x] Guards left uncorrected by design, with the asymmetry stated
+      — the design rationale is committed prose
+      (`stats/multiplicity.py` module docstring), true independent of whether
+      the correction above has ever run
 - [ ] Raw p and adjusted q both reported for every primary
 - [ ] Effect sizes reported with intervals, never p-values alone
 - [ ] Underpowered comparisons reported as `UNTESTED` with their MDE, not as
       nulls
 - [x] Statistical code covered at 100% line and branch, with property tests
-      pinning it against `scipy` and `statsmodels`
+      pinning McNemar against `scipy`
+      — Benjamini-Hochberg is a thin wrapper around `statsmodels`, not an
+      independent implementation checked against it, so nothing here pins
+      against `statsmodels`; that self-referential test was deliberately
+      removed (`tests/property/test_stats_properties.py`,
+      `TestBenjaminiHochberg.test_rejections_agree_with_the_adjusted_values`)
 - [ ] Coverage simulation: 1,000 simulated clustered datasets with known Δ,
       empirical 95% CI coverage in [0.93, 0.97]
 
@@ -64,7 +84,10 @@ claimed and what exists is visible at every commit.
 
 - [x] Code public from the first commit
       — `github.com/AngelCampa1/decision-making-skills`
-- [x] Apache-2.0 for code; CC-BY-4.0 intended for the paper
+- [x] Apache-2.0 for code — [`../LICENSE`](../LICENSE)
+- [ ] CC-BY-4.0 for the paper — stated as "intended" here, but not committed
+      anywhere: no `paper/LICENSE`, no notice in `paper/main.tex`, no header on
+      `paper/refs.bib`. Intention is not the artifact.
 - [x] Dependencies pinned via `uv` lockfile
 - [x] Full local gate (`de check`) runs lint, types, tests, coverage floors
 - [ ] Zenodo DOI minted for the code and data release
