@@ -1,0 +1,511 @@
+---
+import Base from '../layouts/Base.astro';
+import Mark from '../components/Mark.astro';
+import { REPO } from '../lib/site.ts';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const procedures = [
+  {
+    ord: '01',
+    name: 'Sort the pile',
+    file: 'ledger.md',
+    when: 'Too much arrived and you cannot tell what matters.',
+    before: 'It is raining in Paraguay. Your flight to Lisbon is Tuesday. So bring a raincoat.',
+    after: `TURNS ON
+  the Lisbon forecast
+  the Tuesday flight
+
+SET ASIDE
+  the rain in Paraguay
+  Your trip does not touch it.
+
+SO
+  pack for Lisbon`,
+  },
+  {
+    ord: '02',
+    name: 'Check it fits you',
+    file: 'fit.md',
+    when: 'The advice is right in general and may be wrong for you.',
+    before: 'Save six months of pay before you quit.',
+    after: `NORMAL ANSWER
+  Save six months of pay first.
+
+WHAT WOULD CHANGE IT
+  Your visa is tied to your job.
+  Then line up the next job first.
+
+  Under about four months of savings,
+  take the contract first.
+
+SO
+  Ask about the visa before anything else.`,
+  },
+  {
+    ord: '03',
+    name: 'Follow what it starts',
+    file: 'cascade.md',
+    when: 'The action looks fine and the worry is what comes next.',
+    before: 'Should I resign?',
+    after: `CHAIN
+  Resigning gets you out.
+  It also ends your standing.
+  You can no longer raise the thing
+  you were going to raise.
+
+CLOSES
+  the talk you were saving for later
+
+SO
+  That second part decides the answer.`,
+  },
+  {
+    ord: '04',
+    name: 'Now or later',
+    file: 'timing.md',
+    when: 'You know what to do and not when.',
+    before: 'The offer says decide by Friday.',
+    after: `UNDO PRICE
+  You can say no up to your start date.
+  After that it costs a job and a reference.
+
+REAL DEADLINE
+  The letter has a written expiry.
+
+FELT DEADLINE
+  You want the worry to stop.
+
+WAITING
+  buys:  You hear from the other firm on Thursday.
+  costs: The team starts planning without you.
+
+SO
+  Wait for Thursday. Answer Friday morning.`,
+  },
+];
+
+const counts = [
+  { value: '4,240', label: 'model calls on record' },
+  { value: '0', label: 'skills proven' },
+  { value: '8', label: 'of our own tests found broken' },
+  { value: '89%', label: 'of the test set a word count can pass' },
+];
+
+const arms = [
+  ['Off', 'We remove the skill.', 'the floor'],
+  ['On', 'We add the real skill.', 'the thing we care about'],
+  ['Placebo', 'We add filler of the same length and shape.', 'whether the words did the work'],
+  ['Think first', 'We just say think step by step.', 'whether a cheap line does the same'],
+];
+---
+
+<Base title="decision-making-skills: an agent skill, tested in the open">
+  <div class="page">
+    <header class="hero">
+      <p class="hero__eyebrow">Pre-alpha &middot; Apache-2.0 &middot; 0 skills proven</p>
+      <h1>Help your agent make the call</h1>
+      <p class="lede">
+        A free file your AI agent reads. It works out what is hard about the choice.
+        Then it uses one method, not four.
+      </p>
+
+      <div class="status-block">
+        <Mark width={64} state="null" />
+        <div>
+          <p class="status-block__label">Where the evidence stands</p>
+          <p><strong>We have not proven this works.</strong> No skill here has passed a
+          real test. The scorecard is empty on purpose.</p>
+          <p>We built the measuring tools first. Every result is public. So are the
+          eight times we found our own test broken.</p>
+        </div>
+      </div>
+
+      <div class="cta">
+        <a class="cta__primary" href="#install">Install the skill</a>
+        <a class="cta__secondary" href={`${base}/docs/status/`}>Read the results</a>
+        <a class="cta__secondary" href={REPO}>See the code</a>
+      </div>
+
+      <p class="counter-strip">
+        {counts.map((c) => (
+          <span class="counter"><b>{c.value}</b> {c.label}</span>
+        ))}
+      </p>
+    </header>
+
+    <h2>What goes wrong now</h2>
+    <p>Give an agent a pile of facts and a question. It treats every fact as equal.</p>
+    <p>
+      Tell it that it is raining in Paraguay. Then ask about a trip to Lisbon. You may
+      get a raincoat in the answer. The fact arrived, so the agent used it.
+    </p>
+    <p class="bad-answer">&ldquo;&hellip;and given the rain in Paraguay, pack a raincoat.&rdquo;</p>
+    <p>A big choice and a small one get the same thought. That is the other half of the problem.</p>
+
+    <h2>Four methods. It reads one.</h2>
+    <p>It asks one question first. What is hard here? The answer picks the method.</p>
+
+    <ol class="procedures breakout">
+      {
+        procedures.map((p) => (
+          <li class="proc">
+            <span class="proc__ord">{p.ord}</span>
+            <div class="proc__body">
+              <h3 class="proc__name">
+                {p.name}
+                <a class="proc__file" href={`${REPO}/blob/main/skills/decision-making/${p.file}`}>
+                  {p.file}
+                </a>
+              </h3>
+              <p class="proc__when">{p.when}</p>
+              <p class="proc__before">{p.before}</p>
+              <pre class="proc__after">{p.after}</pre>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="muted proc__caption">
+      These show the shape of the answer. They are examples, not recorded runs.
+    </p>
+
+    <h2>It picks one, then answers</h2>
+    <p>More than one can apply. Then they run in order. Each one feeds the next.</p>
+    <p class="chain">sort the pile &rarr; check it fits &rarr; follow what it starts &rarr; now or later</p>
+    <p>Two is usually enough. Three means you have two choices, not one.</p>
+    <p>The point is the answer. Four neat blocks and no advice is homework.</p>
+    <p>It also knows when to stay off. A lookup is not a choice. Neither is a bug hunt.</p>
+
+    <h2 id="install">Install it in one line</h2>
+    <p>
+      The files are plain markdown. That is text you can read yourself. They follow the
+      <a href="https://agentskills.io">Agent Skills</a> standard. Nothing to build.
+      Nothing to convert.
+    </p>
+
+    <h3>Claude Code</h3>
+    <div class="code"><pre><code>cp -r skills/* .claude/skills/</code></pre></div>
+
+    <h3>Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode</h3>
+    <div class="code"><pre><code>cp -r .agents/skills/* ~/.agents/skills/</code></pre></div>
+
+    <p class="muted">
+      There is also a Claude Code plugin. It ships nothing today. A skill goes in only
+      after it passes a test.
+    </p>
+
+    <div class="caveat">
+      <p class="caveat__label">Before you install it</p>
+      <p>We have not shown this helps yet. It is free, and one line takes it back out.</p>
+    </div>
+
+    <h2>What we found</h2>
+
+    <div class="stat-strip breakout">
+      {
+        counts.map((c) => (
+          <div class="stat">
+            <b class="stat__value">{c.value}</b>
+            <span class="stat__label">{c.label}</span>
+          </div>
+        ))
+      }
+    </div>
+
+    <p>
+      We have made about 4,240 model calls. They all ask one thing. Does the skill turn
+      on at the right time? None of them ask if it helps you choose better. We have not
+      run that test yet.
+    </p>
+    <p>
+      We changed how the skill describes itself five times. Not one change made it
+      better at spotting a real choice. Each change only traded one kind of mistake for
+      another.
+    </p>
+
+    <div class="caveat">
+      <p class="caveat__label">Then we checked the test set itself</p>
+      <p>
+        <strong>You can pass 89% of it by counting words.</strong> Long message, real
+        choice. Short message, not a choice. No model needed.
+      </p>
+      <p>
+        Our highest score is 95.6%. So every result above was a fight over about six
+        points. That makes our own work look worse. We found it, and we are writing it
+        here. We are building a new test set now.
+      </p>
+    </div>
+
+    <p>
+      So why ship the file at all? A verdict rules what we may claim in public. It does
+      not rule what you may install. Use it if it helps you. Drop it if it does not.
+    </p>
+    <p>
+      We also list the times we broke our own tests. Eight so far. Every one ran clean
+      and handed back a number that looked fine. Nothing crashed. That is why we keep
+      looking.
+    </p>
+
+    <div class="cta">
+      <a class="cta__secondary" href={`${base}/docs/status/`}>Read every result</a>
+      <a class="cta__secondary" href={`${base}/notebook/`}>Read the research log</a>
+      <a class="cta__secondary" href={`${base}/docs/limitations/`}>Read what is wrong with this</a>
+    </div>
+
+    <h2>How we test</h2>
+    <p>
+      Lots of people share prompt packs. Almost nobody checks if they work. So we run
+      each skill four ways on the same questions.
+    </p>
+
+    <div class="table-scroll breakout">
+      <table>
+        <thead>
+          <tr><th>Version</th><th>What we run</th><th>What it tells us</th></tr>
+        </thead>
+        <tbody>
+          {arms.map(([v, run, tells]) => (
+            <tr><td><strong>{v}</strong></td><td>{run}</td><td>{tells}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      A placebo is a fake with the same shape. It is easy to beat no skill at all. The
+      placebo is the real test. If filler scores the same, the words did the work.
+    </p>
+    <p>
+      We write down what we expect before each run. The date goes into git history. We
+      cannot move it later. A guess made after the fact is not a guess.
+    </p>
+
+    <h2>Who this is for</h2>
+    <ul>
+      <li>You use an AI agent and face real choices.</li>
+      <li>You write agent skills and want to know if yours works.</li>
+      <li>You study these tools and want the raw data.</li>
+    </ul>
+
+    <h3>Who it is not for</h3>
+    <ul>
+      <li>You want a badge that says this works. There is no badge yet.</li>
+      <li>You want a lookup or a bug fix. It stays off for those.</li>
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    padding: var(--space-3xl) 0 var(--space-2xl);
+  }
+
+  .hero__eyebrow {
+    font: 600 0.6875rem/1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 var(--space-md);
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin: var(--space-xl) 0 0;
+  }
+
+  .cta a {
+    font: 600 0.875rem/1 var(--font-mono);
+    text-decoration: none;
+    padding: 0.65rem 1.1rem;
+    border-radius: var(--radius-3);
+  }
+
+  .cta__primary {
+    background: var(--accent);
+    color: var(--accent-on);
+    border: 1px solid var(--accent);
+  }
+
+  .cta__primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: var(--accent-on);
+  }
+
+  .cta__secondary {
+    color: var(--ink);
+    border: 1px solid var(--rule-interactive);
+  }
+
+  .cta__secondary:hover {
+    color: var(--ink-strong);
+    border-color: var(--ink-muted);
+  }
+
+  /* Four counts at one size and one weight. The zero is the point, and it lands
+     harder for not being enlarged: the "do not aestheticise the null" rule.
+     Separated by space rather than by a middot, because a wrapped middot
+     strands itself at the end of a line. */
+  .counter-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-lg);
+    margin: var(--space-2xl) 0 0;
+    font: 400 0.8125rem/1.6 var(--font-mono);
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .counter b {
+    color: var(--ink-strong);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .bad-answer {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    padding-left: var(--space-md);
+    border-left: 1px solid var(--rule);
+  }
+
+  .procedures {
+    list-style: none;
+    margin: var(--space-2xl) 0 var(--space-md);
+    padding: 0;
+    display: grid;
+  }
+
+  .proc {
+    display: grid;
+    /* minmax(0,...) or the `pre` below, which is white-space: pre, sets the
+       column's min-content width to its longest line and blows the grid out. */
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0 var(--space-md);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--rule-hair);
+    margin: 0;
+  }
+
+  .proc:last-child {
+    border-bottom: 1px solid var(--rule-hair);
+  }
+
+  .proc__ord {
+    font: 600 0.75rem/1.6 var(--font-mono);
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    padding-top: 0.35rem;
+  }
+
+  .proc__name {
+    margin: 0 0 var(--space-2xs);
+    font-size: 1.125rem;
+    line-height: 1.3;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-sm);
+  }
+
+  .proc__file {
+    font: 400 0.75rem/1 var(--font-mono);
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .proc__file:hover {
+    text-decoration: underline;
+  }
+
+  .proc__when {
+    margin: 0 0 var(--space-sm);
+    font-size: 1rem;
+    color: var(--ink);
+  }
+
+  .proc__before {
+    margin: 0 0 var(--space-sm);
+    font-style: italic;
+    font-size: 0.9375rem;
+    color: var(--ink-muted);
+    font-variation-settings: "opsz" 15;
+  }
+
+  .proc__after {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--ink-secondary);
+    background: var(--surface-sunken);
+    border: 1px solid var(--rule-hair);
+    border-radius: var(--radius-2);
+    padding: var(--space-sm) var(--space-md);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .proc__caption {
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 56rem) {
+    .procedures {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--space-2xl);
+    }
+    .proc:nth-child(2) {
+      border-top: 1px solid var(--rule-hair);
+    }
+    .proc:nth-child(odd) {
+      border-right: 1px solid var(--rule-hair);
+      padding-right: var(--space-2xl);
+    }
+    .proc:nth-child(3) {
+      border-bottom: 1px solid var(--rule-hair);
+    }
+  }
+
+  .chain {
+    font: 400 0.875rem/1.6 var(--font-mono);
+    color: var(--ink-secondary);
+    padding: var(--space-sm) var(--space-md);
+    border-left: 2px solid var(--accent-rule);
+  }
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--rule-strong);
+    border-bottom: 1px solid var(--rule-hair);
+  }
+
+  @media (min-width: 46rem) {
+    .stat-strip {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .stat__value {
+    display: block;
+    font: 600 1.75rem/1.1 var(--font-mono);
+    color: var(--ink-strong);
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .stat__label {
+    display: block;
+    margin-top: var(--space-2xs);
+    font: 400 0.75rem/1.4 var(--font-mono);
+    color: var(--ink-muted);
+  }
+</style>

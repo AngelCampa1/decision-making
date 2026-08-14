@@ -1,0 +1,1115 @@
+/* decision-making-skills -- design system
+ *
+ * Two families and no sans: serif is prose, mono is anything that is a
+ * measurement, an identifier, a label, or chrome. In this repository that
+ * division is real, so a third family would be a third signal with nothing to
+ * signal.
+ *
+ * The accent is permitted in four roles -- link text, 1-3px rules, the point
+ * estimate square in the mark, and one primary button per view. It is never a
+ * surface. Burnt sienna at 8:1 is an excellent ink and a terrible fill, and the
+ * moment it becomes a filled band this turns into a startup landing page.
+ */
+
+/* ------------------------------------------------------------------ tokens */
+
+:root {
+  color-scheme: light dark;
+
+  /* surfaces */
+  --surface-page: #fdfcfa;
+  --surface-raised: #f7f5f1;
+  --surface-sunken: #f1eee8;
+  --surface-inset: #ebe7df;
+
+  /* rules */
+  --rule-hair: #e5e1d9;
+  --rule: #d6d1c7;
+  --rule-strong: #b9b2a5;
+  --rule-interactive: #8c857a;
+
+  /* prose */
+  --ink-strong: #15130f;
+  --ink: #262320;
+  --ink-secondary: #423d36;
+  --ink-muted: #635d53;
+  /* NOT body text. 3.56:1 -- licensed for >=19px, non-text bounds, and the
+   * em-dash null glyph only. */
+  --ink-faint: #8c857a;
+
+  /* accent */
+  --accent: #7a3e12;
+  --accent-hover: #5e2f0d;
+  --accent-rule: #d9b189;
+  --accent-wash: #f7eee4;
+  --accent-on: #fdfcfa;
+
+  /* verdict vocabulary */
+  --status-ship-ink: #1f5e36;
+  --status-ship-wash: #e9f3eb;
+  --status-ship-rule: #a9cdb4;
+  --status-provisional-ink: #7a3e12;
+  --status-provisional-wash: #f7eee4;
+  --status-provisional-rule: #ddb48b;
+  --status-null-ink: #2e5473;
+  --status-null-wash: #e9eff5;
+  --status-null-rule: #a6c0d6;
+  --status-harmful-ink: #8c2a1e;
+  --status-harmful-wash: #f8ebe8;
+  --status-harmful-rule: #e0afa5;
+  --status-untested-ink: #635d53;
+  --status-untested-rule: #b9b2a5;
+  --status-withdrawn-ink: #5a4e63;
+  --status-withdrawn-wash: #f0edf2;
+  --status-withdrawn-rule: #c3b9cc;
+
+  /* editorial. Corrections are teal, not amber and never red: catching an
+   * error is this project working, and red would say "unstable" where the text
+   * says "careful". Red appears in exactly one place in this system, HARMFUL. */
+  --status-correction-ink: #1d5b57;
+  --status-correction-wash: #e8f2f0;
+  --status-correction-rule: #9cc7c1;
+  --status-caveat-ink: #6e4e12;
+  --status-caveat-wash: #fbf3e3;
+  --status-caveat-rule: #dcc08a;
+
+  /* code */
+  --code-bg: var(--surface-sunken);
+  --code-fg: var(--ink);
+  --code-comment: var(--ink-muted);
+  --code-string: var(--accent);
+  --code-keyword: var(--ink-strong);
+
+  /* mark */
+  --mark-ink: var(--ink);
+  --mark-axis: #a8a092;
+  --mark-accent: var(--accent);
+  --mark-w-data: 2.5;
+  --mark-w-axis: 1.5;
+
+  /* system */
+  --focus-ring: var(--accent);
+  --selection-bg: #e8ded5;
+
+  /* families */
+  --font-serif: "Source Serif 4 Variable", "Serif Fallback", Georgia, serif;
+  --font-mono: "IBM Plex Mono", "Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
+
+  /* spacing -- 4px base, block rhythm at --space-xl to sit near body leading */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.375rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 1.75rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+  --space-4xl: 7rem;
+
+  /* radii -- the ceiling is 4px, everywhere. There are no box-shadows: depth
+   * is a 1px rule plus a 2-4% surface luminance step. */
+  --radius-0: 0;
+  --radius-1: 2px;
+  --radius-2: 3px;
+  --radius-3: 4px;
+
+  /* measure -- 34rem is ~66 characters at 18px Source Serif 4. Tables, code
+   * and figures break out to --wide rather than widening the prose. */
+  --measure: 34rem;
+  --wide: 48rem;
+}
+
+/* Dark values are authored once and applied to both selectors, so the explicit
+ * toggle wins in both directions and the system default still works with no JS.
+ * Never give a colour its only definition inside one of these blocks. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-page: #171613;
+    --surface-raised: #1f1e1a;
+    --surface-sunken: #100f0d;
+    --surface-inset: #26241f;
+    --rule-hair: #2b2924;
+    --rule: #3a3831;
+    --rule-strong: #575349;
+    --rule-interactive: #7e786d;
+    --ink-strong: #f5f1e8;
+    --ink: #e6e1d7;
+    --ink-secondary: #c6bfb3;
+    --ink-muted: #a39c90;
+    --ink-faint: #7e786d;
+    --accent: #e0a06a;
+    --accent-hover: #eeb587;
+    --accent-rule: #6e4c2e;
+    --accent-wash: #2a2019;
+    --accent-on: #171613;
+    --status-ship-ink: #7cc79a;
+    --status-ship-wash: #16241c;
+    --status-ship-rule: #2f4c3a;
+    --status-provisional-ink: #e0a06a;
+    --status-provisional-wash: #2a2019;
+    --status-provisional-rule: #6e4c2e;
+    --status-null-ink: #8fb6d6;
+    --status-null-wash: #171f27;
+    --status-null-rule: #2f4457;
+    --status-harmful-ink: #e39182;
+    --status-harmful-wash: #271815;
+    --status-harmful-rule: #5c2e26;
+    --status-untested-ink: #a39c90;
+    --status-untested-rule: #575349;
+    --status-withdrawn-ink: #b3a5c1;
+    --status-withdrawn-wash: #201c26;
+    --status-withdrawn-rule: #443a50;
+    --status-correction-ink: #6fc0b7;
+    --status-correction-wash: #12211f;
+    --status-correction-rule: #2a4a46;
+    --status-caveat-ink: #d9b877;
+    --status-caveat-wash: #241f14;
+    --status-caveat-rule: #5e4f28;
+    --mark-axis: #6b665c;
+    /* light-on-dark blooms, so the mark's strokes come down a notch */
+    --mark-w-data: 2.25;
+    --mark-w-axis: 1.25;
+    --selection-bg: #4b3a2a;
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface-page: #171613;
+  --surface-raised: #1f1e1a;
+  --surface-sunken: #100f0d;
+  --surface-inset: #26241f;
+  --rule-hair: #2b2924;
+  --rule: #3a3831;
+  --rule-strong: #575349;
+  --rule-interactive: #7e786d;
+  --ink-strong: #f5f1e8;
+  --ink: #e6e1d7;
+  --ink-secondary: #c6bfb3;
+  --ink-muted: #a39c90;
+  --ink-faint: #7e786d;
+  --accent: #e0a06a;
+  --accent-hover: #eeb587;
+  --accent-rule: #6e4c2e;
+  --accent-wash: #2a2019;
+  --accent-on: #171613;
+  --status-ship-ink: #7cc79a;
+  --status-ship-wash: #16241c;
+  --status-ship-rule: #2f4c3a;
+  --status-provisional-ink: #e0a06a;
+  --status-provisional-wash: #2a2019;
+  --status-provisional-rule: #6e4c2e;
+  --status-null-ink: #8fb6d6;
+  --status-null-wash: #171f27;
+  --status-null-rule: #2f4457;
+  --status-harmful-ink: #e39182;
+  --status-harmful-wash: #271815;
+  --status-harmful-rule: #5c2e26;
+  --status-untested-ink: #a39c90;
+  --status-untested-rule: #575349;
+  --status-withdrawn-ink: #b3a5c1;
+  --status-withdrawn-wash: #201c26;
+  --status-withdrawn-rule: #443a50;
+  --status-correction-ink: #6fc0b7;
+  --status-correction-wash: #12211f;
+  --status-correction-rule: #2a4a46;
+  --status-caveat-ink: #d9b877;
+  --status-caveat-wash: #241f14;
+  --status-caveat-rule: #5e4f28;
+  --mark-axis: #6b665c;
+  --mark-w-data: 2.25;
+  --mark-w-axis: 1.25;
+  --selection-bg: #4b3a2a;
+}
+
+/* Metric-matched fallbacks, so the swap does not reflow. These numbers are
+ * derived from published metrics and have NOT been measured against the
+ * subsetted build -- see docs note. Treat them as provisional. */
+@font-face {
+  font-family: "Serif Fallback";
+  src: local("Georgia"), local("Charter"), local("Times New Roman");
+  size-adjust: 98%;
+  ascent-override: 96%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Mono Fallback";
+  src: local("SFMono-Regular"), local("Consolas"), local("Menlo"), local("DejaVu Sans Mono");
+  size-adjust: 96%;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+/* ------------------------------------------------------------------- reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.62;
+  /* oldstyle in prose: "about 4,240 model calls" sits in the line rather than
+   * shouting over it. Data switches to lining tabular below. */
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--ink-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-1);
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+/* -------------------------------------------------------------- typography */
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--ink-strong);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.35rem + 2.7vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  font-variation-settings: "opsz" 44;
+  margin: 0 0 var(--space-md);
+}
+
+h2 {
+  font-size: 1.625rem;
+  line-height: 1.22;
+  letter-spacing: -0.014em;
+  font-variation-settings: "opsz" 26;
+  margin: var(--space-3xl) 0 var(--space-md);
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  letter-spacing: -0.006em;
+  font-variation-settings: "opsz" 20;
+  margin: var(--space-2xl) 0 var(--space-xs);
+}
+
+/* h4 is the "RESULTS / LIMITS / THE BANDS" label, not a heading in the serif
+ * sense -- so it is mono, like every other label in the system. */
+h4 {
+  font: 600 0.8125rem/1.35 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: var(--space-2xl) 0 var(--space-xs);
+}
+
+p {
+  margin: 0 0 var(--space-md);
+  text-wrap: pretty;
+}
+
+.lede {
+  font-size: 1.375rem;
+  line-height: 1.42;
+  letter-spacing: -0.006em;
+  font-variation-settings: "opsz" 22;
+  color: var(--ink-secondary);
+  max-width: 28rem;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+strong {
+  font-weight: 600;
+  color: var(--ink-strong);
+}
+
+ul,
+ol {
+  padding-left: 1.15rem;
+  margin: 0 0 var(--space-md);
+}
+
+li {
+  margin-bottom: var(--space-2xs);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: var(--space-2xl) 0;
+}
+
+/* A rule followed by a heading is one section break, not two. Without this the
+ * hr's margin and the h2's margin-top stack into a screen of nothing. */
+hr + h2,
+hr + h3 {
+  margin-top: var(--space-lg);
+}
+
+blockquote {
+  margin: var(--space-xl) 0;
+  padding-left: var(--space-lg);
+  border-left: 1px solid var(--rule-strong);
+  color: var(--ink-secondary);
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------------------------------------------ layout */
+
+/* Prose holds at --measure; tables, code and figures break out to --wide on
+ * either side of it. Symmetric, so the column is optically centred -- an
+ * asymmetric grid reserving a gutter nothing occupies just reads as a page
+ * pushed to the left. */
+.page {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(1.25rem, 1fr)
+    [wide-start] minmax(0, calc((var(--wide) - var(--measure)) / 2))
+    [text-start] min(var(--measure), 100%) [text-end]
+    minmax(0, calc((var(--wide) - var(--measure)) / 2)) [wide-end]
+    minmax(1.25rem, 1fr) [full-end];
+}
+
+.page > * {
+  grid-column: text;
+}
+
+/* A rendered markdown document is wrapped in `.doc__body { display: contents }`
+ * so its children become grid items directly. They do NOT match `.page > *` --
+ * display:contents does not change selector matching -- so without this rule
+ * they auto-flow into whatever column is free and the page shatters. */
+.doc__body > * {
+  grid-column: text;
+}
+
+.page > .breakout,
+.doc__body > .breakout {
+  grid-column: wide;
+}
+
+.page > .bleed {
+  grid-column: full;
+}
+
+/* Chrome that belongs to github.com and not to this site.
+ *
+ * `README.md` opens with the lockup as a `<picture>` whose dark variant is
+ * selected by `media="(prefers-color-scheme: dark)"`. That is the only
+ * mechanism GitHub offers, and it is the wrong one here: this site has a
+ * three-state theme, so a reader who has explicitly chosen dark against a light
+ * system gets the light lockup painted on a dark page, which is dark ink on
+ * dark paper. The mark is already in the header of every page, so the fix is to
+ * drop the duplicate rather than to reimplement the swap. */
+.doc__body .gh-only {
+  display: none;
+}
+
+/* Tables and code extend right from the prose edge rather than being centred
+ * on a wider column. Centring them hangs a table 7rem outside its own heading
+ * on the left, which reads as the heading being indented -- and in STATUS.md
+ * nearly every h2 is immediately followed by a table. */
+.doc__body > table,
+.doc__body > pre,
+.doc__body > .table-scroll {
+  grid-column: text-start / wide-end;
+}
+
+/* A wide table scrolls inside its own column instead of widening the page.
+ * `display: block` is what makes overflow-x apply to a table at all.
+ *
+ * Descendant selector, not child: RESEARCH_PROGRAMME.md has 28 tables and many
+ * are nested inside list items rather than sitting at the top level, and those
+ * were the ones scrolling the whole page sideways on a phone. */
+.doc__body table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.doc__body pre {
+  background: var(--code-bg);
+  border: 1px solid var(--rule-hair);
+  border-radius: var(--radius-2);
+  padding: var(--space-md) var(--space-lg);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.doc__body pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.doc__body > h1 {
+  margin-bottom: var(--space-lg);
+}
+
+/* The emoji ticks in the source are replaced at render time (see
+ * rehype-tables.mjs); this keeps any that slip through in the text font rather
+ * than the OS emoji font. */
+.doc__body td {
+  font-variant-emoji: text;
+}
+
+@media (max-width: 62rem) {
+  .page {
+    /* minmax(0, 1fr), not 1fr: a plain 1fr is minmax(auto, 1fr) and a wide
+       table's min-content width then stretches the column past the viewport,
+       scrolling the whole page sideways instead of just the table. */
+    grid-template-columns:
+      [full-start wide-start text-start] minmax(0, 1fr)
+      [text-end side-end wide-end full-end];
+    padding-inline: 1.25rem;
+  }
+}
+
+/* -------------------------------------------------------------------- mark */
+
+.mark[data-state="null"] {
+  --mark-accent: var(--status-null-ink);
+}
+.mark[data-state="provisional"] {
+  --mark-accent: var(--status-provisional-ink);
+}
+.mark[data-state="ship"] {
+  --mark-accent: var(--status-ship-ink);
+}
+.mark[data-state="harmful"] {
+  --mark-accent: var(--status-harmful-ink);
+}
+/* no ink, because no data */
+.mark[data-state="untested"] .mark__estimate {
+  fill: none;
+  stroke: var(--ink-faint);
+  stroke-width: 2;
+}
+
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
+  color: var(--ink-strong);
+}
+
+.lockup__word {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+}
+
+.lockup:hover .mark {
+  --mark-accent: var(--accent-hover);
+}
+
+/* ------------------------------------------------------------------ header */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  /* solid, never translucent. backdrop-filter is the most recognisable SaaS
+   * tell of the decade and it does nothing for a text site. */
+  background: var(--surface-page);
+  border-bottom: 1px solid var(--rule-hair);
+}
+
+.site-header__inner {
+  max-width: calc(var(--wide) + 14rem);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  font: 400 0.8125rem/1 var(--font-mono);
+}
+
+.site-nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+
+.site-nav a:hover {
+  color: var(--ink);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+@media (max-width: 46rem) {
+  .site-header__inner {
+    gap: var(--space-sm);
+  }
+  .site-nav {
+    gap: var(--space-md);
+    font-size: 0.75rem;
+  }
+  .site-nav .site-nav__wide {
+    display: none;
+  }
+}
+
+/* Below this the wordmark, three nav items and a three-state toggle cannot
+ * share 375px, and the overflow is a horizontally scrolling page rather than a
+ * cramped header. The mark alone still identifies the site. */
+@media (max-width: 30rem) {
+  .lockup__word {
+    display: none;
+  }
+  .site-header__inner {
+    padding-inline: 0.875rem;
+  }
+  .site-nav {
+    gap: var(--space-sm);
+  }
+  .theme-toggle button {
+    padding: 0.35rem 0.35rem;
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  border: 1px solid var(--rule-interactive);
+  border-radius: var(--radius-1);
+  overflow: hidden;
+}
+
+.theme-toggle button {
+  font: 600 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  background: transparent;
+  border: 0;
+  padding: 0.35rem 0.45rem;
+  cursor: pointer;
+}
+
+.theme-toggle button[aria-pressed="true"] {
+  background: var(--surface-inset);
+  color: var(--ink-strong);
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--surface-raised);
+  color: var(--ink-strong);
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--rule-interactive);
+  border-radius: var(--radius-2);
+  font: 600 0.8125rem/1 var(--font-mono);
+  z-index: 20;
+}
+
+.skip-link:focus {
+  left: var(--space-md);
+  top: var(--space-xs);
+}
+
+/* --------------------------------------------------------------- callouts */
+
+/* The standing status of the evidence -- NULL blue, not amber. Amber means
+ * "this particular number is qualified"; blue means "here is where the
+ * evidence stands". Keeping them apart stops the site looking like it is
+ * warning you about itself. */
+.status-block {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-md);
+  align-items: start;
+  background: var(--status-null-wash);
+  border: 1px solid var(--status-null-rule);
+  border-left-width: 3px;
+  border-radius: var(--radius-2);
+  padding: var(--space-md) var(--space-lg);
+  margin-block: var(--space-xl);
+}
+
+.status-block .mark {
+  --mark-accent: var(--status-null-ink);
+  --mark-axis: var(--status-null-rule);
+  --mark-ink: var(--status-null-ink);
+  margin-top: 0.35rem;
+}
+
+.status-block__label,
+.caveat__label {
+  font: 600 0.6875rem/1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 var(--space-2xs);
+}
+
+.status-block__label {
+  color: var(--status-null-ink);
+}
+
+.status-block p:last-child,
+.caveat p:last-child {
+  margin-bottom: 0;
+  color: var(--ink-secondary);
+}
+
+@media (max-width: 34rem) {
+  .status-block {
+    grid-template-columns: 1fr;
+  }
+  .status-block .mark {
+    margin-top: 0;
+  }
+}
+
+.caveat {
+  background: var(--status-caveat-wash);
+  border: 1px solid var(--status-caveat-rule);
+  border-left-width: 3px;
+  border-radius: var(--radius-2);
+  padding: var(--space-md) var(--space-lg);
+  margin-block: var(--space-xl);
+}
+
+.caveat__label {
+  color: var(--status-caveat-ink);
+}
+
+/* The signature component. No background fill -- a fill makes it a warning
+ * box, and being wrong in public is this repository working, not failing. The
+ * doubled left rule reads as struck and restated; the size/colour/style delta
+ * between the two blocks IS the correction. */
+.correction {
+  position: relative;
+  padding-left: var(--space-lg);
+  margin-block: var(--space-2xl);
+}
+
+.correction::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  bottom: 0.3em;
+  width: 4px;
+  border-left: 1px solid var(--status-correction-rule);
+  border-right: 1px solid var(--status-correction-rule);
+}
+
+.correction__label {
+  font: 600 0.6875rem/1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--status-correction-ink);
+  margin: 0 0 var(--space-sm);
+}
+
+.correction__was {
+  margin: 0 0 var(--space-md);
+  padding-left: var(--space-md);
+  border: 0;
+  font-style: italic;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  font-variation-settings: "opsz" 15;
+}
+
+.correction__was p::before {
+  content: "\201C";
+  color: var(--status-correction-rule);
+}
+
+.correction__was p::after {
+  content: "\201D";
+  color: var(--status-correction-rule);
+}
+
+.correction__now {
+  font-size: 1.125rem;
+  line-height: 1.62;
+  color: var(--ink);
+}
+
+.correction__now p:last-child {
+  margin-bottom: 0;
+}
+
+.correction__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-sm);
+  margin: var(--space-sm) 0 0;
+  font: 400 0.75rem/1.45 var(--font-mono);
+  color: var(--ink-muted);
+}
+
+.correction__meta > *:not(:last-child)::after {
+  content: " \00B7";
+  color: var(--ink-faint);
+}
+
+/* ---------------------------------------------------------- verdict badge */
+
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font: 600 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.45rem;
+  border-radius: var(--radius-1);
+  border: 1px solid var(--_rule);
+  background: var(--_wash);
+  color: var(--_ink);
+  white-space: nowrap;
+  vertical-align: 0.05em;
+}
+
+.verdict[data-verdict="ship"] {
+  --_ink: var(--status-ship-ink);
+  --_wash: var(--status-ship-wash);
+  --_rule: var(--status-ship-rule);
+}
+.verdict[data-verdict="provisional"] {
+  --_ink: var(--status-provisional-ink);
+  --_wash: var(--status-provisional-wash);
+  --_rule: var(--status-provisional-rule);
+}
+.verdict[data-verdict="null"] {
+  --_ink: var(--status-null-ink);
+  --_wash: var(--status-null-wash);
+  --_rule: var(--status-null-rule);
+}
+.verdict[data-verdict="harmful"] {
+  --_ink: var(--status-harmful-ink);
+  --_wash: var(--status-harmful-wash);
+  --_rule: var(--status-harmful-rule);
+}
+/* struck literally -- retirement is a state change, not a downgrade */
+.verdict[data-verdict="withdrawn"] {
+  --_ink: var(--status-withdrawn-ink);
+  --_wash: var(--status-withdrawn-wash);
+  --_rule: var(--status-withdrawn-rule);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+/* an unfilled field, not a grey disabled pill */
+.verdict[data-verdict="untested"] {
+  --_ink: var(--status-untested-ink);
+  --_wash: transparent;
+  --_rule: var(--status-untested-rule);
+  border-style: dashed;
+}
+
+/* ------------------------------------------------------------------ tables */
+
+.table-scroll {
+  overflow-x: auto;
+  margin-block: var(--space-xl);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* no vertical rules, no zebra striping, no header fill. One hairline per row
+ * and one strong rule under the header is the entire structure. */
+thead th {
+  font: 600 0.75rem/1.35 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-align: left;
+  padding: 0 var(--space-sm) var(--space-2xs);
+  border-bottom: 1px solid var(--rule-strong);
+  background: none;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: var(--space-sm);
+  border-bottom: 1px solid var(--rule-hair);
+  vertical-align: baseline;
+  font-size: 0.9375rem;
+  line-height: 1.48;
+  color: var(--ink-secondary);
+  font-variation-settings: "opsz" 15;
+  text-wrap: pretty;
+}
+
+tbody tr:last-child td {
+  border-bottom: 1px solid var(--rule);
+}
+
+td strong {
+  font-weight: 600;
+  color: var(--ink-strong);
+}
+
+/* measurements are mono, lining, tabular, right-aligned -- 0.9529 sits
+ * digit-over-digit above 0.9118 */
+td.num,
+th.num,
+.num {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums lining-nums;
+  text-align: right;
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  tbody tr:hover td {
+    background: var(--surface-raised);
+  }
+}
+
+/* an empty cell means "we forgot"; an em dash means "not applicable" */
+.nil {
+  color: var(--ink-faint);
+}
+
+.mark-pass {
+  color: var(--status-ship-ink);
+}
+
+.mark-fail {
+  color: var(--status-harmful-ink);
+}
+
+/* -------------------------------------------------------------------- code */
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Plex Mono's x-height runs ~8% larger than Source Serif 4's, so inline code
+ * is set relative and one notch down or every `de check` in a paragraph
+ * bulges. Block code is absolute -- there is no adjacent serif to match. */
+:not(pre) > code {
+  font-size: 0.9em;
+  background: var(--accent-wash);
+  color: var(--ink);
+  padding: 0.08em 0.3em;
+  border-radius: var(--radius-1);
+  /* These documents are full of long unbroken identifiers -- file paths,
+     `[tool.decision-evals.docs-absent-commands]`. One of them is wider than a
+     phone, and an inline token that cannot wrap scrolls the whole page. */
+  overflow-wrap: anywhere;
+}
+
+a code {
+  color: inherit;
+}
+
+.code {
+  position: relative;
+  background: var(--code-bg);
+  border: 1px solid var(--rule-hair);
+  border-radius: var(--radius-2);
+  margin-block: var(--space-xl);
+}
+
+.code pre {
+  margin: 0;
+  padding: var(--space-md) var(--space-lg);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--code-fg);
+  tab-size: 2;
+}
+
+.code__copy {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  font: 600 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--rule-interactive);
+  border-radius: var(--radius-1);
+  padding: 0.35rem 0.5rem;
+  cursor: pointer;
+  /* opacity, never display:none -- the button stays tab-reachable */
+  opacity: 0;
+  transition: opacity 120ms linear;
+}
+
+.code:hover .code__copy,
+.code:focus-within .code__copy,
+.code__copy:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .code__copy {
+    opacity: 1;
+  }
+}
+
+.code__copy[data-copied] {
+  color: var(--status-ship-ink);
+  border-color: var(--status-ship-rule);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code__copy {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------ footer */
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  margin-top: var(--space-4xl);
+  padding: var(--space-3xl) 0 var(--space-4xl);
+  color: var(--ink-muted);
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 56rem) {
+  .site-footer__grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: var(--space-2xl);
+  }
+}
+
+.site-footer__honest {
+  font-size: 0.9375rem;
+  color: var(--ink-secondary);
+  margin: 0;
+}
+
+.site-footer__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font: 400 0.8125rem/1.9 var(--font-mono);
+}
+
+.site-footer__links a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.site-footer__links a:hover {
+  color: var(--accent);
+}
+
+/* staleness made visible, the same gesture as STATUS.md's "Last updated" line */
+.site-footer__stamp {
+  font: 400 0.75rem/1.6 var(--font-mono);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ------------------------------------------------------------------- print */
+
+@media print {
+  :root {
+    --surface-page: #fff;
+    --surface-raised: #fff;
+    --surface-sunken: #fff;
+    --ink: #000;
+    --ink-strong: #000;
+    --accent: #000;
+  }
+  .site-header,
+  .code__copy,
+  .theme-toggle,
+  .skip-link {
+    display: none;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font: 400 0.7rem var(--font-mono);
+    word-break: break-all;
+  }
+  table,
+  .correction,
+  figure {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tbody tr:hover td {
+    background: none;
+  }
+}

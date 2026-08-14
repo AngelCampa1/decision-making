@@ -1,0 +1,20 @@
+{
+  "note": "What the site renders, and what decides how it renders. Read by decision_evals.site (which hashes these to gate staleness) and by site/src/content.config.ts (which loads them). One file, two readers, so the build and the check cannot drift apart. Paths are repository-relative globs.",
+  "content": [
+    "*.md",
+    "docs/**/*.md",
+    "notebook/*.md",
+    "results/*/*/README.md",
+    "skills/**/*.md",
+    "plugin/skills/README.md"
+  ],
+  "site": [
+    "site/package.json",
+    "site/package-lock.json",
+    "site/inputs.json",
+    "site/dead-links.json",
+    "site/astro.config.mjs",
+    "site/src/**/*",
+    "site/public/**/*"
+  ]
+}

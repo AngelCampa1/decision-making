@@ -1,0 +1,17 @@
+---
+import { getEntry, render } from 'astro:content';
+import Doc from '../../layouts/Doc.astro';
+
+/**
+ * `docs/README.md` is the documentation index, so it is published at `/docs/`
+ * rather than `/docs/readme/`. A link to the directory and a link to its README
+ * then land on the same page, which is also how github.com behaves.
+ */
+const entry = await getEntry('docs', 'readme');
+if (!entry) throw new Error('docs/README.md is missing; it is the documentation index.');
+const { Content } = await render(entry);
+---
+
+<Doc title="Documentation" source="docs/README.md" kind="documentation">
+  <Content />
+</Doc>

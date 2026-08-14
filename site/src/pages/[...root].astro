@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import Doc from '../layouts/Doc.astro';
+import { titleFrom } from '../lib/titles.ts';
+import { ROOT_ROUTES } from '../lib/routes.ts';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('root');
+  return entries
+    .filter((entry) => ROOT_ROUTES.has(entry.id))
+    .map((entry) => ({ params: { root: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const source = `${entry.id.toUpperCase()}.md`;
+
+// `README.md` opens with the lockup image rather than an `# h1`, because on
+// github.com a wordmark followed by the same words as a heading is the same
+// name twice. So the one document whose title cannot be read off its headings
+// states it here.
+const TITLES: Record<string, string> = { readme: 'decision-making-skills' };
+---
+
+<Doc
+  title={TITLES[entry.id] ?? titleFrom(headings, entry.id)}
+  source={entry.id === 'readme' ? 'README.md' : source}
+  kind="repository"
+>
+  <Content />
+</Doc>

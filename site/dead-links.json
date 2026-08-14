@@ -1,0 +1,4 @@
+{
+  "note": "Repository-relative targets that are linked from an append-only record and no longer exist. notebook/ and results/**/README.md are dated evidence: docs.py refuses to demand an edit there, and so does this. Shrink-only, like [tool.decision-evals.unwired] -- an entry that starts resolving again is an error, not a tidy-up. Empty today, and it should stay that way for as long as possible.",
+  "allowed": []
+}

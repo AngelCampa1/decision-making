@@ -1,0 +1,109 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { titleFrom } from '../../lib/titles.ts';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const entries = await getCollection('notebook');
+
+// The rules of the log are stated in notebook/README.md and rendered here
+// rather than restated, so there is one copy of them and it is the one the
+// repository ships.
+const readme = await getEntry('notebook', 'readme');
+const Readme = readme ? (await render(readme)).Content : null;
+
+const items = await Promise.all(
+  entries
+    .filter((entry) => entry.id !== 'readme')
+    .map(async (entry) => {
+      const { headings } = await render(entry);
+      const date = entry.id.slice(0, 10);
+      return { id: entry.id, date, title: titleFrom(headings, entry.id) };
+    }),
+);
+
+// Newest first. The id is date-prefixed, so this is a string sort on purpose.
+items.sort((a, b) => (a.id < b.id ? 1 : -1));
+
+const byDate = new Map<string, typeof items>();
+for (const item of items) {
+  const bucket = byDate.get(item.date) ?? [];
+  bucket.push(item);
+  byDate.set(item.date, bucket);
+}
+---
+
+<Base title="Research log &middot; decision-making-skills">
+  <div class="page index-page">
+    {Readme ? <Readme /> : <h1>Research log</h1>}
+
+    <p class="index-count">{items.length} entries</p>
+
+    {
+      [...byDate.entries()].map(([date, group]) => (
+        <section class="day">
+          <h2 class="day__date">{date}</h2>
+          <ul class="day__list">
+            {group.map((item) => (
+              <li>
+                <a href={`${base}/notebook/${item.id}/`}>{item.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .index-page {
+    padding-top: var(--space-2xl);
+  }
+
+  .index-count {
+    font: 400 0.8125rem/1.6 var(--font-mono);
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums lining-nums;
+    margin-top: var(--space-2xl);
+  }
+
+  .day {
+    display: contents;
+  }
+
+  .day__date {
+    font: 600 0.75rem/1.35 var(--font-mono);
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    text-transform: none;
+    margin: var(--space-xl) 0 var(--space-xs);
+    padding-bottom: var(--space-2xs);
+    border-bottom: 1px solid var(--rule-strong);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .day__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .day__list li {
+    margin: 0;
+    border-bottom: 1px solid var(--rule-hair);
+  }
+
+  .day__list a {
+    display: block;
+    padding: var(--space-sm) 0;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  .day__list a:hover {
+    color: var(--accent);
+  }
+</style>

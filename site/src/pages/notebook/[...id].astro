@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from 'astro:content';
+import Doc from '../../layouts/Doc.astro';
+import { titleFrom, sourcePath } from '../../lib/titles.ts';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('notebook');
+  // `notebook/README.md` states the rules of the log and is rendered into the
+  // index at /notebook/, so it is not also a dated entry.
+  return entries
+    .filter((entry) => entry.id !== 'readme')
+    .map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<Doc
+  title={titleFrom(headings, entry.id)}
+  source={sourcePath(entry.filePath, `notebook/${entry.id}.md`)}
+  kind="notebook · append-only"
+>
+  <Content />
+</Doc>

@@ -1,0 +1,101 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { titleFrom, stripReadme } from '../../lib/titles.ts';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const entries = await getCollection('results');
+
+const runs = await Promise.all(
+  entries.map(async (entry) => {
+    const slug = stripReadme(entry.id).replace(/\/$/, '');
+    const { headings } = await render(entry);
+    const dir = slug.split('/').pop() ?? slug;
+    return { slug, dir, title: titleFrom(headings, entry.id) };
+  }),
+);
+
+runs.sort((a, b) => (a.dir < b.dir ? 1 : -1));
+---
+
+<Base title="Published runs &middot; decision-making-skills">
+  <div class="page index-page">
+    <h1>Published runs</h1>
+    <p class="lede">
+      One directory per run, with its raw transcripts and a record of what it showed.
+      Every one names the answer-key version it used and the prediction that predates it.
+    </p>
+
+    <div class="caveat">
+      <p class="caveat__label">Read these with the corpus caveat</p>
+      <p>
+        Every trigger result below was measured on a set that a word count passes 89% of
+        the time. The results are real and the headroom above a ruler is about six points.
+      </p>
+    </div>
+
+    <p class="index-count">{runs.length} published runs</p>
+
+    <ul class="run-list">
+      {
+        runs.map((run) => (
+          <li class="run-item">
+            <a href={`${base}/results/${run.slug}/`}>
+              <span class="run-item__dir">{run.dir}</span>
+              <span class="run-item__title">{run.title}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .index-page {
+    padding-top: var(--space-2xl);
+  }
+
+  .index-count {
+    font: 400 0.8125rem/1.6 var(--font-mono);
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums lining-nums;
+    margin-top: var(--space-2xl);
+  }
+
+  .run-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-xs) 0 0;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .run-item {
+    margin: 0;
+    border-bottom: 1px solid var(--rule-hair);
+  }
+
+  .run-item a {
+    display: block;
+    padding: var(--space-sm) 0;
+    text-decoration: none;
+  }
+
+  .run-item__dir {
+    display: block;
+    font: 600 0.8125rem/1.5 var(--font-mono);
+    color: var(--accent);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .run-item__title {
+    display: block;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--ink-secondary);
+  }
+
+  .run-item a:hover .run-item__title {
+    color: var(--ink);
+  }
+</style>

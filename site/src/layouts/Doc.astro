@@ -1,0 +1,75 @@
+---
+import Base from './Base.astro';
+import { REPO } from '../lib/site.ts';
+
+interface Props {
+  title: string;
+  /** Repository-relative path, e.g. `docs/STATUS.md`. Shown as provenance. */
+  source: string;
+  /** Short label for where this sits: "documentation", "notebook", ... */
+  kind: string;
+  description?: string;
+}
+
+const { title, source, kind, description } = Astro.props;
+---
+
+<Base title={`${title} · decision-making-skills`} description={description}>
+  <article class="page doc">
+    <p class="doc__eyebrow">
+      <span>{kind}</span>
+      <a href={`${REPO}/blob/main/${source}`}><code>{source}</code></a>
+    </p>
+    <div class="doc__body">
+      <slot />
+    </div>
+  </article>
+</Base>
+
+{/* Styles for the rendered markdown itself live in base.css, next to the grid
+    placement rules they depend on -- they are global by nature, and a scoped
+    component block is the wrong home for them. */}
+
+<style>
+  .doc {
+    padding-top: var(--space-2xl);
+  }
+
+  .doc__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-sm);
+    font: 400 0.75rem/1.6 var(--font-mono);
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 var(--space-md);
+  }
+
+  .doc__eyebrow span::after {
+    content: " \00B7";
+    color: var(--ink-faint);
+  }
+
+  .doc__eyebrow a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .doc__eyebrow a:hover {
+    color: var(--accent);
+  }
+
+  .doc__eyebrow code {
+    background: none;
+    padding: 0;
+    font-size: 1em;
+  }
+
+  /* The rendered document is a grid child so its tables can break out. */
+  .doc__body {
+    display: contents;
+  }
+</style>

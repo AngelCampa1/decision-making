@@ -1,0 +1,192 @@
+---
+import Base from '../../layouts/Base.astro';
+import { REPO } from '../../lib/site.ts';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const procedures = [
+  {
+    file: 'ledger',
+    name: 'ledger',
+    hard: 'A pile of context arrived and it is unclear what the answer turns on',
+    out: 'what bears on it, what was set aside, and why',
+  },
+  {
+    file: 'fit',
+    name: 'fit',
+    hard: 'The advice may be generically right and wrong for this person',
+    out: 'the generic answer, and the facts that would overturn it',
+  },
+  {
+    file: 'cascade',
+    name: 'cascade',
+    hard: 'The action looks fine and the worry is what it starts, or what it spends',
+    out: 'the chain, what it forecloses, and the order',
+  },
+  {
+    file: 'timing',
+    name: 'timing',
+    hard: 'The direction is settled and the question is when',
+    out: 'the undo price, the real deadline, what waiting buys',
+  },
+];
+---
+
+<Base title="The skill &middot; decision-making-skills">
+  <div class="page index-page">
+    <p class="eyebrow">
+      <span class="verdict" data-verdict="untested">untested</span>
+      <span>v0.2.1 &middot; experimental</span>
+    </p>
+
+    <h1>decision-making</h1>
+    <p class="lede">
+      One skill that routes to one of four procedures depending on what is actually hard
+      about the decision. It reads only that one.
+    </p>
+
+    <ol class="procedures">
+      {
+        procedures.map((p, i) => (
+          <li class="proc">
+            <span class="proc__ord">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h2 class="proc__name">
+                <a href={`${base}/skill/decision-making/${p.file}/`}>{p.name}</a>
+                <span class="proc__file">{p.file}.md</span>
+              </h2>
+              <p class="proc__hard">{p.hard}</p>
+              <p class="proc__out">{p.out}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p>
+      Where more than one applies they run in the order
+      <strong>ledger → fit → cascade → timing</strong>, because each supplies an input to
+      the next. Two is usually the most that earns its place.
+    </p>
+
+    <h2>The router</h2>
+    <p>
+      <a href={`${base}/skill/decision-making/skill/`}><code>SKILL.md</code></a> is what
+      an agent reads first. It chooses a procedure, or declines to fire at all. A lookup
+      is not a decision, and neither is a bug hunt.
+    </p>
+
+    <h2>The control arm</h2>
+    <p>
+      <a href={`${base}/skill/decision-making/placebo/`}><code>placebo.md</code></a> is
+      token- and structure-matched filler. It ships alongside because a skill that only
+      beats nothing has not been measured against the thing that would fake it.
+    </p>
+
+    <div class="caveat">
+      <p class="caveat__label">Status</p>
+      <p>
+        Every file here carries <code>verdict: UNTESTED</code>, and the shipped plugin
+        refuses to accept one that does. That is enforced, not aspirational.
+      </p>
+    </div>
+
+    <div class="cta">
+      <a class="cta__secondary" href={`${REPO}/tree/main/skills/decision-making`}>
+        View the source
+      </a>
+      <a class="cta__secondary" href={`${base}/scorecard/`}>Read the scorecard</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .index-page {
+    padding-top: var(--space-2xl);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font: 400 0.75rem/1.6 var(--font-mono);
+    color: var(--ink-muted);
+    margin: 0 0 var(--space-md);
+  }
+
+  .procedures {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2xl) 0;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .proc {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0 var(--space-md);
+    padding: var(--space-lg) 0;
+    margin: 0;
+    border-bottom: 1px solid var(--rule-hair);
+  }
+
+  .proc__ord {
+    font: 600 0.75rem/1.9 var(--font-mono);
+    color: var(--ink-faint);
+  }
+
+  .proc__name {
+    margin: 0 0 var(--space-2xs);
+    font: 600 1.0625rem/1.3 var(--font-mono);
+    letter-spacing: -0.01em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-sm);
+  }
+
+  .proc__name a {
+    text-decoration: none;
+  }
+
+  .proc__file {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+  }
+
+  .proc__hard {
+    margin: 0 0 var(--space-2xs);
+    font-style: italic;
+    font-size: 0.9375rem;
+    color: var(--ink-muted);
+    font-variation-settings: "opsz" 15;
+  }
+
+  .proc__out {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-xl);
+  }
+
+  .cta a {
+    font: 600 0.875rem/1 var(--font-mono);
+    text-decoration: none;
+    padding: 0.65rem 1.1rem;
+    border-radius: var(--radius-3);
+    color: var(--ink);
+    border: 1px solid var(--rule-interactive);
+  }
+
+  .cta a:hover {
+    color: var(--ink-strong);
+    border-color: var(--ink-muted);
+  }
+</style>

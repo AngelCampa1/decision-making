@@ -1,6 +1,6 @@
 <div align="center">
 
-<picture>
+<picture class="gh-only">
   <source media="(prefers-color-scheme: dark)" srcset="site/public/lockup-dark.png">
   <img src="site/public/lockup-light.png" alt="decision-making-skills" width="440">
 </picture>

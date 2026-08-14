@@ -1,0 +1,169 @@
+---
+import '@fontsource-variable/source-serif-4/opsz.css';
+import '@fontsource-variable/source-serif-4/opsz-italic.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import '../styles/base.css';
+import Mark from '../components/Mark.astro';
+import { REPO, NAV } from '../lib/site.ts';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
+const {
+  title,
+  description = 'A free file your AI agent reads when you face a hard choice. Four methods, and it reads one. We have not proven any of it yet. Every result is public.',
+  ogTitle = 'An agent skill for hard choices. Nothing proven yet.',
+  ogDescription = 'Four methods. Your agent reads one. Free, and one line installs it. Every result is public. So are the eight times we found our own test broken.',
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const path = Astro.url.pathname.replace(/\/$/, '');
+
+// Absolute, because a social crawler resolves nothing against the page.
+const ogImage = new URL(`${base}/og.png`, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:site_name" content="decision-making-skills" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="decision-making-skills. An agent skill for hard choices. Nothing proven yet." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    {/* Set before first paint so an explicit choice never flashes the other theme. */}
+    <script is:inline>
+      (function () {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="lockup" href={`${base}/`}>
+          <Mark width={40} />
+          <span class="lockup__word">decision-making-skills</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Main">
+          {
+            NAV.map((item) => (
+              <a
+                href={item.href.startsWith('http') ? item.href : `${base}${item.href}`}
+                class={item.wide ? 'site-nav__wide' : undefined}
+                aria-current={path === `${base}${item.href}`.replace(/\/$/, '') ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="theme-toggle" role="group" aria-label="Colour theme">
+          <button type="button" data-theme-set="system">sys</button>
+          <button type="button" data-theme-set="light">light</button>
+          <button type="button" data-theme-set="dark">dark</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="page">
+        <div class="breakout site-footer__grid">
+          <div>
+            <p class="site-footer__honest">
+              We have not proven anything here yet. That is a status, not a sales
+              pitch. Use it if it helps you.
+            </p>
+          </div>
+          <ul class="site-footer__links">
+            <li><a href={`${base}/docs/status/`}>Results</a></li>
+            <li><a href={`${base}/scorecard/`}>Scorecard</a></li>
+            <li><a href={`${base}/notebook/`}>Research log</a></li>
+            <li><a href={`${base}/docs/limitations/`}>Limitations</a></li>
+            <li><a href={REPO}>GitHub</a></li>
+          </ul>
+          <p class="site-footer__stamp">
+            Apache-2.0 &middot; Angel Campa<br />
+            scorecard: 0 proven / 0 shipped
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        function paint() {
+          var t = localStorage.getItem('theme') || 'system';
+          document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.themeSet === t));
+          });
+        }
+        document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var next = b.dataset.themeSet;
+            if (next === 'system') {
+              localStorage.removeItem('theme');
+              delete root.dataset.theme;
+            } else {
+              localStorage.setItem('theme', next);
+              root.dataset.theme = next;
+            }
+            paint();
+          });
+        });
+        paint();
+
+        // Copy buttons. The label swap is announced, not just shown.
+        document.querySelectorAll('.code').forEach(function (block) {
+          var pre = block.querySelector('pre');
+          if (!pre) return;
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'code__copy';
+          btn.textContent = 'copy';
+          btn.addEventListener('click', function () {
+            navigator.clipboard.writeText(pre.innerText).then(function () {
+              btn.textContent = 'copied';
+              btn.dataset.copied = '';
+              setTimeout(function () {
+                btn.textContent = 'copy';
+                delete btn.dataset.copied;
+              }, 1600);
+            });
+          });
+          block.appendChild(btn);
+        });
+      })();
+    </script>
+  </body>
+</html>

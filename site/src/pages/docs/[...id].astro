@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import Doc from '../../layouts/Doc.astro';
+import { titleFrom, sourcePath } from '../../lib/titles.ts';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('docs');
+  // `docs/README.md` is the section index and is rendered by ./index.astro,
+  // so that a link to the directory and a link to its README land on one page.
+  return entries
+    .filter((entry) => entry.id !== 'readme')
+    .map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<Doc title={titleFrom(headings, entry.id)} source={sourcePath(entry.filePath, `docs/${entry.id}.md`)} kind="documentation">
+  <Content />
+</Doc>
