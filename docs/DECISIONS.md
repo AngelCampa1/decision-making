@@ -24,6 +24,108 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-14 — The opener leak closed by touching both sides, not one
+
+**Commits:** `cee9329`
+
+A 20,000-draw permutation sweep of the full 4-band x 4-view x 11-feature
+family (`notebook/2026-08-14-the-battery-searches-176-cells-and-nobody-had-
+costed-that.md`) found `question_marks`/`terminal_question` on the `open`
+view as the strongest survivors of Benjamini-Hochberg correction across all
+176 cells: AUC 0.779 in `xl`/`open`, 0.716 in `l`/`open`, p < 0.001 both.
+Measured directly before any edit: in `l`, 10 of 22 positives opened their
+ask with a question against 1 of 44 negatives; in `xl`, 10 of 17 against 1
+of 34 — whichever triple member led with a question scored as the positive
+nineteen times out of twenty in the long bands.
+
+**The fix is variety, not a direction.** Every earlier generation of this
+defect (`word_count`, closed 2026-08-14 earlier the same day) came from a
+rule pushed one way — this one touches both sides of the label instead: 4
+positives per band (5 in `xl`) had their opener reordered, or given a
+one-clause statement lead-in where the whole ask was a single question, so
+the question no longer opens the ask; 10 `l` and 9 `xl` negatives — drawn
+from `lookup`/`compute` kinds whose asks are already determinate questions —
+had their existing question moved to the front instead. Every edit is a
+reordering or small addition strictly after each triple's true shared
+prefix; `corpus._shared_body` recomputed on every touched triple returns the
+same length as before the edit. Resulting rates: `l` 6/22 positives vs
+10/44 negatives (27.3% vs 22.7%), `xl` 5/17 vs 9/34 (29.4% vs 26.5%) — not
+exact, because three items that would have made it exact were reverted (next
+paragraph) rather than kept for the sake of a round number.
+
+**Three items moved label under re-adjudication and were reverted, not
+accepted.** A first pass touched 29 items (11 `l` and 10 `xl` negatives).
+Blind re-adjudication on all 29 — 3 judges, `scripts/adjudicate.py` — found
+3 moved 2-of-3 or 3-of-3 against the original label, all negative-to-positive:
+`l12n1`, `l17n2`, `xl15n2`. Investigated rather than accepted, because
+accepting would have put two positives in a one-positive-per-triple design.
+In all three, moving the existing question to the front of the ask also
+pushed a short framing clause ("One process question, separate from the
+above." and similar) from leading to trailing — that clause was decoupling
+a determinate lookup from an emotionally loaded shared body, and losing it
+made the same question read as part of the decision rather than apart from
+it. All three reverted to original text (confirmed byte-identical via
+`git diff`) and dropped from the touched set; re-adjudication on the
+remaining 26 items: 0 moved. Fresh adjudication records for the reverted
+three's flawed text were excluded from the merge into
+`results/triggers/adjudication.jsonl` rather than appended.
+
+**Verified against the full family, not just the targeted cells.** Re-ran
+the 176-cell sweep after the final edit (post-revert): all four target cells
+clear BH by a wide margin (AUC 0.523/0.515, q = 1.0, was q <= 0.0044).
+`l/close/type_token_ratio` and `xl/open/type_token_ratio`, named by the same
+notebook as adjacent leaks, both improved without being touched directly.
+Two cells newly cross BH (`l/ask/type_token_ratio`, `xl/ask/sentence_count`);
+both checked and are pre-existing signal exposed by removing larger leaks
+that were absorbing the correction budget, not the leak relocated by an
+unbalanced push — see the notebook entry for the per-cell reasoning.
+Independently, the task-giver re-ran the same test with a different
+implementation against the corpus after the first (pre-revert) pass: 18
+cells crossing p<0.05 before (8.8 expected) and 7 BH survivors (5 this leak)
+against 10 crossing / 0 surviving after.
+
+**The corpus's own gate.** `matched:open:question_marks` and
+`matched:open:terminal_question` no longer reproduce and are removed from
+`corpus-baseline.txt` (may-only-shrink). One gate finding,
+`cancel:close:type_token_ratio`, briefly crossed 3.0 (to 3.04) during the
+first pass — two of the three reverted items' reordering shifted a couple of
+closing sentences by a clause — and closed the same day when those three
+were reverted (measured after: 2.985, under the gate). The underlying skew
+is real, corpus-wide (positive is the highest/lowest vocabulary-diversity
+triple member in 66 of 87 triples, every band), predates this session at
+~2.9 null SE, and needs a length/complexity-neutral rewrite of closing
+sentences corpus-wide to actually close — out of scope here, and not added
+to the baseline because it never shipped as a crossing finding on the
+committed corpus.
+
+**A claim raised and refuted.** The task-giver's read of the near-exact
+pre-revert opener rates was that `matched_attainable` on these cells must now
+be degenerate by construction (every permutation gives 0.500, the
+`_shared_body`-bug signature). Checked directly against `corpus.py`'s own
+functions rather than transcribed: only 8 of 22 `l` triples and 8 of 17 `xl`
+triples have all three members agreeing on opener form; `null_se` is nonzero
+and `matched_attainable`'s reach from 0.5 clears `MATCHED_Z * null_se` on
+both bands (`Check.inert` is `False`, both axes, both bands, verified on the
+final corpus). The band-level rate came from mixing which triples lean which
+way, not from flattening each triple, so the check that closed this leak
+stays capable of catching a regression.
+
+**Two tests re-pinned in the same commit.** `test_corpus_battery.py` pinned
+the shipped baseline's deferred-finding count at 5 and one per-band figure at
+`xl 0.235` for `sentence_count`'s `cancel:` finding on `turn`. Both are
+data-driven pins against the live corpus rather than assertions about
+mechanism: the count drops to 3 as the two `question_marks`/
+`terminal_question` findings above close, and `xl 0.235` moves to `xl 0.309`
+because several `xl` positives gained a lead-in sentence, which shifts
+`sentence_count`'s distribution. The reporting format itself (one
+`band value` pair per band) is unchanged — checked before re-pinning rather
+than assumed, since a changed message would have meant something broke
+rather than moved.
+
+Full derivation, before/after opener counts, the three-item investigation,
+and the complete 176-cell before/after table:
+`notebook/2026-08-14-the-opener-leak-closed-by-touching-both-sides.md`.
+
 ## 2026-08-14 — The ask cut stopped one word short of every shared body's newline
 
 **Commits:** `6707c38`
