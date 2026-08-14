@@ -57,7 +57,12 @@ from decision_evals.stats.agreement import (  # noqa: E402
     percent_agreement,
     unanimity_rate,
 )
-from decision_evals.triggers import TriggerCase, load_trigger_set  # noqa: E402
+from decision_evals.triggers import (  # noqa: E402
+    TriggerCase,
+    load_trigger_set,
+    parse_only,
+    select_cases,
+)
 
 #: The adjudicator's whole context. Deliberately *not* the skill description:
 #: that is the thing under test in every other run, and an adjudicator shown it
@@ -391,20 +396,59 @@ def main() -> int:
     )
     parser.add_argument("--checkpoint", default=str(CHECKPOINT))
     parser.add_argument("--report-only", action="store_true")
+    parser.add_argument(
+        "--only",
+        default=None,
+        help=(
+            "Restrict to specific case ids: a comma-separated list, or "
+            "@path/to/ids.txt (one id per line, # comments allowed). Unknown ids "
+            "raise rather than silently selecting nothing. Combines with "
+            "--missing-only."
+        ),
+    )
+    parser.add_argument(
+        "--missing-only",
+        action="store_true",
+        help=(
+            "Restrict to cases with zero adjudication records in the checkpoint "
+            "at all -- not cases with some judges done and others pending, which "
+            "--report-only's own resume logic already fills in. For re-running "
+            "after a corpus edit, where only the new or changed items need "
+            "adjudicating and everything already on record must be left alone."
+        ),
+    )
     args = parser.parse_args()
 
     trigger_set = load_trigger_set(Path(args.set))
     checkpoint = Path(args.checkpoint)
-    cases = trigger_set.cases
+    only = parse_only(args.only) if args.only else None
+    exclude_ids = None
+    if args.missing_only:
+        exclude_ids = frozenset(case_id for case_id, _judge in load_done(checkpoint))
+    cases = select_cases(trigger_set.cases, only=only, exclude_ids=exclude_ids)
 
     if not args.report_only:
         clauses = abort_clauses(REPO_ROOT / "skills" / trigger_set.skill / "SKILL.md")
         system = SYSTEM if not clauses else f"{SYSTEM}\n\nThe tool's own exclusions:\n{clauses}"
-        print(f"adjudicating {len(cases)} cases x {args.judges} judges on {args.model}")
-        print(f"  = {len(cases) * args.judges} calls, checkpointed at {checkpoint}")
+        done_before = load_done(checkpoint)
+        remaining = sum(
+            1
+            for case in cases
+            for judge in range(args.judges)
+            if (case.id, judge) not in done_before
+        )
+        print(f"selected {len(cases)} cases x {args.judges} judges on {args.model}")
+        print(f"  = {remaining} calls remaining after resume, checkpointed at {checkpoint}")
         collect(cases, args.model, system, checkpoint=checkpoint, judges=args.judges)
 
     done = load_done(checkpoint)
+    if only is not None:
+        # Scope the report to what was selected, not the whole checkpoint --
+        # otherwise `--only` would narrow which calls get made but not which
+        # ones get reported on, and a scoped run of an unrelated band would
+        # silently fold its records into someone else's numbers.
+        wanted = set(only)
+        done = {key: row for key, row in done.items() if key[0] in wanted}
     if not done:
         print("no adjudication records")
         return 1

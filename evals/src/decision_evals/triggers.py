@@ -314,6 +314,74 @@ def load_trigger_set(path: Path) -> TriggerSet:
     )
 
 
+def parse_only(raw: str) -> tuple[str, ...]:
+    """Case ids from a ``--only`` argument.
+
+    Two forms, disambiguated by a leading ``@``:
+
+    * ``"s15n1,s15n2,s15p"`` -- a comma-separated list, for a handful of ids.
+    * ``"@path/to/ids.txt"`` -- one id per line, blank lines and ``#`` comments
+      ignored. A 141-case gap does not fit on a command line on every shell this
+      repository runs under, and a file is also the thing worth keeping: the
+      list a re-run used is then a path in a commit rather than a string nobody
+      wrote down.
+
+    Order and duplicates are not normalised here -- :func:`select_cases` turns
+    the result into a set, so a duplicate id costs nothing and there is nothing
+    for this function to reject.
+    """
+    if raw.startswith("@"):
+        text = Path(raw[1:]).read_text(encoding="utf-8")
+        return tuple(
+            line.strip()
+            for line in text.splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        )
+    return tuple(part.strip() for part in raw.split(",") if part.strip())
+
+
+def select_cases(
+    cases: tuple[TriggerCase, ...],
+    *,
+    only: Iterable[str] | None = None,
+    exclude_ids: frozenset[str] | None = None,
+) -> tuple[TriggerCase, ...]:
+    """Narrow a trigger set's cases for a partial run.
+
+    ``only``, when given, restricts to exactly those ids and raises on any id
+    that does not name a case in ``cases`` -- a typo'd id should fail loudly
+    rather than silently select nothing, which is the shape of defect a
+    parser whitelist already produced once in this repository (the M4 run that
+    discarded every offered tool name and printed a clean zero).
+
+    ``exclude_ids``, when given, drops cases already present in it. The caller
+    supplies this as the set of case ids that carry at least one adjudication
+    record, which is how ``--missing-only`` is built without this module having
+    to know what a checkpoint file looks like.
+
+    The two compose: ``only`` narrows to a named band or list, then
+    ``exclude_ids`` drops whatever in that narrowed set is already done. Order
+    is fixed rather than left to the caller because narrow-then-exclude is the
+    only reading that keeps an unknown id in ``only`` an error in every case --
+    excluding first would let a typo'd id that happens to already be adjudicated
+    disappear silently instead of raising.
+    """
+    selected = cases
+    if only is not None:
+        wanted = set(only)
+        known = {case.id for case in cases}
+        unknown = sorted(wanted - known)
+        if unknown:
+            raise TriggerSetError(
+                f"--only names case ids not in this set: {unknown}. Check the id or the "
+                "trigger set passed with --set."
+            )
+        selected = tuple(case for case in selected if case.id in wanted)
+    if exclude_ids is not None:
+        selected = tuple(case for case in selected if case.id not in exclude_ids)
+    return selected
+
+
 def _read_yaml(path: Path) -> object:
     try:
         return yaml.safe_load(path.read_text(encoding="utf-8"))

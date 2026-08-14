@@ -10,6 +10,7 @@ import yaml
 from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.triggers import (
     PROCEDURES,
+    TriggerCase,
     TriggerSet,
     TriggerSetError,
     _check_routes,
@@ -20,7 +21,9 @@ from decision_evals.triggers import (
     evaluate_routing,
     length_separability,
     load_trigger_set,
+    parse_only,
     routing_is_by_name,
+    select_cases,
 )
 
 #: The set for the skill that ships. It was `evidence-ledger.yaml` until
@@ -678,3 +681,79 @@ class TestLengthSeparability:
     def test_a_set_under_the_target_needs_no_ceiling(self, tmp_path: Path) -> None:
         trigger_set = self._set(tmp_path, ["a b c"], ["d e f"])
         assert _check_separability(trigger_set, tmp_path / "s.yaml") == []
+
+
+# -- partial adjudication runs -----------------------------------------------
+#
+# Added for Track N3's continuation: re-running `scripts/adjudicate.py` after a
+# corpus edit had no way to touch only the changed items, so a re-run meant
+# re-adjudicating everything. `select_cases` and `parse_only` are the pure,
+# testable core of `--only` / `--missing-only`; the script itself only wires
+# argv to these.
+
+
+def _cases(*ids: str) -> tuple[TriggerCase, ...]:
+    return tuple(TriggerCase(id=i, turn=f"turn {i}", should_fire=True, why="w") for i in ids)
+
+
+class TestSelectCases:
+    def test_with_no_filters_everything_passes_through(self) -> None:
+        cases = _cases("a", "b", "c")
+        assert select_cases(cases) == cases
+
+    def test_only_narrows_to_the_named_ids(self) -> None:
+        cases = _cases("a", "b", "c")
+        selected = select_cases(cases, only=["a", "c"])
+        assert [case.id for case in selected] == ["a", "c"]
+
+    def test_only_preserves_the_original_order_not_the_argument_order(self) -> None:
+        """The corpus's own order, not whatever order a hand-typed list used."""
+        cases = _cases("a", "b", "c")
+        selected = select_cases(cases, only=["c", "a"])
+        assert [case.id for case in selected] == ["a", "c"]
+
+    def test_an_unknown_id_in_only_raises_rather_than_selecting_nothing(self) -> None:
+        """A typo must fail loudly. Silently adjudicating zero cases is the M4
+        parser-whitelist defect one layer up: a clean run and a plausible zero."""
+        cases = _cases("a", "b")
+        with pytest.raises(TriggerSetError, match="not in this set"):
+            select_cases(cases, only=["a", "nope"])
+
+    def test_exclude_ids_drops_cases_already_adjudicated(self) -> None:
+        cases = _cases("a", "b", "c")
+        selected = select_cases(cases, exclude_ids=frozenset({"b"}))
+        assert [case.id for case in selected] == ["a", "c"]
+
+    def test_only_and_exclude_ids_compose(self) -> None:
+        cases = _cases("a", "b", "c")
+        selected = select_cases(cases, only=["a", "b"], exclude_ids=frozenset({"b"}))
+        assert [case.id for case in selected] == ["a"]
+
+    def test_an_unknown_id_still_raises_even_if_it_would_have_been_excluded(self) -> None:
+        """Narrow-then-exclude, fixed: excluding first would let a typo'd id that
+        happens to already be done vanish instead of raising."""
+        cases = _cases("a", "b")
+        with pytest.raises(TriggerSetError, match="not in this set"):
+            select_cases(cases, only=["nope"], exclude_ids=frozenset({"nope"}))
+
+    def test_exclude_ids_alone_can_empty_the_set(self) -> None:
+        cases = _cases("a")
+        assert select_cases(cases, exclude_ids=frozenset({"a"})) == ()
+
+
+class TestParseOnly:
+    def test_a_comma_separated_list_splits_and_strips(self) -> None:
+        assert parse_only("a, b ,c") == ("a", "b", "c")
+
+    def test_a_single_id_is_a_one_tuple(self) -> None:
+        assert parse_only("a") == ("a",)
+
+    def test_an_at_prefixed_path_reads_ids_one_per_line(self, tmp_path: Path) -> None:
+        path = tmp_path / "ids.txt"
+        path.write_text("a\nb\n\nc\n", encoding="utf-8")
+        assert parse_only(f"@{path}") == ("a", "b", "c")
+
+    def test_a_file_of_ids_skips_comments_and_blank_lines(self, tmp_path: Path) -> None:
+        path = tmp_path / "ids.txt"
+        path.write_text("# the s+m gap\na\n\n# note\nb\n", encoding="utf-8")
+        assert parse_only(f"@{path}") == ("a", "b")
