@@ -24,6 +24,52 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-14 — Twenty-three long-band triples, and a leak that closed sideways
+
+**Commits:** `a38d2d8`
+
+`l.yaml` gains `l10`–`l22` (13 triples) and `xl.yaml` gains `xl08`–`xl17` (10),
+the rebuild that was "mid-rebuild and unmerged" in the entry below. The corpus
+goes from 192 items (64 triples) to 261 (87). **No label on an existing item
+changes here.** The three moves N3's adjudication found (`s02n2`, `s12p`,
+`xl05n2`) are still not applied — this change merges the authored triples only
+and does not touch that backlog, so "the freeze" the entry below anticipated is
+still open on that point.
+
+**Both `word_count` findings closed, but not by the condition the previous entry
+named.** That entry called for a rank roughly uniform across longest, middle and
+shortest. Measured on the 23 new triples: 16 positive-shortest, 5 positive-middle,
+2 positive-longest — the mirror image of the 49-of-64 positive-longest bias
+projected against, not a uniform split. `word_count` closed anyway, from matched
+0.660 (3.24 null SE) to 0.546 (1.09), because `l` and `xl` swung from
+positive-longest bias (0.778, 0.393) to positive-shortest bias (0.455, 0.294),
+which happened to average against `s` and `m`'s unchanged positive-longest bias
+and land the pooled/matched figure under the gate.
+
+**The same swing opened two findings the previous corpus did not have.**
+`sentence_count`, which tracks `word_count` closely, crosses the *dispersion*
+gate on both `turn` and `ask` views (3.82 null SE, `cancel:` not `matched:` — the
+mean stays near chance at 0.480 but the positive sits at an extreme of its triple
+far more often than chance). `type_token_ratio` on the `ask` view crosses the
+*matched* gate outright (0.316, 4.27 SE, below chance in all four bands). Not
+retuned to close them: three features reading the same closing-sentence habit
+through different rulers, and per-item retuning against whichever one is
+currently over the line is the mechanism `docs/DECISIONS.md`'s own entries have
+already named four times.
+
+**`datasets/triggers/corpus-baseline.txt`:** the two `word_count` entries are
+deleted; three replace them —
+`cancel:turn:sentence_count`, `cancel:ask:sentence_count`,
+`matched:ask:type_token_ratio` — with the same rank-uniformity condition named as
+what would close them, corpus-wide. A concurrent session's `matched:open:
+question_marks` / `matched:open:terminal_question` entries, added the same day
+for an unrelated `_shared_body` measurement fix, are left as that session wrote
+them; this merge shifts their numbers too (0.566→0.629 matched, 3.47→6.12 SE)
+but the key still matches, so the gate still reads them as open and baselined.
+
+Full battery, before/after per-band figures, and the rank-count measurement are
+in `notebook/2026-08-14-the-long-band-merge-closed-one-leak-and-opened-two.md`.
+
 ## 2026-08-13 — Twenty-four short-band triples, and a statistic the design had always deserved
 
 **Commits:** `e07c5ef`
