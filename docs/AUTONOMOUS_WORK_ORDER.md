@@ -108,7 +108,8 @@ judgement about an answer key.
 | **Fold the `stream-json` transport** into `providers/claude_code.py` beside the single-shot path | the multi-turn canary reproduces: `input_tokens` climbs *and* turn-*n* recalls turn-1 content |
 | **Vendor the sharded corpus** from arXiv:2505.06120 and write `model_claude_code.py` against its `generate()` interface | it runs; upstream commit SHA recorded in the datasheet |
 | **Compute the MDE** for A1–A5 with `stats/power.py`, and write it into the programme beside each experiment | numbers exist where "sized from the MDE" currently is |
-| **Track I1** — `stats/reliability.py` | 100% line+branch with property tests, matching `paired.py` |
+| ~~**Track I1** — `stats/reliability.py`~~ **done**, and the programme said so before this table did | — |
+| **Inter-rater agreement** — `stats/agreement.py`, a different concept from `reliability.py`'s score reliability | 100% line+branch with property tests, matching `paired.py`, and wired to `adjudicate.py` |
 | **Track K1–K4, K6** — the decision-frameworks review | `docs/DECISION_FRAMEWORKS.md` exists, every claim carrying a `quote` |
 | **Delete or wire the `inspect-ai` dependency** — declared in `pyproject.toml`, imported nowhere | either it is imported or it is gone |
 

@@ -48,6 +48,76 @@ class ClusterBootstrapResult:
         return self.ci_low > 0.0 or self.ci_high < 0.0
 
 
+@dataclass(frozen=True, slots=True)
+class TwoSampleClusterBootstrapResult:
+    """Percentile bootstrap interval for a difference between **disjoint** groups.
+
+    :class:`ClusterBootstrapResult` describes a *paired* difference: the same
+    item measured twice, so the difference exists per item and the resampling
+    unit carries both arms with it. This describes the other shape — two groups
+    of different items, in different clusters, with no pairing available. The
+    trigger corpus's length question is exactly that: S+M is 72 items in 24
+    triples and L+XL is 48 items in 16 triples, and nothing pairs an S item with
+    an L one.
+
+    **The reason this exists rather than two calls to the one-sample form** is
+    that a difference interval cannot be recovered by subtracting two independent
+    percentile intervals. That subtraction gives an interval for the difference
+    of the *bounds*, which is conservative in one direction and simply wrong in
+    the other, and it drops the fact that the two groups' resampling error adds
+    in variance rather than in width.
+
+    Attributes:
+        point_estimate: ``mean(treatment) − mean(control)``, over items. The
+            sign convention matches :class:`ClusterBootstrapResult`.
+        mean_control: Observed control mean.
+        mean_treatment: Observed treatment mean.
+        ci_low: Lower bound of the percentile interval on the difference.
+        ci_high: Upper bound.
+        standard_error: Standard deviation of the bootstrap distribution.
+        confidence: Nominal coverage, e.g. 0.95.
+        n_clusters_control: Clusters resampled in the control group — the
+            number that governs that group's contribution to the width.
+        n_clusters_treatment: Clusters resampled in the treatment group.
+        n_items_control: Items in the control group.
+        n_items_treatment: Items in the treatment group.
+        n_resamples: Replicates drawn.
+        icc: Intraclass correlation of the **group-centred** values, pooled over
+            every cluster in both groups. Centring first is what stops the
+            between-group difference itself from being read as within-cluster
+            agreement: without it, a large treatment effect inflates the ICC and
+            the design effect reports the effect rather than the clustering.
+        design_effect: ``1 + (m - 1) * ICC`` at the pooled mean cluster size.
+        effective_n: Total items over the design effect.
+    """
+
+    point_estimate: float
+    mean_control: float
+    mean_treatment: float
+    ci_low: float
+    ci_high: float
+    standard_error: float
+    confidence: float
+    n_clusters_control: int
+    n_clusters_treatment: int
+    n_items_control: int
+    n_items_treatment: int
+    n_resamples: int
+    icc: float
+    design_effect: float
+    effective_n: float
+
+    @property
+    def excludes_zero(self) -> bool:
+        """Whether the interval excludes zero in either direction."""
+        return self.ci_low > 0.0 or self.ci_high < 0.0
+
+    @property
+    def width(self) -> float:
+        """Interval width. The quantity an item-level bootstrap understates."""
+        return self.ci_high - self.ci_low
+
+
 def _grouped_indices(
     clusters: npt.ArrayLike,
 ) -> tuple[npt.NDArray[np.intp], list[npt.NDArray[np.intp]]]:
@@ -136,6 +206,135 @@ def cluster_bootstrap_diff(
         n_clusters=n_clusters,
         n_items=int(diffs.size),
         n_resamples=n_resamples,
+    )
+
+
+def _validated_group(
+    values: npt.ArrayLike, clusters: npt.ArrayLike, name: str
+) -> tuple[npt.NDArray[np.float64], list[npt.NDArray[np.intp]]]:
+    """One group's values and its cluster membership, or a refusal."""
+    vals = np.asarray(values, dtype=np.float64)
+    if vals.ndim != 1:
+        raise ValueError(f"{name} must be one-dimensional, got shape {vals.shape}")
+    if vals.size != np.asarray(clusters).size:
+        raise ValueError(
+            f"{name} and {name}_clusters must be the same length, got "
+            f"{vals.size} and {np.asarray(clusters).size}"
+        )
+    _, members = _grouped_indices(clusters)
+    if len(members) < 2:
+        raise ValueError(
+            f"{name} falls in a single cluster. Resampling one cluster returns the same "
+            "items every replicate, so that group contributes no width and the interval "
+            "reads as certainty about it rather than as one cluster."
+        )
+    return vals, members
+
+
+def cluster_bootstrap_two_sample(
+    control: npt.ArrayLike,
+    control_clusters: npt.ArrayLike,
+    treatment: npt.ArrayLike,
+    treatment_clusters: npt.ArrayLike,
+    *,
+    confidence: float = 0.95,
+    n_resamples: int = 10_000,
+    seed: int | None = None,
+) -> TwoSampleClusterBootstrapResult:
+    """Percentile bootstrap CI for an **unpaired** difference of two clustered means.
+
+    Each group is resampled independently: whole clusters are drawn with
+    replacement from within the group, all their items come along, and the
+    replicate is the difference of the two resampled means. That is what
+    propagates both groups' within-cluster correlation into one interval on the
+    difference.
+
+    Values are passed immediately before their own cluster labels rather than
+    with the two label arrays at the end, because the failure this signature is
+    guarding against is a caller handing group B's labels to group A. Adjacency
+    makes that visible at the call site; a trailing pair of label arguments does
+    not.
+
+    Args:
+        control: Per-item values for the first group.
+        control_clusters: Per-item cluster label for the first group.
+        treatment: Per-item values for the second group. **Need not be the same
+            length as** ``control`` — that is the whole point of this function.
+        treatment_clusters: Per-item cluster label for the second group. Labels
+            are namespaced by group internally, so the two groups may reuse the
+            same label values without being merged.
+        confidence: Nominal coverage. Must lie strictly between 0 and 1.
+        n_resamples: Bootstrap replicates.
+        seed: Seed for reproducibility. A report that moves between two readings
+            of the same checkpoint is not a report.
+
+    Returns:
+        A :class:`TwoSampleClusterBootstrapResult`.
+
+    Raises:
+        ValueError: on mismatched lengths within a group, empty input,
+            ``n_resamples < 1``, a ``confidence`` outside ``(0, 1)``, or a group
+            holding fewer than two clusters.
+
+    Note:
+        The interval is a percentile interval on clusters, so its coverage is
+        governed by the **number of clusters**, not the number of items. At 24
+        and 16 triples the realised coverage is measured rather than assumed —
+        see the coverage simulation in ``tests/unit/test_group_estimators.py``.
+    """
+    if n_resamples < 1:
+        raise ValueError(f"n_resamples must be >= 1, got {n_resamples}")
+    if not 0.0 < confidence < 1.0:
+        raise ValueError(f"confidence must be in (0, 1), got {confidence}")
+
+    ctrl, members_ctrl = _validated_group(control, control_clusters, "control")
+    treat, members_treat = _validated_group(treatment, treatment_clusters, "treatment")
+    k_ctrl, k_treat = len(members_ctrl), len(members_treat)
+
+    rng = np.random.default_rng(seed)
+    draws_ctrl = rng.integers(0, k_ctrl, size=(n_resamples, k_ctrl))
+    draws_treat = rng.integers(0, k_treat, size=(n_resamples, k_treat))
+
+    replicates = np.empty(n_resamples, dtype=np.float64)
+    for r in range(n_resamples):
+        picked_ctrl = np.concatenate([members_ctrl[g] for g in draws_ctrl[r]])
+        picked_treat = np.concatenate([members_treat[g] for g in draws_treat[r]])
+        replicates[r] = treat[picked_treat].mean() - ctrl[picked_ctrl].mean()
+
+    tail = (1.0 - confidence) / 2.0
+    ci_low, ci_high = np.quantile(replicates, (tail, 1.0 - tail))
+
+    # The ICC is computed on values centred within their own group, and the
+    # clusters are renumbered so that a label shared by both groups is two
+    # clusters rather than one. Skipping either step reports the difference
+    # between the groups as agreement inside them, which would inflate the
+    # design effect exactly when the effect being measured is largest.
+    centred = np.concatenate([ctrl - ctrl.mean(), treat - treat.mean()])
+    codes = np.empty(centred.size, dtype=np.intp)
+    for g, member in enumerate(members_ctrl):
+        codes[member] = g
+    for g, member in enumerate(members_treat):
+        codes[member + ctrl.size] = k_ctrl + g
+
+    n_items = int(ctrl.size + treat.size)
+    icc = intraclass_correlation(centred, codes)
+    mean_cluster_size = n_items / (k_ctrl + k_treat)
+    return TwoSampleClusterBootstrapResult(
+        point_estimate=float(treat.mean() - ctrl.mean()),
+        mean_control=float(ctrl.mean()),
+        mean_treatment=float(treat.mean()),
+        ci_low=float(ci_low),
+        ci_high=float(ci_high),
+        standard_error=float(replicates.std(ddof=1)) if n_resamples > 1 else 0.0,
+        confidence=confidence,
+        n_clusters_control=k_ctrl,
+        n_clusters_treatment=k_treat,
+        n_items_control=int(ctrl.size),
+        n_items_treatment=int(treat.size),
+        n_resamples=n_resamples,
+        icc=icc,
+        design_effect=design_effect(mean_cluster_size, icc),
+        effective_n=effective_sample_size(n_items, mean_cluster_size, icc),
     )
 
 

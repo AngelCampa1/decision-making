@@ -75,9 +75,18 @@ frontier.
 
 **And a second reading of that through-line, added 2026-08-13.** The trigger
 corpus is separable by **turn length alone at AUC 0.850**, and a bare
-*"fire if ≥ 18 words"* rule scores **0.890** with no model. The best arm ever
-measured scores 0.956, so every result above was competing for about **six
-points over a ruler**. Five nulls is what a ceiling looks like. Neither reading
+*"fire if ≥ 18 words"* rule scores **0.890** with no model on the **version 2**
+key, against the best arm measured on that key — **0.9795** for the best
+description arm (`stakes-shown`) and **0.9863** for `confidence`.
+So every result above was competing for about **nine points over a ruler**.
+Five nulls is what a ceiling looks like.
+
+**Correction, 2026-08-13, appended.** This read "0.956 … about six points"
+until the checkpoints were reconciled. 0.956 is the `full` arm on the
+**version 1** key, where the same ruler scores 0.877, so the six-point figure
+was arithmetic across two answer keys — and 0.956 was not the best arm at
+either version, because `no-opener` reached 0.967 and `confidence` 0.973 at v1,
+and L5 published no accuracy column for anyone to notice. Neither reading
 is established and both must be reported until the corpus is rebuilt —
 [`the v3 plan`](superpowers/plans/2026-08-13-trigger-corpus-v3.md),
 [`the finding`](../notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words.md).
@@ -96,7 +105,7 @@ plausible number. **None crashed.**
 | routing graded against names the arm never offered | routing 0.000 again | no answer could have matched |
 | `covers` quoted without its denominator | 0.743 | or 0.895, depending |
 | `covers` compared across partitions | 0.743 vs 0.857 | 28.6-point range; the measure is retired |
-| the corpus itself, never audited | five arm comparisons | a ruler solves it at 0.890; the movable range was ~6 points → **Track N** |
+| the corpus itself, never audited | five arm comparisons | a ruler solves it at 0.890; the movable range is ~9 points, not the ~6 quoted here until 2026-08-13, which compared a v2 ruler with a v1 arm → **Track N** |
 | the model tier is not in any record | every trigger number | `--model` is a CLI default and the tier survived only as prose in a hand-written README. **Closed 2026-08-13 (N8)**: `run_triggers.py` stamps `model`, and `models_comparable` refuses a comparison spanning tiers |
 | `summarise()` read `should_fire` from the record, so a single-arm report on a v1 checkpoint silently emitted v1 numbers | `full` at recall 0.878 beside `stakes-shown` at 0.912 | a v2 re-score puts `full` five points higher; the L7 table would have been wrong in the shipped arm's disfavour |
 

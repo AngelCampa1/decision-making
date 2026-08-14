@@ -1,0 +1,77 @@
+# Corpus findings that are on the record and deferred.
+#
+# One `<corpus path>|<finding key>` per line, `#` for comments. Same semantics
+# as `paper/citations-baseline.txt` and `results/provenance-baseline.txt`:
+# exempt, and it MAY ONLY SHRINK. `de check` fails when a listed entry no
+# longer matches a real finding, because a baseline that does not shrink when
+# work is done has stopped measuring anything.
+#
+# A line here is not "this is fine". It is "this defect is on the record and
+# nobody is pretending otherwise" -- and unlike the other two baselines, these
+# entries are *printed on every run* by `check_triggers_step`, so a green gate
+# cannot be read as a clean corpus.
+#
+# WHAT A BASELINE HERE CANNOT DO. Only the shortcut battery's findings carry a
+# key. A structural defect -- a case with no band, a triple that is not one
+# positive and two negatives, a band whose members are not the length it claims
+# -- carries no key and cannot be listed, because there is no backlog to defer:
+# it is fixable in the time it takes to read the message.
+#
+# AND THE KEYS ARE NARROW ON PURPOSE. A derived view's key names the entire set
+# of leaking features. A fifth feature joining the set below is a different key
+# and fails the build; so is the leak appearing on the `ask` or `turn` view; so
+# is any other feature going inert. Dropping to three features is also a
+# different key and also fails, which is the may-only-shrink rule doing its job
+# -- an improvement nobody recorded is an improvement the baseline has stopped
+# being able to see.
+#
+# Seeded 2026-08-13 with two findings, both produced the day the battery was
+# given a guard against checks that could not fail and a view of the closing
+# ask. Neither threshold was moved to accommodate them.
+
+# CLOSED, 2026-08-13, both seeded entries. The corpus grew from 120 items to
+# 192 when the short-band unit merged 24 new triples, and both original
+# findings went with it: `paste_cues` is no longer inert in every view, and the
+# four-feature `close`-view leak no longer holds with that feature set. Neither
+# was closed by moving a threshold. They are deleted rather than kept, which is
+# the may-only-shrink rule working in the direction it was written for.
+
+# ADDED 2026-08-13, and an addition is the exceptional case. These two are not
+# deferred work that somebody declined to do; they are a *pre-existing* defect
+# that became visible when the battery gained a check it did not have. The
+# matched within-triple statistic compares a positive against its own two
+# negatives over a shared body -- the only comparison a matched design actually
+# controls -- and it fires where the pooled AUC cannot.
+#
+# `word_count`, turn and ask views: within its own triple the positive sits
+# above both its negatives in 0.660 of comparisons, 3.24 null standard errors
+# from chance. Per band: s 0.604, m 0.750, l 0.778, xl 0.393.
+#
+# READ THOSE AGAINST THE POOLED FIGURE, WHICH IS THE POINT. Pooled AUC is 0.517
+# on the turn view and 0.502 on the ask -- as clean as this battery can print.
+# A pooled AUC ranks positives against negatives from *other* triples, where
+# body variation swamps the ask, so it is structurally blind to a rank held
+# inside a triple. `xl` at 0.393 pulls against `m` and `l` and cancels the rest
+# to innocence. This is the fourth pooled-cancellation recorded on 2026-08-13.
+#
+# WHAT IT DOES AND DOES NOT MEAN. An arm sees one turn and never sees the other
+# two members, so it cannot use a within-triple rank directly; this is a defect
+# in the *construction*, not a demonstrated exploit. Per-band pooled AUC
+# remains the exploitability measure. Both are real and neither substitutes for
+# the other, which is why this is baselined and printed rather than treated as
+# either fatal or fine.
+#
+# NOT FIXABLE TODAY. 23 long-band triples are mid-rebuild and unmerged. An
+# assignment rule pairing close rank with ask form was tried and *measured to
+# make it worse* -- only 15 of 64 positives are `embedded` and can carry
+# shortest or middle rank, so 49 of 64 are forced to positive-longest, which
+# projects ~0.766 against the observed 0.660.
+#
+# CLOSED BY: a rank distribution for the positive that is roughly uniform
+# across longest, middle and shortest within its triple, reached by assignment
+# at authoring time rather than by editing negatives to hit a target -- four
+# generations of leak on 2026-08-13 came from per-item bounds pushed in one
+# direction. Any item whose ask changes needs re-adjudication, because the ask
+# is what the label rests on.
+datasets/triggers/decision-making/index.yaml|matched:turn:word_count
+datasets/triggers/decision-making/index.yaml|matched:ask:word_count

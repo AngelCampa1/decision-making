@@ -15,14 +15,18 @@ import pytest
 
 from decision_evals.trigger_arms import (
     ArmError,
+    bootstrap_rate,
     compare,
     covers_rates,
+    format_bands,
     format_comparison,
+    format_rate,
     label_versions_comparable,
     load_arm,
     models_comparable,
     per_item_correctness,
     summarise,
+    summarise_by_band,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -44,6 +48,53 @@ def row(
         "should_fire": should_fire,
         "covers": covers,
     }
+
+
+def banded(
+    case: str,
+    *,
+    fired: bool | None,
+    should_fire: bool,
+    band: str,
+    triple: str,
+    repeat: int = 0,
+) -> dict[str, object]:
+    """A version 3 row: the same verdict, carrying its stratum and its cluster."""
+    return row(case, fired=fired, should_fire=should_fire, repeat=repeat) | {
+        "band": band,
+        "triple": triple,
+    }
+
+
+def a_triple(name: str, *, band: str, correct: bool, repeat: int = 0) -> list[dict[str, object]]:
+    """One positive and two negatives from one body, all right or all wrong.
+
+    The extreme case on purpose. Three items built from one body are one
+    authored artefact seen three times, and a body that is confusing moves all
+    three together; this is that correlation at its maximum, which is where an
+    item-level bootstrap is most wrong.
+    """
+    return [
+        banded(
+            f"{name}p",
+            fired=correct,
+            should_fire=True,
+            band=band,
+            triple=name,
+            repeat=repeat,
+        ),
+        *(
+            banded(
+                f"{name}n{index}",
+                fired=not correct,
+                should_fire=False,
+                band=band,
+                triple=name,
+                repeat=repeat,
+            )
+            for index in (1, 2)
+        ),
+    ]
 
 
 # -- summarise --------------------------------------------------------------
@@ -226,6 +277,266 @@ def test_format_comparison_names_both_arms_and_the_test() -> None:
     assert "four" in lines
     assert "paired Wilcoxon" in lines, "the estimator must be named in the output it produces"
     assert "p1: 1.00 -> 0.00" in lines
+
+
+# -- per band ---------------------------------------------------------------
+
+
+class TestSummariseByBand:
+    """Track N. The question version 3 of the corpus exists to ask.
+
+    Every published number here sits on turns of 25 words or fewer. Whether
+    firing survives at 1,200 words is the thing a pooled figure cannot say, and
+    the pooled figure is what a caller gets by default.
+    """
+
+    #: Perfect on the short band, half wrong on the long one. Not a fixture that
+    #: merely parses: the two bands must come out with *different* numbers, or
+    #: the function is splitting records and computing nothing.
+    ROWS: ClassVar[list[dict[str, Any]]] = [
+        *a_triple("s01", band="s", correct=True),
+        *a_triple("s02", band="s", correct=True),
+        *a_triple("x01", band="xl", correct=True),
+        *a_triple("x02", band="xl", correct=False),
+    ]
+
+    def test_the_bands_carry_different_rates(self) -> None:
+        bands = summarise_by_band(self.ROWS)
+        assert bands["s"].accuracy == 1.0
+        assert bands["xl"].accuracy == 0.5, "a real drop, not a rounding difference"
+        assert bands["s"].recall == 1.0
+        assert bands["xl"].recall == 0.5
+        assert bands["xl"].false_positive_rate == 0.5
+        assert bands["xl"].missed == ("x02p",)
+
+    def test_the_denominators_are_per_band_and_not_the_pooled_one(self) -> None:
+        bands = summarise_by_band(self.ROWS)
+        assert bands["s"].n_records == 6
+        assert bands["xl"].n_records == 6
+        assert summarise(self.ROWS).accuracy == 0.75, (
+            "the pooled figure sits between the two bands and hides both"
+        )
+
+    def test_it_returns_the_bands_shortest_first(self) -> None:
+        """Corpus order, not insertion order and not alphabetical.
+
+        Alphabetical would read l, m, s, xl, which puts the 200-word band first
+        and reads as though accuracy rose with length.
+        """
+        rows = [
+            *a_triple("x01", band="xl", correct=True),
+            *a_triple("l01", band="l", correct=True),
+            *a_triple("s01", band="s", correct=False),
+            *a_triple("m01", band="m", correct=True),
+        ]
+        assert list(summarise_by_band(rows)) == ["s", "m", "l", "xl"]
+
+    def test_a_band_the_corpus_does_not_declare_sorts_last(self) -> None:
+        rows = [
+            *a_triple("z01", band="xxl", correct=True),
+            *a_triple("s01", band="s", correct=False),
+        ]
+        assert list(summarise_by_band(rows)) == ["s", "xxl"]
+
+    def test_a_checkpoint_with_no_bands_is_refused(self) -> None:
+        """A version 2 checkpoint. `{}` would read as "the bands agree"."""
+        with pytest.raises(ArmError, match="no record carries a `band`"):
+            summarise_by_band(
+                [
+                    row("p1", fired=True, should_fire=True),
+                    row("n1", fired=False, should_fire=False),
+                ]
+            )
+
+    def test_a_half_collected_band_is_refused_by_name(self) -> None:
+        """The shape an interrupted `--band` run leaves behind.
+
+        Its precision would read 0.000, which is a number rather than the
+        absence of one.
+        """
+        rows = [
+            *a_triple("s01", band="s", correct=True),
+            banded("x01p", fired=True, should_fire=True, band="xl", triple="x01"),
+        ]
+        with pytest.raises(ArmError, match="band 'xl' cannot be scored"):
+            summarise_by_band(rows)
+
+
+def test_format_bands_prints_a_row_per_band_with_its_denominator() -> None:
+    lines = "\n".join(format_bands(summarise_by_band(TestSummariseByBand.ROWS)))
+    assert "band" in lines
+    assert "  s    " in lines
+    assert "  xl   " in lines
+    assert "1.000" in lines, "the short band's accuracy"
+    assert "0.500" in lines, "the long band's"
+    assert "never fired: x02p" in lines
+
+
+# -- the clustered bootstrap ------------------------------------------------
+
+
+class TestBootstrapRate:
+    """The resampling unit is the triple, and it is not the item.
+
+    Three items sharing a body are one authored artefact seen three times.
+    Resampling items pretends they are three independent draws and returns an
+    interval that is too narrow -- wrong in the anti-conservative direction,
+    which is the direction that publishes an effect that is not there.
+    """
+
+    #: Six triples, three of them right throughout and three wrong throughout.
+    #: The correlation at its maximum, which is where the wrong unit is most
+    #: wrong and therefore where the difference is visible rather than argued.
+    ROWS: ClassVar[list[dict[str, Any]]] = [
+        *a_triple("t1", band="l", correct=True),
+        *a_triple("t2", band="l", correct=True),
+        *a_triple("t3", band="l", correct=True),
+        *a_triple("t4", band="l", correct=False),
+        *a_triple("t5", band="l", correct=False),
+        *a_triple("t6", band="l", correct=False),
+    ]
+
+    def test_the_point_estimate_is_the_mean_per_item_correctness(self) -> None:
+        rate = bootstrap_rate(self.ROWS, seed=0)
+        assert rate.point_estimate == pytest.approx(0.5)
+        assert (rate.n_items, rate.n_clusters) == (18, 6)
+
+    def test_the_interval_is_not_degenerate(self) -> None:
+        """The non-zero check. A resampler that returns a point is not one."""
+        rate = bootstrap_rate(self.ROWS, seed=0)
+        assert rate.standard_error > 0.0
+        assert rate.width > 0.0
+        assert rate.ci_low < rate.point_estimate < rate.ci_high
+
+    def test_clustering_widens_the_interval_over_resampling_items(self) -> None:
+        """The reason the function exists, asserted rather than described.
+
+        At three items per cluster and an ICC of 1 the design effect is 3, so
+        the clustered standard error should run about sqrt(3) times the
+        item-level one. If these two ever come out equal, the cluster label is
+        being ignored and every interval this reports is too narrow.
+        """
+        clustered = bootstrap_rate(self.ROWS, seed=0)
+        per_item = bootstrap_rate(self.ROWS, cluster_on="case", seed=0)
+        assert clustered.standard_error > 1.4 * per_item.standard_error
+        assert clustered.width > per_item.width
+
+    def test_the_design_effect_is_reported_and_is_above_one(self) -> None:
+        rate = bootstrap_rate(self.ROWS, seed=0)
+        assert rate.icc == pytest.approx(1.0)
+        assert rate.design_effect == pytest.approx(3.0)
+        assert rate.effective_n == pytest.approx(6.0)
+        assert rate.effective_n < rate.n_items, "eighteen items are worth six"
+
+    def test_resampling_items_reports_no_clustering_cost(self) -> None:
+        """`cluster_on="case"` is the wrong unit, and says so in its own fields."""
+        rate = bootstrap_rate(self.ROWS, cluster_on="case", seed=0)
+        assert rate.n_clusters == rate.n_items == 18
+        assert rate.icc == 0.0
+        assert rate.design_effect == 1.0
+        assert rate.effective_n == pytest.approx(18.0)
+
+    def test_it_is_reproducible_under_a_seed(self) -> None:
+        """A report that moves between two readings of one checkpoint is not one."""
+        first = bootstrap_rate(self.ROWS, seed=7)
+        second = bootstrap_rate(self.ROWS, seed=7)
+        assert (first.ci_low, first.ci_high) == (second.ci_low, second.ci_high)
+
+    def test_filtering_to_the_positives_gives_recall(self) -> None:
+        """And each triple then contributes one item, so there is nothing to cluster.
+
+        Worth pinning: the same call on a filtered subset is a different measure,
+        and the class cannot tell the caller which one it returned.
+        """
+        positives = [dict(record) for record in self.ROWS if record["should_fire"]]
+        rate = bootstrap_rate(positives, seed=0)
+        assert rate.point_estimate == pytest.approx(summarise(self.ROWS).recall)
+        assert rate.point_estimate == pytest.approx(0.5)
+        assert (rate.n_items, rate.n_clusters) == (6, 6)
+        assert rate.icc == 0.0
+
+    def test_filtering_to_the_negatives_gives_one_minus_the_false_positive_rate(self) -> None:
+        negatives = [dict(record) for record in self.ROWS if not record["should_fire"]]
+        rate = bootstrap_rate(negatives, seed=0)
+        assert rate.point_estimate == pytest.approx(1.0 - summarise(self.ROWS).false_positive_rate)
+        assert rate.point_estimate == pytest.approx(0.5)
+
+    def test_a_confidence_level_widens_the_interval(self) -> None:
+        narrow = bootstrap_rate(self.ROWS, confidence=0.50, seed=0)
+        wide = bootstrap_rate(self.ROWS, confidence=0.99, seed=0)
+        assert wide.width > narrow.width
+        assert (narrow.confidence, wide.confidence) == (0.50, 0.99)
+
+    def test_an_unparseable_repeat_does_not_remove_its_item(self) -> None:
+        rows = [
+            *a_triple("t1", band="s", correct=True),
+            *a_triple("t2", band="s", correct=False),
+            banded("t1p", fired=None, should_fire=True, band="s", triple="t1", repeat=1),
+        ]
+        rate = bootstrap_rate(rows, seed=0)
+        assert rate.n_items == 6, "t1p is still an item; only its null repeat is dropped"
+
+    def test_an_item_whose_every_repeat_failed_to_parse_is_absent(self) -> None:
+        rows = [
+            *a_triple("t1", band="s", correct=True),
+            *a_triple("t2", band="s", correct=False),
+            banded("t3p", fired=None, should_fire=True, band="s", triple="t3"),
+        ]
+        rate = bootstrap_rate(rows, seed=0)
+        assert rate.n_items == 6, "absent, not scored as a failure to fire"
+        assert rate.n_clusters == 2
+
+    def test_a_checkpoint_with_no_triples_is_refused(self) -> None:
+        with pytest.raises(ArmError, match="no record carries 'triple'"):
+            bootstrap_rate(
+                [
+                    row("p1", fired=True, should_fire=True),
+                    row("n1", fired=False, should_fire=False),
+                ]
+            )
+
+    def test_a_partly_labelled_checkpoint_is_refused(self) -> None:
+        """Dropping the unlabelled rows would move the denominator in silence."""
+        rows = [*self.ROWS, row("p9", fired=True, should_fire=True)]
+        with pytest.raises(ArmError, match="carry no 'triple'"):
+            bootstrap_rate(rows)
+
+    def test_an_entirely_unparseable_arm_is_refused(self) -> None:
+        rows = [
+            banded("t1p", fired=None, should_fire=True, band="s", triple="t1"),
+            banded("t2p", fired=None, should_fire=True, band="s", triple="t2"),
+        ]
+        with pytest.raises(ArmError, match="no rate to resample"):
+            bootstrap_rate(rows)
+
+    def test_a_single_cluster_is_refused(self) -> None:
+        """One cluster resamples to itself: a zero-width interval reading as certainty."""
+        with pytest.raises(ArmError, match="single 'triple'"):
+            bootstrap_rate(a_triple("t1", band="s", correct=True))
+
+    def test_a_case_under_two_triples_is_refused(self) -> None:
+        """Two corpora appended to one checkpoint, which the runner's paths prevent."""
+        rows = [
+            *a_triple("t1", band="s", correct=True),
+            *a_triple("t2", band="s", correct=False),
+            banded("t1p", fired=True, should_fire=True, band="s", triple="other", repeat=1),
+        ]
+        with pytest.raises(ArmError, match="appears under two 'triple' labels"):
+            bootstrap_rate(rows)
+
+    def test_an_impossible_confidence_level_is_refused(self) -> None:
+        with pytest.raises(ValueError, match="confidence"):
+            bootstrap_rate(self.ROWS, confidence=1.0)
+
+
+def test_format_rate_names_the_cluster_count_and_the_design_effect() -> None:
+    """A width nobody can attribute is a width taken on trust."""
+    lines = "\n".join(format_rate("accuracy", bootstrap_rate(TestBootstrapRate.ROWS, seed=0)))
+    assert "accuracy" in lines
+    assert "18 item(s) in 6 cluster(s)" in lines
+    assert "ICC 1.000" in lines
+    assert "design effect 3.00" in lines
+    assert "effective n 6.0" in lines
 
 
 # -- the published numbers --------------------------------------------------

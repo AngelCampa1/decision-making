@@ -46,8 +46,10 @@ Three corpora were built and all three measured nothing:
 **A fourth corpus did produce results — and on 2026-08-13 it turned out to be
 measuring something else.** The 73-turn trigger set behind every Track L and
 Track M number is separable by **turn length alone at AUC 0.850**; a bare *"fire
-if ≥ 18 words"* rule scores **0.890** against a best-ever arm of 0.956. So the
-six-point band above a ruler is where five reported nulls were competing, and
+if ≥ 18 words"* rule scores **0.890** on the version 2 key, against **0.9795**
+for the best description arm on that key (`stakes-shown`) and **0.9863** for the
+`confidence` arm. So the **nine-point** band
+above a ruler is where five reported nulls were competing, and
 the corpus never contained the pile of context its `ledger` procedure exists
 for. **Track N** rebuilds it; the existing L and M comparisons stay valid
 against each other and stop being quotable on their own.
@@ -269,8 +271,9 @@ in between, and it comes with an installer who abandoned it.
 > **The same caveat as Track L, and it lands harder here.** M4, M5, M6 and M6b
 > each found no effect on firing accuracy, and the headline reading is that
 > structure, count and composition do not change discrimination. On a corpus a
-> ruler solves at 0.890 there were about six points to move. **Four nulls with
-> six points of headroom is not the same evidence as four nulls with fifty**,
+> ruler solves at 0.890 there were about nine points to move — the ruler and
+> the best arm on the same key, 0.9795 to 0.9863. **Four nulls with
+> nine points of headroom is not the same evidence as four nulls with fifty**,
 > and this document reported it as though it were. **Track N** is the fix; the
 > M results stand as internally valid comparisons and as nothing more until it
 > lands.
@@ -600,7 +603,8 @@ is the one to bet on.
 
 > **Every L result on disk was measured on a corpus a ruler solves at 0.890.**
 > L5 and L7 are internally valid — all arms saw identical items — but the
-> movable range above a word count was about six points, so an L null is
+> movable range above a word count was about nine points on the version 2 key,
+> ruler 0.890 against 0.9795 to 0.9863 for the best arm, so an L null is
 > ambiguous between "phrasing does not matter" and "there was nowhere to move".
 > **Track N** is rebuilding the corpus; nothing here is retired and nothing here
 > may be quoted without that sentence attached.
@@ -818,15 +822,20 @@ they are different problems that arrived together:
   positive was one sentence *describing* one.
 - **A shortcut.** Positives ran at a median of 18 words and negatives at 8, so
   turn length alone separated the labels at **AUC 0.850** and a bare *"fire if
-  ≥ 18 words"* rule scored **0.890 accuracy with no model involved.** The best
-  arm ever measured scored 0.956.
+  ≥ 18 words"* rule scored **0.890 accuracy with no model involved** on the
+  version 2 key. The best description arm on that key is `stakes-shown` at
+  **0.9795** and the highest firing accuracy on record is `confidence` at
+  **0.9863**; on the version 1 key the same ruler scores 0.877, against
+  `no-opener` at 0.967 and `confidence` at 0.973. **Nine points either way, and
+  the two pairs must not be crossed** — 0.956, the figure this paragraph carried until 2026-08-13, is
+  the `full` arm at version 1 quoted against a version 2 ruler.
 
-**So every result in Tracks L and M was competing for about six points over a
+**So every result in Tracks L and M was competing for about nine points over a
 ruler**, and the through-line those tracks report — five manipulations of a
 description, none of which moved discrimination — now carries a second reading
-that cannot be dismissed: **there was six points of room, and five nulls is what
-a ceiling looks like.** Neither reading is established. Both are reported until
-this track closes.
+that cannot be dismissed: **there was nine points of room, and five nulls is
+what a ceiling looks like.** Neither reading is established. Both are reported
+until this track closes.
 
 Fixing coverage without fixing the shortcut makes the shortcut worse — adding
 long positives to a set where long already means positive widens the gap — so
@@ -1439,9 +1448,10 @@ well it discriminates; the probe casefiles took 0 of 27 traps; `math` returned
 `p_discordant` 0.000. Two independent lines of evidence now point the same way.
 
 **And a competing explanation for the trigger half of that, found 2026-08-13.**
-The corpus those nulls were measured on is solved to 0.890 by counting words,
-against a best arm of 0.956. A flat result is what a real null looks like *and*
-what a six-point ceiling looks like, and this document had no way to tell them
+The corpus those nulls were measured on is solved to 0.890 by counting words on
+the version 2 key, against 0.9795 to 0.9863 for the best arm on the same key. A flat
+result is what a real null looks like *and*
+what a nine-point ceiling looks like, and this document had no way to tell them
 apart because nobody had measured the ceiling. **Track N** measures it. Until it
 lands, "nothing about a description changes discrimination" is one of two live
 readings rather than the finding — which is the more important correction,

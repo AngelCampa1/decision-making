@@ -44,3 +44,9 @@ Fourteen documents, and they answer different questions. This is the map.
 The research log is [`notebook/`](../notebook/) — append-only, dated, predictions
 before runs. Published run records are [`results/`](../results/), one directory
 per run with its own README. The write-up is [`paper/`](../paper/).
+
+Every one of those is also readable at
+<https://angelcampa1.github.io/decision-making-skills/>. The site renders these
+files in place rather than copying them, so there is no second version of this
+page to fall behind the one you are reading; `de check` refuses a build older
+than its inputs. The source is [`site/`](../site/).

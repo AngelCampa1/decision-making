@@ -75,6 +75,14 @@ dev = [
     "types-pyyaml>=6.0.12.20260724",
 ]
 
+# Publishing the site, and nothing else. Separated from `dev` because `de check`
+# must run without it: the staleness gate is pure Python and offline, so a
+# contributor who never publishes still gets the refusal. `ghp-import` is
+# imported lazily inside `de site --deploy` for the same reason.
+docs = [
+    "ghp-import>=2.1",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["evals/src/decision_evals"]
 
@@ -126,8 +134,10 @@ mypy_path = "evals/src"
 packages = ["decision_evals"]
 
 [[tool.mypy.overrides]]
-# These ship without complete stubs.
-module = ["statsmodels.*", "scipy.*"]
+# These ship without complete stubs. `ghp_import` is also in the `docs` group
+# rather than `dev`, so on a plain dev checkout the import does not resolve at
+# all -- which is the intended shape: `de check` never reaches it.
+module = ["statsmodels.*", "scipy.*", "ghp_import.*"]
 ignore_missing_imports = true
 
 # --------------------------------------------------------------------------- #
@@ -198,6 +208,17 @@ output = "coverage.json"
 # checked by reading it, and the README was found naming two commands that do
 # not exist and a directory that never has.
 "decision_evals/docs.py" = { line = 100.0, branch = 100.0 }
+# The gate over the published site. It renders the markdown in this repository
+# in place rather than copying it, which is what stops a second STATUS.md
+# existing to disagree with the first -- and what makes every build a snapshot
+# that goes stale silently. A refusal branch here that nothing exercises is a
+# published page quietly disagreeing with the repository.
+"decision_evals/site.py" = { line = 100.0, branch = 100.0 }
+# The other half of the label-version guard. `label_versions_comparable` refuses
+# a comparison across a key revision; this is what makes the refusal satisfiable
+# and what stops an unstamped record reaching a stamped one unnoticed. A wrong
+# branch here republishes a number under the wrong answer key.
+"decision_evals/rescore.py" = { line = 100.0, branch = 100.0 }
 # A generator bug silently changes the benchmark rather than failing loudly.
 "decision_evals/providers" = { line = 100.0, branch = 100.0 }
 "decision_evals/generators" = { line = 98.0, branch = 95.0 }
@@ -223,6 +244,40 @@ output = "coverage.json"
 "decision_evals/plugin" = { line = 95.0, branch = 90.0 }
 # Argument wiring, exercised through integration tests.
 "decision_evals/cli.py" = { line = 85.0, branch = 75.0 }
+
+# --------------------------------------------------------------------------- #
+# Which answer key each pre-versioning checkpoint was scored against.
+#
+# `set_version` was added to the runner on 2026-08-13 in `903169c`, after every
+# arm below had already run. `label_versions_comparable` defaults an absent one
+# to 1, which is true and silent, and `de rescore` will not act on a default:
+# stamping a record is writing a fact into the file, so the fact is derived once
+# and written here where the derivation can be read.
+#
+# **Derived, not assumed from the dates.** The runner bakes `should_fire` into
+# every row at write time, so each checkpoint carries the key it was scored
+# against inside itself. Every file below agrees with the version 1 labels on
+# all 73 cases and disagrees with version 2 on exactly `x-n21` -- the turn the
+# maintainer moved from the positives to the negatives in `d43c490`. Version 2
+# was tagged five minutes later in `903169c`, so no run could have been scored
+# against v2 without being stamped.
+#
+# The table stays after the stamping. `results/triggers/verdicts.jsonl` is
+# tracked in git in its unstamped form at `1bd87b8`, so a checkout restores a
+# file with no version in it, and the derivation has to survive that. A line may
+# be added only for a checkpoint that carries no `set_version`, and removed only
+# when its checkpoint is.
+# --------------------------------------------------------------------------- #
+[tool.decision-evals.unstamped-checkpoints]
+"verdicts.jsonl" = 1
+"verdicts-four.jsonl" = 1
+"verdicts-2-entries.jsonl" = 1
+"verdicts-confidence.jsonl" = 1
+"verdicts-opener-only.jsonl" = 1
+"verdicts-no-opener.jsonl" = 1
+"verdicts-no-exclusions.jsonl" = 1
+"verdicts-pairing-ledger+cascade-fit+timing.jsonl" = 1
+"verdicts-pairing-ledger+timing-fit+cascade.jsonl" = 1
 
 # --------------------------------------------------------------------------- #
 # Integrity locks that no entry point reaches yet.

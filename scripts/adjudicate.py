@@ -35,6 +35,7 @@ import argparse
 import json
 import sys
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -50,6 +51,12 @@ from decision_evals.providers.claude_code import (  # noqa: E402
     isolated_cwd,
 )
 from decision_evals.skills import parse_skill  # noqa: E402
+from decision_evals.stats.agreement import (  # noqa: E402
+    fleiss_kappa,
+    krippendorff_alpha,
+    percent_agreement,
+    unanimity_rate,
+)
 from decision_evals.triggers import TriggerCase, load_trigger_set  # noqa: E402
 
 #: The adjudicator's whole context. Deliberately *not* the skill description:
@@ -208,6 +215,19 @@ class CaseOutcome:
         return ADJUDICATORS - len(self.votes)
 
     @property
+    def ratings(self) -> tuple[bool | None, ...]:
+        """One slot per adjudicator, ``None`` where the reply could not be read.
+
+        ``votes`` holds only the readable replies, which is what the resolution
+        rule needs — a majority is a majority of the votes that exist. The
+        agreement estimators need the *shape* instead: three judges of whom one
+        produced nothing is not the same evidence as two judges who agreed, and
+        collapsing them is how a formatting problem turns into a reliability
+        claim.
+        """
+        return (*self.votes, *([None] * self.unparseable))
+
+    @property
     def agreeing(self) -> int:
         return sum(1 for vote in self.votes if vote == self.label)
 
@@ -252,10 +272,22 @@ class AdjudicationOutcome:
 
     @property
     def unanimous_rate(self) -> float:
-        unanimous = sum(
-            1 for o in self.outcomes if o.votes and o.agreeing == len(o.votes) == ADJUDICATORS
-        )
-        return unanimous / self.n_cases if self.n_cases else 0.0
+        """Cases where every adjudicator was readable *and* agreed with my label.
+
+        The denominator is every case, including ones nobody could be read on:
+        an unreadable reply is a missing rating, and a missing rating is not
+        agreement. Computed by :func:`~decision_evals.stats.agreement.unanimity_rate`
+        so that this repository carries one definition of unanimity rather than
+        two — the inline version this replaced hard-coded the same rule and
+        agreed with it case for case at three judges.
+
+        Note that this is agreement *with the key*, not between the judges. The
+        inter-rater block in :func:`report` is the one that says whether three
+        judges agreeing means anything.
+        """
+        if not self.outcomes:
+            return 0.0
+        return unanimity_rate([(case.label, *case.ratings) for case in self.outcomes]).rate
 
 
 def adjudication_outcome(
@@ -280,6 +312,45 @@ def adjudication_outcome(
     return AdjudicationOutcome(outcomes=tuple(outcomes))
 
 
+def _agreement_line(label: str, compute: Callable[[], float]) -> str:
+    """One reported coefficient, or the reason there is not one.
+
+    Every estimator refuses a degenerate input rather than returning a plausible
+    zero, so a run where all three judges said the same thing about everything
+    prints why alpha is unavailable instead of printing 0.000 and being believed.
+    """
+    try:
+        return f"    {label:<20s} {compute():.3f}"
+    except ValueError as error:
+        return f"    {label:<20s} n/a -- {error}"
+
+
+def report_reliability(outcome: AdjudicationOutcome) -> None:
+    """Agreement *between the judges*, which the key is not involved in.
+
+    ``unanimous with key`` above measures the judges against my labels and is
+    therefore a statement about the corpus. This block measures the judges
+    against each other and is a statement about the *instrument*: three blind
+    adjudicators who disagree with one another cannot move a label on anyone's
+    behalf, and until this ran there was no number here that would have said so.
+
+    Fleiss' kappa is reported beside Krippendorff's alpha because they answer
+    the same question differently under missing data — Fleiss refuses the run
+    outright the moment one reply is unreadable, alpha drops the unpairable
+    units and says how many. When both are available they differ only by the
+    finite-sample factor ``(n - 1) / n``.
+    """
+    ratings = [case.ratings for case in outcome.outcomes]
+    print("\n  inter-rater agreement (judges against each other, key not involved):")
+    for line in (
+        _agreement_line("pairwise agreement", lambda: percent_agreement(ratings).agreement),
+        _agreement_line("unanimous judges", lambda: unanimity_rate(ratings).rate),
+        _agreement_line("Fleiss kappa", lambda: fleiss_kappa(ratings).kappa),
+        _agreement_line("Krippendorff alpha", lambda: krippendorff_alpha(ratings).alpha),
+    ):
+        print(line)
+
+
 def report(outcome: AdjudicationOutcome) -> None:
     print("\n=== adjudication ===")
     print(f"  cases                {outcome.n_cases}")
@@ -287,6 +358,7 @@ def report(outcome: AdjudicationOutcome) -> None:
     print(f"  contested (2-1 kept) {len(outcome.contested)}")
     print(f"  moved (2-1 against)  {len(outcome.moved)}")
     print(f"  movement rate        {outcome.movement_rate:.3f}   (kill above {KILL_THRESHOLD})")
+    report_reliability(outcome)
     per_band: Counter[str] = Counter()
     totals: Counter[str] = Counter()
     for case in outcome.outcomes:

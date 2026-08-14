@@ -7,6 +7,9 @@ fail — particularly the git-identity guard, whose whole job is to refuse.
 
 from __future__ import annotations
 
+import sys
+import types
+from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
@@ -28,9 +31,19 @@ from decision_evals.corpora import CorpusError
 from decision_evals.decisions import DecisionIssue
 from decision_evals.provenance import ProvenanceIssue, discover_runs
 from decision_evals.provenance import RunRecord as ProvenanceRun
+from decision_evals.site import INPUTS_PATH as SITE_INPUTS_PATH
+from decision_evals.site import MANIFEST_PATH as SITE_MANIFEST_PATH
+from decision_evals.site import render_manifest
 from decision_evals.wiring import WiringIssue
 
 runner = CliRunner()
+
+
+@dataclass(frozen=True)
+class _Completed:
+    """Stand-in for `subprocess.CompletedProcess` where only the code matters."""
+
+    returncode: int
 
 
 class TestGitIdentityGuard:
@@ -488,3 +501,181 @@ class TestDecisionsStep:
     def test_a_malformed_log_line_is_skipped(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(cli, "_git_output", lambda args: "no-pipes-here\nabc1234|2026-08-13|x")
         assert [c.sha for c in cli._governed_commits()] == ["abc1234"]
+
+
+def _site_project(root: Path, *, installed: bool = False) -> None:
+    """A repository with a site project and one document the site renders."""
+    (root / "site").mkdir(exist_ok=True)
+    (root / SITE_INPUTS_PATH).write_text('{"content": ["*.md"]}', encoding="utf-8")
+    (root / "README.md").write_text("# readme\n", encoding="utf-8")
+    if installed:
+        (root / "site" / "node_modules").mkdir(exist_ok=True)
+
+
+class TestSiteStep:
+    """The gate half. Pure Python, so every branch runs without a Node toolchain."""
+
+    def test_absent_site_is_a_no_op(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        """The gate shipped before the site did, so it has to be green without one."""
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = cli.check_site_step()
+        assert result.passed
+        assert result.detail == ""
+
+    def test_a_stale_build_fails(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path)
+        result = cli.check_site_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
+
+    def test_a_fresh_build_passes(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path)
+        (tmp_path / SITE_MANIFEST_PATH).write_text(render_manifest(tmp_path), encoding="utf-8")
+        assert cli.check_site_step().passed
+
+    def test_the_real_repository_is_current(self) -> None:
+        """No monkeypatching. A published site older than its inputs is a failure."""
+        assert cli.check_site_step().passed
+
+
+class TestSiteCommand:
+    """The build half.
+
+    `npm` is stubbed rather than run: what these pin down is the ordering that
+    makes the manifest trustworthy. A manifest written before a failed build is
+    a green gate over a site that does not exist, and nothing downstream can
+    tell the difference afterwards.
+    """
+
+    def test_refuses_without_a_site_directory(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = runner.invoke(app, ["site"])
+        assert result.exit_code == 1
+        assert "does not exist" in result.output
+
+    def test_refuses_without_npm(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path)
+        monkeypatch.setattr(cli.shutil, "which", lambda _: None)
+        result = runner.invoke(app, ["site"])
+        assert result.exit_code == 1
+        assert "npm is not on PATH" in result.output
+
+    def test_a_failed_install_leaves_the_manifest_alone(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path)
+        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
+        monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(1))
+        result = runner.invoke(app, ["site"])
+        assert result.exit_code == 1
+        assert "npm ci failed" in result.output
+        assert not (tmp_path / SITE_MANIFEST_PATH).exists()
+
+    def test_a_failed_build_leaves_the_manifest_alone(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path, installed=True)
+        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
+        monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(1))
+        result = runner.invoke(app, ["site"])
+        assert result.exit_code == 1
+        assert "the manifest is unchanged" in result.output
+        assert not (tmp_path / SITE_MANIFEST_PATH).exists()
+
+    def test_a_successful_build_writes_the_manifest_and_clears_the_caches(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """The caches go first because Astro will otherwise serve markdown
+        rendered by the previous version of the link-rewrite plugin, which is a
+        stale page that looks perfectly fine."""
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path, installed=True)
+        for stale in (".astro-cache", ".astro", "dist"):
+            (tmp_path / "site" / stale).mkdir()
+        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
+        calls: list[list[str]] = []
+
+        def fake_run(command: list[str], **kwargs: object) -> _Completed:
+            calls.append(command)
+            return _Completed(0)
+
+        monkeypatch.setattr(cli.subprocess, "run", fake_run)
+        result = runner.invoke(app, ["site"])
+
+        assert result.exit_code == 0, result.output
+        assert calls == [["npm", "run", "build"]]
+        assert not (tmp_path / "site" / ".astro-cache").exists()
+        assert not (tmp_path / "site" / "dist").exists()
+        assert (tmp_path / SITE_MANIFEST_PATH).read_text(encoding="utf-8") == render_manifest(
+            tmp_path
+        )
+        assert "not deployed" in result.output
+
+    def test_deploy_refuses_without_the_docs_group(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """`ghp-import` is in the `docs` group, not `dev`, so this is the state
+        every contributor who never publishes is in."""
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path, installed=True)
+        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
+        monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
+        monkeypatch.setitem(sys.modules, "ghp_import", None)
+
+        result = runner.invoke(app, ["site", "--deploy"])
+        assert result.exit_code == 1
+        assert "uv sync --group dev --group docs" in result.output
+        # Still written: the build succeeded and only publishing failed.
+        assert (tmp_path / SITE_MANIFEST_PATH).exists()
+
+    def test_deploy_publishes_the_built_directory(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path, installed=True)
+        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
+        monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
+        monkeypatch.setattr(cli, "_git_output", lambda args: "abc1234")
+
+        seen: dict[str, object] = {}
+
+        def fake_ghp(srcdir: str, **kwargs: object) -> None:
+            seen["srcdir"] = srcdir
+            seen.update(kwargs)
+
+        module = types.ModuleType("ghp_import")
+        module.ghp_import = fake_ghp  # type: ignore[attr-defined]
+        monkeypatch.setitem(sys.modules, "ghp_import", module)
+
+        result = runner.invoke(app, ["site", "--deploy"])
+        assert result.exit_code == 0, result.output
+        assert seen["srcdir"] == str(tmp_path / "site" / "dist")
+        # Jekyll drops every path beginning with an underscore, which is where
+        # Astro puts its bundles.
+        assert seen["nojekyll"] is True
+        assert seen["push"] is True
+        assert seen["mesg"] == "site: build from abc1234"
+
+    def test_deploy_names_an_unknown_commit_rather_than_an_empty_one(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        _site_project(tmp_path, installed=True)
+        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
+        monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
+        monkeypatch.setattr(cli, "_git_output", lambda args: None)
+
+        seen: dict[str, object] = {}
+        module = types.ModuleType("ghp_import")
+        module.ghp_import = lambda srcdir, **kw: seen.update(kw)  # type: ignore[attr-defined]
+        monkeypatch.setitem(sys.modules, "ghp_import", module)
+
+        assert runner.invoke(app, ["site", "--deploy"]).exit_code == 0
+        assert seen["mesg"] == "site: build from unknown"

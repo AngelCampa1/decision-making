@@ -260,7 +260,15 @@ class TestRouting:
 
 class TestCorrespondence:
     def test_the_repository_satisfies_it(self) -> None:
-        """The check that would have caught the orphan, run on the real tree."""
+        """The check that would have caught the orphan, run on the real tree.
+
+        Green does not mean the corpus is clean. Two findings are deferred by
+        ``datasets/triggers/corpus-baseline.txt`` and printed on every run;
+        what they are, why they cannot be fixed today and what closes them
+        lives in that file and is asserted in ``test_corpus_battery.py``, which
+        is the **one** place either question is answered. A second list here
+        would be a place a finding could be closed and left open.
+        """
         assert check_trigger_sets(REPO_ROOT) == []
 
     def test_a_skill_without_a_trigger_set_is_reported(self, tmp_path: Path) -> None:

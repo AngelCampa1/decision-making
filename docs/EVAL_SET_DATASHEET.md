@@ -84,10 +84,21 @@ Facts are rendered in the order the generator arranged them and are **not**
 reordered downstream. Position is a stratum; reordering at render time would
 destroy it.
 
-The option menu is rendered identically in every arm. AgentAtlas measured 14–40pp
-of trajectory accuracy moving with the presence of an explicit menu, which is
-larger than any effect this corpus is designed to detect, so it is held constant
-by construction rather than by convention.
+The option menu is rendered identically in every arm. AgentAtlas
+(arXiv:2605.20530**v1**) reported every model's trajectory accuracy dropping by
+14–40 pp when the explicit label menu was removed, and two conditions travel with
+that figure. First, **it is v1-only**: v2 (26 May 2026) deleted the sentence and
+replaced the quantity with "mapped label agreement can change substantially" — no
+number, and a different measure name — so the version has to be named wherever the
+figure is used. Second, both versions disclaim the run as a demonstration on a
+synthetic 1,342-item set rather than a benchmark release, v2 adding that it
+"should not be read as a 'definitive model comparison'".
+
+So the figure is used here only to justify holding the menu constant by
+construction rather than by convention. It is **not** a magnitude to compare this
+corpus's own effects against, and the earlier claim here that it was "larger than
+any effect this corpus is designed to detect" has been withdrawn: that is exactly
+the cross-study magnitude comparison v2 disclaims.
 
 ### Sampling is constrained, in two ways that make the corpus non-naturalistic
 

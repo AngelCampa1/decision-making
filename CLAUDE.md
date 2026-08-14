@@ -96,10 +96,19 @@ worth saying.
 ```
 
 The wording is deliberate. Trust-framed system prompts surfaced 59% more hidden
-issues than unframed ones in a controlled comparison (arXiv:2603.14373), while
-fear-framing — threats, consequences, "you MUST" — showed no gain over saying
-nothing. So nothing here threatens the model, and the closing line invites it to
-report that a skill is not working.
+issues than unframed ones (arXiv:2603.14373), while fear-framing — threats,
+consequences, "you MUST" — "showed no significant improvement over baseline on
+any metric". So nothing here threatens the model, and the closing line invites
+it to report that a skill is not working.
+
+**The 59% is the smaller of the paper's two studies and the replication is
+weaker.** Study 1 is a *manual* experiment over 9 debugging scenarios on a
+single model: 59% more hidden issues, p = 0.002, d = 2.28. Study 2 automates
+it over 135 scenario-level points and lands at **+25%** hidden issues
+(p = 0.016) and +74% investigative steps. The fear-framing null is Study 2's
+and is the robust half. Whichever number is quoted, the other travels with it —
+and both were measured on debugging, so applying them to how reviewers are
+briefed here is an extrapolation. Verified first-hand 2026-08-13.
 
 ---
 
@@ -234,6 +243,22 @@ If you are an agent contributing here rather than a user installing the skills:
 - `python -m uv run de check` is the full local gate — lint, types, tests,
   coverage floors, skill validation, run provenance and integrity wiring. There
   is no cloud CI. Run it before you believe anything works.
+- **Editing a document means rebuilding the site in the same change.** The site
+  under `site/` renders this repository's markdown *in place* — `docs/`,
+  `notebook/`, `results/`, `skills/` and the root are read by the build, never
+  copied — so there is no second copy of `STATUS.md` to disagree with the first,
+  and every build is a snapshot that goes stale invisibly. `python -m uv run de
+  site` rebuilds it and writes `site/build-manifest.json`, a hash of every input;
+  `de check` refuses a tree where that manifest has fallen behind, and names the
+  files that moved. Notebook entries are this repository's highest-frequency
+  action, so this will fire often. It is the price of not having two copies.
+
+  **What that gate cannot see, stated so nobody mistakes green for correct.** It
+  proves the site was *built* from the current tree. It does not prove the build
+  was ever *pushed*: `de check` is offline and deterministic by design, so it
+  cannot consult `origin/gh-pages`, and a green gate beside a build that never
+  left the machine is exactly as green as a deployed one. Only
+  `de site --deploy` closes that, and nothing checks that you ran it.
 - **A published run must carry its own provenance, and the gate enforces it.**
   `results/<skill>/<date>-<sha7>[-slug]/README.md` must declare
   `**Answer key:** <label set> v<n>` matching the `set_version` in the records

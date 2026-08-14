@@ -27,10 +27,19 @@ same headings, bullets, and a worked example — but contentless. A skill that
 beats `off` and not `placebo` is a length effect, and no `SHIP` verdict is issued
 without a passing placebo arm.
 
-**Any option menus are held constant across arms.** AgentAtlas (arXiv:2605.20530)
-found that removing explicit label menus from prompts moved trajectory accuracy
-by 14–40pp across all eight models tested. That is larger than any effect we
-expect to measure, so it cannot be allowed to vary.
+**Any option menus are held constant across arms.** AgentAtlas
+(arXiv:2605.20530**v1**) found that removing explicit label menus moved
+trajectory accuracy by 14–40 pp across all eight models tested. Two conditions
+travel with that figure and are the reason it is used only to justify holding a
+variable constant, never as a magnitude to compare our own effects against.
+First, **it is v1-only**: v2 (26 May 2026) removed the sentence and replaced the
+quantity with "mapped label agreement can change substantially", so the version
+must be named. Second, both versions call the study a measurement-protocol
+demonstration on a synthetic 1,342-item set, and v2 says explicitly it "should
+not be read as a 'definitive model comparison'". An earlier draft of this
+paragraph called the effect "larger than any effect we expect to measure" — a
+cross-study magnitude comparison, which is the reading v2's own abstract
+disclaims. It is dropped.
 
 A fifth `in-situ` arm, injecting the skill via `--append-system-prompt` on top of
 the default system prompt rather than replacing it, tests ecological validity.
@@ -198,16 +207,19 @@ leak, or infrastructure error rather than assumed to be the first.
 Judges produce **secondary** metrics only; no primary metric is ever a judge
 score. They emit a binary verdict plus a written critique rather than a Likert
 rating, and are calibrated against a deliberately failure-heavy human-labelled
-set with **TPR and TNR reported separately**. Blended accuracy hides the
-agreeableness bias documented across this literature, where a judge can appear
->90% accurate while catching almost no real failures. Criteria drift
+set with **TPR and TNR reported separately**, because blended accuracy hides
+agreeableness bias — a judge that agrees with everything scores well on a
+balanced set while catching almost no real failures. Criteria drift
 (arXiv:2404.12272) means recalibration is required whenever the pipeline or the
-model changes.
+model changes: "users need criteria to grade outputs, but grading outputs helps
+users define criteria."
 
 Panels are small and heterogeneous. "Nine Judges, Two Effective Votes"
-(arXiv:2605.29800) found nine judges from seven families yield an effective
-sample size of ~2.18, so headcount is not the lever — diversity of failure mode
-is. Aggregation uses a robust estimator rather than a mean, per RoPoLL
+(arXiv:2605.29800) found nine frontier judges from seven families provide "only
+about 2 independent votes' worth of information", and that the best single judge
+matches or outperforms the full panel across all conditions — so headcount is
+not the lever, and diversity of failure mode is the only thing that could be.
+Aggregation uses a robust estimator rather than a mean, per RoPoLL
 (arXiv:2606.30931), which shows mean aggregation carries unbounded bias under any
 positive contamination.
 
@@ -227,7 +239,35 @@ skills is part of the protocol, not an optional extra.
 
 Every run records its harness configuration against the ETCSOVG checklist —
 Execution, Tool, Context, Scheduling, Observability, Verification, Governance.
-This is not bureaucracy: in a controlled 3×3 factorial, harness variance exceeded
-model variance by roughly 7.8× and produced six ranking reversals in nine
-comparisons (arXiv:2605.23950). An agent result without its harness disclosed is
-not reproducible, and most published ones are not.
+This is not bureaucracy: the harness "is often a stronger determinant of agent
+performance than the model it wraps", and current protocols therefore
+"systematically misattribute harness-level gains to model improvements"
+(arXiv:2605.23950). An agent result without its harness disclosed is not
+reproducible, and most published ones are not.
+
+In that paper's own 3×3 experiment — three frontier models × three harness
+configurations, on "a difficulty-stratified 100-task subset of SWE-bench
+Verified", two runs per cell — the aggregate harness-to-model variance ratio was
+**7.80×**, with ranking reversals in "6 out of 9 model-pair/harness-pair
+comparisons" (§4.2, Table 2). One design on one task distribution, so the
+direction transfers and the ratio does not.
+
+> **Correction, 2026-08-13.** This paragraph read "in a controlled 3×3
+> factorial, harness variance exceeded model variance by roughly 7.8× and
+> produced six ranking reversals in nine comparisons". **None of those figures
+> is in that paper's abstract**, which is a position paper's and contains no
+> numerals at all. They may be in its body; they are *unverified*, and they are
+> out of this file until somebody opens it. The qualitative direction quoted
+> above is verbatim and the disclosure requirement is unaffected. The ETCSOVG
+> expansion is likewise not in the abstract, which says only "a disclosure
+> standard and a variance decomposition protocol" — the seven names are this
+> repository's, and are used as our own checklist rather than as the paper's.
+
+> **Correction to the correction, 2026-08-13, later the same day.** Somebody
+> opened it. The full text is at `arxiv.org/html/2605.23950v1` and **both figures
+> are there verbatim, in §4.2 and Table 2**, as output of an experiment the
+> authors ran; two agents fetched it independently. The figures are restored
+> above with the section named, and the caveat that was missing all along — one
+> 3×3 design, one task distribution — is stated with them. The defect was
+> citing a body figure as though it came from the abstract, not inventing one.
+> The note about ETCSOVG stands unchanged: those seven names are still ours.

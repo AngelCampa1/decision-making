@@ -171,6 +171,265 @@ positive:
       A pile of conflicting input, a deadline, and the stated difficulty is not
       knowing what the disagreement is. No question mark.
 
+  # m11-m24 were added to take the short arm from 24 positives to 48. Ten went
+  # to band s and fourteen here, because the pooled S+M estimate does not care
+  # how the 24 are split and an even 24/24 is what maximises the power of the
+  # s-against-m contrast underneath it.
+  - id: m11p
+    triple: m11
+    band: m
+    domain: relationships
+    stakes: high
+    ask: implicit
+    route: ledger
+    turn: >-
+      My brother-in-law has sent the care home's fee schedule. My sister has sent
+      a list of what she thinks each of the four of us can put in, and the two
+      documents do not use the same year's rates. There is also a voicemail from
+      the manager saying a room has come free and goes back on the list on the
+      thirtieth if nobody takes it. Nobody has told my father-in-law any of it.
+    why: >-
+      Three sources that do not line up, one decision and a date, with no
+      question asked. Every sentence states what a document says, what somebody
+      sent, or who has not been told; none says the writer is stuck.
+  - id: m12p
+    triple: m12
+    band: m
+    domain: health
+    stakes: low
+    ask: embedded
+    route: ~
+    turn: >-
+      The hernia has not got any worse in a year. Do I book the repair now or
+      leave it? The surgeon said it is not urgent and the waiting list is about
+      eleven months, and I am supposed to be walking the coast path in September
+      with two people who have already booked their flights.
+    why: >-
+      The question sits in the second sentence and the three facts that bear on
+      it all arrive after it. Low stakes and genuinely open: not urgent, but an
+      eleven-month list against a September date.
+  - id: m13p
+    triple: m13
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    route: ~
+    turn: >-
+      Someone outside the company has sent a pull request that rewrites our
+      whole date handling. It is better than what we have and every test
+      passes. It is also four thousand lines, nobody here wrote a word of it,
+      and the author has said plainly in the thread that they will not be
+      around to maintain it. Tell me: should the team merge four thousand
+      lines that nobody here would be able to maintain?
+    why: >-
+      A technical subject that is not a technical judgement: the tests passing is
+      settled and what is open is whether to take on code nobody can maintain.
+      The closing ask names the cost and not the benefit, and it asks without the
+      "should I" string, which two-thirds of the positives in this band do carry.
+  - id: m14p
+    triple: m14
+    band: m
+    domain: money
+    stakes: high
+    ask: embedded
+    route: fit
+    turn: >-
+      The advice everywhere is to keep three to six months of expenses in cash
+      and put the rest to work. Ours is all in cash. My wife's contract renews
+      annually, it has never once been renewed early in six years, and the
+      renewal decision lands in November every year. Does a three-to-six-month
+      rule mean anything for a household whose entire income is decided on one
+      date a year? We have no second income.
+    why: >-
+      The general rule is stated in full in the first sentence and is probably
+      right in general. The fact that may overturn it, one annual renewal date, is
+      stated as a fact, and the question asks only whether the rule transfers. It
+      is embedded rather than explicit because a fourth fact follows it, which
+      also makes this triple's closing sentence the shortest of its three.
+  - id: m15p
+    triple: m15
+    band: m
+    domain: relationships
+    stakes: high
+    ask: implicit
+    route: ~
+    turn: >-
+      A friend from university asked on Sunday whether she and her son could stay
+      with us while she sorts out the housing application. She said six weeks. The
+      last time she stayed anywhere it ran to eight months, and the person she
+      stayed with is the one who told me that. We have the room, in the sense that
+      the room exists. My partner has never met her.
+    why: >-
+      A request with a date on it, three facts pulling against it, and no question
+      at all. Nothing here describes the writer as undecided: the eight-month
+      history is reported as what a third person said, and the room and the
+      partner are stated flat.
+  - id: m16p
+    triple: m16
+    band: m
+    domain: career
+    stakes: low
+    ask: embedded
+    route: cascade
+    turn: >-
+      There is a nine-month secondment to the Dublin office open and my
+      manager has said she would sign it off. Do I put my name in? It would
+      mean handing the platform work to Tom, who has been here five months,
+      and the reorganisation everybody has been expecting since January would
+      happen while I am the other side of the Irish Sea. I have not told Tom.
+    why: >-
+      The action is easy and the long sentence after the question is entirely
+      what it sets off, which is why cascade rather than an open route: the
+      handover and the reorganisation are both consequences of going, not
+      reasons to go. "I have not told Tom" is a third.
+  - id: m17p
+    triple: m17
+    band: m
+    domain: health
+    stakes: high
+    ask: explicit
+    route: cascade
+    turn: >-
+      The consultant has offered to put my mother on the trial. It would get her
+      the drug about six months before it is licensed, which is the only reason
+      any of us are looking at it. It also means the hospital an hour away instead
+      of the one down the road, my sister covering the Tuesdays because I cannot,
+      and no route back to the standard treatment once she starts. Should we take
+      the place, given everything it commits the rest of us to?
+    why: >-
+      Three named consequences that land on three different people, and the ask
+      says so in its own words. Asks what the place spends rather than what it
+      gets.
+  - id: m18p
+    triple: m18
+    band: m
+    domain: technical
+    stakes: low
+    ask: implicit
+    route: ledger
+    turn: >-
+      There are three RFCs open on how we do feature flags. The one from
+      platform argues for buying, the one from my team argues for what we
+      already have plus a UI, and the third is from someone who left in June
+      and is mostly about a system we retired. The three of them do not
+      disagree in the places they appear to. They run to eleven, nine and
+      fourteen pages. I am chairing the review on the twenty-second.
+    why: >-
+      Thirty-four pages of conflicting input, a date, and no question. The stated
+      difficulty is that the disagreement is not where it looks, which is the
+      ledger problem rather than a technical one.
+  - id: m19p
+    triple: m19
+    band: m
+    domain: relationships
+    stakes: low
+    ask: explicit
+    route: ~
+    turn: >-
+      I have been asked to be a bridesmaid at a wedding in Corfu in June. The
+      dress is 340 and the flights are already about 280. I would want to go
+      to the wedding anyway. The complication is that the bride's sister, who
+      is also in it, is the person who stopped speaking to me in 2023 and has
+      never said why. Tell me: is saying yes worth it, given that the two of
+      us would be standing next to each other all day?
+    why: >-
+      Low stakes, a live yes-or-no, and the closing sentence asks for a
+      recommendation without using "should". The money and the falling-out pull
+      in opposite directions and neither settles it.
+  - id: m20p
+    triple: m20
+    band: m
+    domain: money
+    stakes: low
+    ask: embedded
+    route: ~
+    turn: >-
+      The share scheme matures in April and it is worth about 19,000 at
+      today's price. Do I sell the lot on the day or hold some of it?
+      Everything in the household is already tied to this company, which also
+      pays the mortgage, and nothing in the pension has ever been held for
+      longer than a scheme forced it to be. April gives me nine weeks.
+    why: >-
+      The question is the second sentence and the concentration argument arrives
+      after it. Neither the concentration nor the nine weeks decides it, because
+      selling the lot is not the only alternative the question offers.
+  - id: m21p
+    triple: m21
+    band: m
+    domain: career
+    stakes: high
+    ask: implicit
+    route: ~
+    turn: >-
+      The term sheet came back on Friday and the valuation is what we asked for.
+      Two things in it were not in any of the conversations: a board seat for
+      them, and a clause letting them block a sale under forty million. My
+      co-founder read it in twenty minutes and said take it. Our runway is nine
+      months, and the second-best conversation we have had went quiet three weeks
+      ago.
+    why: >-
+      A real decision with a deadline implied by the runway, several things
+      pulling against each other, and no question anywhere. The co-founder's view
+      is reported as a fact about what he said.
+  - id: m22p
+    triple: m22
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    route: fit
+    turn: >-
+      Every guide on this starts with the elimination diet and reintroduces
+      one food a fortnight, which is twelve weeks minimum. I cook for a
+      household of five, two of them under seven, and I am the only person in
+      it who cooks. The dietitian who wrote the plan asked whether anyone else
+      could take some of the meals and I said yes, because it seemed like the
+      answer she wanted. Does the standard protocol survive a household like
+      mine?
+    why: >-
+      The standard protocol is named and is not in dispute. What is in dispute is
+      whether it applies to this household, and the turn supplies the one fact
+      that would overturn it plus the reason nobody has heard that fact.
+  - id: m23p
+    triple: m23
+    band: m
+    domain: relationships
+    stakes: high
+    ask: embedded
+    route: timing
+    turn: >-
+      We have decided to tell the children we are separating. That part is not
+      in question and both of us are settled on it. When we tell them is where
+      we cannot agree: my husband wants it done before the summer holiday so
+      they have six weeks at home, and I think two days before their
+      grandmother's ninetieth is worse than waiting. The eldest sits her exams
+      from the twelfth of June and the ninetieth is on the twenty-eighth, so I
+      have sixteen days between the two dates.
+    why: >-
+      Direction is stated as settled twice and only the moment is open. The
+      question sits mid-paragraph with two sentences of dates after it, and the
+      dates check out: the twenty-eighth less the twelfth is sixteen.
+  - id: m24p
+    triple: m24
+    band: m
+    domain: technical
+    stakes: high
+    ask: explicit
+    route: [timing, cascade]
+    turn: >-
+      We found that a permissions bug has been letting one customer's admins read
+      another customer's audit log since March. As far as the access records go,
+      nobody has actually opened one. The contract says notify within seventy-two
+      hours of becoming aware, and we became aware on Tuesday morning. The only
+      two people who know are me and the engineer who found it. Should this go to
+      the customer now, or to our own counsel first?
+    why: >-
+      Notifying is not in question; the ask is which of two acts goes first under
+      a stated clock, which is the timing shape s04 has. Cascade is a second
+      acceptable route: going to the customer before counsel is the move that
+      cannot be taken back, and the turn names the clause that makes it so.
+
 negative:
   - id: m01n1
     triple: m01
@@ -477,3 +736,501 @@ negative:
       throughput on the busiest topic look like against the 900 a second the consumer manages now? I want the number for the busiest single topic,
       not the average across the three of them.
     why: "The same system, and the ask is arithmetic about it."
+
+  # Negatives for m11-m24. Every `compute` ask below was worked through before
+  # it shipped, and the two closing habits the battery caught in the bands above
+  # -- a question mark on the negative and a short closing ask on the positive --
+  # are deliberately mixed here rather than repeated.
+  - id: m11n1
+    triple: m11
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      My brother-in-law has sent the care home's fee schedule and my sister
+      has sent her own list of what each of the four of us would put in. The
+      two are laid out completely differently and one of them is on last
+      year's rates. There is a voicemail from the manager as well that I have
+      not written down anywhere. I would find all of it easier laid out side
+      by side.
+    why: >-
+      The same three sources as m11p. The ask in the final sentence is
+      consolidation, and putting documents side by side settles nothing about who
+      pays what.
+  - id: m11n2
+    triple: m11
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      The care home is 1,340 a week. My father-in-law's pension covers 410 of that
+      and the attendance allowance another 108. Whatever is left over gets split
+      four ways between me, my sister, my brother-in-law and one cousin. Assume
+      fifty-two weeks and take the monthly figure as the annual one divided by
+      twelve. Give me the monthly figure for each of the four of us, and the
+      annual one as well.
+    why: >-
+      Arithmetic over the same fees, and it resolves: 1,340 less 410 less 108 is
+      822 a week, 42,744 a year, 3,562 a month, 890.50 each. Computed here rather
+      than assumed to have an answer.
+  - id: m12n1
+    triple: m12
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      The hernia has not got any worse in a year and the surgeon says it is not
+      urgent. If one of these is left alone for years, does it get slowly worse in
+      a way you would notice, or does it sit still and then fail suddenly? I would
+      like to understand that.
+    why: >-
+      The same two facts as m12p, and the ask is how the condition behaves in
+      general. The answer would be identical for anyone with the same question,
+      which is what makes it a lookup and not a recommendation.
+  - id: m12n2
+    triple: m12
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      I have booked the hernia repair for the spring, so that part is done. The
+      coast path is in September with two people who have booked their flights,
+      and I am now trying to work out the training around it. What does the first
+      fortnight after the operation normally look like for me?
+    why: >-
+      The repair is booked in the first six words, which is the decision m12p has
+      not made. Nothing later in the turn reopens it, and the ask is what recovery
+      normally looks like.
+  - id: m13n1
+    triple: m13
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      Someone outside the company sent a pull request rewriting our date handling
+      and we merged it last month. Since then the nightly export has been writing
+      timestamps an hour out, but only for the two weeks either side of the clock
+      change, and only for customers in Europe. Every test still passes, including
+      the ones that came with the pull request itself. Where should I be looking?
+    why: >-
+      The merge m13p is weighing has happened, and the task is finding a cause.
+      "Where should I be looking" carries the should-I string on a turn that is
+      pure diagnosis.
+  - id: m13n2
+    triple: m13
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      There is a four-thousand-line pull request from someone outside the
+      company that rewrites our date handling, and four of us have each left
+      long review comments on it over the last fortnight. The comment thread
+      is now considerably longer than the diff and half of it is people
+      replying to each other and not to the code. I need the actual objections
+      pulled out of it somehow.
+    why: >-
+      The same pull request as m13p and a pile on top of it. The ask is what the
+      objections already are, which is extraction from the thread rather than a
+      view on the merge.
+  - id: m14n1
+    triple: m14
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: compute
+    turn: >-
+      Our outgoings are 3,180 a month and we hold 26,400 in cash. My wife's
+      contract renews in November and I want the numbers straight before then.
+      Say we moved 12,000 of the cash into the ISA before April and kept the
+      rest where it is. There is nothing else liquid and no other income in
+      the household. I want the number of months that still leaves us covered.
+    why: >-
+      The same household as m14p and the ask is a division: 26,400 less 12,000 is
+      14,400, over 3,180 a month, which is 4.5 months. Checked, so the ask is
+      known to resolve.
+  - id: m14n2
+    triple: m14
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      We have decided to keep the whole emergency fund in cash until my wife's
+      contract renewal in November, and I am not looking to revisit that decision
+      here. What I do want to get right is where the cash sits in the meantime.
+      Instant access matters and so does how the interest is taxed, and I have
+      never had to think about either. Which sort of account should I be using?
+    why: >-
+      The cash-or-invest question m14p asks is closed in the first sentence, on
+      the same facts. The remaining ask is which product has two named properties,
+      which has an answer independent of this household.
+  - id: m15n1
+    triple: m15
+    band: m
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      A friend from university has asked whether she and her son can stay with
+      us while she sorts out the housing application, and I am going to say
+      yes, but with an end date on it. Six weeks, and then we talk again. She
+      will not like the end date and I do not want it to read like a tenancy
+      agreement. Draft the message for me, warm but firm about the date.
+    why: >-
+      "I am going to say yes" settles what m15p is weighing, and it settles it on
+      the option m15p leaves open rather than one m15p rules out. The ask is a
+      piece of writing with two stated constraints.
+  - id: m15n2
+    triple: m15
+    band: m
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      A friend and her son are staying with us for about six weeks while her
+      housing application goes through, and she will be using our address for post
+      in the meantime. Neither of us has done this before. Does having her
+      registered at our address change anything for our council tax, or for the
+      housing application itself? I would rather know now than find out in a
+      letter.
+    why: >-
+      The stay is happening and the ask is whether one administrative fact touches
+      two others. Both halves have determinate answers that do not depend on
+      whether the stay was a good idea.
+  - id: m16n1
+    triple: m16
+    band: m
+    domain: career
+    stakes: low
+    ask: implicit
+    kind: diagnose
+    turn: >-
+      The Dublin secondment has been open for six weeks and nobody in our team has
+      applied, which has never happened with a secondment here before. Two people
+      told me privately that they looked at it and closed the tab. The pay is the
+      same, the work is more interesting, and the manager signs them off without
+      any fuss. I cannot work out what is putting people off.
+    why: >-
+      The same secondment as m16p, and the writer's own application is not the
+      subject. What is asked for is an explanation of other people's behaviour,
+      with three facts offered as the puzzle.
+  - id: m16n2
+    triple: m16
+    band: m
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: settled
+    turn: >-
+      I have put my name in for the Dublin secondment and my manager has already
+      signed the form, so it is happening. The handover to Tom starts in three
+      weeks. He has been here five months and has never touched the platform work,
+      and I will be away for the whole nine months. What should I be writing down
+      for him, and in what order?
+    why: >-
+      The application m16p is weighing has been made and signed off in the first
+      sentence. The ask is what to put in a handover, and nothing in the turn
+      reopens going.
+  - id: m17n1
+    triple: m17
+    band: m
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      The consultant has offered my mother a place on a trial for a drug that is
+      not licensed for another six months or so. If she starts it and the trial is
+      stopped early, or she comes off it herself, what actually happens to her
+      access to the standard treatment afterwards, and does she go back on the
+      same waiting list she would have been on or a new one? I have been told two
+      different things by two different people at the same hospital.
+    why: >-
+      The same offer as m17p, and the ask is the rule that governs one of m17p's
+      three consequences. A determinate answer exists and the turn says two people
+      have given different ones.
+  - id: m17n2
+    triple: m17
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      My mother has taken the place on the trial and starts on the eleventh. The
+      hospital is an hour away and my sister and I are splitting the Tuesdays
+      between us. The trial runs for eighteen months on the same weekday each
+      time. There are four cousins who have offered to cover the odd week and none
+      of them knows the dates yet, and two of them have not spoken to each other
+      since Christmas. Can you draft me the rota email?
+    why: >-
+      The place is taken and dated in the first sentence, so the decision m17p is
+      weighing is closed. The ask is an email, and the cousins' falling-out is
+      context for the tone rather than a second decision.
+  - id: m18n1
+    triple: m18
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: >-
+      There are three RFCs open on how we do feature flags, at eleven, nine
+      and fourteen pages, and one of them is from someone who left in June.
+      The architecture review is on the twenty-second and most of the people
+      coming to it will not have read a page of any of them, which is nobody's
+      fault given the week we have all had. Summarise all three onto one page
+      for the people coming.
+    why: >-
+      The identical pile and the identical date as m18p. The ask is a document for
+      other people to read before a meeting, which is compression and not a
+      direction.
+  - id: m18n2
+    triple: m18
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      We evaluate about forty million feature-flag checks a day across the fleet.
+      The hosted option prices at 0.60 per thousand monthly active users and we
+      have 180,000 of those, billed monthly. Our own version costs roughly one
+      engineer-week a month to keep running, and an engineer-week is about 2,400
+      to us. Nobody in the room can agree which of those two numbers matters. What
+      would we be paying the hosted lot a year?
+    why: >-
+      The ask names one figure and it resolves: 180 thousands at 0.60 is 108 a
+      month, so 1,296 a year. The forty million and the engineer-week are there to
+      be ignored, and the ask says which number it wants.
+  - id: m19n1
+    triple: m19
+    band: m
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      The bridesmaid dress is 340, flights to Corfu are about 280 return, and
+      the hotel the group has booked is 95 a night for four nights. The
+      flights are the only thing already booked. There is a hen weekend in
+      Lisbon on top of that which I have not priced yet, and my mother keeps
+      saying I should factor in a present as well. Ignore the hen and the
+      present. Add up what the wedding itself comes to.
+    why: >-
+      The same costs as m19p and the ask is a sum: 340 plus 280 plus four nights
+      at 95 is 1,000. The turn names what to exclude, so the answer is determinate,
+      and it was added up here.
+  - id: m19n2
+    triple: m19
+    band: m
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      I said yes to being a bridesmaid in Corfu in June and the dress is ordered,
+      so that is not in question and I am not reopening it. The bride's sister is
+      also in it and the two of us have not spoken since 2023. There is a rehearsal
+      dinner the night before where we will be at the same table for three hours
+      with the photographer there. Can you write me two neutral lines to say to
+      her?
+    why: >-
+      The yes m19p is weighing is given twice in the first sentence, and the
+      falling-out is retained as the reason the ask is hard rather than as a
+      reason to reconsider. The ask is two lines of dialogue.
+  - id: m20n1
+    triple: m20
+    band: m
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      The share scheme matures in April and is worth 19,000 at today's price. I
+      paid in 12,600 over three years out of salary. The scheme is the only one I
+      have ever been in. Assume the gain above the 3,000 allowance is taxed at
+      twenty per cent and that there is nothing else to set against it that year.
+      What is left after tax?
+    why: >-
+      The same scheme and the same figure as m20p. The gain is 6,400, the taxable
+      part 3,400, the tax 680 and the answer 18,320. Worked through here so the
+      ask is known to have one.
+  - id: m20n2
+    triple: m20
+    band: m
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      The share scheme matures in April and I have never had one before, so I do
+      not understand the mechanics of the sale itself. Nobody at work seems to
+      know either, which is not encouraging. When shares come out of a scheme like
+      this, is the company's broker holding them or am I, and how long is it
+      before I can actually spend the money?
+    why: >-
+      Two questions about how a scheme works mechanically, on the same April date
+      as m20p. Neither touches whether to sell, and both have answers written down
+      in the scheme rules.
+  - id: m21n1
+    triple: m21
+    band: m
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Our term sheet has a board seat for the investor and a clause letting them
+      block a sale under forty million, and both of us have signed it. At seed
+      stage, is a blocking right set at that level normal, and what is it usually
+      there to protect against? I would like to understand what I have actually
+      agreed to before the first board meeting next month.
+    why: >-
+      Both of m21p's two surprises are named and the sheet is signed, so the
+      decision is closed. What is asked for is whether a term is standard and what
+      it does, which is information about the market.
+  - id: m21n2
+    triple: m21
+    band: m
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      We signed the term sheet on Monday: valuation as asked, a board seat,
+      and a blocking right under forty million. Twenty-two people work here
+      and eleven of them hold options, so this changes something real for half
+      the company. I want them to hear it from me and not from somebody on the
+      investor's side. The lawyers want it out today. Draft me the all-hands
+      note.
+    why: >-
+      Signed and dated in the first four words, with the same three terms m21p
+      lists. The ask is an internal announcement and the deadline in it is the
+      lawyers' rather than the decision's.
+  - id: m22n1
+    triple: m22
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      The dietitian's plan is an elimination diet with one food reintroduced a
+      fortnight, twelve weeks in total. Nobody has explained where the fortnight
+      comes from. Two of my friends were told a week and one was told a month, all
+      by different clinics. Is it how long a reaction takes to show up, or is it
+      about the gut settling, or is it just a round number that stuck? I would
+      just like to understand it.
+    why: >-
+      The same protocol as m22p and the same fortnight. The ask is what the
+      interval is for, which is a question about the mechanism and has nothing to
+      do with this household.
+  - id: m22n2
+    triple: m22
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      We are doing the elimination diet, starting Monday, and I am not going to
+      relitigate it with the dietitian. Household of five, two of them under
+      seven, and I am the only one who cooks. Twelve weeks of this, one food back
+      a fortnight. Nothing exotic, and nothing that takes more than forty minutes
+      on a weeknight. Write me a fortnight of dinners that work for all of us at
+      once, with a shopping list per week.
+    why: >-
+      The protocol m22p questions is accepted in the first line, with the same
+      household facts retained as constraints on the meals and not as objections
+      to the diet. The ask is a menu and a shopping list.
+  - id: m23n1
+    triple: m23
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: settled
+    turn: >-
+      We have decided to tell the children we are separating and we have agreed on
+      the weekend after the exams finish, so the timing is settled as well.
+      Neither of those is open. What I do not have is the words. It has to work
+      for a fifteen-year-old and a nine-year-old at the same time, and it has to
+      be short, because the last time we tried to explain anything at length they
+      both left the room. Can you help?
+    why: >-
+      Both the direction and the timing, which is the one thing m23p leaves open,
+      are closed in the first two sentences. The weekend after the exams is a date
+      m23p's own facts permit, so nothing here is settled on an option the
+      situation rules out.
+  - id: m23n2
+    triple: m23
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      We are separating and telling the children in June. Both of us want to keep
+      the house until the youngest finishes primary, which is another three years,
+      and neither of us is arguing about that. Before we say anything to a
+      solicitor: does one of us staying in the house for three more years change
+      how it is treated when it is eventually split, or is that decided by whose
+      name is on it? Nobody has given me a straight answer yet, and I have heard
+      both.
+    why: >-
+      The separation and the June date are stated as agreed, and the house
+      question the ask depends on is stated as agreed too. What is left is a rule
+      about how occupation affects a split, which has an answer.
+  - id: m24n1
+    triple: m24
+    band: m
+    domain: technical
+    stakes: high
+    ask: implicit
+    kind: diagnose
+    turn: >-
+      A permissions bug let one tenant's admins read another tenant's audit log.
+      The check is in the middle tier, it does compare tenant ids, and it has done
+      since the code was written three years ago. It only fails for accounts that
+      were created through the bulk invite endpoint, and only for the ones created
+      before the tenant had a billing record. I cannot see why that one path
+      behaves differently from every other one we have.
+    why: >-
+      The same bug as m24p with the notification question absent. Two conditions
+      are given that narrow the fault, and what is wanted is the mechanism, which
+      is technical diagnosis.
+  - id: m24n2
+    triple: m24
+    band: m
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: generate
+    turn: >-
+      We are notifying the customer about the permissions bug today. That is
+      decided and counsel has signed it off. It ran from March, one tenant's
+      admins could read another tenant's audit log, and the access records show
+      that nobody opened one. It goes out at five and the account manager has
+      already been briefed. The notification has to be plain, unhedged, and honest
+      about the things we still do not know. Draft the notification.
+    why: >-
+      Both halves of m24p's question are answered in the second sentence: counsel
+      has seen it and the customer is being told today. The ask is to write the
+      notice, with three stated constraints on its tone.

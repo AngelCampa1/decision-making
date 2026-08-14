@@ -33,12 +33,32 @@
 
 % VERIFY
 @article{skillopt2026,
-  title  = {Executive Strategy for Self-Evolving Agent Skills},
+  author = {Yang, Yifan and Gong, Ziyang and Huang, Weiquan and Yang, Qihao
+            and Zhou, Ziwei and Huang, Zisu and Li, Yan and Gao, Xuemei and
+            Dai, Qi and Liu, Bei and Qiu, Kai and Yang, Yuqing and
+            Chen, Dongdong and Yang, Xue and Luo, Chong},
+  title  = {{SkillOpt}: Executive Strategy for Self-Evolving Agent Skills},
   journal = {arXiv preprint arXiv:2605.23904},
   year   = {2026},
-  note   = {Microsoft Research. Code at github.com/microsoft/SkillOpt.
-            +23.5pp average on GPT-5.5 across six benchmarks. No CIs, no
-            significance tests, no multiplicity correction}
+  quote  = {Across six benchmarks, seven target models, and three execution
+            harnesses (direct chat, Codex, Claude Code), SkillOpt is best or
+            tied on all 52 evaluated (model, benchmark, harness) cells and
+            beats every per-cell competitor among human, one-shot LLM,
+            Trace2Skill, TextGrad, GEPA, and EvoSkill skills. On GPT-5.5 it
+            lifts the average no-skill accuracy by +23.5 points in direct
+            chat, by +24.8 inside the Codex agentic loop, and by +19.1 inside
+            Claude Code.},
+  note   = {Verified first-hand 2026-08-13. TITLE CORRECTED: the entry dropped
+            the "SkillOpt:" prefix. THE +23.5 IS ONE HARNESS, NOT AN AVERAGE
+            OVER THREE: it is the direct-chat figure on GPT-5.5, and the same
+            sentence gives +24.8 for Codex and +19.1 for Claude Code. Quoting
+            +23.5 alone is defensible only if the harness is named with it,
+            which is the disclosure this repository's own harness citation
+            (arXiv:2605.23950) exists to demand. UNVERIFIED AND NOT IN THE
+            ABSTRACT: the "target-matched optimiser recovers only 56-74\% of
+            the gain" in docs/RELATED_WORK.md, and the absence of CIs and
+            significance tests -- that last is a claim about what the paper
+            does NOT contain, which an abstract cannot settle either way}
 }
 
 @article{agentsmd2026,
@@ -93,22 +113,75 @@
 
 % VERIFY
 @article{harnessdisclosure2026,
+  author = {Zhang, Yunbei and Wang, Janet and Ge, Yingqiang and Xu, Weijie and
+            Hamm, Jihun and Reddy, Chandan K.},
   title  = {Stop Comparing {LLM} Agents Without Disclosing the Harness},
   journal = {arXiv preprint arXiv:2605.23950},
   year   = {2026},
-  note   = {3x3 factorial on 100 SWE-bench Verified tasks. Harness variance /
-            model variance ~7.8x; six ranking reversals in nine comparisons.
-            Source of the ETCSOVG checklist}
+  quote  = {This position paper argues that, for long-horizon tasks evaluated
+            across models with comparable frontier capability, the agent
+            execution harness ... is often a stronger determinant of agent
+            performance than the model it wraps. ... Second, published
+            benchmarks, industry deployments, and a controlled variance
+            decomposition show that harness-induced variance can substantially
+            exceed model-induced variance, including cases of model ranking
+            reversal.},
+  quote_body = {We evaluate three frontier models, GPT-5.4, Kimi K2.6, and
+            GLM-5.1, ... across three harness configurations {H1,H2,H3} on a
+            difficulty-stratified 100-task subset of SWE-bench Verified. ... Changing the harness moves GLM-5.1 by 13.0
+            percentage points and GPT-5.4 and Kimi K2.6 by 8.5 points each.
+            Changing the model within a fixed harness moves scores by only 3.0,
+            2.5, and 5.0 points for H1, H2, H3. ... Aggregate HV/MV ratio: 7.80x.
+            Ranking reversal pairs: 6 out of 9 model-pair/harness-pair
+            comparisons.},
+  note   = {Verified first-hand 2026-08-13 -- ABSTRACT AND BODY, and the body
+            visit reversed an earlier retraction. docs/RELATED_WORK.md calls this
+            "the premise of the whole project". It IS a position paper and its
+            ABSTRACT CONTAINS NO NUMBERS, which an earlier pass took to mean the
+            four figures were unsupported; they were withdrawn from
+            docs/RELATED_WORK.md and docs/PROTOCOL.md on that basis. THAT WAS
+            WRONG. arxiv.org/html/2605.23950v1 was then fetched by two agents
+            that did not share context, and ALL FOUR ARE IN THE BODY, verbatim,
+            in section 4.2 and Table 2 -- see quote_body above: the 7.80x
+            aggregate ratio, the 3x3 design on a difficulty-stratified 100-task
+            SWE-bench Verified subset, the 13.0/8.5 versus 3.0/2.5/5.0 point
+            moves, and "6 out of 9" ranking reversals. They are the authors' own
+            controlled experiment, not figures cited from elsewhere. RESTORED to
+            both files with the section named. THE DEFECT WAS CITATION HYGIENE,
+            NOT FABRICATION: a body figure cited as though the abstract carried
+            it. THE CAVEAT THAT MUST TRAVEL WITH THE 7.80x: one 3x3 design, one
+            task distribution, two runs per cell -- the direction transfers, the
+            ratio does not. NOT IN THIS PAPER AT ALL, and never was: n_eff 2.18
+            (that is arXiv:2605.29800's) and the 23.8-point swing (that is
+            arXiv:2605.27922's). The ETCSOVG expansion is ours, not the paper's}
 }
 
-% VERIFY
 @article{harnessbench2026,
-  title  = {Harness-Bench: Disentangling Harness and Model Contributions to
-            Agent Performance},
+  author = {Yao, Yilun and Tan, Xinyu and Liu, Chao-Hsuan and Li, Yaoming and
+            Wang, Zhengyang and Yu, Wenhan and Tan, Zhewen and Tian, Yuxuan and
+            Zhao, Guangxiang and Sun, Lin and Zhang, Xiangzheng and Yang, Tong},
+  title  = {Harness-Bench: Measuring Harness Effects across Models in Realistic
+            Agent Workflows},
   journal = {arXiv preprint arXiv:2605.27922},
   year   = {2026},
-  note   = {5,194 trajectories, 6 harnesses x 8 backends x 106 tasks.
-            23.8-point swing from harness alone}
+  quote  = {The benchmark contains 106 sandboxed offline tasks constructed from
+            practical agent-use patterns and manually reviewed for realism,
+            solvability, oracle-checkability, and integrity. ... Across 5,194
+            execution trajectories, we observe substantial variation in
+            completion, process quality, efficiency, and failure behavior across
+            model-harness pairings.},
+  note   = {Verified first-hand 2026-08-13. 5,194 trajectories and 106 tasks are
+            exact. TITLE CORRECTED: the entry read "Disentangling Harness and
+            Model Contributions to Agent Performance", which is not this
+            paper's title and asserts a disentangling the abstract does not
+            claim -- it says "substantial variation", a qualitative statement.
+            UNVERIFIED AND NOT IN THE ABSTRACT: the "23.8-point swing from
+            harness alone", the "6 harnesses x 8 backends" grid in
+            docs/RELATED_WORK.md 305, and the failure-taxonomy percentages
+            ("output-contract violations (36\%)") at 307. The abstract says only
+            "representative harness configurations across multiple model
+            backends". The 23.8 in particular is a bare magnitude with no source
+            sentence and is the figure to check before it is used anywhere}
 }
 
 % ---------------------------------------------------------------------------
@@ -121,7 +194,16 @@
   title  = {{GSM-Symbolic}: Understanding the Limitations of Mathematical
             Reasoning in Large Language Models},
   journal = {arXiv preprint arXiv:2410.05229},
-  year   = {2024}
+  year   = {2024},
+  quote  = {Adding a single clause that seems relevant to the question causes
+            significant performance drops (up to 65\%) across all
+            state-of-the-art models, even though the clause doesn't contribute
+            to the reasoning chain needed for the final answer.},
+  note   = {Verified first-hand 2026-08-13. docs/RELATED_WORK.md 17-18 is
+            supported exactly, including "topically-relevant but logically
+            irrelevant", which is the paper's "seems relevant ... doesn't
+            contribute to the reasoning chain". "up to 65\%" is a MAXIMUM across
+            models, not a mean, and should keep its "up to"}
 }
 
 @inproceedings{liu2024lost,
@@ -161,62 +243,182 @@
   year   = {2025}
 }
 
-% VERIFY
 @article{contextcuration2026,
+  author = {Li, Xiaozhe and Lyu, Tianyi and Yang, Yizhao and Shan, Liang and
+            Yang, Siyi and Zhang, Ligao and Huang, Zhuoyi and Liu, Qingwen and
+            Li, Yang},
   title  = {Escaping the Context Bottleneck: Active Context Curation for
             {LLM} Agents via Reinforcement Learning},
   journal = {arXiv preprint arXiv:2604.11462},
   year   = {2026},
-  note   = {WebArena 36.4 -> 41.2 with 8.8\% fewer tokens; 8x token reduction
-            on DeepSearch}
+  quote  = {On WebArena, our framework improves the success rate of
+            Gemini-3.0-flash from 36.4\% to 41.2\% while reducing token
+            consumption by 8.8\% (from 47.4K to 43.3K). On DeepSearch, it
+            achieves a 57.1\% success rate, compared with 53.9\%, while reducing
+            token consumption by a factor of 8.},
+  note   = {Verified first-hand 2026-08-13. Every figure in
+            docs/RELATED_WORK.md 64-65 and
+            notebook/2026-08-10-inline-vs-forked-curation.md 31-32 is exact.
+            ONE SCOPE POINT THE PROSE DROPS: the WebArena numbers are
+            Gemini-3.0-flash specifically, not a multi-model average, and the
+            8x token reduction is DeepSearch only. The curator/executor split
+            -- a trained lightweight policy against a FROZEN foundation model --
+            is the architecture, which matters when citing it beside a
+            fork-vs-inline decision that trains nothing}
 }
 
-% VERIFY
 @inproceedings{ace2026,
+  author = {Zhang, Qizheng and Hu, Changran and Upasani, Shubhangi and
+            Ma, Boyuan and Hong, Fenglu and Kamanuru, Vamsidhar and
+            Rainton, Jay and Wu, Chen and Ji, Mengmeng and Li, Hanchen and
+            Thakker, Urmish and Zou, James and Olukotun, Kunle},
   title  = {Agentic Context Engineering: Evolving Contexts for Self-Improving
             Language Models},
   booktitle = {International Conference on Learning Representations (ICLR)},
   year   = {2026},
-  note   = {arXiv:2510.04618. Oral}
+  quote  = {Across agent and domain-specific benchmarks, ACE optimizes contexts
+            both offline (e.g., system prompts) and online (e.g., agent memory),
+            consistently outperforming strong baselines: +10.6\% on agents and
+            +8.6\% on finance, while significantly reducing adaptation latency
+            and rollout cost.},
+  note   = {arXiv:2510.04618. Verified first-hand 2026-08-13. +10.6\% on agents
+            is exact and docs/RELATED_WORK.md 70-72 is supported, including
+            brevity bias and context collapse, which are the paper's own terms.
+            The +8.6\% finance figure travels with it in the same sentence and is
+            not carried in our prose. VENUE UNVERIFIED: "ICLR 2026, Oral" was
+            not confirmed from the abstract page and is inherited from the
+            earlier entry}
 }
 
 % ---------------------------------------------------------------------------
 % Control, clarification, abstention
 % ---------------------------------------------------------------------------
 
-% VERIFY
 @article{agentatlas2026,
-  title  = {Beyond Outcome Leaderboards for {LLM} Agents},
+  author = {Mazaheri, Parsa and Mazaheri, Kasra},
+  title  = {{AgentAtlas}: Beyond Outcome Leaderboards for {LLM} Agents},
   journal = {arXiv preprint arXiv:2605.20530},
   year   = {2026},
-  note   = {Act/Ask/Refuse/Stop/Confirm/Recover taxonomy. Removing explicit
-            option menus dropped trajectory accuracy 14-40pp across 8 models}
+  version = {v1, 19 May 2026 -- CITE THIS VERSION, see note},
+  quote  = {[v1 abstract, 19 May 2026] Removing the explicit label menu drops
+            every model's trajectory accuracy by 14-40 pp to a tight 0.54-0.62
+            floor regardless of family
+            ---
+            [v2 abstract, 26 May 2026, the current version] The synthetic
+            demonstration is not a public benchmark release and should not be
+            read as a definitive model comparison. Instead, it illustrates two
+            measurement risks: mapped label agreement can change substantially
+            when the explicit label menu is removed, and axis choice can change
+            apparent rankings.},
+  note   = {Verified first-hand 2026-08-13, AND THE FIGURE WE CITE IS NOT IN
+            THE CURRENT VERSION OF THE PAPER. The 14-40pp figure is verbatim in
+            v1 and was REMOVED in v2, where the quantitative claim is replaced
+            by "mapped label agreement can change substantially" -- no number,
+            a different measure name, and an added caution against reading the
+            synthetic study as a model comparison. This entry is therefore
+            pinned to v1, because that is the version the number comes from.
+            The affected prose is docs/PROTOCOL.md 30-33 and
+            docs/RELATED_WORK.md 103-108, both of which give the figure with no
+            version and PROTOCOL.md additionally uses it as a magnitude
+            comparison -- "larger than any effect we expect to measure" -- which
+            is the specific reading v2's own abstract disclaims. The taxonomy
+            itself (Act/Ask/Refuse/Stop/Confirm/Recover) is unchanged across
+            versions and the design decision resting on it is unaffected.
+            1,342 synthetic items, eight models}
 }
 
-% VERIFY
 @article{askorassume2026,
+  author = {Edwards, Nicholas and Schuster, Sebastian},
   title  = {Ask or Assume? Uncertainty-Aware Clarification-Seeking in Coding
             Agents},
   journal = {arXiv preprint arXiv:2603.26233},
   year   = {2026},
-  note   = {SWE-bench Verified 61.2 -> 69.4 by decoupling underspecification
-            detection from execution}
+  version = {v1, 27 Mar 2026 -- the version carrying 61.20\%, see note},
+  quote  = {[v1 abstract, 27 Mar 2026] In this work, we systematically evaluate
+            the clarification-seeking abilities of LLM agents on an
+            underspecified variant of SWE-bench Verified. ... Our results
+            demonstrate that this multi-agent system using OpenHands + Claude
+            Sonnet 4.5 achieves a 69.40\% task resolve rate, significantly
+            outperforming a standard single-agent setup (61.20\%) and closing the
+            performance gap with agents operating on fully specified
+            instructions.
+            ---
+            [v2 abstract, 3 Jun 2026, the current version] Across both
+            proprietary and open-weight frontier LLMs, our scaffold achieves a
+            69.40\% task resolve rate, significantly outperforming a standard
+            single-agent setup and closing the performance gap with agents
+            operating on fully specified instructions.},
+  note   = {Verified first-hand 2026-08-13; the v1 abstract was fetched
+            separately after an independent checker contradicted an earlier
+            draft of this note, which asserted the 61.2 was not in the paper.
+            IT IS -- in v1's abstract, quoted above, and in the body. That
+            earlier claim was wrong and is recorded here rather than quietly
+            replaced. What IS wrong is the framing in docs/RELATED_WORK.md
+            111-112, on three counts. (1) THE BENCHMARK IS NOT SWE-bench
+            Verified: it is "an underspecified variant of SWE-bench Verified",
+            the paper's own words, and the movement happens entirely inside that
+            degraded variant. Our prose says "lifted SWE-bench Verified 61.2\% ->
+            69.4\%", which reads as a leaderboard number and is not comparable to
+            one -- the paper's fully-specified baseline is HIGHER than its own
+            69.40 headline. (2) 61.20\% IS MODEL-SPECIFIC, OpenHands + Claude
+            Sonnet 4.5, named in v1 and dropped in v2. (3) The independent check
+            reports that in the body the 61.20\% is UA-SINGLE, itself one of the
+            paper's proposed scaffolds, with the unmodified baseline lower
+            again; that body reading is NOT confirmed first-hand here and is
+            flagged rather than asserted. v2 removed the 61.20\% and the model
+            name from the abstract, so cite v1 for the pair or cite neither}
 }
 
-% VERIFY
 @article{abstentionbench2025,
+  author = {Kirichenko, Polina and Ibrahim, Mark and Chaudhuri, Kamalika and
+            Bell, Samuel J.},
   title  = {{AbstentionBench}: Reasoning {LLMs} Fail on Unanswerable Questions},
   journal = {arXiv preprint arXiv:2506.09038},
   year   = {2025},
-  note   = {Reasoning-tuned models ~24\% worse at abstaining than base models}
+  quote  = {Evaluating 20 frontier LLMs reveals abstention is an unsolved
+            problem, and one where scaling models is of little use. While recent
+            reasoning LLMs have shown impressive results in complex problem
+            solving, surprisingly, we find that reasoning fine-tuning degrades
+            abstention (by 24\% on average), even for math and science domains on
+            which reasoning models are explicitly trained.},
+  note   = {Verified first-hand 2026-08-13. 24\% and the does-not-scale claim are
+            both exact, and docs/RELATED_WORK.md 77-79 is supported. ONE
+            WORDING NOTE: the paper says reasoning FINE-TUNING degrades
+            abstention by 24\%; "reasoning-tuned models are ~24\% worse ... than
+            their base counterparts" is a fair reading of that, but the paper's
+            unit is the intervention rather than the model class. 20 datasets}
 }
 
-% VERIFY
 @article{trustoverfear2026,
-  title  = {Trust Over Fear: Framing Effects in Agent System Prompts},
+  author = {Ji, Wu},
+  title  = {Trust Over Fear: How Motivation Framing in System Prompts Affects
+            {AI} Agent Debugging Depth},
   journal = {arXiv preprint arXiv:2603.14373},
   year   = {2026},
-  note   = {Trust-framed prompts surfaced 59\% more hidden issues}
+  quote  = {Trust-framed agents found 59\% more hidden issues (p = 0.002,
+            d = 2.28) while taking 83\% more investigative steps, despite finding
+            15\% fewer surface-level issues -- revealing a depth-over-breadth
+            tradeoff in investigation strategy.
+            ---
+            Crucially, fear-framed (PUA) agents showed no significant
+            improvement over baseline on any metric (all p > 0.3), demonstrating
+            that fear-based motivation is ineffective for AI agents.},
+  note   = {Verified first-hand 2026-08-13. TITLE CORRECTED -- the entry
+            previously read "Framing Effects in Agent System Prompts", which is
+            not this paper's title, and dropping "Debugging Depth" drops the
+            entire measured domain. THE 59\% IS STUDY 1 AND STUDY 2 DID NOT
+            REPRODUCE IT AT THAT SIZE: Study 1 is a MANUAL experiment over 9
+            debugging scenarios on a single model (Claude Sonnet 4); Study 2 is
+            5 automated runs x 3 conditions, 135 scenario-level points, and
+            lands at +74\% investigative steps (p = 0.008) and +25\% hidden
+            issues (p = 0.016). So 59\% is the smaller study's figure and +25\% is
+            the replication's; whichever is quoted, the other should travel with
+            it. The fear-framing null is Study 2 and is quoted above intact.
+            Single author. CLAUDE.md, AGENTS.md and
+            docs/AUTONOMOUS_WORK_ORDER.md all cite the 59\% to justify how
+            reviewers are briefed here -- the direction is supported, the
+            magnitude is from n=9 in a debugging task, and the transfer to
+            adversarial review of research artefacts is an extrapolation}
 }
 
 % ---------------------------------------------------------------------------
@@ -292,7 +494,20 @@
   title  = {Judging {LLM}-as-a-Judge with {MT-Bench} and {Chatbot Arena}},
   booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
   year   = {2023},
-  note   = {arXiv:2306.05685}
+  quote  = {Our results reveal that strong LLM judges like GPT-4 can match both
+            controlled and crowdsourced human preferences well, achieving over
+            80\% agreement, the same level of agreement between humans.},
+  note   = {arXiv:2306.05685. Verified first-hand 2026-08-13, AND THE DIRECTION
+            IN OUR PROSE IS NOT THE ABSTRACT'S. docs/RELATED_WORK.md read "GPT-4 judge
+            agreement with humans ~85\%, above human-human agreement ~81\%",
+            which asserts the judge BEATS human-human agreement. The abstract
+            says "over 80\% agreement, the same level of agreement between
+            humans" -- parity, not superiority, and a floor rather than a point
+            estimate. The 85/81 pair is not in the abstract; it may be in the
+            body's tables and this entry does not assert otherwise, but the
+            claim resting on it was pointed the wrong way. Same defect shape as
+            arXiv:2605.29800 in the same section: an inequality reversed
+            against the source}
 }
 
 @article{verga2024poll,
@@ -304,22 +519,77 @@
   year   = {2024}
 }
 
-% VERIFY
 @article{ropoll2026,
-  title  = {{RoPoLL}: Robust Aggregation for Panels of {LLM} Judges},
+  author = {Acharya, Anish and Pan, Kris W. and Verkhovsky, Brian},
+  title  = {{RoPoLL}: Robust Panel of {LLM} Judges},
   journal = {arXiv preprint arXiv:2606.30931},
   year   = {2026},
-  note   = {PoLL incurs unbounded bias under any positive contamination
-            regardless of jury size; geometric median gives ~19\% improvement}
+  quote  = {We formalize the LLM Jury under the Huber contamination model and
+            show that PoLL incurs unbounded bias under any positive
+            contamination, regardless of jury size, whenever a single judge
+            fails in a biased, LLM-typical way (mode collapse, sycophancy,
+            safety refusal). ... Across 13 open-weight judges (4B-675B), three
+            reward-model benchmarks, and four corruption regimes at rates up to
+            50\%, RoPoLL dominates PoLL on every biased corruption type: by about
+            19\% on cross-dimensional attacks at matched compute, and by orders
+            of magnitude on heavy-tailed Byzantine adversaries.},
+  note   = {Verified first-hand 2026-08-13. The unbounded-bias result and the
+            ~19\% are exact, and the breakdown point 1/2 for the geometric median
+            is the paper's own. TITLE CORRECTED: the entry read "Robust
+            Aggregation for Panels of LLM Judges". ONE CONDITION THE PROSE
+            DROPS: the 19\% is "at matched compute" and is specific to
+            CROSS-DIMENSIONAL attacks -- docs/RELATED_WORK.md 185-189 keeps the
+            attack type but not the compute condition. UNVERIFIED: the
+            "3-judge 38B robust committee beat a 675B single judge by 1.31x
+            under 30\% corruption" in that same paragraph is not in the abstract}
 }
 
-% VERIFY
 @article{ninejudges2026,
-  title  = {Nine Judges, Two Effective Votes},
+  author = {Kohli, Guneet},
+  title  = {Nine Judges, Two Effective Votes: Correlated Errors Undermine
+            {LLM} Evaluation Panels},
   journal = {arXiv preprint arXiv:2605.29800},
   year   = {2026},
-  note   = {n_eff = 2.18, 95\% CI [2.07, 2.31]; panel lift over best single
-            judge +0.2pp against 22pp predicted under independence}
+  quote  = {Testing a panel of 9 frontier LLMs from 7 model families on three
+            natural language inference datasets (each with 100 human annotations
+            per item), we find that the 9 judges effectively provide only about
+            2 independent votes' worth of information. ... The consequences are
+            stark: the panel's actual accuracy falls 8-22 percentage points
+            short of what independent voting would achieve, and the best single
+            judge matches or outperforms the full panel across all conditions.},
+  note   = {Verified first-hand 2026-08-13, and TWO OF THE THREE FIGURES WE
+            CARRY ARE NOT IN THE ABSTRACT. (1) "22pp predicted under
+            independence" IS THE TOP OF A RANGE REPORTED AS A POINT VALUE: the
+            paper says the shortfall is 8-22 percentage points. Quoting 22
+            alone reports the most favourable end of the authors' own interval,
+            which is the same defect this repository has already recorded
+            against a registered band that named a number without its
+            estimator. (2) "Panel lift over the best single judge +0.2pp" points
+            the OPPOSITE WAY to the abstract, which says the best single judge
+            "matches or outperforms the full panel across all conditions" -- a
+            positive lift for the panel is not that claim. (3) n_eff = 2.18 and
+            the 95\% CI [2.07, 2.31], and the mean pairwise correlation 0.391 in
+            docs/RELATED_WORK.md 191-193, are not in the abstract; "about 2
+            independent votes' worth" is. They may all be in the body and this
+            entry does not assert they are absent -- it asserts they are
+            UNVERIFIED, which is a different and weaker claim, and the fix is to
+            read the tables rather than to keep quoting them. AND THE WORST OF
+            IT IS THE AXIS, which an independent check found and this note
+            originally missed: "+0.2pp against a predicted-under-independence
+            22pp" reads the two as observed-lift versus predicted-lift, and they
+            are not the same quantity. The 22pp is an ACCURACY SHORTFALL against
+            the Condorcet independent-voting ideal; the +0.2pp is a LIFT OVER
+            THE BEST SINGLE JUDGE. Putting them on one axis is the same class of
+            error as scoring two arms off different objects. That check also
+            reports every body figure we quote is MNLI-ONLY (SNLI is n_eff 2.35,
+            and there the best judge beats the panel outright), so +0.2pp is the
+            one dataset where the panel edges ahead in a paper whose headline is
+            that it does not. Neither the body reading nor the per-dataset
+            figures are confirmed first-hand here. THE DESIGN
+            CONCLUSION SURVIVES INTACT and is if anything understated: the
+            structural ceiling is the paper's headline, "the bottleneck is
+            correlated judges, not the aggregation algorithm" is verbatim, and
+            capping the council at three divergent judges follows from it}
 }
 
 @inproceedings{shankar2024validators,
@@ -329,7 +599,20 @@
             of {LLM} Outputs with Human Preferences},
   booktitle = {Proceedings of UIST},
   year   = {2024},
-  note   = {arXiv:2404.12272. Source of the criteria-drift result}
+  quote  = {In particular, we identify a phenomenon we dub criteria drift:
+            users need criteria to grade outputs, but grading outputs helps
+            users define criteria. What is more, some criteria appears
+            dependent on the specific LLM outputs observed (rather than
+            independent criteria that can be defined a priori), raising serious
+            questions for approaches that assume the independence of evaluation
+            from observation of model outputs.},
+  note   = {arXiv:2404.12272. Verified first-hand 2026-08-13. Criteria drift is
+            verbatim and is the load-bearing citation. THE ABSTRACT CONTAINS NO
+            PERCENTAGES: the agreeableness-bias claim in docs/RELATED_WORK.md
+            -- "high TPR paired with badly low TNR", "a judge can look >90\%
+            accurate by blended agreement" -- is not in it. That figure is
+            UNVERIFIED rather than shown absent from the paper, and the prose
+            has been rewritten to stop asserting the number}
 }
 
 @inproceedings{huang2024selfcorrect,
@@ -450,20 +733,43 @@
 % Prompt optimisation and transfer
 % ---------------------------------------------------------------------------
 
-% VERIFY
 @article{promptinginversion2025,
-  title  = {Prompting Inversion: When Sculpted Prompts Hurt Stronger Models},
+  author = {Khan, Imran},
+  title  = {You Don't Need Prompt Engineering Anymore: The Prompting Inversion},
   journal = {arXiv preprint arXiv:2510.22251},
   year   = {2025},
-  note   = {Helped GPT-4o (97\% vs 93\%), hurt GPT-5 (94.00\% vs 96.36\%
-            plain CoT)}
+  quote  = {Our findings reveal a "Prompting Inversion": Sculpting provides
+            advantages on gpt-4o (97\% vs. 93\% for standard CoT), but becomes
+            detrimental on gpt-5 (94.00\% vs. 96.36\% for CoT on full benchmark).},
+  note   = {Verified first-hand 2026-08-13. All four figures are exact and the
+            direction in docs/PROTOCOL.md 50-52 and docs/RELATED_WORK.md 335-336
+            is right. TITLE CORRECTED: the entry read "Prompting Inversion: When
+            Sculpted Prompts Hurt Stronger Models", which is a fair description
+            of the finding and is not the paper's title. SCOPE: one benchmark
+            (GSM8K, 1,317 problems), three OpenAI models, independent single
+            author -- "optimal prompting strategies must co-evolve with model
+            capabilities" is the paper's own generalisation and is broader than
+            what it measured}
 }
 
 % VERIFY
 @article{promptcoinflip2026,
-  title  = {Prompt Optimization Is a Coin Flip},
+  author = {Zhang, Xing and Wang, Guanghui and Cui, Yanwei and Qiu, Wei and
+            Li, Ziyuan and Zhu, Bing and He, Peiyang},
+  title  = {Prompt Optimization Is a Coin Flip: Diagnosing When It Helps in
+            Compound {AI} Systems},
   journal = {arXiv preprint arXiv:2604.14585},
-  year   = {2026}
+  year   = {2026},
+  quote  = {Prompt optimization in compound AI systems is statistically
+            indistinguishable from a coin flip: across 72 optimization runs on
+            Claude Haiku 4.5 (6 methods x 4 tasks x 3 repeats), 49\% score below
+            zero-shot; on Amazon Nova Lite, the failure rate is even higher.
+            ... optimization helps only when the task has exploitable output
+            structure: a format the model can produce but does not default to.},
+  note   = {Verified first-hand 2026-08-13. TITLE COMPLETED: the entry carried
+            only the headline half and dropped ": Diagnosing When It Helps in
+            Compound AI Systems", which is the part naming the scope the
+            finding is restricted to}
 }
 
 % VERIFY
@@ -535,19 +841,19 @@
   year    = {2025},
   quote   = {all the top open- and closed-weight LLMs we test exhibit
              significantly lower performance in multi-turn conversations than
-             single-turn, with an average drop of 39% across six generation
+             single-turn, with an average drop of 39\% across six generation
              tasks ... a minor loss in aptitude and a significant increase in
              unreliability
              ---
              [Sec. 4.2, read 2026-08-11] Aptitude: A^90 = percentile_90(S).
              Unreliability: U^90_10 = percentile_90(S) - percentile_10(S).
              "Model aptitude degrades in a non-significant way between the full
-             and sharded settings, with an average drop of 16%" ...
-             "unreliability skyrockets with an average increase of 112% (more
+             and sharded settings, with an average drop of 16\%" ...
+             "unreliability skyrockets with an average increase of 112\% (more
              than doubling)" ... "we experimented with 15 LLMs, running N=10
              simulations for each pair of model and simulation type"},
   note    = {Verified from the abstract 2026-08-11. The Sec. 4.2 definitions and
-             the 16%/112% split were read from the full text the same day and
+             the 16\%/112\% split were read from the full text the same day and
              are implemented in stats/reliability.py. The aggregation level of
              S -- pooled across instructions, or per instruction -- was NOT
              confirmed, which is why per_item_reliability is labelled our
@@ -593,7 +899,7 @@
   year    = {2026},
   quote   = {87 tasks across 8 domains paired with curated Skills and
              deterministic verifiers ... Curated Skills raise the average pass
-             rate from 33.9% to 50.5% (+16.6 percentage points; 25.5%
+             rate from 33.9\% to 50.5\% (+16.6 percentage points; 25.5\%
              normalized gain)},
   note    = {Verified 2026-08-11. DISTINCT from arXiv:2605.31408, which is a
              different real paper on the same topic -- conflating the two is
@@ -607,10 +913,10 @@
              When Expanding Skill Libraries},
   journal = {arXiv preprint arXiv:2605.24050},
   year    = {2026},
-  quote   = {performance degrades as libraries grow -- by up to 21% when
+  quote   = {performance degrades as libraries grow -- by up to 21\% when
              scaling from a small set of helpful skills to a 202-skill library},
   note    = {Verified from the abstract 2026-08-11. THE REGIME IS 202 SKILLS.
-             The figures "90% -> 13.6% at 11,100 candidates" are this paper
+             The figures "90\% -> 13.6\% at 11,100 candidates" are this paper
              QUOTING Gan and Sun 2025 on TOOL selection, not its own finding,
              and must not be attributed here. Shadowing dominates context
              overhead, which the paper calls small and indistinguishable from
@@ -622,7 +928,7 @@
              Trace-Conditioned Skill Revision},
   journal = {arXiv preprint arXiv:2606.01139},
   year    = {2026},
-  quote   = {improved the base agent's success rate from 36.05% to 61.63%},
+  quote   = {improved the base agent's success rate from 36.05\% to 61.63\%},
   note    = {Verified 2026-08-11. +25.6pp across three benchmarks and five
              LLMs. Measured on SkillsBench, which has EXECUTABLE verification;
              this repository's decision tasks do not, so the prior does not
@@ -676,13 +982,25 @@
 }
 
 @article{recency2025rerank,
+  author  = {Fang, Hanpei and Tao, Sijie and Chen, Nuo and Chang, Kai-Xin and
+             Sakai, Tetsuya},
   title   = {Do Large Language Models Favor Recent Content? A Study on Recency
              Bias in {LLM}-Based Reranking},
   journal = {arXiv preprint arXiv:2509.11353},
   year    = {2025},
-  note    = {NO QUOTE FIELD: the reported shifts (up to 4.78 years, up to 95
-             rank positions, 7 models) come from a search summary. Verify
-             before asserting}
+  quote   = {Across seven models, GPT-3.5-turbo, GPT-4o, GPT-4, LLaMA-3 8B/70B,
+             and Qwen-2.5 7B/72B, "fresh" passages are consistently promoted,
+             shifting the Top-10's mean publication year forward by up to 4.78
+             years and moving individual items by as many as 95 ranks in our
+             listwise reranking experiments.},
+  note    = {Verified first-hand 2026-08-13, replacing a note that said these
+             figures came from a search summary and must be verified before
+             asserting. All three are exact: seven models, up to 4.78 years, as
+             many as 95 ranks. docs/RESEARCH_PROGRAMME.md 94 is supported. TWO
+             CONDITIONS THE ONE-LINE CITATION DROPS: the publication dates are
+             ARTIFICIAL, prepended by the authors to TREC DL21/DL22 passages,
+             and the effect is measured in LISTWISE reranking -- so this is an
+             induced-signal study, not observed recency preference in the wild}
 }
 
 % ---------------------------------------------------------------------------
@@ -777,7 +1095,29 @@
   title   = {Sycophancy in Large Language Models: Causes and Mitigations},
   journal = {arXiv preprint arXiv:2411.15287},
   year    = {2024},
-  note    = {A survey, not a measurement study. Single author}
+  quote   = {This paper provides a technical survey of sycophancy in LLMs,
+             analyzing its causes, impacts, and potential mitigation strategies.
+             We review recent work on measuring and quantifying sycophantic
+             tendencies, examine the relationship between sycophancy and other
+             challenges like hallucination and bias, and evaluate promising
+             techniques for reducing sycophancy while maintaining model
+             performance.},
+  note    = {Verified first-hand 2026-08-13. THE 63.7\% IS NOT IN THIS PAPER'S
+             ABSTRACT, and the abstract is all that was read -- the stronger
+             claim this note used to make, that the figure is not in the paper,
+             is not one an abstract can settle.
+             docs/RELATED_WORK.md 85-87 attributes "First-person opinion
+             statements induce agreement with incorrect beliefs at 63.7\% average
+             across seven model families" to this identifier; the figure does
+             not appear on the abstract page, and the paper is a SURVEY with a
+             single author that reviews other people's measurements rather than
+             running any. So a measurement figure is attached to a paper that
+             reports no measurements -- the exact shape of the three 2026-08-11
+             misattributions, and the note here already said "a survey, not a
+             measurement study" without the figure being taken back out of the
+             prose. The 63.7\% may well be real and belong to one of the studies
+             this survey reviews; it must be traced to that study and cited
+             there, not here}
 }
 
 @article{zhang2025madovervalued,
@@ -807,7 +1147,18 @@
   title   = {When Truth Is Overridden: Uncovering the Internal Origins of
              Sycophancy in Large Language Models},
   journal = {arXiv preprint arXiv:2508.02087},
-  year    = {2025}
+  year    = {2025},
+  quote   = {In addition, we examine how grammatical perspective affects
+             sycophantic behavior, finding that first-person prompts ("I
+             believe...") consistently induce higher sycophancy rates than
+             third-person framings ("They believe...") by creating stronger
+             representational perturbations in deeper layers.},
+  note    = {Verified first-hand 2026-08-13. The first-person/third-person
+             result is verbatim and is the one docs/RELATED_WORK.md rests the
+             third-person-restatement design decision on. THE ABSTRACT GIVES NO
+             RATE: "higher sycophancy rates" is directional, so the 63.7\% that
+             sat in the same paragraph attributed to arXiv:2411.15287 cannot be
+             rescued by moving it here either}
 }
 
 @article{knipper2025cognitivebias,
@@ -839,9 +1190,18 @@
   title   = {Structured Uncertainty guided Clarification for {LLM} Agents},
   journal = {arXiv preprint arXiv:2511.08798},
   year    = {2025},
-  note    = {Cited in RELATED_WORK as SAGE-Agent, which is the method name
-             rather than the title. Expected Value of Perfect Information to
-             choose which clarifying question to ask}
+  quote   = {SAGE-Agent achieves 7-39\% higher coverage on ambiguous tasks
+             while reducing clarification questions by 1.5-2.7x. ...
+             uncertainty-guided reward modeling boosts accuracy from 36.5\% to
+             65.2\% (3B model) and 36.7\% to 62.9\% (7B model) through
+             uncertainty-weighted GRPO training.},
+  note    = {Verified first-hand 2026-08-13. Cited in RELATED_WORK as
+             SAGE-Agent, which is the method name rather than the title.
+             Expected Value of Perfect Information to choose which clarifying
+             question to ask. The figures above are this paper's own and are
+             not the ones our prose attributes to arXiv:2603.26233 -- the two
+             were adjacent in one paragraph, which is how the block-scoped
+             citation gate surfaced this entry at all}
 }
 
 @article{wang2025promptbridge,
@@ -850,7 +1210,20 @@
   title   = {{PromptBridge}: Cross-Model Prompt Transfer for Large Language
              Models},
   journal = {arXiv preprint arXiv:2512.01420},
-  year    = {2025}
+  year    = {2025},
+  quote   = {Yet prompts are highly model-sensitive: reusing a prompt
+             engineered for one model on another often yields substantially
+             worse performance than a prompt optimized for the target model. We
+             term this phenomenon Model Drifting. ... Experiments in
+             single-agent and multi-agent settings show that PromptBridge
+             consistently improves downstream accuracy while reducing migration
+             effort.},
+  note    = {Verified first-hand 2026-08-13. THE ABSTRACT REPORTS NO NUMBERS --
+             "consistently improves downstream accuracy" is the strongest thing
+             it says, and "the code will be available soon". Our prose calls it
+             "still the current answer for cheap-to-expensive transfer", which
+             is a recommendation the abstract does not underwrite; it is kept
+             as a pointer and no figure is attached to it}
 }
 
 @article{chowdhury2026lostatbirth,
@@ -914,9 +1287,9 @@
              conventional resources, with particular gains in contextual and
              patient-specific decision-making.},
   note    = {Verified first-hand 2026-08-13. 92 physicians, 46 per arm, 5 case
-             vignettes with expert rubrics. GPT-4 arm 43.0% vs conventional
-             35.7%, difference 6.5pp (95% CI 2.7-10.2, p<0.001); the
-             case-specific domains alone move 6.2pp (95% CI 2.4-9.9, p=0.002).
+             vignettes with expert rubrics. GPT-4 arm 43.0\% vs conventional
+             35.7\%, difference 6.5pp (95\% CI 2.7-10.2, p<0.001); the
+             case-specific domains alone move 6.2pp (95\% CI 2.4-9.9, p=0.002).
              Cited in docs/DECISION_FRAMEWORKS.md as the strongest located
              evidence that CONTEXTUAL TAILORING is the axis on which AI
              assistance helps, which is Track H's construct.},
@@ -930,12 +1303,12 @@
   year    = {2026},
   doi     = {10.1038/s41591-026-04503-6},
   quote   = {Clinicians fully adhered to the LLM's advice in 195 encounters
-             (19.5%), partially adhered in 573 encounters (57.3%) and did not
-             adhere in 232 encounters (23.2%).},
+             (19.5\%), partially adhered in 573 encounters (57.3\%) and did not
+             adhere in 232 encounters (23.2\%).},
   note    = {Verified first-hand 2026-08-13. 16 primary care facilities in
              Kenya, 103 clinical officers cluster-randomized, 9,691 patients,
-             April-July 2025. Treatment failure 2.2% (102/4,693) with LLM vs
-             2.0% (94/4,654) without, aOR 0.77, p=0.13 -- no outcome effect --
+             April-July 2025. Treatment failure 2.2\% (102/4,693) with LLM vs
+             2.0\% (94/4,654) without, aOR 0.77, p=0.13 -- no outcome effect --
              while note quality rose across all domains and appropriate
              diagnosis reached aOR 1.74, p<0.001. Cited in
              docs/DECISION_FRAMEWORKS.md as the process/outcome split: the

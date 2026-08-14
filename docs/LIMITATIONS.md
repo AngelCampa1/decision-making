@@ -72,8 +72,21 @@ in mixed batches to reduce this, but it is not eliminated.
 **The trigger corpus is 89% solvable by counting words, and every published
 trigger number sits on it.** Turn length alone separates the positives from the
 negatives at AUC 0.850; a bare *"fire if ≥ 18 words"* rule scores 0.890 with no
-model involved. The best arm ever measured here scores 0.956, so **the entire
-range any arm was competing over is about six points above a ruler.**
+model involved. Both figures are **label version 2**. The best *description*
+arm on that key is `stakes-shown` at **0.9795**, and the highest firing accuracy
+on record at all is the `confidence` arm at **0.9863** — the shipped description
+with a probability also elicited, at one repeat rather than five. So **the range
+any arm was competing over is about nine points above a ruler, either way.**
+
+**This paragraph used to say six points, against a best arm of 0.956, and that
+was wrong twice.** 0.956 is the `full` arm at **version 1**, where the same
+ruler scores 0.877 — so the comparison spanned a label revision, which is the
+move `trigger_arms.label_versions_comparable` refuses. It was also the wrong
+arm: at version 1 the best description arm was `no-opener` at 0.967 — published
+without an accuracy column and therefore never noticed — and `confidence`
+reached 0.973. The rule this leaves
+behind is that *"the best arm ever measured scores X"* cannot be written without
+naming the arm and the label version, because X is not a property of the skill.
 
 Two consequences, and both must be reported until the corpus is rebuilt:
 
@@ -115,9 +128,12 @@ items. Contamination is managed by regeneration between runs, not by secrecy.
 ## The judges
 
 **Judge panels have a low effective sample size.** Nine judges from seven
-families yield n_eff ≈ 2.18 (arXiv:2605.29800). Our three-judge panel should be
-assumed to carry roughly two independent votes, and it reports its measured n_eff
-rather than its headcount. No primary metric is ever a judge score.
+families yield a Kish n_eff of 2.18, 95% CI [2.07, 2.31] (arXiv:2605.29800) —
+a body figure; the abstract states the result as roughly two independent votes'
+worth of information rather than as a point estimate, and the rounded form is the
+one that should be quoted. Our three-judge panel should be assumed to carry
+roughly two independent votes, and it reports its measured n_eff rather than its
+headcount. No primary metric is ever a judge score.
 
 **Judges drift.** Criteria drift (arXiv:2404.12272) means a judge calibrated once
 does not stay calibrated. Recalibration is required whenever the pipeline or the

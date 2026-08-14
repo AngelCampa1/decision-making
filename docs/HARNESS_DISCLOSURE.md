@@ -1,12 +1,26 @@
 # Harness disclosure
 
 Every run in this repository records its harness configuration against the
-**ETCSOVG** checklist. This is not bureaucracy. In a controlled 3×3 factorial on
-100 SWE-bench Verified tasks, harness variance exceeded model variance by roughly
-**7.8×**, producing **six ranking reversals in nine comparisons**
-(arXiv:2605.23950); Harness-Bench found a **23.8-point swing** from harness alone
-across 5,194 trajectories (arXiv:2605.27922). An agent result reported without its
-harness is not reproducible, and most published ones are not.
+**ETCSOVG** checklist. This is not bureaucracy. In the controlled 3×3 factorial
+that arXiv:2605.23950 runs on "a difficulty-stratified 100-task subset of
+SWE-bench Verified", two runs per cell, the aggregate harness-to-model variance
+ratio was **7.80×**, with ranking reversals in **"6 out of 9
+model-pair/harness-pair comparisons"** (§4.2 and Table 2 — these figures are in
+the paper's body, not its abstract). Harness-Bench (arXiv:2605.27922) separately
+reports a **23.8-point** gap between its best- and worst-scoring configurable
+harness — 76.2 against 52.4, "under the same task set and model-backend pool".
+An agent result reported without its harness is not reproducible, and most
+published ones are not.
+
+Both numbers are narrower than they look, and the narrowing is the point rather
+than a footnote. The 7.80× is one estimate from one 3×3 design on one task
+distribution. The 23.8 is a best-versus-worst comparison across six configurable
+harnesses, averaged over eight model backends and 106 tasks — not a variance
+component with everything else held fixed, and not computed over the full 5,194
+trajectories, since the 106 Codex trajectories sit outside that comparison. What
+each supports is the **direction**: harness choice can move a result by more than
+model choice does. Neither is a constant to carry into another setting, and this
+file does not use them as one.
 
 Since the independent variable here is a markdown file and the model is held
 fixed, the harness is not background detail — it is the largest thing in the

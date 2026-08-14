@@ -21,6 +21,23 @@ receipt asserted, so nothing on disk can influence the decision.
 Usage:
     python scripts/run_triggers.py [--model haiku] [--skill decision-making]
                                    [--repeats 5] [--confidence] [--arm one|four]
+                                   [--set PATH] [--band s|m|l|xl]
+
+``--set`` names the corpus. It defaults to ``datasets/triggers/<skill>.yaml``,
+which is version 2 and is what every published number was measured on, and the
+version 3 corpus is reached by pointing it at
+``datasets/triggers/decision-making/index.yaml``. **A non-default set gets its
+own checkpoint**, because two corpora are two answer keys: a resume against a
+shared path would skip a case id that exists in the file under a different
+label, and the run would look complete. That is the same shape as the label
+move on 2026-08-13 that gave every arm five points it did not earn.
+
+``--band`` runs one length stratum. It does *not* change the checkpoint — a band
+is a subset of the same items under the same labels, so a band run and a later
+full run resume into each other, which is the point of running the cheap bands
+first. A band the set does not contain is refused rather than run: zero cases
+would produce a clean, complete, empty run, and this instrument has twice
+shipped an estimator that could only return zero.
 
 ``--confidence`` additionally elicits a probability and scores it. It writes to
 its own checkpoint: asking for a probability changes the response contract, so a
@@ -39,6 +56,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -46,6 +64,7 @@ sys.path.insert(0, str(REPO_ROOT / "evals" / "src"))
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+from decision_evals.corpus import BANDS  # noqa: E402
 from decision_evals.providers.claude_code import (  # noqa: E402
     CliError,
     Conversation,
@@ -53,7 +72,20 @@ from decision_evals.providers.claude_code import (  # noqa: E402
     isolated_cwd,
 )
 from decision_evals.skills import parse_skill  # noqa: E402
-from decision_evals.trigger_arms import summarise  # noqa: E402
+from decision_evals.trigger_arms import (  # noqa: E402
+    ArmError,
+    bootstrap_rate,
+    bootstrap_rate_difference,
+    false_positive_rate_by_kind,
+    format_bands,
+    format_difference,
+    format_negative_kinds,
+    format_rate,
+    format_routing,
+    routing_by_procedure,
+    summarise,
+    summarise_by_band,
+)
 from decision_evals.triggers import (  # noqa: E402
     PROCEDURES,
     TRIGGERS_DIR,
@@ -272,6 +304,36 @@ def collect(
                     "p_fire": p_fire,
                     "should_fire": case.should_fire,
                     "route": case.route,
+                    # The **whole** routes tuple, not only its first element.
+                    #
+                    # `route` is `routes[0]` and `covers` above is equality
+                    # against it, while `evaluate_routing` accepts any member —
+                    # two live scoring rules that disagree on three v3 items.
+                    # Stamping the data rather than a second derived boolean
+                    # lets either rule be computed from a checkpoint alone, and
+                    # leaves `covers` meaning on new records exactly what it
+                    # means on the published ones. A field whose definition
+                    # changed silently between records is the defect this
+                    # instrument keeps shipping; a field that is simply absent
+                    # from older records is not.
+                    "routes": list(case.routes),
+                    # The version 3 strata, copied onto every row rather than
+                    # left to be joined back from the YAML at scoring time.
+                    #
+                    # A checkpoint that names only the case id is readable only
+                    # beside the exact revision of the set that produced it, and
+                    # this repository has already published four numbers that
+                    # moved because a set changed under records nobody re-made.
+                    # `band` and `triple` in particular are what
+                    # `summarise_by_band` and `bootstrap_rate` read, and a run
+                    # whose rows lack them cannot be read per band at all --
+                    # which is exactly what both functions refuse to pretend.
+                    "band": case.band,
+                    "triple": case.triple,
+                    "domain": case.domain,
+                    "stakes": case.stakes,
+                    "ask": case.ask,
+                    "kind": case.kind,
                     "raw": raw,
                 }
                 handle.write(json.dumps(row) + "\n")
@@ -337,6 +399,166 @@ def report_stability(
             print(f"  repeats for r={target}   {k}")
         except ValueError as error:
             print(f"  repeats for r={target}   n/a ({error})")
+
+
+def report_bands(done: dict[tuple[str, int], dict[str, object]]) -> None:
+    """Firing per length band, with intervals that resample triples.
+
+    **The per-band table is the point of version 3 and the pooled figure above it
+    cannot substitute.** Everything this repository has published was measured on
+    turns of 25 words or fewer. If accuracy holds from ``s`` to ``xl``, the six
+    points of room above a word-count ruler were real and five null results
+    stand; if it falls, those nulls were an artefact of the band. One number over
+    all four bands is consistent with both.
+
+    The intervals cluster on ``triple`` because three items built from one body
+    are one authored artefact seen three times. The item-level width is printed
+    beside the clustered one rather than described, so a reader can see what the
+    wrong unit would have claimed.
+
+    Printed rather than raised when the records cannot support it: a version 2
+    checkpoint has no bands, and a run that made every call should not lose its
+    report to a format error at the end -- which has happened here, after 365
+    calls.
+    """
+    rows = list(done.values())
+    print(f"\n{'=' * 60}\nPER BAND -- across every repeat\n{'=' * 60}")
+    try:
+        # Item-weighted, and reported rather than raised. Row weighting puts a
+        # band collected at three repeats ahead of its neighbours at two, which
+        # is the routine state of a resumed `--band` run and biases exactly the
+        # short-against-long comparison this table exists to make. Raising on a
+        # half-collected band would cost the other three bands' rows for no
+        # correctness at all, and `collect` iterates the positives before the
+        # negatives so an interrupted run leaves precisely that shape.
+        bands = summarise_by_band(rows, weight="item", on_unscoreable="report")
+    except ArmError as error:
+        print(f"  not available: {error}")
+        return
+    for line in format_bands(bands):
+        print(line)
+    report_long_against_short(rows)
+
+    print("\n  Clustered on `triple`; the item-level width is the one to distrust.")
+    subsets: tuple[tuple[str, list[dict[str, object]]], ...] = (
+        ("accuracy", rows),
+        ("recall (positives)", [row for row in rows if row["should_fire"]]),
+        ("specificity (negatives)", [row for row in rows if not row["should_fire"]]),
+    )
+    for name, subset in subsets:
+        try:
+            clustered = bootstrap_rate(subset, seed=0)
+            per_item = bootstrap_rate(subset, cluster_on="case", seed=0)
+        except ArmError as error:
+            print(f"  {name:24s} not available -- {error}")
+            continue
+        for line in format_rate(name, clustered):
+            print(line)
+        print(
+            f"  {'':24s} item-level bootstrap would have said {per_item.width:.3f} wide "
+            f"against {clustered.width:.3f}"
+        )
+
+
+def report_long_against_short(rows: list[dict[str, object]]) -> None:
+    """Q1 of the N6 pre-registration: does firing accuracy fall on the long bands?
+
+    S+M against L+XL — 72 items in 24 triples against 48 in 16. Different items,
+    different clusters, nothing pairing them, so neither ``compare`` nor
+    ``cluster_bootstrap_diff`` applies: both need the treatment values in the
+    same item order as the control. **And the interval cannot be recovered by
+    subtracting the two per-group intervals printed above**, which is the
+    obvious thing to do by eye and answers a different question.
+
+    The registered band is ``accuracy(S+M) − accuracy(L+XL)`` between −0.05 and
+    +0.10, so the short bands go in as the treatment and the long ones as the
+    control, and the printed sign is the registered one.
+    """
+    short = [row for row in rows if row.get("band") in ("s", "m")]
+    long = [row for row in rows if row.get("band") in ("l", "xl")]
+    print("\n  Q1 -- the registered comparison. S+M against L+XL, unpaired.")
+    if not short or not long:
+        print("    not available: this run does not hold both halves of the corpus.")
+        return
+    try:
+        difference = bootstrap_rate_difference(
+            long, short, name_control="L+XL", name_treatment="S+M", seed=0
+        )
+    except ArmError as error:
+        print(f"    not available -- {error}")
+        return
+    for line in format_difference(difference):
+        print(line)
+    print(
+        f"    registered band [-0.050, +0.100]: "
+        f"{'INSIDE' if difference.within(-0.05, 0.10) else 'OUTSIDE'}"
+    )
+    print(
+        "    Nominal 95% here is nearer 93% at 16 and 24 clusters -- measured, not "
+        "assumed; see tests/unit/test_group_estimators.py."
+    )
+
+
+def report_routing_by_procedure(
+    done: dict[tuple[str, int], dict[str, object]], trigger_set: TriggerSet
+) -> None:
+    """Q3: how does ``ledger`` route now that the corpus contains piles?
+
+    Printed under **both** rules, always, because the two live in this
+    repository and disagree: the ``covers`` stamp is equality against
+    ``routes[0]`` and ``evaluate_routing`` accepts any member of ``routes``.
+    Three v3 positives carry a second defensible route, so the rules differ on
+    the verdicts *and* on the per-procedure denominators — 8 / 8 / 7 / 10 against
+    8 / 10 / 8 / 10. Printing one of them would be picking a rule silently.
+    """
+    rows = list(done.values())
+    routes = {case.id: case.routes for case in trigger_set.positives if case.routes}
+    print(f"\n{'=' * 60}\nROUTING PER PROCEDURE -- Q3\n{'=' * 60}")
+    for rule in ("first", "any"):
+        try:
+            result = routing_by_procedure(rows, rule=rule, routes=routes)  # type: ignore[arg-type]
+        except ArmError as error:
+            print(f"  rule {rule!r} not available -- {error}")
+            continue
+        for line in format_routing(result):
+            print(line)
+        worst = min(result.groups, key=lambda name: result.groups[name].over_items)
+        print(f"  worst-routed under {rule!r}: {worst}")
+        print("  Descriptive only. Ten items detects nothing; no p-value is offered.\n")
+
+
+def report_negative_kinds(done: dict[tuple[str, int], dict[str, object]]) -> None:
+    """Q4: do twinned negatives fire more than hand-written ones?
+
+    The cross-version comparison the pre-registration wanted is refused by
+    ``label_versions_comparable`` and is not attempted. What is available is the
+    false-positive rate by ``kind`` inside version 3, and the registered band is
+    that ``settled`` is the highest of the seven.
+
+    ``summarise`` cannot produce this table: it refuses a subgroup holding one
+    label, and a ``kind`` subgroup is all negatives by definition. Every row
+    carries an interval because two of the seven kinds hold four items and one
+    holds five, and a point estimate of 0.000 over five items is not evidence of
+    a floor.
+    """
+    print(f"\n{'=' * 60}\nFALSE POSITIVES BY KIND OF NEGATIVE -- Q4\n{'=' * 60}")
+    try:
+        kinds = false_positive_rate_by_kind(list(done.values()))
+    except ArmError as error:
+        print(f"  not available: {error}")
+        return
+    for line in format_negative_kinds(kinds):
+        print(line)
+    highest = max(kinds, key=lambda name: kinds[name].over_items)
+    others = [rate for name, rate in kinds.items() if name != highest]
+    separated = all(kinds[highest].separated_from(other) for other in others)
+    print(f"\n  highest: {highest} ({kinds[highest].n_items} item(s))")
+    print(
+        f"  its interval {'excludes' if separated else 'contains'} every other kind's point "
+        "estimate."
+    )
+    if not separated:
+        print("  So the ranking is a description of this run, not a difference between kinds.")
 
 
 def report_calibration(done: dict[tuple[str, int], dict[str, object]]) -> None:
@@ -407,6 +629,19 @@ def main() -> int:
     parser.add_argument("--skill", default="decision-making")
     parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument(
+        "--set",
+        type=Path,
+        help=(
+            "corpus to run, defaulting to datasets/triggers/<skill>.yaml. A non-default "
+            "set is a different answer key and gets its own checkpoint"
+        ),
+    )
+    parser.add_argument(
+        "--band",
+        choices=BANDS,
+        help="run one length stratum. Shares the full run's checkpoint; both resume",
+    )
+    parser.add_argument(
         "--confidence",
         action="store_true",
         help="also elicit p_fire and score it; writes a separate checkpoint",
@@ -464,7 +699,27 @@ def main() -> int:
         print("the response contract. Two manipulations in one run measure neither.")
         return 1
 
-    trigger_set = load_trigger_set(REPO_ROOT / TRIGGERS_DIR / f"{args.skill}.yaml")
+    default_set = REPO_ROOT / TRIGGERS_DIR / f"{args.skill}.yaml"
+    set_path = Path(args.set).resolve() if args.set else default_set
+    trigger_set = load_trigger_set(set_path)
+
+    if args.band is not None:
+        banded = tuple(case for case in trigger_set.cases if case.band == args.band)
+        if not banded:
+            # Nothing would crash. The run would finish, checkpoint cleanly and
+            # report a rate over zero calls, which is the failure this
+            # instrument keeps producing: a plausible number nothing could have
+            # moved. Version 2 declares no bands at all, so this is the likely
+            # way to reach it.
+            print(f"{set_path} has no case in band {args.band!r}; there is nothing to run.")
+            print("Version 2 declares no bands. Point --set at a banded corpus.")
+            return 1
+        # `replace` rather than reconstructing: the set's `version` is the label
+        # revision stamped onto every record, and building a bare TriggerSet
+        # would silently default it to 1 and make the run look like a pre-2026
+        # one on paper.
+        trigger_set = replace(trigger_set, cases=banded)
+
     document = parse_skill(REPO_ROOT / "skills" / args.skill / "SKILL.md")
     description = str(document.frontmatter["description"]).strip()
 
@@ -488,9 +743,12 @@ def main() -> int:
         description = four_arm_block(entry_names)
         print(f"{n_entries}-entry arm: {', '.join(entry_names)}")
 
+    band_note = f" band {args.band}" if args.band else ""
     print(
-        f"{args.skill}: {len(trigger_set.positives)} positive, {len(trigger_set.negatives)} negative"
+        f"{args.skill}{band_note}: {len(trigger_set.positives)} positive, "
+        f"{len(trigger_set.negatives)} negative"
     )
+    print(f"set: {set_path.name} (label version {trigger_set.version})")
     print(f"description: {len(description)} chars, {args.repeats} repeat(s)\n")
 
     system = SYSTEM_CONFIDENCE if args.confidence else SYSTEM
@@ -510,6 +768,26 @@ def main() -> int:
             )
     if args.description != "full":
         checkpoint = CHECKPOINT.with_name(f"verdicts-{args.description}.jsonl")
+    if set_path != default_set:
+        # A different corpus is a different answer key, so it cannot share a
+        # checkpoint with any arm above. `load_done` resumes on (case id,
+        # repeat) and nothing else: a case id present under one label in version
+        # 2 and another in version 3 would be skipped as already collected, and
+        # the run would finish clean carrying a verdict scored against a label
+        # it never saw. That is the 2026-08-13 defect with a file path instead
+        # of a YAML edit.
+        #
+        # The marker composes with the arm suffixes rather than replacing them,
+        # because the arm and the corpus are two independent axes and a name
+        # that drops either would collide.
+        marker = set_path.parent.name if set_path.name == "index.yaml" else set_path.stem
+        checkpoint = checkpoint.with_name(
+            f"{checkpoint.stem}-{marker}-v{trigger_set.version}{checkpoint.suffix}"
+        )
+    # `--band` deliberately does not appear here. A band is a subset of the same
+    # items under the same labels, so a band run and a later full run resume into
+    # each other, which is what makes running the cheap bands first worth doing.
+    print(f"checkpoint: {checkpoint.name}\n")
     try:
         done = collect(
             trigger_set,
@@ -549,7 +827,10 @@ def main() -> int:
         print("*** This measured format compliance rather than firing. Stopping.")
         return 1
 
-    subset = type(trigger_set)(skill=trigger_set.skill, cases=scored)
+    # `replace`, not a fresh TriggerSet: reconstructing one from `skill` and
+    # `cases` alone drops `version` back to its default of 1, which is the field
+    # that decides whether two runs may be compared at all.
+    subset = replace(trigger_set, cases=scored)
     report = evaluate(subset, lambda turn: verdicts[turn])
     routing = evaluate_routing(subset, lambda turn: routes[turn])
 
@@ -562,11 +843,32 @@ def main() -> int:
     scope = "repeat 0 only" if args.repeats > 1 else "the single repeat"
     print(f"\n{'=' * 60}\nFIRING  (primary) -- {scope}\n{'=' * 60}")
     if args.repeats > 1:
-        every = summarise(list(done.values()))
+        rows_all = list(done.values())
+        # Item-weighted, and the observed repeat count rather than `--repeats`.
+        # A `--band` run shares a checkpoint with the full run on purpose, so a
+        # band collected three times beside bands collected twice is the normal
+        # state and not an edge case. Row weighting then hands the
+        # over-collected band extra weight in the headline, and the header line
+        # claimed "ALL 2 REPEATS" over a file that held three.
+        collected = sorted({int(row["repeat"]) for row in rows_all})  # type: ignore[call-overload]
+        every = summarise(rows_all, weight="item")
+        by_record = summarise(rows_all)
         print(
-            f"  ACROSS ALL {args.repeats} REPEATS: precision {every.precision:.3f}  "
-            f"recall {every.recall:.3f}  FPR {every.false_positive_rate:.3f}"
+            f"  ACROSS {len(collected)} REPEAT(S) {collected}, WEIGHTED BY ITEM: "
+            f"precision {every.precision:.3f}  recall {every.recall:.3f}  "
+            f"FPR {every.false_positive_rate:.3f}  accuracy {every.accuracy:.3f}"
         )
+        print(
+            f"  weighted by row instead:            precision {by_record.precision:.3f}  "
+            f"recall {by_record.recall:.3f}  FPR {by_record.false_positive_rate:.3f}  "
+            f"accuracy {by_record.accuracy:.3f}"
+        )
+        if abs(every.accuracy - by_record.accuracy) > 5e-4:
+            print(
+                "  ^ the two differ, so the repeats are uneven and the row figure is "
+                "weighted toward whichever items were collected most."
+            )
+        print(f"  {every.n_items} item(s) over {every.n_records} row(s)")
         print(f"  never fired: {', '.join(every.missed) or 'none'}")
         print("  ^ this is the arm's rate. The block below is one repeat of it.\n")
     print(f"  precision            {report.precision:.3f}")
@@ -578,6 +880,15 @@ def main() -> int:
     )
     if report.missed:
         print(f"  missed: {', '.join(report.missed)}")
+
+    report_bands(done)
+    report_negative_kinds(done)
+    if entry_names is None:
+        # The per-procedure table grades against the four procedure names. An
+        # M5-style arm offering `ledger-fit` cannot be scored that way and
+        # reports `covers` below instead -- the same defect that graded 365
+        # calls against names an arm never offered, one table over.
+        report_routing_by_procedure(done, trigger_set)
 
     print(f"\n{'=' * 60}\nROUTING  (secondary -- the easier question)\n{'=' * 60}")
     if entry_names is not None and not routing_is_by_name(entry_names):

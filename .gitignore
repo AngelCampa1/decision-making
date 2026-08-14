@@ -42,6 +42,15 @@ paper/*.blg
 paper/*.synctex.gz
 paper/main.pdf
 
+# Site build artifacts. `site/build-manifest.json` is deliberately *not* here:
+# it is the committed record of which version of these documents the published
+# pages were built from, and `de check` refuses a tree where it has fallen
+# behind. Ignoring it would remove the only evidence the gate reads.
+site/node_modules/
+site/dist/
+site/.astro-cache/
+site/.astro/
+
 # OS
 Thumbs.db
 .DS_Store

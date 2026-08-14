@@ -12,13 +12,16 @@ Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 uv sync --group dev
 ```
 
+Add `--group docs` only if you will publish the website. The gate that refuses a
+stale build is pure Python and offline, so it refuses either way.
+
 ```bash
 uv run de check
 ```
 
 That is the whole local gate — lint, format, types, tests, coverage floors, and
-six repository-integrity checks. There is no cloud CI, so `de check` is the only
-thing standing between a mistake and the published record. It is bound to
+seven repository-integrity checks. There is no cloud CI, so `de check` is the
+only thing standing between a mistake and the published record. It is bound to
 `pre-commit` (fast subset) and `pre-push` (everything). Run it before you
 believe anything works.
 
@@ -34,6 +37,7 @@ believe anything works.
 | give a module a coverage floor that no entry point reaches | a tested refusal with no caller is inert, and the gate reports green either way |
 | name a `de` command, path, or component that does not exist | documentation was the last obligation here checked by reading it, and the README was found naming two commands that never existed |
 | leave [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md) stale | run `de index`; it is generated so it cannot drift the way a hand-maintained index does |
+| edit a document the website renders without rebuilding it | run `de site`; the site reads this repository's markdown in place, so an edited document is a published page that disagrees with the repository until somebody notices |
 | regenerate a golden file without `pytest --bless` | a benchmark that changes silently makes every earlier number incomparable with every later one |
 
 ## The research rules
@@ -73,6 +77,30 @@ uv run de mirror
 
 A skill may not enter `plugin/skills/` while it carries `UNTESTED` or
 `WITHDRAWN`. That is the promotion gate and it is enforced by `de lint`.
+
+## Changing a document the website renders
+
+Every markdown file under `docs/`, `notebook/`, `results/`, `skills/` and the
+repository root is rendered by the site *in place*. Nothing is copied, so no
+second version of a document exists to disagree with the first — and the price
+is that each build is a snapshot with an expiry nobody can see. Rebuild in the
+same change:
+
+```bash
+uv run de site
+```
+
+That writes `site/build-manifest.json`, which records a hash of every file the
+site renders. Commit it with the document. Publishing is separate and manual:
+
+```bash
+uv run de site --deploy
+```
+
+**What that gate cannot see.** It proves the committed build matches the current
+tree. It does not prove the build was ever pushed, because `de check` is offline
+by design and cannot consult the published branch. Nothing checks that you ran
+`--deploy`.
 
 ## Reporting that a skill does not work
 

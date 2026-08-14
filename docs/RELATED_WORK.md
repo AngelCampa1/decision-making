@@ -82,14 +82,29 @@ their base counterparts.
 calls at a much higher rate than they correctly withhold warranted ones. Still
 current; no contradicting 2026 work found.
 
-**"Sycophancy in Large Language Models"** — arXiv:2411.15287. First-person
-opinion statements induce agreement with *incorrect* beliefs at 63.7% average
-across seven model families. **"When Truth Is Overridden"** (arXiv:2508.02087)
-shows first-person framing perturbs internal representations more than
-third-person framing of the same claim. *Effect on design:* the flagship restates
-user assertions in the third person before evaluating them — though note this is
-an *extrapolation*, since a self-applied rewrite is not the same manipulation the
-paper tested. Flagged as such in the skill's own evidence file.
+**"When Truth Is Overridden"** — arXiv:2508.02087. First-person prompts ("I
+believe...") "consistently induce higher sycophancy rates than third-person
+framings", by perturbing representations more strongly in deeper layers. The
+direction is the paper's own; it states no rate, so none is given here.
+*Effect on design:* the flagship restates user assertions in the third person
+before evaluating them — though note this is an *extrapolation*, since a
+self-applied rewrite is not the same manipulation the paper tested. Flagged as
+such in the skill's own evidence file.
+
+**Malmqvist, "Sycophancy in Large Language Models: Causes and Mitigations"** —
+arXiv:2411.15287. A single-author technical *survey* of the area, reviewing
+other people's measurements rather than running any.
+
+> **Correction, 2026-08-13.** This entry previously read "First-person opinion
+> statements induce agreement with *incorrect* beliefs at 63.7% average across
+> seven model families", attributed to arXiv:2411.15287. Its abstract contains
+> no percentage of any kind and names no model family, and describes itself as
+> a technical survey that reviews other people's measurements. The figure has
+> been removed rather than softened, and it has *not* been moved onto
+> arXiv:2508.02087, whose abstract is directional and gives no rate either. If
+> the 63.7% is real it belongs to one of the studies the survey reviews, and it
+> may be cited once that study is opened. Verified first-hand against both
+> abstracts.
 
 **"The Bias is in the Details"** — arXiv:2509.22856. 45 LLMs, 2.8M responses,
 8 biases. Bias-consistent behaviour in 17.8–57.3% of instances; scale reduced
@@ -102,16 +117,41 @@ bias in only ~39.5% of cases; more detailed prompts reduced most biases by up to
 
 **AgentAtlas, "Beyond Outcome Leaderboards for LLM Agents"** — arXiv:2605.20530.
 Six control gates — **Act, Ask, Refuse, Stop, Confirm, Recover** — with named
-failure modes including *missing irreversibility*. Removing explicit option menus
-dropped trajectory accuracy 14–40pp across all 8 models, compressing them into a
-0.54–0.62 band regardless of family. *Effect on design:* adopted as the control
-taxonomy, and the reason option menus are held constant across all arms.
+failure modes. (The category *missing irreversibility* this entry used to
+name is in neither abstract and is unverified.) The taxonomy is unchanged
+across both versions of the paper and is what we adopt. *Effect on design:*
+adopted as the control taxonomy, and the reason option menus are held constant
+across all arms.
+
+The paper's own figure for removing the option menu is **v1-only**, and v1 must
+be named whenever it is used:
+
+> **arXiv:2605.20530v1, 19 May 2026:** "Removing the explicit label menu drops
+> every model's trajectory accuracy by 14-40 pp to a tight 0.54-0.62 floor
+> regardless of family."
+
+**v2 (26 May 2026) removed that sentence** and replaced the quantity with
+"mapped label agreement can change substantially" — no number, a different
+measure name — while adding that the synthetic study "should not be read as a
+'definitive model comparison'". Both versions disclaim the run as a
+demonstration on a synthetic 1,342-item set rather than a benchmark release —
+v1 as a "measurement-protocol demonstration", v2 as an "illustrative protocol
+study". The phrase differs; the disclaimer does not. Verified first-hand
+against both abstracts, 2026-08-13.
 
 **"Ask or Assume? Uncertainty-Aware Clarification-Seeking in Coding Agents"** —
 arXiv:2603.26233. Decoupling underspecification detection from execution lifted
-SWE-bench Verified 61.2% → 69.4%, with calibrated behaviour (fewer questions on
-easy tasks). Supersedes SAGE-Agent (arXiv:2511.08798) as the primary citation for
-EVPI-gated clarification.
+the task resolve rate from 61.20% to 69.40% **on an underspecified variant of
+SWE-bench Verified**, for **OpenHands + Claude Sonnet 4.5** (the v1 abstract's
+configuration; v2 states the 69.40 across proprietary and open-weight frontier
+models without naming a baseline). Both figures live inside the degraded
+variant, and the abstract implies its own fully-specified baseline sits
+*above* the 69.40 headline, since the scaffold is described as "closing the
+performance gap" with it — an inference from that phrase, not a figure anyone
+read — so this is not a SWE-bench Verified leaderboard movement and
+must not be read beside one. The calibration result (fewer questions on easy
+tasks) is qualitative in the abstract. Supersedes SAGE-Agent
+(arXiv:2511.08798) as the primary citation for EVPI-gated clarification.
 
 **Flyvbjerg, Holm, Buhl**, *JAPA* 2002, and Flyvbjerg 2006/2008 — reference class
 forecasting. Rail, bridge/tunnel and road overruns average 45%, 34% and 20%,
@@ -171,8 +211,17 @@ base rate is perfectly reliable and useless.
 
 ## 4. Judges and councils
 
-**Zheng et al., "Judging LLM-as-a-Judge"** — arXiv:2306.05685, NeurIPS 2023.
-GPT-4 judge agreement with humans ~85%, above human-human agreement ~81%.
+**Zheng et al., "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena"** —
+arXiv:2306.05685, NeurIPS 2023. Strong LLM judges like GPT-4 "can match both
+controlled and crowdsourced human preferences well, achieving over 80%
+agreement, the same level of agreement between humans."
+
+> **Correction, 2026-08-13.** This read "GPT-4 judge agreement with humans
+> ~85%, above human-human agreement ~81%" — asserting the judge *beats*
+> human-human agreement. The abstract claims parity, not superiority, and gives
+> a floor ("over 80%") rather than the 85/81 pair, which is not in it. The
+> inequality was pointed the wrong way, which is the same defect shape as the
+> arXiv:2605.29800 correction further down this same section.
 
 **Liu et al., "G-Eval"** — arXiv:2303.16634, EMNLP 2023. CoT rubric
 decomposition; Spearman 0.514 with humans on summarisation.
@@ -188,13 +237,30 @@ point ½) gives ~19% improvement under cross-dimensional attack; a 3-judge 38B
 robust committee beat a 675B single judge by 1.31× under 30% corruption.
 *Effect on design:* aggregation is a robust estimator, never a mean.
 
-**"Nine Judges, Two Effective Votes"** — arXiv:2605.29800. Nine judges from seven
-families gave an effective sample size of **2.18** (95% CI [2.07, 2.31]), mean
-pairwise correlation 0.391. Panel lift over the best single judge: **+0.2pp**
-against a predicted-under-independence 22pp. *Effect on design:* this is a
+**"Nine Judges, Two Effective Votes"** — arXiv:2605.29800. Nine frontier LLMs
+from seven families "effectively provide only about 2 independent votes' worth
+of information", because they make the same mistakes on the same items. The
+panel's accuracy "falls 8-22 percentage points short of what independent voting
+would achieve, and the best single judge matches or outperforms the full panel
+across all conditions". "Established methods close at most 11%" of
+that gap even with access to the correct answers. *Effect on design:* this is a
 structural ceiling, not an aggregation problem. The council is capped at three
 judges chosen for divergent failure modes, and must report effective sample size
 or its diversity claim is decorative.
+
+> **Correction, 2026-08-13.** This entry previously read "Panel lift over the
+> best single judge: **+0.2pp** against a predicted-under-independence 22pp",
+> which was wrong twice over. It reported the **top of a range** — the paper
+> says 8–22 pp — as a point value, the same defect this repository has recorded
+> against a registered band that named a number without its estimator. And it
+> compared two different quantities: the 8–22 pp is a *shortfall of the panel
+> against a Condorcet independent-voting ideal*, while +0.2pp was a *lift of
+> the panel over the best single judge* — a lift the abstract contradicts
+> outright, since it says the best single judge matches or outperforms the
+> panel. The effective sample size 2.18, its CI and the mean pairwise
+> correlation 0.391 are not in the abstract and are unverified; "about 2
+> independent votes' worth" is what the paper states, so that is what is
+> quoted. Verified first-hand.
 
 **Position bias** — arXiv:2406.07791 (15 judges, >150,000 instances; repetition
 stability, position consistency, preference fairness), refined by
@@ -202,12 +268,16 @@ arXiv:2604.23178. **Self-preference** — arXiv:2410.21819. **Scoring bias** —
 arXiv:2506.22316. **CALM bias framework** — arXiv:2410.02736.
 
 **Shankar et al., "Who Validates the Validators?" (EvalGen)** — arXiv:2404.12272,
-UIST 2024. *Criteria drift*: grading outputs changes the grader's own criteria,
-so a judge aligned once does not stay aligned. Judges also show agreeableness
-bias — high TPR paired with badly low TNR — meaning a judge can look >90%
-"accurate" by blended agreement while catching almost no real failures.
+UIST 2024. *Criteria drift*, in the paper's own words: "users need criteria to
+grade outputs, but grading outputs helps users define criteria" — so a judge
+aligned once does not stay aligned, and some criteria turn out to be *dependent*
+on the outputs observed rather than definable a priori.
 *Effect on design:* TPR and TNR reported separately against a deliberately
 failure-heavy calibration set; recalibration whenever the pipeline changes.
+(The agreeableness-bias figure this entry used to carry — "a judge can look
+>90% accurate by blended agreement" — is not in the abstract and is unverified,
+so it has been removed. The design decision rests on criteria drift, which is
+verbatim, and is unaffected.)
 
 ### Multi-agent debate
 
@@ -257,8 +327,13 @@ and availability, not wordsmithing.
 arXiv:2605.23904, Microsoft Research, code at `github.com/microsoft/SkillOpt`.
 Treats `SKILL.md` as a trainable parameter: bounded edits ("textual learning
 rate"), a held-out validation gate, a rejected-edit buffer, epoch-level
-consolidation. +23.5pp average on GPT-5.5 across six benchmarks, evaluated inside
-Claude Code and Codex CLI harnesses.
+consolidation. Six benchmarks, seven target models, three execution harnesses.
+On GPT-5.5 it lifts average no-skill accuracy by **+23.5 points in direct
+chat**, **+24.8 inside Codex** and **+19.1 inside Claude Code** — the harness
+must travel with the number, since it is the paper's own largest source of
+spread and this document's own methodology section (arXiv:2605.23950) exists to
+say so. An earlier version of this entry gave "+23.5pp" as an average across
+benchmarks with no harness named.
 *Caveats we take seriously:* no confidence intervals, no significance tests, and
 no correction for the many implicit comparisons its accept-if-strictly-better
 ratchet performs; benchmark selection restricted to tasks with crisp automatic
@@ -295,19 +370,111 @@ data-exfiltration, privilege-escalation and supply-chain categories.
 ## 6. Methodology
 
 **"Stop Comparing LLM Agents Without Disclosing the Harness"** — arXiv:2605.23950.
-Controlled 3×3 factorial, 100 SWE-bench Verified tasks: **harness variance /
-model variance ≈ 7.8×**. Harness changes moved scores 8.5–13 points, model
-changes 2.5–5 points, with **six ranking reversals in nine comparisons**.
-Supplies the ETCSOVG disclosure checklist. *This validates the premise of the
-whole project: the scaffold is the dominant variable, and it is the one nobody
-reports.*
+A **position paper**, arguing the *Binding Constraint Thesis*: for long-horizon
+tasks across models of comparable frontier capability, the harness "is often a
+stronger determinant of agent performance than the model it wraps", so current
+protocols "systematically misattribute harness-level gains to model
+improvements". Its support is a control-theoretic formalisation, a survey of
+published benchmarks and deployments, and a controlled variance decomposition
+showing harness-induced variance "can substantially exceed" model-induced
+variance, "including cases of model ranking reversal". Supplies the ETCSOVG
+disclosure checklist. *This is the premise of the whole project: the scaffold is
+the dominant variable, and it is the one nobody reports.*
 
-**Harness-Bench** — arXiv:2605.27922. 5,194 trajectories, 6 harnesses × 8 model
-backends × 106 tasks. A 23.8-point swing from harness alone; weaker models are
-more harness-dependent. Failure taxonomy: output-contract violations (36%),
-tool/recovery failures (25%), evidence/grounding gaps, artifact-commitment
-failures, state/continuation issues — used as the prior for our own bottom-up
-error coding.
+**The variance decomposition is the authors' own experiment, and its numbers are
+in the body rather than the abstract** (§4.2 and Table 2, verified first-hand
+against `arxiv.org/html/2605.23950v1` on 2026-08-13). Three frontier models
+"selected because they were tightly clustered on the LLM Stats coding
+leaderboard" are crossed with three harness configurations "on a
+difficulty-stratified 100-task subset of SWE-bench Verified", two independent
+runs per cell:
+
+> "Changing the harness moves GLM-5.1 by 13.0 percentage points and GPT-5.4 and
+> Kimi K2.6 by 8.5 points each." … "Changing the model within a fixed harness
+> moves scores by only 3.0, 2.5, and 5.0 points for H₁, H₂, H₃." … "Aggregate
+> HV̄/MV̄ ratio: 7.80×." … "Ranking reversal pairs: 6 out of 9
+> model-pair/harness-pair comparisons."
+
+Because it is a single 3×3 design with two runs per cell, the 7.80× is one
+estimate from one task distribution, not a general constant. The direction is
+what this repository leans on; the ratio is not treated as transferable.
+
+> **Correction, 2026-08-13, and it is the one that should worry a reader most.**
+> This entry read "Controlled 3×3 factorial, 100 SWE-bench Verified tasks:
+> **harness variance / model variance ≈ 7.8×**. Harness changes moved scores
+> 8.5–13 points, model changes 2.5–5 points, with **six ranking reversals in
+> nine comparisons**." **None of those four figures is in the abstract**, and
+> the paper is a position paper rather than the empirical study the phrasing
+> implied. The abstract does describe a controlled variance decomposition, so
+> the numbers may be its body's; they are *unverified*, not shown absent. The
+> sentence they supported is the one this repository uses to justify its own
+> existence, and a premise resting on a figure nobody opened is precisely the
+> failure the citation gate was built for. The qualitative direction above
+> survives intact and the design decisions resting on it are unaffected.
+>
+> **They are out of this file and out of `PROTOCOL.md` §9. They are still in
+> two others**, and an independent check found that, not the author: they
+> remain in `docs/HARNESS_DISCLOSURE.md` (all four, plus arXiv:2605.27922's
+> 23.8-point swing, in the opening paragraph of the file whose whole subject is
+> disclosure discipline) and in `docs/LIMITATIONS.md` for the separate n_eff
+> 2.18. A first draft of this notice said they were "out of the prose" full
+> stop, which was false when written. **A retraction is not done when the
+> entry is fixed; it is done when every file carrying the figure is fixed**, and
+> nothing here checks that — the citation gate binds a number to a *quote*, not
+> a withdrawn number to its other homes.
+
+> **Correction to the correction, 2026-08-13, later the same day. The retraction
+> above was too broad, and the figures are restored.** The notice was right that
+> none of the four is in the abstract, and right to flag them as *unverified*
+> rather than absent. But the retraction was then propagated as though "not in
+> the abstract" meant "not in the paper". It does not. The full text was fetched
+> — `arxiv.org/html/2605.23950v1`, twice, by two agents that did not share
+> context — and **all four figures are in §4.2 and Table 2, verbatim**, as the
+> output of a 3×3 experiment the authors ran themselves. They are restored to
+> the entry above with the section named.
+>
+> So the defect was never fabrication. It was **citation hygiene**: a body figure
+> cited as though the abstract carried it, in a repository whose standing rule is
+> to cite nothing you have not opened. The abstract had been opened; the paper
+> had not. That is a real defect and the rule catches it — but the correct fix is
+> to cite the section, not to delete the number.
+>
+> **The premise of the project is therefore not uncited, and it does not rest on
+> a position paper's argument alone.** It rests on that paper's own controlled
+> experiment, with the caveat now stated above: one 3×3 design, one task
+> distribution, two runs per cell.
+>
+> Two further claims in the notice above do not survive either. The n_eff ≈ 2.18
+> in `docs/LIMITATIONS.md` was never a `2605.23950` figure — it is
+> **arXiv:2605.29800**'s, where it is confirmed in Table 2 as "n_eff (Kish): 2.18
+> [2.07, 2.31]" for nine judges from seven families, exactly as that file states.
+> And the 23.8-point swing in `docs/HARNESS_DISCLOSURE.md` is **arXiv:2605.27922**'s
+> and is in its body. Neither was a withdrawn figure; both were correct.
+>
+> **The lesson the first notice drew still stands and is now better evidenced: a
+> retraction that propagates is as dangerous as one that stalls.** This one
+> reached two files on a finding that was labelled unverified in its own text,
+> and would have deleted four correct figures from a third had a later unit not
+> opened the paper. Verify before propagating, in both directions.
+
+**Harness-Bench: Measuring Harness Effects across Models in Realistic Agent
+Workflows** — arXiv:2605.27922. **5,194** execution trajectories over **106**
+sandboxed offline tasks, across "representative harness configurations" and
+"multiple model backends". The abstract's finding is qualitative: "substantial
+variation in completion, process quality, efficiency, and failure behavior
+across model-harness pairings", concluding that capability should be reported at
+the model-harness configuration level rather than attributed to the base model.
+Its named failure family — execution-alignment failures, "where plausible
+reasoning becomes decoupled from tool feedback, workspace state, evidence, or
+verifiable output contracts" — is the prior for our own bottom-up error coding.
+
+> **Correction, 2026-08-13.** The "23.8-point swing from harness alone", the
+> "6 harnesses × 8 model backends" grid, the claim that weaker models are more
+> harness-dependent, and the failure-taxonomy percentages ("output-contract
+> violations (36%)") are none of them in the abstract, and the 23.8 in
+> particular was a bare magnitude with no source sentence anywhere. They are
+> removed rather than hedged. The trajectory and task counts are exact and the
+> qualitative finding above is verbatim.
 
 **Miller (Anthropic), "Adding Error Bars to Evals"** — arXiv:2411.00640.
 Clustered standard errors, paired designs, power analysis.

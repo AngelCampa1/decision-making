@@ -31,7 +31,8 @@ them can put a row in the table below. They govern whether a number is
 Every measurement this repository has made is a **trigger** measurement — does
 the skill fire when it should — and all of them ran on a corpus that is **89%
 solvable by counting words** (AUC 0.850 on turn length alone; a bare "fire if
-≥ 18 words" rule scores 0.890 against a best measured arm of 0.956). The paired
+≥ 18 words" rule scores 0.890 on the version 2 key, against the best arm on
+that key — 0.9795 to 0.9863). The paired
 comparisons between arms remain valid; the absolute numbers do not travel, and
 "nothing moved discrimination" has a second reading, which is that this is what
 a ceiling looks like. The rebuild is Track N. See

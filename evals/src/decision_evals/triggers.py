@@ -21,12 +21,15 @@ import re
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
 import yaml
 
 from decision_evals.skills import parse_skill
 from decision_evals.unbundle import UnbundleError, router_rows
+
+if TYPE_CHECKING:  # `corpus` imports TriggerSet from here; the cycle is real at runtime.
+    from decision_evals.corpus import Finding
 
 #: The four procedures the shipped router offers. The default whitelist for
 #: :func:`decision`; an M5 arm overrides it with its own entry names.
@@ -62,9 +65,16 @@ def routing_is_by_name(offered: Iterable[str]) -> bool:
 #: classifies it at **0.890 accuracy with no model involved**.
 #:
 #: That does not invalidate the arm comparisons — every arm saw the same set —
-#: but it caps what any of them could have shown. The best arm measured 0.956,
-#: so **the whole movable range above a ruler is about six points**, and five
-#: manipulations finding nothing is exactly what a ceiling looks like.
+#: but it caps what any of them could have shown. Both figures are on the
+#: **version 2** key, and the best arm measured on it reaches 0.9795
+#: (``stakes-shown``) to 0.9863 (``confidence``), so **the whole movable range
+#: above a ruler is about nine points**,
+#: and five manipulations finding nothing is exactly what a ceiling looks like.
+#:
+#: This said six points against 0.956 until 2026-08-13. 0.956 is the ``full``
+#: arm at **version 1**, where the same ruler scores 0.877 — a comparison across
+#: a label revision, which is what ``trigger_arms.label_versions_comparable``
+#: refuses — and it was not the best arm at either version.
 MAX_LENGTH_SEPARABILITY: Final = 0.70
 
 
@@ -435,8 +445,35 @@ def check_trigger_sets(repo_root: Path) -> list[str]:
 
     A dataset that describes a skill which no longer exists is worse than a
     missing one: it reports a measurement of something that is not shipping.
+
+    Corpus findings named in ``datasets/triggers/corpus-baseline.txt`` are
+    deferred rather than dropped: see :func:`deferred_corpus_findings`, which
+    the ``de check`` step prints on every run so that a green gate is never
+    read as a clean corpus.
     """
+    from decision_evals.corpus import apply_corpus_baseline, load_corpus_baseline
+
+    issues, findings = _scan(repo_root)
+    return issues + apply_corpus_baseline(findings, load_corpus_baseline(repo_root))[0]
+
+
+def deferred_corpus_findings(repo_root: Path) -> list[str]:
+    """Corpus findings the baseline defers: on the record, not failing the build.
+
+    Printed by ``de check`` beside the census. A baseline that is invisible at
+    the point the gate reports green is a baseline nobody re-reads, and the
+    distinction between "we have not shown this is clean" and "this is clean"
+    is the one thing this repository is for.
+    """
+    from decision_evals.corpus import apply_corpus_baseline, load_corpus_baseline
+
+    return apply_corpus_baseline(_scan(repo_root)[1], load_corpus_baseline(repo_root))[1]
+
+
+def _scan(repo_root: Path) -> tuple[list[str], list[tuple[str, Finding]]]:
+    """Everything wrong with the trigger sets, before the baseline is applied."""
     issues: list[str] = []
+    findings: list[tuple[str, Finding]] = []
     skills_dir = repo_root / "skills"
     triggers_dir = repo_root / TRIGGERS_DIR
 
@@ -469,23 +506,39 @@ def check_trigger_sets(repo_root: Path) -> list[str]:
             )
         issues.extend(_check_separability(trigger_set, path))
         issues.extend(_check_routes(trigger_set, skills_dir / name / "SKILL.md", path))
-        issues.extend(_check_corpus_rules(trigger_set, path))
-    issues.extend(_check_drafts(triggers_dir, skills_dir, skills))
-    return issues
+        findings.extend(_check_corpus_rules(trigger_set, path, repo_root))
+    draft_issues, draft_findings = _check_drafts(triggers_dir, skills_dir, skills, repo_root)
+    issues.extend(draft_issues)
+    findings.extend(draft_findings)
+    return issues, findings
 
 
-def _check_corpus_rules(trigger_set: TriggerSet, path: Path) -> list[str]:
+def _scope(path: Path, repo_root: Path) -> str:
+    """The corpus a finding is about, as a repository-relative posix path.
+
+    Posix and relative so that a baseline line reads the same on every machine.
+    Every path reaching here was globbed out of ``repo_root`` a few frames up,
+    so there is no fallback for one that is not underneath it: an unreachable
+    branch is a branch nothing can test.
+    """
+    return path.relative_to(repo_root).as_posix()
+
+
+def _check_corpus_rules(
+    trigger_set: TriggerSet, path: Path, repo_root: Path
+) -> list[tuple[str, Finding]]:
     # Imported here rather than at module scope: `corpus` reads TriggerSet from
     # this module, so a top-level import would close the cycle. The direction is
     # deliberate -- loading a set must not depend on the rules for building one.
     from decision_evals.corpus import check_corpus
 
-    return check_corpus(trigger_set, path)
+    scope = _scope(path, repo_root)
+    return [(scope, finding) for finding in check_corpus(trigger_set, path)]
 
 
 def _check_drafts(
-    triggers_dir: Path, skills_dir: Path, skills: frozenset[str] | set[str]
-) -> list[str]:
+    triggers_dir: Path, skills_dir: Path, skills: frozenset[str] | set[str], repo_root: Path
+) -> tuple[list[str], list[tuple[str, Finding]]]:
     """Hold a corpus under construction to the same rules as a live one.
 
     A version 3 corpus is a directory of band files, because 120 items whose
@@ -504,6 +557,7 @@ def _check_drafts(
     every runner uses stays where it is until blind adjudication has run.
     """
     issues: list[str] = []
+    findings: list[tuple[str, Finding]] = []
     for index in sorted(triggers_dir.glob("*/index.yaml")):
         try:
             draft = load_trigger_set(index)
@@ -518,8 +572,8 @@ def _check_drafts(
             )
             continue
         issues.extend(_check_routes(draft, skills_dir / draft.skill / "SKILL.md", index))
-        issues.extend(_check_corpus_rules(draft, index))
-    return issues
+        findings.extend(_check_corpus_rules(draft, index, repo_root))
+    return issues, findings
 
 
 def _check_separability(trigger_set: TriggerSet, path: Path) -> list[str]:

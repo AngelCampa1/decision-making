@@ -154,6 +154,138 @@ positive:
       asked. The eager reading fires here; the cautious one does not, which is
       what makes it worth having.
 
+  # s15-s24 were added to take the short arm from 24 positives to 48. The short
+  # arm, not the long one, is what binds the power of the length experiment:
+  # with 24 short positives at a reference rate near 0.95 the design saturates
+  # around 0.65 however many long items are added, and 400 long positives still
+  # reach only 0.798. See the report accompanying this change.
+  - id: s15p
+    triple: s15
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    route: ~
+    turn: "Check my thinking on the boiler: two quotes, 3,400 and 4,900, the dearer one with a ten-year guarantee, and both want an answer tomorrow."
+    why: >-
+      Two options, one differentiator and a deadline, stated as facts. The
+      imperative opener is on a positive on purpose: an imperative first word is
+      otherwise a negative's tell, and a corpus where it is one has taught the
+      feature the label.
+  - id: s16p
+    triple: s16
+    band: s
+    domain: technical
+    stakes: low
+    ask: embedded
+    route: ~
+    turn: "Do we keep supporting the on-premise build? It is two per cent of revenue and about half of the support tickets we get."
+    why: >-
+      The question is the first sentence and the two facts that bear on it come
+      after it, which is the embedded form. Neither fact settles it: two per cent
+      is small and half the tickets is large.
+  - id: s17p
+    triple: s17
+    band: s
+    domain: health
+    stakes: low
+    ask: implicit
+    route: timing
+    turn: >-
+      My dentist wants to do the crown now and the alternative is a filling
+      that might last another two or three years.
+    why: >-
+      Timing rather than direction: the crown is coming either way and the
+      filling is named as a two-to-three-year deferral of it, so what is open is
+      when. No question is asked.
+  - id: s18p
+    triple: s18
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    route: ~
+    turn: "My brother wants to borrow eleven thousand for a deposit and still owes me two thousand from four years ago. Should I?"
+    why: >-
+      A direct request for a recommendation, and the outstanding two thousand is
+      a mark against rather than a bar, so the turn does not answer itself. The
+      closing ask is deliberately the shortest of the three in this triple.
+  - id: s19p
+    triple: s19
+    band: s
+    domain: career
+    stakes: high
+    ask: embedded
+    route: fit
+    turn: "Do I put him on a formal plan? He has missed three of the last four deadlines and his father died in March."
+    why: >-
+      The general rule that three missed deadlines out of four means a formal
+      plan, against one fact about this person that may overturn it. The question
+      leads and the fact that complicates it arrives last.
+  - id: s20p
+    triple: s20
+    band: s
+    domain: relationships
+    stakes: high
+    ask: implicit
+    route: ~
+    turn: "My father wrote last week after nine years of nothing. The rest of the family says leave it. My sister says reply."
+    why: >-
+      A live decision with the family split two ways and no question asked. Every
+      sentence reports what somebody did or said rather than describing the
+      writer as undecided, and the closing sentence is the shortest of the three
+      in this triple.
+  - id: s21p
+    triple: s21
+    band: s
+    domain: money
+    stakes: high
+    ask: implicit
+    route: ledger
+    turn: "The deadline to accept is the ninth, and here's the settlement offer, the two HR emails and my note of what my rep said."
+    why: >-
+      Four sources, one decision, a date, and no question. The short form of the
+      pile, and it opens with the deadline rather than with the paste cue so the
+      cue is not carrying the label.
+  - id: s22p
+    triple: s22
+    band: s
+    domain: technical
+    stakes: low
+    ask: implicit
+    route: ~
+    turn: "Two of the team want the reporting service rewritten in Go, one wants it left alone, and I have to call it."
+    why: >-
+      A split team and one person who has to decide. "I have to call it" reports
+      who owns the decision, which is a fact, not a statement of being stuck.
+  - id: s23p
+    triple: s23
+    band: s
+    domain: health
+    stakes: high
+    ask: explicit
+    route: cascade
+    turn: "My parents both had it early and my daughter is nineteen. Should we do the test, knowing she would have to be told?"
+    why: >-
+      The clause after the comma is the whole point: the test is easy and what it
+      commits the daughter to is not. Asks what the action spends rather than
+      what it does, in a closing sentence sitting between its two negatives in
+      length rather than above both.
+  - id: s24p
+    triple: s24
+    band: s
+    domain: career
+    stakes: low
+    ask: embedded
+    route: ~
+    turn: >-
+      Do I say yes to the keynote? It is unpaid and it is the week my parental
+      leave ends. They want my answer Friday.
+    why: >-
+      Question first and three facts after it, the last of them a deadline, and
+      none of the three settles it. Low stakes, genuinely open, and the closing
+      sentence is the shortest of the three in this triple.
+
 negative:
   - id: s01n1
     triple: s01
@@ -407,3 +539,247 @@ negative:
     kind: meta
     turn: "Ignore what I said about the physio earlier, I'd misread the letter and it says something else."
     why: "A correction, not a decision."
+
+  # Negatives for s15-s24. Three deliberate departures from the negatives above,
+  # each because the shortcut battery measured the old habit and found it:
+  # closing punctuation is mixed rather than uniformly a question mark, five
+  # negatives close on an imperative and three positives do too, and every
+  # `compute` ask below was worked through before it shipped.
+  - id: s15n1
+    triple: s15
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      One boiler quote is 3,400 plus VAT at twenty per cent and the other is
+      4,900 inclusive. Work out which one costs less.
+    why: >-
+      The same two quotes as s15p and the ask is arithmetic with one answer:
+      3,400 at twenty per cent VAT is 4,080, so the first. Checked rather than
+      assumed.
+  - id: s15n2
+    triple: s15
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: "We've gone with the dearer boiler for the guarantee. Tell me what to have ready for the fitters on the day."
+    why: >-
+      "We've gone with" settles it in the first four words, and the guarantee is
+      given as the reason, which is the reason s15p offers rather than one this
+      turn rules out. The ask is preparation.
+  - id: s16n1
+    triple: s16
+    band: s
+    domain: technical
+    stakes: low
+    ask: implicit
+    kind: diagnose
+    turn: "Support tickets from on-premise customers have tripled since the April release and nothing in that release touched their code path."
+    why: >-
+      Same subject as s16p and no decision in it at all. A fact that does not fit
+      another fact, which is a request for a technical explanation.
+  - id: s16n2
+    triple: s16
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: "On-premise is two per cent of our revenue. Which of the competitors we lose deals to still ship an on-premise build?"
+    why: >-
+      Opens with the same revenue figure as s16p. The ask is which companies do a
+      thing, which has a determinate answer that does not depend on this
+      person.
+  - id: s17n1
+    triple: s17
+    band: s
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: "My dentist has offered a crown or a filling. I have never been told how long a crown on a back tooth lasts."
+    why: >-
+      The same two options as s17p. "how long a crown on a back tooth lasts"
+      asks for a typical figure, which is information, and the answer would be
+      the same whoever asked it.
+  - id: s17n2
+    triple: s17
+    band: s
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: "I'm having the crown done. What should I expect the week afterwards, and is there anything I ought to avoid eating?"
+    why: >-
+      The decision is made in four words and the ask is what recovery is like.
+      Carries "should I" while being no kind of decision, which is the point of
+      including it.
+  - id: s18n1
+    triple: s18
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: "My brother owes me two thousand from four years ago. I want the figure at three per cent a year, compounded."
+    why: >-
+      The same debt as s18p and the ask is compounding: two thousand at three per
+      cent for four years is 2,251.02. Computed here, not assumed to resolve.
+  - id: s18n2
+    triple: s18
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: "Draft me something short that sets out the repayment. I'm lending my brother eleven thousand for his deposit and want it written down."
+    why: >-
+      The loan is agreed, at the same amount s18p is weighing, and the ask is
+      drafting a repayment note. The imperative leads and the decision follows
+      it, so the settled fact is not sitting where a skim would find it.
+  - id: s19n1
+    triple: s19
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: "One of my team has missed three deadlines. I want to understand what a performance plan is meant to do and how long they run."
+    why: >-
+      Same missed deadlines as s19p. Both halves of the ask are about what the
+      instrument is and how long it normally lasts, neither of which is about
+      this employee.
+  - id: s19n2
+    triple: s19
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: settled
+    turn: "He is going on a formal plan from Monday. What are the first things to get written down before I meet him?"
+    why: >-
+      The plan is decided and dated in the first sentence. The ask is what to
+      prepare, and nothing in the turn reopens whether it should happen.
+  - id: s20n1
+    triple: s20
+    band: s
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: "My father wrote after nine years and I am going to reply. Give me the first two or three lines."
+    why: >-
+      "I am going to reply" is the decision s20p has not made, and the ask that
+      follows is for opening lines.
+  - id: s20n2
+    triple: s20
+    band: s
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: "Here's my father's letter, nine years after the last one. What is he actually asking me for in it?"
+    why: >-
+      One document and a question about what is in it. The answer is a reading of
+      the letter rather than a recommendation.
+  - id: s21n1
+    triple: s21
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      The settlement offer, the two HR emails and my rep's note all differ
+      slightly on the figure. List what each of them says.
+    why: >-
+      The identical pile to s21p, minus the deadline. The ask is what each source
+      says, which is consolidation rather than a choice.
+  - id: s21n2
+    triple: s21
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: "The settlement offer is 14,000 for nine years of service and statutory redundancy would be 4,100. Work out how much extra I am being offered."
+    why: >-
+      The same offer as s21p and the ask is a subtraction: 14,000 less 4,100 is
+      9,900. Confirmed here so the ask is known to resolve.
+  - id: s22n1
+    triple: s22
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      The reporting service times out on the month-end job, but only when two
+      of us run it. I cannot see where to start looking.
+    why: >-
+      The same service as s22p, and the task is finding a cause. The condition
+      "only when two of us run it" is the clue, not a second option.
+  - id: s22n2
+    triple: s22
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: "We're rewriting the reporting service in Go, starting next sprint. Write the note I send to the reporting team, and keep it short."
+    why: >-
+      The rewrite s22p is weighing is settled and scheduled in the first
+      sentence, and the ask is a piece of writing.
+  - id: s23n1
+    triple: s23
+    band: s
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "My parents both had it early and my daughter is nineteen. Once a genetic test is on my record, who has to be told?"
+    why: >-
+      Opens with the same two facts as s23p. The ask is who is entitled to the
+      result, which is a rule and not a recommendation.
+  - id: s23n2
+    triple: s23
+    band: s
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      We're doing the genetic test next month and my daughter already knows.
+      Give me the questions to ask the counsellor first.
+    why: >-
+      The test is booked and the thing s23p worries about, the daughter finding
+      out, has already happened. The ask is generation.
+  - id: s24n1
+    triple: s24
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      I have been asked to keynote the week my parental leave ends. I do not
+      know whether unpaid work then affects my pay.
+    why: >-
+      The same clash of dates as s24p. The ask is whether one rule interacts with
+      another, which has an answer somebody could look up.
+  - id: s24n2
+    triple: s24
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: summarise
+    turn: "Here's the whole thread with the conference organisers about the keynote, going back to March. Tell me what I have actually committed to."
+    why: >-
+      A pile and an explicit ask, and the ask is what the pile already says. Two
+      paste cues where s24p has none, which is the direction that keeps the cue
+      from tracking the label.

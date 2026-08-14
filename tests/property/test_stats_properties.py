@@ -30,19 +30,24 @@ from decision_evals.stats import (
     benjamini_hochberg,
     brier_score,
     cluster_bootstrap_diff,
+    cohen_kappa,
     design_effect,
     effective_sample_size,
+    fleiss_kappa,
+    krippendorff_alpha,
     log_score,
     mcnemar_exact,
     minimum_detectable_effect,
     murphy_decomposition,
     paired_permutation_test,
     per_item_reliability,
+    percent_agreement,
     repeat_reliability,
     repeats_for_reliability,
     repeats_for_scatter_precision,
     required_pairs,
     smooth_calibration_error,
+    unanimity_rate,
 )
 
 # Bootstrap-heavy tests are slow; hypothesis' default deadline is not meaningful
@@ -493,3 +498,157 @@ class TestReliability:
         k = repeats_for_scatter_precision(rse)
         assert k >= 2
         assert repeats_for_scatter_precision(min(rse * 2, 0.999)) <= k
+
+
+# --------------------------------------------------------------------------- #
+# Inter-rater agreement
+#
+# The load-bearing property here is the algebraic identity between Fleiss'
+# kappa and Krippendorff's alpha on complete data, ``1 - alpha = (1 - kappa) *
+# (n - 1) / n``. The two are computed by entirely separate code paths -- one
+# through per-unit agreement and pooled proportions, the other through
+# disagreement matrices and sampling without replacement -- so the identity
+# holding across the input space is cross-implementation agreement, not a
+# restatement of either.
+# --------------------------------------------------------------------------- #
+
+categories = st.sampled_from("abc")
+categories_or_missing = st.sampled_from(["a", "b", "c", None])
+
+
+@st.composite
+def rating_matrix(draw: st.DrawFn, *, min_units: int = 1, missing: bool = False):
+    """A rectangular units x raters matrix of nominal labels."""
+    n_units = draw(st.integers(min_value=min_units, max_value=10))
+    n_raters = draw(st.integers(min_value=2, max_value=5))
+    element = categories_or_missing if missing else categories
+    return [draw(st.lists(element, min_size=n_raters, max_size=n_raters)) for _ in range(n_units)]
+
+
+def _multi_category(matrix) -> bool:
+    """At least two categories observed, which is when the coefficients exist."""
+    return len({r for unit in matrix for r in unit if r is not None}) > 1
+
+
+class TestAgreementCoefficients:
+    @given(rating_matrix())
+    def test_alpha_and_fleiss_agree_up_to_the_finite_sample_factor(self, matrix) -> None:
+        """``1 - alpha == (1 - kappa) * (n - 1) / n`` exactly, on complete data.
+
+        Alpha corrects for sampling *without* replacement and kappa does not,
+        which is the whole of the difference between them at a constant rater
+        count. Anything else differing between the two implementations breaks
+        this.
+        """
+        assume(_multi_category(matrix))
+        kappa = fleiss_kappa(matrix)
+        alpha = krippendorff_alpha(matrix)
+        n = alpha.n_pairable_values
+        assert 1.0 - alpha.alpha == pytest.approx((1.0 - kappa.kappa) * (n - 1) / n)
+
+    @given(rating_matrix())
+    def test_fleiss_observed_agreement_is_the_pooled_pairwise_agreement(self, matrix) -> None:
+        """``P-bar`` counted a second way: agreeing rater pairs over all pairs."""
+        assume(_multi_category(matrix))
+        assert percent_agreement(matrix).agreement == pytest.approx(
+            fleiss_kappa(matrix).observed_agreement
+        )
+
+    @given(st.lists(categories, min_size=2, max_size=10), st.integers(2, 5))
+    def test_perfect_agreement_is_one_everywhere(self, labels, n_raters: int) -> None:
+        assume(len(set(labels)) > 1)
+        matrix = [[label] * n_raters for label in labels]
+        assert fleiss_kappa(matrix).kappa == pytest.approx(1.0)
+        assert krippendorff_alpha(matrix).alpha == pytest.approx(1.0)
+        assert percent_agreement(matrix).agreement == pytest.approx(1.0)
+        assert unanimity_rate(matrix).rate == pytest.approx(1.0)
+
+    @given(st.integers(2, 6))
+    def test_kappa_is_exactly_zero_when_raters_are_independent_by_construction(
+        self, k: int
+    ) -> None:
+        """Every ordered pair of categories once: agreement is exactly chance.
+
+        Both marginals are uniform over ``k`` categories, so ``p_o = k/k^2 =
+        1/k`` and ``p_e = k * (1/k)^2 = 1/k``. The zero is exact rather than
+        asymptotic, which is what makes it a test rather than a simulation.
+        """
+        a = [i for i in range(k) for _ in range(k)]
+        b = [j for _ in range(k) for j in range(k)]
+        cohen = cohen_kappa(a, b)
+        assert cohen.observed_agreement == pytest.approx(1 / k)
+        assert cohen.expected_agreement == pytest.approx(1 / k)
+        assert cohen.kappa == pytest.approx(0.0, abs=1e-12)
+
+        fleiss = fleiss_kappa([[x, y] for x, y in zip(a, b, strict=True)])
+        assert fleiss.kappa == pytest.approx(0.0, abs=1e-12)
+
+    @given(st.lists(st.tuples(categories, categories), min_size=2, max_size=12))
+    def test_cohen_equals_fleiss_exactly_when_the_marginals_match(self, pairs) -> None:
+        """The condition under which the two coincide, asserted as the condition.
+
+        Symmetrising the item set — every ``(x, y)`` accompanied by ``(y, x)`` —
+        forces the two raters to have identical marginals, which is precisely
+        when Cohen's per-rater expectation and Fleiss' pooled one are the same
+        number. ``test_it_is_scotts_pi_at_two_raters_not_cohens_kappa`` in the
+        unit tests holds the other half: drop the symmetry and they part.
+        """
+        symmetric = [*pairs, *((y, x) for x, y in pairs)]
+        a = [x for x, _ in symmetric]
+        b = [y for _, y in symmetric]
+        assume(len(set(a) | set(b)) > 1)
+        assert cohen_kappa(a, b).kappa == pytest.approx(
+            fleiss_kappa([[x, y] for x, y in symmetric]).kappa
+        )
+
+    @given(rating_matrix())
+    def test_coefficients_are_bounded_above_by_one(self, matrix) -> None:
+        assume(_multi_category(matrix))
+        assert fleiss_kappa(matrix).kappa <= 1.0 + 1e-12
+        assert krippendorff_alpha(matrix).alpha <= 1.0 + 1e-12
+        assert 0.0 <= percent_agreement(matrix).agreement <= 1.0
+
+    @given(rating_matrix(), st.permutations("abc"))
+    def test_relabelling_the_categories_changes_nothing(self, matrix, permutation) -> None:
+        """Nominal means the labels are names. A coefficient that moves when
+        ``"a"`` is renamed ``"c"`` has ordered them somewhere."""
+        assume(_multi_category(matrix))
+        mapping = dict(zip("abc", permutation, strict=True))
+        relabelled = [[mapping[r] for r in unit] for unit in matrix]
+        assert fleiss_kappa(relabelled).kappa == pytest.approx(fleiss_kappa(matrix).kappa)
+        assert krippendorff_alpha(relabelled).alpha == pytest.approx(
+            krippendorff_alpha(matrix).alpha
+        )
+
+
+class TestAgreementUnderMissingRatings:
+    """The reason alpha is here: ``adjudicate.parse`` returns ``None``."""
+
+    @given(rating_matrix(min_units=2), categories)
+    def test_alpha_ignores_a_unit_with_one_observed_rating(self, matrix, extra: str) -> None:
+        """Dropped, not imputed — and the drop is reported rather than silent."""
+        assume(_multi_category(matrix))
+        base = krippendorff_alpha(matrix)
+        singleton = [extra, *([None] * (len(matrix[0]) - 1))]
+        padded = krippendorff_alpha([*matrix, singleton])
+        assert padded.alpha == pytest.approx(base.alpha)
+        assert padded.n_units_dropped == base.n_units_dropped + 1
+
+    @given(rating_matrix(missing=True))
+    def test_alpha_survives_gaps_that_fleiss_refuses(self, matrix) -> None:
+        assume(any(r is None for unit in matrix for r in unit))
+        # The coefficient exists over the units alpha *retains*, which is not the
+        # same set as the units drawn: ``[['a', None], ['b', 'b']]`` observes two
+        # categories and retains one. Asserting on the drawn matrix instead was
+        # this test's first version, and it failed within seconds.
+        retained = [unit for unit in matrix if sum(r is not None for r in unit) >= 2]
+        assume(len({r for unit in retained for r in unit if r is not None}) > 1)
+        assert -1.0 <= krippendorff_alpha(matrix).alpha <= 1.0
+        with pytest.raises(ValueError, match="krippendorff_alpha"):
+            fleiss_kappa(matrix)
+
+    @given(rating_matrix(missing=True))
+    def test_the_strict_reading_of_unanimity_is_never_the_more_generous_one(self, matrix) -> None:
+        strict = unanimity_rate(matrix).rate
+        loose = unanimity_rate(matrix, require_complete=False).rate
+        assert 0.0 <= strict <= loose <= 1.0

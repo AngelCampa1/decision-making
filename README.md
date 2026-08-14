@@ -1,12 +1,24 @@
-# decision-making-skills
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/public/lockup-dark.png">
+  <img src="site/public/lockup-light.png" alt="decision-making-skills" width="440">
+</picture>
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.13%2B-blue.svg)](pyproject.toml)
 [![Status](https://img.shields.io/badge/status-pre--alpha-orange.svg)](docs/STATUS.md)
 [![Verdict](https://img.shields.io/badge/verdict-UNTESTED-lightgrey.svg)](SCORECARD.md)
 
+</div>
+
 Agent skills for making better decisions under uncertainty — and an evaluation
 harness that measures whether they actually work.
+
+The mark is one row of a forest plot: a line of no effect, an interval, a point
+estimate. The interval crosses zero, which is this repository's position stated
+in the notation it argues in. It is *we have not shown this works*, not *this
+does not work*, and [`SCORECARD.md`](SCORECARD.md) exists to keep those apart.
 
 > **Status: pre-alpha. No skill in this repository has been validated yet.**
 > The harness is being built first, deliberately. Until a skill carries a
@@ -90,6 +102,7 @@ for building the feedback loop that tells you *which* ones help, and by how much
 | `paper/` | The write-up, in LaTeX. A draft; see [`paper/CHECKLIST.md`](paper/CHECKLIST.md) |
 | `scripts/` | Standalone analysis and runners, including `run_triggers.py` — the script behind every model call on record |
 | `tests/` | Unit, integration, property and golden tests |
+| `site/` | The website. It renders the markdown already in this repository rather than copying it, so there is no second copy of a document to disagree with the first. Built locally by `de site`; `de check` refuses a build older than what it publishes |
 
 ## What has been measured
 
@@ -117,8 +130,10 @@ originally claimed:
   be cited as though it reached down to four.
 - **The corpus behind every one of those numbers is 89% solvable by counting
   words.** Turn length alone separates the labels at AUC 0.850, and a bare
-  *"fire if ≥ 18 words"* rule scores 0.890 with no model at all — against a best
-  measured arm of 0.956. So every result above was competing for about six
+  *"fire if ≥ 18 words"* rule scores 0.890 with no model at all — both on the
+  version 2 answer key, against the best arm measured on that key — 0.9795 for
+  the best description arm (`stakes-shown`), 0.9863 for `confidence`. So every
+  result above was competing for about nine
   points over a ruler, and five nulls is also what a ceiling looks like. Both
   readings must be reported until the corpus is rebuilt, which is
   [Track N](docs/RESEARCH_PROGRAMME.md).
@@ -171,6 +186,14 @@ Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 uv sync --group dev
 ```
 
+Add `--group docs` if you will publish the site. Nothing else needs it: the
+staleness gate is pure Python and offline, so a contributor who never publishes
+still gets its refusal.
+
+```bash
+uv sync --group dev --group docs
+```
+
 Run the full local gate — lint, types, tests, coverage floors, and the
 repository-integrity checks:
 
@@ -178,11 +201,19 @@ repository-integrity checks:
 uv run de check
 ```
 
-There is no cloud CI. `de check` is bound to `pre-commit` (fast subset) and
-`pre-push` (everything), so a red tree can't be pushed. It makes no model calls;
-model-backed evaluation is run explicitly from [`scripts/`](scripts/).
+There is no cloud CI, and no workflow directory for one either. `de check` is
+bound to `pre-commit` (fast subset) and `pre-push` (everything), so a red tree
+can't be pushed. It makes no model calls; model-backed evaluation is run
+explicitly from [`scripts/`](scripts/). The website is built the same way, by
+hand on a machine, and pushed to `gh-pages` by `de site --deploy`.
 
-Five of its steps check the method rather than the code, each one added after
+**One thing that arrangement cannot check, stated here rather than papered
+over.** The site gate proves the committed build matches the current tree. It
+does not prove that build was ever pushed. `de check` is offline on purpose, so
+it cannot consult `origin/gh-pages`, and a green gate beside a build that never
+left the machine is exactly as green as a deployed one.
+
+Six of its steps check the method rather than the code, each one added after
 the failure it prevents had already happened here:
 
 | Step | Refuses |
@@ -192,12 +223,22 @@ the failure it prevents had already happened here:
 | integrity wiring | a module with a coverage floor that no entry point can reach |
 | decision register | a change to the answer key or the shipped skill with no entry in [`docs/DECISIONS.md`](docs/DECISIONS.md) |
 | documentation | a `de` command, path, or component that this README names and the repository does not have |
+| site | a published build older than the documents it publishes, naming the files that moved |
 
 The other commands: `de index` regenerates
 [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool
-skill copies, `de lint` checks skill frontmatter and the promotion gate,
-`de power` prints a minimum-detectable-effect table, and `de fetch` downloads
-the hash-pinned third-party corpora.
+skill copies, `de site` rebuilds the website and records what it was built from,
+`de lint` checks skill frontmatter and the promotion gate, `de power` prints a
+minimum-detectable-effect table, and `de fetch` downloads the hash-pinned
+third-party corpora.
+
+`de site` needs Node; the gate that demands you run it does not. Editing any
+document the site renders makes the published build stale, so the loop is edit,
+`de site`, commit both:
+
+```bash
+uv run de site
+```
 
 > **Note:** if `uv` was installed with `pip install uv`, its executable may not be
 > on `PATH`. On Windows it lands in

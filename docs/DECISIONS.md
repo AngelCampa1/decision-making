@@ -102,6 +102,19 @@ It caps what any of them could have shown, and it gives Track M's headline a
 second reading: five manipulations moved firing accuracy nowhere, and there were
 about six points of room above a word count.
 
+**Correction, 2026-08-13, appended rather than rewritten.** The two numbers in
+the paragraphs above are at different label versions and comparing them is the
+move `trigger_arms.label_versions_comparable` refuses. 0.890 is the ruler on the
+**version 2** key; 0.956 is the `full` arm on the **version 1** key, where the
+same ruler scores 0.877. Within a version the headroom is about **nine** points
+either way: v2 ruler 0.890 against 0.9795 (`stakes-shown`) to 0.9863
+(`confidence`), v1 ruler 0.877 against 0.967 (`no-opener`) to 0.973
+(`confidence`). 0.956 was also never the best arm at either
+version — `no-opener` and `confidence` both beat it at v1 and no document had computed it, because L5
+published precision, recall, FPR and routing and no accuracy column. The
+six-point figure is withdrawn; the decision it supported, that the corpus needs
+rebuilding, is unaffected and if anything better supported.
+
 ## 2026-08-13 — Version the answer key
 
 **Commits:** `903169c`
