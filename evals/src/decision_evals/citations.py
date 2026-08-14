@@ -55,6 +55,26 @@ load-bearing citation. ``docs/AUTONOMOUS_WORK_ORDER.md`` — the document that
 *states* standing rule 5 — carried the same claim across the same wrap.
 
 The window is now the **markdown block the author wrote**: see :func:`blocks`.
+
+**A field rename is a way to escape the check, and one was already in production
+use.** Found 2026-08-14, during an adversarial review of this apparatus itself.
+``paper/refs.bib``'s entry for arXiv:2605.23950 carries ``quote_body`` — added
+2026-08-13 to hold the verbatim body-section text backing four numbers
+(``7.80x``, ``13.0pp``, ``8.5pp``, ``6 out of 9``) that are not in that paper's
+abstract. :func:`parse_bib`'s ``has_quote`` recognised exactly one name,
+``quote``, so ``quote_body`` was invisible to it: the check did not read it as
+evidence, and did not complain that it was unrecognised either. That entry
+happened to pass anyway, because it *also* carries a plain ``quote`` field
+(the abstract text, which contains no numbers at all) — the same
+content-blind pass described above, not something ``quote_body`` caused. But
+the field carrying the only real evidence for those four numbers was doing
+zero enforcement work, and a future edit that dropped the redundant ``quote``
+field (reasonable, if you didn't know the gate needed it) would have made the
+entry fail silently in the safe direction — or, if the field were misnamed a
+third way, failed to fail at all. Fixed by recognising :data:`QUOTE_BODY_FIELD`
+explicitly and by refusing, loudly, any other field name that starts with
+``quote`` — see :func:`check_unknown_quote_fields`. A rename cannot escape the
+check unnoticed, whichever way it goes.
 """
 
 from __future__ import annotations
@@ -85,6 +105,17 @@ BASELINE_PATH: Final = "paper/citations-baseline.txt"
 
 #: The field a bib entry must carry before a number may be asserted beside it.
 QUOTE_FIELD: Final = "quote"
+
+#: A second recognised evidence field, for the sentence a number needs when it
+#: is only in a paper's body rather than its abstract (see the module
+#: docstring). Recognised explicitly rather than left to fall out of the
+#: ``quote`` regex, which does not and must not match it.
+QUOTE_BODY_FIELD: Final = "quote_body"
+
+#: Every field name this gate accepts as evidence. Anything else that starts
+#: with ``quote`` is refused rather than silently ignored — see
+#: :func:`check_unknown_quote_fields`.
+_KNOWN_QUOTE_FIELDS: Final = frozenset({QUOTE_FIELD, QUOTE_BODY_FIELD})
 
 _ARXIV: Final = re.compile(r"\b(\d{4}\.\d{4,5})\b")
 
@@ -145,7 +176,10 @@ def parse_bib(text: str) -> dict[str, BibEntry]:
         if found is None:
             continue
         arxiv_id = found.group(1)
-        has_quote = re.search(rf"^\s*{QUOTE_FIELD}\s*=", body, re.M | re.IGNORECASE) is not None
+        has_quote = any(
+            re.search(rf"^\s*{name}\s*=", body, re.M | re.IGNORECASE) is not None
+            for name in _KNOWN_QUOTE_FIELDS
+        )
         # First entry wins. A duplicated identifier is reported separately
         # rather than silently resolving to whichever came last.
         entries.setdefault(arxiv_id, BibEntry(arxiv_id=arxiv_id, has_quote=has_quote))
@@ -489,6 +523,49 @@ def check_percent_escaping(text: str) -> list[CitationIssue]:
     return issues
 
 
+def check_unknown_quote_fields(text: str) -> list[CitationIssue]:
+    """Refuse any ``quote``-prefixed field this gate does not know how to check.
+
+    :func:`parse_bib` recognises exactly two field names as evidence:
+    :data:`QUOTE_FIELD` and :data:`QUOTE_BODY_FIELD`. Before 2026-08-14 it
+    recognised only the first, and ``quote_body`` — added the day before,
+    carrying the only verbatim support in this bibliography for four numbers
+    attributed to arXiv:2605.23950's body section — was invisible to it. The
+    entry passed anyway, only because it *also* carries a plain ``quote``
+    field with unrelated content (see the module docstring), which is the
+    general content-blind limitation this gate has always had, not something
+    ``quote_body`` introduced. But the field actually doing the evidentiary
+    work was doing zero enforcement work, and nothing would have said so.
+
+    So a third name is not treated as silence. Any field beginning with
+    ``quote`` that is not exactly one of the two known names is reported —
+    a typo, a rename, or a future author's own convention all fail loudly
+    instead of failing invisibly.
+    """
+    issues: list[CitationIssue] = []
+    for match in _FIELD_OPEN.finditer(text):
+        name = match.group("name")
+        lname = name.lower()
+        if lname in _KNOWN_QUOTE_FIELDS or not lname.startswith(QUOTE_FIELD):
+            continue
+        entry = text.rfind("\n@", 0, match.start())
+        found = _ARXIV.search(text[entry : match.start()]) if entry != -1 else None
+        arxiv_id = found.group(1) if found else "-"
+        line0 = text.count("\n", 0, match.start()) + 1
+        issues.append(
+            CitationIssue(
+                BIB_PATH,
+                line0,
+                arxiv_id,
+                f"field `{name}` looks like a quote field but is neither `{QUOTE_FIELD}` nor "
+                f"`{QUOTE_BODY_FIELD}`, the only two names this gate checks for evidence. "
+                "Rename it to one of those, or it carries no verification weight at all and "
+                "the check has no way to say so.",
+            )
+        )
+    return issues
+
+
 def governed_files(repo_root: Path) -> list[Path]:
     """Every file whose citations this gate governs, deduplicated and sorted."""
     found: set[Path] = set()
@@ -558,6 +635,11 @@ def check_citations(repo_root: Path) -> list[CitationIssue]:
     # evidence itself rather than in a claim resting on it, so there is nothing
     # for a baseline to defer: the fix is one backslash.
     issues += check_percent_escaping(bib_text)
+
+    # Also not exemptible, and for the same reason: an unrecognised quote-like
+    # field name is a defect in the evidence's shape, not in a specific cited
+    # claim, so there is no per-identifier backlog for a baseline to track.
+    issues += check_unknown_quote_fields(bib_text)
     return issues
 
 

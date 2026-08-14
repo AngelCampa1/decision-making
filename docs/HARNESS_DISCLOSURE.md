@@ -6,21 +6,31 @@ that arXiv:2605.23950 runs on "a difficulty-stratified 100-task subset of
 SWE-bench Verified", two runs per cell, the aggregate harness-to-model variance
 ratio was **7.80×**, with ranking reversals in **"6 out of 9
 model-pair/harness-pair comparisons"** (§4.2 and Table 2 — these figures are in
-the paper's body, not its abstract). Harness-Bench (arXiv:2605.27922) separately
-reports a **23.8-point** gap between its best- and worst-scoring configurable
-harness — 76.2 against 52.4, "under the same task set and model-backend pool".
-An agent result reported without its harness is not reproducible, and most
-published ones are not.
+the paper's body, not its abstract; `paper/refs.bib` carries the verbatim body
+text in a `quote_body` field). Harness-Bench (arXiv:2605.27922) separately runs
+**5,194** execution trajectories over **106** sandboxed tasks across
+"representative harness configurations" and "multiple model backends", and
+finds "substantial variation in completion, process quality, efficiency, and
+failure behavior across model-harness pairings" — its abstract's own wording,
+and qualitative rather than a magnitude. An agent result reported without its
+harness is not reproducible, and most published ones are not.
 
-Both numbers are narrower than they look, and the narrowing is the point rather
-than a footnote. The 7.80× is one estimate from one 3×3 design on one task
-distribution. The 23.8 is a best-versus-worst comparison across six configurable
-harnesses, averaged over eight model backends and 106 tasks — not a variance
-component with everything else held fixed, and not computed over the full 5,194
-trajectories, since the 106 Codex trajectories sit outside that comparison. What
-each supports is the **direction**: harness choice can move a result by more than
-model choice does. Neither is a constant to carry into another setting, and this
-file does not use them as one.
+> **Correction, 2026-08-14.** This paragraph previously also gave a
+> **23.8-point** gap between Harness-Bench's best- and worst-scoring
+> configurable harness — 76.2 against 52.4. That figure has no source sentence
+> anywhere: it is not in the abstract, `paper/refs.bib`'s entry for
+> arXiv:2605.27922 states it as unverified, and this repository's own
+> `docs/RELATED_WORK.md` entry for the same paper already removed it rather
+> than hedging it, for the same reason. It is removed here too, along with the
+> 76.2/52.4 sub-figures, which never had any source at all — not even an
+> "unverified" note — and were introduced by a notebook entry restating a
+> different, since-corrected passage.
+
+The 7.80× is narrower than it looks, and the narrowing is the point rather than
+a footnote: it is one estimate from one 3×3 design on one task distribution.
+What it supports is the **direction** — harness choice can move a result by
+more than model choice does — and it is not a constant to carry into another
+setting. This file does not use it as one.
 
 Since the independent variable here is a markdown file and the model is held
 fixed, the harness is not background detail — it is the largest thing in the

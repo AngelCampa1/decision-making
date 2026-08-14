@@ -176,12 +176,15 @@
             paper's title and asserts a disentangling the abstract does not
             claim -- it says "substantial variation", a qualitative statement.
             UNVERIFIED AND NOT IN THE ABSTRACT: the "23.8-point swing from
-            harness alone", the "6 harnesses x 8 backends" grid in
-            docs/RELATED_WORK.md 305, and the failure-taxonomy percentages
-            ("output-contract violations (36\%)") at 307. The abstract says only
-            "representative harness configurations across multiple model
-            backends". The 23.8 in particular is a bare magnitude with no source
-            sentence and is the figure to check before it is used anywhere}
+            harness alone", the "6 harnesses x 8 backends" grid, and the
+            failure-taxonomy percentages ("output-contract violations (36\%)"),
+            all discussed in docs/RELATED_WORK.md 492-498 and (23.8 only) in
+            docs/HARNESS_DISCLOSURE.md 15-27 -- LINE NUMBERS CORRECTED
+            2026-08-14, was 305/307, stale after later edits inserted material
+            earlier in RELATED_WORK.md. The abstract says only "representative
+            harness configurations across multiple model backends". The 23.8 in
+            particular is a bare magnitude with no source sentence and is the
+            figure to check before it is used anywhere}
 }
 
 % ---------------------------------------------------------------------------
@@ -317,14 +320,21 @@
             a different measure name, and an added caution against reading the
             synthetic study as a model comparison. This entry is therefore
             pinned to v1, because that is the version the number comes from.
-            The affected prose is docs/PROTOCOL.md 30-33 and
-            docs/RELATED_WORK.md 103-108, both of which give the figure with no
-            version and PROTOCOL.md additionally uses it as a magnitude
-            comparison -- "larger than any effect we expect to measure" -- which
-            is the specific reading v2's own abstract disclaims. The taxonomy
-            itself (Act/Ask/Refuse/Stop/Confirm/Recover) is unchanged across
-            versions and the design decision resting on it is unaffected.
-            1,342 synthetic items, eight models}
+            THE AFFECTED PROSE IS THREE FILES, NOT TWO -- a 2026-08-14 review
+            found docs/EVAL_SET_DATASHEET.md 87-101 also carrying the figure,
+            missing from this note since it was written. The other two are
+            docs/PROTOCOL.md 30-42 and docs/RELATED_WORK.md 118-139 (LINE
+            NUMBERS CORRECTED 2026-08-14; was 30-33 and 103-108, the second
+            stale after later edits inserted material earlier in the file).
+            All three now name the version and use the figure only to justify
+            holding the option menu constant, never as a magnitude comparison
+            -- PROTOCOL.md and EVAL_SET_DATASHEET.md each record having
+            withdrawn an earlier "larger than any effect we expect to
+            measure"/"detect" reading, which is the comparison v2's own
+            abstract disclaims. The taxonomy itself
+            (Act/Ask/Refuse/Stop/Confirm/Recover) is unchanged across versions
+            and the design decision resting on it is unaffected. 1,342
+            synthetic items, eight models}
 }
 
 @article{askorassume2026,
@@ -353,20 +363,26 @@
             draft of this note, which asserted the 61.2 was not in the paper.
             IT IS -- in v1's abstract, quoted above, and in the body. That
             earlier claim was wrong and is recorded here rather than quietly
-            replaced. What IS wrong is the framing in docs/RELATED_WORK.md
-            111-112, on three counts. (1) THE BENCHMARK IS NOT SWE-bench
+            replaced. What WAS wrong -- and, per a 2026-08-14 re-check, has
+            since been corrected in docs/RELATED_WORK.md (now 142-154; LINE
+            NUMBERS CORRECTED, was 111-112, stale after later edits) -- was the
+            framing, on three counts. (1) THE BENCHMARK IS NOT SWE-bench
             Verified: it is "an underspecified variant of SWE-bench Verified",
             the paper's own words, and the movement happens entirely inside that
-            degraded variant. Our prose says "lifted SWE-bench Verified 61.2\% ->
-            69.4\%", which reads as a leaderboard number and is not comparable to
-            one -- the paper's fully-specified baseline is HIGHER than its own
-            69.40 headline. (2) 61.20\% IS MODEL-SPECIFIC, OpenHands + Claude
-            Sonnet 4.5, named in v1 and dropped in v2. (3) The independent check
-            reports that in the body the 61.20\% is UA-SINGLE, itself one of the
-            paper's proposed scaffolds, with the unmodified baseline lower
-            again; that body reading is NOT confirmed first-hand here and is
-            flagged rather than asserted. v2 removed the 61.20\% and the model
-            name from the abstract, so cite v1 for the pair or cite neither}
+            degraded variant. The prose used to say "lifted SWE-bench Verified
+            61.2\% -> 69.4\%", which reads as a leaderboard number and is not
+            comparable to one -- the paper's fully-specified baseline is HIGHER
+            than its own 69.40 headline; current prose names the variant and
+            says explicitly this "must not be read beside" a leaderboard
+            movement. (2) 61.20\% IS MODEL-SPECIFIC, OpenHands + Claude Sonnet
+            4.5, named in v1 and dropped in v2; current prose names the
+            configuration. (3) The independent check reports that in the body
+            the 61.20\% is UA-SINGLE, itself one of the paper's proposed
+            scaffolds, with the unmodified baseline lower again; that body
+            reading is NOT confirmed first-hand here and is flagged rather than
+            asserted, and current prose does not claim otherwise. v2 removed
+            the 61.20\% and the model name from the abstract, so cite v1 for
+            the pair or cite neither}
 }
 
 @article{abstentionbench2025,
@@ -538,8 +554,9 @@
             is the paper's own. TITLE CORRECTED: the entry read "Robust
             Aggregation for Panels of LLM Judges". ONE CONDITION THE PROSE
             DROPS: the 19\% is "at matched compute" and is specific to
-            CROSS-DIMENSIONAL attacks -- docs/RELATED_WORK.md 185-189 keeps the
-            attack type but not the compute condition. UNVERIFIED: the
+            CROSS-DIMENSIONAL attacks -- docs/RELATED_WORK.md 234-238 (LINE
+            NUMBERS CORRECTED 2026-08-14, was 185-189) keeps the attack type
+            but not the compute condition. UNVERIFIED: the
             "3-judge 38B robust committee beat a 675B single judge by 1.31x
             under 30\% corruption" in that same paragraph is not in the abstract}
 }
@@ -569,8 +586,9 @@
             "matches or outperforms the full panel across all conditions" -- a
             positive lift for the panel is not that claim. (3) n_eff = 2.18 and
             the 95\% CI [2.07, 2.31], and the mean pairwise correlation 0.391 in
-            docs/RELATED_WORK.md 191-193, are not in the abstract; "about 2
-            independent votes' worth" is. They may all be in the body and this
+            docs/RELATED_WORK.md 260-261 (LINE NUMBERS CORRECTED 2026-08-14,
+            was 191-193), are not in the abstract; "about 2 independent votes'
+            worth" is. They may all be in the body and this
             entry does not assert they are absent -- it asserts they are
             UNVERIFIED, which is a different and weaker claim, and the fix is to
             read the tables rather than to keep quoting them. AND THE WORST OF
@@ -742,8 +760,9 @@
             advantages on gpt-4o (97\% vs. 93\% for standard CoT), but becomes
             detrimental on gpt-5 (94.00\% vs. 96.36\% for CoT on full benchmark).},
   note   = {Verified first-hand 2026-08-13. All four figures are exact and the
-            direction in docs/PROTOCOL.md 50-52 and docs/RELATED_WORK.md 335-336
-            is right. TITLE CORRECTED: the entry read "Prompting Inversion: When
+            direction in docs/PROTOCOL.md 59-63 and docs/RELATED_WORK.md 523-524
+            (LINE NUMBERS CORRECTED 2026-08-14, was 50-52 and 335-336) is right.
+            TITLE CORRECTED: the entry read "Prompting Inversion: When
             Sculpted Prompts Hurt Stronger Models", which is a fair description
             of the finding and is not the paper's title. SCOPE: one benchmark
             (GSM8K, 1,317 problems), three OpenAI models, independent single
@@ -996,7 +1015,8 @@
   note    = {Verified first-hand 2026-08-13, replacing a note that said these
              figures came from a search summary and must be verified before
              asserting. All three are exact: seven models, up to 4.78 years, as
-             many as 95 ranks. docs/RESEARCH_PROGRAMME.md 94 is supported. TWO
+             many as 95 ranks. docs/RESEARCH_PROGRAMME.md 96 (LINE NUMBER
+             CORRECTED 2026-08-14, was 94) is supported. TWO
              CONDITIONS THE ONE-LINE CITATION DROPS: the publication dates are
              ARTIFICIAL, prepended by the authors to TREC DL21/DL22 passages,
              and the effect is measured in LISTWISE reranking -- so this is an
@@ -1106,18 +1126,21 @@
              ABSTRACT, and the abstract is all that was read -- the stronger
              claim this note used to make, that the figure is not in the paper,
              is not one an abstract can settle.
-             docs/RELATED_WORK.md 85-87 attributes "First-person opinion
+             docs/RELATED_WORK.md then attributed "First-person opinion
              statements induce agreement with incorrect beliefs at 63.7\% average
              across seven model families" to this identifier; the figure does
              not appear on the abstract page, and the paper is a SURVEY with a
              single author that reviews other people's measurements rather than
-             running any. So a measurement figure is attached to a paper that
+             running any. So a measurement figure was attached to a paper that
              reports no measurements -- the exact shape of the three 2026-08-11
-             misattributions, and the note here already said "a survey, not a
-             measurement study" without the figure being taken back out of the
-             prose. The 63.7\% may well be real and belong to one of the studies
-             this survey reviews; it must be traced to that study and cited
-             there, not here}
+             misattributions. FIXED IN THE LIVING DOC: docs/RELATED_WORK.md
+             94-107 (LINE NUMBERS CORRECTED 2026-08-14, was 85-87, and the
+             claim it pointed at is no longer live prose either) now describes
+             this paper only as the survey it is, with the retracted 63.7\%
+             sentence preserved verbatim inside a dated correction box rather
+             than deleted. The 63.7\% may well be real and belong to one of the
+             studies this survey reviews; it must be traced to that study and
+             cited there, not here}
 }
 
 @article{zhang2025madovervalued,

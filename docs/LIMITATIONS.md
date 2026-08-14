@@ -128,12 +128,17 @@ items. Contamination is managed by regeneration between runs, not by secrecy.
 ## The judges
 
 **Judge panels have a low effective sample size.** Nine judges from seven
-families yield a Kish n_eff of 2.18, 95% CI [2.07, 2.31] (arXiv:2605.29800) —
-a body figure; the abstract states the result as roughly two independent votes'
-worth of information rather than as a point estimate, and the rounded form is the
-one that should be quoted. Our three-judge panel should be assumed to carry
-roughly two independent votes, and it reports its measured n_eff rather than its
-headcount. No primary metric is ever a judge score.
+families are reported to yield a Kish n_eff of 2.18, 95% CI [2.07, 2.31]
+(arXiv:2605.29800); the abstract states the result only as roughly two
+independent votes' worth of information, and per that paper's own `refs.bib`
+entry the 2.18 point estimate and its CI are **unverified** — not confirmed
+first-hand against the paper's tables, and a 2026-08-14 review of this
+repository's own documentation found a claim to the contrary that did not hold
+up (`docs/RELATED_WORK.md`). Until the tables are read, the rounded abstract
+form — "roughly two independent votes" — is the one that should be quoted, and
+that is what governs the design: our three-judge panel should be assumed to
+carry roughly two independent votes, and it reports its measured n_eff rather
+than its headcount. No primary metric is ever a judge score.
 
 **Judges drift.** Criteria drift (arXiv:2404.12272) means a judge calibrated once
 does not stay calibrated. Recalibration is required whenever the pipeline or the

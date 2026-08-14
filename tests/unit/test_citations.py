@@ -15,11 +15,14 @@ import pytest
 from decision_evals.citations import (
     BASELINE_PATH,
     BIB_PATH,
+    QUOTE_BODY_FIELD,
+    QUOTE_FIELD,
     asserts_a_number,
     blocks,
     census,
     check_citations,
     check_percent_escaping,
+    check_unknown_quote_fields,
     governed_files,
     load_baseline,
     parse_bib,
@@ -73,6 +76,33 @@ def test_bib_entry_is_indexed_by_arxiv_id() -> None:
 
 def test_entry_without_a_quote_is_recorded_as_such() -> None:
     assert not parse_bib(_ENTRY_NO_QUOTE)["2605.24050"].has_quote
+
+
+def test_quote_body_field_counts_as_a_quote() -> None:
+    """The field added 2026-08-14 for body-section evidence, not the abstract.
+
+    Before this, ``has_quote`` recognised only ``quote`` and a ``quote_body``-only
+    entry was indistinguishable from one with no evidence at all.
+    """
+    entry = _ENTRY_NO_QUOTE.replace(
+        "  year    = {2026}",
+        "  year    = {2026},\n  quote_body = {The body says 42%.}",
+    )
+    assert parse_bib(entry)["2605.24050"].has_quote
+
+
+def test_an_unrecognised_quote_like_field_does_not_count_as_a_quote() -> None:
+    """A third spelling is not silently treated as evidence either.
+
+    ``has_quote`` must stay a closed set of two names — recognising *any*
+    ``quote*`` field here would just move the escape hatch this gate closed
+    on 2026-08-14 rather than remove it.
+    """
+    entry = _ENTRY_NO_QUOTE.replace(
+        "  year    = {2026}",
+        "  year    = {2026},\n  quote_summary = {The body says 42%.}",
+    )
+    assert not parse_bib(entry)["2605.24050"].has_quote
 
 
 def test_commented_out_identifiers_do_not_count_as_entries() -> None:
@@ -491,3 +521,63 @@ def test_a_percent_outside_any_field_is_not_this_check_s_business() -> None:
 def test_the_bibliography_has_no_unescaped_percent() -> None:
     root = Path(__file__).resolve().parents[2]
     assert check_percent_escaping((root / BIB_PATH).read_text(encoding="utf-8")) == []
+
+
+# ---------------------------------------------------------------------------
+# Unknown quote-like fields, found 2026-08-14: `quote_body` was in production
+# use as load-bearing evidence and was invisible to `has_quote`, which
+# recognised only `quote`. A field rename must fail loudly, not silently.
+# ---------------------------------------------------------------------------
+
+
+def test_check_unknown_quote_fields_accepts_the_two_known_names() -> None:
+    entry = _ENTRY.replace(
+        "  year    = {2026}",
+        "  year    = {2026},\n  quote_body = {The body says 42%.}",
+    )
+    assert check_unknown_quote_fields(entry) == []
+
+
+def test_check_unknown_quote_fields_flags_a_renamed_field() -> None:
+    """The failure this check exists for: a plausible third spelling."""
+    entry = _ENTRY_NO_QUOTE.replace(
+        "  year    = {2026}",
+        "  year    = {2026},\n  quote_summary = {The body says 42%.}",
+    )
+    issues = check_unknown_quote_fields(entry)
+    assert len(issues) == 1
+    assert issues[0].arxiv_id == "2605.24050"
+    assert "quote_summary" in issues[0].message
+    assert QUOTE_FIELD in issues[0].message
+    assert QUOTE_BODY_FIELD in issues[0].message
+
+
+def test_check_unknown_quote_fields_ignores_fields_that_do_not_start_with_quote() -> None:
+    assert check_unknown_quote_fields(_ENTRY) == []
+    assert check_unknown_quote_fields(_ENTRY_NO_QUOTE) == []
+
+
+def test_check_unknown_quote_fields_is_case_insensitive() -> None:
+    entry = _ENTRY_NO_QUOTE.replace(
+        "  year    = {2026}",
+        "  year    = {2026},\n  Quote_Body = {The body says 42%.}",
+    )
+    assert check_unknown_quote_fields(entry) == []
+
+
+def test_an_unrecognised_quote_field_fails_check_citations_even_when_unused(
+    tmp_path: Path,
+) -> None:
+    """Not exemptible by the baseline: this is a defect in the evidence's shape."""
+    bib = _ENTRY.replace(
+        "  year    = {2026}",
+        "  year    = {2026},\n  quote_summary = {unrelated text}",
+    )
+    root = _repo(tmp_path, doc="No citations here.", bib=bib)
+    issues = check_citations(root)
+    assert any("quote_summary" in issue.message for issue in issues)
+
+
+def test_the_bibliography_has_no_unrecognised_quote_fields() -> None:
+    root = Path(__file__).resolve().parents[2]
+    assert check_unknown_quote_fields((root / BIB_PATH).read_text(encoding="utf-8")) == []

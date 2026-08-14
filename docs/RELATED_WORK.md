@@ -457,6 +457,27 @@ what this repository leans on; the ratio is not treated as transferable.
 > and would have deleted four correct figures from a third had a later unit not
 > opened the paper. Verify before propagating, in both directions.
 
+> **Correction, 2026-08-14.** The paragraph immediately above overreached in the
+> other direction on its two "further claims". It said the n_eff ≈ 2.18 figure
+> "is confirmed in Table 2" and that the 23.8-point swing "is in its body ...
+> both were correct". Neither claim has a `quote_body` — or any verbatim body
+> text — backing it in `paper/refs.bib`, and both bib entries say the opposite
+> of "correct" in their own `note` fields: **arXiv:2605.29800**'s entry states
+> "n_eff = 2.18 and the 95% CI ... are not in the abstract ... UNVERIFIED ...
+> Neither the body reading nor the per-dataset figures are confirmed first-hand
+> here", and **arXiv:2605.27922**'s entry states the 23.8-point swing is
+> "UNVERIFIED AND NOT IN THE ABSTRACT ... a bare magnitude with no source
+> sentence". This file's own entry for arXiv:2605.27922, two paragraphs below,
+> already reached the correct conclusion independently and removed the 23.8
+> figure rather than hedging it — so the error was confined to this box, and
+> was caught by the disagreement between two passages of the same document
+> rather than by anyone reading a table. Both numbers are restored to
+> *unverified* pending a first-hand read of the tables named. This is now the
+> third finding in this file's own history where "not in the abstract" drifted
+> into "confirmed" or "absent" without anyone opening the body — see the two
+> corrections above it. `docs/LIMITATIONS.md` and `docs/HARNESS_DISCLOSURE.md`
+> carry the same walk-back.
+
 **Harness-Bench: Measuring Harness Effects across Models in Realistic Agent
 Workflows** — arXiv:2605.27922. **5,194** execution trajectories over **106**
 sandboxed offline tasks, across "representative harness configurations" and
