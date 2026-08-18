@@ -389,7 +389,10 @@ negative:
         """
         corpus = REPO_ROOT / "datasets" / "triggers" / "decision-making"
         draft = load_trigger_set(corpus / "index.yaml")
-        assert draft.version == 3
+        # Pinned on purpose, and it did its job: this literal is what made the
+        # 2026-08-18 bump to 4 a reviewed edit rather than a silent one. Unlike
+        # the count below, a version is supposed to move only deliberately.
+        assert draft.version == 4
         assert {case.band for case in draft.cases} == {"s", "m", "l", "xl"}
         assert len(draft.positives) * 2 == len(draft.negatives)
 

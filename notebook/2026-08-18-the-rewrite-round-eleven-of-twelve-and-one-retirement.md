@@ -123,4 +123,7 @@ but it is not a proof.
 The author was a model, the rewriters were models, the judges are models. This
 round made the corpus internally consistent. It did not make it right, and
 nothing in it bears on whether these labels match what a person would say.
-**That is N4's job**, and N4 now has four licence-cleared sources to draw on.
+**That is N4's job.** N4's source survey landed the same day —
+[eight candidates, four clearing the redistribution bar, and the one closest to
+the deployment distribution killed by
+it](2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md).

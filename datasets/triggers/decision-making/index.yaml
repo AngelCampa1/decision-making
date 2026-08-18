@@ -20,7 +20,17 @@
 # `datasets/triggers/*/index.yaml` and holds the set behind it to the same
 # corpus rules as a live one, without it being the set anything runs.
 
-version: 3
+# Bumped 3 -> 4 on 2026-08-18, before anything is scored against this corpus.
+# Version 3 named four different corpora: 120 items when authored, 192 after the
+# short-band merge, 261 after the long-band merge, 258 after the rewrite round
+# retired `l15`. That was harmless only because no run has ever been scored
+# against any of them -- zero records on disk carry `set_version: 3`. N6 would
+# be the first, and it would stamp 1,548 records with a version that does not
+# identify a corpus. `label_versions_comparable` compares this integer and
+# nothing else, so a version that moves only when a label flips cannot see a
+# corpus whose text changed under it, which is what happened today: eleven asks
+# were rewritten and three items removed while every `should_fire` stayed put.
+version: 4
 skill: decision-making
 includes:
   - s.yaml
