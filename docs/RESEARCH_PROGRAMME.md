@@ -15,6 +15,14 @@ none of them together:
 | accumulates over turns | accumulation has been *rendered*, never *lived* |
 | delegates to sub-agents | never attempted |
 
+**Read two other files with this one, and read the first of them before this
+one.** They are not appendices; the work is not doable without them.
+
+| | |
+|---|---|
+| [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md) | **How the work is done.** Five standing rules, the sub-agent and adversarial-review method, the confirmation requirement, what may run unattended. Every rule is a failure that already happened here. **Read it first.** |
+| [`STATUS.md`](STATUS.md) | **Where the work actually stopped.** Track states, runs on record, and the ten measurements caught being broken. This programme says what a track *is*; that file says how far it got. |
+
 **How to read this.** Fifteen tracks in eight parts. Each track states a
 question, what would kill it, the experiments inside it, and what "done" means —
 point at one and there is enough here to work for days without asking what next.
