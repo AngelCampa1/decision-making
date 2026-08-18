@@ -1023,9 +1023,9 @@ because a pooled rate has hidden a per-stratum problem here before.
 
 **All 12 moves break the one-positive-two-negative invariant, and that is a
 fact about the design rather than about the labels.** In each of the 10
-negative → positive moves, the same adjudication independently reconfirmed
-that triple's *existing* positive — so the judges say both members should
-fire, and applying the move yields two positives. The 2 positive → negative
+negative → positive moves, the same adjudication **unanimously** reconfirmed
+that triple's *existing* positive — 10 of 10, all three judges — so the judges
+say both members should fire, and applying the move yields two positives. The 2 positive → negative
 moves land in triples whose other members were unanimously negative, yielding
 none. `corpus._check_triples` reports this as **structural**, which carries the
 `_UNBASELINEABLE` key by design: there is no version of the freeze that lands
@@ -1056,6 +1056,36 @@ disputed ask and re-adjudicating preserves difficulty and costs authoring plus
 another adjudication round. Demoting the existing positive is ruled out: no
 judge supports it. Relaxing the invariant is a corpus redesign, not a version
 bump.
+
+**The remedy is rewrite-and-re-adjudicate, and an adversarial review settled
+it against the cheaper option.** Retirement of the 12 triples was the obvious
+move and is the wrong branch of the plan's own rule, which sends a 2-of-3
+disagreement to *rewrite the turn or move the label* and reserves retirement
+for a *three-way split*. All 12 disputes are clean 3-0 or 2-1 majorities, and
+**with three binary judges a three-way split cannot occur at all** — so the
+retirement branch has been unreachable since the protocol was written, which is
+why it read as available. Moving the label is structurally blocked, so
+rewriting is the only live branch. Three checks, each re-derived:
+
+- **Retirement biases the survivors along the axes v3 exists to test.** It
+  removes implicit asks at 18.5% and embedded at 18.2% against explicit at
+  7.9% — the two forms added because v2 was saturated with *"should I"* — and
+  23.5% of technical and 22.2% of money against **0%** of relationships.
+- **It costs N6 the power the long-band merge just bought.** SE 0.0346 →
+  0.0374, MDE **0.0970 → 0.1047**, power at the registered 0.10 threshold
+  **0.823 → 0.763**. The MDE crosses the effect the test is built around.
+- **It closes two of the three open shortcut findings, and that is a side
+  effect rather than a reason.** The retired triples are in fact *less* extreme
+  than the survivors on both features (0.229 vs 0.283, 0.292 vs 0.393), so this
+  is not disguised feature-retuning — but citing a gate closure as a merit is
+  the reasoning this repository has named as the source of four generations of
+  leak.
+
+Retirement is held for any of the 12 that still fails to reach a key-consistent
+majority after a genuine rewrite. **And if it is ever used, movement must be
+reported cumulatively over the corpus's whole history**, because pruning the
+disputed items is otherwise a way of making the 20% kill structurally unable to
+fire again.
 
 Nothing is applied; the corpus on disk is unchanged. Working:
 [`notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md`](../notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md).

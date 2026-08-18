@@ -130,3 +130,91 @@ evidence and is not rewritten, so the correction lives in `STATUS.md` and here.
 `2412.06593` and `2505.02151`, added by the K3/K4 pass, and neither is in
 `paper/refs.bib`. The claim was true on 2026-08-12 and the file never noticed
 the backlog reopening under it.
+
+---
+
+## Correction and adversarial review, appended same day
+
+The review briefed to break the retirement option came back, and it changed the
+answer. Every number below was re-derived by me after reading it, not taken on
+its word.
+
+**One number above is wrong.** The entry says the existing positives were "9 of
+10 unanimous". **It is 10 of 10** — every one of the ten triples receiving a
+negative → positive move has its existing positive confirmed by all three judges.
+The claim was understated in the direction that made the conflict look softer
+than it is. Recomputed directly; the commit that carried the wrong figure is
+`2601760` and history is not rewritten.
+
+**Retirement is the wrong branch of the plan's own rule, and I had not read the
+rule closely enough.** [The v3 plan](../docs/superpowers/plans/2026-08-13-trigger-corpus-v3.md)
+sets out three cases:
+
+> - unanimous agreement with my label → keep
+> - 2-of-3 against me → I rewrite the turn or move the label, and say which
+> - split 3 ways → the triple is retired as genuinely undecidable
+
+All 12 disputes are clean 3-0 or 2-1 majorities. **Not one is a three-way
+split**, so retirement — which the entry above listed first and called
+"mechanical" — is the remedy for a case none of these are. And the reviewer went
+further, correctly: with **three binary judges a three-way split cannot occur**.
+Outcomes are 3-0 or 2-1 and nothing else. **The retirement branch has been dead
+code since the protocol was written**, which is why reaching for it here felt
+available: nothing had ever tested whether it could fire.
+
+So the plan's live branch is *rewrite the turn or move the label*. Moving the
+label is structurally blocked, as the entry above establishes. **That leaves
+rewriting, which the entry listed second and never costed.**
+
+**Three further objections, each checked:**
+
+- **Selection bias is measurable, not hypothetical.** Retiring the 12 removes
+  implicit asks at 18.5% and embedded asks at 18.2% against explicit asks at
+  7.9% — more than double the rate on the two ask forms v3 exists to add,
+  because v2 was saturated with *"should I"*. By domain it removes 23.5% of
+  technical and 22.2% of money while removing **0%** of relationships. The
+  survivor corpus is easier along exactly the axes the redesign was built to
+  stress.
+- **Retirement costs N6 the power the long-band merge just bought.** Reusing
+  that entry's own formula and design effect: SE 0.0346 → 0.0374, MDE **0.0970
+  → 0.1047**, power at the registered 0.10 consequential threshold **0.823 →
+  0.763**. The MDE crosses the effect the test is built around, and the power
+  drops back under 0.80 — undoing most of the 0.577 → 0.823 gain that
+  2026-08-14 recorded as making Q1 "a properly powered test now".
+- **The favourable-numbers charge is weaker than I stated, and the reasoning is
+  still wrong.** The reviewer computed that the retired triples are *less*
+  extreme than the survivors on the two features whose findings close — 0.229
+  against 0.283 on `sentence_count`, 0.292 against 0.393 on `type_token_ratio`
+  — so this is not feature-retuning wearing an adjudication mask. But listing
+  "two gates close" as a *merit* of the option is the shape of reasoning this
+  repository has named as the source of four generations of leak, whatever the
+  mechanism. Gate movement is a disclosed side effect, never a reason.
+
+**And one prospective danger worth recording even though it is not today's
+decision.** If retirement becomes the standing answer to adjudication
+disagreement, the 20% kill can never fire again: whatever would move the number
+gets deleted before it is counted, so every future round reads near zero
+movement on a corpus pruned of exactly the disagreements. If retirement is ever
+used, movement has to be reported **cumulatively over the corpus's whole
+history** — every disagreement ever found over every item ever adjudicated —
+rather than reset against the pruned base.
+
+**So the freeze's remedy is rewrite-and-re-adjudicate**, on the plan's own rule,
+at a cost of ~12 rewritten asks and 36 re-adjudication calls. There is no budget
+to spend and no quota argument for the cheaper wrong thing. Retirement is held
+back for any of the 12 that still fails to reach a key-consistent majority after
+a genuine rewrite — which is the nearest thing to "genuinely undecidable" this
+voting design can actually produce.
+
+**One thing nobody can check yet, and it should not be papered over.** The plan
+requires that a retirement be bias-checked by asking whether retired items were
+*harder for the arms* — and **no run has ever been scored against this corpus**,
+so that check cannot be run at all. The shortcut-battery features stand in for
+it above. They are not the same claim.
+
+**A drifted number, found in passing.** `datasets/triggers/corpus-baseline.txt`
+quotes 3.82 and 4.27 null SE for the two open findings; live against `HEAD` they
+read **3.11 and 4.14**, moved by intervening text-only edits. That is consistent
+with that file's stated policy of leaving prose as a dated record — but whoever
+executes the freeze re-runs the battery against `HEAD` rather than trusting
+either figure.
