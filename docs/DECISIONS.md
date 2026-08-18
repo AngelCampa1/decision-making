@@ -24,6 +24,44 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-18 — Version 3 named four different corpora, so it moves to 4 before N6 runs
+
+**Commits:** `19a44c2`
+
+**This corrects the reasoning in the entry below, on the same day.** That entry
+concluded that because the rewrite round altered no `should_fire`, no published
+number was affected and `set_version` could stay where it was. The first half is
+true. The second does not follow, and an independent check of N6's readiness
+found why.
+
+**`version: 3` has named four different corpora** — 120 items when authored, 192
+after the short-band merge, 261 after the long-band merge, 258 after `l15` was
+retired. `label_versions_comparable` compares that integer and nothing else, and
+`run_triggers.py`'s resume keys on `(case_id, repeat)` and never hashes a case's
+text. So a version that moves only when a label flips **cannot see a corpus
+whose text changed underneath it**, which is precisely what happened: eleven
+asks rewritten, three items removed, every `should_fire` untouched.
+
+**It has been harmless for exactly one reason: nothing has ever been scored
+against any of the four.** Zero records on disk carry `set_version: 3` — 2,555
+at version 1, 3,139 at version 2, 4,810 unstamped, none at 3. N6 would be the
+first, and it would stamp 1,548 records with a number that does not identify a
+corpus.
+
+So the bump happens **before** the first call rather than after. It costs
+nothing, because there is nothing to be made incomparable, and it means the
+version in N6's records denotes exactly one corpus.
+
+**The pinned `assert draft.version == 3` in `tests/unit/test_triggers.py` is
+what turned this into a reviewed edit rather than a silent one**, which is what
+a pinned literal is for. It is updated to 4, not removed. The count beside it
+stays recomputed rather than pinned, for the opposite reason given there.
+
+Working, including N6's recomputed power at the smaller corpus:
+[`the addendum`](../notebook/2026-08-18-n6-addendum-the-corpus-shrank-and-the-version-had-to-move.md).
+
+---
+
 ## 2026-08-18 — Twelve disputed asks rewritten, one triple retired, and the key still has not moved
 
 **Commits:** `08eda89`
