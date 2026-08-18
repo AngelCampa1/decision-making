@@ -23,7 +23,7 @@ from decision_evals.generators import generate, load_all, load_template
 from decision_evals.generators.loader import REPO_ROOT
 
 #: Fixed for the golden corpus. Not the seed any real run uses -- the holdout is
-#: regenerated from a passphrase-derived seed held outside the repository.
+#: regenerated from a seed kept in an uncommitted local file outside the repository.
 GOLDEN_SEED = 1
 
 GOLDEN_ROOT = REPO_ROOT / "datasets" / "golden"

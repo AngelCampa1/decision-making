@@ -645,8 +645,12 @@ recall to 0.988 with precision and FPR unchanged. Of the five cases promoted out
 of `evidence-ledger`'s negatives, three fire 5/5 and these two fire 0/5, with
 nothing in between — so this is a **stable disagreement, not a coin flip**. Both
 readings still stand (the promotion was wrong, or the router widened on paper and
-not in behaviour) and repeats cannot separate them. It is a label decision and it
-belongs to the maintainer.
+not in behaviour) and repeats cannot separate them. It is a label decision, and it
+goes where every other label in this repository goes: three-instance blind
+adjudication under N3's protocol, with the answer key versioned and the movement
+reported. **Not to a casting vote.** Routing a disputed label to a person is what
+left these two unresolved from the day they were found, and a label one person
+settles is a label no reader can check.
 
 **What it points at.** The cost of consolidation is not that the skill fires
 wrongly — it is that, having fired, it reads the wrong file. 0.942 against 0.686.
@@ -967,8 +971,8 @@ column on the case rather than a property the set happens to have.
 | **N1** | **The shortcut battery.** `corpus.py`: eight trivial features, each held to a **two-sided** [0.40, 0.60] — the one-sided `MAX_LENGTH_SEPARABILITY = 0.70` it replaces would have passed a set at AUC 0.05, which is solved by a ruler pointing the other way — plus a depth-2 stump over all eight capped at 0.70, because a battery of singles misses interactions. | free | **done** |
 | **N2** | **Author the corpus.** 40 triples, 120 items, four bands (≤25 / 40–90 / 200–400 / 900–1500 words), 1:2 positive-to-negative in **every** band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | **done** — authored at 40 triples / 120 items and since grown by two merges to **87 triples, 261 items** (S 24, M 24, L 22, XL 17), every gate in N1 passing. See below |
 | **N3** | **Blind label adjudication.** Three independent instances label each turn with no access to mine. **Pre-registered kill: >20% label movement retires the corpus.** 21 of 21 scored failures across three corpora were the answer key, and a 1,200-word turn has fifty times the surface for that. | 360 calls | **done 2026-08-14** across two continuations, 261 of 261 items, 3 judges each, 0 unparseable. **Movement 12/261 = 0.046 against the 0.20 kill — the corpus survives by a factor of four**, and no band is near it (0.042 s, 0.042 m, 0.045 l, 0.059 xl). Fleiss kappa 0.862. **The 12 moves are unapplied and cannot be applied as written** — see below |
-| **N4** | **The human-authored holdout.** The threat no gate above touches: a model is authoring the corpus that will evaluate a model. Blind adjudication does not fix it — the adjudicator is also a model. The maintainer supplies ~20 turns, ideally real messages rather than turns written to order. Every arm is reported twice. **Orderings agree → the threat is bounded by a measurement. Orderings disagree → the model-authored corpus is decoration, and we know it.** | ~120 calls | |
-| **N5** | **Realism.** 10% human audit — 12 items, and the repository's realism audit has been at 0% since it was written down. Plus a descriptive machine probe on whether turns read as real or as authored-for-a-benchmark; **not** a gate, because "looks authored" has no ground truth and a gate without one is how a corpus gets tuned to a judge. | 40 calls | |
+| **N4** | **The human-authored holdout.** The threat no gate above touches: a model is authoring the corpus that will evaluate a model. Blind adjudication does not fix it — the adjudicator is also a model. **~20 turns are drawn from a public human-written corpus** that clears the outside-data rule; the labels stay with N3's blind adjudication. Every arm is reported twice. **Orderings agree → the threat is bounded by a measurement. Orderings disagree → the model-authored corpus is decoration, and we know it.** | ~120 calls | **source survey done 2026-08-18** — eight candidates, four clear redistribution, OASST1 recommended. No step waits on a person; see below |
+| **N5** | **Realism.** The descriptive machine probe — do turns read as real, or as authored-for-a-benchmark — plus, once N4 lands, a **forced choice against N4's human turns**: one corpus turn beside one human turn, blind judge, which was sent by a person. That is the instrument `realism_probe.py`'s own docstring names as the sharper one and declines to build for want of real messages, and it carries the known-good case standing rule 2 demands, because which item is human is a fact rather than a taste. 0.5 will mean indistinguishable; above it, the corpus reads as authored and the probe will say by how much. **It will still not be a gate** — it retires nothing on its own, and it has not run. | 86 + ~86 calls | **the 10% human audit is retired** — its own sheet recorded that the only auditor available authored the corpus, so it was a self-assessment wearing the words *ground truth*. See below |
 | **N6** | **Confirmatory re-run** — `full`, `stakes-shown`, `opener-only` × 120 × 2 repeats. Two repeats, not five: ICC 0.83–0.85 (Track I). | 720 calls | |
 | **N7** | **Descriptive re-run** — the remaining five arms. | 1,200 calls | |
 | **N8** | **Stamp the model into the record.** `--model` is a CLI argument with a default and the tier survives only as prose in a hand-written README; the verdict records carry `case`, `fired`, `route`, `repeat` and no model at all. Same shape as the label-versioning defect: a run parameter that changes every number, recoverable only from someone remembering to type it. Needs a comparability guard beside `label_versions_comparable`. | free | **done 2026-08-13.** `run_triggers.py` writes `model`; `models_comparable` refuses a comparison spanning tiers, and `compare` raises on it. **An absent `model` is unknown, not the default** — `--model` could have been passed and the record would look identical, so filling in `haiku` would be standing rule 1's invented parameter. Two unstamped arms therefore still compare (no published comparison is retroactively voided) and a stamped arm against an unstamped one is refused, which is the transition where the risk is real |
@@ -1112,11 +1116,39 @@ the first attempt.
 Working:
 [`notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md`](../notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md).
 
-**N5 is further from done than the table above implies.** Its sample and key
-exist at `results/triggers/realism-audit-{sample.md,key.json}` and were built
-against the **120-item** corpus — the sample's own header reads "12 items (10%
-of 120)" — so they do not cover the 141 items added since. Every human-audit
-field is blank and no output from `scripts/realism_probe.py` exists on disk.
+#### N5's human audit is retired, and the plan has no step left that waits on a person — 2026-08-18
+
+**The 10% audit was a gate on a person and it is removed**, on a maintainer
+instruction to take every such gate out of the plans. It is not being removed
+because nobody filled it in, and that distinction is the whole of the
+justification. The audit sheet's own standing caveat said it: *"The only auditor
+available authored this corpus, so these answers are a self-assessment."* A
+self-assessment by the author is not the ground truth the sheet's header claimed
+for it, so the audit was mislabelled from the day it was written, and **138
+items were added under it** without the sheet ever being regenerated — it was
+still addressed to a 120-item corpus at answer key v3, against 258 items at v4.
+
+**What replaces it is stronger than what it replaced, and only because N4
+moved.** `realism_probe.py`'s docstring already names the sharper instrument and
+declined to build it: a forced choice cancels the judge's base rate, which is the
+one quantity a single-item realism verdict cannot recover, and it was unavailable
+because — in that docstring's words as they stood at `90f1653`, this morning's
+commit — *"There is no human-written comparison set in this repository."* N4 no
+longer waits for a person to write one — it draws on a public human-written
+corpus — so the comparison set becomes reachable, and with it the known-good case
+standing rule 2 demands before any falsifier may fail anything: **which turn is
+human is a fact on the record, not a taste**. N5 therefore now depends on N4
+rather than on anybody's calendar.
+
+**What this costs, stated rather than glossed.** The retired audit was the only
+place in the programme where a reader outside the model loop was ever going to
+look at this corpus. Nothing replaces that, and the forced choice does not: its
+judge is a model too. What it gains is a ground truth the audit never had. The
+corpus remains model-authored, model-adjudicated and model-probed, and Track N4's
+row is the only thing that moves the provenance of the *text* out of that loop.
+
+**And no output from `scripts/realism_probe.py` exists on disk**, so the
+descriptive half of N5 has not run either. That is a call budget, not a gate.
 
 **And a naming collision worth fixing before it reaches a paper.** Commit
 `30012d9` and its notebook entry call themselves "N7". They are a continuation
@@ -1347,9 +1379,15 @@ pair it. Two guards now encode the defect rather than a memory of it:
 Both defects had already produced a publishable-looking false replication
 (45/50 against 23/50, discordance 24-to-2 in the predicted direction).
 
-**Option 2 is now the leading one and it needs the maintainer**: vendoring the
-spider databases means downloading a third-party dataset, which is not a decision
-an agent makes unattended.
+**Option 2 is now the leading one and nothing in it waits on a person**:
+vendoring the spider databases means downloading a third-party dataset, which is
+precisely what [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md)'s
+outside-data rule is for — free, redistributable, licence read first-hand, a
+sample read for personal information, a digest pinned in
+`datasets/vendor/*.lock.json`. **The rule is the decision procedure, so
+executing it is the approval.** Four steps, all free, and a source failing any
+one of them is not vendored. Whether Spider's own terms clear that bar is not
+asserted here, and reading them is the first of the four.
 
 **One consequence for the rest of Track A, and it is good news.** A1 compares a
 **one-turn** arm against a **six-turn** arm, which is why no object is

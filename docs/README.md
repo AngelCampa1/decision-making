@@ -35,7 +35,7 @@ Fourteen documents, and they answer different questions. This is the map.
 
 | Document | Answers |
 | --- | --- |
-| [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md) | What may run without a human and what to stop for. Every rule in it exists because that failure already happened. |
+| [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md) | How work is done here — the five standing rules, sub-agents, adversarial review, and the confirmation requirement. Nothing in it waits on a person. Every rule in it exists because that failure already happened. |
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | How to contribute, and which gates will refuse you. |
 | [`superpowers/plans/`](superpowers/plans/) | Long-form experiment plans. |
 

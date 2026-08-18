@@ -15,7 +15,10 @@ something got built before it got specified.
 > **Phases 0–4 are done, later the same day. Phases 5 onward are not.** All four
 > bands are authored — 40 triples, **120 items**, 40 positives and 80 negatives —
 > and every gate in §"The four gates" passes on the whole set, with the two
-> exceptions Gate 4 names as human work. The corpus is a **draft** and the entry
+> exceptions Gate 4 named as human work at the time. **Both are retired as of
+> 2026-08-18** — see Gate 4 below for what replaced them, and why "not
+> optional" did not survive contact with what the human audit actually was.
+> The corpus is a **draft** and the entry
 > point every runner uses is still version 2, because blind adjudication (phase
 > 5) carries a kill that can retire it.
 >
@@ -199,12 +202,41 @@ A 1,200-word turn that reads like an example written for a test is not a test.
 The repo's realism audit has been at 0% since it was written down, and it
 matters far more at 1,200 words than at 12.
 
-- **Human audit, 10% of items**, which is 12 items and is not optional.
-- **Machine probe, descriptive not blocking:** a fresh instance is shown a mixed
-  sample and asked which turns look like a real message and which look authored
-  for a benchmark. Reported as a rate. It is not a gate because *"looks
-  authored"* has no ground truth, and a gate without ground truth is how a
-  corpus gets tuned to a judge.
+- **Human audit, 10% of items, retired 2026-08-18.** It was written here as
+  "not optional" and it was never that: the audit sheet's own standing caveat
+  read *"The only auditor available authored this corpus, so these answers are
+  a self-assessment,"* directly under a header calling itself *"the part with
+  ground truth."* A self-assessment by the corpus's own author is not ground
+  truth at any sample size, and the sheet was never regenerated as the corpus
+  grew — it still addressed 120 items at answer-key v3 while the corpus is now
+  258 items / 86 triples at v4. Keeping it would have meant certifying a set it
+  had not looked at.
+- **What replaces it: a forced choice against real human turns**, one corpus
+  turn beside one human turn, blind judge — sourced from N4's 2026-08-18
+  reroute to a public human-written corpus rather than a maintainer-authored
+  one (see "The fix is a control, not a disclaimer" below, and
+  [`notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md`](../../../notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md)).
+  `scripts/realism_probe.py`'s own module docstring already names forced choice
+  as the sharper instrument — it cancels the judge's base rate, which a
+  single-item verdict cannot recover — and it declines to build it only because
+  *"There is no human-written comparison set in this repository"* — its wording
+  at `90f1653`, rewritten in the same change that retired the audit. N4 will
+  supply one without a person, and with it the known-good case standing rule 2
+  demands: which turn is actually human is a fact, not a taste. **Nothing has
+  been fetched, no licence is cleared, and this version of the probe will not
+  run until both are done.**
+- **The judge is still a model, forced choice or not.** Retiring the human
+  audit removes the last outside reader from this gate — nobody who is not a
+  model looks at any of these turns any more. What is gained in exchange is a
+  ground truth the audit never had: a real human turn to judge against, rather
+  than the corpus author grading the corpus author.
+- **Machine probe, single-item, descriptive not blocking, as built today:** a
+  fresh instance is shown a mixed sample and asked which turns look like a real
+  message and which look authored for a benchmark. Reported as a rate. It is
+  not a gate because *"looks authored"* has no ground truth, and a gate without
+  ground truth is how a corpus gets tuned to a judge. This is
+  `scripts/realism_probe.py` as it runs today, and it stays live — not
+  retired — until the forced-choice version above has a corpus to run against.
 
 Bodies must carry real artefact texture — timestamps, copy-paste seams,
 inconsistent formatting, sentences that trail off, numbers that appear twice in
@@ -301,11 +333,38 @@ finds legible.
 
 ### The fix is a control, not a disclaimer
 
-**A human-authored holdout.** The maintainer writes — or supplies from real
-messages — a set of turns under the same grid, labelled by them, never seen by
-me before authoring is closed. Every arm is then reported twice:
+**A public human-written holdout, not a maintainer-authored one — route
+changed 2026-08-18.** This section originally read: the maintainer writes, or
+supplies from real messages, a set of turns under the same grid, labelled by
+them, never seen by me before authoring is closed. That never happened — N4
+sat on the maintainer's list with no turn ever supplied — and it is retired as
+a plan rather than left as a row nobody closes
+(`docs/RESEARCH_PROGRAMME.md`, "N4's route changed on 2026-08-18";
+[`notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md`](../../../notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md)).
 
-| | model-authored items | human-authored holdout |
+N4 **will** instead be built from a public human-written corpus that clears the
+outside-data rule in `docs/AUTONOMOUS_WORK_ORDER.md` — free, redistributable,
+sampled and read, digest pinned — with labels from N3's three-instance blind
+adjudication rather than from the maintainer. The survey named above checked
+eight candidates: OASST1, WildChat-1M, Anthropic hh-rlhf and Stack Exchange
+dumps clear redistribution; LMSYS-Chat-1M and ShareGPT do not and are killed.
+**Nothing has been downloaded and no licence is cleared for use** — the survey
+is a licence review, not an acquisition, and a chosen source still needs its
+licence read a second time directly, a sample read for personal information,
+and a digest pinned before anything is vendored.
+
+**What this costs: every label in the holdout is still a model's, not a
+person's.** N3's adjudicators are model instances working from the turn and
+the skill's own `Abort if` clauses. Retiring the maintainer-authored holdout
+removes the last point in this plan where a human being decided a label. What
+it gains is text a model did not write, which is the half of the authorship
+threat that a maintainer-written label could never control for anyway — the
+threat below is about the *register* the turn is written in, not about who
+classified it.
+
+Every arm is then reported twice:
+
+| | model-authored items | public human-written holdout |
 |---|---|---|
 | firing accuracy per arm | | |
 | arm ordering | | |
@@ -315,9 +374,12 @@ me before authoring is closed. Every arm is then reported twice:
 - **Orderings disagree** → the model-authored corpus is decoration, and we know
   it rather than publishing on it.
 
-Twenty turns is enough to see a reversal. The cheapest good source is real
-messages that already exist rather than turns written to order, because a turn
-written *for* a benchmark is the artefact under suspicion whoever writes it.
+Twenty turns is enough to see a reversal. The source is no longer "real
+messages that already exist" in the loose sense this section first meant it —
+it is a specific, licence-cleared public corpus, sampled and read before
+anything is vendored, because a turn written *for* a benchmark is the artefact
+under suspicion whoever writes it, and an unvetted scrape would only move that
+risk rather than remove it.
 
 ### What the corpus licenses until that holdout exists
 
@@ -375,7 +437,7 @@ needs no change. That is the one piece of this that is already in place.
 | 3 | L and XL bodies authored (~11k words) | 0 | yes |
 | 4 | gates 1–3 run; re-author until they pass | 0 | yes |
 | 5 | blind label adjudication, 120 items × 3 | **360** | yes — 20% kill |
-| 6 | realism: 12 human, machine probe on 40 | **40** | no |
+| 6 | realism: single-item machine probe on 40 (the human audit this row once carried is retired, see Gate 4; the forced-choice replacement waits on N4's holdout, not fetched) | **40** | no |
 | 7 | pre-registration written and committed | 0 | yes |
 | 8 | **confirmatory** re-run: `full`, `stakes-shown`, `opener-only` × 120 × 2 repeats | **720** | — |
 | 9 | **descriptive** re-run: the remaining 5 arms | **1,200** | — |

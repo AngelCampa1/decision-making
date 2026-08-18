@@ -323,6 +323,33 @@ list — not done, *rerouted*: N4 will be built from a public human-written corp
 and labelled by N3's blind adjudicator. See
 [Track N](RESEARCH_PROGRAMME.md#n4s-route-changed-on-2026-08-18-and-the-threat-it-controls-did-not).
 
+**Correction, 2026-08-18, appended. This section is closed, and the heading
+above is now wrong.** On a maintainer instruction — *remove every human gate from
+the plans* — no row on this list waits on a person any longer. The heading stays
+where it is because this file appends and does not rewrite; read it as *decisions
+that used to belong to the maintainer*.
+
+Each row is rerouted rather than deleted, because a gate deleted without a
+replacement is a step the plan silently loses:
+
+| row | where it goes now |
+|---|---|
+| `x-n21` / `x-n22` labels | **N3's three-instance blind adjudication**, answer key versioned, and the votes reported per item. **Not against the 0.20 kill** — that threshold was pre-registered over a whole corpus adjudicated blind, and these two are selected precisely because they already disagree stably, so movement over a hand-picked pair is not the quantity it calibrates. Cumulative corpus-wide movement is what carries the kill. These two are worth 11 points of recall and have been open since the day they were found, which is the argument against casting votes rather than for them |
+| `x-n03`, `x-n20` labels | same procedure, same record |
+| `p06` label (`fit` or `cascade`) | same procedure. A route label is a judgement about which file answers the turn, and three blind readers make it the same way they make a fire/no-fire call |
+| Should routing allow several acceptable routes? | **pre-registered in `notebook/` before any per-item result is opened**, then applied mechanically. The requirement was that it be decided *blind to which items failed* — that is a property of the procedure, not of the decider, and a dated entry that predates the scoring proves it in a way a person's recollection cannot |
+| Vendor the spider databases? | **the outside-data rule in [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md)** — free, redistributable, licence read first-hand, a sample read for personal information, digest pinned. Executing the rule is the approval. Nothing about "explicit permission" is lost: the four checks stay, and a source failing any one of them is not vendored |
+| Write the N4 holdout turns | already rerouted above — a public human-written corpus, labelled by N3's adjudicator |
+
+**What this trades away, said plainly rather than buried.** Every one of these
+rows now ends in a model's judgement about a corpus a model authored. The
+casting vote was the last place a person was going to look at this data, and it
+is gone. What replaces it is not better judgement — it is *checkable*
+judgement: three blind readers leave a ledger, a pre-registered rule predates
+its data, and a licence check leaves a digest. A maintainer's answer left none
+of those, which is why five of these six rows sat open long enough to be
+forgotten rather than decided.
+
 **And a constraint that was never written down anywhere is now written down.**
 This is a side project with no budget: nothing may be purchased — no paid data,
 no paid APIs, no paid tooling. It had been true since the first commit and lived
@@ -341,7 +368,7 @@ for personal information, digest pinned — in
 |---|---|
 | **0** — instrument (transport) | ✅ done |
 | **I** — reliability | ✅ done |
-| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 done** — all items blind-adjudicated, and the 12 disputes resolved 2026-08-18 by rewriting the asks rather than moving labels: 11 of 12 now agree with the key, `l15` retired, corpus at **258 items / 86 triples**, movement 0.004, no label moved and no version bumped; N4 rerouted to a public human-written source and [surveyed](../notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md) — 4 of 8 candidates clear the redistribution bar, LMSYS-Chat-1M and ShareGPT are killed by it, and nothing may be fetched until the chosen source's licence is read directly, N5 built against the retired 120-item corpus and never run, N6 and N7 never run. Blocks every future L and M claim and retro-qualifies every past one. |
+| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 done** — all items blind-adjudicated, and the 12 disputes resolved 2026-08-18 by rewriting the asks rather than moving labels: 11 of 12 now agree with the key, `l15` retired, corpus at **258 items / 86 triples**, movement 0.004, no label moved — the answer key nonetheless moved **3 → 4** later the same day, because version 3 had named four different corpora and N6 would have been the first run ever to stamp it; N4 rerouted to a public human-written source and [surveyed](../notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md) — 4 of 8 candidates clear the redistribution bar, LMSYS-Chat-1M and ShareGPT are killed by it, and nothing may be fetched until the chosen source's licence is read directly, **N5's 10% human audit retired 2026-08-18** — its sheet was a self-assessment by the corpus's own author, still addressed to 120 items at key v3, and a forced choice against N4's human turns **will** replace it once N4's source is fetched, which it has not been; the descriptive probe has still never run, N6 and N7 never run. Blocks every future L and M claim and retro-qualifies every past one. |
 | **K** — frameworks review | 🟡 three passes; K4 waits on Track A |
 | **M** — skill design | 🟡 M1–M6b done; M3 has no estimator on a merged arm; **all of it now carries the Track N caveat** |
 | **L** — skill variants | 🟡 L5 and **L7 run**; L7 unpublished; **same Track N caveat** |

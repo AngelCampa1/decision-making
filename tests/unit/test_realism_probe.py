@@ -550,70 +550,6 @@ def test_the_corpus_aliases_dashes_with_the_long_bands(trigger_set: Any) -> None
 
 
 # --------------------------------------------------------------------------- #
-# The human audit sample
-# --------------------------------------------------------------------------- #
-def test_audit_sample_is_twelve_items_stratified_by_band(trigger_set: Any) -> None:
-    picked = probe.audit_sample(probe.sample(trigger_set))
-    assert len(picked) == probe.AUDIT_ITEMS
-    bands = [case.band for case in picked]
-    assert {bands.count(band) for band in set(bands)} == {3}
-
-
-def test_audit_sample_holds_the_corpus_label_ratio(trigger_set: Any) -> None:
-    picked = probe.audit_sample(probe.sample(trigger_set))
-    positives = sum(1 for case in picked if case.should_fire)
-    assert (positives, len(picked) - positives) == (4, 8)
-
-
-def test_audit_sample_is_drawn_from_the_probe_sample(trigger_set: Any) -> None:
-    """The overlap is the only anchor the machine probe's base rate has."""
-    probed = probe.sample(trigger_set)
-    picked = probe.audit_sample(probed)
-    assert {case.id for case in picked} <= {case.id for case in probed}
-
-
-def test_audit_sample_uses_distinct_triples(trigger_set: Any) -> None:
-    picked = probe.audit_sample(probe.sample(trigger_set))
-    assert len({case.triple for case in picked}) == len(picked)
-
-
-def test_audit_sample_refuses_a_shape_it_cannot_honour() -> None:
-    """It used to emit zero positives at five bands and keep claiming a 1:2 split."""
-    five_bands = tuple(
-        _case(f"c{i}", fires=i % 3 == 0, triple=f"t{i}", band=f"b{i % 5}") for i in range(15)
-    )
-    with pytest.raises(ValueError, match="does not divide"):
-        probe.audit_sample(five_bands)
-
-
-def test_audit_order_does_not_put_the_positives_first(trigger_set: Any) -> None:
-    """The ordering was the leak: positives were items 1, 4, 7 and 10."""
-    picked = probe.audit_sample(probe.sample(trigger_set))
-    positions = [index for index, case in enumerate(probe.audit_order(picked)) if case.should_fire]
-    assert positions != [0, 3, 6, 9]
-    assert positions != sorted(range(len(positions)))
-
-
-def test_audit_order_is_deterministic(trigger_set: Any) -> None:
-    picked = probe.audit_sample(probe.sample(trigger_set))
-    assert [c.id for c in probe.audit_order(picked)] == [c.id for c in probe.audit_order(picked)]
-
-
-def test_audit_sheet_does_not_leak_the_label(trigger_set: Any) -> None:
-    picked = probe.audit_sample(probe.sample(trigger_set))
-    sheet, key = probe.render_audit(picked, set_version=3)
-    for case in picked:
-        assert case.id not in sheet, "the case id encodes the label"
-        assert case.turn in sheet
-    for band in ("band s", "band m", "band l", "band xl"):
-        assert band not in sheet.lower()
-    loaded = json.loads(key)
-    assert sorted(loaded) == [f"A{i:02d}" for i in range(1, probe.AUDIT_ITEMS + 1)]
-    assert {entry["case"] for entry in loaded.values()} == {case.id for case in picked}
-    assert all(entry["set_version"] == 3 for entry in loaded.values())
-
-
-# --------------------------------------------------------------------------- #
 # End to end, zero model calls
 # --------------------------------------------------------------------------- #
 def test_dry_run_completes_the_whole_path(capsys: pytest.CaptureFixture[str]) -> None:
@@ -654,42 +590,6 @@ def test_an_alternative_prompt_can_be_supplied(
     other.write_text('Answer {"verdict": "real"} always.', encoding="utf-8")
     assert probe.main(["--dry-run", "--stub", "mixed", "--system", str(other)]) == 0
     assert probe.prompt_sha(probe.SYSTEM)[:8] not in capsys.readouterr().out
-
-
-def test_emit_audit_writes_both_files(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
-) -> None:
-    monkeypatch.setattr(probe, "AUDIT_SAMPLE", tmp_path / "sheet.md")
-    monkeypatch.setattr(probe, "AUDIT_KEY", tmp_path / "key.json")
-    assert probe.main(["--emit-audit", "--set", str(CORPUS)]) == 0
-    assert (tmp_path / "sheet.md").exists()
-    assert json.loads((tmp_path / "key.json").read_text(encoding="utf-8"))
-    capsys.readouterr()
-
-
-def test_emit_audit_honours_an_explicit_destination(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """The default lands in a gitignored directory; a filled-in sheet is evidence."""
-    sheet = tmp_path / "nested" / "sheet.md"
-    key = tmp_path / "nested" / "key.json"
-    assert (
-        probe.main(
-            [
-                "--emit-audit",
-                "--set",
-                str(CORPUS),
-                "--audit-out",
-                str(sheet),
-                "--audit-key-out",
-                str(key),
-            ]
-        )
-        == 0
-    )
-    assert sheet.exists()
-    assert len(json.loads(key.read_text(encoding="utf-8"))) == probe.AUDIT_ITEMS
-    capsys.readouterr()
 
 
 def test_report_only_with_no_records_returns_nonzero(

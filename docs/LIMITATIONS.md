@@ -107,9 +107,13 @@ produced a given trigger number survives only as prose in a hand-written README.
 Track N8.
 
 **We generate our own items, so we also own their biases.** Public benchmarks are
-contaminated, which is why we generate. The cost is that item realism rests on a
-10% human audit, and a template family that is subtly easier in the treatment's
-favour would not be caught by any automatic gate. The distractor audit runs on
+contaminated, which is why we generate. The cost is item realism, and it is now
+uncovered: the 10% human audit it rested on was **retired on 2026-08-18** with
+every other step in these plans that waited on a person, and the forced-choice
+probe replacing it cannot run until a human-written comparison source clears the
+outside-data rule. **Nothing measures realism today**, and a template family that
+is subtly easier in the treatment's favour would not be caught by any automatic
+gate. The distractor audit runs on
 the control arm only, which prevents the most direct version of this leak but not
 all of it.
 
@@ -120,10 +124,16 @@ keeps a similarly small fraction, the flagship's effect may be too small to
 detect at the N the budget supports. That outcome is a legitimate result and is
 pre-registered as a possibility, not a failure to be worked around.
 
-**Holdout secrecy is temporary and partial.** The holdout regenerates from a
-passphrase-derived seed held outside the repository, and is published after the
-verdict. Anyone who can run the generator with a guessed seed could reconstruct
-items. Contamination is managed by regeneration between runs, not by secrecy.
+**Holdout secrecy is temporary and partial, and it got weaker on 2026-08-18.**
+The holdout regenerates from a seed kept in an uncommitted local file outside
+the repository — not from a passphrase in anyone's head, because a secret only a
+person can supply is a step that waits on a person. **The cost is that the seed
+is now readable by any agent with filesystem access**, where a remembered
+passphrase was not, so on this machine reconstruction no longer requires guessing
+at all. That is accepted rather than unnoticed: the seed has to reach the
+generator through an agent either way. Anyone who can run the generator with a
+guessed seed could reconstruct items. Contamination is managed by regeneration
+between runs, not by secrecy — which is the only reason the trade is affordable.
 
 ## The judges
 

@@ -193,9 +193,15 @@ Templates rather than items are the clustering unit, so the design favours **man
 templates with few variants each**.
 
 Public/screen items are committed and expected to become contaminated over time;
-they only gate spending. The holdout is regenerated from a passphrase-derived
-seed held outside the repository and published after the verdict, with fresh
-seeds for the next run. Contamination is handled by regeneration, not secrecy.
+they only gate spending. The holdout is regenerated from a seed kept in an
+uncommitted local file outside the repository, and published after the verdict,
+with a fresh seed for the next run. **A file rather than a passphrase**: a
+secret only a person can supply makes regeneration wait on one. The exposure
+this adds is real and is stated rather than glossed — a file on the machine is
+readable by any agent with filesystem access, and a passphrase in someone's head
+is not. It is accepted because the seed has to reach the generator through an
+agent either way, and because secrecy was never the contamination mechanism here;
+regeneration between runs is. Contamination is handled by regeneration, not secrecy.
 
 ## 7. Verifiers and judges
 
@@ -206,10 +212,22 @@ leak, or infrastructure error rather than assumed to be the first.
 
 Judges produce **secondary** metrics only; no primary metric is ever a judge
 score. They emit a binary verdict plus a written critique rather than a Likert
-rating, and are calibrated against a deliberately failure-heavy human-labelled
-set with **TPR and TNR reported separately**, because blended accuracy hides
-agreeableness bias — a judge that agrees with everything scores well on a
-balanced set while catching almost no real failures. Criteria drift
+rating, and are calibrated against a deliberately failure-heavy set whose labels
+come from **three-instance blind adjudication** — the N3 protocol, movement
+reported against its kill threshold — rather than from a person, with **TPR and
+TNR reported separately**, because blended accuracy hides agreeableness bias —
+a judge that agrees with everything scores well on a balanced set while catching
+almost no real failures.
+
+**That calibration key is model-labelled, and the weakening is stated rather
+than argued away.** This paragraph said *human-labelled* until 2026-08-18, when
+every step waiting on a person came out of these plans; what it named had never
+been produced, so the change is from an unavailable key to an available one and
+not from a better key to a worse one. It does mean a judge is calibrated against
+labels a model set, so a bias the adjudicator shares with the judge is invisible
+to this check. Three independent instances and a reported movement figure bound
+that; they do not remove it. A public human-labelled set that clears the
+outside-data rule would, and none has been cleared. Criteria drift
 (arXiv:2404.12272) means recalibration is required whenever the pipeline or the
 model changes: "users need criteria to grade outputs, but grading outputs helps
 users define criteria."

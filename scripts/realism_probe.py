@@ -1,11 +1,12 @@
 """Track N5: does the trigger corpus read as text a person sent?
 
 **This is descriptive. It is not a gate, and no number it prints retires the
-corpus.** There is no human-written comparison set in this repository — Track N4,
-the human holdout, does not exist yet — so a judge's realism verdict is a
-statement about one model's prior over message text, not about whether the
-corpus is valid. What it produces is a *rate with an interval*, reported and
-left alone.
+corpus.** No human-written comparison set is in this repository yet. Track N4
+now has a route to one — a public human-written corpus rather than a person, see
+below — but nothing has been fetched against it, so a judge's realism verdict
+here is still a statement about one model's prior over message text, not about
+whether the corpus is valid. What it produces is a *rate with an interval*,
+reported and left alone.
 
 The temptation this docstring exists to refuse: writing a threshold. Standing
 rule 2 says a falsifier must be run against a known-good case before it may fail
@@ -15,14 +16,20 @@ known to be a real message, so nothing can show that a judge calling text
 judge, which is worse than no realism measurement at all.
 
 **Single-item judgement, not forced choice, and that is a downgrade taken on
-purpose.** A forced choice between a real message and an authored one is the
-sharper instrument — it cancels the judge's base rate, which is the exact
-quantity that is unmeasurable here. It needs real messages to pair against and
-there are none. The available alternative, pairing two *corpus* items against
-each other, is an estimator that cannot answer the question asked: both sides are
-model-authored, so it would sit at 0.5 by construction however authored the whole
-set reads, and it would print a clean, plausible number while doing it. That is
-the 2026-08-12 defect shape exactly.
+purpose, for now.** A forced choice between a real message and an authored one
+is the sharper instrument — it cancels the judge's base rate, which is the exact
+quantity that is unmeasurable with a single item. It needs real messages to pair
+against, and Track N4 no longer says those cannot exist here: N4 is now routed
+to a public human-written corpus rather than a person
+(`notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md`),
+which makes the comparison set reachable without a person and supplies the
+known-good case standing rule 2 demands — which item is actually human is a
+fact, not a taste. That data has not been fetched, so the paired probe is not
+implemented here. The available alternative today, pairing two *corpus* items
+against each other, is an estimator that cannot answer the question asked: both
+sides are model-authored, so it would sit at 0.5 by construction however
+authored the whole set reads, and it would print a clean, plausible number
+while doing it. That is the 2026-08-12 defect shape exactly.
 
 **This deviates from the written plan and the deviation is recorded rather than
 made quietly.** `docs/superpowers/plans/2026-08-13-trigger-corpus-v3.md` specifies
@@ -45,7 +52,6 @@ shown a skill. It is asked one question about the text.
 Usage::
 
     python scripts/realism_probe.py --dry-run --stub mixed   # no model calls
-    python scripts/realism_probe.py --emit-audit             # no model calls
     python scripts/realism_probe.py --model haiku            # 40 calls
 """
 
@@ -116,16 +122,11 @@ SYSTEM = (
 VERDICTS = ("real", "composed")
 
 CHECKPOINT = REPO_ROOT / "results" / "triggers" / "realism.jsonl"
-AUDIT_SAMPLE = REPO_ROOT / "results" / "triggers" / "realism-audit-sample.md"
-AUDIT_KEY = REPO_ROOT / "results" / "triggers" / "realism-audit-key.json"
 
 #: Conventional two-sided level for the reported interval. Named rather than
 #: buried in a 1.96: the interval is the output here, so the thing that sets its
 #: width is a parameter of the report.
 ALPHA = 0.05
-
-#: Items in the human audit sample. 10% of 120, fixed by Track N5's own line.
-AUDIT_ITEMS = 12
 
 #: Run parameters that change every number and are invisible once a checkpoint is
 #: read back. Each is written into every row and each is refused if a resumed run
@@ -259,73 +260,6 @@ def sample(trigger_set: TriggerSet) -> tuple[TriggerCase, ...]:
                 elif positives:  # pragma: no cover - a triple with no negative
                     picked.append(positives[0])
     return tuple(sorted(picked, key=lambda c: _natural_key(c.id)))
-
-
-def audit_sample(probe_cases: tuple[TriggerCase, ...]) -> tuple[TriggerCase, ...]:
-    """The 12 items for the human audit, drawn from the probe's own sample.
-
-    **Drawn from the probe sample on purpose.** The human verdicts are the only
-    thing in this track with ground truth, and putting them on the same items the
-    machine judged is the one anchor available for the machine's base rate — the
-    quantity the single-item design cannot otherwise touch. Disjoint samples
-    would have thrown that away for nothing. The cost is that the human inherits
-    every confound the machine sample has.
-
-    Three per band, one positive and two negatives, all from distinct triples.
-    Equal allocation across bands rather than proportional: proportional would
-    give the XL band two items, and XL — seven bodies of 900 to 1,500 authored
-    words — is the band whose realism is most open to question. That is a choice
-    and it is recorded as one; what would replace it is a human audit large
-    enough to be allocated by variance rather than by judgement.
-
-    Raises:
-        ValueError: The corpus shape cannot produce the documented allocation.
-            An earlier draft computed ``12 // len(bands)`` and silently emitted
-            **zero positives** at five bands while the docstring went on claiming
-            a 1:2 split. A shape this function cannot honour is a refusal, not a
-            quietly different sheet.
-    """
-    by_band: dict[str, list[TriggerCase]] = {}
-    for case in probe_cases:
-        by_band.setdefault(str(case.band), []).append(case)
-
-    per_band, remainder = divmod(AUDIT_ITEMS, max(len(by_band), 1))
-    if per_band < 3 or remainder:
-        raise ValueError(
-            f"{AUDIT_ITEMS} items over {len(by_band)} band(s) does not divide into groups of "
-            "three (one positive, two negatives), which is the ratio the sheet documents. "
-            "Change AUDIT_ITEMS with the allocation, or allocate by band size explicitly."
-        )
-    positives_wanted = per_band // 3
-
-    picked: list[TriggerCase] = []
-    for band in sorted(by_band):
-        cases = sorted(by_band[band], key=lambda c: _natural_key(c.id))
-        positives = [c for c in cases if c.should_fire][:positives_wanted]
-        negatives = [c for c in cases if not c.should_fire][: per_band - len(positives)]
-        if len(positives) + len(negatives) < per_band:
-            raise ValueError(
-                f"band {band!r} cannot supply {positives_wanted} positive(s) and "
-                f"{per_band - positives_wanted} negative(s) from distinct triples."
-            )
-        picked.extend(positives + negatives)
-    return tuple(picked)
-
-
-def audit_order(cases: tuple[TriggerCase, ...]) -> tuple[TriggerCase, ...]:
-    """Presentation order for the audit sheet, keyed on a hash of the case id.
-
-    **The order was the leak.** Sorting by band and then taking one positive
-    followed by two negatives put the positive first in every group of three, so
-    the sheet's items 1, 4, 7 and 10 were the positives and a reader could see
-    the rule without opening the key. The word counts already group the bands, so
-    "first of each group of three" was all that remained.
-
-    A hash of the case id is deterministic, reproduces exactly, and is unrelated
-    to the label — which a shuffle with a seed would also be, at the cost of one
-    more parameter nobody derived.
-    """
-    return tuple(sorted(cases, key=lambda c: hashlib.sha256(c.id.encode("utf-8")).hexdigest()))
 
 
 # --------------------------------------------------------------------------- #
@@ -921,80 +855,6 @@ def report(outcome: ProbeOutcome, cases: tuple[TriggerCase, ...] = ()) -> None:
 
 
 # --------------------------------------------------------------------------- #
-# The human audit sample
-# --------------------------------------------------------------------------- #
-def render_audit(cases: tuple[TriggerCase, ...], *, set_version: int = 0) -> tuple[str, str]:
-    """The blind audit sheet, and its separate un-blinding key.
-
-    The sheet carries opaque keys rather than case ids because the ids leak the
-    label — ``s01p`` is a positive and ``s01n1`` is not — and the audit question
-    has nothing to do with the label. The key is a second file so that reading
-    the sheet does not un-blind it, and the items are ordered by
-    :func:`audit_order` so the sheet's own sequence does not either.
-
-    **The only human available authored this corpus**, so this is closer to a
-    self-assessment than to an independent audit, and the sheet says so at the
-    top rather than leaving a reader to infer it. An audit by someone who has
-    never seen the corpus is what would replace it, and that is Track N4's
-    holdout supplier, not this file.
-    """
-    ordered = audit_order(cases)
-    lines = [
-        f"# Realism audit sample — {len(ordered)} items (10% of 120)",
-        "",
-        f"**Track N5, answer key v{set_version}. This is the part with ground truth,",
-        "and it needs a person.**",
-        "",
-        "For each item below, answer three questions:",
-        "",
-        "1. Does this read like a message a real person sent to someone?"
-        "  `real` / `composed` / `unsure`",
-        "2. If `composed`, what gave it away? One phrase.",
-        "3. Would you have sent something like this? `yes` / `no`",
-        "",
-        "Do not open the key file first — it carries the label and the band, and",
-        "neither is the question. Answer from the text. The order below is a hash",
-        "of the item id and carries no information about either.",
-        "",
-        "**Standing caveat.** The only auditor available authored this corpus, so",
-        "these answers are a self-assessment. They bound the machine probe's base",
-        "rate on the same twelve items, which is the one anchor this track has;",
-        "they are not an independent judgement of realism. An outside reader is",
-        "Track N4's job.",
-        "",
-        "---",
-        "",
-    ]
-    key: dict[str, dict[str, object]] = {}
-    for index, case in enumerate(ordered, start=1):
-        tag = f"A{index:02d}"
-        key[tag] = {
-            "case": case.id,
-            "band": case.band,
-            "label": case.should_fire,
-            "triple": case.triple,
-            "domain": case.domain,
-            "kind": case.kind,
-            "set_version": set_version,
-        }
-        lines += [
-            f"## {tag}",
-            "",
-            "```text",
-            case.turn,
-            "```",
-            "",
-            "- real / composed / unsure:",
-            "- cue:",
-            "- would you send this? yes / no:",
-            "",
-            "---",
-            "",
-        ]
-    return "\n".join(lines), json.dumps(key, indent=2, sort_keys=True) + "\n"
-
-
-# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def _display(path: Path) -> str:
@@ -1045,40 +905,12 @@ def main(argv: list[str] | None = None) -> int:
         "to move; a stub that only ever produced one rate would prove nothing. `band` is "
         "label-blind, so any label gap it prints is a confound rather than a finding.",
     )
-    parser.add_argument(
-        "--emit-audit",
-        action="store_true",
-        help="Write the 12-item human audit sheet and its key. No model calls.",
-    )
-    parser.add_argument(
-        "--audit-out",
-        default=None,
-        help=(
-            "Where the audit sheet goes. The default sits in `results/triggers/`, which is "
-            "gitignored -- correct for a raw checkpoint and wrong for a filled-in sheet, "
-            "since the answers would be evidence. Point this somewhere versioned before "
-            "answering it."
-        ),
-    )
-    parser.add_argument("--audit-key-out", default=None)
     args = parser.parse_args(argv)
 
     corpus_path = Path(args.set)
     trigger_set = load_trigger_set(corpus_path)
     cases = sample(trigger_set)
     system = Path(args.system).read_text(encoding="utf-8") if args.system else SYSTEM
-
-    if args.emit_audit:
-        cases_for_audit = audit_sample(cases)
-        sheet, key = render_audit(cases_for_audit, set_version=trigger_set.version)
-        sheet_path = Path(args.audit_out) if args.audit_out else AUDIT_SAMPLE
-        key_path = Path(args.audit_key_out) if args.audit_key_out else AUDIT_KEY
-        for path, text in ((sheet_path, sheet), (key_path, key)):
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(text, encoding="utf-8")
-        print(f"wrote {_display(sheet_path)} ({len(cases_for_audit)} items)")
-        print(f"wrote {_display(key_path)}")
-        return 0
 
     if args.checkpoint:
         checkpoint = Path(args.checkpoint)

@@ -58,8 +58,20 @@ and the full output is pinned byte-exact by golden files that require an explici
 
 **Who wrote the templates?** Claude Opus 5, under direction, in a single session.
 That is a real limitation: ten templates from one author in one sitting will
-share idiom and structure in ways a broader corpus would not. The 10% human
-realism audit is the mitigation and it has not been performed yet.
+share idiom and structure in ways a broader corpus would not. **The mitigation
+was a 10% human realism audit and it is retired as of 2026-08-18**, along with
+every other step in these plans that waited on a person. It is not retired for
+being unperformed: a single-item realism verdict cannot recover the judge's own
+base rate, and the only reader available had authored the templates, so it was a
+self-assessment either way. What replaces it is a **forced choice** — one
+generated problem beside one human-written problem of the same shape, judged
+blind, which was written by a person — because that cancels the base rate and
+carries a ground truth the audit never had: which item is human is a fact on the
+record. It needs a public human-written word-problem source that clears the
+outside-data rule in [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md), and
+**no such source has been read, fetched or cleared** — so the mitigation is
+currently unavailable rather than merely undone, and this limitation stands
+open.
 
 **What quality filters applied?**
 
@@ -143,8 +155,10 @@ comparison, since prompt formatting differs and that alone moves results.
 **Is contamination a risk?** Yes, and it is managed rather than prevented. The
 public split is committed and expected to become contaminated; it only gates
 spending and never enters a verdict. The holdout regenerates from a
-passphrase-derived seed held outside the repository and is published after the
-verdict, with fresh seeds for the next run.
+seed kept in an uncommitted local file outside the repository — **a file, not a
+passphrase somebody remembers**, since a secret only a person can produce is a
+step that waits on a person — and is published after the verdict, with a fresh
+seed for the next run.
 
 ## Distribution and maintenance
 
@@ -173,6 +187,10 @@ number computed before the change incomparable with every number after it.
   re-audit found had produced most of the original effect. Structural invariance
   does not settle that; two independent auditors are required and none have run.
   This gate blocks pre-registration.
-- **No human realism audit yet.** 10% is the target; 0% is the status.
+- **No realism measurement at all.** The 10% human audit that was the target is
+  retired (see *Who wrote the templates?*), and the forced choice replacing it
+  cannot run until a human-written comparison source clears the outside-data
+  rule. Target and status are both now 0, and the honest reading is that this
+  limitation got *more* open, not less.
 - **Single author, single session, ten templates.** Idiom and structure are
   correlated across the corpus in ways that are hard to see from inside it.

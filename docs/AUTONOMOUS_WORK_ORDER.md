@@ -201,6 +201,43 @@ scale. Then start it.
 
 ---
 
+## A person is not a step
+
+**Maintainer instruction, 2026-08-18: remove every human gate from the plans.**
+The same shape as the quota removal above, and for the same reason — a step that
+waits on somebody is a step that does not happen. What it cost, measured rather
+than asserted: N4's holdout sat on `STATUS.md`'s maintainer list from the day it
+was written to the day it was rerouted, and **not one turn was ever supplied**;
+the 10% realism audit was written down at 0% and was still at 0% one hundred and
+forty-one items later; five label decisions marked *open* were open long enough
+to be forgotten rather than decided.
+
+So: **no plan in this repository may name a person as a prerequisite.** If you
+find one, reroute it, and observe the two conditions that make a removal honest
+rather than convenient:
+
+- **Name what now does the job.** A gate deleted with nothing behind it is a
+  step the plan silently loses, which is worse than a step it openly fails to
+  take. Labels go to three-instance blind adjudication. Data-source decisions
+  go to the outside-data rule below — executing it *is* the approval, and none
+  of its four checks is dropped. A parameter with no derivation goes to standing
+  rule 1: record the choice as a choice, in a dated `notebook/` entry.
+- **Name what is lost.** Usually it is the last reader outside the model loop,
+  and that is a real cost that no amount of procedure buys back. Say so in the
+  same paragraph as the removal. What the replacements do buy is *checkability*:
+  three blind judges leave a ledger, a pre-registered rule predates its data, a
+  licence check leaves a digest. One person's answer left none of those, which
+  is the argument — not that a person would judge worse.
+
+**This does not touch the things a person is genuinely for.** Reporting that a
+skill made an answer worse, deciding what this repository is for, and reading a
+claim before it is published are not gates in a plan. Nor does it loosen
+anything protective: the outside-data rule, the pre-registration requirement,
+the answer-key versioning and the promotion gate all stand exactly as written.
+A gate on evidence is not a gate on a person.
+
+---
+
 ## Things that still need care, none of which is a reason to wait
 
 1. **Authoring corpus items.** Three corpora were built and discarded, and the

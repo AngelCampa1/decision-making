@@ -30,7 +30,10 @@
 %      missed WITHOUT distractors is ambiguous, not hard.
 %   2. Difficulty calibration: control accuracy on distractor-present items in
 %      [0.35, 0.75]. Above that there is no headroom and required N explodes.
-%   3. Human audit of a 10% sample for realism.
+%   3. Realism: forced choice against human-written items, judged blind, scored
+%      against 0.5. Replaced the 10% human audit on 2026-08-18 -- see
+%      docs/EVAL_SET_DATASHEET.md. Needs a public human-written source that
+%      clears the outside-data rule; none is cleared, so this gate is UNRUN.
 
 \subsection{Clustering}
 % Items from one template are correlated. Design effect 1 + (m-1)rho, so the
@@ -41,7 +44,7 @@
 \subsection{Splits and contamination}
 % Public/screen items are committed and expected to become contaminated; they
 % only gate spending and never enter a verdict. The holdout regenerates from a
-% passphrase-derived seed held outside the repository and is published after the
+% seed kept in an uncommitted local file outside the repository, published after the
 % verdict, with fresh seeds next run.
 %
 % State the principle: contamination is handled by regeneration, not secrecy.
