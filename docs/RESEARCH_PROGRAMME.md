@@ -963,6 +963,47 @@ column on the case rather than a property the set happens to have.
 | **N7** | **Descriptive re-run** — the remaining five arms. | 1,200 calls | |
 | **N8** | **Stamp the model into the record.** `--model` is a CLI argument with a default and the tier survives only as prose in a hand-written README; the verdict records carry `case`, `fired`, `route`, `repeat` and no model at all. Same shape as the label-versioning defect: a run parameter that changes every number, recoverable only from someone remembering to type it. Needs a comparability guard beside `label_versions_comparable`. | free | **done 2026-08-13.** `run_triggers.py` writes `model`; `models_comparable` refuses a comparison spanning tiers, and `compare` raises on it. **An absent `model` is unknown, not the default** — `--model` could have been passed and the record would look identical, so filling in `haiku` would be standing rule 1's invented parameter. Two unstamped arms therefore still compare (no published comparison is retroactively voided) and a stamped arm against an unstamped one is refused, which is the transition where the risk is real |
 
+#### N4's route changed on 2026-08-18, and the threat it controls did not
+
+**The maintainer will not hand-author the ~20 holdout turns.** Recorded as a
+decision rather than left as a blocked row, because a blocked row that nobody
+retires is how a track stalls for weeks — N4 has sat on
+[`STATUS.md`](STATUS.md)'s maintainer list since it was written and no turn has
+ever been supplied.
+
+So N4 **will** be built from a public human-written corpus instead. What it
+controls for is the *provenance of the text* — the three leaks Track N has
+closed so far were authoring habits (a word-count ruler at 0.890, an `open`-view
+opener at 0.779, and `_shared_body` cutting at a space), all of them in text a
+model wrote, all of them hunted by gates a model built. Human text breaks that
+loop whether or not the human is the maintainer.
+
+The labels **will** come from N3's three-judge blind adjudication, unchanged.
+That is a real weakening and it is stated rather than argued away: the
+adjudicator is still a model. But the contamination being controlled sits in the
+*text*, not the key, so a model-labelled human corpus is materially less
+circular than a model-authored one — and it is reachable without a person.
+
+Two things this costs, both accepted:
+
+- **The distribution shifts.** Forum posts are written for strangers and chat
+  logs were sent to a different assistant. The holdout therefore asks *does this
+  generalise off our own writing*, not *does this work on the maintainer's
+  inbox*. The first is the question worth answering; the second was never quite
+  what N4 asked either.
+- **A source must clear the outside-data rule before anything is fetched** —
+  free, redistributable, sampled and read, digest pinned. See
+  [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md). Nothing here has a
+  budget, so a source that costs money is not a source.
+
+**A label-free fallback exists if no corpus clears that bar.** N4's payload is
+whether the arms *rank the same* on human text as on authored text; a weaker
+version measures only how much the arms disagree **with each other** on
+unlabelled human turns. Divergence on authored text and convergence on human
+text would be a finding, and it needs no key at all.
+
+---
+
 **Depends on.** Nothing. Like Track 0, it is a gate rather than a question.
 
 **Blocks.** Every *future* claim from Tracks L and M, and it retro-qualifies

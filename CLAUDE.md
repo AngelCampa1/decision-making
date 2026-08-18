@@ -170,6 +170,14 @@ Two things follow, and both have been got wrong here before:
   long calls is hours of serial running spread across days and windows. That is
   why the runner is checkpointed and resumable, and why `--model` tiers exist:
   to stay inside a quota, not inside a price.
+- **And nothing may be bought.** This is a side project with no budget — no paid
+  APIs, no paid datasets, no paid tooling, no subscription beyond the Claude Max
+  one already here, nothing that bills. Maintainer instruction, 2026-08-18. If a
+  track needs data this repository did not author, it uses data that is free to
+  obtain *and* free to redistribute, or it does without and says which. Note
+  that **"vendoring" here means checking a copy into `datasets/vendor/`** — it
+  has never meant paying anyone, and the word has already been misread that way
+  once, which is the reason this bullet names it.
 
 `BudgetLedger` stays, reinterpreted. Reported cost scales with tokens, so it is
 the best available **burn meter** for quota consumption. It is not a spend cap

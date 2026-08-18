@@ -268,6 +268,22 @@ session is mid-edit on `l.yaml`/`xl.yaml`/`corpus-baseline.txt` closing an
 Trigger corpus v3 is no longer on this list — it stopped being a decision and
 became **[Track N](RESEARCH_PROGRAMME.md)** on 2026-08-13.
 
+**Correction, 2026-08-18, appended. The N4 row above is answered, and the answer
+is no.** The maintainer will not author the ~20 holdout turns. It is off this
+list — not done, *rerouted*: N4 will be built from a public human-written corpus
+and labelled by N3's blind adjudicator. See
+[Track N](RESEARCH_PROGRAMME.md#n4s-route-changed-on-2026-08-18-and-the-threat-it-controls-did-not).
+
+**And a constraint that was never written down anywhere is now written down.**
+This is a side project with no budget: nothing may be purchased — no paid data,
+no paid APIs, no paid tooling. It had been true since the first commit and lived
+only in the maintainer's head, which is the same defect shape as the model tier
+that survived as prose in a README. It is now in
+[`CLAUDE.md`](../CLAUDE.md) beside the subscription note, with the operational
+half — licence read first-hand, redistribution checked, a sample actually read
+for personal information, digest pinned — in
+[`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md).
+
 ---
 
 ## Tracks

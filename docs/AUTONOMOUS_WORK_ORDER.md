@@ -214,6 +214,27 @@ scale. Then start it.
    verdict vocabulary in [`SCORECARD.md`](../SCORECARD.md) governs what may be
    said; `UNTESTED` is the honest state of every skill in this repository. This
    constrains the sentence you write, never whether you run the experiment.
+5. **Outside data must be free, redistributable and read before it lands.**
+   There is no budget and nothing may be purchased — see
+   [`CLAUDE.md`](../CLAUDE.md). So a corpus this repository did not author comes
+   from a public source or it does not come at all, and four things are settled
+   *before* it is fetched, in a dated `notebook/` entry:
+
+   - **The licence, read first-hand**, and whether it permits redistribution.
+     Free to download and free to check in are different permissions, and
+     discovering the difference after vendoring is worse than not vendoring.
+   - **Attribution and share-alike terms**, where the licence carries them.
+     They travel to whatever is built from the data, including the paper.
+   - **What is actually in it.** Public human-written text carries personal
+     information, and worse. Read a sample, state what was checked and what was
+     found, and record the filter applied. Nothing enters unread on the strength
+     of its licence.
+   - **A pinned digest** in `datasets/vendor/*.lock.json`, with the loader
+     refusing anything that does not match — the pattern `lost_in_conversation`
+     already follows.
+
+   `de fetch` downloads; it does not vet. **The vetting is the work**, and it
+   belongs to whoever proposes the source, before an agent is pointed at it.
 
 ---
 
