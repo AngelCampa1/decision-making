@@ -24,6 +24,56 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-18 — Twelve disputed asks rewritten, one triple retired, and the key still has not moved
+
+**Commits:** `08eda89`
+
+**Twelve turns change and no label does.** N3's blind adjudication left 12 items
+where the judges' majority disagreed with the key. Applying those moves is
+impossible: all 12 land in triples that would end up with two positives or none,
+because in each of the ten negative → positive cases the same adjudication
+**unanimously** reconfirmed that triple's existing positive. So the disagreement
+was never evidence that a label was wrong — it was evidence that **the authored
+contrast did not land**, which the v3 plan's rule sends to *rewrite the turn*.
+
+**The rule the rewrites were written to:** an inert ask asks about one thing. It
+may share every noun with the positive; it may not put two options in a frame
+that invites ranking them. Diagnosed from `s02n2` and applied to all twelve
+without the rewriters being shown any judge's rationale — a rewrite aimed at a
+stated objection is tuned to that judge.
+
+**Result: 11 of 12 now agree with the key** on blind re-adjudication (36 calls,
+0 unparseable), against a registered band of 8. Judge agreement on those twelve
+went from 0.611 pairwise to 1.000, and corpus-wide movement from 12/261 = 0.046
+to **1/261 = 0.004**.
+
+**`l15` is retired whole** — `l15n2` still moves unanimously after its rewrite,
+and the registered rule is one round only. The plan's rule that a retired body
+retires its triple applies, and retiring one member would leave a structure the
+corpus forbids. **The corpus goes from 261 items / 87 triples to 258 / 86** —
+s 24, m 24, l 21, xl 17.
+
+**No gate crossed and no baseline entry was orphaned**, which took a correction
+mid-round. Three initial rewrites changed their turn's sentence count and pushed
+a corpus-wide habit sitting at 3.01–3.11σ under its 3.0 gate, which would have
+had a label fix quietly closing two open shortcut findings — the pattern this
+register has already named four times. Rephrased to preserve sentence counts;
+the two `sentence_count` findings now read **3.18σ**, stronger than before the
+round. `datasets/triggers/corpus-baseline.txt` is unchanged: same three entries,
+same keys.
+
+**The answer key still has not moved and no version has been bumped.** Nothing
+in this change alters a `should_fire`, so no published number is affected and
+`set_version` stays where it was. The freeze — if one is still wanted — now has
+one disputed item instead of twelve, and that item is gone.
+
+Protocol registered before the round in
+[`notebook/2026-08-18-prediction-the-rewrite-round-and-its-stopping-rule.md`](../notebook/2026-08-18-prediction-the-rewrite-round-and-its-stopping-rule.md);
+outcome, including a registered prediction that turned out wrong, in
+[`notebook/2026-08-18-the-rewrite-round-eleven-of-twelve-and-one-retirement.md`](../notebook/2026-08-18-the-rewrite-round-eleven-of-twelve-and-one-retirement.md).
+
+---
+
 ## 2026-08-14 — The opener leak closed by touching both sides, not one
 
 **Commits:** `cee9329`
