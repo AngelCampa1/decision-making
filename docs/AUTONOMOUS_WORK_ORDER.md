@@ -102,16 +102,24 @@ judgement about an answer key.
 
 | Work | Done when |
 |---|---|
-| **Track K5 backlog** — resolve baselined identifiers in `paper/citations-baseline.txt`, one paper at a time: fetch, add the entry, add the `quote`, delete the line | `de check` green with a shorter baseline |
-| **Track 0.5** — OTel GenAI span attributes on `RunRecord`/`NodeRecord` | tests pass at the coverage floor |
-| **Track 0.6** — assert on the `system/init` isolation receipt | a planted `CLAUDE.md` is proven absent from `memory_paths` and `tools` |
+| **Track K5 backlog** — two identifiers are outstanding, `2412.06593` and `2505.02151`, added by the K3/K4 pass on 2026-08-14 with their quotes recorded in `docs/DECISION_FRAMEWORKS.md` because another session held `refs.bib` at the time. Move each into `paper/refs.bib` with its `quote` and delete the line | `de check` green with an empty baseline. **`docs/RESEARCH_PROGRAMME.md` said "K5 is closed" for four days while this backlog was non-empty** — a may-only-shrink list can still be added to |
+| **Track 0.5** — the attributes are on `RunRecord`/`NodeRecord` and `telemetry.span_attributes()` is tested to 100%, but **nothing in `evals/src` calls it** — six callers, all in `tests/unit/test_telemetry.py`. Fifth tested-with-no-caller instance, and unregistered in `[tool.decision-evals.unwired]`; the wiring gate misses it for the same reason it missed `benjamini_hochberg`, which is that `telemetry` *is* imported by `orchestrator.py` and reachability is checked per module, not per function | a production path emits the `gen_ai.*` mapping and a test asserts on it — or the function is deleted |
+| **Track 0.6** — `assert_isolated()` raises on `tools` and on `skills` and **never inspects `memory_paths`**; the class docstring says so outright ("gates on `tools` and the rest is recorded"), and `tests/unit/test_conversation.py`'s own fixture passes the assertion with `memory_paths` populated. The field is parsed, not gated | a planted `CLAUDE.md` surfaces in the receipt's `memory_paths` and something refuses the run over it |
 | **Fold the `stream-json` transport** into `providers/claude_code.py` beside the single-shot path | the multi-turn canary reproduces: `input_tokens` climbs *and* turn-*n* recalls turn-1 content |
-| **Vendor the sharded corpus** from arXiv:2505.06120 and write `model_claude_code.py` against its `generate()` interface | it runs; upstream commit SHA recorded in the datasheet |
+| **Either write `model_claude_code.py` against `lost_in_conversation`'s `generate()` interface, or retire that plan in writing** — the corpus is vendored and pinned and `sharded.py` already runs live against it through this repository's own `Conversation`, bypassing the upstream plugin protocol entirely, so the shim may simply be obsolete | the shim exists and runs, or the programme stops saying it is "still needed". Either way the pin (`c865793f`, SHA-256) reaches a datasheet — `docs/EVAL_SET_DATASHEET.md` covers the authored trigger corpus and never mentions this one |
 | **Compute the MDE** for A1–A5 with `stats/power.py`, and write it into the programme beside each experiment | numbers exist where "sized from the MDE" currently is |
 | ~~**Track I1** — `stats/reliability.py`~~ **done**, and the programme said so before this table did | — |
-| **Inter-rater agreement** — `stats/agreement.py`, a different concept from `reliability.py`'s score reliability | 100% line+branch with property tests, matching `paired.py`, and wired to `adjudicate.py` |
 | **Track K1–K4, K6** — the decision-frameworks review | `docs/DECISION_FRAMEWORKS.md` exists, every claim carrying a `quote` |
-| **Delete or wire the `inspect-ai` dependency** — declared in `pyproject.toml`, imported nowhere | either it is imported or it is gone |
+
+**Two rows were deleted on 2026-08-18 because the work was already done and the
+table had not noticed** — `stats/agreement.py`, which `scripts/adjudicate.py`
+imports and calls for all four agreement statistics, and the `inspect-ai`
+dependency, which is gone and has a comment in `pyproject.toml` explaining why.
+**A backlog nobody prunes advertises finished work and is read as a to-do
+list.** The audit that found them was briefed to break the claim that the table
+was stale, and it found the opposite in two places: Track 0.6 is *less* done
+than the programme says, and the vendored-corpus row names an artefact that was
+never built because the work took a different route.
 
 ---
 

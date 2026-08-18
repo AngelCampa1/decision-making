@@ -218,7 +218,9 @@ Eleven frameworks catalogued and graded on *prescriptive* evidence rather than
 popularity. K2's *none located* rows still want a database search. Four results
 bear on what the rest of the programme should build.
 
-**K5 is closed, and the audit found two more misattributions.** All 27 baselined
+**K5 closed on 2026-08-12 and reopened on 2026-08-14, and this paragraph did not notice.** `paper/citations-baseline.txt` carries two identifiers again — `2412.06593` (anchoring) and `2505.02151` (overconfidence), added by the K3/K4 pass with their quotes recorded in [`DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md) rather than in `paper/refs.bib`, because another session held that file at the time. Neither is in the bibliography today. **A backlog that may only shrink can still be added to**, and the sentence below was true when written and has been false since. What follows is the 2026-08-12 audit as it stood.
+
+All 27 baselined
 identifiers were fetched first-hand: 67 cited, 67 in the bibliography, 0
 exempted. Of the eight that assert a number, six survive — In-Context Prompting's
 three failure-rate pairs, PerspectiveGap's 17.2% and 62.0%, and MAST's 14 modes /
@@ -963,8 +965,8 @@ column on the case rather than a property the set happens to have.
 | # | Experiment | Cost | State |
 |---|---|---|---|
 | **N1** | **The shortcut battery.** `corpus.py`: eight trivial features, each held to a **two-sided** [0.40, 0.60] — the one-sided `MAX_LENGTH_SEPARABILITY = 0.70` it replaces would have passed a set at AUC 0.05, which is solved by a ruler pointing the other way — plus a depth-2 stump over all eight capped at 0.70, because a battery of singles misses interactions. | free | **done** |
-| **N2** | **Author the corpus.** 40 triples, 120 items, four bands (≤25 / 40–90 / 200–400 / 900–1500 words), 1:2 positive-to-negative in **every** band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | **done** — 40 triples, 120 items, all four bands, every gate in N1 passing. See below |
-| **N3** | **Blind label adjudication.** Three independent instances label each turn with no access to mine. **Pre-registered kill: >20% label movement retires the corpus.** 21 of 21 scored failures across three corpora were the answer key, and a 1,200-word turn has fifty times the surface for that. | 360 calls | |
+| **N2** | **Author the corpus.** 40 triples, 120 items, four bands (≤25 / 40–90 / 200–400 / 900–1500 words), 1:2 positive-to-negative in **every** band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | **done** — authored at 40 triples / 120 items and since grown by two merges to **87 triples, 261 items** (S 24, M 24, L 22, XL 17), every gate in N1 passing. See below |
+| **N3** | **Blind label adjudication.** Three independent instances label each turn with no access to mine. **Pre-registered kill: >20% label movement retires the corpus.** 21 of 21 scored failures across three corpora were the answer key, and a 1,200-word turn has fifty times the surface for that. | 360 calls | **done 2026-08-14** across two continuations, 261 of 261 items, 3 judges each, 0 unparseable. **Movement 12/261 = 0.046 against the 0.20 kill — the corpus survives by a factor of four**, and no band is near it (0.042 s, 0.042 m, 0.045 l, 0.059 xl). Fleiss kappa 0.862. **The 12 moves are unapplied and cannot be applied as written** — see below |
 | **N4** | **The human-authored holdout.** The threat no gate above touches: a model is authoring the corpus that will evaluate a model. Blind adjudication does not fix it — the adjudicator is also a model. The maintainer supplies ~20 turns, ideally real messages rather than turns written to order. Every arm is reported twice. **Orderings agree → the threat is bounded by a measurement. Orderings disagree → the model-authored corpus is decoration, and we know it.** | ~120 calls | |
 | **N5** | **Realism.** 10% human audit — 12 items, and the repository's realism audit has been at 0% since it was written down. Plus a descriptive machine probe on whether turns read as real or as authored-for-a-benchmark; **not** a gate, because "looks authored" has no ground truth and a gate without one is how a corpus gets tuned to a judge. | 40 calls | |
 | **N6** | **Confirmatory re-run** — `full`, `stakes-shown`, `opener-only` × 120 × 2 repeats. Two repeats, not five: ICC 0.83–0.85 (Track I). | 720 calls | |
@@ -1009,6 +1011,66 @@ whether the arms *rank the same* on human text as on authored text; a weaker
 version measures only how much the arms disagree **with each other** on
 unlabelled human turns. Divergence on authored text and convergence on human
 text would be a finding, and it needs no key at all.
+
+#### N3 closed, and the freeze it feeds cannot be executed as written — 2026-08-18
+
+**261 of 261 items blind-adjudicated, 3 judges each, 12 moves, movement
+0.046 against the 0.20 kill.** Derived independently three times — two
+sub-agents told nothing of each other, then by hand — and agreeing on every
+figure. The corpus survives the kill by a factor of four and survives it in
+every band separately (0.042 s, 0.042 m, 0.045 l, 0.059 xl), which is stated
+because a pooled rate has hidden a per-stratum problem here before.
+
+**All 12 moves break the one-positive-two-negative invariant, and that is a
+fact about the design rather than about the labels.** In each of the 10
+negative → positive moves, the same adjudication independently reconfirmed
+that triple's *existing* positive — so the judges say both members should
+fire, and applying the move yields two positives. The 2 positive → negative
+moves land in triples whose other members were unanimously negative, yielding
+none. `corpus._check_triples` reports this as **structural**, which carries the
+`_UNBASELINEABLE` key by design: there is no version of the freeze that lands
+and defers this.
+
+**The mechanism: the corpus is authored in triples and adjudicated in items.**
+A judge sees one turn and is asked whether that turn should fire. Nothing in
+the protocol knows the turn shares a body with two others and is competing for
+a single positive slot. So a 2-of-3 vote against the key does not say *this
+label is wrong*; it says **the authored contrast did not land**. The v3 plan's
+rule — *"2-of-3 against me → I rewrite the turn or move the label, and say
+which"* — assumes both branches are always available. On a matched-triple
+corpus **"move the label" sometimes is not**, and the plan does not say so
+because the case had not arisen when it was written.
+
+It had arisen once, and was read as a local accident. `docs/DECISIONS.md`'s
+2026-08-14 entry reverted `l12n1`, `l17n2` and `xl15n2` rather than promoting
+them, "because accepting would have put two positives in a one-positive-per-
+triple design." That was the general case seen through one opener edit.
+
+**The freeze is therefore open, and the choice is not neutral.** Retiring the
+12 affected triples is mechanical and invents nothing, and it deletes exactly
+the 36 items three blind readers found hardest — making the corpus easier
+rather than better, and incidentally closing two of the three open shortcut
+findings. A corpus edit that turns gates green is the mechanism this repository
+has already named as the source of four generations of leak. Rewriting the
+disputed ask and re-adjudicating preserves difficulty and costs authoring plus
+another adjudication round. Demoting the existing positive is ruled out: no
+judge supports it. Relaxing the invariant is a corpus redesign, not a version
+bump.
+
+Nothing is applied; the corpus on disk is unchanged. Working:
+[`notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md`](../notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md).
+
+**N5 is further from done than the table above implies.** Its sample and key
+exist at `results/triggers/realism-audit-{sample.md,key.json}` and were built
+against the **120-item** corpus — the sample's own header reads "12 items (10%
+of 120)" — so they do not cover the 141 items added since. Every human-audit
+field is blank and no output from `scripts/realism_probe.py` exists on disk.
+
+**And a naming collision worth fixing before it reaches a paper.** Commit
+`30012d9` and its notebook entry call themselves "N7". They are a continuation
+of **N3** — closing the L/XL adjudication gap — and not the N7 in the table
+above, which is the descriptive re-run of the remaining five arms and has never
+started.
 
 ---
 

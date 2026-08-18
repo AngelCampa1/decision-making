@@ -1,0 +1,132 @@
+# 2026-08-18 — the corpus is authored in triples and adjudicated in items
+
+Not a run. A finding about the instrument, produced while trying to execute
+"the freeze" — the single answer-key version bump that
+[`docs/DECISIONS.md`](../docs/DECISIONS.md) has deferred to twice, on
+2026-08-13 and again on 2026-08-14, each time saying the key moves **once**,
+carrying every adjudicated move with it.
+
+The freeze cannot be executed as written, and the reason is structural rather
+than clerical.
+
+## What was checked, and by whom
+
+Six sub-agents were dispatched across Track N and the work order's backlog.
+Two were given the same task independently and told nothing of each other:
+re-derive the adjudicated move list from `results/triggers/adjudication.jsonl`
+without trusting any prose. They agree with each other, with
+`scripts/adjudicate.py --report-only`, and with a third derivation run by hand
+afterwards:
+
+| | |
+|---|---|
+| adjudicated | **261 of 261**, 3 judges each, 0 unparseable |
+| moved | **12** — 10 negative → positive, 2 positive → negative |
+| movement | **12/261 = 0.046** against the pre-registered 0.20 kill |
+| per band | 0.042 s, 0.042 m, 0.045 l, 0.059 xl |
+| agreement | Fleiss kappa 0.862, Krippendorff alpha 0.862, unanimity 0.904 |
+
+**The corpus survives the kill by a factor of four, and survives it in every
+band separately.** That matters more than the pooled figure: this repository
+has had a pooled statistic hide a per-stratum problem before, so the per-band
+column is reported beside it rather than after someone asks.
+
+## The finding
+
+**Every one of the 12 moves breaks the one-positive-two-negative invariant that
+`corpus._check_triples` enforces.** Computed directly against the corpus and the
+adjudication ledger, 12 of 12, with no exceptions:
+
+- **The 10 negative → positive moves each land in a triple whose existing
+  positive the same blind adjudication independently reconfirmed as positive.**
+  Not one of those ten is a case of "the author labelled the wrong member" — in
+  every one, the judges say *both* members should fire. Applying the move gives
+  a triple with **two positives**.
+- **The 2 positive → negative moves land in triples whose other two members were
+  unanimously judged negative.** There is no member to promote. Applying the
+  move gives a triple with **zero positives**.
+
+`_check_triples` reports this as a **structural** finding, and structural
+findings carry the `_UNBASELINEABLE` key on purpose — the module's own comment
+says they "cannot be listed, because there is no backlog to defer." So there is
+no path where the freeze lands and `de check` stays green while somebody sorts
+this out later. It fails immediately, by design, and the design is right.
+
+## Why this is the instrument's shape and not an accident
+
+**The corpus is authored in triples and adjudicated in items.** A triple is one
+body with three different closing asks, exactly one of which is supposed to
+warrant firing. The judges were shown one turn at a time and asked whether *that
+turn* should fire. Nothing in the adjudication protocol knows that two of the
+turns it just judged share a body with a third and are competing for a single
+positive slot.
+
+So a 2-of-3 vote against the key does not mean "this item's label is wrong". It
+means **the authored contrast did not land** — the ask that was supposed to be
+inert reads, to three independent readers, as one that warrants firing. Those
+are different claims with different remedies, and the plan's rule collapses them
+into one line. [`docs/superpowers/plans/2026-08-13-trigger-corpus-v3.md`](../docs/superpowers/plans/2026-08-13-trigger-corpus-v3.md)
+says: *"2-of-3 against me → I rewrite the turn or move the label, and say
+which."* On a matched-triple corpus, **"move the label" is not always an
+available branch**, and the plan never says so because when it was written the
+question had not come up.
+
+That the same class of problem was already met once, and correctly, is the
+strongest evidence this is structural. `docs/DECISIONS.md`'s 2026-08-14 entry
+records three items (`l12n1`, `l17n2`, `xl15n2`) reverted rather than promoted,
+because accepting them "would have broken the one-positive-per-triple design."
+That was treated as a side effect of one opener edit. It was not. It is the
+general case, and the general case is **all twelve**.
+
+## Where this leaves the freeze
+
+Unresolved, deliberately, and recorded rather than decided quietly. The options
+are not equivalent and at least one of them is a trap:
+
+- **Retire the affected triples.** Mechanical, invents nothing, and costs 36
+  items — 261 → 225, 87 → 75 triples. Its danger is that it deletes exactly the
+  items blind judges found hardest, which makes the corpus *easier* rather than
+  *better*, and it happens to close two of the three open shortcut findings.
+  A corpus edit that turns gates green is the mechanism this repository has
+  already named as the source of four generations of leak.
+- **Rewrite the disputed ask and re-adjudicate.** The plan's own first-named
+  remedy, and the one that preserves the item count and the difficulty. Costs
+  authoring and a further adjudication round.
+- **Swap roles inside the triple** — demote the existing positive. Ruled out:
+  no judge supports it, and it would be asserting a label against the evidence
+  that motivated the change.
+- **Relax the invariant.** Corpus redesign, not a version bump, and it breaks
+  the matched-null arithmetic that the triple construction exists to provide.
+
+**Prediction, registered before the choice is made.** I expect retirement to
+raise measured accuracy on the survivors, because the 36 retired items are by
+construction the ones three readers found ambiguous. If a future run on the
+225-item corpus scores *lower* than the same arm on the 261-item one, that
+prediction is wrong and the retired items were not the hard ones.
+
+**Where I expect to be wrong:** I have assumed the two positive → negative
+triples are the same kind of problem as the ten negative → positive ones. They
+may not be — a triple with zero positives has lost its reason to exist, while a
+triple with two has an excess of signal, and the cheap remedy may differ.
+
+An adversarial review of the retirement option is running as this is written and
+its objections are not yet in. Nothing is applied. The corpus on disk is
+unchanged, and `de check` is green against it.
+
+## Two smaller corrections that fall out of the same audit
+
+**`docs/STATUS.md` was stale by one commit, for the third time.** It read "192 of
+261 items are now blind-adjudicated" and "seven adjudicated label moves" while
+`30012d9` had closed the L/XL gap about an hour after that paragraph was
+written. Corrected in place by appending, per that file's own rule.
+
+**`30012d9`'s commit message says "Eleven of the twelve move negative to
+positive."** It is ten. `m18p` and `s12p` both move positive → negative, and the
+same commit's own table lists them correctly. History is the pre-registration
+evidence and is not rewritten, so the correction lives in `STATUS.md` and here.
+
+**`docs/RESEARCH_PROGRAMME.md` claimed "K5 is closed" and it has not been since
+2026-08-14.** `paper/citations-baseline.txt` carries two identifiers,
+`2412.06593` and `2505.02151`, added by the K3/K4 pass, and neither is in
+`paper/refs.bib`. The claim was true on 2026-08-12 and the file never noticed
+the backlog reopening under it.

@@ -251,6 +251,40 @@ L and XL (69 of the 261 items) remain at N3's original coverage. A separate
 session is mid-edit on `l.yaml`/`xl.yaml`/`corpus-baseline.txt` closing an
 `open`-view leak, so their text is not stable enough to adjudicate against yet.
 
+**Correction, 2026-08-18, appended. The section above is stale by one commit,
+and it is the third instance of this file lagging its own tables.** `30012d9`
+closed the L/XL gap about an hour after the paragraph above was written, and
+nothing came back to update it. Re-derived from
+`results/triggers/adjudication.jsonl` by two independent agents and then by
+hand, all three agreeing:
+
+| | stated above | actual |
+|---|---|---|
+| adjudicated | 192 of 261 | **261 of 261**, 3 judges each, 0 unparseable |
+| moves on record | 7 | **12** — 10 negative → positive, 2 positive → negative |
+| movement | 7/192 = 0.036 | **12/261 = 0.046**, against the 0.20 kill |
+
+The five further moves are `l15n2`, `l17n2`, `l21n1` (l), `xl13n2`, `xl16n1`
+(xl). Per-band movement is 0.042 (s), 0.042 (m), 0.045 (l), 0.059 (xl) — no
+band is individually near the kill, which the pooled figure alone would not
+show. Fleiss kappa 0.862, Krippendorff alpha 0.862, unanimity 0.904.
+
+**One number in `30012d9`'s own commit message is wrong and cannot be fixed
+where it was written.** It reads "Eleven of the twelve move negative to
+positive." It is **ten**: `m18p` and `s12p` both move positive → negative, and
+this file's own table above already listed both correctly. History is the
+pre-registration evidence and is not rewritten, so the correction lives here.
+
+**And the freeze is now blocked on something nobody had costed.** All 12 moves
+break the one-positive-per-triple invariant `corpus._check_triples` enforces —
+the 10 negative → positive moves each land in a triple whose existing positive
+the same adjudication independently reconfirmed (9 of 10 unanimous), giving two
+positives; the 2 positive → negative moves land in triples whose other members
+were unanimously negative, giving none. So "apply the adjudicated labels" is
+not an executable instruction, and the freeze needs a design decision that the
+v3 plan's *"rewrite the turn or move the label"* rule names but does not
+resolve.
+
 ---
 
 ## Open decisions that belong to the maintainer
@@ -292,7 +326,7 @@ for personal information, digest pinned — in
 |---|---|
 | **0** — instrument (transport) | ✅ done |
 | **I** — reliability | ✅ done |
-| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 partial** — S and M fully adjudicated (192 of 261 items total, 7 moves unapplied — see below), L/XL blocked on an in-progress `open`-view leak fix; N4–N7 open. Blocks every future L and M claim and retro-qualifies every past one. |
+| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 done** — all 261 items blind-adjudicated, 3 judges each, 12 moves unapplied and now known to be unappliable as written (see the 2026-08-18 correction below); N4 rerouted to a public human-written source, N5 built against the retired 120-item corpus and never run, N6 and N7 never run. Blocks every future L and M claim and retro-qualifies every past one. |
 | **K** — frameworks review | 🟡 three passes; K4 waits on Track A |
 | **M** — skill design | 🟡 M1–M6b done; M3 has no estimator on a merged arm; **all of it now carries the Track N caveat** |
 | **L** — skill variants | 🟡 L5 and **L7 run**; L7 unpublished; **same Track N caveat** |
