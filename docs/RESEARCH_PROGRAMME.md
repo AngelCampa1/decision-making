@@ -1087,7 +1087,29 @@ reported cumulatively over the corpus's whole history**, because pruning the
 disputed items is otherwise a way of making the 20% kill structurally unable to
 fire again.
 
-Nothing is applied; the corpus on disk is unchanged. Working:
+**Resolved 2026-08-18, and the corpus survived it.** All 12 asks were rewritten
+to one rule — *an inert ask asks about one thing, and may not put two options in
+a frame that invites ranking them* — diagnosed from `s02n2` and applied by agents
+never shown a judge's rationale, since a rewrite aimed at a stated objection is
+tuned to that judge. On blind re-adjudication, **36 calls, 0 unparseable, 11 of
+12 now agree with the key** against a registered band of 8. Judge agreement on
+those twelve went **0.611 → 1.000** pairwise and corpus-wide movement **0.046 →
+0.004**. `l15` is retired whole, being the one item still disputed after the
+single round the protocol allowed, so the corpus stands at **258 items, 86
+triples** — s 24, m 24, l 21, xl 17.
+
+**No label moved and no version was bumped**, so no published number is
+affected. No gate crossed, `imperative_opener` did not pick up the *"Restate…"*
+rewrites, and the two `sentence_count` findings ended *stronger* at 3.18σ —
+after a mid-round correction, because three rewrites had changed their turn's
+sentence count and pushed that habit under its 3.0 gate, which would have had a
+label fix quietly closing two open shortcut findings.
+
+**One prediction registered before the round was wrong**: the two positive →
+negative items were expected to be harder and possibly to retire. Both fixed on
+the first attempt.
+
+Working:
 [`notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md`](../notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md).
 
 **N5 is further from done than the table above implies.** Its sample and key

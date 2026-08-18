@@ -633,50 +633,6 @@ positive:
       clause and spends everything after it on what the move then sets going — the
       order changing, and whatever changes with the order. No question mark appears
       anywhere in the turn.
-  - id: l15p
-    triple: l15
-    band: l
-    domain: career
-    stakes: low
-    ask: embedded
-    route: fit
-    turn: >-
-      Collecting the returnship material in one place while it is still current.
-
-      I left engineering in 2017 when the twins were born. Nine years since, no paid
-      work, two years of school governor meetings that are on the CV in small letters.
-
-      The programme: sixteen weeks, paid at 32,000 pro rata, based in Reading, four
-      days on site. Applications close Friday 25 September. They say about a third of
-      each cohort is offered a permanent role at the end.
-
-      Their brochure, page 4 — "Returnships are designed for experienced professionals
-      coming back after a career break of two years or more. Our returners arrive with
-      current, transferable expertise and need only a short bridge into the
-      workplace."
-
-      Email from Nadia, who ran the 2024 cohort, 6 August — "Honest answer: the ones
-      who converted were the ones who could show recent evidence of currency. Two of
-      the eleven had gaps over five years and neither converted, though one of those
-      two had a shocking manager. Do not read much into eleven people."
-
-      My old manager, message, 7 August — "you'd walk it. the stack has moved but the
-      hard part was never the stack"
-
-      The application form wants a 300-word statement about the break itself.
-
-      Money: 32,000 pro rata is about 9,800 gross across the sixteen weeks. The care I
-      would need from five to six, four days a week, plus the train to Reading, is
-      about 2,900 of it.
-
-      Is nine years the same problem as two? Every line of that brochure assumes a
-      two-year gap, and a two-year gap is not the gap I have.
-    why: >-
-      The general rule is quoted and is probably sound — "a career break of two years
-      or more" — and it is one fact about this person, a nine-year gap, that may take
-      it apart. The question is put first and the fact that settles it lands after,
-      unanswered.
-
   - id: l16p
     triple: l16
     band: l
@@ -2238,91 +2194,6 @@ negative:
       responsibility, the order itself remaining in force until varied or discharged;
       the wishes and feelings of a child of fifteen enter through the s.1(3)(a)
       welfare checklist and are weighed, not decisive.
-  - id: l15n1
-    triple: l15
-    band: l
-    domain: career
-    stakes: low
-    ask: explicit
-    kind: summarise
-    turn: >-
-      Collecting the returnship material in one place while it is still current.
-
-      I left engineering in 2017 when the twins were born. Nine years since, no paid
-      work, two years of school governor meetings that are on the CV in small letters.
-
-      The programme: sixteen weeks, paid at 32,000 pro rata, based in Reading, four
-      days on site. Applications close Friday 25 September. They say about a third of
-      each cohort is offered a permanent role at the end.
-
-      Their brochure, page 4 — "Returnships are designed for experienced professionals
-      coming back after a career break of two years or more. Our returners arrive with
-      current, transferable expertise and need only a short bridge into the
-      workplace."
-
-      Email from Nadia, who ran the 2024 cohort, 6 August — "Honest answer: the ones
-      who converted were the ones who could show recent evidence of currency. Two of
-      the eleven had gaps over five years and neither converted, though one of those
-      two had a shocking manager. Do not read much into eleven people."
-
-      My old manager, message, 7 August — "you'd walk it. the stack has moved but the
-      hard part was never the stack"
-
-      The application form wants a 300-word statement about the break itself.
-
-      Money: 32,000 pro rata is about 9,800 gross across the sixteen weeks. The care I
-      would need from five to six, four days a week, plus the train to Reading, is
-      about 2,900 of it.
-
-      Condense what I pasted above into one paragraph, please. It is for my husband,
-      who has not read a word of any of this, and the money can stay out.
-    why: >-
-      "Condense what I pasted above into one paragraph, please" wants the same
-      material shortened for a reader who has not seen it, and dropping the money is
-      an editing instruction.
-  - id: l15n2
-    triple: l15
-    band: l
-    domain: career
-    stakes: low
-    ask: explicit
-    kind: meta
-    turn: >-
-      Collecting the returnship material in one place while it is still current.
-
-      I left engineering in 2017 when the twins were born. Nine years since, no paid
-      work, two years of school governor meetings that are on the CV in small letters.
-
-      The programme: sixteen weeks, paid at 32,000 pro rata, based in Reading, four
-      days on site. Applications close Friday 25 September. They say about a third of
-      each cohort is offered a permanent role at the end.
-
-      Their brochure, page 4 — "Returnships are designed for experienced professionals
-      coming back after a career break of two years or more. Our returners arrive with
-      current, transferable expertise and need only a short bridge into the
-      workplace."
-
-      Email from Nadia, who ran the 2024 cohort, 6 August — "Honest answer: the ones
-      who converted were the ones who could show recent evidence of currency. Two of
-      the eleven had gaps over five years and neither converted, though one of those
-      two had a shocking manager. Do not read much into eleven people."
-
-      My old manager, message, 7 August — "you'd walk it. the stack has moved but the
-      hard part was never the stack"
-
-      The application form wants a 300-word statement about the break itself.
-
-      Money: 32,000 pro rata is about 9,800 gross across the sixteen weeks. The care I
-      would need from five to six, four days a week, plus the train to Reading, is
-      about 2,900 of it.
-
-      Nadia's email is the one I have read most often. Her whole case rests on eleven
-      people, and how much can eleven people tell me about a gap like mine?
-    why: >-
-      The subject is the pasted email and not the programme. "Her whole case rests on
-      eleven people" interrogates the inference inside text quoted in the body, and
-      asks what that inference can bear.
-
   - id: l16n1
     triple: l16
     band: l
@@ -2546,17 +2417,18 @@ negative:
       My own estimate of the migration: a weekend, or two weekends if the archive
       fights.
 
-      Clause 9.2 is the part of the schedule I cannot pin down. Who counts as the
-      data controller once an outside provider holds the mailboxes, and in the
-      funder's register should we name them or us?
+      Clause 9.2 is the part of the schedule I cannot pin down. Once an outside
+      provider is processing the mailboxes on our instructions, which party does
+      UK data protection law name as the data controller for the funder's
+      register?
     why: >-
-      A question about who a defined term applies to, closing on "in the
-      funder's register should we name them or us" — the phrase the shipped
-      description scans for, attached to a definition rather than to a choice.
-      Verified: under UK GDPR Article 4(7)
-      and 4(8) the charity that determines the purposes stays the controller and
-      a mail host acting on instructions is a processor, so the register names
-      the charity.
+      Rewrote the ask: it now turns on one determinate fact — which party UK
+      data protection law names as controller once a processor holds the
+      mailboxes — and drops the "them or us" framing that read as a choice
+      between two named parties. Verified: under UK GDPR Article 4(7) and 4(8)
+      the charity that determines the purposes of processing stays the
+      controller and a mail host acting on its instructions is a processor, so
+      the answer is the charity.
   - id: l18n1
     triple: l18
     band: l
@@ -2915,13 +2787,15 @@ negative:
       node_modules/.cache" and passed when it is run again. The lockfile has not
       changed since July.
 
-      Separate question, nothing to do with the repo layout. What makes a build fail
-      one run in five on a missing cache directory and pass when I rerun?
+      This next question stands on its own. What would make a build fail on a
+      missing cache directory about one push in five, and pass cleanly the next
+      time?
     why: >-
-      "What makes a build fail one run in five on a missing cache directory" is a
-      technical diagnosis of something already broken since 3 August, which the shipped
-      skill's Abort clause excludes by name. The opening sentence puts the repo
-      decision out of scope.
+      Rewrote the ask: dropped the "nothing to do with the repo layout"
+      disclaimer, which named the very decision it was trying to exclude, for a
+      self-contained framing clause that doesn't reopen it. The ask still turns
+      on one technical diagnosis — the intermittent cache-directory failure —
+      which the shipped skill's Abort clause excludes by name.
   - id: l21n2
     triple: l21
     band: l

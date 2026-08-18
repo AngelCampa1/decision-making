@@ -125,10 +125,12 @@ positive:
     stakes: low
     ask: implicit
     route: ledger
-    turn: "Four people have now sent me spreadsheets about the holiday budget and they don't agree with each other."
+    turn: "Four people have sent me conflicting spreadsheets about the holiday budget, and now I must pick one to book against."
     why: >-
-      A pile of conflicting input and no question at all. The implicit form of
-      v2 p03, which said "what should I actually do" and made the label easy.
+      No determinate right spreadsheet exists; the turn now states the forced
+      choice — which of four to book against — that is what should be weighed.
+      The implicit form of v2 p03, which said "what should I actually do" and
+      made the label easy.
   - id: s13p
     triple: s13
     band: s
@@ -321,8 +323,10 @@ negative:
     stakes: high
     ask: explicit
     kind: lookup
-    turn: "Is there a tax difference for me between paying down my interest-free family loan and putting that money into my pension?"
-    why: "A determinate factual answer wearing the same subject matter."
+    turn: "My family loan is interest-free, and I get a 4% pension match. Is the match on the pension treated as taxable income this year?"
+    why: >-
+      One fact asked about one thing — whether the match is taxable — with the
+      loan present as background rather than as a second option set beside it.
   - id: s03n1
     triple: s03
     band: s
@@ -660,10 +664,11 @@ negative:
     stakes: high
     ask: explicit
     kind: settled
-    turn: "He is going on a formal plan from Monday. What are the first things to get written down before I meet him?"
+    turn: "He is going on a formal plan from Monday. How many working days does HR policy require before the first review meeting?"
     why: >-
-      The plan is decided and dated in the first sentence. The ask is what to
-      prepare, and nothing in the turn reopens whether it should happen.
+      The plan is decided and dated in the first sentence. The ask is a single
+      HR-policy day count, not a judgment call about what matters before the
+      meeting, so nothing in the turn reopens whether it should happen.
   - id: s20n1
     triple: s20
     band: s

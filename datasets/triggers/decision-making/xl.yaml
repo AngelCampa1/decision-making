@@ -3990,16 +3990,17 @@ negative:
       wrist. You said the question I kept asking — whether the surgery is a
       good idea — was not the one I needed answered, and that the one that
       mattered was what evidence would tell me whether wrist-driven
-      production survives a fusion, since nobody in the pile has it. I have
-      been turning that over for a fortnight and I do not think I follow the
-      reasoning. It sounds like it is telling me that the two consultants'
-      recommendation is not the relevant fact, and I cannot see how that can
-      be right.
+      production survives a fusion, since nobody in the pile has it. Can you
+      restate that distinction back to me in one paragraph, using only the
+      terms you used last time? I keep losing the thread of the reasoning
+      itself and want to check I have followed it correctly before I read
+      the rest of this over again.
     why: >-
-      The subject is a previous answer and the ask is for the reasoning
-      behind it. The decision is the topic of the conversation and not the
-      thing being asked about, which is the distinction this case exists to
-      test at length.
+      The subject is a previous answer and the ask is a restatement of the
+      reasoning behind it, in the asker's own check-my-understanding terms.
+      It does not ask whether the distinction is right, only what it was,
+      which keeps the decision the topic of the conversation rather than the
+      thing being asked about.
   - id: xl06n1
     triple: xl06
     band: xl
@@ -6605,14 +6606,17 @@ negative:
 
       That is all of it, and all of it is other people talking.
 
-      Hana's second paragraph is the bit that snags. Why does her forty
-      percent relief argument still hold if the money comes back out taxed to
-      me?
+      Hana's second paragraph is the bit that snags. Restate her reasoning in
+      plain terms, using only her own numbers, for why a pound of salary
+      sacrifice costs sixty pence and lands as a pound, since I keep losing
+      the arithmetic when I read it back.
     why: >-
       The target is a piece of reasoning quoted inside the body, Hana's "the
-      pound costs you sixty pence and lands as a pound", and the request is for
-      the argument behind it rather than for a call on the money. Nothing here
-      points at an earlier turn: the paragraph being queried is on the page.
+      pound costs you sixty pence and lands as a pound", and the request is a
+      restatement of that specific arithmetic in her own stated terms, not a
+      call on the money or on the wider comparison her email sits inside.
+      Nothing here points at an earlier turn: the paragraph being restated is
+      on the page.
 
   - id: xl14n1
     triple: xl14
@@ -7375,15 +7379,19 @@ negative:
       other's estimate. Both estimates were built off the same spike branch and
       reviewed by the other person before they went in the sheet.
 
-      Finding 3 is separate. Only the mid-period contract changes came out wrong in
-      March, and only in two entities, so where would you have me look first?
+      Finding 3 is separate: only the mid-period contract changes came out wrong
+      in March, and only in two entities. Given that the stored procedure selects
+      the rules row by pay date rather than by anything on the employment row,
+      explain in a paragraph why a mid-period contract change is the one case
+      that logic gets wrong.
     why: >-
       Finding 3 supplies the symptom, "All 41 had a contract change effective
-      part-way through the period", and the ask takes only that, narrowing to "only
-      in two entities" and asking "where would you have me look first". This is
-      technical diagnosis, which the skill's Abort clause excludes by name, and the
-      ask opens on "Finding 3 is separate", holding the artefact apart from the
-      April decision.
+      part-way through the period", and the mechanism is already stated in the
+      body -- the procedure selects by pay date, not by the employment row. The
+      ask ties the two together and requests the explanation itself, not a ranked
+      list of places to check, which is technical diagnosis and the skill's Abort
+      clause excludes it by name. The ask opens on "Finding 3 is separate",
+      holding the artefact apart from the April decision.
   - id: xl16n2
     triple: xl16
     band: xl

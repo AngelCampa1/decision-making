@@ -310,15 +310,17 @@ positive:
     route: ledger
     turn: >-
       There are three RFCs open on how we do feature flags. The one from
-      platform argues for buying, the one from my team argues for what we
-      already have plus a UI, and the third is from someone who left in June
-      and is mostly about a system we retired. The three of them do not
-      disagree in the places they appear to. They run to eleven, nine and
-      fourteen pages. I am chairing the review on the twenty-second.
+      platform argues for buying, mine argues for what we already have plus a
+      UI, and the third is from someone who left in June and is about a system
+      we retired. They do not disagree where they appear to. They run to
+      eleven, nine and fourteen pages. I am chairing the review on the
+      twenty-second with no idea which of the three to land the room on.
     why: >-
-      Thirty-four pages of conflicting input, a date, and no question. The stated
-      difficulty is that the disagreement is not where it looks, which is the
-      ledger problem rather than a technical one.
+      Thirty-four pages of conflicting input and a date, still with no question
+      mark, but the closing clause now says plainly that the writer does not
+      know which of the three to back. The stated difficulty is that the
+      disagreement is not where it looks, which is the ledger problem rather
+      than a technical one.
   - id: m19p
     triple: m19
     band: m
@@ -871,13 +873,15 @@ negative:
     turn: >-
       We have decided to keep the whole emergency fund in cash until my wife's
       contract renewal in November, and I am not looking to revisit that decision
-      here. What I do want to get right is where the cash sits in the meantime.
-      Instant access matters and so does how the interest is taxed, and I have
-      never had to think about either. Which sort of account should I be using?
+      here. The 26,400 sits in one easy-access savings account that pays interest
+      monthly. Neither of us has had to think about savings tax before. Is that
+      interest taxable, and if so, at what point in the year does the bank or
+      HMRC actually collect it?
     why: >-
       The cash-or-invest question m14p asks is closed in the first sentence, on
-      the same facts. The remaining ask is which product has two named properties,
-      which has an answer independent of this household.
+      the same facts. What is left is a single fact about how interest on the
+      account is taxed and when it is collected, with no second option offered
+      to weigh it against.
   - id: m15n1
     triple: m15
     band: m
@@ -941,12 +945,12 @@ negative:
       I have put my name in for the Dublin secondment and my manager has already
       signed the form, so it is happening. The handover to Tom starts in three
       weeks. He has been here five months and has never touched the platform work,
-      and I will be away for the whole nine months. What should I be writing down
-      for him, and in what order?
+      and I will be away for the whole nine months. Write me the handover
+      document he can work from once I have gone.
     why: >-
       The application m16p is weighing has been made and signed off in the first
-      sentence. The ask is what to put in a handover, and nothing in the turn
-      reopens going.
+      sentence. The ask is a single document, and nothing in the turn reopens
+      going or asks the writer to choose between what to include.
   - id: m17n1
     triple: m17
     band: m

@@ -182,7 +182,7 @@ now unticked.
 
 ## Where the corpus is, 2026-08-14
 
-**261 items, 87 triples** — s 24, m 24, l 22, xl 17. Grown from 120 items / 40
+**258 items, 86 triples** — s 24, m 24, l 21, xl 17, after `l15` was retired on 2026-08-18. It read 261/87 until then, and 120/40 when authored. Grown from 120 items / 40
 triples by two same-day merges (24 short-band triples, 23 long-band ones). A
 separate session's own notebook entry has the merge detail and the battery
 before/after; not reproduced here.
@@ -278,12 +278,27 @@ pre-registration evidence and is not rewritten, so the correction lives here.
 **And the freeze is now blocked on something nobody had costed.** All 12 moves
 break the one-positive-per-triple invariant `corpus._check_triples` enforces —
 the 10 negative → positive moves each land in a triple whose existing positive
-the same adjudication independently reconfirmed (9 of 10 unanimous), giving two
+the same adjudication **unanimously** reconfirmed, 10 of 10, giving two
 positives; the 2 positive → negative moves land in triples whose other members
 were unanimously negative, giving none. So "apply the adjudicated labels" is
 not an executable instruction, and the freeze needs a design decision that the
 v3 plan's *"rewrite the turn or move the label"* rule names but does not
 resolve.
+
+**Resolved the same day, and the answer was to rewrite rather than relabel.**
+The plan sends a 2-of-3 disagreement to *rewrite the turn*, and reserves
+retirement for a three-way split that three binary judges cannot produce. All
+12 asks were rewritten to one rule — an inert ask asks about one thing, and may
+not put two options in a frame that invites ranking them — by agents never shown
+any judge's rationale. On blind re-adjudication, **36 calls, 11 of 12 now agree
+with the key** against a registered band of 8; judge agreement on those twelve
+went 0.611 → 1.000 pairwise, and corpus-wide movement **0.046 → 0.004**.
+
+`l15` is retired whole, being the one item still disputed after the single
+registered round. **The corpus is now 258 items, 86 triples — s 24, m 24, l 21,
+xl 17.** No label moved, no version was bumped, no gate crossed, and the two
+`sentence_count` findings ended *stronger* at 3.18σ. Detail:
+[`the outcome`](../notebook/2026-08-18-the-rewrite-round-eleven-of-twelve-and-one-retirement.md).
 
 ---
 
@@ -326,7 +341,7 @@ for personal information, digest pinned — in
 |---|---|
 | **0** — instrument (transport) | ✅ done |
 | **I** — reliability | ✅ done |
-| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 done** — all 261 items blind-adjudicated, 3 judges each, 12 moves unapplied and now known to be unappliable as written (see the 2026-08-18 correction below); N4 rerouted to a public human-written source, N5 built against the retired 120-item corpus and never run, N6 and N7 never run. Blocks every future L and M claim and retro-qualifies every past one. |
+| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 done** — all items blind-adjudicated, and the 12 disputes resolved 2026-08-18 by rewriting the asks rather than moving labels: 11 of 12 now agree with the key, `l15` retired, corpus at **258 items / 86 triples**, movement 0.004, no label moved and no version bumped; N4 rerouted to a public human-written source and four candidates are licence-cleared, N5 built against the retired 120-item corpus and never run, N6 and N7 never run. Blocks every future L and M claim and retro-qualifies every past one. |
 | **K** — frameworks review | 🟡 three passes; K4 waits on Track A |
 | **M** — skill design | 🟡 M1–M6b done; M3 has no estimator on a merged arm; **all of it now carries the Track N caveat** |
 | **L** — skill variants | 🟡 L5 and **L7 run**; L7 unpublished; **same Track N caveat** |
