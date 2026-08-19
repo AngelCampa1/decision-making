@@ -1,0 +1,227 @@
+- generic [active] [ref=f160e1]:
+  - link "Skip to content" [ref=f160e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f160e3]:
+    - generic [ref=f160e4]:
+      - link [ref=f160e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f160e14]:
+        - link "skill" [ref=f160e15] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f160e16] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f160e17] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+      - group "Colour theme" [ref=f160e18]:
+        - button "sys" [pressed] [ref=f160e19] [cursor=pointer]
+        - button "light" [ref=f160e20] [cursor=pointer]
+        - button "dark" [ref=f160e21] [cursor=pointer]
+  - main [ref=f160e22]:
+    - article [ref=f160e23]:
+      - paragraph [ref=f160e24]:
+        - generic [ref=f160e25]: repository ·
+        - link [ref=f160e26] [cursor=pointer]:
+          - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/SCORECARD.md
+          - code [ref=f160e27]: SCORECARD.md
+      - generic [ref=f160e28]:
+        - heading "Scorecard" [level=1] [ref=f160e29]
+        - paragraph [ref=f160e30]:
+          - text: Hand-maintained, and this line used to claim otherwise. It called the file a
+          - emphasis [ref=f160e31]: “generated artifact”
+          - text: that you should
+          - emphasis [ref=f160e32]: “not edit by hand”
+          - text: ", rebuilt by"
+          - code [ref=f160e33]: de report
+          - text: from
+          - code [ref=f160e34]: results/**/summary.json
+          - text: ", with"
+          - code [ref=f160e35]: de check
+          - text: "failing the build if the committed copy differed. None of that was true: there is no"
+          - code [ref=f160e36]: de report
+          - text: command, no
+          - code [ref=f160e37]: summary.json
+          - text: under
+          - code [ref=f160e38]: results/
+          - text: ", and no scorecard step in"
+          - code [ref=f160e39]: de check
+          - text: . The file had not changed since the initial commit, so nothing ever tested the promise.
+        - paragraph [ref=f160e40]:
+          - text: Correcting it rather than building the generator, because the table is still empty. A generator written now would be written against a results schema no run has produced. When the first confirmatory run lands,
+          - code [ref=f160e41]: de report
+          - text: gets built and this paragraph gets replaced by the guarantee it describes.
+        - paragraph [ref=f160e42]:
+          - text: What
+          - emphasis [ref=f160e43]: is
+          - text: "enforced today is the promotion gate:"
+          - code [ref=f160e44]: de lint
+          - text: refuses to let a skill carrying
+          - code [ref=f160e45]: UNTESTED
+          - text: or
+          - code [ref=f160e46]: WITHDRAWN
+          - text: sit in
+          - code [ref=f160e47]: plugin/skills/
+          - text: ", and"
+          - code [ref=f160e48]: de check
+          - text: runs it. That check is real and has teeth. The table below does not.
+        - paragraph [ref=f160e49]:
+          - text: "Four more checks over the method itself were added on 2026-08-13, each after the failure it prevents had already happened here. Run provenance: a published run must state its answer-key version and name a prediction that can be shown to predate its data. Integrity wiring: a module with a coverage floor that no entry point reaches is refused. The decision register: a change to the answer key or the shipped skill needs a written reason. Documentation: a"
+          - code [ref=f160e50]: de
+          - text: command or path that this repository does not have is refused. None of them can put a row in the table below. They govern whether a number is
+          - emphasis [ref=f160e51]: traceable
+          - text: ", not whether it is"
+          - emphasis [ref=f160e52]: good
+          - text: .
+        - heading "The caveat that used to qualify every number on record" [level=2] [ref=f160e53]
+        - paragraph [ref=f160e54]: "Every trigger measurement made before 2026-08-18 ran on a corpus that is 89% solvable by counting words (AUC 0.850 on turn length alone; a bare “fire if ≥ 18 words” rule scores 0.890 on the version 2 key, against the best arm on that key, 0.9795 to 0.9863). That has not changed and does not get to change: it still applies, in full, to every number computed on trigger corpus versions 1 through 3, which is every published Track L and Track M result. The paired comparisons between arms on those versions remain valid; the absolute numbers still do not travel, and “nothing moved discrimination” still has the second reading that a corpus with nowhere to move explains a null as well as a real effect does."
+        - paragraph [ref=f160e55]:
+          - text: It can no longer be said of every number on record. Track N6 (2026-08-18) ran on trigger corpus v4, 258 items in
+          - code [ref=f160e56]: datasets/triggers/decision-making/index.yaml
+          - text: ", whose best depth-2 stump over eight trivial features reads 0.7054 against a majority baseline of 0.6667. That is a corpus a trivial feature can barely nudge, not one it solves. All three arms N6 ran,"
+          - code [ref=f160e57]: full
+          - text: ","
+          - code [ref=f160e58]: stakes-shown
+          - text: and
+          - code [ref=f160e59]: opener-only
+          - text: ", cleared the stump by 12 to 24 points (accuracy 0.8295, 0.9360, 0.9477 against the 0.7054 bar)."
+          - link "Run" [ref=f160e60] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-18-e632659-n6-confirmatory/
+          - text: .
+        - paragraph [ref=f160e61]:
+          - text: "What that is worth, stated so it is not overclaimed: one confirmatory run, three arms, one corpus revision. It says this instrument, on this corpus, is not solved by a trivial feature. It does not say the skill works, does not touch"
+          - code [ref=f160e62]: "verdict: UNTESTED"
+          - text: ", and does not fill in the table below. A trigger measurement is about whether the skill fires, not about whether firing produces a better decision, and nothing has measured the second question yet."
+        - paragraph [ref=f160e63]:
+          - text: The rebuild is Track N; N7 is running as this is written, and the corpus’s own gates (Track N1) still apply to v4 going forward exactly as they applied to v1 through v3. See
+          - link [ref=f160e64] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+            - code [ref=f160e65]: docs/LIMITATIONS.md
+          - text: .
+        - paragraph [ref=f160e66]: "None of this touches the table below, which is empty for a different and simpler reason: no skill has been measured on whether it improves a decision at all."
+        - heading "Skills" [level=2] [ref=f160e67]
+        - table [ref=f160e68]:
+          - rowgroup [ref=f160e69]:
+            - row [ref=f160e70]:
+              - columnheader "Skill" [ref=f160e71]
+              - columnheader "Verdict" [ref=f160e72]
+              - columnheader "Primary metric" [ref=f160e73]
+              - columnheader "Effect" [ref=f160e74]
+              - columnheader "95% CI" [ref=f160e75]
+              - columnheader "p" [ref=f160e76]
+              - columnheader "q (BH)" [ref=f160e77]
+              - columnheader "N" [ref=f160e78]
+              - columnheader "Model" [ref=f160e79]
+              - columnheader "Run" [ref=f160e80]
+          - rowgroup [ref=f160e81]:
+            - row [ref=f160e82]:
+              - cell [ref=f160e83]:
+                - emphasis [ref=f160e84]: none yet
+              - cell [ref=f160e85]
+              - cell [ref=f160e86]
+              - cell [ref=f160e87]
+              - cell [ref=f160e88]
+              - cell [ref=f160e89]
+              - cell [ref=f160e90]
+              - cell [ref=f160e91]
+              - cell [ref=f160e92]
+              - cell [ref=f160e93]
+        - paragraph [ref=f160e94]:
+          - strong [ref=f160e95]: "proven: 0 / shipped: 0"
+        - paragraph [ref=f160e96]:
+          - text: No skill has been evaluated yet. The harness is being built first, deliberately. See
+          - link [ref=f160e97] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/protocol/
+            - code [ref=f160e98]: docs/PROTOCOL.md
+          - text: for the standing methodology and the verdict vocabulary, and
+          - link [ref=f160e99] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+            - code [ref=f160e100]: notebook/
+          - text: for the running research log.
+        - heading "Verdict vocabulary" [level=2] [ref=f160e101]
+        - table [ref=f160e102]:
+          - rowgroup [ref=f160e103]:
+            - row [ref=f160e104]:
+              - columnheader "Verdict" [ref=f160e105]
+              - columnheader "Meaning" [ref=f160e106]
+          - rowgroup [ref=f160e107]:
+            - row [ref=f160e108]:
+              - cell [ref=f160e109]:
+                - code [ref=f160e110]: SHIP
+              - cell "Beat control at q < 0.10 with every guard passing, placebo-controlled, and replicated on a freshly generated holdout" [ref=f160e111]
+            - row [ref=f160e112]:
+              - cell [ref=f160e113]:
+                - code [ref=f160e114]: PROVISIONAL
+              - cell "Same, but not yet replicated" [ref=f160e115]
+            - row [ref=f160e116]:
+              - cell [ref=f160e117]:
+                - code [ref=f160e118]: "NULL"
+              - cell [ref=f160e119]:
+                - text: Confidence interval includes zero, or the effect is smaller than the pre-registered minimum detectable effect. Back to the workbench; ships as
+                - code [ref=f160e120]: experimental
+            - row [ref=f160e121]:
+              - cell [ref=f160e122]:
+                - code [ref=f160e123]: HARMFUL
+              - cell "Significantly worse, or a guard was violated. Off by default pending redesign" [ref=f160e124]
+            - row [ref=f160e125]:
+              - cell [ref=f160e126]:
+                - code [ref=f160e127]: UNTESTED
+              - cell "No confirmation run. Cannot carry a proven badge" [ref=f160e128]
+            - row [ref=f160e129]:
+              - cell [ref=f160e130]:
+                - code [ref=f160e131]: WITHDRAWN
+              - cell "The maintainer stopped using it. See the retirement rule below" [ref=f160e132]
+        - paragraph [ref=f160e133]:
+          - text: A verdict governs the
+          - emphasis [ref=f160e134]: public claim
+          - text: ", not whether a skill is usable."
+          - code [ref=f160e135]: "NULL"
+          - text: means we have not shown it works, which is not the same as showing it does not.
+        - heading "The retirement rule" [level=2] [ref=f160e136]
+        - paragraph [ref=f160e137]: The maintainer’s daily use is the fastest signal this project has, and until now it could only come out positive. A procedure that fires when it should not, or that produces a worse answer than thinking directly, had no way of being recorded as such. Evidence that cannot come out negative is not evidence, so here is the failure condition.
+        - paragraph [ref=f160e138]:
+          - strong [ref=f160e139]:
+            - text: A procedure disabled for 14 consecutive days is marked
+            - code [ref=f160e140]: WITHDRAWN
+            - text: .
+        - list [ref=f160e141]:
+          - listitem [ref=f160e142]:
+            - text: The clock starts at a dated line in
+            - link [ref=f160e143] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/
+              - code [ref=f160e144]: notebook/
+            - text: saying the procedure was turned off and why. Turning it back on is another dated line.
+          - listitem [ref=f160e145]: Fourteen days is chosen to survive a holiday and not to survive disinterest. It is a judgement, not a measurement, and it is written down before any procedure is near it so that it cannot be chosen to spare one.
+          - listitem [ref=f160e146]:
+            - code [ref=f160e147]: WITHDRAWN
+            - text: blocks the plugin exactly as
+            - code [ref=f160e148]: UNTESTED
+            - text: does, and
+            - code [ref=f160e149]: de lint
+            - text: enforces that rather than intention.
+          - listitem [ref=f160e150]:
+            - text: It is reversible. A withdrawn procedure that is rewritten and used again returns to
+            - code [ref=f160e151]: UNTESTED
+            - text: ", and the notebook keeps both entries."
+        - paragraph [ref=f160e152]: This is not a public claim about the procedure. It says the person who wrote it stopped reaching for it, which is worth exactly as much as that sounds, and considerably more than an evidence channel that only ever agrees with itself.
+  - contentinfo [ref=f160e153]:
+    - generic [ref=f160e155]:
+      - paragraph [ref=f160e157]: We have not proven anything here yet. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f160e158]:
+        - listitem [ref=f160e159]:
+          - link "Results" [ref=f160e160] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f160e161]:
+          - link "Scorecard" [ref=f160e162] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f160e163]:
+          - link "Research log" [ref=f160e164] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f160e165]:
+          - link "Limitations" [ref=f160e166] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f160e167]:
+          - link "GitHub" [ref=f160e168] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f160e169]:
+        - generic [ref=f160e170]: Apache-2.0 · Angel Campa
+        - generic [ref=f160e171]: decision-making v0.3.0
+        - generic [ref=f160e172]: UNTESTED

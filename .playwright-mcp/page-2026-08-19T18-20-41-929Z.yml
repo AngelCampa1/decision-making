@@ -1,0 +1,1245 @@
+- generic [active] [ref=f150e1]:
+  - link "Skip to content" [ref=f150e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f150e3]:
+    - generic [ref=f150e4]:
+      - link "decision-making-skills" [ref=f150e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f150e15]:
+        - link "skill" [ref=f150e16] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f150e17] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f150e18] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+        - link "notebook" [ref=f150e19] [cursor=pointer]:
+          - /url: /decision-making-skills/notebook/
+        - link "docs" [ref=f150e20] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/
+      - group "Colour theme" [ref=f150e21]:
+        - button "sys" [pressed] [ref=f150e22] [cursor=pointer]
+        - button "light" [ref=f150e23] [cursor=pointer]
+        - button "dark" [ref=f150e24] [cursor=pointer]
+  - main [ref=f150e25]:
+    - article [ref=f150e26]:
+      - paragraph [ref=f150e27]:
+        - generic [ref=f150e28]: documentation ·
+        - link [ref=f150e29] [cursor=pointer]:
+          - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/docs/STATUS.md
+          - code [ref=f150e30]: docs/STATUS.md
+      - generic [ref=f150e31]:
+        - 'heading "Status: what has been run, what it showed, what is left" [level=1] [ref=f150e32]'
+        - paragraph [ref=f150e33]:
+          - strong [ref=f150e34]: Hand-maintained. Last updated 2026-08-14.
+          - text: There is no generator behind this file and it does not pretend otherwise — see the note at the top of
+          - link [ref=f150e35] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+            - code [ref=f150e36]: SCORECARD.md
+          - text: about a status file that claimed to be generated and was not.
+        - paragraph [ref=f150e37]:
+          - link [ref=f150e38] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+            - code [ref=f150e39]: SCORECARD.md
+          - text: answers
+          - emphasis [ref=f150e40]: what may be publicly claimed about a skill
+          - text: and is empty on purpose.
+          - link [ref=f150e41] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/research_programme/
+            - code [ref=f150e42]: RESEARCH_PROGRAMME.md
+          - text: answers
+          - emphasis [ref=f150e43]: what the tracks are
+          - text: .
+          - strong [ref=f150e44]:
+            - text: This file answers
+            - emphasis [ref=f150e45]: where the work actually is
+            - text: .
+        - separator
+        - heading "The one-line version" [level=2] [ref=f150e46]
+        - paragraph [ref=f150e47]:
+          - strong [ref=f150e48]:
+            - text: Eleven results are in, eleven measurements were caught being broken, no skill has been evaluated end-to-end — and the instrument that produced every trigger result was solvable at 0.890 by counting words, which is
+            - link "Track N" [ref=f150e49] [cursor=pointer]:
+              - /url: /decision-making-skills/docs/research_programme/
+            - text: "and is now rebuilt: the best shortcut on the"
+            - strong [ref=f150e50]: "258"
+            - text: "-item corpus is a stump at"
+            - strong [ref=f150e51]: "0.7054"
+            - text: against a 0.6667 baseline, a lift of
+            - strong [ref=f150e52]: "0.0387"
+            - text: . One of the eleven,
+            - strong [ref=f150e53]: N9, is void
+            - text: and answers nothing.
+        - paragraph [ref=f150e54]:
+          - emphasis [ref=f150e55]: The counts above read “six” and “five” until 2026-08-13, and “eight” until 2026-08-14, each time because the tables below had already grown past them. A summary line that is not recomputed from the table under it is a hand-maintained number like any other — and it has now drifted twice, which says the lesson was recorded and not learned.
+        - paragraph [ref=f150e56]:
+          - emphasis [ref=f150e57]:
+            - text: Drifted a third time, corrected 2026-08-19. It read “seven” while the table below had gained N5, N6 and N7 — three published runs that were in
+            - code [ref=f150e58]: results/
+            - text: "and not in the ledger. The corpus figures in the same sentence were stale by one revision: 261 items and a 0.701 stump are the"
+            - strong [ref=f150e59]: pre-shrink
+            - text: numbers, from before
+            - code [ref=f150e60]: l15
+            - text: was retired. On v4 the stump is 0.7054 against 0.6667. Three drifts now, all of the same shape, and the count has never once been wrong in the direction of claiming less than the tables held.
+        - separator
+        - heading "Model calls on record" [level=2] [ref=f150e61]
+        - table [ref=f150e62]:
+          - rowgroup [ref=f150e63]:
+            - row [ref=f150e64]:
+              - columnheader "family" [ref=f150e65]
+              - columnheader "calls" [ref=f150e66]
+              - columnheader "status" [ref=f150e67]
+          - rowgroup [ref=f150e68]:
+            - row [ref=f150e69]:
+              - cell "trigger arms (M4, M5, M6, M6b, L5, confidence, baseline)" [ref=f150e70]
+              - cell [ref=f150e71]:
+                - strong [ref=f150e72]: 2,555
+              - cell "the working instrument" [ref=f150e73]
+            - row [ref=f150e74]:
+              - cell [ref=f150e75]:
+                - strong [ref=f150e76]: L7
+                - text: (
+                - code [ref=f150e77]: stakes-named
+                - text: ","
+                - code [ref=f150e78]: stakes-shown
+                - text: )
+              - cell [ref=f150e79]:
+                - strong [ref=f150e80]: "292"
+              - cell [ref=f150e81]:
+                - text: run, scored and
+                - strong [ref=f150e82]: published
+                - text: 2026-08-13
+            - row [ref=f150e83]:
+              - cell "M5 first attempt, voided by a parser defect" [ref=f150e84]
+              - cell "365" [ref=f150e85]
+              - cell "kept as evidence" [ref=f150e86]
+            - row [ref=f150e87]:
+              - cell [ref=f150e88]:
+                - text: Track A pilots (
+                - code [ref=f150e89]: math
+                - text: ","
+                - code [ref=f150e90]: actions
+                - text: )
+              - cell "420" [ref=f150e91]
+              - cell "both venues closed" [ref=f150e92]
+            - row [ref=f150e93]:
+              - cell [ref=f150e94]:
+                - text: calibration +
+                - code [ref=f150e95]: evidence-ledger
+                - text: corpora
+              - cell "560" [ref=f150e96]
+              - cell "ceiling, closed" [ref=f150e97]
+            - row [ref=f150e98]:
+              - cell "casefile probe" [ref=f150e99]
+              - cell "44" [ref=f150e100]
+              - cell "clean negative, closed" [ref=f150e101]
+            - row [ref=f150e102]:
+              - cell "Track 0 instrument checks" [ref=f150e103]
+              - cell "8" [ref=f150e104]
+              - cell "passed" [ref=f150e105]
+            - row [ref=f150e106]:
+              - cell [ref=f150e107]:
+                - strong [ref=f150e108]: total
+              - cell [ref=f150e109]:
+                - strong [ref=f150e110]: ~4,240
+              - cell [ref=f150e111]
+        - paragraph [ref=f150e112]:
+          - text: Notional cost only — everything runs on a Claude Max subscription, nothing is billed per call. See
+          - link [ref=f150e113] [cursor=pointer]:
+            - /url: /decision-making-skills/agents/
+            - code [ref=f150e114]: CLAUDE.md
+          - text: .
+        - paragraph [ref=f150e115]:
+          - strong [ref=f150e116]: Correction, 2026-08-13, appended. A whole run is missing from the table above.
+          - text: N3’s blind label adjudication ran on 2026-08-13 — 3 judges × 120 turns,
+          - strong [ref=f150e117]: 360 calls
+          - text: ", 0 unparseable — and this file did not mention it anywhere. The total was therefore"
+          - strong [ref=f150e118]: ~4,600
+          - text: ", not ~4,240, counted from"
+          - code [ref=f150e119]: results/triggers/adjudication.jsonl
+          - text: .
+        - paragraph [ref=f150e120]:
+          - text: It is the largest single omission the ledger has had, and it is instructive about
+          - emphasis [ref=f150e121]: which
+          - text: "runs go missing: N3 produced no arm comparison and no accuracy number, so it never passed through the reporting path that puts a family in this table."
+          - strong [ref=f150e122]: A run that measures the instrument rather than the skill is exactly the run nobody records
+          - text: ", and N3 was the run that decided whether the corpus could be used at all."
+        - paragraph [ref=f150e123]:
+          - strong [ref=f150e124]: Correction, 2026-08-14, appended.
+          - text: The corpus grew to 261 items the same day (two merges, 24 short-band and 23 long-band triples), leaving 141 items with no adjudication record at all.
+          - code [ref=f150e125]: s
+          - text: and
+          - code [ref=f150e126]: m
+          - text: are now
+          - strong [ref=f150e127]: fully adjudicated
+          - text: — 216 more calls, 3 judges × 72 turns, 0 unparseable,
+          - code [ref=f150e128]: "--only"
+          - text: scoped so
+          - code [ref=f150e129]: l
+          - text: /
+          - code [ref=f150e130]: xl
+          - text: (mid-edit by another session closing an
+          - code [ref=f150e131]: open
+          - text: "-view leak) were not touched. The total is therefore"
+          - strong [ref=f150e132]: ~4,816
+          - text: ", not ~4,600. See"
+          - link [ref=f150e133] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated/
+            - code [ref=f150e134]: 2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md
+          - text: .
+        - paragraph [ref=f150e135]:
+          - strong [ref=f150e136]: Correction, 2026-08-19, appended. Four runs since the table was last touched, and none of them is in it.
+          - text: Counted by line from the
+          - code [ref=f150e137]: .jsonl
+          - text: beside each run’s
+          - code [ref=f150e138]: README.md
+          - text: ", so the arithmetic can be checked without trusting this paragraph:"
+        - table [ref=f150e139]:
+          - rowgroup [ref=f150e140]:
+            - row [ref=f150e141]:
+              - columnheader "run" [ref=f150e142]
+              - columnheader "calls" [ref=f150e143]
+              - columnheader "from" [ref=f150e144]
+          - rowgroup [ref=f150e145]:
+            - row [ref=f150e146]:
+              - cell "N5 realism probe" [ref=f150e147]
+              - cell "86" [ref=f150e148]
+              - cell [ref=f150e149]:
+                - code [ref=f150e150]: 2026-08-18-0ee75d4-n5-realism-probe/realism.jsonl
+            - row [ref=f150e151]:
+              - cell "N6 confirmatory" [ref=f150e152]
+              - cell "1,548" [ref=f150e153]
+              - cell [ref=f150e154]:
+                - code [ref=f150e155]: 2026-08-18-e632659-n6-confirmatory/
+                - text: (3 arms x 516)
+            - row [ref=f150e156]:
+              - cell "N7 remaining arms" [ref=f150e157]
+              - cell "1,548" [ref=f150e158]
+              - cell [ref=f150e159]:
+                - code [ref=f150e160]: 2026-08-19-d52236a-n7-remaining-arms/
+                - text: (3 arms x 516)
+            - row [ref=f150e161]:
+              - cell [ref=f150e162]:
+                - text: N9 in situ,
+                - strong [ref=f150e163]: void
+              - cell "516" [ref=f150e164]
+              - cell [ref=f150e165]:
+                - code [ref=f150e166]: 2026-08-19-505b236-n9-in-situ-void/verdicts-in-situ.jsonl
+            - row [ref=f150e167]:
+              - cell [ref=f150e168]:
+                - strong [ref=f150e169]: new total
+              - cell [ref=f150e170]:
+                - strong [ref=f150e171]: ~8,514
+              - cell "4,816 + 86 + 1,548 + 1,548 + 516" [ref=f150e172]
+        - paragraph [ref=f150e173]: "N9 is counted although the run is void, on the same rule that keeps M5’s voided 365 in the table above: the ledger records calls made, not calls that produced a usable number, and a void run is the more expensive kind to forget."
+        - paragraph [ref=f150e174]:
+          - strong [ref=f150e175]: A figure of 8,550 was briefly published on the site and is wrong.
+          - text: It added 36 calls this file cannot account for. The 36 was almost certainly the three casefile probes at 12 each, which are already inside the
+          - code [ref=f150e176]: casefile probe
+          - text: row’s 44 alongside the 8 canary rows, so it was double-counted. Recounting from
+          - code [ref=f150e177]: results/
+          - text: gives 8,514, and the site now quotes that.
+        - separator
+        - heading "Venues built, and what happened to each" [level=2] [ref=f150e178]
+        - table [ref=f150e179]:
+          - rowgroup [ref=f150e180]:
+            - row [ref=f150e181]:
+              - columnheader "venue" [ref=f150e182]
+              - columnheader "verdict" [ref=f150e183]
+              - columnheader "why" [ref=f150e184]
+          - rowgroup [ref=f150e185]:
+            - row [ref=f150e186]:
+              - cell [ref=f150e187]:
+                - code [ref=f150e188]: rel-*
+                - text: single-turn relevance
+              - cell [ref=f150e189]:
+                - strong [ref=f150e190]: closed — ceiling
+              - cell "0.946, and 15 of 15 zeros were the answer key" [ref=f150e191]
+            - row [ref=f150e192]:
+              - cell [ref=f150e193]:
+                - code [ref=f150e194]: rel-*
+                - text: rebuilt with colliding distractors
+              - cell [ref=f150e195]:
+                - strong [ref=f150e196]: closed — ceiling
+              - cell "0.971; collisions bought 2.9pp" [ref=f150e197]
+            - row [ref=f150e198]:
+              - cell [ref=f150e199]:
+                - code [ref=f150e200]: probe-*
+                - text: casefiles
+              - cell [ref=f150e201]:
+                - strong [ref=f150e202]: closed — clean negative
+              - cell [ref=f150e203]:
+                - text: 27 trap opportunities,
+                - strong [ref=f150e204]: zero taken
+            - row [ref=f150e205]:
+              - cell [ref=f150e206]:
+                - code [ref=f150e207]: math
+                - text: sharded conversations
+              - cell [ref=f150e208]:
+                - strong [ref=f150e209]: closed — real null
+              - cell [ref=f150e210]:
+                - code [ref=f150e211]: p_discordant
+                - text: = 0.000
+            - row [ref=f150e212]:
+              - cell [ref=f150e213]:
+                - code [ref=f150e214]: actions
+                - text: tool-use
+              - cell [ref=f150e215]:
+                - strong [ref=f150e216]: closed — no measurement exists
+              - cell "no object is comparable across the arms" [ref=f150e217]
+            - row [ref=f150e218]:
+              - cell [ref=f150e219]:
+                - strong [ref=f150e220]: trigger instrument
+              - cell [ref=f150e221]:
+                - strong [ref=f150e222]: working
+              - cell "2,555 calls, 0 unparseable, 0 isolation failures" [ref=f150e223]
+        - separator
+        - heading "Results in hand" [level=2] [ref=f150e224]
+        - table [ref=f150e225]:
+          - rowgroup [ref=f150e226]:
+            - row [ref=f150e227]:
+              - columnheader "run" [ref=f150e228]
+              - columnheader "question" [ref=f150e229]
+              - columnheader "answer" [ref=f150e230]
+          - rowgroup [ref=f150e231]:
+            - row [ref=f150e232]:
+              - cell [ref=f150e233]:
+                - strong [ref=f150e234]: M4
+              - cell "one entry or four separate skills?" [ref=f150e235]
+              - cell [ref=f150e236]:
+                - strong [ref=f150e237]: Indistinguishable on firing
+                - text: (0.956 vs 0.951, p = 0.83). Four are more conservative. The 202-skill shadowing citation no longer reaches down to four.
+            - row [ref=f150e238]:
+              - cell [ref=f150e239]:
+                - strong [ref=f150e240]: L5
+              - cell "which part of a description does the work?" [ref=f150e241]
+              - cell [ref=f150e242]:
+                - text: Routing summary
+                - strong [ref=f150e243]: −5.8pp
+                - text: false firing, exclusions
+                - strong [ref=f150e244]: −3.7pp
+                - text: ", opener"
+                - strong [ref=f150e245]: +1.8pp — it costs
+                - text: . Not a length effect.
+            - row [ref=f150e246]:
+              - cell [ref=f150e247]:
+                - strong [ref=f150e248]: M5
+              - cell "two entries?" [ref=f150e249]
+              - cell "Conservatism floor already at two. Firing unmoved (p = 0.50)." [ref=f150e250]
+            - row [ref=f150e251]:
+              - cell [ref=f150e252]:
+                - strong [ref=f150e253]: M6 + M6b
+              - cell "which two procedures share an entry?" [ref=f150e254]
+              - cell [ref=f150e255]:
+                - strong [ref=f150e256]:
+                  - code [ref=f150e257]: covers
+                  - text: spans 28.6 points across the three partitions
+                - text: of identical vocabulary. A merged entry does not inherit its parts’ pull.
+            - row [ref=f150e258]:
+              - cell [ref=f150e259]:
+                - strong [ref=f150e260]: Track I
+              - cell "how many repeats are needed?" [ref=f150e261]
+              - cell [ref=f150e262]:
+                - text: ICC 0.83–0.85.
+                - strong [ref=f150e263]: Two, not five.
+                - text: Cut every later arm by 60%.
+            - row [ref=f150e264]:
+              - cell [ref=f150e265]:
+                - strong [ref=f150e266]: Track K
+              - cell "does the decision literature support any of this?" [ref=f150e267]
+              - cell [ref=f150e268]:
+                - text: 4 of 11 popular frameworks have
+                - strong [ref=f150e269]: no located controlled evaluation
+                - text: . Patient decision aids have 209 RCTs. LLM assistance moves process measures and did not move the one outcome measure tested.
+            - row [ref=f150e270]:
+              - cell [ref=f150e271]:
+                - strong [ref=f150e272]: L7
+              - cell "can the description be eager without deleting the parts that work?" [ref=f150e273]
+              - cell [ref=f150e274]:
+                - strong [ref=f150e275]: Showing beat naming.
+                - code [ref=f150e276]: stakes-shown
+                - text: reaches
+                - strong [ref=f150e277]: FPR 0.000 / recall 0.912 / precision 1.000
+                - text: and
+                - strong [ref=f150e278]:
+                  - text: dominates
+                  - code [ref=f150e279]: no-opener
+                  - text: on both axes
+                - text: "— the first Pareto improvement of one arm over another here. The two openers are not distinguishable (p = 0.257). Band 4, the experiment, failed:"
+                - strong [ref=f150e280]: the precision/recall frontier is intact after seven arms.
+                - text: Band 6 passed against expectation — both stakes openers score 0/2 on tabs-vs-spaces while
+                - code [ref=f150e281]: opener-only
+                - text: fires 5/5, so the criterion reads content and not sentence shape.
+            - row [ref=f150e282]:
+              - cell [ref=f150e283]:
+                - strong [ref=f150e284]: N5
+              - cell "are the generated turns realistic?" [ref=f150e285]
+              - cell [ref=f150e286]:
+                - strong [ref=f150e287]: Descriptive only, and the registered prediction failed.
+                - code [ref=f150e288]: composed
+                - text: 0.302 [0.215, 0.406] against a registered >0.50. Band is
+                - strong [ref=f150e289]: perfectly confounded with em/en-dash presence
+                - text: — all 38
+                - code [ref=f150e290]: l
+                - text: /
+                - code [ref=f150e291]: xl
+                - text: items carry one, none of the 48
+                - code [ref=f150e292]: s
+                - text: /
+                - code [ref=f150e293]: m
+                - text: items do — so band and punctuation cannot be told apart here.
+            - row [ref=f150e294]:
+              - cell [ref=f150e295]:
+                - strong [ref=f150e296]: N6
+              - cell "do the description findings survive the rebuilt corpus?" [ref=f150e297]
+              - cell [ref=f150e298]:
+                - strong [ref=f150e299]: Three of four bands met, Q4 falsified.
+                - text: Q1 +0.0976 [0.0459, 0.1493];
+                - code [ref=f150e300]: ledger
+                - text: worst-routed in all three arms;
+                - code [ref=f150e301]: settled
+                - text: is at the
+                - strong [ref=f150e302]: bottom
+                - text: of the routing table, not the top as registered.
+                - code [ref=f150e303]: opener-only
+                - text: ’s pooled FPR 0.250 is one band coming apart (
+                - code [ref=f150e304]: l
+                - text: 0.524). Triple ICC
+                - strong [ref=f150e305]: 0.00–0.06
+                - text: against the 0.315 the power arithmetic assumed, so that planning figure may not be reused.
+            - row [ref=f150e306]:
+              - cell [ref=f150e307]:
+                - strong [ref=f150e308]: N7
+              - cell "which description arm is best, all six on one corpus?" [ref=f150e309]
+              - cell [ref=f150e310]:
+                - strong [ref=f150e311]: One of five predictions met cleanly, and the top three arms are indistinguishable
+                - text: —
+                - code [ref=f150e312]: no-opener
+                - text: 0.9496,
+                - code [ref=f150e313]: stakes-shown
+                - text: 0.9477,
+                - code [ref=f150e314]: full
+                - text: 0.9360, p = 0.86 and p = 0.35. L7’s precision/recall frontier is
+                - strong [ref=f150e315]: intact after ten arms
+                - text: . A pre-registration defect is recorded against this run.
+            - row [ref=f150e316]:
+              - cell [ref=f150e317]:
+                - strong [ref=f150e318]: N9
+              - cell "does the venue move firing?" [ref=f150e319]
+              - cell [ref=f150e320]:
+                - strong [ref=f150e321]: Void — no answer.
+                - text: 516 calls made and refused on parse rate, no prediction scored. Reported here so the row is not mistaken for unrun. What broke is described in
+                - link "the run record" [ref=f150e322] [cursor=pointer]:
+                  - /url: /decision-making-skills/results/decision-making/2026-08-19-505b236-n9-in-situ-void/
+                - text: and is exploratory.
+        - paragraph [ref=f150e323]:
+          - strong [ref=f150e324]: "The through-line:"
+          - text: five independent manipulations of a skill description — structure, content, count, composition twice — and
+          - strong [ref=f150e325]: not one moved how well it discriminates.
+          - text: Every one moved only where it sits on the precision/recall frontier.
+        - paragraph [ref=f150e326]:
+          - strong [ref=f150e327]: And a second reading of that through-line, added 2026-08-13.
+          - text: The trigger corpus is separable by
+          - strong [ref=f150e328]: turn length alone at AUC 0.850
+          - text: ", and a bare"
+          - emphasis [ref=f150e329]: “fire if ≥ 18 words”
+          - text: rule scores
+          - strong [ref=f150e330]: "0.890"
+          - text: with no model on the
+          - strong [ref=f150e331]: version 2
+          - text: key, against the best arm measured on that key —
+          - strong [ref=f150e332]: "0.9795"
+          - text: for the best description arm (
+          - code [ref=f150e333]: stakes-shown
+          - text: ) and
+          - strong [ref=f150e334]: "0.9863"
+          - text: for
+          - code [ref=f150e335]: confidence
+          - text: . So every result above was competing for about
+          - strong [ref=f150e336]: nine points over a ruler
+          - text: . Five nulls is what a ceiling looks like.
+        - paragraph [ref=f150e337]:
+          - strong [ref=f150e338]: Correction, 2026-08-13, appended.
+          - text: This read “0.956 … about six points” until the checkpoints were reconciled. 0.956 is the
+          - code [ref=f150e339]: full
+          - text: arm on the
+          - strong [ref=f150e340]: version 1
+          - text: key, where the same ruler scores 0.877, so the six-point figure was arithmetic across two answer keys — and 0.956 was not the best arm at either version, because
+          - code [ref=f150e341]: no-opener
+          - text: reached 0.967 and
+          - code [ref=f150e342]: confidence
+          - text: 0.973 at v1, and L5 published no accuracy column for anyone to notice. Neither reading is established and both must be reported until the corpus is rebuilt —
+          - link [ref=f150e343] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/superpowers/plans/2026-08-13-trigger-corpus-v3/
+            - code [ref=f150e344]: the v3 plan
+          - text: ","
+          - link [ref=f150e345] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words/
+            - code [ref=f150e346]: the finding
+          - text: .
+        - separator
+        - heading "Measurements caught being broken" [level=2] [ref=f150e347]
+        - paragraph [ref=f150e348]:
+          - text: Recorded because every one of them produced a clean run, a full checkpoint and a plausible number.
+          - strong [ref=f150e349]: None crashed.
+        - table [ref=f150e350]:
+          - rowgroup [ref=f150e351]:
+            - row [ref=f150e352]:
+              - columnheader "defect" [ref=f150e353]
+              - columnheader "what it read" [ref=f150e354]
+              - columnheader "what was true" [ref=f150e355]
+          - rowgroup [ref=f150e356]:
+            - row [ref=f150e357]:
+              - cell [ref=f150e358]:
+                - text: scorer read
+                - code [ref=f150e359]: final_response
+                - text: across arms with different turn counts
+              - cell "45/50 vs 23/50, “clean replication”" [ref=f150e360]
+              - cell "an artefact; crediting the whole conversation reversed it" [ref=f150e361]
+            - row [ref=f150e362]:
+              - cell "parser whitelist dropped every entry name an n=2 arm offers" [ref=f150e363]
+              - cell "routing 0.000 over 365 calls" [ref=f150e364]
+              - cell "nothing had failed" [ref=f150e365]
+            - row [ref=f150e366]:
+              - cell "routing graded against names the arm never offered" [ref=f150e367]
+              - cell "routing 0.000 again" [ref=f150e368]
+              - cell "no answer could have matched" [ref=f150e369]
+            - row [ref=f150e370]:
+              - cell [ref=f150e371]:
+                - code [ref=f150e372]: covers
+                - text: quoted without its denominator
+              - cell "0.743" [ref=f150e373]
+              - cell "or 0.895, depending" [ref=f150e374]
+            - row [ref=f150e375]:
+              - cell [ref=f150e376]:
+                - code [ref=f150e377]: covers
+                - text: compared across partitions
+              - cell "0.743 vs 0.857" [ref=f150e378]
+              - cell "28.6-point range; the measure is retired" [ref=f150e379]
+            - row [ref=f150e380]:
+              - cell "the corpus itself, never audited" [ref=f150e381]
+              - cell "five arm comparisons" [ref=f150e382]
+              - cell [ref=f150e383]:
+                - text: a ruler solves it at 0.890; the movable range is ~9 points, not the ~6 quoted here until 2026-08-13, which compared a v2 ruler with a v1 arm →
+                - strong [ref=f150e384]: Track N
+            - row [ref=f150e385]:
+              - cell "the model tier is not in any record" [ref=f150e386]
+              - cell "every trigger number" [ref=f150e387]
+              - cell [ref=f150e388]:
+                - code [ref=f150e389]: "--model"
+                - text: is a CLI default and the tier survived only as prose in a hand-written README.
+                - strong [ref=f150e390]: Closed 2026-08-13 (N8)
+                - text: ":"
+                - code [ref=f150e391]: run_triggers.py
+                - text: stamps
+                - code [ref=f150e392]: model
+                - text: ", and"
+                - code [ref=f150e393]: models_comparable
+                - text: refuses a comparison spanning tiers
+            - row [ref=f150e394]:
+              - cell [ref=f150e395]:
+                - code [ref=f150e396]: summarise()
+                - text: read
+                - code [ref=f150e397]: should_fire
+                - text: from the record, so a single-arm report on a v1 checkpoint silently emitted v1 numbers
+              - cell [ref=f150e398]:
+                - code [ref=f150e399]: full
+                - text: at recall 0.878 beside
+                - code [ref=f150e400]: stakes-shown
+                - text: at 0.912
+              - cell [ref=f150e401]:
+                - text: a v2 re-score puts
+                - code [ref=f150e402]: full
+                - text: five points higher; the L7 table would have been wrong in the shipped arm’s disfavour
+        - paragraph [ref=f150e403]:
+          - text: "Six of the eight have a guard and tests:"
+          - code [ref=f150e404]: final_responses_comparable
+          - text: ","
+          - code [ref=f150e405]: decision(text, allowed)
+          - text: ","
+          - code [ref=f150e406]: routing_is_by_name
+          - text: ","
+          - code [ref=f150e407]: trigger_arms.covers_rates
+          - text: ", and — since N8 closed on 2026-08-13 —"
+          - code [ref=f150e408]: models_comparable
+          - text: .
+          - strong [ref=f150e409]: Row six is the open one
+          - text: ", and it is Track N’s whole job: nothing can guard a corpus against admitting a shortcut except rebuilding it."
+        - paragraph [ref=f150e410]:
+          - strong [ref=f150e411]: The eighth is still open, and it is the sharpest, because a guard was already there and did not cover it.
+          - code [ref=f150e412]: label_versions_comparable
+          - text: refused the cross-arm comparison, which is the guard working. Nothing refuses a
+          - emphasis [ref=f150e413]: single-arm
+          - text: report — and a single-arm report is what goes in a README. The guard protects comparisons and not statements. Found while scoring L7; see
+          - link "the entry" [ref=f150e414] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier/
+          - text: .
+        - paragraph [ref=f150e415]:
+          - strong [ref=f150e416]: The pattern is the finding.
+          - text: Not one of these was caught by a run failing. Every one was caught by somebody asking a question the instrument was not set up to answer — and two of the eight were the maintainer asking, not the tooling.
+        - paragraph [ref=f150e417]:
+          - strong [ref=f150e418]: Correction, 2026-08-14, appended. The count is ten, and the ninth is the largest of them
+          - text: ", because it is not a bug in a scorer — it is the wrong statistic, used by every gate since the corpus was designed."
+        - table [ref=f150e419]:
+          - rowgroup [ref=f150e420]:
+            - row [ref=f150e421]:
+              - columnheader "defect" [ref=f150e422]
+              - columnheader "what it read" [ref=f150e423]
+              - columnheader "what was true" [ref=f150e424]
+          - rowgroup [ref=f150e425]:
+            - row [ref=f150e426]:
+              - cell [ref=f150e427]:
+                - strong [ref=f150e428]: the parse-rate gate reads repeat 0 only
+              - cell [ref=f150e429]:
+                - code [ref=f150e430]: run_triggers.py:918
+                - text: prints one parse rate and voids the run on it, described everywhere as the run’s parse rate
+              - cell [ref=f150e431]:
+                - code [ref=f150e432]: row = done.get((case.id, 0))
+                - text: — the gate never looks at repeat 1. On N9 that is 0.8566 against an aggregate of 0.8643; both are below the floor so the disposition held
+                - strong [ref=f150e433]: by luck
+                - text: . A run whose repeat 0 cleared 0.90 while repeat 1 dragged the aggregate under would exit zero and publish. Found by adversarial review 2026-08-19.
+                - strong [ref=f150e434]: Fixed the same day
+                - text: —
+                - code [ref=f150e435]: parse_rate_over_all_repeats()
+                - text: "counts every call the run was asked to make, and the gate runs before the repeat-0 report is built so a failing run never reaches a report describing half its calls. The falsifier was demonstrated against the old code first: a 20-item run with repeat 0 clean at 20/20 and repeat 1 at 6/20 — true rate 65% — returned 0 before the fix and voids after. The rejected denominator,"
+                - emphasis [ref=f150e436]: item parseable if any repeat parsed
+                - text: ", reads 0.957 on N9 against 0.8643 over all calls, and would have flipped N9 from void to published"
+            - row [ref=f150e437]:
+              - cell [ref=f150e438]:
+                - strong [ref=f150e439]: pooled AUC used on a matched corpus
+              - cell [ref=f150e440]:
+                - code [ref=f150e441]: word_count
+                - text: at 0.517, “as clean as this battery can print”
+              - cell [ref=f150e442]:
+                - text: the matched within-triple statistic read 0.660 at 3.24 null SE. A pooled AUC ranks positives against negatives from
+                - emphasis [ref=f150e443]: other
+                - text: triples, where body variation swamps the ask, so it is structurally blind to a rank held inside a triple — two-thirds of its comparisons are between items sharing nothing
+            - row [ref=f150e444]:
+              - cell [ref=f150e445]:
+                - code [ref=f150e446]: _shared_body
+                - text: cut the common prefix back to the last
+                - strong [ref=f150e447]: space
+                - text: ", and bodies end in a"
+                - strong [ref=f150e448]: newline
+              - cell [ref=f150e449]:
+                - text: opener features constant within every triple, reading exactly
+                - strong [ref=f150e450]: "0.500"
+              - cell [ref=f150e451]:
+                - text: the body’s final word leaked into every derived
+                - code [ref=f150e452]: ask
+                - text: and became its first “sentence”. Fifth inert-estimator instance, and it was in the module whose job is hunting inert estimators
+        - paragraph [ref=f150e453]:
+          - strong [ref=f150e454]: The corpus was built as a matched design and evaluated as an unmatched one.
+          - text: Four separate pooled-cancellations were found by four separate people over 2026-08-13, each after the fact; the matched statistic found all of them in one run. Row six above — “the corpus itself, never audited” — was the same failure seen from the other side.
+        - paragraph [ref=f150e455]:
+          - text: Neither statistic retires the other. Per-band pooled AUC is the
+          - emphasis [ref=f150e456]: exploitability
+          - text: "measure: an arm sees one turn and never sees the other two members of its triple, so a within-triple rank is a defect in the construction rather than a demonstrated exploit. Both are gated and both are printed."
+        - paragraph [ref=f150e457]:
+          - strong [ref=f150e458]: An eleventh is on record and is not counted here
+          - text: ", because it is a claim rather than a measurement:"
+          - code [ref=f150e459]: stats/multiplicity.py
+          - text: implements
+          - code [ref=f150e460]: benjamini_hochberg
+          - text: ", exports it, property-tests it, and"
+          - strong [ref=f150e461]: nothing calls it
+          - text: ", while"
+          - code [ref=f150e462]: paper/CHECKLIST.md
+          - text: ticked “multiplicity controlled”. Fourth instance of a tested function with no caller. The wiring gate missed it because the module is
+          - emphasis [ref=f150e463]: import
+          - text: "-reachable via"
+          - code [ref=f150e464]: stats/__init__.py
+          - text: ; importable is not used. The box is now unticked.
+        - separator
+        - heading "Where the corpus is, 2026-08-14" [level=2] [ref=f150e465]
+        - paragraph [ref=f150e466]:
+          - strong [ref=f150e467]: 258 items, 86 triples
+          - text: — s 24, m 24, l 21, xl 17, after
+          - code [ref=f150e468]: l15
+          - text: was retired on 2026-08-18. It read 261/87 until then, and 120/40 when authored. Grown from 120 items / 40 triples by two same-day merges (24 short-band triples, 23 long-band ones). A separate session’s own notebook entry has the merge detail and the battery before/after; not reproduced here.
+        - paragraph [ref=f150e469]:
+          - strong [ref=f150e470]: A leak was found and closed the same day, and both halves are measured.
+          - text: "A 20,000-draw permutation test over the battery’s full family — 4 bands × 4 views × 11 features, 176 cells, band-restricted plain unpaired AUC, Benjamini–Hochberg corrected — run before and against the committed fix:"
+        - table [ref=f150e471]:
+          - rowgroup [ref=f150e472]:
+            - row [ref=f150e473]:
+              - columnheader [ref=f150e474]
+              - columnheader "cells crossing p<0.05" [ref=f150e475]
+              - columnheader "expected by chance" [ref=f150e476]
+              - columnheader "surviving BH" [ref=f150e477]
+          - rowgroup [ref=f150e478]:
+            - row [ref=f150e479]:
+              - cell "before" [ref=f150e480]
+              - cell "18" [ref=f150e481]
+              - cell "8.8" [ref=f150e482]
+              - cell [ref=f150e483]:
+                - strong [ref=f150e484]: "7"
+            - row [ref=f150e485]:
+              - cell "after" [ref=f150e486]
+              - cell "10" [ref=f150e487]
+              - cell "8.8" [ref=f150e488]
+              - cell [ref=f150e489]:
+                - strong [ref=f150e490]: "0"
+        - paragraph [ref=f150e491]:
+          - text: "Five of the seven were one fact:"
+          - code [ref=f150e492]: question_marks
+          - text: and
+          - code [ref=f150e493]: terminal_question
+          - text: on the
+          - code [ref=f150e494]: open
+          - text: view read AUC
+          - strong [ref=f150e495]: 0.779 in XL and 0.716 in L
+          - text: . Whether a turn’s
+          - emphasis [ref=f150e496]: first sentence
+          - text: ends in a question mark separated the labels in the long bands at close to four cases in five — plain unpaired AUC inside a single band, on text the arm reads, with band membership self-evident from turn length.
+          - strong [ref=f150e497]: Exploitable
+          - text: ", unlike the within-triple findings, and it confounded N6’s Q1 directly."
+        - paragraph [ref=f150e498]:
+          - strong [ref=f150e499]: By this test the corpus is now statistically indistinguishable from clean
+          - text: ", and nothing moved in to replace what was removed — which is what happened to the four previous generations of this defect. It was closed by moving"
+          - emphasis [ref=f150e500]: both
+          - text: sides and keeping per-triple variety, never by a per-item rule.
+        - paragraph [ref=f150e501]:
+          - text: Two claims about the fix were raised and
+          - strong [ref=f150e502]: refuted
+          - text: by direct computation, both recorded because a refuted claim is worth as much here as a confirmed one. The target cells read AUC exactly 0.500, which is the signature of a
+          - emphasis [ref=f150e503]: constant
+          - text: feature that ties every comparison and cannot fail — that is how the
+          - code [ref=f150e504]: _shared_body
+          - text: "bug was caught. It is not that, and the check is not degenerate: only 8 of 22 L triples and 8 of 17 XL triples are internally homogeneous, so attainable AUC still reaches 0.807 in L against a dead-band requirement of 0.187."
+          - strong [ref=f150e505]: The check can still fail on a regression.
+        - paragraph [ref=f150e506]:
+          - strong [ref=f150e507]: One discrepancy is open and is recorded rather than resolved.
+          - text: Two independent sweeps of the same pre-fix corpus disagreed on how many cells survive BH — 7 by the measure above, 16 by another session’s. It is not Monte Carlo noise (stable across seeds) and it is not the degenerate-cell denominator (7 either way, at m=176 and m=152). The likeliest explanation is that the two sweeps score different statistics — matched within-triple versus plain unpaired — which is precisely the distinction that produced defect nine. Unresolved.
+        - paragraph [ref=f150e508]:
+          - strong [ref=f150e509]: "192 of 261 items are now blind-adjudicated (N3 + this continuation), and seven adjudicated label moves are on record and unapplied:"
+        - table [ref=f150e510]:
+          - rowgroup [ref=f150e511]:
+            - row [ref=f150e512]:
+              - columnheader "case" [ref=f150e513]
+              - columnheader "direction" [ref=f150e514]
+              - columnheader "votes" [ref=f150e515]
+              - columnheader "adjudicated" [ref=f150e516]
+          - rowgroup [ref=f150e517]:
+            - row [ref=f150e518]:
+              - cell [ref=f150e519]:
+                - code [ref=f150e520]: s02n2
+              - cell "negative → positive" [ref=f150e521]
+              - cell "(False, True, True)" [ref=f150e522]
+              - cell "2026-08-13 (N3)" [ref=f150e523]
+            - row [ref=f150e524]:
+              - cell [ref=f150e525]:
+                - code [ref=f150e526]: s12p
+              - cell "positive → negative" [ref=f150e527]
+              - cell "(True, False, False)" [ref=f150e528]
+              - cell "2026-08-13 (N3)" [ref=f150e529]
+            - row [ref=f150e530]:
+              - cell [ref=f150e531]:
+                - code [ref=f150e532]: xl05n2
+              - cell "negative → positive" [ref=f150e533]
+              - cell "(True, True, True)" [ref=f150e534]
+              - cell "2026-08-13 (N3)" [ref=f150e535]
+            - row [ref=f150e536]:
+              - cell [ref=f150e537]:
+                - code [ref=f150e538]: m14n2
+              - cell "negative → positive" [ref=f150e539]
+              - cell "(True, True, True)" [ref=f150e540]
+              - cell "2026-08-14" [ref=f150e541]
+            - row [ref=f150e542]:
+              - cell [ref=f150e543]:
+                - code [ref=f150e544]: m16n2
+              - cell "negative → positive" [ref=f150e545]
+              - cell "(True, True, False)" [ref=f150e546]
+              - cell "2026-08-14" [ref=f150e547]
+            - row [ref=f150e548]:
+              - cell [ref=f150e549]:
+                - code [ref=f150e550]: m18p
+              - cell "positive → negative" [ref=f150e551]
+              - cell "(False, False, False)" [ref=f150e552]
+              - cell "2026-08-14" [ref=f150e553]
+            - row [ref=f150e554]:
+              - cell [ref=f150e555]:
+                - code [ref=f150e556]: s19n2
+              - cell "negative → positive" [ref=f150e557]
+              - cell "(True, True, False)" [ref=f150e558]
+              - cell "2026-08-14" [ref=f150e559]
+        - paragraph [ref=f150e560]:
+          - text: "None applied yet: moving a label bumps the answer-key version and invalidates every comparison across the boundary, so the key moves"
+          - strong [ref=f150e561]: once
+          - text: ", at the freeze, carrying all seven plus whatever N4–N7 still finds. Movement over the 192 adjudicated so far is 7/192 = 0.036 against the pre-registered 0.20 kill — the corpus continues to survive it by a wide margin. Detail, per-band breakdown and inter-rater agreement:"
+          - link [ref=f150e562] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated/
+            - code [ref=f150e563]: 2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md
+          - text: .
+        - paragraph [ref=f150e564]:
+          - text: L and XL (69 of the 261 items) remain at N3’s original coverage. A separate session is mid-edit on
+          - code [ref=f150e565]: l.yaml
+          - text: /
+          - code [ref=f150e566]: xl.yaml
+          - text: /
+          - code [ref=f150e567]: corpus-baseline.txt
+          - text: closing an
+          - code [ref=f150e568]: open
+          - text: "-view leak, so their text is not stable enough to adjudicate against yet."
+        - paragraph [ref=f150e569]:
+          - strong [ref=f150e570]: Correction, 2026-08-18, appended. The section above is stale by one commit, and it is the third instance of this file lagging its own tables.
+          - code [ref=f150e571]: 30012d9
+          - text: closed the L/XL gap about an hour after the paragraph above was written, and nothing came back to update it. Re-derived from
+          - code [ref=f150e572]: results/triggers/adjudication.jsonl
+          - text: "by two independent agents and then by hand, all three agreeing:"
+        - table [ref=f150e573]:
+          - rowgroup [ref=f150e574]:
+            - row [ref=f150e575]:
+              - columnheader [ref=f150e576]
+              - columnheader "stated above" [ref=f150e577]
+              - columnheader "actual" [ref=f150e578]
+          - rowgroup [ref=f150e579]:
+            - row [ref=f150e580]:
+              - cell "adjudicated" [ref=f150e581]
+              - cell "192 of 261" [ref=f150e582]
+              - cell [ref=f150e583]:
+                - strong [ref=f150e584]: 261 of 261
+                - text: ", 3 judges each, 0 unparseable"
+            - row [ref=f150e585]:
+              - cell "moves on record" [ref=f150e586]
+              - cell "7" [ref=f150e587]
+              - cell [ref=f150e588]:
+                - strong [ref=f150e589]: "12"
+                - text: — 10 negative → positive, 2 positive → negative
+            - row [ref=f150e590]:
+              - cell "movement" [ref=f150e591]
+              - cell "7/192 = 0.036" [ref=f150e592]
+              - cell [ref=f150e593]:
+                - strong [ref=f150e594]: 12/261 = 0.046
+                - text: ", against the 0.20 kill"
+        - paragraph [ref=f150e595]:
+          - text: The five further moves are
+          - code [ref=f150e596]: l15n2
+          - text: ","
+          - code [ref=f150e597]: l17n2
+          - text: ","
+          - code [ref=f150e598]: l21n1
+          - text: (l),
+          - code [ref=f150e599]: xl13n2
+          - text: ","
+          - code [ref=f150e600]: xl16n1
+          - text: (xl). Per-band movement is 0.042 (s), 0.042 (m), 0.045 (l), 0.059 (xl) — no band is individually near the kill, which the pooled figure alone would not show. Fleiss kappa 0.862, Krippendorff alpha 0.862, unanimity 0.904.
+        - paragraph [ref=f150e601]:
+          - strong [ref=f150e602]:
+            - text: One number in
+            - code [ref=f150e603]: 30012d9
+            - text: ’s own commit message is wrong and cannot be fixed where it was written.
+          - text: It reads “Eleven of the twelve move negative to positive.” It is
+          - strong [ref=f150e604]: ten
+          - text: ":"
+          - code [ref=f150e605]: m18p
+          - text: and
+          - code [ref=f150e606]: s12p
+          - text: both move positive → negative, and this file’s own table above already listed both correctly. History is the pre-registration evidence and is not rewritten, so the correction lives here.
+        - paragraph [ref=f150e607]:
+          - strong [ref=f150e608]: And the freeze is now blocked on something nobody had costed.
+          - text: All 12 moves break the one-positive-per-triple invariant
+          - code [ref=f150e609]: corpus._check_triples
+          - text: enforces — the 10 negative → positive moves each land in a triple whose existing positive the same adjudication
+          - strong [ref=f150e610]: unanimously
+          - text: reconfirmed, 10 of 10, giving two positives; the 2 positive → negative moves land in triples whose other members were unanimously negative, giving none. So “apply the adjudicated labels” is not an executable instruction, and the freeze needs a design decision that the v3 plan’s
+          - emphasis [ref=f150e611]: “rewrite the turn or move the label”
+          - text: rule names but does not resolve.
+        - paragraph [ref=f150e612]:
+          - strong [ref=f150e613]: Resolved the same day, and the answer was to rewrite rather than relabel.
+          - text: The plan sends a 2-of-3 disagreement to
+          - emphasis [ref=f150e614]: rewrite the turn
+          - text: ", and reserves retirement for a three-way split that three binary judges cannot produce. All 12 asks were rewritten to one rule — an inert ask asks about one thing, and may not put two options in a frame that invites ranking them — by agents never shown any judge’s rationale. On blind re-adjudication,"
+          - strong [ref=f150e615]: 36 calls, 11 of 12 now agree with the key
+          - text: against a registered band of 8; judge agreement on those twelve went 0.611 → 1.000 pairwise, and corpus-wide movement
+          - strong [ref=f150e616]: 0.046 → 0.004
+          - text: .
+        - paragraph [ref=f150e617]:
+          - code [ref=f150e618]: l15
+          - text: is retired whole, being the one item still disputed after the single registered round.
+          - strong [ref=f150e619]: The corpus is now 258 items, 86 triples — s 24, m 24, l 21, xl 17.
+          - text: No label moved, no version was bumped, no gate crossed, and the two
+          - code [ref=f150e620]: sentence_count
+          - text: findings ended
+          - emphasis [ref=f150e621]: stronger
+          - text: "at 3.18σ. Detail:"
+          - link [ref=f150e622] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-18-the-rewrite-round-eleven-of-twelve-and-one-retirement/
+            - code [ref=f150e623]: the outcome
+          - text: .
+        - separator
+        - heading "Open decisions that belong to the maintainer" [level=2] [ref=f150e624]
+        - table [ref=f150e625]:
+          - rowgroup [ref=f150e626]:
+            - row [ref=f150e627]:
+              - columnheader "decision" [ref=f150e628]
+              - columnheader "status" [ref=f150e629]
+          - rowgroup [ref=f150e630]:
+            - row [ref=f150e631]:
+              - cell [ref=f150e632]:
+                - strong [ref=f150e633]: Eager or cautious?
+              - cell [ref=f150e634]:
+                - strong [ref=f150e635]: Answered 2026-08-13 — eager, provisionally.
+                - text: See
+                - link "the notebook entry" [ref=f150e636] [cursor=pointer]:
+                  - /url: /decision-making-skills/notebook/2026-08-13-the-maintainer-picked-eager/
+                - text: .
+            - row [ref=f150e637]:
+              - cell [ref=f150e638]:
+                - code [ref=f150e639]: x-n21
+                - text: /
+                - code [ref=f150e640]: x-n22
+                - text: labels
+              - cell "open — worth 11 points of recall" [ref=f150e641]
+            - row [ref=f150e642]:
+              - cell [ref=f150e643]:
+                - code [ref=f150e644]: x-n03
+                - text: ","
+                - code [ref=f150e645]: x-n20
+                - text: labels
+              - cell "open — largest per-item regressions" [ref=f150e646]
+            - row [ref=f150e647]:
+              - cell [ref=f150e648]:
+                - code [ref=f150e649]: p06
+                - text: label (
+                - code [ref=f150e650]: fit
+                - text: or
+                - code [ref=f150e651]: cascade
+                - text: )
+              - cell "open — the model answers timing-ish in every arm" [ref=f150e652]
+            - row [ref=f150e653]:
+              - cell "Should routing allow several acceptable routes?" [ref=f150e654]
+              - cell "open — must be decided blind to which items failed" [ref=f150e655]
+            - row [ref=f150e656]:
+              - cell "Vendor the spider databases?" [ref=f150e657]
+              - cell "open — needs explicit permission, third-party download" [ref=f150e658]
+            - row [ref=f150e659]:
+              - cell [ref=f150e660]:
+                - strong [ref=f150e661]: Write the N4 holdout turns
+              - cell [ref=f150e662]:
+                - strong [ref=f150e663]: open, and it is the only Track N item that is not mine to do.
+                - text: ~20 turns you author, ideally real messages rather than turns written to order, never seen by me before authoring closes. It is the control on “a model is writing the corpus that will evaluate a model”, which no other gate touches.
+        - paragraph [ref=f150e664]:
+          - text: Trigger corpus v3 is no longer on this list — it stopped being a decision and became
+          - strong [ref=f150e665]:
+            - link "Track N" [ref=f150e666] [cursor=pointer]:
+              - /url: /decision-making-skills/docs/research_programme/
+          - text: on 2026-08-13.
+        - paragraph [ref=f150e667]:
+          - strong [ref=f150e668]: Correction, 2026-08-18, appended. The N4 row above is answered, and the answer is no.
+          - text: The maintainer will not author the ~20 holdout turns. It is off this list — not done,
+          - emphasis [ref=f150e669]: rerouted
+          - text: ": N4 will be built from a public human-written corpus and labelled by N3’s blind adjudicator. See"
+          - link "Track N" [ref=f150e670] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/research_programme/#n4s-route-changed-on-2026-08-18-and-the-threat-it-controls-did-not
+          - text: .
+        - paragraph [ref=f150e671]:
+          - strong [ref=f150e672]: Correction, 2026-08-18, appended. This section is closed, and the heading above is now wrong.
+          - text: On a maintainer instruction —
+          - emphasis [ref=f150e673]: remove every human gate from the plans
+          - text: — no row on this list waits on a person any longer. The heading stays where it is because this file appends and does not rewrite; read it as
+          - emphasis [ref=f150e674]: decisions that used to belong to the maintainer
+          - text: .
+        - paragraph [ref=f150e675]: "Each row is rerouted rather than deleted, because a gate deleted without a replacement is a step the plan silently loses:"
+        - table [ref=f150e676]:
+          - rowgroup [ref=f150e677]:
+            - row [ref=f150e678]:
+              - columnheader "row" [ref=f150e679]
+              - columnheader "where it goes now" [ref=f150e680]
+          - rowgroup [ref=f150e681]:
+            - row [ref=f150e682]:
+              - cell [ref=f150e683]:
+                - code [ref=f150e684]: x-n21
+                - text: /
+                - code [ref=f150e685]: x-n22
+                - text: labels
+              - cell [ref=f150e686]:
+                - strong [ref=f150e687]: N3’s three-instance blind adjudication
+                - text: ", answer key versioned, and the votes reported per item."
+                - strong [ref=f150e688]: Not against the 0.20 kill
+                - text: — that threshold was pre-registered over a whole corpus adjudicated blind, and these two are selected precisely because they already disagree stably, so movement over a hand-picked pair is not the quantity it calibrates. Cumulative corpus-wide movement is what carries the kill. These two are worth 11 points of recall and have been open since the day they were found, which is the argument against casting votes rather than for them
+            - row [ref=f150e689]:
+              - cell [ref=f150e690]:
+                - code [ref=f150e691]: x-n03
+                - text: ","
+                - code [ref=f150e692]: x-n20
+                - text: labels
+              - cell "same procedure, same record" [ref=f150e693]
+            - row [ref=f150e694]:
+              - cell [ref=f150e695]:
+                - code [ref=f150e696]: p06
+                - text: label (
+                - code [ref=f150e697]: fit
+                - text: or
+                - code [ref=f150e698]: cascade
+                - text: )
+              - cell "same procedure. A route label is a judgement about which file answers the turn, and three blind readers make it the same way they make a fire/no-fire call" [ref=f150e699]
+            - row [ref=f150e700]:
+              - cell "Should routing allow several acceptable routes?" [ref=f150e701]
+              - cell [ref=f150e702]:
+                - strong [ref=f150e703]:
+                  - text: pre-registered in
+                  - code [ref=f150e704]: notebook/
+                  - text: before any per-item result is opened
+                - text: ", then applied mechanically. The requirement was that it be decided"
+                - emphasis [ref=f150e705]: blind to which items failed
+                - text: — that is a property of the procedure, not of the decider, and a dated entry that predates the scoring proves it in a way a person’s recollection cannot
+            - row [ref=f150e706]:
+              - cell "Vendor the spider databases?" [ref=f150e707]
+              - cell [ref=f150e708]:
+                - strong [ref=f150e709]:
+                  - text: the outside-data rule in
+                  - link [ref=f150e710] [cursor=pointer]:
+                    - /url: /decision-making-skills/docs/autonomous_work_order/
+                    - code [ref=f150e711]: AUTONOMOUS_WORK_ORDER.md
+                - text: "— free, redistributable, licence read first-hand, a sample read for personal information, digest pinned. Executing the rule is the approval. Nothing about “explicit permission” is lost: the four checks stay, and a source failing any one of them is not vendored"
+            - row [ref=f150e712]:
+              - cell "Write the N4 holdout turns" [ref=f150e713]
+              - cell "already rerouted above — a public human-written corpus, labelled by N3’s adjudicator" [ref=f150e714]
+        - paragraph [ref=f150e715]:
+          - strong [ref=f150e716]: What this trades away, said plainly rather than buried.
+          - text: Every one of these rows now ends in a model’s judgement about a corpus a model authored. The casting vote was the last place a person was going to look at this data, and it is gone. What replaces it is not better judgement — it is
+          - emphasis [ref=f150e717]: checkable
+          - text: "judgement: three blind readers leave a ledger, a pre-registered rule predates its data, and a licence check leaves a digest. A maintainer’s answer left none of those, which is why five of these six rows sat open long enough to be forgotten rather than decided."
+        - paragraph [ref=f150e718]:
+          - strong [ref=f150e719]: And a constraint that was never written down anywhere is now written down.
+          - text: "This is a side project with no budget: nothing may be purchased — no paid data, no paid APIs, no paid tooling. It had been true since the first commit and lived only in the maintainer’s head, which is the same defect shape as the model tier that survived as prose in a README. It is now in"
+          - link [ref=f150e720] [cursor=pointer]:
+            - /url: /decision-making-skills/agents/
+            - code [ref=f150e721]: CLAUDE.md
+          - text: beside the subscription note, with the operational half — licence read first-hand, redistribution checked, a sample actually read for personal information, digest pinned — in
+          - link [ref=f150e722] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/autonomous_work_order/
+            - code [ref=f150e723]: AUTONOMOUS_WORK_ORDER.md
+          - text: .
+        - separator
+        - heading "Tracks" [level=2] [ref=f150e724]
+        - table [ref=f150e725]:
+          - rowgroup [ref=f150e726]:
+            - row [ref=f150e727]:
+              - columnheader "track" [ref=f150e728]
+              - columnheader "state" [ref=f150e729]
+          - rowgroup [ref=f150e730]:
+            - row [ref=f150e731]:
+              - cell [ref=f150e732]:
+                - strong [ref=f150e733]: "0"
+                - text: — instrument (transport)
+              - cell "passed done" [ref=f150e734]:
+                - text: ✓
+                - generic [ref=f150e735]: passed
+                - text: done
+            - row [ref=f150e736]:
+              - cell [ref=f150e737]:
+                - strong [ref=f150e738]: I
+                - text: — reliability
+              - cell "passed done" [ref=f150e739]:
+                - text: ✓
+                - generic [ref=f150e740]: passed
+                - text: done
+            - row [ref=f150e741]:
+              - cell [ref=f150e742]:
+                - strong [ref=f150e743]: "N"
+                - text: — the trigger corpus
+              - cell [ref=f150e744]:
+                - text: 🟡
+                - strong [ref=f150e745]: started.
+                - text: N1 shortcut battery done;
+                - strong [ref=f150e746]: N2 done
+                - text: — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17);
+                - strong [ref=f150e747]: N8 done
+                - text: — the model tier is in the record and a comparison spanning tiers is refused;
+                - strong [ref=f150e748]: N3 done
+                - text: "— all items blind-adjudicated, and the 12 disputes resolved 2026-08-18 by rewriting the asks rather than moving labels: 11 of 12 now agree with the key,"
+                - code [ref=f150e749]: l15
+                - text: retired, corpus at
+                - strong [ref=f150e750]: 258 items / 86 triples
+                - text: ", movement 0.004, no label moved — the answer key nonetheless moved"
+                - strong [ref=f150e751]: 3 → 4
+                - text: later the same day, because version 3 had named four different corpora and N6 would have been the first run ever to stamp it; N4 rerouted to a public human-written source and
+                - link "surveyed" [ref=f150e752] [cursor=pointer]:
+                  - /url: /decision-making-skills/notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify/
+                - text: — 4 of 8 candidates clear the redistribution bar, LMSYS-Chat-1M and ShareGPT are killed by it, and nothing may be fetched until the chosen source’s licence is read directly,
+                - strong [ref=f150e753]: N5’s 10% human audit retired 2026-08-18
+                - text: — its sheet was a self-assessment by the corpus’s own author, still addressed to 120 items at key v3, and a forced choice against N4’s human turns
+                - strong [ref=f150e754]: will
+                - text: replace it once N4’s source is fetched, which it has not been;
+                - strong [ref=f150e755]: N5’s descriptive probe ran the same day for the first time
+                - text: — 86 calls,
+                - code [ref=f150e756]: composed
+                - text: 0.302 [0.215, 0.406], the registered >0.50 prediction falsified, and band inseparable from em-dash presence,
+                - strong [ref=f150e757]: N6 done 2026-08-18
+                - text: — 1,548 calls, 0 unparseable, three of four registered bands met and Q4 falsified in all three arms;
+                - code [ref=f150e758]: opener-only
+                - text: ’s pooled FPR of 0.250 is one band coming apart (
+                - code [ref=f150e759]: l
+                - text: 0.524). The triple ICC is 0.00–0.06 against the 0.315 the power arithmetic assumed, so that planning figure may not be reused.
+                - strong [ref=f150e760]: N7 done 2026-08-19
+                - text: "— 1,548 calls, 0 unparseable, all six description arms now on one corpus at one key and tier. One of five predictions met cleanly; the top three arms are statistically indistinguishable, and L7’s precision/recall frontier is intact after ten arms. A pre-registration defect is recorded against this run: prediction 5 re-derived L7’s band-4 thresholds from N6’s observed numbers while citing L7, which flipped the verdict."
+                - strong [ref=f150e761]: N9 ran 2026-08-19 and is void
+                - text: — 516 calls refused on parse rate, no prediction scored; the first registered void condition here to actually fire. The 70 unparseable responses carry no
+                - code [ref=f150e762]: "\"fire\""
+                - text: "key and no JSON at all: they are the model answering as Claude Code. Parse rate is"
+                - strong [ref=f150e763]: two clusters, not a gradient
+                - text: —
+                - code [ref=f150e764]: technical
+                - text: /
+                - code [ref=f150e765]: money
+                - text: /
+                - code [ref=f150e766]: career
+                - text: 0.9135 against
+                - code [ref=f150e767]: relationships
+                - text: /
+                - code [ref=f150e768]: health
+                - text: 0.7892, Fisher p = 0.00011 — and identity-refusal language never appears in
+                - code [ref=f150e769]: technical
+                - text: or
+                - code [ref=f150e770]: career
+                - text: .
+                - strong [ref=f150e771]: An adversarial review found the gate reads repeat 0 only
+                - text: ", so it graded this run on half its calls; the disposition survives because every reading is below every floor, which is luck rather than verification. So the harness still has"
+                - strong [ref=f150e772]: no measurement of how the shipped description behaves in the venue anybody uses
+                - text: ", and closing that needs a new arm and a new pre-registration. Blocks every future L and M claim and retro-qualifies every past one."
+            - row [ref=f150e773]:
+              - cell [ref=f150e774]:
+                - strong [ref=f150e775]: K
+                - text: — frameworks review
+              - cell "🟡 three passes; K4 waits on Track A" [ref=f150e776]
+            - row [ref=f150e777]:
+              - cell [ref=f150e778]:
+                - strong [ref=f150e779]: M
+                - text: — skill design
+              - cell [ref=f150e780]:
+                - text: 🟡 M1–M6b done; M3 has no estimator on a merged arm;
+                - strong [ref=f150e781]: all of it now carries the Track N caveat
+            - row [ref=f150e782]:
+              - cell [ref=f150e783]:
+                - strong [ref=f150e784]: L
+                - text: — skill variants
+              - cell [ref=f150e785]:
+                - text: 🟡 L5 and
+                - strong [ref=f150e786]: L7 run
+                - text: ; L7 unpublished;
+                - strong [ref=f150e787]: same Track N caveat
+            - row [ref=f150e788]:
+              - cell [ref=f150e789]:
+                - strong [ref=f150e790]: S
+                - text: — ship the skills
+              - cell [ref=f150e791]:
+                - text: 🟡
+                - strong [ref=f150e792]: started 2026-08-19.
+                - text: S5 (
+                - code [ref=f150e793]: council.md
+                - text: ) and S6 (
+                - code [ref=f150e794]: hinge.md
+                - text: ) written, the last two procedures the founding brief named; S9’s router half done —
+                - code [ref=f150e795]: ledger
+                - text: ’s row retargeted against its confusion pair (
+                - code [ref=f150e796]: cascade
+                - text: ", 77 records)."
+                - strong [ref=f150e797]: The shipped description now enumerates six procedures, which retires all ten description arms as measurements of what ships
+                - text: — see
+                - link [ref=f150e798] [cursor=pointer]:
+                  - /url: /decision-making-skills/docs/decisions/
+                  - code [ref=f150e799]: DECISIONS.md
+                - text: . Nothing here is measured; all of it is
+                - code [ref=f150e800]: UNTESTED
+            - row [ref=f150e801]:
+              - cell [ref=f150e802]:
+                - strong [ref=f150e803]: A
+                - text: — replication
+              - cell "🔴 A1 closed both families; A2 needs harder items" [ref=f150e804]
+            - row [ref=f150e805]:
+              - cell [ref=f150e806]:
+                - strong [ref=f150e807]: B
+                - text: — attribution
+              - cell "🔴 not started" [ref=f150e808]
+            - row [ref=f150e809]:
+              - cell [ref=f150e810]:
+                - strong [ref=f150e811]: C
+                - text: — evidence aggregation
+              - cell "🔴 not started" [ref=f150e812]
+            - row [ref=f150e813]:
+              - cell [ref=f150e814]:
+                - strong [ref=f150e815]: D
+                - text: — delegation quality
+              - cell "🔴 not started" [ref=f150e816]
+            - row [ref=f150e817]:
+              - cell [ref=f150e818]:
+                - strong [ref=f150e819]: E
+                - text: — handoff fidelity
+              - cell "🔴 not started" [ref=f150e820]
+            - row [ref=f150e821]:
+              - cell [ref=f150e822]:
+                - strong [ref=f150e823]: F
+                - text: — end-to-end
+              - cell "🔴 not started" [ref=f150e824]
+            - row [ref=f150e825]:
+              - cell [ref=f150e826]:
+                - strong [ref=f150e827]: G
+                - text: — volume / long context
+              - cell "🔴 demoted; harness fixed and canary-verified to 101k tokens, no corpus" [ref=f150e828]
+            - row [ref=f150e829]:
+              - cell [ref=f150e830]:
+                - strong [ref=f150e831]: H
+                - text: — tailoring, life decisions
+              - cell "🔴 not started; construct and its evidence now identified" [ref=f150e832]
+            - row [ref=f150e833]:
+              - cell [ref=f150e834]:
+                - strong [ref=f150e835]: J
+                - text: — write-up and release
+              - cell "🔴 not started" [ref=f150e836]
+        - separator
+        - heading "Run but not written up" [level=2] [ref=f150e837]
+        - paragraph [ref=f150e838]: The one category this file exists to stop growing quietly.
+        - paragraph [ref=f150e839]:
+          - strong [ref=f150e840]: Empty.
+          - text: L7 was the only entry and was published on 2026-08-13 —
+          - link [ref=f150e841] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-13-abb6862-l7-stakes/
+            - code [ref=f150e842]: results/decision-making/2026-08-13-abb6862-l7-stakes/
+          - text: .
+        - paragraph [ref=f150e843]:
+          - text: Every checkpoint in
+          - code [ref=f150e844]: results/triggers/
+          - text: now corresponds to a published directory under
+          - code [ref=f150e845]: results/decision-making/
+          - text: .
+          - code [ref=f150e846]: de index
+          - text: and the provenance gate — see
+          - code [ref=f150e847]: evals/src/decision_evals/provenance.py
+          - text: — check that a published run has a prediction that predates it. Neither can see a run that was never published at all, which is what this table is for, and it is the reason to keep it here empty rather than delete it.
+        - separator
+        - heading "What is proven" [level=2] [ref=f150e848]
+        - paragraph [ref=f150e849]:
+          - strong [ref=f150e850]: Nothing.
+          - text: Every skill carries
+          - code [ref=f150e851]: "verdict: UNTESTED"
+          - text: and
+          - code [ref=f150e852]: de lint
+          - text: "refuses to let one into the shipped plugin. That is enforced, not aspirational, and it is the point of the repository:"
+          - emphasis [ref=f150e853]: “we have not shown this works”
+          - text: and
+          - emphasis [ref=f150e854]: “this works”
+          - text: are different statements.
+  - contentinfo [ref=f150e855]:
+    - generic [ref=f150e857]:
+      - paragraph [ref=f150e859]: We have not proven anything here yet. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f150e860]:
+        - listitem [ref=f150e861]:
+          - link "Results" [ref=f150e862] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f150e863]:
+          - link "Scorecard" [ref=f150e864] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f150e865]:
+          - link "Research log" [ref=f150e866] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f150e867]:
+          - link "Limitations" [ref=f150e868] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f150e869]:
+          - link "GitHub" [ref=f150e870] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f150e871]:
+        - generic [ref=f150e872]: Apache-2.0 · Angel Campa
+        - generic [ref=f150e873]: decision-making v0.3.0
+        - generic [ref=f150e874]: UNTESTED

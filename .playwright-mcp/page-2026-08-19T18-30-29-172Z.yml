@@ -1,0 +1,401 @@
+- generic [active] [ref=f157e1]:
+  - link "Skip to content" [ref=f157e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f157e3]:
+    - generic [ref=f157e4]:
+      - link [ref=f157e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f157e14]:
+        - link "skill" [ref=f157e15] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f157e16] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f157e17] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+      - group "Colour theme" [ref=f157e18]:
+        - button "sys" [pressed] [ref=f157e19] [cursor=pointer]
+        - button "light" [ref=f157e20] [cursor=pointer]
+        - button "dark" [ref=f157e21] [cursor=pointer]
+  - main [ref=f157e22]:
+    - article [ref=f157e23]:
+      - paragraph [ref=f157e24]:
+        - generic [ref=f157e25]: notebook · append-only ·
+        - link [ref=f157e26] [cursor=pointer]:
+          - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/notebook/2026-08-12-m4-shadowing-did-not-appear-at-four.md
+          - code [ref=f157e27]: notebook/2026-08-12-m4-shadowing-did-not-appear-at-four.md
+      - generic [ref=f157e28]:
+        - 'heading "M4: shadowing did not appear at four, and the table was the problem all along" [level=1] [ref=f157e29]'
+        - paragraph [ref=f157e30]:
+          - strong [ref=f157e31]: 2026-08-12.
+          - text: Outcome for
+          - link "the prediction" [ref=f157e32] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-12-m4-prediction-one-entry-against-four/
+          - text: ", registered and committed at"
+          - code [ref=f157e33]: 615f7cb
+          - text: before the run started. Track M4. 365 isolated calls, 73 cases × 5 repeats, Haiku,
+          - strong [ref=f157e34]: 0 unparseable, 0 isolation failures
+          - text: . Arm
+          - code [ref=f157e35]: one
+          - text: ’s five-repeat baseline already existed and was not re-run.
+        - heading "Scored as registered" [level=2] [ref=f157e36]
+        - table [ref=f157e37]:
+          - rowgroup [ref=f157e38]:
+            - row [ref=f157e39]:
+              - columnheader "#" [ref=f157e40]
+              - columnheader "Prediction" [ref=f157e41]
+              - columnheader "Band" [ref=f157e42]
+              - columnheader "Observed" [ref=f157e43]
+              - columnheader [ref=f157e44]
+          - rowgroup [ref=f157e45]:
+            - row [ref=f157e46]:
+              - cell "1" [ref=f157e47]
+              - cell "Parseable verdicts" [ref=f157e48]
+              - cell "≥ 98%" [ref=f157e49]
+              - cell [ref=f157e50]:
+                - strong [ref=f157e51]: 100%
+                - text: (365/365)
+              - cell "passed" [ref=f157e52]: ✓
+            - row [ref=f157e54]:
+              - cell "2" [ref=f157e55]
+              - cell [ref=f157e56]:
+                - text: Arm
+                - code [ref=f157e57]: four
+                - text: precision
+              - cell "0.80–0.95" [ref=f157e58]
+              - cell [ref=f157e59]:
+                - strong [ref=f157e60]: "1.000"
+              - cell "failed (above)" [ref=f157e61]:
+                - text: ✕
+                - generic [ref=f157e62]: failed
+                - emphasis [ref=f157e63]: (above)
+            - row [ref=f157e64]:
+              - cell "3" [ref=f157e65]
+              - cell [ref=f157e66]:
+                - text: Arm
+                - code [ref=f157e67]: four
+                - text: recall
+              - cell "0.80–0.95" [ref=f157e68]
+              - cell [ref=f157e69]:
+                - strong [ref=f157e70]: "0.800"
+              - cell "passed" [ref=f157e71]: ✓
+            - row [ref=f157e73]:
+              - cell "4" [ref=f157e74]
+              - cell [ref=f157e75]:
+                - strong [ref=f157e76]: FPR rises above 0.018
+              - cell "> 0.018" [ref=f157e77]
+              - cell [ref=f157e78]:
+                - strong [ref=f157e79]: "0.000"
+              - cell "failed" [ref=f157e80]: ✕
+            - row [ref=f157e82]:
+              - cell "5" [ref=f157e83]
+              - cell [ref=f157e84]:
+                - text: Arm
+                - code [ref=f157e85]: four
+                - text: routing
+              - cell "0.55–0.80" [ref=f157e86]
+              - cell [ref=f157e87]:
+                - strong [ref=f157e88]: "0.786"
+              - cell "passed" [ref=f157e89]: ✓
+            - row [ref=f157e91]:
+              - cell "6" [ref=f157e92]
+              - cell [ref=f157e93]:
+                - code [ref=f157e94]: x-n21
+                - text: ","
+                - code [ref=f157e95]: x-n22
+                - text: still miss
+              - cell "≤ 1/5 each" [ref=f157e96]
+              - cell [ref=f157e97]:
+                - strong [ref=f157e98]: 1/5, 0/5
+              - cell "passed" [ref=f157e99]: ✓
+        - paragraph [ref=f157e101]:
+          - strong [ref=f157e102]: Band 4 was the one the repository’s own design choice rests on, and it failed in the informative direction.
+          - text: Not “FPR rose less than expected” — it went to
+          - strong [ref=f157e103]: zero, in all five repeats, sd 0.000.
+        - heading "The two arms, side by side" [level=2] [ref=f157e104]
+        - table [ref=f157e105]:
+          - rowgroup [ref=f157e106]:
+            - row [ref=f157e107]:
+              - columnheader [ref=f157e108]
+              - columnheader [ref=f157e109]:
+                - text: arm
+                - code [ref=f157e110]: one
+              - columnheader [ref=f157e111]:
+                - text: arm
+                - code [ref=f157e112]: four
+          - rowgroup [ref=f157e113]:
+            - row [ref=f157e114]:
+              - cell "precision" [ref=f157e115]
+              - cell "0.942 ± 0.039" [ref=f157e116]
+              - cell [ref=f157e117]:
+                - strong [ref=f157e118]: 1.000 ± 0.000
+            - row [ref=f157e119]:
+              - cell "recall" [ref=f157e120]
+              - cell [ref=f157e121]:
+                - strong [ref=f157e122]: 0.878 ± 0.025
+              - cell "0.800 ± 0.063" [ref=f157e123]
+            - row [ref=f157e124]:
+              - cell "false-positive rate" [ref=f157e125]
+              - cell "0.018 ± 0.013" [ref=f157e126]
+              - cell [ref=f157e127]:
+                - strong [ref=f157e128]: 0.000 ± 0.000
+            - row [ref=f157e129]:
+              - cell "routing accuracy" [ref=f157e130]
+              - cell "0.686 ± 0.108" [ref=f157e131]
+              - cell [ref=f157e132]:
+                - strong [ref=f157e133]: 0.786 ± 0.051
+        - 'heading "The headline: they are the same, and that is the result" [level=2] [ref=f157e134]'
+        - paragraph [ref=f157e135]:
+          - text: Per-item correctness (
+          - code [ref=f157e136]: fired == should_fire
+          - text: "), 73 paired items, 5 repeats each:"
+        - table [ref=f157e137]:
+          - rowgroup [ref=f157e138]:
+            - row [ref=f157e139]:
+              - columnheader "set" [ref=f157e140]
+              - columnheader [ref=f157e141]:
+                - text: arm
+                - code [ref=f157e142]: one
+              - columnheader [ref=f157e143]:
+                - text: arm
+                - code [ref=f157e144]: four
+              - columnheader "items differing" [ref=f157e145]
+              - columnheader "paired Wilcoxon" [ref=f157e146]
+          - rowgroup [ref=f157e147]:
+            - row [ref=f157e148]:
+              - cell [ref=f157e149]:
+                - strong [ref=f157e150]: all 73
+              - cell "0.956" [ref=f157e151]
+              - cell "0.951" [ref=f157e152]
+              - cell [ref=f157e153]:
+                - text: 8 —
+                - strong [ref=f157e154]: 4 each way
+              - cell [ref=f157e155]:
+                - strong [ref=f157e156]: p = 0.83
+            - row [ref=f157e157]:
+              - cell "55 negatives" [ref=f157e158]
+              - cell "0.982" [ref=f157e159]
+              - cell "1.000" [ref=f157e160]
+              - cell [ref=f157e161]:
+                - text: 2, both favour
+                - code [ref=f157e162]: four
+              - cell "p = 0.18" [ref=f157e163]
+            - row [ref=f157e164]:
+              - cell "18 positives" [ref=f157e165]
+              - cell "0.878" [ref=f157e166]
+              - cell "0.800" [ref=f157e167]
+              - cell [ref=f157e168]:
+                - text: 6, 4 favour
+                - code [ref=f157e169]: one
+              - cell "p = 0.21" [ref=f157e170]
+        - paragraph [ref=f157e171]:
+          - strong [ref=f157e172]: Shadowing did not appear at four descriptions on this instrument.
+          - text: The two sub-splits point opposite ways and cancel, and the aggregate is a dead heat.
+        - paragraph [ref=f157e173]:
+          - code [ref=f157e174]: CLAUDE.md
+          - text: "currently justifies shipping one entry like this:"
+        - blockquote [ref=f157e175]:
+          - paragraph [ref=f157e176]:
+            - text: The decision procedures live behind
+            - strong [ref=f157e177]: one
+            - text: entry rather than four because four descriptions that all read as “help me decide” look like the same failure.
+        - paragraph [ref=f157e178]:
+          - strong [ref=f157e179]: That mechanism was not observed.
+          - text: The four descriptions here share an opener and an exclusion list
+          - emphasis [ref=f157e180]: by construction
+          - text: — they are maximally overlapping — and the model still selected among them without firing once on a negative.
+        - paragraph [ref=f157e181]:
+          - strong [ref=f157e182]: "What it does not show: anything about n=202."
+          - text: This was pre-registered and it stands. Four is four. The published shadowing result is not contradicted; the extrapolation from it down to four is not supported either.
+        - heading "The finding I did predict, in writing, before the run" [level=2] [ref=f157e183]
+        - paragraph [ref=f157e184]: "The prediction file’s note on band 5:"
+        - blockquote [ref=f157e185]:
+          - paragraph [ref=f157e186]:
+            - strong [ref=f157e187]: 5 is where I would most like to be surprised.
+            - text: "[…] today’s two table defects ("
+            - code [ref=f157e188]: cascade
+            - text: /
+            - code [ref=f157e189]: timing
+            - text: colliding on order/when, and “advice” appearing only in
+            - code [ref=f157e190]: fit
+            - text: ’s row) are both defects
+            - strong [ref=f157e191]: of the table
+            - text: ", which arm"
+            - code [ref=f157e192]: four
+            - text: does not have.
+        - paragraph [ref=f157e193]:
+          - text: Those two defects are
+          - code [ref=f157e194]: p07
+          - text: and
+          - code [ref=f157e195]: p03
+          - text: ", named this morning from reading traces rather than from any aggregate. Both moved, and so did"
+          - code [ref=f157e196]: p06
+          - text: ":"
+        - table [ref=f157e197]:
+          - rowgroup [ref=f157e198]:
+            - row [ref=f157e199]:
+              - columnheader "item" [ref=f157e200]
+              - columnheader "diagnosed this morning as" [ref=f157e201]
+              - columnheader [ref=f157e202]:
+                - text: arm
+                - code [ref=f157e203]: one
+              - columnheader [ref=f157e204]:
+                - text: arm
+                - code [ref=f157e205]: four
+          - rowgroup [ref=f157e206]:
+            - row [ref=f157e207]:
+              - cell [ref=f157e208]:
+                - strong [ref=f157e209]:
+                  - code [ref=f157e210]: p07
+              - cell [ref=f157e211]:
+                - code [ref=f157e212]: cascade
+                - text: /
+                - code [ref=f157e213]: timing
+                - text: collide on
+                - emphasis [ref=f157e214]: order
+                - text: vs
+                - emphasis [ref=f157e215]: when
+              - cell "1/5" [ref=f157e216]
+              - cell [ref=f157e217]:
+                - strong [ref=f157e218]: 5/5
+            - row [ref=f157e219]:
+              - cell [ref=f157e220]:
+                - strong [ref=f157e221]:
+                  - code [ref=f157e222]: p03
+              - cell [ref=f157e223]:
+                - text: “advice” appears only in
+                - code [ref=f157e224]: fit
+                - text: ’s row
+              - cell "1/5" [ref=f157e225]
+              - cell [ref=f157e226]:
+                - strong [ref=f157e227]: 3/5
+            - row [ref=f157e228]:
+              - cell [ref=f157e229]:
+                - code [ref=f157e230]: p06
+              - cell "partly a trigger-set defect, two routes defensible" [ref=f157e231]
+              - cell "0/5" [ref=f157e232]
+              - cell [ref=f157e233]:
+                - strong [ref=f157e234]: 3/5
+        - paragraph [ref=f157e235]:
+          - text: Across all 14 labelled items,
+          - code [ref=f157e236]: four
+          - text: routes better on 5 and worse on 2, and its standard deviation is
+          - strong [ref=f157e237]: half
+          - text: arm
+          - code [ref=f157e238]: one
+          - text: ’s.
+        - paragraph [ref=f157e239]:
+          - strong [ref=f157e240]: So the router table, not the bundling, is what was costing routing accuracy.
+          - text: Every procedure describing its own condition in its own entry beats four rows the model reads past each other in one table. That is a mechanism confirmed on the two items it was stated about, before the run, which is worth more than the aggregate it sits inside.
+        - paragraph [ref=f157e241]:
+          - strong [ref=f157e242]: "Held to the pre-registration: no p-value on routing."
+          - text: It was registered descriptive-only because 14 items cannot reject at any useful effect size (
+          - link "the power check" [ref=f157e243] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-12-routing-cannot-be-scored-on-fourteen-items/
+          - text: ). The item-level prediction is stronger evidence than the rate precisely because it named
+          - emphasis [ref=f157e244]: which
+          - text: items in advance.
+        - heading "The mechanism behind the trade, and it is structural rather than incidental" [level=2] [ref=f157e245]
+        - paragraph [ref=f157e246]:
+          - text: Arm
+          - code [ref=f157e247]: four
+          - text: fires less and routes better
+          - strong [ref=f157e248]: for one reason
+          - text: ": in a four-entry world,"
+          - emphasis [ref=f157e249]: declining to name a tool is declining to fire
+          - text: . The two decisions are one act. Arm
+          - code [ref=f157e250]: one
+          - text: can fire and then fail to route — it did so on
+          - code [ref=f157e251]: p03
+          - text: and
+          - code [ref=f157e252]: p09
+          - text: — and arm
+          - code [ref=f157e253]: four
+          - text: cannot.
+        - paragraph [ref=f157e254]:
+          - text: That explains the whole trade in one sentence.
+          - code [ref=f157e255]: four
+          - text: never fires on a message it cannot confidently route, so its false positives vanish (
+          - code [ref=f157e256]: n07
+          - text: 2/5 → 0/5,
+          - code [ref=f157e257]: n11
+          - text: 3/5 → 0/5) and its misses grow (
+          - code [ref=f157e258]: x-n20
+          - text: 5/5 → 1/5,
+          - code [ref=f157e259]: p03
+          - text: 5/5 → 3/5,
+          - code [ref=f157e260]: p12
+          - text: 5/5 → 3/5). It is not a better or worse selector.
+          - strong [ref=f157e261]: It is a more conservative one, and the conservatism is forced by the structure rather than chosen.
+        - paragraph [ref=f157e262]:
+          - text: "Which arm that favours depends on a judgement nobody here has made explicitly:"
+          - strong [ref=f157e263]: is a missed decision or an unwanted interruption the more expensive error?
+          - text: Arm
+          - code [ref=f157e264]: one
+          - text: is 0.018 FPR / 0.878 recall; arm
+          - code [ref=f157e265]: four
+          - text: is 0.000 / 0.800. Neither dominates. The repository has never written down which side it wants.
+        - heading [level=2] [ref=f157e266]:
+          - code [ref=f157e267]: x-n20
+          - text: is the item that argues the other way
+        - paragraph [ref=f157e268]:
+          - code [ref=f157e269]: x-n20
+          - text: — a promoted
+          - code [ref=f157e270]: evidence-ledger
+          - text: negative labelled
+          - code [ref=f157e271]: timing
+          - text: — fires 5/5 and routes 4/5 in arm
+          - code [ref=f157e272]: one
+          - text: ", and fires"
+          - strong [ref=f157e273]: 1/5
+          - text: and routes
+          - strong [ref=f157e274]: 0/5
+          - text: in arm
+          - code [ref=f157e275]: four
+          - text: . It is the single largest per-item regression in the run and it is worth a maintainer reading, alongside
+          - code [ref=f157e276]: x-n21
+          - text: /
+          - code [ref=f157e277]: x-n22
+          - text: ", whose labels were already in question."
+        - heading "What I am not doing" [level=2] [ref=f157e278]
+        - paragraph [ref=f157e279]:
+          - strong [ref=f157e280]: Not restructuring the skill.
+          - text: Four entries routed better in one run on one instrument at one model tier, and unbundling
+          - code [ref=f157e281]: decision-making
+          - text: "today on the strength of it would be the same error as editing the router table this morning: acting on the measurement that motivated the question. The result goes to Track L and Track M5 as an input."
+        - paragraph [ref=f157e282]:
+          - strong [ref=f157e283]: The honest next step is smaller and cheaper.
+          - text: "The router-table defect and the one-entry structure are now separable claims, and only one of them has support: give the table’s rows the disambiguating clauses (an L6 variant) and re-run arm"
+          - code [ref=f157e284]: one
+          - text: . If that closes the routing gap, the bundle was never the problem and the table always was.
+        - heading [level=2] [ref=f157e285]:
+          - text: For
+          - code [ref=f157e286]: CLAUDE.md
+          - text: and
+          - code [ref=f157e287]: AGENTS.md
+        - paragraph [ref=f157e288]:
+          - text: "The block that says one-entry-not-four is “a judgement call wearing a citation” was right, and it now has a measurement instead of a citation. It should say:"
+          - strong [ref=f157e289]: at n=4, measured here, one entry and four entries are indistinguishable on firing accuracy, and four routed better.
+          - text: That is not a reason to unbundle, and it is a reason to stop citing a 202-skill result as though it applied.
+  - contentinfo [ref=f157e290]:
+    - generic [ref=f157e292]:
+      - paragraph [ref=f157e294]: We have not proven anything here yet. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f157e295]:
+        - listitem [ref=f157e296]:
+          - link "Results" [ref=f157e297] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f157e298]:
+          - link "Scorecard" [ref=f157e299] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f157e300]:
+          - link "Research log" [ref=f157e301] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f157e302]:
+          - link "Limitations" [ref=f157e303] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f157e304]:
+          - link "GitHub" [ref=f157e305] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f157e306]:
+        - generic [ref=f157e307]: Apache-2.0 · Angel Campa
+        - generic [ref=f157e308]: decision-making v0.3.0
+        - generic [ref=f157e309]: UNTESTED

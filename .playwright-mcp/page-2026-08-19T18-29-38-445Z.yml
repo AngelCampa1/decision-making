@@ -1,0 +1,400 @@
+- generic [active] [ref=f154e1]:
+  - link "Skip to content" [ref=f154e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f154e3]:
+    - generic [ref=f154e4]:
+      - link [ref=f154e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f154e14]:
+        - link "skill" [ref=f154e15] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f154e16] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f154e17] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+      - group "Colour theme" [ref=f154e18]:
+        - button "sys" [pressed] [ref=f154e19] [cursor=pointer]
+        - button "light" [ref=f154e20] [cursor=pointer]
+        - button "dark" [ref=f154e21] [cursor=pointer]
+  - main [ref=f154e22]:
+    - generic [ref=f154e23]:
+      - heading "Research log" [level=1] [ref=f154e24]
+      - paragraph [ref=f154e25]: Append-only. Entries are dated and never edited after the fact — if something here turns out to be wrong, a later entry says so and links back. Rewriting an entry to look smarter in hindsight would destroy the only thing this directory is for.
+      - paragraph [ref=f154e26]: "The log records three things that the code cannot:"
+      - list [ref=f154e27]:
+        - listitem [ref=f154e28]:
+          - strong [ref=f154e29]: Predictions made before runs.
+          - text: A prediction written down before the data arrives is evidence; the same claim written afterwards is a story.
+        - listitem [ref=f154e30]:
+          - strong [ref=f154e31]: Dead ends.
+          - text: Approaches that failed and why, so they aren’t re-attempted and so the methods section is honest about the path taken.
+        - listitem [ref=f154e32]:
+          - strong [ref=f154e33]: Why decisions changed.
+          - text: Particularly where new literature overturned an earlier choice.
+      - paragraph [ref=f154e34]:
+        - text: "Naming:"
+        - code [ref=f154e35]: YYYY-MM-DD-<slug>.md
+        - text: .
+      - paragraph [ref=f154e36]: 106 entries
+      - generic [ref=f154e37]:
+        - heading "2026-08-19" [level=2] [ref=f154e38]
+        - list [ref=f154e39]:
+          - listitem [ref=f154e40]:
+            - link "2026-08-19 — there are two realism gaps here, and the survey only closed one" [ref=f154e41] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-two-realism-gaps-and-one-survey/
+          - listitem [ref=f154e42]:
+            - link "2026-08-19 — Track G’s padding shelf is under 3k tokens, so length is not reachable" [ref=f154e43] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-track-g-cannot-reach-length/
+          - listitem [ref=f154e44]:
+            - link "2026-08-19 — the same whitelist defect, third instance, caught before it ran" [ref=f154e45] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-the-third-instance-of-a-defect-caught-before-it-ran/
+          - listitem [ref=f154e46]:
+            - link "2026-08-19 — H1’s first authoring pass failed, and the objection it was built to answer survived" [ref=f154e47] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-the-h1-form-failed-and-the-two-dials-are-one-dial/
+          - listitem [ref=f154e48]:
+            - link "The gate that could not read the page" [ref=f154e49] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-the-gate-that-could-not-read-the-page/
+          - listitem [ref=f154e50]:
+            - link "2026-08-19 — the first docs sweep, and four things it found" [ref=f154e51] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-the-first-docs-sweep-and-four-things-it-found/
+          - listitem [ref=f154e52]:
+            - 'link "2026-08-19 — prediction: Track H Phase 0, is there anything for tailoring to help with?" [ref=f154e53] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-19-prediction-track-h-phase-0/
+          - listitem [ref=f154e54]:
+            - 'link "2026-08-19 — prediction: N9, does prompt position move firing at all?" [ref=f154e55] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-19-prediction-n9-does-position-move-firing/
+          - listitem [ref=f154e56]:
+            - link "2026-08-19 — N9 is void, and the way it broke is the finding" [ref=f154e57] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-n9-the-in-situ-arm-refused-to-answer-in-json/
+          - listitem [ref=f154e58]:
+            - 'link "2026-08-19 — N7: four of five predictions wrong, and a band I substituted for the one I claimed to test" [ref=f154e59] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-19-n7-four-of-five-predictions-wrong-and-a-band-i-substituted/
+          - listitem [ref=f154e60]:
+            - link "Five venues closed, and what that is evidence of" [ref=f154e61] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-19-five-venues-closed-and-what-that-is-evidence-of/
+      - generic [ref=f154e62]:
+        - heading "2026-08-18" [level=2] [ref=f154e63]
+        - list [ref=f154e64]:
+          - listitem [ref=f154e65]:
+            - 'link "2026-08-18 — the rewrite round: eleven of twelve, and one retirement" [ref=f154e66] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-18-the-rewrite-round-eleven-of-twelve-and-one-retirement/
+          - listitem [ref=f154e67]:
+            - link "2026-08-18 — the corpus is authored in triples and adjudicated in items" [ref=f154e68] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items/
+          - listitem [ref=f154e69]:
+            - 'link "2026-08-18 — prediction: the rewrite round, and the stopping rule that keeps it honest" [ref=f154e70] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-18-prediction-the-rewrite-round-and-its-stopping-rule/
+          - listitem [ref=f154e71]:
+            - 'link "2026-08-18 — prediction: N7, the remaining description arms on v4" [ref=f154e72] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-18-prediction-n7-the-remaining-description-arms/
+          - listitem [ref=f154e73]:
+            - 'link "2026-08-18 — prediction: N5’s descriptive probe, which has never run" [ref=f154e74] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-18-prediction-n5s-descriptive-probe-runs-at-last/
+          - listitem [ref=f154e75]:
+            - link "2026-08-18 — there is no budget, and N4 stops waiting on a person" [ref=f154e76] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-18-no-budget-and-n4-reroutes-to-public-text/
+          - listitem [ref=f154e77]:
+            - 'link "2026-08-18 — N6: two arms in, and I saw the numbers during an instrument check" [ref=f154e78] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-18-n6-two-arms-in-and-the-bands-were-checked-before-i-meant-to-look/
+          - listitem [ref=f154e79]:
+            - 'link "2026-08-18 — N6: three bands of four, and the one that broke" [ref=f154e80] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-18-n6-three-of-four-and-the-one-that-broke/
+          - listitem [ref=f154e81]:
+            - 'link "2026-08-18 — N6 addendum: the corpus shrank to 258/86, and the version had to move" [ref=f154e82] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-18-n6-addendum-the-corpus-shrank-and-the-version-had-to-move/
+          - listitem [ref=f154e83]:
+            - link "2026-08-18 — N5’s probe ran, and the prediction it was registered around was wrong" [ref=f154e84] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-18-n5-the-probe-ran-and-the-headline-prediction-was-wrong/
+          - listitem [ref=f154e85]:
+            - link "2026-08-18 — N4’s licence survey, and the two sources it killed" [ref=f154e86] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify/
+          - listitem [ref=f154e87]:
+            - link "2026-08-18 — memory_paths is not a gate, checked live rather than assumed" [ref=f154e88] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-18-memory-paths-is-not-a-gate/
+          - listitem [ref=f154e89]:
+            - link "2026-08-18 — every human gate comes out of the plans" [ref=f154e90] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-18-every-human-gate-comes-out-of-the-plans/
+      - generic [ref=f154e91]:
+        - heading "2026-08-14" [level=2] [ref=f154e92]
+        - list [ref=f154e93]:
+          - listitem [ref=f154e94]:
+            - link "2026-08-14 — the opener leak closed by touching both sides" [ref=f154e95] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-the-opener-leak-closed-by-touching-both-sides/
+          - listitem [ref=f154e96]:
+            - link "2026-08-14 — the long-band merge closed one leak and opened two" [ref=f154e97] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-the-long-band-merge-closed-one-leak-and-opened-two/
+          - listitem [ref=f154e98]:
+            - link "The checklist ticked a function nothing calls" [ref=f154e99] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-the-checklist-ticked-a-function-nothing-calls/
+          - listitem [ref=f154e100]:
+            - link "2026-08-14 — the battery searches 176 cells, and nobody had costed that" [ref=f154e101] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-the-battery-searches-176-cells-and-nobody-had-costed-that/
+          - listitem [ref=f154e102]:
+            - link "2026-08-14 — the ask-derivation bug, and two checks it had been hiding" [ref=f154e103] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-the-ask-derivation-bug-and-two-checks-it-had-been-hiding/
+          - listitem [ref=f154e104]:
+            - 'link "S9: a replacement candidate for ledger, drafted, and recommended against on today’s evidence" [ref=f154e105] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-14-s9-a-replacement-candidate-drafted-and-recommended-against/
+          - listitem [ref=f154e106]:
+            - link "2026-08-14 — Q1 cannot reach its own prediction, at any corpus size we will build" [ref=f154e107] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-q1-cannot-reach-its-own-prediction-at-any-corpus-size-we-will-build/
+          - listitem [ref=f154e108]:
+            - 'link "2026-08-14 — N7: the L/XL gap closes, 261 of 261 now blind-adjudicated" [ref=f154e109] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-14-n7-the-l-and-xl-gap-closes-261-of-261-adjudicated/
+          - listitem [ref=f154e110]:
+            - 'link "2026-08-14 — N6 unblocked: Q1 goes descriptive, the test moves to the ten-point boundary" [ref=f154e111] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-14-n6-unblocked-q1-goes-descriptive-the-test-moves-to-the-ten-point-boundary/
+          - listitem [ref=f154e112]:
+            - 'link "2026-08-14 — N3 continued: the 72 S and M items N3 left unadjudicated" [ref=f154e113] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated/
+          - listitem [ref=f154e114]:
+            - 'link "K3 and K4 close: form can’t explain an anecdote with no contrast, and the best-evidenced framework targets a failure five-sixths unconfirmed" [ref=f154e115] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-14-k3-and-k4-close-form-cannot-explain-an-anecdote-with-no-contrast/
+          - listitem [ref=f154e116]:
+            - 'link "K2 closes: “widen your options” had real evidence all along, and it was hiding behind the wrong search key" [ref=f154e117] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-14-k2-closes-widen-your-options-had-real-evidence-under-the-right-search-key/
+          - listitem [ref=f154e118]:
+            - link "Four findings against the citation apparatus, checked from the files" [ref=f154e119] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-four-findings-against-the-citation-apparatus/
+          - listitem [ref=f154e120]:
+            - link "2026-08-14 — adversarial re-derivation of the long-band merge" [ref=f154e121] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-14-adversarial-re-derivation-of-the-long-band-merge/
+      - generic [ref=f154e122]:
+        - heading "2026-08-13" [level=2] [ref=f154e123]
+        - list [ref=f154e124]:
+          - listitem [ref=f154e125]:
+            - link "2026-08-13 — Track N stops at adjudication, and what the maintainer has to decide" [ref=f154e126] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-track-n-stops-at-adjudication/
+          - listitem [ref=f154e127]:
+            - link "2026-08-13 — the XL band, and two rulers that cancelled each other out" [ref=f154e128] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-xl-band-and-two-rulers-that-cancelled/
+          - listitem [ref=f154e129]:
+            - link "2026-08-13 — the spec made the leak arithmetically unavoidable" [ref=f154e130] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-spec-made-the-leak-arithmetically-unavoidable/
+          - listitem [ref=f154e131]:
+            - link "2026-08-13 — the sixth pre-registration defect, and the first one caught before the data" [ref=f154e132] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-sixth-pre-registration-defect-and-the-first-caught-before-the-run/
+          - listitem [ref=f154e133]:
+            - link "The retraction was wrong in the other direction" [ref=f154e134] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-retraction-was-wrong-in-the-other-direction/
+          - listitem [ref=f154e135]:
+            - link "The maintainer picked eager, provisionally" [ref=f154e136] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-maintainer-picked-eager/
+          - listitem [ref=f154e137]:
+            - link "2026-08-13 — the long bands cannot answer the question they were built for" [ref=f154e138] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-long-bands-cannot-answer-the-question-they-were-built-for/
+          - listitem [ref=f154e139]:
+            - link "The guard was built and the records were never reconciled" [ref=f154e140] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-guard-was-built-and-the-records-were-never-reconciled/
+          - listitem [ref=f154e141]:
+            - link "The gate was line-scoped and the file was hard-wrapped" [ref=f154e142] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-gate-was-line-scoped-and-the-file-was-hard-wrapped/
+          - listitem [ref=f154e143]:
+            - link "The gate that was documented and never ran" [ref=f154e144] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-gate-that-was-documented-and-never-ran/
+          - listitem [ref=f154e145]:
+            - link "The corpus is 89% solved by counting words" [ref=f154e146] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words/
+          - listitem [ref=f154e147]:
+            - link "2026-08-13 — the corpus fails its own battery, on the last sentence" [ref=f154e148] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-corpus-fails-its-own-battery-on-the-last-sentence/
+          - listitem [ref=f154e149]:
+            - link "2026-08-13 — an adversarial review of the XL band, and the fourth inert estimator" [ref=f154e150] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-the-battery-passed-a-feature-that-could-not-fail/
+          - listitem [ref=f154e151]:
+            - link "One label moved and every arm improved" [ref=f154e152] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-one-label-moved-and-every-arm-improved/
+          - listitem [ref=f154e153]:
+            - link "2026-08-13 — on a matched corpus, the pooled AUC is the wrong statistic" [ref=f154e154] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-on-a-matched-corpus-the-pooled-auc-is-the-wrong-statistic/
+          - listitem [ref=f154e155]:
+            - link "2026-08-13 — pre-registration for N6, the confirmatory run on corpus v3" [ref=f154e156] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-13-n6-prediction-does-accuracy-fall-on-the-long-bands/
+          - listitem [ref=f154e157]:
+            - 'link "2026-08-13 — N5: what a realism probe without a comparison set can say" [ref=f154e158] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-13-n5-what-a-realism-probe-without-a-comparison-set-can-say/
+          - listitem [ref=f154e159]:
+            - 'link "2026-08-13 — N3: the corpus survived, and four routes agreed on one item" [ref=f154e160] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-13-n3-the-corpus-survived-and-four-routes-agreed-on-one-item/
+          - listitem [ref=f154e161]:
+            - 'link "M6b: a merged entry is not the union of its parts" [ref=f154e162] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-13-m6b-the-merged-entry-is-not-the-union-of-its-parts/
+          - listitem [ref=f154e163]:
+            - 'link "Prediction: the third partition, and a mechanism that names one item in advance" [ref=f154e164] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-13-m6b-prediction-the-third-partition-and-a-mechanism-that-names-one-item/
+          - listitem [ref=f154e165]:
+            - 'link "L7: showing beat naming, and nothing left the frontier" [ref=f154e166] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier/
+          - listitem [ref=f154e167]:
+            - 'link "Prediction: eager without deleting the parts that work" [ref=f154e168] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-13-l7-prediction-eager-without-deleting-what-works/
+      - generic [ref=f154e169]:
+        - heading "2026-08-12" [level=2] [ref=f154e170]
+        - list [ref=f154e171]:
+          - listitem [ref=f154e172]:
+            - 'link "Trigger run: what I expect, written before it runs" [ref=f154e173] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-trigger-run-prediction/
+          - listitem [ref=f154e174]:
+            - link "The repaired pilot, and math is a ceiling" [ref=f154e175] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-the-repaired-pilot-and-a-ceiling/
+          - listitem [ref=f154e176]:
+            - 'link "The first forecast: five of six, and the miss is in the good direction" [ref=f154e177] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-the-first-forecast-outcome/
+          - listitem [ref=f154e178]:
+            - link "The description fires well and routes badly" [ref=f154e179] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-the-description-fires-well-and-routes-badly/
+          - listitem [ref=f154e180]:
+            - link "The closing turn worked, and made the measure worse" [ref=f154e181] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-the-closing-turn-worked-and-made-the-measure-worse/
+          - listitem [ref=f154e182]:
+            - link "The baseline was where the errors were" [ref=f154e183] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-the-baseline-was-where-the-errors-were/
+          - listitem [ref=f154e184]:
+            - link "The actions effect was the scorer reading one turn of seven" [ref=f154e185] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-the-actions-effect-was-the-scorer-reading-one-turn/
+          - listitem [ref=f154e186]:
+            - link "The first ablation measured resampling, and the fix is cheap" [ref=f154e187] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-the-ablation-that-measured-resampling/
+          - listitem [ref=f154e188]:
+            - link "Routing cannot be scored on fourteen items" [ref=f154e189] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-routing-cannot-be-scored-on-fourteen-items/
+          - listitem [ref=f154e190]:
+            - 'link "Prediction: the pilot re-run, with the task actually set" [ref=f154e191] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-repaired-pilot-prediction/
+          - listitem [ref=f154e192]:
+            - link "p03, and the only row in the table that says “advice”" [ref=f154e193] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-p03-and-the-only-row-that-says-advice/
+          - listitem [ref=f154e194]:
+            - 'link "Prediction: the collision was hiding inside the entry" [ref=f154e195] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-m6-prediction-the-collision-was-inside-the-entry/
+          - listitem [ref=f154e196]:
+            - 'link "M6: covers went the wrong way, and the measure does not survive finding out why" [ref=f154e197] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-m6-covers-went-up-and-the-measure-does-not-survive-it/
+          - listitem [ref=f154e198]:
+            - 'link "M5: the conservatism floor is reached at two, and the recall curve is not monotone" [ref=f154e199] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-m5-the-floor-is-at-two-and-the-recall-curve-is-not-monotone/
+          - listitem [ref=f154e200]:
+            - 'link "Prediction: where the bundle-size curve turns" [ref=f154e201] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-m5-prediction-where-the-curve-turns/
+          - listitem [ref=f154e202]:
+            - 'link "M4: shadowing did not appear at four, and the table was the problem all along" [ref=f154e203] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-m4-shadowing-did-not-appear-at-four/
+          - listitem [ref=f154e204]:
+            - 'link "Prediction: one entry against four" [ref=f154e205] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-m4-prediction-one-entry-against-four/
+          - listitem [ref=f154e206]:
+            - 'link "L5: the boilerplate does the work and the good sentence does the least" [ref=f154e207] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-l5-the-boilerplate-does-the-work/
+          - listitem [ref=f154e208]:
+            - 'link "Prediction: what each part of a description actually buys" [ref=f154e209] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-l5-prediction-what-each-part-of-a-description-buys/
+          - listitem [ref=f154e210]:
+            - 'link "Five repeats: firing is stable, routing is not" [ref=f154e211] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-five-repeats-firing-is-stable-routing-is-not/
+          - listitem [ref=f154e212]:
+            - 'link "Prediction: the first forecast this repo has asked for" [ref=f154e213] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-first-forecast-prediction/
+          - listitem [ref=f154e214]:
+            - link "cascade and timing collide in the router’s own table" [ref=f154e215] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-cascade-and-timing-collide-in-the-table/
+          - listitem [ref=f154e216]:
+            - link "actions has no comparable object, and that closes it" [ref=f154e217] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-12-actions-has-no-comparable-object/
+          - listitem [ref=f154e218]:
+            - 'link "Prediction: 50 actions pairs, and a note about when this was written" [ref=f154e219] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-actions-expansion-prediction/
+          - listitem [ref=f154e220]:
+            - 'link "A1 pilot: what I expect, written before the run" [ref=f154e221] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-a1-pilot-prediction/
+          - listitem [ref=f154e222]:
+            - 'link "A1 pilot: the instrument works and the effect is not there" [ref=f154e223] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-12-a1-pilot-outcome/
+      - generic [ref=f154e224]:
+        - heading "2026-08-11" [level=2] [ref=f154e225]
+        - list [ref=f154e226]:
+          - listitem [ref=f154e227]:
+            - link "Twelve items could not have found anything" [ref=f154e228] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-twelve-items-could-not-have-found-anything/
+          - listitem [ref=f154e229]:
+            - link "2026-08-11 — The venue was in the wrong cell" [ref=f154e230] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-the-venue-was-in-the-wrong-cell/
+          - listitem [ref=f154e231]:
+            - link "2026-08-11 — The padding had a tell, and so did the cores" [ref=f154e232] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-the-padding-had-a-tell/
+          - listitem [ref=f154e233]:
+            - link "2026-08-11 — The harness could not have carried the experiment" [ref=f154e234] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-the-harness-could-not-carry-the-experiment/
+          - listitem [ref=f154e235]:
+            - link "The corpus disagrees with its own filename" [ref=f154e236] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-the-corpus-disagrees-with-its-own-filename/
+          - listitem [ref=f154e237]:
+            - link "2026-08-11 — The collision rebuild, scored against the prediction" [ref=f154e238] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-the-collision-rebuild-scored/
+          - listitem [ref=f154e239]:
+            - link "Seven-eighths of the effect is scatter, and we were measuring the other eighth" [ref=f154e240] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-seven-eighths-of-the-effect-is-scatter/
+          - listitem [ref=f154e241]:
+            - link "2026-08-11 — What the probe scores were actually measuring" [ref=f154e242] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-pivot-out-of-admissibility/
+          - listitem [ref=f154e243]:
+            - link "2026-08-11 — Multi-turn already worked, and the falsifier would have killed it" [ref=f154e244] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-multi-turn-already-worked/
+          - listitem [ref=f154e245]:
+            - link "2026-08-11 — The casefile venue, and what I expect the probe to show" [ref=f154e246] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-casefile-venue-prediction/
+          - listitem [ref=f154e247]:
+            - link "2026-08-11 — The casefile probe, scored" [ref=f154e248] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-11-casefile-probe-scored/
+      - generic [ref=f154e249]:
+        - heading "2026-08-10" [level=2] [ref=f154e250]
+        - list [ref=f154e251]:
+          - listitem [ref=f154e252]:
+            - link "2026-08-10 — The distractors do nothing, and reading the traces says why" [ref=f154e253] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-10-why-the-distractors-do-nothing/
+          - listitem [ref=f154e254]:
+            - 'link "2026-08-10 — Positioning: what the prior art gets wrong, and the tension we can resolve" [ref=f154e255] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-10-what-the-prior-art-gets-wrong/
+          - listitem [ref=f154e256]:
+            - link "2026-08-10 — The baseline number, scored against the prediction" [ref=f154e257] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-10-the-baseline-number-and-two-more-defective-items/
+          - listitem [ref=f154e258]:
+            - link "2026-08-10 — The subscription-auth premise fails its first test" [ref=f154e259] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-10-subscription-auth-blocker/
+          - listitem [ref=f154e260]:
+            - link "2026-08-10 — The isolation flag I would have got wrong" [ref=f154e261] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-10-isolation-canary/
+          - listitem [ref=f154e262]:
+            - 'link "2026-08-10 — Spike verdict: inspect_swe is the wrong shape, for a sharper reason than predicted" [ref=f154e263] [cursor=pointer]':
+              - /url: /decision-making-skills/notebook/2026-08-10-inspect-swe-spike-verdict/
+          - listitem [ref=f154e264]:
+            - link "2026-08-10 — The flagship skill nearly had a fatal design flaw" [ref=f154e265] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-10-inline-vs-forked-curation/
+          - listitem [ref=f154e266]:
+            - link "2026-08-10 — Choosing a model backend, and the --bare dead end" [ref=f154e267] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-10-harness-backend-selection/
+          - listitem [ref=f154e268]:
+            - link "2026-08-10 — The first real run found a bug in my benchmark, not in the model" [ref=f154e269] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/2026-08-10-first-calibration-and-a-defective-item/
+  - contentinfo [ref=f154e270]:
+    - generic [ref=f154e272]:
+      - paragraph [ref=f154e274]: We have not proven anything here yet. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f154e275]:
+        - listitem [ref=f154e276]:
+          - link "Results" [ref=f154e277] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f154e278]:
+          - link "Scorecard" [ref=f154e279] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f154e280]:
+          - link "Research log" [ref=f154e281] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f154e282]:
+          - link "Limitations" [ref=f154e283] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f154e284]:
+          - link "GitHub" [ref=f154e285] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f154e286]:
+        - generic [ref=f154e287]: Apache-2.0 · Angel Campa
+        - generic [ref=f154e288]: decision-making v0.3.0
+        - generic [ref=f154e289]: UNTESTED

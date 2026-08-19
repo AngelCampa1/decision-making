@@ -1,0 +1,111 @@
+- generic [active] [ref=f155e1]:
+  - link "Skip to content" [ref=f155e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f155e3]:
+    - generic [ref=f155e4]:
+      - link [ref=f155e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f155e14]:
+        - link "skill" [ref=f155e15] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f155e16] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f155e17] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+      - group "Colour theme" [ref=f155e18]:
+        - button "sys" [pressed] [ref=f155e19] [cursor=pointer]
+        - button "light" [ref=f155e20] [cursor=pointer]
+        - button "dark" [ref=f155e21] [cursor=pointer]
+  - main [ref=f155e22]:
+    - generic [ref=f155e23]:
+      - heading "Published runs" [level=1] [ref=f155e24]
+      - paragraph [ref=f155e25]: One directory per run, with its raw transcripts and a record of what it showed. Every one names the answer-key version it used and the prediction that predates it.
+      - generic [ref=f155e26]:
+        - paragraph [ref=f155e27]: Read these with the corpus caveat
+        - paragraph [ref=f155e28]: Every trigger result published before 2026-08-18 was measured on a set a word count passes 89% of the time, so those results were competing for about nine points over a ruler. The results are real; the room they had was small.
+        - paragraph [ref=f155e29]: It does not apply to every run below. The corpus was rebuilt, and on the new one the best model-free shortcut reaches 0.71. Each run names the answer-key version it used.
+      - paragraph [ref=f155e30]: 12 published runs
+      - list [ref=f155e31]:
+        - listitem [ref=f155e32]:
+          - link "2026-08-19-d52236a-n7-remaining-arms Track N7 — the remaining three description arms, and a band I substituted" [ref=f155e33] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-19-d52236a-n7-remaining-arms/
+            - generic [ref=f155e34]: 2026-08-19-d52236a-n7-remaining-arms
+            - generic [ref=f155e35]: Track N7 — the remaining three description arms, and a band I substituted
+        - listitem [ref=f155e36]:
+          - link "2026-08-19-505b236-n9-in-situ-void Track N9 — the in-situ arm, void on parse rate" [ref=f155e37] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-19-505b236-n9-in-situ-void/
+            - generic [ref=f155e38]: 2026-08-19-505b236-n9-in-situ-void
+            - generic [ref=f155e39]: Track N9 — the in-situ arm, void on parse rate
+        - listitem [ref=f155e40]:
+          - link "2026-08-18-e632659-n6-confirmatory Track N6 — the confirmatory grid, on a corpus that is not a word-count ruler" [ref=f155e41] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-18-e632659-n6-confirmatory/
+            - generic [ref=f155e42]: 2026-08-18-e632659-n6-confirmatory
+            - generic [ref=f155e43]: Track N6 — the confirmatory grid, on a corpus that is not a word-count ruler
+        - listitem [ref=f155e44]:
+          - link "2026-08-18-0ee75d4-n5-realism-probe Track N5 — the realism probe, run for the first time" [ref=f155e45] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-18-0ee75d4-n5-realism-probe/
+            - generic [ref=f155e46]: 2026-08-18-0ee75d4-n5-realism-probe
+            - generic [ref=f155e47]: Track N5 — the realism probe, run for the first time
+        - listitem [ref=f155e48]:
+          - link "2026-08-13-abb6862-l7-stakes Track L7 — an eager opener that keeps the boilerplate" [ref=f155e49] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-13-abb6862-l7-stakes/
+            - generic [ref=f155e50]: 2026-08-13-abb6862-l7-stakes
+            - generic [ref=f155e51]: Track L7 — an eager opener that keeps the boilerplate
+        - listitem [ref=f155e52]:
+          - link "2026-08-13-82b4ab8-m6-pairing Track M6 — which procedures share an entry, at fixed count" [ref=f155e53] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-13-82b4ab8-m6-pairing/
+            - generic [ref=f155e54]: 2026-08-13-82b4ab8-m6-pairing
+            - generic [ref=f155e55]: Track M6 — which procedures share an entry, at fixed count
+        - listitem [ref=f155e56]:
+          - link "2026-08-13-5ccedb9-m6b-third-partition Track M6b — the third and final partition" [ref=f155e57] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-13-5ccedb9-m6b-third-partition/
+            - generic [ref=f155e58]: 2026-08-13-5ccedb9-m6b-third-partition
+            - generic [ref=f155e59]: Track M6b — the third and final partition
+        - listitem [ref=f155e60]:
+          - link "2026-08-12-fe24180-l5 Track L5 — what each part of a description buys" [ref=f155e61] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-12-fe24180-l5/
+            - generic [ref=f155e62]: 2026-08-12-fe24180-l5
+            - generic [ref=f155e63]: Track L5 — what each part of a description buys
+        - listitem [ref=f155e64]:
+          - link "2026-08-12-c2673c5-m5-two-entries Track M5 — the same four procedures across two entries, 5 repeats" [ref=f155e65] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-12-c2673c5-m5-two-entries/
+            - generic [ref=f155e66]: 2026-08-12-c2673c5-m5-two-entries
+            - generic [ref=f155e67]: Track M5 — the same four procedures across two entries, 5 repeats
+        - listitem [ref=f155e68]:
+          - link "2026-08-12-615f7cb-four-arm Track M4 — four separate skills instead of one bundle, 5 repeats" [ref=f155e69] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-12-615f7cb-four-arm/
+            - generic [ref=f155e70]: 2026-08-12-615f7cb-four-arm
+            - generic [ref=f155e71]: Track M4 — four separate skills instead of one bundle, 5 repeats
+        - listitem [ref=f155e72]:
+          - link "2026-08-12-40b6ba5 Trigger measurement — decision-making v0.2.1, 5 repeats" [ref=f155e73] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-12-40b6ba5/
+            - generic [ref=f155e74]: 2026-08-12-40b6ba5
+            - generic [ref=f155e75]: Trigger measurement — decision-making v0.2.1, 5 repeats
+        - listitem [ref=f155e76]:
+          - link "2026-08-12-1bd87b8-confidence Elicited confidence — decision-making v0.2.1, 1 repeat" [ref=f155e77] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-12-1bd87b8-confidence/
+            - generic [ref=f155e78]: 2026-08-12-1bd87b8-confidence
+            - generic [ref=f155e79]: Elicited confidence — decision-making v0.2.1, 1 repeat
+  - contentinfo [ref=f155e80]:
+    - generic [ref=f155e82]:
+      - paragraph [ref=f155e84]: We have not proven anything here yet. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f155e85]:
+        - listitem [ref=f155e86]:
+          - link "Results" [ref=f155e87] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f155e88]:
+          - link "Scorecard" [ref=f155e89] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f155e90]:
+          - link "Research log" [ref=f155e91] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f155e92]:
+          - link "Limitations" [ref=f155e93] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f155e94]:
+          - link "GitHub" [ref=f155e95] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f155e96]:
+        - generic [ref=f155e97]: Apache-2.0 · Angel Campa
+        - generic [ref=f155e98]: decision-making v0.3.0
+        - generic [ref=f155e99]: UNTESTED

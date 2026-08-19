@@ -1,0 +1,535 @@
+- generic [active] [ref=f158e1]:
+  - link "Skip to content" [ref=f158e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f158e3]:
+    - generic [ref=f158e4]:
+      - link [ref=f158e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f158e14]:
+        - link "skill" [ref=f158e15] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f158e16] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f158e17] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+      - group "Colour theme" [ref=f158e18]:
+        - button "sys" [pressed] [ref=f158e19] [cursor=pointer]
+        - button "light" [ref=f158e20] [cursor=pointer]
+        - button "dark" [ref=f158e21] [cursor=pointer]
+  - main [ref=f158e22]:
+    - article [ref=f158e23]:
+      - paragraph [ref=f158e24]:
+        - generic [ref=f158e25]: repository ·
+        - link [ref=f158e26] [cursor=pointer]:
+          - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/README.md
+          - code [ref=f158e27]: README.md
+      - generic [ref=f158e28]:
+        - paragraph [ref=f158e30]:
+          - link [ref=f158e31] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/LICENSE
+            - img "License" [ref=f158e32]
+          - link [ref=f158e33] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/pyproject.toml
+            - img "Python" [ref=f158e34]
+          - link [ref=f158e35] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+            - img "Status" [ref=f158e36]
+          - link [ref=f158e37] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+            - img "Verdict" [ref=f158e38]
+        - paragraph [ref=f158e39]: Agent skills for making better decisions under uncertainty, plus an evaluation harness that measures whether they actually work.
+        - paragraph [ref=f158e40]:
+          - text: "The mark is one row of a forest plot: a line of no effect, an interval, a point estimate. The interval crosses zero, which is this repository’s position stated in the notation it argues in. It is"
+          - emphasis [ref=f158e41]: we have not shown this works
+          - text: ", not"
+          - emphasis [ref=f158e42]: this does not work
+          - text: ", and"
+          - link [ref=f158e43] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+            - code [ref=f158e44]: SCORECARD.md
+          - text: exists to keep those apart.
+        - blockquote [ref=f158e45]:
+          - paragraph [ref=f158e46]:
+            - text: "Status: pre-alpha. No skill in this repository has been validated yet. The harness is being built first, deliberately. Until a skill carries a verdict in"
+            - link [ref=f158e47] [cursor=pointer]:
+              - /url: /decision-making-skills/scorecard/
+              - code [ref=f158e48]: SCORECARD.md
+            - text: ", treat it as an untested hypothesis."
+          - paragraph [ref=f158e49]:
+            - link [ref=f158e50] [cursor=pointer]:
+              - /url: /decision-making-skills/docs/status/
+              - code [ref=f158e51]: docs/STATUS.md
+            - text: "is the ledger: every run on record, what it showed, which measurements turned out to be broken, and which tracks are still untouched."
+        - heading "How this is measured" [level=2] [ref=f158e52]
+        - paragraph [ref=f158e53]:
+          - text: "Most skill libraries ship on the author’s word that the thing helps. This one is built the other way round: the harness came first, and the claim is still"
+          - code [ref=f158e54]: UNTESTED
+          - text: .
+        - paragraph [ref=f158e55]:
+          - text: What that costs, in practice, is a set of mechanisms that make it hard to overclaim by accident. The answer key is relabelled blind by three independent model instances that never see the maintainer’s label, against a kill threshold fixed before the run. Every prediction since the convention was adopted is committed to
+          - code [ref=f158e56]: notebook/
+          - text: before its run, and
+          - code [ref=f158e57]: de check
+          - text: refuses a published run whose prediction cannot be shown by git ancestry to predate its data. Two runs predate the rule and are baselined by name in
+          - link [ref=f158e58] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/results/provenance-baseline.txt
+            - code [ref=f158e59]: results/provenance-baseline.txt
+          - text: ", a list that may only shrink. The key carries a version stamped into every record, and comparing arms across a version boundary is refused in code. That rule exists because one correct label move raised recall on every arm on disk without a single call being re-made. Primary metrics are deterministic; a judge never produces one."
+        - paragraph [ref=f158e60]: None of that is a claim that the skills work. It is the reason this repository can say they have not been shown to.
+        - paragraph [ref=f158e61]:
+          - link [ref=f158e62] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/methods/
+            - code [ref=f158e63]: docs/METHODS.md
+          - text: "is the full account: nine sections, each naming the technique, the failure it defends against, the code that implements it, and whether it has actually run. Several entries say it has not."
+        - heading "The skill" [level=2] [ref=f158e64]
+        - paragraph [ref=f158e65]:
+          - text: One skill,
+          - code [ref=f158e66]: decision-making
+          - text: ", that routes to one of six procedures depending on what is actually hard about the decision, and reads only that one."
+        - table [ref=f158e67]:
+          - rowgroup [ref=f158e68]:
+            - row [ref=f158e69]:
+              - columnheader "What is hard" [ref=f158e70]
+              - columnheader "Procedure" [ref=f158e71]
+              - columnheader "What it produces" [ref=f158e72]
+          - rowgroup [ref=f158e73]:
+            - row [ref=f158e74]:
+              - cell "A pile of context arrived and it is unclear which fact decides it (the choice itself, not what acting on it would set off)" [ref=f158e75]
+              - cell [ref=f158e76]:
+                - link [ref=f158e77] [cursor=pointer]:
+                  - /url: /decision-making-skills/skill/decision-making/ledger/
+                  - code [ref=f158e78]: ledger.md
+              - cell "what bears on it, what was set aside, and why" [ref=f158e79]
+            - row [ref=f158e80]:
+              - cell "The advice may be generically right and wrong for this person" [ref=f158e81]
+              - cell [ref=f158e82]:
+                - link [ref=f158e83] [cursor=pointer]:
+                  - /url: /decision-making-skills/skill/decision-making/fit/
+                  - code [ref=f158e84]: fit.md
+              - cell "the generic answer, and the facts that would overturn it" [ref=f158e85]
+            - row [ref=f158e86]:
+              - cell "The action looks fine and the worry is what it starts, or what it spends" [ref=f158e87]
+              - cell [ref=f158e88]:
+                - link [ref=f158e89] [cursor=pointer]:
+                  - /url: /decision-making-skills/skill/decision-making/cascade/
+                  - code [ref=f158e90]: cascade.md
+              - cell "the chain, what it forecloses, and the order" [ref=f158e91]
+            - row [ref=f158e92]:
+              - cell "The direction is settled and the question is when" [ref=f158e93]
+              - cell [ref=f158e94]:
+                - link [ref=f158e95] [cursor=pointer]:
+                  - /url: /decision-making-skills/skill/decision-making/timing/
+                  - code [ref=f158e96]: timing.md
+              - cell "the undo price, the real deadline, what waiting buys" [ref=f158e97]
+            - row [ref=f158e98]:
+              - cell "Several positions are each defensible, and whichever was argued first has the advantage" [ref=f158e99]
+              - cell [ref=f158e100]:
+                - link [ref=f158e101] [cursor=pointer]:
+                  - /url: /decision-making-skills/skill/decision-making/council/
+                  - code [ref=f158e102]: council.md
+              - cell "the case for each, argued fairly, and which one survives" [ref=f158e103]
+            - row [ref=f158e104]:
+              - cell "Something needed to answer is missing, and it is unclear whether asking for it is worth the wait" [ref=f158e105]
+              - cell [ref=f158e106]:
+                - link [ref=f158e107] [cursor=pointer]:
+                  - /url: /decision-making-skills/skill/decision-making/hinge/
+                  - code [ref=f158e108]: hinge.md
+              - cell "which gaps would change the answer, and the answer now or the one question to ask" [ref=f158e109]
+        - paragraph [ref=f158e110]:
+          - text: Where more than one of those six applies they run in the order ledger → fit → cascade → timing, because each supplies an input to the next.
+          - code [ref=f158e111]: council.md
+          - text: and
+          - code [ref=f158e112]: hinge.md
+          - text: are not in that chain; each runs alone. A seventh file,
+          - link [ref=f158e113] [cursor=pointer]:
+            - /url: /decision-making-skills/skill/decision-making/placebo/
+            - code [ref=f158e114]: placebo.md
+          - text: ", is the token- and structure-matched control arm; it ships alongside because a skill that only beats nothing has not been measured against the thing that would fake it."
+        - heading "Installing" [level=3] [ref=f158e115]
+        - paragraph [ref=f158e116]:
+          - text: The skills use only the six portable frontmatter fields defined by the
+          - link "Agent Skills standard" [ref=f158e117] [cursor=pointer]:
+            - /url: https://agentskills.io
+          - text: ", so they need no conversion."
+        - code [ref=f158e119]: "# Cross-tool: Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode cp -r .agents/skills/* ~/.agents/skills/"
+        - code [ref=f158e121]: "# Claude Code, project-scoped cp -r skills/* .claude/skills/"
+        - paragraph [ref=f158e122]:
+          - text: There is also a Claude Code plugin, and it currently ships nothing.
+          - code [ref=f158e123]: plugin/skills/
+          - text: is empty because a skill is copied there only once a confirmation run gives it a verdict. See
+          - link [ref=f158e124] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/plugin/skills/README.md
+            - code [ref=f158e125]: plugin/skills/README.md
+          - text: . Copying from
+          - code [ref=f158e126]: skills/
+          - text: is the way to use this today.
+        - paragraph [ref=f158e127]:
+          - text: Nothing here is proven, and that is not a reason to avoid it. A verdict governs the
+          - emphasis [ref=f158e128]: public claim
+          - text: ", not whether a skill is usable."
+        - heading "Why this exists" [level=2] [ref=f158e129]
+        - paragraph [ref=f158e130]: "Agents fail at decisions in three separable ways:"
+        - list [ref=f158e131]:
+          - listitem [ref=f158e132]: Unranked context. Everything retrieved is weighted roughly equally. Tell an agent it’s raining in Paraguay while planning a trip to Lisbon and it will suggest a raincoat. The information arrived, so it must be used somehow.
+          - listitem [ref=f158e133]: Uncalibrated probability. Stated confidence doesn’t track observed frequency, and RLHF makes this worse rather than better.
+          - listitem [ref=f158e134]: Uniform deliberation budget. A one-way door and a trivially reversible choice get the same amount of thought.
+        - paragraph [ref=f158e135]:
+          - text: Plenty of prompt libraries claim to fix this. The closest prior art ships 28 thinking skills and states in its own README that none is proven to improve model accuracy. That is not an argument against skills. The published evidence says having the right skill available is worth a great deal, so it is an argument for building the feedback loop that tells you
+          - emphasis [ref=f158e136]: which
+          - text: ones help, and by how much.
+        - heading "What’s actually here" [level=2] [ref=f158e137]
+        - table [ref=f158e138]:
+          - rowgroup [ref=f158e139]:
+            - row [ref=f158e140]:
+              - columnheader "Component" [ref=f158e141]
+              - columnheader "Purpose" [ref=f158e142]
+          - rowgroup [ref=f158e143]:
+            - row [ref=f158e144]:
+              - cell [ref=f158e145]:
+                - code [ref=f158e146]: skills/
+              - cell [ref=f158e147]:
+                - text: The skills, authored to the
+                - link "Agent Skills" [ref=f158e148] [cursor=pointer]:
+                  - /url: https://agentskills.io
+                - text: 6-field standard so they work in Claude Code, Codex, Cursor, Copilot, Gemini CLI, Cline, Amp and OpenCode without conversion. Mirrored byte-for-byte to
+                - code [ref=f158e149]: .agents/skills/
+                - text: by
+                - code [ref=f158e150]: de mirror
+            - row [ref=f158e151]:
+              - cell [ref=f158e152]:
+                - code [ref=f158e153]: plugin/
+              - cell "The Claude Code plugin. A skill is copied here only once a confirmation run gives it a verdict, so the directory is currently empty on purpose" [ref=f158e154]
+            - row [ref=f158e155]:
+              - cell [ref=f158e156]:
+                - code [ref=f158e157]: evals/
+              - cell [ref=f158e158]:
+                - code [ref=f158e159]: decision_evals
+                - text: ", the harness. Paired experiments, exact tests, cluster-aware resampling"
+            - row [ref=f158e160]:
+              - cell [ref=f158e161]:
+                - code [ref=f158e162]: datasets/
+              - cell [ref=f158e163]:
+                - text: "The answer key: parameterised scenario templates with"
+                - emphasis [ref=f158e164]: computed
+                - text: ground truth, and the trigger corpus
+            - row [ref=f158e165]:
+              - cell [ref=f158e166]:
+                - code [ref=f158e167]: results/
+              - 'cell "Published run records: raw transcripts and a README per run" [ref=f158e168]'
+            - row [ref=f158e169]:
+              - cell [ref=f158e170]:
+                - code [ref=f158e171]: notebook/
+              - cell [ref=f158e172]:
+                - text: Append-only research log. Predictions go in
+                - emphasis [ref=f158e173]: before
+                - text: runs
+            - row [ref=f158e174]:
+              - cell [ref=f158e175]:
+                - code [ref=f158e176]: docs/
+              - cell [ref=f158e177]:
+                - text: Protocol, status, the research programme, related work, limitations, and what was rejected. Start at
+                - link [ref=f158e178] [cursor=pointer]:
+                  - /url: /decision-making-skills/docs/
+                  - code [ref=f158e179]: docs/README.md
+            - row [ref=f158e180]:
+              - cell [ref=f158e181]:
+                - code [ref=f158e182]: paper/
+              - cell [ref=f158e183]:
+                - text: The write-up, in LaTeX. A draft; see
+                - link [ref=f158e184] [cursor=pointer]:
+                  - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/paper/CHECKLIST.md
+                  - code [ref=f158e185]: paper/CHECKLIST.md
+            - row [ref=f158e186]:
+              - cell [ref=f158e187]:
+                - code [ref=f158e188]: scripts/
+              - cell [ref=f158e189]:
+                - text: Standalone analysis and runners, including
+                - code [ref=f158e190]: run_triggers.py
+                - text: ", the script behind every model call on record"
+            - row [ref=f158e191]:
+              - cell [ref=f158e192]:
+                - code [ref=f158e193]: tests/
+              - cell "Unit, integration, property and golden tests" [ref=f158e194]
+            - row [ref=f158e195]:
+              - cell [ref=f158e196]:
+                - code [ref=f158e197]: site/
+              - cell [ref=f158e198]:
+                - text: The website. It renders the markdown already in this repository rather than copying it, so there is no second copy of a document to disagree with the first. Built locally by
+                - code [ref=f158e199]: de site
+                - text: ;
+                - code [ref=f158e200]: de check
+                - text: refuses a build older than what it publishes
+        - heading "What has been measured" [level=2] [ref=f158e201]
+        - paragraph [ref=f158e202]:
+          - text: "Nothing about whether a decision skill improves a decision. Every number on record measures something upstream of that: whether a skill"
+          - emphasis [ref=f158e203]: fires
+          - text: when it should, which is the question that decides whether it is worth having installed at all.
+        - paragraph [ref=f158e204]:
+          - text: Thirteen runs are published, each one indexed with its answer key and its prediction in
+          - link [ref=f158e205] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/run_index/
+            - code [ref=f158e206]: docs/RUN_INDEX.md
+          - text: ", and"
+          - link [ref=f158e207] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+            - code [ref=f158e208]: docs/STATUS.md
+          - text: has all of them with links to the data. One of the thirteen is
+          - strong [ref=f158e209]: void
+          - text: and answers nothing.
+        - paragraph [ref=f158e210]:
+          - text: The call total belongs to the ledger and is not restated here.
+          - code [ref=f158e211]: docs/STATUS.md
+          - text: "keeps it, corrects it by appending, and the site quotes that file rather than a second copy. Recounting means separating published records from the working checkpoints and re-scores they overlap with, which is a job for the ledger rather than a number to guess at in a README. The through-line:"
+        - blockquote [ref=f158e212]:
+          - paragraph [ref=f158e213]: Five independent manipulations of a skill description, covering structure, content, entry count and composition twice, and not one moved how well it discriminates. Every one moved only where it sits on the precision/recall frontier.
+        - paragraph [ref=f158e214]: "Two findings worth naming here because they cut against what this repository originally claimed:"
+        - list [ref=f158e215]:
+          - listitem [ref=f158e216]:
+            - text: Skill shadowing did not appear at four entries. One entry and four separate entries were indistinguishable on firing accuracy (0.956 vs 0.951, paired Wilcoxon p = 0.83). The
+            - link "202-skill shadowing result" [ref=f158e217] [cursor=pointer]:
+              - /url: https://arxiv.org/abs/2605.24050
+            - text: may no longer be cited as though it reached down to four.
+          - listitem [ref=f158e218]:
+            - text: "The corpus behind those numbers is 89% solvable by counting words. This scopes to the version 2 answer key and the runs above it, not to everything on record: the corpus was rebuilt, and on the version 4 key the best model-free shortcut reaches 0.7054. Turn length alone separates the labels at AUC 0.850, and a bare"
+            - emphasis [ref=f158e219]: “fire if ≥ 18 words”
+            - text: "rule scores 0.890 with no model at all. Both sit on the version 2 answer key, against the best arm measured on that key: 0.9795 for the best description arm ("
+            - code [ref=f158e220]: stakes-shown
+            - text: ), 0.9863 for
+            - code [ref=f158e221]: confidence
+            - text: . So every result above was competing for about nine points over a ruler, and five nulls is also what a ceiling looks like. Both readings must be reported until the corpus is rebuilt, which is
+            - link "Track N" [ref=f158e222] [cursor=pointer]:
+              - /url: /decision-making-skills/docs/research_programme/
+            - text: .
+        - heading "How claims are made" [level=2] [ref=f158e223]
+        - paragraph [ref=f158e224]:
+          - text: "The design puts four arms on the same items:"
+          - strong [ref=f158e225]: "off"
+          - text: ","
+          - strong [ref=f158e226]: "on"
+          - text: ","
+          - strong [ref=f158e227]: placebo
+          - text: (token- and structure-matched filler), and
+          - strong [ref=f158e228]: cot
+          - text: (plain “think step by step”). A skill that beats
+          - emphasis [ref=f158e229]: "off"
+          - text: but not
+          - emphasis [ref=f158e230]: placebo
+          - text: is a length effect. A skill that doesn’t beat
+          - emphasis [ref=f158e231]: cot
+          - text: is an expensive way to say “think.”
+        - paragraph [ref=f158e232]:
+          - strong [ref=f158e233]: No published run has used the placebo or cot arm.
+          - text: Every call on record is a trigger measurement comparing variants of the skill’s
+          - emphasis [ref=f158e234]: description
+          - text: . The four-arm comparison is what a confirmation run would do, and no confirmation run has happened, so the placebo is a written, size-checked control that has never stood in for anything.
+        - paragraph [ref=f158e235]: The statistics are exact and resampling-based rather than CLT-based, because at our item counts the normal approximation isn’t reliable. Templates rather than items are the resampling unit, since items from one template are correlated. Calibration goes through the Murphy decomposition, so a “skill” that improves Brier by hedging every forecast toward the base rate is caught by the resolution term instead of being scored as a win.
+        - paragraph [ref=f158e236]:
+          - text: The controls, the instrument checks that run before any of it is believed, and the statistics are covered properly in
+          - link [ref=f158e237] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/methods/
+            - code [ref=f158e238]: docs/METHODS.md
+          - text: §4 and §6.
+        - 'heading "Pre-registration: two mechanisms, and only one of them has ever run" [level=3] [ref=f158e239]'
+        - paragraph [ref=f158e240]:
+          - text: This section used to describe the second as though it were the first. It read
+          - emphasis [ref=f158e241]: “a confirmation run refuses to start unless the pre-registration file is committed, predates the results, and its recorded hash still matches the skill on disk”
+          - text: ", in the present tense, and it pointed at a"
+          - code [ref=f158e242]: preregistration/
+          - text: directory that has never existed. It also told you to run
+          - code [ref=f158e243]: de screen
+          - text: and
+          - code [ref=f158e244]: de confirm
+          - text: ", neither of which is a command. The correction is"
+          - link [ref=f158e245] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/protocol/
+            - code [ref=f158e246]: docs/PROTOCOL.md
+          - text: "§3, split in two:"
+        - list [ref=f158e247]:
+          - listitem [ref=f158e248]:
+            - text: The standing mechanism, the one every run on record actually used, is a dated prediction committed to
+            - link [ref=f158e249] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/
+              - code [ref=f158e250]: notebook/
+            - emphasis [ref=f158e251]: before
+            - text: the run.
+            - code [ref=f158e252]: de check
+            - text: enforces it, and refuses a published run whose README does not name a prediction whose first commit is an ancestor of the run’s commit.
+          - listitem [ref=f158e253]:
+            - text: The hash-locked refusal is built, tested, and has never run. It is scoped to the
+            - code [ref=f158e254]: confirm
+            - text: arena, and no confirmation run has happened. The module carries a 100% branch floor and no caller, which is why it is declared in
+            - code [ref=f158e255]: "[tool.decision-evals.unwired]"
+            - text: . A tested refusal that nothing calls is inert, and the gate reports green either way.
+        - paragraph [ref=f158e256]:
+          - text: The model calls on record were made by
+          - link [ref=f158e257] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/scripts/run_triggers.py
+            - code [ref=f158e258]: scripts/run_triggers.py
+          - text: .
+        - paragraph [ref=f158e259]:
+          - text: Verdicts govern the
+          - emphasis [ref=f158e260]: public claim
+          - text: ", not your ability to use something. A skill that comes back"
+          - code [ref=f158e261]: "NULL"
+          - text: goes back to the workbench and ships as
+          - code [ref=f158e262]: experimental
+          - text: ": available, just not claimed as proven."
+        - heading "Development" [level=2] [ref=f158e263]
+        - paragraph [ref=f158e264]:
+          - text: Requires Python 3.13+ and
+          - link "uv" [ref=f158e265] [cursor=pointer]:
+            - /url: https://docs.astral.sh/uv/
+          - text: .
+        - code [ref=f158e267]: uv sync --group dev
+        - paragraph [ref=f158e268]:
+          - text: Add
+          - code [ref=f158e269]: "--group docs"
+          - text: "if you will publish the site. Nothing else needs it: the staleness gate is pure Python and offline, so a contributor who never publishes still gets its refusal."
+        - code [ref=f158e271]: uv sync --group dev --group docs
+        - paragraph [ref=f158e272]: "Run the full local gate, which is lint, types, tests, coverage floors, and the repository-integrity checks:"
+        - code [ref=f158e274]: uv run de check
+        - paragraph [ref=f158e275]:
+          - text: There is no cloud CI, and no workflow directory for one either.
+          - code [ref=f158e276]: de check
+          - text: is bound to
+          - code [ref=f158e277]: pre-commit
+          - text: (fast subset) and
+          - code [ref=f158e278]: pre-push
+          - text: (everything), so a red tree can’t be pushed. It makes no model calls; model-backed evaluation is run explicitly from
+          - link [ref=f158e279] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/tree/main/scripts
+            - code [ref=f158e280]: scripts/
+          - text: . The website is built the same way, by hand on a machine, and pushed to
+          - code [ref=f158e281]: gh-pages
+          - text: by
+          - code [ref=f158e282]: de site --deploy
+          - text: .
+        - paragraph [ref=f158e283]:
+          - text: That arrangement cannot check one thing, and it is stated here rather than papered over. The site gate proves the committed build matches the current tree. It does not prove that build was ever pushed.
+          - code [ref=f158e284]: de check
+          - text: is offline on purpose, so it cannot consult
+          - code [ref=f158e285]: origin/gh-pages
+          - text: ", and a green gate beside a build that never left the machine is exactly as green as a deployed one."
+        - paragraph [ref=f158e286]: "Several of its steps check the method rather than the code, each one added after the failure it prevents had already happened here:"
+        - table [ref=f158e287]:
+          - rowgroup [ref=f158e288]:
+            - row [ref=f158e289]:
+              - columnheader "Step" [ref=f158e290]
+              - columnheader "Refuses" [ref=f158e291]
+          - rowgroup [ref=f158e292]:
+            - row [ref=f158e293]:
+              - cell "trigger sets" [ref=f158e294]
+              - cell "a skill with no trigger set, or a trigger set naming a skill that no longer exists" [ref=f158e295]
+            - row [ref=f158e296]:
+              - cell "run provenance" [ref=f158e297]
+              - cell "a published run that does not state its answer-key version, or whose prediction cannot be shown to predate its data" [ref=f158e298]
+            - row [ref=f158e299]:
+              - cell "integrity wiring" [ref=f158e300]
+              - cell "a module with a coverage floor that no entry point can reach" [ref=f158e301]
+            - row [ref=f158e302]:
+              - cell "decision register" [ref=f158e303]
+              - cell [ref=f158e304]:
+                - text: a change to the answer key or the shipped skill with no entry in
+                - link [ref=f158e305] [cursor=pointer]:
+                  - /url: /decision-making-skills/docs/decisions/
+                  - code [ref=f158e306]: docs/DECISIONS.md
+            - row [ref=f158e307]:
+              - cell "documentation" [ref=f158e308]
+              - cell [ref=f158e309]:
+                - text: a
+                - code [ref=f158e310]: de
+                - text: command, path, or component that this README names and the repository does not have
+            - row [ref=f158e311]:
+              - cell "citations" [ref=f158e312]
+              - cell [ref=f158e313]:
+                - text: a claim carrying an arXiv identifier whose entry in
+                - link [ref=f158e314] [cursor=pointer]:
+                  - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/paper/refs.bib
+                  - code [ref=f158e315]: paper/refs.bib
+                - text: has no quote behind it
+            - row [ref=f158e316]:
+              - cell "published claims" [ref=f158e317]
+              - cell "a measured number on the website that no longer matches the sentence in the document it came from" [ref=f158e318]
+            - row [ref=f158e319]:
+              - cell "site" [ref=f158e320]
+              - cell "a published build older than the documents it publishes, naming the files that moved" [ref=f158e321]
+        - paragraph [ref=f158e322]:
+          - text: "The other commands:"
+          - code [ref=f158e323]: de index
+          - text: regenerates
+          - link [ref=f158e324] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/run_index/
+            - code [ref=f158e325]: docs/RUN_INDEX.md
+          - text: ","
+          - code [ref=f158e326]: de mirror
+          - text: regenerates the cross-tool skill copies,
+          - code [ref=f158e327]: de site
+          - text: rebuilds the website and records what it was built from,
+          - code [ref=f158e328]: de lint
+          - text: checks skill frontmatter and the promotion gate,
+          - code [ref=f158e329]: de power
+          - text: prints a minimum-detectable-effect table,
+          - code [ref=f158e330]: de rescore
+          - text: re-grades an existing checkpoint against a newer answer key without re-making a single call, and
+          - code [ref=f158e331]: de fetch
+          - text: downloads the hash-pinned third-party corpora.
+        - paragraph [ref=f158e332]:
+          - code [ref=f158e333]: de site
+          - text: needs Node; the gate that demands you run it does not. Editing any document the site renders makes the published build stale, so the loop is edit,
+          - code [ref=f158e334]: de site
+          - text: ", commit both:"
+        - code [ref=f158e336]: uv run de site
+        - blockquote [ref=f158e337]:
+          - paragraph [ref=f158e338]:
+            - strong [ref=f158e339]: "Note:"
+            - text: if
+            - code [ref=f158e340]: uv
+            - text: was installed with
+            - code [ref=f158e341]: pip install uv
+            - text: ", its executable may not be on"
+            - code [ref=f158e342]: PATH
+            - text: . On Windows it lands in
+            - code [ref=f158e343]: "%APPDATA%\\Python\\Python313\\Scripts"
+            - text: . Add that directory to
+            - code [ref=f158e344]: PATH
+            - text: ", or invoke it as"
+            - code [ref=f158e345]: python -m uv
+            - text: .
+        - heading "Contributing" [level=2] [ref=f158e346]
+        - paragraph [ref=f158e347]:
+          - text: See
+          - link [ref=f158e348] [cursor=pointer]:
+            - /url: /decision-making-skills/contributing/
+            - code [ref=f158e349]: CONTRIBUTING.md
+          - text: ". The short version: run"
+          - code [ref=f158e350]: de check
+          - text: before believing anything works, put predictions in the notebook before runs, and never edit a notebook entry after the fact. Append a correction instead.
+        - heading "License" [level=2] [ref=f158e351]
+        - paragraph [ref=f158e352]:
+          - text: Apache-2.0. See
+          - link "LICENSE" [ref=f158e353] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/LICENSE
+          - text: .
+  - contentinfo [ref=f158e354]:
+    - generic [ref=f158e356]:
+      - paragraph [ref=f158e358]: We have not proven anything here yet. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f158e359]:
+        - listitem [ref=f158e360]:
+          - link "Results" [ref=f158e361] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f158e362]:
+          - link "Scorecard" [ref=f158e363] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f158e364]:
+          - link "Research log" [ref=f158e365] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f158e366]:
+          - link "Limitations" [ref=f158e367] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f158e368]:
+          - link "GitHub" [ref=f158e369] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f158e370]:
+        - generic [ref=f158e371]: Apache-2.0 · Angel Campa
+        - generic [ref=f158e372]: decision-making v0.3.0
+        - generic [ref=f158e373]: UNTESTED
