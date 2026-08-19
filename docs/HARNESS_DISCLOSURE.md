@@ -81,7 +81,7 @@ so a mid-experiment change surfaces as an error rather than as noise.
 
 | Field | Value |
 | --- | --- |
-| Agent | Claude Code CLI, non-interactive (`claude -p`) |
+| Agent | Claude Code CLI, non-interactive (`claude -p`). Every published number. A second backend exists from 2026-08-19, `providers/openai_compatible.py`, an OpenAI-compatible HTTP server. It is `dev`-arena only, has produced nothing published, and is disclosed separately below |
 | CLI version | Recorded per run |
 | Resolved model id | Recorded per run from `--output-format json` |
 | Auth | Subscription OAuth. No API key. `--bare` is unusable: its help states auth is strictly `ANTHROPIC_API_KEY`/`apiKeyHelper` and OAuth is never read. See *Preconditions* below; this is the harness's most fragile assumption |
@@ -89,6 +89,23 @@ so a mid-experiment change surfaces as an error rather than as noise.
 | Repeats | ≥2 independent runs per cell; variance reported |
 | Working directory | A fresh temporary directory per call, outside `D:\code`, via `providers.claude_code.isolated_cwd`. The CLI's auto-memory path is keyed on cwd, so a shared directory would let one call's state reach the next |
 | Temp-directory cleanup | Errors ignored. On Windows the CLI subprocess does not reliably release its cwd before the directory is removed, and a 365-call run died at call 348 with `WinError 32`, raised by the cleanup, after every call had succeeded. Leaked directories are left for the OS to reclaim |
+
+**The second backend, disclosed separately because it is a different harness.**
+That is the whole finding of the two papers above: a result reported without its
+harness is not reproducible, so folding a local server into the table above
+would be the error this document exists to avoid.
+
+| Field | Value |
+| --- | --- |
+| Agent | An OpenAI-compatible HTTP server. Ollama first; the same module reaches vLLM, LM Studio and `llama.cpp` |
+| Arena | `dev` only, enforced in code on the `ollama` model prefix. Emits no verdict |
+| Resolved model id | Recorded per call from the response's `model` field, prefixed with the server label |
+| Auth | None locally. A bearer token where an endpoint wants one |
+| Sampling parameters | **Exposed**, unlike the CLI, and defaulted to `temperature=0` |
+| Cost | `0.0`, recorded rather than omitted. Local inference bills nothing and consumes no subscription quota |
+| Working directory | Not applicable. Nothing reads the filesystem |
+| Isolation receipt | The model card from Ollama's native `/api/show`, refused when it carries a `SYSTEM` prompt. A Modelfile `SYSTEM` line is the local analogue of a planted `CLAUDE.md`. Where a server offers no card, the absence of a receipt is recorded and is **not** reported as a receipt that passed |
+| In-situ arm | **Refused.** There is no pre-existing system prompt to append to, so the call would be the isolated arm under another arm's label |
 
 ### T: Tools
 

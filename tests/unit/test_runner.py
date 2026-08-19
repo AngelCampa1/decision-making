@@ -21,6 +21,7 @@ from decision_evals.budget import BudgetLedger
 from decision_evals.generators.generate import Item, generate
 from decision_evals.generators.schema import Template
 from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
+from decision_evals.providers.openai_compatible import Endpoint
 from decision_evals.runner import (
     RunError,
     completed_keys,
@@ -284,6 +285,46 @@ def test_default_call_forwards_the_scratch_cwd_and_arm_mode(
     assert seen["model"] == "haiku"
     assert seen["in_situ"] is True
     assert seen["system_prompt"] == "the system prompt"
+
+
+def test_local_call_reaches_the_openai_backend(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The substitution `CallFn` was written for, with no second run loop."""
+    seen: dict[str, Any] = {}
+
+    def fake_run(prompt: str, **kwargs: Any) -> CliResult:
+        seen.update(kwargs, prompt=prompt)
+        return _result("ANSWER: act")
+
+    monkeypatch.setattr(runner, "openai_run", fake_run)
+    call = runner.local_call("ollama/qwen3:4b")
+    assert call("the item", "the system prompt", False).text == "ANSWER: act"
+    assert seen["model"] == "ollama/qwen3:4b"
+    assert seen["system_prompt"] == "the system prompt"
+    assert seen["endpoint"] is None
+
+
+def test_local_call_forwards_an_explicit_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: dict[str, Any] = {}
+
+    def fake_run(prompt: str, **kwargs: Any) -> CliResult:
+        seen.update(kwargs)
+        return _result("ANSWER: act")
+
+    monkeypatch.setattr(runner, "openai_run", fake_run)
+    endpoint = Endpoint(base_url="http://box:8000/v1", label="vllm")
+    runner.local_call("vllm/llama", endpoint)("i", "s", False)
+    assert seen["endpoint"] is endpoint
+
+
+def test_local_call_refuses_the_in_situ_arm() -> None:
+    """Two arms with one meaning is worse than one arm fewer.
+
+    A raw completion has no pre-existing system prompt to append to, so running
+    the in-situ arm here would send the isolated prompt under the other arm's
+    label, and nothing downstream could tell them apart.
+    """
+    with pytest.raises(RunError, match="no meaning against a raw completion"):
+        runner.local_call("ollama/qwen3:4b")("i", "s", True)
 
 
 def test_preflight_passes_on_a_working_credential(monkeypatch: pytest.MonkeyPatch) -> None:

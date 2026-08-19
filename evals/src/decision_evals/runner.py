@@ -30,6 +30,8 @@ from decision_evals.generators.generate import Item
 from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
 from decision_evals.providers.claude_code import preflight as cli_preflight
 from decision_evals.providers.claude_code import run as cli_run
+from decision_evals.providers.openai_compatible import Endpoint
+from decision_evals.providers.openai_compatible import run as openai_run
 from decision_evals.scorers.answer import score_item
 from decision_evals.solvers.arms import ArmPrompt, render_item
 from decision_evals.telemetry import RECORD_SCHEMA_VERSION, NodeIdentity
@@ -94,6 +96,47 @@ def default_call(model: str, cwd: str) -> CallFn:
             model=model,
             cwd=cwd,
             in_situ=append,
+        )
+
+    return call
+
+
+def local_call(model: str, endpoint: Endpoint | None = None) -> CallFn:
+    """A :data:`CallFn` bound to an OpenAI-compatible server.
+
+    The substitution :data:`CallFn` was written for. No ``cwd``, because nothing
+    here reads the filesystem; the contamination channel that replaces it is a
+    Modelfile ``SYSTEM`` line, and
+    :func:`~decision_evals.providers.openai_compatible.assert_isolated` is what
+    checks it. Call that before a run rather than trusting a clean-looking
+    response.
+
+    Raises:
+        RunError: The in-situ arm was requested. It has no local meaning, and
+            the refusal is deliberate.
+    """
+
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        if append:
+            # In situ means `--append-system-prompt`: the skill arrives on top
+            # of whatever Claude Code already puts in the system prompt, which
+            # is the whole point of the arm -- it is the ecological control
+            # against the isolated arms. A raw completion has no pre-existing
+            # system prompt to append to, so running it here would send the
+            # isolated prompt and label the record `in_situ`. That is not a
+            # degraded measurement, it is two arms with one meaning, and the
+            # scorer could not tell them apart afterwards.
+            raise RunError(
+                "the in-situ arm has no meaning against a raw completion endpoint: "
+                "there is no existing system prompt to append to, so the call would "
+                "be the isolated arm wearing another arm's label. Run it on the CLI "
+                "backend, or drop it from the local grid and say which."
+            )
+        return openai_run(
+            prompt,
+            system_prompt=system_prompt,
+            model=model,
+            endpoint=endpoint,
         )
 
     return call

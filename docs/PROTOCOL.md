@@ -62,6 +62,31 @@ separation matters: scaffolding tuned against a weak model can become a handicap
 on a strong one. Iterating freely in `dev` and `screen` is therefore fine and
 expected; carrying that iteration into the verdict is not.
 
+**`dev` got a backend on 2026-08-19, having had none since this table was
+written.** `evals/src/decision_evals/providers/openai_compatible.py` speaks the
+wire format Ollama, vLLM, LM Studio and `llama.cpp` all serve, and
+`runner.local_call` is the substitution `CallFn` was designed for, so a local
+run needs no second run loop. Nothing has been measured on it yet.
+
+Two things it changes and one it does not. It costs nothing and consumes no
+quota, which is what makes the standing rules affordable. Running a falsifier
+against a known-good case first, and checking that some possible response would
+have scored above zero, are cheap here and are not cheap on a subscription. And
+it is the first backend that is not one Claude CLI, which the claim ladder's
+sentence about *frontier models*, plural, will eventually need. What it does not
+change is what may be claimed: `dev` emits no verdict, `arenas.py` enforces that
+on the `ollama` model prefix, and a local number stays a local number.
+
+**Isolation is checked here, not assumed.** The reasoning that nearly shipped
+was that an HTTP server reads nothing off the client's disk, so there is no
+`CLAUDE.md` to plant and isolation is structural. The first half is true and the
+conclusion is false: an Ollama model is a Modelfile, and a Modelfile may carry
+its own `SYSTEM` prompt, which is a planted instruction one layer down:
+invisible in the request, present in every generation. `assert_isolated` reads
+the model card and refuses one. Where a server offers no card, `Endpoint` makes
+the caller record that no receipt was obtainable, because that is a different
+statement from a receipt that passed.
+
 ## 3. Pre-registration
 
 There are two mechanisms, and only one of them has ever run. This section said
