@@ -24,6 +24,29 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-19 — The merge that carried `c55d4af` onto `item-analysis`
+
+**Commits:** `b83384d`
+
+A merge commit, and it is here because it is a governed commit like any other.
+Against its first parent it changes one governed file:
+`datasets/triggers/decision-making.yaml`'s header comment, arriving from
+`c55d4af` on `main`. Against its second parent it carries this branch's
+`datasets/triggers/decision-making/index.yaml` and `s.yaml` — `eb99e81`'s
+annotation correction and ancestry block — onto the merged history.
+
+**No label moves and no `set_version` bumps in either direction.** Every change
+under a governed path in this commit is already explained by the entry for the
+commit that made it: `eb99e81` and `c55d4af`, both below. Nothing computed from
+the key changes and no published number is affected.
+
+The entry exists because `_governed_commits` reads `git log` over the governed
+paths and a merge that touches them is in that list, so the gate refuses
+without it. That is the right behaviour rather than a gap to route around: a
+merge is exactly where a label could move with no commit of its own to name,
+and the register is where a reader would find out whether one did. This one
+records that none did.
+
 ## 2026-08-19 — `s13p` is not the turn `x-n22` was, and its annotation said it was
 
 **Commits:** `eb99e81`
