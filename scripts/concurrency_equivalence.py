@@ -43,6 +43,7 @@ sidestep it, which is why the checkpoints already in that directory are flat.
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 from typing import Any
@@ -51,6 +52,7 @@ from decision_evals.budget import BudgetLedger
 from decision_evals.generators.generate import Item
 from decision_evals.providers.openai_compatible import assert_isolated, ollama, show
 from decision_evals.runner import RunRecord, load_records, local_call, run_arm
+from decision_evals.scorers.answer import ZeroCause
 from decision_evals.solvers.arms import build_arm
 from decision_evals.stats.paired import mcnemar_exact
 from decision_evals.triggers import load_trigger_set
@@ -58,7 +60,10 @@ from decision_evals.triggers import load_trigger_set
 REPO_ROOT = Path(__file__).resolve().parents[1]
 TRIGGERS = REPO_ROOT / "datasets" / "triggers" / "decision-making" / "index.yaml"
 OUT = REPO_ROOT / "results" / "track-0"
-PREFIX = "concurrency"
+#: Set `DE_CONC_PREFIX` to run an independent replication into its own files
+#: rather than resuming the first one. No finding here is believed until the
+#: run reproduces, and a resumed pass returns the same records by construction.
+PREFIX = os.environ.get("DE_CONC_PREFIX", "concurrency")
 
 #: Registered in the prediction and not to be changed here.
 N_ITEMS = 40
@@ -103,8 +108,10 @@ def items() -> list[Item]:
 def run(label: str, pool: list[Item], concurrency: int) -> tuple[list[RunRecord], float]:
     """One arm, into its own checkpoint. Returns records and wall-clock seconds."""
     checkpoint = OUT / f"{PREFIX}-{label}.jsonl"
+    timing = OUT / f"{PREFIX}-{label}-timing.json"
+
     started = time.monotonic()
-    run_arm(
+    produced = run_arm(
         pool,
         build_arm("off"),
         model=MODEL,
@@ -113,11 +120,29 @@ def run(label: str, pool: list[Item], concurrency: int) -> tuple[list[RunRecord]
         ledger=BudgetLedger(limit_usd=1.0),
         expected_cost_usd=0.0,
         concurrency=concurrency,
+        # This script is why `runner.CONCURRENCY_UNSAFE` has an `ollama` entry,
+        # and it is the only caller allowed past it. The register may only
+        # shrink, and it shrinks when this run comes back inside the band --
+        # so the job that would clear it has to be able to make the calls.
+        measuring_concurrency=True,
     )
     elapsed = time.monotonic() - started
+
+    if produced:
+        timing.write_text(
+            json.dumps({"elapsed_s": elapsed, "n_called": len(produced)}, indent=2),
+            encoding="utf-8",
+        )
+    if not timing.is_file():
+        raise SystemExit(
+            f"{timing.name} is missing and this pass made no calls, so the wall-clock "
+            f"for {label} is not recoverable. Delete {checkpoint.name} and run again."
+        )
+    stored = json.loads(timing.read_text(encoding="utf-8"))
+
     # Read back rather than using the return value: a resumed arm returns only
     # what this invocation produced, and the comparison needs all of it.
-    return load_records(checkpoint), elapsed
+    return load_records(checkpoint), float(stored["elapsed_s"])
 
 
 def by_id(records: list[RunRecord]) -> dict[str, RunRecord]:
@@ -147,11 +172,33 @@ def main() -> None:
     # An infrastructure zero has the exception text in `response`, so it would
     # be compared as though it were an answer. Counted and reported rather than
     # silently folded into the agreement rate.
+    #
+    # The field is `zero_cause`. The first version of this line read
+    # `parse_status == "infrastructure_error"`, a value `ParseStatus` does not
+    # contain, so the count could never have risen above zero. It was caught
+    # because a CUDA OOM on `m01p` wrote a record with `duration_ms=0` that this
+    # check called healthy. Third inert estimator on record here, same standing
+    # rule broken: before believing an outcome, check that some possible response
+    # would have scored non-zero. The annotation makes a rename a type error
+    # rather than a silent revival.
+    infrastructure: ZeroCause = "infrastructure"
     failures = {
-        label: sum(1 for i in ids if arm[i].parse_status == "infrastructure_error")
+        label: sum(1 for i in ids if arm[i].zero_cause == infrastructure)
         for label, (arm, _) in arms.items()
     }
     print(f"infrastructure failures: {failures}")
+
+    # A failed call is not a disagreement about anything. It stays in the
+    # registered denominator, because the prediction registered "all items,
+    # whatever their parse status". But that same paragraph said "every call
+    # returns text or raises, and a raise is a failed run rather than a scored
+    # zero", and that is false about this harness: `_run_one` catches `CliError`
+    # and writes an infrastructure zero. The registered denominator therefore
+    # rests on a premise about the runner that does not hold, so the clean-set
+    # rate below is reported beside the registered number and never instead of
+    # it. Sixth pre-registration defect on record, second one visible before
+    # scoring rather than after.
+    clean = [i for i in ids if all(arm[i].zero_cause != infrastructure for arm, _ in arms.values())]
 
     agree_s2 = [int(s2[i].response == s1[i].response) for i in ids]
     agree_c = [int(c[i].response == s1[i].response) for i in ids]
@@ -186,6 +233,18 @@ def main() -> None:
     )
     print(f"\nsecondary -- input_tokens identical across all three arms: {tokens_match}")
 
+    # Unregistered, and labelled as such everywhere it appears.
+    rate_s2_clean = (
+        sum(int(s2[i].response == s1[i].response) for i in clean) / len(clean) if clean else 0.0
+    )
+    rate_c_clean = (
+        sum(int(c[i].response == s1[i].response) for i in clean) / len(clean) if clean else 0.0
+    )
+    print(
+        f"UNREGISTERED sensitivity, {len(clean)} items with no infrastructure zero "
+        f"in any arm: agree_S2 {rate_s2_clean:.4f}, agree_C {rate_c_clean:.4f}"
+    )
+
     speedup = arms["S1"][1] / arms["C"][1] if arms["C"][1] else 0.0
     print(f"speedup, S1 / C wall-clock: {speedup:.2f}x")
 
@@ -200,6 +259,11 @@ def main() -> None:
         "inside_band": bool(rate_c >= rate_s2 - BAND),
         "input_tokens_identical": tokens_match,
         "infrastructure_failures": failures,
+        "unregistered_sensitivity": {
+            "n_clean": len(clean),
+            "agree_S2": rate_s2_clean,
+            "agree_C": rate_c_clean,
+        },
         "wall_clock_s": {label: elapsed for label, (_, elapsed) in arms.items()},
         "speedup": speedup,
         "mcnemar": {
@@ -211,8 +275,9 @@ def main() -> None:
             "alternative": test.alternative,
         },
     }
-    (OUT / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    print(f"\nwrote {(OUT / 'summary.json').relative_to(REPO_ROOT)}")
+    written = OUT / f"{PREFIX}-summary.json"
+    written.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    print(f"\nwrote {written.relative_to(REPO_ROOT)}")
 
 
 if __name__ == "__main__":

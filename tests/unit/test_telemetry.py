@@ -260,10 +260,26 @@ class TestRecordSchema:
         These are the runs the notebook cites. A schema change that orphaned
         them would make the cited numbers unrecomputable, which is a worse
         outcome than never adding the columns.
+
+        This asserted ``schema_version == 1`` until 2026-08-19, and passed only
+        because every checkpoint on disk predated the bump to 2. The first run
+        on the ``dev`` arena wrote v2 records and turned it red, which is the
+        assertion failing rather than the records being wrong: pinned to 1, it
+        could stay green only while nothing new was ever run. What it means to
+        protect is that a record written under *any* schema this code has ever
+        emitted still loads, so that is what it now says.
         """
         records = load_records(checkpoint)
         assert records
-        assert all(record.schema_version == 1 for record in records)
+        assert all(1 <= record.schema_version <= RECORD_SCHEMA_VERSION for record in records)
+        # A v1 record predates the node columns. They must read as `None`,
+        # which is the true value for a single-call run, rather than as
+        # something the loader invented to fill the gap.
+        assert all(
+            record.conversation_id is None and record.turn_index is None
+            for record in records
+            if record.schema_version == 1
+        )
 
     def test_the_published_checkpoints_were_actually_found(self) -> None:
         """Otherwise an empty glob would make the test above vacuously green.

@@ -25,6 +25,7 @@ from collections.abc import Callable, Iterable, Sequence
 from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import Final
 
 from decision_evals.budget import BudgetLedger, estimate_cost_usd
 from decision_evals.generators.generate import Item
@@ -81,6 +82,28 @@ class RunRecord:
     node_id: str | None = None
     parent_node_id: str | None = None
     turn_index: int | None = None
+
+
+#: Model prefixes measured to return *different text* when calls run
+#: concurrently, and therefore refused above ``concurrency=1``.
+#:
+#: ``ollama`` is here because it was measured, not because it is suspected. On
+#: 2026-08-19 the registered falsifier ran 40 items three times on
+#: ``ollama/qwen3:4b`` at ``temperature=0``: two serial passes agreed on the
+#: exact text of 31 of 40, and the concurrent pass at ``concurrency=8`` agreed
+#: on **0 of 40**, with the parsed answer itself moving on 6 of 39. The prompts
+#: were byte-identical -- ``input_tokens`` matched exactly across all three
+#: arms -- so the request is not what changed. A server that batches concurrent
+#: requests changes the matrix shapes it multiplies, which changes the
+#: floating-point reduction order, which flips a token, which cascades through a
+#: reasoning chain thousands of tokens long.
+#:
+#: **This is a statement about a venue, not about concurrency.** Each backend
+#: has to be measured before it is trusted, which is why this is a register of
+#: prefixes rather than a flat refusal. It may only shrink, and it shrinks by
+#: running the falsifier, not by argument:
+#: ``notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md``.
+CONCURRENCY_UNSAFE: Final[frozenset[str]] = frozenset({"ollama/"})
 
 
 class RunError(RuntimeError):
@@ -173,6 +196,7 @@ def run_arm(
     expected_cost_usd: float | None = None,
     identity: NodeIdentity | None = None,
     concurrency: int = 1,
+    measuring_concurrency: bool = False,
 ) -> list[RunRecord]:
     """Run one arm over a set of items, resuming from any checkpoint.
 
@@ -189,6 +213,11 @@ def run_arm(
             Pass a number to pin it, which the budget tests do.
         concurrency: How many calls may be in flight. ``1`` -- the default --
             is the sequential loop every published run used, unchanged.
+        measuring_concurrency: Permit ``concurrency > 1`` on a model listed in
+            :data:`CONCURRENCY_UNSAFE`. Only the falsifier that populates that
+            register may pass it: the register exists because such a run was
+            measured to change every answer, and the one job that still needs to
+            make those calls is the job that re-measures it.
 
     **Threads rather than asyncio, and it is a real choice.** A call is a
     subprocess or an HTTP request; both spend their whole life blocked on I/O
@@ -210,9 +239,13 @@ def run_arm(
     aborts, results still in flight are discarded rather than written, so resume
     re-runs them; that is what makes the abort safe rather than partial.
 
-    Whether concurrency changes the *response* is not something this docstring
-    may assert. It is measured, in
-    ``notebook/2026-08-19-prediction-concurrency-must-not-change-results.md``.
+    **It was measured, and on one backend the answer is that it does.** The
+    prediction above was registered before this code existed; the run is in
+    ``notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md``.
+    Serial-against-serial agreed on the exact text of 31 of 40 items and
+    concurrent-against-serial on 0 of 40, so :data:`CONCURRENCY_UNSAFE` refuses
+    the combination rather than leaving the finding written down somewhere. Every
+    other backend is unmeasured, which is a different thing from safe.
 
     Returns:
         The records produced *by this invocation*. Records already on disk from
@@ -227,6 +260,16 @@ def run_arm(
     """
     if concurrency < 1:
         raise RunError(f"concurrency must be at least 1, got {concurrency}")
+
+    unsafe = sorted(prefix for prefix in CONCURRENCY_UNSAFE if model.startswith(prefix))
+    if concurrency > 1 and unsafe and not measuring_concurrency:
+        raise RunError(
+            f"{model} is measured to return different text under concurrency, so "
+            f"concurrency={concurrency} would produce records that cannot be compared "
+            f"with anything already on disk. Two serial passes agreed on 31 of 40 "
+            f"items; the concurrent pass agreed on 0 of 40. Run it serially, or pass "
+            f"measuring_concurrency=True if you are the falsifier re-measuring it."
+        )
 
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
     done = completed_keys(checkpoint)

@@ -198,7 +198,7 @@ turns within an item are not, and are not meant to be.
 
 | Field | Value |
 | --- | --- |
-| Concurrency | Serial within a cell; arms interleaved per item so quota drift cannot align with an arm |
+| Concurrency | Serial within a cell, and every published number was produced that way; arms interleaved per item so quota drift cannot align with an arm. `run_arm` gained a concurrent path on 2026-08-19 and it defaults to 1 |
 | Checkpointing | Resumable across sessions: rate limits, not dollars, are the budget |
 | Ordering | Item order seeded and recorded |
 | Wall-clock | Recorded but not a metric, since it is not comparable across days on a shared quota |
@@ -206,6 +206,22 @@ turns within an item are not, and are not meant to be.
 Interleaving matters more than it looks. A run that completes all `off` items on
 Monday and all `on` items on Tuesday confounds the arm with everything that
 changed in between, including the served model.
+
+**Concurrency is refused on the one backend where it was measured, and that is
+the disclosure.** Running 40 items three times on `ollama/qwen3:4b` at
+`temperature=0` gave two serial passes agreeing on the exact text of 31 of 40
+items and a concurrent pass at `concurrency=8` agreeing on 0 of 40, with the
+scored answer itself moving on 6 of 39. `input_tokens` matched exactly across
+all three arms, so the prompts were byte-identical and the change is the
+server's: batching concurrent requests changes the reduction order, and a
+reasoning chain thousands of tokens long gives one flipped token room to
+propagate. `runner.CONCURRENCY_UNSAFE` refuses the combination rather than
+recording it here and hoping.
+
+The Claude CLI backend has **not** been measured this way, and unmeasured is not
+safe. Any future grid that wants concurrency on it needs its own falsifier
+first, against its own serial floor. Recorded in
+[`notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md`](../notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md).
 
 ### O: Observability
 

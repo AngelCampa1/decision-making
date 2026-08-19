@@ -24,6 +24,7 @@ from decision_evals.generators.schema import Template
 from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
 from decision_evals.providers.openai_compatible import Endpoint
 from decision_evals.runner import (
+    CONCURRENCY_UNSAFE,
     RunError,
     completed_keys,
     iter_items,
@@ -261,6 +262,83 @@ def test_a_non_positive_concurrency_is_refused(items: list[Item], tmp_path: Path
             ledger=BudgetLedger(limit_usd=10.0),
             concurrency=bad,
         )
+
+
+def test_a_measured_unsafe_model_refuses_concurrency(items: list[Item], tmp_path: Path) -> None:
+    """The register is enforced, not merely documented.
+
+    `ollama/qwen3:4b` is in `CONCURRENCY_UNSAFE` because the falsifier measured
+    two serial passes agreeing on 31 of 40 items and the concurrent pass on 0 of
+    40. A future session speeding up a grid would otherwise get records that
+    compare with nothing, and a checkpoint would not say so.
+    """
+    assert any(model.startswith(tuple(CONCURRENCY_UNSAFE)) for model in ["ollama/qwen3:4b"])
+    with pytest.raises(RunError, match="different text under concurrency"):
+        run_arm(
+            items,
+            ARM,
+            model="ollama/qwen3:4b",
+            checkpoint=tmp_path / "run.jsonl",
+            call=_answers_correctly(items),
+            ledger=BudgetLedger(limit_usd=10.0),
+            concurrency=4,
+        )
+
+
+def test_an_unsafe_model_still_runs_serially(items: list[Item], tmp_path: Path) -> None:
+    """The refusal is about concurrency, not about the backend.
+
+    Serial is the arm every published number used, and it is exactly what the
+    falsifier found reproducible. Refusing it too would retire a working venue
+    over a finding about a different mode.
+    """
+    records = run_arm(
+        items,
+        ARM,
+        model="ollama/qwen3:4b",
+        checkpoint=tmp_path / "run.jsonl",
+        call=_answers_correctly(items),
+        ledger=BudgetLedger(limit_usd=10.0),
+    )
+    assert len(records) == len(items)
+
+
+def test_the_falsifier_may_re_measure_an_unsafe_model(items: list[Item], tmp_path: Path) -> None:
+    """The register may only shrink, so something has to be able to shrink it.
+
+    Without this escape the entry would be permanent by construction: the run
+    that would clear `ollama` is a concurrent run on `ollama`.
+    """
+    records = run_arm(
+        items,
+        ARM,
+        model="ollama/qwen3:4b",
+        checkpoint=tmp_path / "run.jsonl",
+        call=_answers_correctly(items),
+        ledger=BudgetLedger(limit_usd=10.0),
+        concurrency=4,
+        measuring_concurrency=True,
+    )
+    assert len(records) == len(items)
+
+
+def test_an_unmeasured_model_is_not_refused(items: list[Item], tmp_path: Path) -> None:
+    """Unmeasured is not the same as unsafe, and the register says only what was run.
+
+    Claiming otherwise would be the inverse of this repository's usual error:
+    asserting a result for a venue nobody has tested.
+    """
+    assert not any(prefix.startswith("haiku") for prefix in CONCURRENCY_UNSAFE)
+    records = run_arm(
+        items,
+        ARM,
+        model="haiku",
+        checkpoint=tmp_path / "run.jsonl",
+        call=_answers_correctly(items),
+        ledger=BudgetLedger(limit_usd=10.0),
+        concurrency=4,
+    )
+    assert len(records) == len(items)
 
 
 # -- resumability -----------------------------------------------------------
