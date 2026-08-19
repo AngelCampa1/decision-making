@@ -16,11 +16,24 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
+      # `.playwright-mcp/` holds browser accessibility dumps, not configuration.
+      # They are machine-written, they are not read by anything in this
+      # repository, and two of them carry the YAML `=` value tag, which
+      # PyYAML's safe loader refuses to construct -- so `check-yaml` fails on
+      # them permanently and `trailing-whitespace` rewrites them on every run.
+      # Because pre-commit fails a run whose hooks modified files, a directory
+      # nothing depends on was blocking every push of unrelated work.
+      #
+      # Scoping the two hooks off it is the fix, not an exemption: neither was
+      # written to validate a snapshot dump. Whether the directory should be
+      # tracked at all is a separate question for whoever owns it.
       - id: check-yaml
+        exclude: ^\.playwright-mcp/
       - id: check-toml
       - id: check-json
       - id: end-of-file-fixer
       - id: trailing-whitespace
+        exclude: ^\.playwright-mcp/
       - id: check-merge-conflict
       - id: check-added-large-files
         args: [--maxkb=2048]
