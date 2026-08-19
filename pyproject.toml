@@ -356,10 +356,6 @@ to be able to name the thing it is correcting.\
 # that a document naming a file under either can never resolve for anyone who
 # clones the repository, and the gate was right to refuse it.
 #
-# Deleting the sentences would lose real information: the checkpoint is what
-# the surrounding claim rests on, and a reader reproducing the run will have
-# it. So the reference stays and the absence is declared.
-#
 # One refusal, not two, and the asymmetry with `docs-absent-commands` above is
 # deliberate. That register errors on an entry that becomes real, because the
 # command registry is in the source tree and so is true on every machine. A
@@ -368,18 +364,19 @@ to be able to name the thing it is correcting.\
 # green in CI, which is this register's own bug inverted. What remains: it may
 # only shrink, and an entry named nowhere in the documentation is a line to
 # delete.
+#
+# It is empty, and it was emptied the same day it was written. Both original
+# entries, `results/track-0/tree_smoke.jsonl` and
+# `results/triggers/adjudication.jsonl`, were closed by e6ba411, which committed
+# the two files instead. That is the better fix and it is worth saying why:
+# declaring a path here only stops the gate asking, while committing the file
+# means whoever clones this actually gets the evidence the sentence rests on.
+# Prefer `git add -f` whenever the file may be committed at all.
+#
+# The register stays for the case where it may not. `datasets/holdout/*.jsonl`
+# is ignored on purpose until a verdict publishes, so a document naming the
+# holdout cannot be fixed by committing it, and the only options would be a
+# silenced gate or a deleted sentence. That is what this table is for, and
+# empty is its correct state until then.
 # --------------------------------------------------------------------------- #
 [tool.decision-evals.docs-ignored-paths]
-"results/track-0/tree_smoke.jsonl" = """
-Named in `docs/AUTONOMOUS_WORK_ORDER.md`, in the Track 0.5 row, as the \
-pre-existing checkpoint that still loads after `NodeRecord` gained an \
-`attributes` field. The claim is about backward compatibility and the file is \
-the evidence for it. `results/track-0/` is ignored because re-running appends, \
-so the durable record of what it showed lives in `notebook/`.\
-"""
-"results/triggers/adjudication.jsonl" = """
-Named twice in `docs/STATUS.md` as where N3's blind label adjudication is \
-written. `results/triggers/` is the live trigger checkpoint directory, ignored \
-because it is resumable and appended to on every re-run; completed runs are \
-published under `results/<skill>/<date>-<sha7>/` instead.\
-"""
