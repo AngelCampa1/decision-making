@@ -241,8 +241,9 @@ const best = Math.max(...arms.map((a) => a.accuracy));
       }
     </ol>
 
-    <p>More than one can apply. Then they run in order, and each feeds the next.</p>
+    <p>More than one can apply. Then four of them run in order, and each feeds the next.</p>
     <p>Two is usually enough. Three means you have two choices, not one.</p>
+    <p>The last two do not join that chain. Each one runs on its own.</p>
     <p>
       It also knows when to stay off. A lookup is not a choice, and neither is a bug hunt.
     </p>
@@ -389,6 +390,15 @@ const best = Math.max(...arms.map((a) => a.accuracy));
     <p>
       We write down what we expect before each run. The date goes into git history, so we
       cannot move it later. A guess made after the fact is not a guess.
+    </p>
+    <p>
+      We do not write the answer key either. Three copies of the model label the test set
+      blind. None of them sees our label, or the other two. We set one rule before we ran
+      it. If too many labels move, we throw the test set out.
+    </p>
+    <p>
+      <a href={`${base}/docs/methods/`}>How we test, in full.</a> Every method, what it
+      guards against, and whether we have actually run it. Some we have not.
     </p>
 
     <h2>Who this is for</h2>

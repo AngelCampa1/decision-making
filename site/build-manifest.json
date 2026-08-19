@@ -174,7 +174,7 @@
     "site/src/pages/[...root].astro": "37ecb45b1a5153de16985f3394bccedc8d3639161c3eef1ece0ebb9c5664789e",
     "site/src/pages/docs/[...id].astro": "730c1c9b26b3b5c0e04d37c8328859a21556100b3761f28ba085fba7784bd684",
     "site/src/pages/docs/index.astro": "7e04b213cec560aad1f04dbe6e45a440f0c5280f6e863944007fc2fbd3e2583c",
-    "site/src/pages/index.astro": "3850818ddf1420d4e64b37b2d370b223fe7b5593027e721ef2078ed24f516d4e",
+    "site/src/pages/index.astro": "8987ae676502e3675bdfefb7d2112091dd4191dfd75562d66b6b7a12b39ae19d",
     "site/src/pages/notebook/[...id].astro": "ca80cff8a64f831a25b7277ae581dca9aea5d71ed0878e624546b60163d49bbe",
     "site/src/pages/notebook/index.astro": "024af86a9887e8954c4f8cee6c7a21ec2dcb8fc42acd7fdf9517bda636e5f159",
     "site/src/pages/results/[...id].astro": "31754f298000db0467e97875b3d83b01c0450bd4a6612369fc0bc23efecad003",
