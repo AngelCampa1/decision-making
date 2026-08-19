@@ -207,21 +207,33 @@ Interleaving matters more than it looks. A run that completes all `off` items on
 Monday and all `on` items on Tuesday confounds the arm with everything that
 changed in between, including the served model.
 
-**Concurrency is refused on the one backend where it was measured, and that is
-the disclosure.** Running 40 items three times on `ollama/qwen3:4b` at
-`temperature=0` gave two serial passes agreeing on the exact text of 31 of 40
-items and a concurrent pass at `concurrency=8` agreeing on 0 of 40, with the
-scored answer itself moving on 6 of 39. `input_tokens` matched exactly across
-all three arms, so the prompts were byte-identical and the change is the
+**Concurrency is refused on the one backend where it was measured, and the
+measurement was run twice.** 40 items, three ways, on `ollama/qwen3:4b` at
+`temperature=0`. Within a single process invocation a serial repeat agreed with
+serial on the exact text of 31 of 40 items and then 13 of 40, while the
+concurrent pass at `concurrency=8` agreed on 0 of 40 both times. `input_tokens`
+matched exactly, so the prompts were byte-identical and the change is the
 server's: batching concurrent requests changes the reduction order, and a
 reasoning chain thousands of tokens long gives one flipped token room to
 propagate. `runner.CONCURRENCY_UNSAFE` refuses the combination rather than
 recording it here and hoping.
 
-The Claude CLI backend has **not** been measured this way, and unmeasured is not
-safe. Any future grid that wants concurrency on it needs its own falsifier
+**The `dev` arena does not reproduce its own text across runs, and that is the
+larger disclosure.** Two *serial* runs of the same 40 prompts an hour apart also
+agree on 0 of 40. So no two runs on this backend may be compared by exact text,
+whatever their concurrency, and the serial floor itself moved from 0.775 to
+0.325 between the two measurements. On the parsed answer, which is what reaches
+a published number, every pairing lands between 0.825 and 0.975, and the
+concurrent arms are not separable from cross-run serial variation at n=40.
+Treat `dev`-arena agreement below roughly ten points as noise until somebody
+measures the run-to-run band properly.
+
+The Claude CLI backend has **not** been measured either way, and unmeasured is
+not safe. Any future grid that wants concurrency on it needs its own falsifier
 first, against its own serial floor. Recorded in
-[`notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md`](../notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md).
+[`notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md`](../notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md)
+and corrected in
+[`notebook/2026-08-19-the-replication-moved-the-floor-and-found-a-worse-problem.md`](../notebook/2026-08-19-the-replication-moved-the-floor-and-found-a-worse-problem.md).
 
 ### O: Observability
 

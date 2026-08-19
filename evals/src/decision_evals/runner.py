@@ -87,22 +87,30 @@ class RunRecord:
 #: Model prefixes measured to return *different text* when calls run
 #: concurrently, and therefore refused above ``concurrency=1``.
 #:
-#: ``ollama`` is here because it was measured, not because it is suspected. On
-#: 2026-08-19 the registered falsifier ran 40 items three times on
-#: ``ollama/qwen3:4b`` at ``temperature=0``: two serial passes agreed on the
-#: exact text of 31 of 40, and the concurrent pass at ``concurrency=8`` agreed
-#: on **0 of 40**, with the parsed answer itself moving on 6 of 39. The prompts
-#: were byte-identical -- ``input_tokens`` matched exactly across all three
-#: arms -- so the request is not what changed. A server that batches concurrent
-#: requests changes the matrix shapes it multiplies, which changes the
-#: floating-point reduction order, which flips a token, which cascades through a
-#: reasoning chain thousands of tokens long.
+#: ``ollama`` is here because it was measured twice, not because it is
+#: suspected. The registered falsifier ran 40 items three ways on
+#: ``ollama/qwen3:4b`` at ``temperature=0``, and then again: within a single
+#: process invocation, a serial repeat agreed with serial on the exact text of
+#: 31 of 40 and then 13 of 40, while the concurrent pass at ``concurrency=8``
+#: agreed on **0 of 40 both times**. Prompts were byte-identical, so the request
+#: is not what changed. A server that batches concurrent requests multiplies
+#: different matrix shapes, which changes the floating-point reduction order,
+#: which flips a token, which cascades through a reasoning chain thousands of
+#: tokens long.
 #:
-#: **This is a statement about a venue, not about concurrency.** Each backend
-#: has to be measured before it is trusted, which is why this is a register of
-#: prefixes rather than a flat refusal. It may only shrink, and it shrinks by
-#: running the falsifier, not by argument:
-#: ``notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md``.
+#: **Read the scope carefully, because the replication narrowed it.** The claim
+#: is about text, within one invocation. Two *serial* runs an hour apart also
+#: agree on 0 of 40, so serial is not reproducible here either and no two runs
+#: on this backend may be compared by text at all. On the parsed answer -- the
+#: quantity that reaches a published number -- the concurrent arms sit at 0.850
+#: and 0.825 against a cross-invocation serial baseline of 0.875, which at n=40
+#: separates nothing. So this refusal rests on the prose result, and it is a
+#: precaution rather than a demonstration that concurrency moves decisions.
+#:
+#: It is also a statement about a venue rather than about concurrency, which is
+#: why it is a register of prefixes and not a flat refusal. It may only shrink,
+#: and it shrinks by measurement:
+#: ``notebook/2026-08-19-the-replication-moved-the-floor-and-found-a-worse-problem.md``.
 CONCURRENCY_UNSAFE: Final[frozenset[str]] = frozenset({"ollama/"})
 
 
@@ -239,13 +247,15 @@ def run_arm(
     aborts, results still in flight are discarded rather than written, so resume
     re-runs them; that is what makes the abort safe rather than partial.
 
-    **It was measured, and on one backend the answer is that it does.** The
-    prediction above was registered before this code existed; the run is in
-    ``notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md``.
-    Serial-against-serial agreed on the exact text of 31 of 40 items and
-    concurrent-against-serial on 0 of 40, so :data:`CONCURRENCY_UNSAFE` refuses
-    the combination rather than leaving the finding written down somewhere. Every
-    other backend is unmeasured, which is a different thing from safe.
+    **It was measured twice, and the second run narrowed what the first one
+    licensed.** The prediction above was registered before this code existed.
+    Within one invocation, concurrent-against-serial agreed on the exact text of
+    0 of 40 items both times, against a serial repeat of 31 of 40 and 13 of 40,
+    so :data:`CONCURRENCY_UNSAFE` refuses the combination. But two serial runs an
+    hour apart also agree on 0 of 40, so serial reproducibility is not a property
+    this backend has either, and on the parsed answer nothing separates the arms
+    at n=40. Every other backend is unmeasured, which is a different thing from
+    safe.
 
     Returns:
         The records produced *by this invocation*. Records already on disk from
@@ -265,9 +275,12 @@ def run_arm(
     if concurrency > 1 and unsafe and not measuring_concurrency:
         raise RunError(
             f"{model} is measured to return different text under concurrency, so "
-            f"concurrency={concurrency} would produce records that cannot be compared "
-            f"with anything already on disk. Two serial passes agreed on 31 of 40 "
-            f"items; the concurrent pass agreed on 0 of 40. Run it serially, or pass "
+            f"concurrency={concurrency} would add a known source of variation to a "
+            f"venue that already has one. Measured twice: within an invocation the "
+            f"concurrent arm agreed with serial on 0 of 40 items both times, against "
+            f"a serial repeat of 31 of 40 and 13 of 40. Note that two serial runs an "
+            f"hour apart also agree on 0 of 40, so serial is not a way to make this "
+            f"backend reproducible either. Run it serially, or pass "
             f"measuring_concurrency=True if you are the falsifier re-measuring it."
         )
 
