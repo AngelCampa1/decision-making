@@ -277,6 +277,39 @@ If you are an agent contributing here rather than a user installing the skills:
   how a red gate gets resolved. If the gate is red on your own isolated tree,
   it is yours and it is real.
 
+  **After landing, local `main` and `origin/main` must name the same commit.**
+  Check it, do not assume it:
+
+  ```bash
+  git fetch origin && git rev-parse main origin/main   # two identical lines
+  ```
+
+  The reason this needs saying is that the obvious way to land does not do it.
+  Pushing a topic branch straight onto the remote branch —
+  `git push origin <topic>:main` — moves `origin/main` and leaves the local ref
+  exactly where it was. Nothing warns you: `git status` in a worktree on another
+  branch has nothing to report, and the next session to read local `main`
+  reads a commit that is no longer the tip.
+
+  Nor can you always fix it from where you are. `main` is usually checked out
+  in *some* worktree — on 2026-08-19 it was not in `D:\code\decision-making` at
+  all, which had a topic branch checked out, but in another session's
+  scratchpad worktree — and git refuses to update a branch ref that is checked
+  out anywhere. `git fetch origin main:main` is rejected. `git worktree list`
+  tells you which path holds it. So either land from that worktree and push
+  from there, or fast-forward it in place afterwards:
+
+  ```bash
+  git -C <the-worktree-holding-main> merge --ff-only origin/main
+  ```
+
+  Do **not** reach for `git update-ref refs/heads/main`. It bypasses the
+  checked-out protection rather than satisfying it, and the worktree holding
+  `main` is then left with a HEAD pointing somewhere its index and working tree
+  do not match — which presents to that session as a working tree full of
+  deletions it did not make. That is the failure this whole worktree section
+  exists to stop, reintroduced by the command that looked like a shortcut.
+
 - **Work is sub-agent driven, reviews are adversarial, and no finding is
   believed until it is confirmed.** Maintainer instruction, 2026-08-13. Dispatch
   units of work to sub-agents and run the independent ones concurrently; give
