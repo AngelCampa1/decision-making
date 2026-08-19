@@ -15,8 +15,9 @@ authors:
 repository-code: https://github.com/AngelCampa1/decision-making-skills
 url: https://angelcampa1.github.io/decision-making-skills/
 abstract: >-
-  A markdown Agent Skill that routes a decision to one of four procedures —
-  evidence ledger, switching conditions, consequence cascade, decide-or-wait —
+  A markdown Agent Skill that routes a decision to one of six procedures —
+  evidence ledger, switching conditions, consequence cascade, decide-or-wait,
+  advice fit, and a council of positions —
   and a Python evaluation harness (`decision_evals`) that measures whether such
   a skill actually changes behaviour. The harness is pre-registered and
   placebo-controlled: every skill is measured against four arms on the same

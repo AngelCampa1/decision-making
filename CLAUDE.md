@@ -326,10 +326,11 @@ If you are an agent contributing here rather than a user installing the skills:
   check`, merge, deploy, fetch the deployed page, remove the worktree and
   branch — is
   [Landing the work](docs/AUTONOMOUS_WORK_ORDER.md#landing-the-work). Its last
-  three steps are the ones nothing here can check: that the build was *pushed*,
-  that the deployed page was *fetched and asserted against*, and that the
-  worktree and branch were removed — unless another session is standing in
-  them, which outranks the tidying.
+  two steps are the ones nothing here can check: that the deployed page was
+  *fetched and asserted against*, and that the worktree and branch were removed
+  — unless another session is standing in them, which outranks the tidying.
+  Deploying itself dropped off that list on 2026-08-19: it is a workflow now,
+  and `de deployed` will say whether it landed.
 - **Work is sub-agent driven, reviews are adversarial, and no finding is
   believed until it is confirmed.** Maintainer instruction, 2026-08-13. Dispatch
   units of work to sub-agents and run the independent ones concurrently; give
@@ -370,9 +371,11 @@ If you are an agent contributing here rather than a user installing the skills:
   committed tree on its own showed the gate had only ever been asked about a
   working directory, never about a commit. `main`'s tip imported an uncommitted
   module, two documents linked ignored paths, and the site manifest recorded a
-  build from a file not in the repository. Green locally means green *here*.
-  Only a clean checkout can say green on a clean clone, and that workflow has
-  not run yet. See `notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`.
+  build from a file not in the repository. Green locally means green *here*;
+  only a clean checkout can say green on a clean clone. The workflow's first run
+  went red in four places a working directory cannot show, and has been green
+  since `ada7b4a`. See
+  `notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`.
   A second workflow, `deploy-site.yml`, publishes the site and checks nothing.
 - **Setup, and the loop underneath the gate.** `uv sync --group dev` installs
   it; add `--group docs` only to publish the site. `python -m uv run de check

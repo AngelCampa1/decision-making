@@ -38,6 +38,7 @@ import json
 import os
 import re
 import subprocess
+import time
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
@@ -148,8 +149,30 @@ def fetch_provenance(url: str = PROVENANCE_URL, timeout: float = TIMEOUT) -> dic
     :raises UnreachableError: the host did not answer, or answered with something
         that is not a JSON object.
     """
+    # Cache-busted, because the answer is worthless if it is stale. Pages sits
+    # behind a CDN, and a plain re-fetch of the same URL is a byte-identical
+    # request that hits the same edge object -- so "run it again" was a remedy
+    # that could not work, and the work order said to do exactly that.
+    separator = "&" if "?" in url else "?"
+    request = urllib.request.Request(
+        f"{url}{separator}t={time.time_ns()}",
+        headers={"Cache-Control": "no-cache", "User-Agent": "de deployed"},
+    )
     try:
-        with urllib.request.urlopen(url, timeout=timeout) as response:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            # A redirect is followed silently by urlopen, and a repository
+            # rename leaves one in place. Reading JSON from a URL that is no
+            # longer the one asked about is a confident answer to a different
+            # question.
+            #
+            # Both sides are compared without their query strings, because this
+            # request carries a cache-buster the caller's URL does not. Stripping
+            # only the response's side compared `http://x` against `http://x`
+            # correctly and `http://x?a=1` against `http://x`, so any URL that
+            # already had a query was reported as redirected every time. The
+            # branch above that appends `&` existed solely to produce that.
+            if response.geturl().split("?")[0] != url.split("?")[0]:
+                raise UnreachableError(f"{url} redirected to {response.geturl()}")
             payload = response.read(MAX_BYTES).decode("utf-8")
     except OSError as exc:
         raise UnreachableError(f"could not fetch {url}: {exc}") from exc
@@ -177,7 +200,23 @@ def remote_head(repo_root: Path, ref: str = REMOTE_REF) -> str:
     out = _git(repo_root, ["ls-remote", "origin", ref])
     if not out:
         raise UnreachableError(f"could not read {ref} from origin")
-    return out.split()[0]
+
+    # Validated with the same regex the fetched record gets, and for the same
+    # reason. `ls-remote <remote> <pattern>` matches the *tail* of ref names, so
+    # a branch literally called `feature/refs/heads/main` also matches and sorts
+    # first -- and taking `split()[0]` of a multi-line body would then compare
+    # against a branch nobody deployed and report BEHIND with confidence. Every
+    # other input here is checked before a verdict is taken from it; this one
+    # was not.
+    lines = out.splitlines()
+    if len(lines) != 1:
+        raise UnreachableError(
+            f"origin matched {len(lines)} refs for {ref}, so which one is `main` is ambiguous"
+        )
+    head = lines[0].split()[0]
+    if not _FULL_SHA.fullmatch(head):
+        raise UnreachableError(f"origin returned {head!r} for {ref}, which is not a commit")
+    return head
 
 
 def manifest_digest(repo_root: Path) -> str | None:

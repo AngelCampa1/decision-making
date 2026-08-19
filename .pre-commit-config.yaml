@@ -1,7 +1,12 @@
-# Local git hooks. No CI gates this repository — nothing here needs a remote
-# runner, and a green local tree that actually ran is more credible than a
-# matrix with silently-skipped jobs. The one workflow in `.github/workflows/`
-# deploys the site and checks nothing, so this file is still the whole gate.
+# Local git hooks: the first two of the three arenas `de check` runs in.
+# `pre-commit` runs the `--fast` subset, `pre-push` runs everything, and
+# `.github/workflows/check.yml` runs everything again on pull requests and
+# pushes to `main`.
+#
+# The third arena is not redundant, which was the original argument for not
+# having it. A hook checks a *working directory*; CI checks a *commit*, on a
+# clean clone. The first CI run went red on a tree whose local gate was green,
+# which is the difference stated as a measurement rather than an opinion.
 #
 # Install both stages once:
 #   python -m uv run pre-commit install

@@ -1,8 +1,20 @@
-# The deployer, and the only workflow in this repository.
+# The deployer. `check.yml` beside it is the gate; this file publishes and
+# checks nothing, and that split is deliberate -- a gate that can publish is a
+# gate somebody is tempted to skip.
 #
-# It publishes; it does not gate. `de check` is still the whole gate: local,
-# offline, deterministic, bound to pre-commit and pre-push. Nothing here checks
-# anything, and nothing here may be skipped to get a change in.
+# `de check` is the whole gate and it now runs in three arenas: `pre-commit`
+# (the `--fast` subset), `pre-push` (everything), and `check.yml` on pull
+# requests and pushes to `main`. Nothing here may be skipped to get a change in.
+#
+# **This workflow does not wait for that gate**, and that is a live gap rather
+# than a decision anybody defended. Both fire on push to `main` independently,
+# so a commit whose CI gate goes red is published anyway; and because
+# `check.yml` sets `cancel-in-progress: true` while this file sets `false`, two
+# pushes a minute apart can leave the site published from a commit whose gate
+# run was cancelled and never reported. Coupling them (`workflow_run`) would
+# trade that for a flaky gate being able to block publishing. Neither was
+# chosen. It is written down here so the next person is choosing rather than
+# discovering.
 #
 # What it removes is the last hand-carried step. `de site --deploy` used to
 # force-push whatever local HEAD happened to be to a `gh-pages` branch. On
@@ -90,6 +102,15 @@ jobs:
       - name: Build
         working-directory: site
         run: npm run build
+
+      # Pinned, because everything else in this file is. The script needs
+      # `datetime.UTC` (3.11+) and `Path.write_text(newline=)` (3.10+), and
+      # without this step it runs on whatever interpreter the runner image
+      # happens to ship -- an unpinned dependency in a workflow with no other
+      # unpinned dependency. `check.yml` pins the same version.
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
 
       - name: Record what this run published
         env:

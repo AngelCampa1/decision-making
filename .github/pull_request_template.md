@@ -3,7 +3,11 @@
 ## Why
 
 <!--
-No CI gates this repository. `de check` is the only thing between a mistake and the
+`de check` runs on this pull request via `.github/workflows/check.yml`, and it is
+the same gate your `pre-push` hook runs. CI checking a commit on a clean clone is
+not the same as a hook checking a working directory, so a green local run is not
+a reason to skip reading the result here. `de check` is what stands between a
+mistake and the
 published record, so the checklist below is the review.
 -->
 

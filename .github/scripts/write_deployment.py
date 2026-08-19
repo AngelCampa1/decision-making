@@ -26,7 +26,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 MANIFEST = Path("site/build-manifest.json")
-TARGET = Path("site/dist/deploy-provenance.json")
+BUILT = Path("site/dist")
+TARGET = BUILT / "deploy-provenance.json"
+
+#: What a real Astro build always leaves at the root of ``dist/``. Its absence
+#: is the difference between "the build produced a site" and "the build exited
+#: 0", and those are not the same thing.
+INDEX = BUILT / "index.html"
 
 
 def manifest_digest() -> str | None:
@@ -62,7 +68,28 @@ def payload() -> dict[str, object]:
 
 
 def main() -> None:
-    TARGET.parent.mkdir(parents=True, exist_ok=True)
+    """Write the record, or refuse and fail the run.
+
+    **It must never create ``site/dist/``.** An earlier version opened with
+    ``TARGET.parent.mkdir(parents=True, exist_ok=True)``, and that one line
+    meant that if ``npm run build`` ever exited 0 without producing a site -- a
+    moved ``outDir``, an empty content collection, a build that wrote somewhere
+    else -- this script manufactured the directory, the artifact upload
+    published a tree containing one JSON file, ``deploy-pages`` went green, and
+    ``de deployed`` read that file back and reported the live site current.
+    Every signal agreeing, and a 404 for every visitor.
+
+    That is the failure ``tests/unit/test_workflow.py`` opens by naming, and the
+    command built to catch it could not have returned a non-zero value for it --
+    which this repository has a standing rule against shipping. The refusal
+    belongs here, at the last point that can still tell the difference.
+    """
+    if not INDEX.is_file():
+        raise SystemExit(
+            f"{INDEX} does not exist, so the build produced no site to publish. "
+            "Refusing to write the deployment record: it would make an empty "
+            "artifact indistinguishable from a successful deploy."
+        )
     TARGET.write_text(
         json.dumps(payload(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

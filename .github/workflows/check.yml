@@ -15,7 +15,7 @@
 # that was actually committed. It was not. See
 # `notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`.
 #
-# Two setup steps are load-bearing and neither is a workaround:
+# Three setup steps are load-bearing and none of them is a workaround:
 #
 #   fetch-depth: 0   the run-provenance gate walks git ancestry to prove a
 #                    prediction predates its data, and a shallow clone has no
@@ -33,9 +33,13 @@
 name: check
 
 # Pull requests and `main`, not every branch push. This repository takes
-# hundreds of commits a day and the local `pre-push` hook already runs the full
-# gate on each one, so a run per branch push would be noise rather than
-# evidence. What the hook cannot do is check a *commit* rather than a working
+# hundreds of commits a day and the local `pre-push` hook runs the full gate on
+# each one *where it is installed*, so a run per branch push would mostly be
+# noise. That qualifier is load-bearing and was missing: the hook fires only if
+# somebody ran `pre-commit install --hook-type pre-push` in this clone, and
+# nothing in the repository does that for you -- `docs/AUTONOMOUS_WORK_ORDER.md`
+# says so in as many words. On a clone where it was never installed, a branch
+# push is checked by nothing until it reaches a pull request. What the hook cannot do is check a *commit* rather than a working
 # directory, which is the one thing this workflow exists for, and that only
 # needs to happen where the work merges.
 #
@@ -45,6 +49,14 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+
+# Read-only. The gate checks out, installs, and runs tests; it never writes to
+# the repository. Saying so explicitly matters more here than in most workflows,
+# because this job `npm install -g` an unpinned third-party package and then
+# executes it, and a write-scoped token in that job could push to `main` -- which
+# is the one event that triggers the deployer.
+permissions:
+  contents: read
 
 concurrency:
   group: check-${{ github.ref }}

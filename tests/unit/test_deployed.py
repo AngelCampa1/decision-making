@@ -10,6 +10,7 @@ rebuilds the hole this command was added to close.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -34,17 +35,27 @@ class _Completed:
 
 
 @contextmanager
-def _response(payload: str) -> Iterator[Any]:
+def _response(payload: str, url: str) -> Iterator[Any]:
     class _R:
         def read(self, amount: int | None = None) -> bytes:
             # The real reader caps the read, so the stub must accept a size.
             return payload.encode("utf-8")[:amount]
 
+        def geturl(self) -> str:
+            # A server that did not redirect answers at the URL it was asked
+            # about. Echoing the request rather than hardcoding a string is what
+            # makes the redirect test below a different case and not a different
+            # stub.
+            return url
+
     yield _R()
 
 
-def _serve(monkeypatch: pytest.MonkeyPatch, payload: str) -> None:
-    monkeypatch.setattr(dep.urllib.request, "urlopen", lambda url, timeout=None: _response(payload))
+def _serve(monkeypatch: pytest.MonkeyPatch, payload: str, landed_at: str | None = None) -> None:
+    def urlopen(request: Any, timeout: float | None = None) -> Any:
+        return _response(payload, landed_at or request.full_url)
+
+    monkeypatch.setattr(dep.urllib.request, "urlopen", urlopen)
 
 
 def _provenance(**overrides: object) -> str:
@@ -129,6 +140,44 @@ class TestFetchProvenance:
         with pytest.raises(dep.UnreachableError, match="not JSON"):
             dep.fetch_provenance("http://x")
 
+    def test_the_request_is_cache_busted(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Pages sits behind a CDN, and a plain re-fetch is a byte-identical
+        request that hits the same edge object. The work order's remedy for a
+        surprising *behind* is "run it again", which without this is not a
+        remedy at all."""
+        seen: list[str] = []
+
+        def urlopen(request: Any, timeout: float | None = None) -> Any:
+            seen.append(request.full_url)
+            return _response(_provenance(), request.full_url)
+
+        monkeypatch.setattr(dep.urllib.request, "urlopen", urlopen)
+        dep.fetch_provenance("http://x")
+        dep.fetch_provenance("http://x")
+        assert len(set(seen)) == 2, seen
+        assert all(u.startswith("http://x?t=") for u in seen), seen
+
+    def test_a_redirect_is_not_an_answer(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """`urlopen` follows one silently, and a repository rename leaves one in
+        place. JSON read from a URL that is no longer the one asked about is a
+        confident answer to a different question."""
+        _serve(monkeypatch, _provenance(), landed_at="http://elsewhere/deploy-provenance.json")
+        with pytest.raises(dep.UnreachableError, match="redirected"):
+            dep.fetch_provenance("http://x")
+
+    def test_a_query_string_in_the_url_keeps_the_cache_buster_separate(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        seen: list[str] = []
+
+        def urlopen(request: Any, timeout: float | None = None) -> Any:
+            seen.append(request.full_url)
+            return _response(_provenance(), request.full_url)
+
+        monkeypatch.setattr(dep.urllib.request, "urlopen", urlopen)
+        dep.fetch_provenance("http://x?a=1")
+        assert seen[0].startswith("http://x?a=1&t="), seen
+
     def test_json_that_is_not_an_object_raises(self, monkeypatch: pytest.MonkeyPatch) -> None:
         _serve(monkeypatch, "[1, 2]")
         with pytest.raises(dep.UnreachableError, match="not an object"):
@@ -139,6 +188,32 @@ class TestRemoteHead:
     def test_reads_the_sha(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(dep, "_git", lambda root, args: f"{HEAD}\trefs/heads/main")
         assert dep.remote_head(Path()) == HEAD
+
+    def test_more_than_one_matching_ref_is_ambiguous_not_a_guess(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """`ls-remote <remote> <pattern>` matches the *tail* of a ref name, so a
+        branch called `feature/refs/heads/main` matches too and sorts first.
+        Taking `split()[0]` of the body would compare against a branch nobody
+        deployed and report *behind* with confidence."""
+        body = f"{OTHER}\trefs/heads/feature/refs/heads/main\n{HEAD}\trefs/heads/main"
+        monkeypatch.setattr(dep.subprocess, "run", lambda *a, **k: _Completed(0, body))
+        with pytest.raises(dep.UnreachableError, match="ambiguous"):
+            dep.remote_head(Path())
+
+    @pytest.mark.parametrize("token", ["HEAD", SHORT, HEAD.upper()])
+    def test_something_that_is_not_a_commit_is_not_an_answer(
+        self, monkeypatch: pytest.MonkeyPatch, token: str
+    ) -> None:
+        """The fetched record is validated with this same regex before a verdict
+        is taken from it. This side was not, until it was."""
+        monkeypatch.setattr(
+            dep.subprocess,
+            "run",
+            lambda *a, **k: _Completed(0, f"{token}\trefs/heads/main"),
+        )
+        with pytest.raises(dep.UnreachableError, match="not a commit"):
+            dep.remote_head(Path())
 
     def test_an_unreadable_remote_raises(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(dep, "_git", lambda root, args: None)
@@ -243,3 +318,57 @@ class TestCheckDeployed:
         monkeypatch.setattr(dep, "remote_head", lambda root, ref=dep.REMOTE_REF: HEAD)
         state = dep.check_deployed(tmp_path, "http://x")
         assert state.status == dep.UNREACHABLE
+
+
+class TestDistanceAgainstRealGit:
+    """The one place the stubs cannot answer the question.
+
+    Everything above replaces `subprocess.run`, so it tests `_distance` against
+    a model of git rather than against git. That model is where the risk is:
+    `merge-base --is-ancestor` reports its answer in the *exit code* and prints
+    nothing at all, so a successful call comes back from `_git` as `""` -- falsy,
+    but not `None`. Written as `if not _git(...)` this function would report
+    every ancestor as a divergence, and every stubbed test above would still
+    pass, because a stub returning `""` is indistinguishable from one returning
+    `None` under a truthiness check.
+    """
+
+    @staticmethod
+    def _repo(tmp_path: Path) -> tuple[Path, str, str]:
+        """Two commits, and their real SHAs."""
+
+        def run(*args: str) -> str:
+            return subprocess.run(
+                ["git", *args],
+                cwd=tmp_path,
+                capture_output=True,
+                text=True,
+                check=True,
+                env={
+                    **os.environ,
+                    "GIT_AUTHOR_NAME": "t",
+                    "GIT_AUTHOR_EMAIL": "t@example.invalid",
+                    "GIT_COMMITTER_NAME": "t",
+                    "GIT_COMMITTER_EMAIL": "t@example.invalid",
+                },
+            ).stdout.strip()
+
+        run("init", "--quiet")
+        (tmp_path / "a").write_text("1", encoding="utf-8")
+        run("add", "a")
+        run("commit", "--quiet", "-m", "one")
+        first = run("rev-parse", "HEAD")
+        (tmp_path / "a").write_text("2", encoding="utf-8")
+        run("commit", "--quiet", "-am", "two")
+        return tmp_path, first, run("rev-parse", "HEAD")
+
+    def test_an_ancestor_gets_a_counted_distance(self, tmp_path: Path) -> None:
+        root, first, head = self._repo(tmp_path)
+        assert dep._distance(root, first, head) == "and the live site is 1 commit(s) behind"
+
+    def test_a_commit_this_checkout_never_saw_is_not_counted(self, tmp_path: Path) -> None:
+        """An unknown SHA makes `merge-base` exit non-zero for a different
+        reason than "not an ancestor", and both must land on the same refusal
+        rather than on a fabricated count."""
+        root, _, head = self._repo(tmp_path)
+        assert "diverged or it is not in this checkout" in dep._distance(root, "0" * 40, head)

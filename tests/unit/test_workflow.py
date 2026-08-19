@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -33,8 +34,14 @@ SHA = "f01d325cf1c2199d4f69e845efa9d806c4e805eb"
 class _Served:
     """A stand-in for what `urlopen` hands back, as a context manager."""
 
-    def __init__(self, payload: str) -> None:
+    def __init__(self, payload: str, url: str = "http://x") -> None:
         self._payload = payload.encode("utf-8")
+        self._url = url
+
+    def geturl(self) -> str:
+        """`fetch_provenance` compares this against the URL it asked for, so a
+        stub that cannot answer it is a stub of the wrong object."""
+        return self._url
 
     def __enter__(self) -> _Served:
         return self
@@ -95,7 +102,14 @@ class TestSafety:
         assert workflow["permissions"]["contents"] == "read"
 
     def test_two_pushes_cannot_race_to_publish(self, workflow: dict[str, Any]) -> None:
-        assert workflow["concurrency"]["group"].startswith("pages")
+        """Pinned exactly, not by prefix and substring.
+
+        Both halves used to be checked loosely, and `pages-${{ github.ref }}-${{
+        github.run_id }}` satisfied both while meaning the opposite: a group
+        containing the run id is unique per run, so nothing ever queues behind
+        anything and two pushes race exactly as before. A concurrency key is
+        short enough to assert whole."""
+        assert workflow["concurrency"]["group"] == "pages-${{ github.ref }}"
 
     def test_a_branch_test_cannot_cancel_a_real_deployment(self, workflow: dict[str, Any]) -> None:
         """The group is keyed on the ref. With one fixed group, a third run
@@ -111,7 +125,12 @@ class TestSafety:
     def test_nothing_third_party_runs(self, workflow: dict[str, Any]) -> None:
         """First-party actions only. A deploy step is the one place here where
         somebody else's code would run with write access to what the world
-        sees."""
+        sees.
+
+        Scoped to this workflow and no wider. `check.yml` is not held to it --
+        it installs a CLI from npm, unpinned, which is a real supply-chain
+        surface and a deliberately separate question: that workflow can fail a
+        gate, and this one can change what the public reads."""
         used = [
             str(step["uses"])
             for job in workflow["jobs"].values()
@@ -199,7 +218,12 @@ class TestProvenanceWriter:
     tests are the equivalent for the deployment record."""
 
     @staticmethod
-    def _payload(monkeypatch: pytest.MonkeyPatch, cwd: Path) -> dict[str, object]:
+    def _module(monkeypatch: pytest.MonkeyPatch, cwd: Path) -> Any:
+        """The writer, loaded by path and run against `cwd`.
+
+        It must not be imported as a package module: the deploy runner installs
+        Node and never Python dependencies, so the script may only use the
+        standard library and nothing here may make that easier to forget."""
         for key, value in {
             "GITHUB_SHA": SHA,
             "GITHUB_REF": "refs/heads/main",
@@ -215,7 +239,11 @@ class TestProvenanceWriter:
         assert spec.loader is not None
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        return module.payload()  # type: ignore[no-any-return]
+        return module
+
+    @classmethod
+    def _payload(cls, monkeypatch: pytest.MonkeyPatch, cwd: Path) -> dict[str, object]:
+        return cls._module(monkeypatch, cwd).payload()  # type: ignore[no-any-return]
 
     def test_the_writer_is_invoked_by_the_workflow(self, workflow: dict[str, Any]) -> None:
         scripts = "\n".join(str(s.get("run", "")) for s in _steps(workflow, "build"))
@@ -231,6 +259,30 @@ class TestProvenanceWriter:
             s for s in _steps(workflow, "build") if "write_deployment.py" in str(s.get("run", ""))
         )
         assert "working-directory" not in step
+
+    def test_the_step_supplies_every_variable_github_does_not(
+        self, workflow: dict[str, Any]
+    ) -> None:
+        """`payload()` reads its environment with `os.environ[...]`, which raises
+        on a missing key -- so a variable the runner does not define by itself
+        has to come from the step's `env:`, and `RUN_URL` is the only one.
+
+        Derived from the writer's source rather than listed here, because a
+        hand-copied list is a second place to forget. Both `env:` lines were
+        deleted as a mutation and all 23 tests in this file still passed: the
+        contract test builds the payload with the variables already set by
+        `monkeypatch`, so it can never see the workflow failing to set them."""
+        source = WRITER.read_text(encoding="utf-8")
+        wanted = set(re.findall(r'os\.environ\["([A-Z_]+)"\]', source))
+        assert wanted, "the writer reads no environment at all, so this proves nothing"
+
+        step = next(
+            s for s in _steps(workflow, "build") if "write_deployment.py" in str(s.get("run", ""))
+        )
+        supplied = set(step.get("env", {}))
+        # `GITHUB_*` is set on every runner by the platform; anything else is
+        # the workflow's job.
+        assert {k for k in wanted if not k.startswith("GITHUB_")} <= supplied
 
     def test_it_runs_before_the_upload(self, workflow: dict[str, Any]) -> None:
         """Written after it, the record never reaches the artifact."""
@@ -274,10 +326,41 @@ class TestProvenanceWriter:
         """A fabricated digest would read as a fact."""
         assert self._payload(monkeypatch, tmp_path)["build_manifest_sha256"] is None
 
-    def test_it_writes_into_dist_and_never_into_public(self) -> None:
+    def test_it_writes_into_dist_and_never_into_public(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
         """`site/public/**` is a hashed input of `site/build-manifest.json`, so
         writing there would make every deployment disagree with the committed
-        manifest and the gate would fire on its own output."""
-        source = WRITER.read_text(encoding="utf-8")
-        assert 'Path("site/dist/deploy-provenance.json")' in source
-        assert "site/public/deploy-provenance.json" not in source
+        manifest and the gate would fire on its own output.
+
+        Asserted against the module's own constant rather than against a literal
+        in its source: an earlier version of this test grepped for
+        `Path("site/dist/deploy-provenance.json")` and broke the day the writer
+        factored that string into two constants, without the destination having
+        moved an inch."""
+        module = self._module(monkeypatch, tmp_path)
+        assert Path("site/dist/deploy-provenance.json") == module.TARGET
+
+    def test_it_refuses_to_write_beside_a_build_that_produced_no_site(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """The one failure this whole file opens by naming. If `npm run build`
+        exits 0 without writing a site, the record must not be written: an
+        artifact holding one JSON file uploads green, and `de deployed` then
+        reads it back and reports the live 404 current."""
+        module = self._module(monkeypatch, tmp_path)
+        with pytest.raises(SystemExit):
+            module.main()
+        assert not (tmp_path / module.TARGET).exists()
+
+    def test_it_writes_when_the_build_did_produce_a_site(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """The other half, without which the refusal above would pass against a
+        writer that refuses unconditionally."""
+        module = self._module(monkeypatch, tmp_path)
+        (tmp_path / module.BUILT).mkdir(parents=True)
+        (tmp_path / module.INDEX).write_text("<html></html>", encoding="utf-8")
+
+        module.main()
+        assert json.loads((tmp_path / module.TARGET).read_text(encoding="utf-8"))["commit"] == SHA

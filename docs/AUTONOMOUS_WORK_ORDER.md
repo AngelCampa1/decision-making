@@ -566,6 +566,24 @@ load-bearing on their own.
    merge may be cache lag rather than a failed deploy — re-run it before
    concluding anything.
 
+   **The same push starts a second run, and it is the one that can fail.**
+   `.github/workflows/check.yml` runs the full `de check` on a clean checkout of
+   what you just merged. Nothing in this document waits on it unless you do, and
+   step 7's green is not a prediction of its result: the first such run went red
+   on a tree whose local gate had passed (`76cdfb0`), in four places a working
+   directory cannot show — a CLI the runner had no reason to have, and an
+   assertion reading an error message Rich had wrapped to eighty columns. Wait
+   for it, and treat red as your problem even when the cause is environmental:
+
+   ```bash
+   gh run watch "$(gh run list --workflow 'check' --branch main --limit 1 --json databaseId -q '.[0].databaseId')"
+   ```
+
+   A red `check` on `main` does not roll the deploy back — the two workflows do
+   not gate each other — so the live site can be serving a build of a commit that
+   `check` rejects. That is not a bug to fix by chaining them; it is the reason
+   to look.
+
    **What replaced what, so the old instruction is not resurrected from
    memory.** This used to be `de site --deploy`, which force-pushed whatever
    local `HEAD` happened to be. On 2026-08-19 it published a build of a

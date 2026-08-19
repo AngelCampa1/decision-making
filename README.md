@@ -253,8 +253,12 @@ pushed, and it runs on a machine where you can watch it. It makes no model
 calls; model-backed evaluation is run explicitly from [`scripts/`](scripts/).
 Because it is offline and deterministic, the same command runs unchanged in
 [`.github/workflows/check.yml`](.github/workflows/check.yml) on every push and
-pull request. That workflow is new and has not run yet: until it does, nothing
-here has been checked anywhere except the machine it was written on.
+pull request. Its first run went red on a tree whose local gate was green, in
+four places, none of which a working directory can show -- a CLI the runner had
+no reason to have, and an assertion that was reading an error message Rich had
+wrapped to eighty columns. It has been green since `ada7b4a`. That is what the
+workflow is for: a gate that has only ever run on the machine it was written on
+has only ever been asked about that machine.
 
 **Simulating a clean clone is what found the reason to want that.** Checking out
 the committed tree on its own showed the gate had only ever been asked about a
@@ -291,8 +295,8 @@ It fetches what the site says about its own origin and compares that against
 1 means it is behind, and 2 means the question could not be answered. That last
 one is deliberately not the same as 0.
 
-Several of its steps check the method rather than the code, each one added
-after the failure it prevents had already happened here:
+Several of `de check`'s steps check the method rather than the code, each one
+added after the failure it prevents had already happened here:
 
 | Step | Refuses |
 | --- | --- |

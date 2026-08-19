@@ -19,8 +19,8 @@ publishing no longer happens here.
 uv run de check
 ```
 
-That is the whole local gate: lint, format, types, tests, coverage floors, and
-seven repository-integrity checks. It is bound to `pre-commit` (fast subset) and
+That is the whole gate: lint, format, types, tests, coverage floors, and the
+repository-integrity checks tabled below. It is bound to `pre-commit` (fast subset) and
 `pre-push` (everything), and the same command runs in CI on every push and pull
 request. Run it before you believe anything works.
 
