@@ -12,18 +12,18 @@ Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 uv sync --group dev
 ```
 
-Add `--group docs` only if you will publish the website. The gate that refuses a
-stale build is pure Python and offline, so it refuses either way.
+That is the whole install. Publishing the website needs nothing extra, because
+publishing no longer happens here.
 
 ```bash
 uv run de check
 ```
 
 That is the whole local gate: lint, format, types, tests, coverage floors, and
-seven repository-integrity checks. There is no cloud CI, so `de check` is the
-only thing standing between a mistake and the published record. It is bound to
-`pre-commit` (fast subset) and `pre-push` (everything). Run it before you
-believe anything works.
+seven repository-integrity checks. **No CI gates this repository**, so `de check`
+is the only thing standing between a mistake and the published record. It is
+bound to `pre-commit` (fast subset) and `pre-push` (everything). Run it before
+you believe anything works.
 
 `de check` makes no model calls and is fully deterministic.
 
@@ -116,16 +116,17 @@ uv run de site
 ```
 
 That writes `site/build-manifest.json`, which records a hash of every file the
-site renders. Commit it with the document. Publishing is separate and manual:
+site renders. Commit it with the document.
+
+Publishing is not your job any more. Merging to `main` deploys the site through
+[`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml), and
+nothing on a laptop can publish. That gate still cannot see the live page —
+`de check` is offline by design — so the question is asked separately when you
+want the answer:
 
 ```bash
-uv run de site --deploy
+uv run de deployed
 ```
-
-That gate cannot see one thing. It proves the committed build matches the
-current tree. It does not prove the build was ever pushed, because `de check` is
-offline by design and cannot consult the published branch. Nothing checks that
-you ran `--deploy`.
 
 ## Reporting that a skill does not work
 

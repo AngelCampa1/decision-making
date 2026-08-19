@@ -75,13 +75,10 @@ dev = [
     "types-pyyaml>=6.0.12.20260724",
 ]
 
-# Publishing the site, and nothing else. Separated from `dev` because `de check`
-# must run without it: the staleness gate is pure Python and offline, so a
-# contributor who never publishes still gets the refusal. `ghp-import` is
-# imported lazily inside `de site --deploy` for the same reason.
-docs = [
-    "ghp-import>=2.1",
-]
+# There is no `docs` group any more. It held `ghp-import`, which existed so a
+# laptop could force-push `gh-pages`. Publishing moved to
+# `.github/workflows/deploy-site.yml` on 2026-08-19 and nothing local publishes,
+# so `uv sync --group dev` is now the whole install.
 
 [tool.hatch.build.targets.wheel]
 packages = ["evals/src/decision_evals"]
@@ -134,10 +131,8 @@ mypy_path = "evals/src"
 packages = ["decision_evals"]
 
 [[tool.mypy.overrides]]
-# These ship without complete stubs. `ghp_import` is also in the `docs` group
-# rather than `dev`, so on a plain dev checkout the import does not resolve at
-# all -- which is the intended shape: `de check` never reaches it.
-module = ["statsmodels.*", "scipy.*", "ghp_import.*"]
+# These ship without complete stubs.
+module = ["statsmodels.*", "scipy.*"]
 ignore_missing_imports = true
 
 # --------------------------------------------------------------------------- #
@@ -227,6 +222,12 @@ output = "coverage.json"
 # and what stops an unstamped record reaching a stamped one unnoticed. A wrong
 # branch here republishes a number under the wrong answer key.
 "decision_evals/rescore.py" = { line = 100.0, branch = 100.0 }
+# The only online check here, and the one that answers what visitors actually
+# get. Every branch in it is a different reading of the live site -- current,
+# behind, built against a stale manifest, or unaskable -- and collapsing the
+# last of those into either of the others is the failure this module was added
+# to remove, one level up.
+"decision_evals/deployed.py" = { line = 100.0, branch = 100.0 }
 # A generator bug silently changes the benchmark rather than failing loudly.
 "decision_evals/providers" = { line = 100.0, branch = 100.0 }
 "decision_evals/generators" = { line = 98.0, branch = 95.0 }

@@ -1,6 +1,7 @@
-# Local git hooks. There is no cloud CI — nothing in this gate needs a remote
+# Local git hooks. No CI gates this repository — nothing here needs a remote
 # runner, and a green local tree that actually ran is more credible than a
-# matrix with silently-skipped jobs.
+# matrix with silently-skipped jobs. The one workflow in `.github/workflows/`
+# deploys the site and checks nothing, so this file is still the whole gate.
 #
 # Install both stages once:
 #   python -m uv run pre-commit install

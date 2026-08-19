@@ -3,7 +3,7 @@
 ## Why
 
 <!--
-There is no cloud CI. `de check` is the only thing between a mistake and the
+No CI gates this repository. `de check` is the only thing between a mistake and the
 published record, so the checklist below is the review.
 -->
 

@@ -1,0 +1,108 @@
+# The deployer, and the only workflow in this repository.
+#
+# It publishes; it does not gate. `de check` is still the whole gate: local,
+# offline, deterministic, bound to pre-commit and pre-push. Nothing here checks
+# anything, and nothing here may be skipped to get a change in.
+#
+# What it removes is the last hand-carried step. `de site --deploy` used to
+# force-push whatever local HEAD happened to be to a `gh-pages` branch. On
+# 2026-08-19 that published a build of a work-in-progress commit from a feature
+# branch, caught by hand nine minutes later; separately the published branch sat
+# 43 minutes and one commit behind `main` with nothing to say so. Publishing is
+# now a function of `main` rather than of who remembered.
+#
+# The Pages source is "GitHub Actions" (`build_type: workflow`). There is no
+# `gh-pages` branch any more: a branch-sourced site is a second copy of the
+# build that can disagree with this one, which is the shape of problem the site
+# already avoids by rendering this repository's markdown in place.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# `contents: read` is for the checkout. `pages: write` and `id-token: write` are
+# what `deploy-pages` needs -- the OIDC token is how Pages verifies a deployment
+# came from this workflow in this repository rather than from anywhere else.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and never cancelled halfway. Two pushes a minute
+# apart must not race for the same slot, and queueing means the later commit
+# wins, which is the right answer. `cancel-in-progress: true` would abort a
+# deploy mid-upload, which is how a Pages deployment gets wedged.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Depth 1. The content collections read ../docs, ../notebook, ../results,
+      # ../skills and the root *.md with Node's fs, so the build needs the whole
+      # tree but never consults history. The commit this run publishes comes
+      # from the event context, not from a rev-parse.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      # Astro 5 wants Node >= 22, and the transitive floor is higher than that:
+      # an optional linux-x64 dependency that installs on this runner and not on
+      # a Windows machine asks for ^22.20.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      # No `static_site_generator:` input. That input takes only nuxt, next,
+      # gatsby or sveltekit -- astro is not a value it accepts -- and `site` and
+      # `base` are already committed in site/astro.config.mjs. Passing them from
+      # this step's outputs, as the Astro starter workflow does, would make the
+      # deployed base path a property of the runner rather than of the
+      # repository, and the two could then disagree. This step stays for its
+      # other effect: a clear failure here if Pages is not workflow-sourced,
+      # rather than a confusing one further down.
+      - uses: actions/configure-pages@v6
+
+      - name: Install
+        working-directory: site
+        run: npm ci
+
+      - name: Build
+        working-directory: site
+        run: npm run build
+
+      - name: Record what this run published
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 .github/scripts/write_deployment.py
+
+      # `include-hidden-files`, because this action tars with
+      # `--exclude=.[^/]*` by default and would otherwise drop `dist/.nojekyll`.
+      # Pages does not run Jekyll over an Actions artifact, so nothing breaks
+      # without it -- but a published tree that differs from the one `de site`
+      # produces locally is exactly the second copy this repository exists to
+      # not have.
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/dist
+          include-hidden-files: 'true'
+
+  deploy:
+    needs: build
+    # A `workflow_dispatch` from a branch builds and uploads without publishing.
+    # That is what makes it safe to prove this workflow before the Pages source
+    # is switched over, and safe to test a change to it afterwards.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

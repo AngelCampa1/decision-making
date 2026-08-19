@@ -14,7 +14,6 @@ from __future__ import annotations
 import shutil
 import subprocess
 import sys
-from contextlib import chdir
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
@@ -27,6 +26,9 @@ from decision_evals.claims import check_claims
 from decision_evals.decisions import GOVERNED as DECISION_PATHS
 from decision_evals.decisions import GovernedCommit, check_decisions
 from decision_evals.decisions import census as decisions_census
+from decision_evals.deployed import BEHIND as DEPLOY_BEHIND
+from decision_evals.deployed import CURRENT as DEPLOY_CURRENT
+from decision_evals.deployed import check_deployed
 from decision_evals.docs import census as docs_census
 from decision_evals.docs import check_docs
 from decision_evals.provenance import (
@@ -500,13 +502,7 @@ def check_site_step() -> StepResult:
 
 
 @app.command()
-def site(
-    deploy: bool = typer.Option(
-        False,
-        "--deploy",
-        help="Push the built site to the gh-pages branch after building.",
-    ),
-) -> None:
+def site() -> None:
     """Build the site and record what it was built from.
 
     The manifest is written **after** a successful build, never before: a
@@ -550,40 +546,25 @@ def site(
     target = REPO_ROOT / SITE_MANIFEST_PATH
     target.write_text(render_manifest(REPO_ROOT), encoding="utf-8", newline="\n")
     typer.secho(f"wrote {SITE_MANIFEST_PATH}", fg=typer.colors.GREEN)
+    typer.echo("not published. Publishing happens on push to `main`; see `de deployed`.")
 
-    if not deploy:
-        typer.echo("not deployed. `de site --deploy` publishes to gh-pages.")
-        return
 
-    # Imported here rather than at module scope so that `de check` never needs
-    # the publishing tool -- the staleness gate is offline and pure Python, and
-    # a contributor who never publishes still gets its refusal.
-    try:
-        from ghp_import import ghp_import
-    except ImportError:
-        typer.secho(
-            "ghp-import is not installed. Run `uv sync --group dev --group docs`.",
-            fg=typer.colors.RED,
-        )
-        raise typer.Exit(1) from None
+@app.command()
+def deployed() -> None:
+    """Report whether the published site is a build of the current `main`.
 
-    head = _git_output(["rev-parse", "--short", "HEAD"])
-
-    # `nojekyll=True` writes `.nojekyll` into the published branch. Pages runs
-    # Jekyll over a served branch and Jekyll drops every path beginning with an
-    # underscore, so without it Astro's `_astro/` bundles 404 while the HTML
-    # renders fine -- a site that looks broken in exactly the way nobody checks.
-    # `site/public/.nojekyll` covers the same ground from the other side.
-    typer.echo("publishing to gh-pages")
-    with chdir(REPO_ROOT):  # ghp-import drives git from the process cwd
-        ghp_import(
-            str(site_dir / "dist"),
-            mesg=f"site: build from {head or 'unknown'}",
-            nojekyll=True,
-            push=True,
-            force=True,
-        )
-    typer.secho("published", fg=typer.colors.GREEN)
+    Online, and deliberately not a `de check` step. That gate is offline and
+    deterministic by design; a step that reaches the network would fail on a
+    plane and turn a refusal into a coin toss.
+    """
+    state = check_deployed(REPO_ROOT)
+    colour = {
+        DEPLOY_CURRENT: typer.colors.GREEN,
+        DEPLOY_BEHIND: typer.colors.RED,
+    }.get(state.status, typer.colors.YELLOW)
+    typer.secho(str(state), fg=colour)
+    if state.exit_code:
+        raise typer.Exit(state.exit_code)
 
 
 @app.command()

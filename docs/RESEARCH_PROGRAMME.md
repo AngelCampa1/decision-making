@@ -2260,7 +2260,8 @@ Unchanged, and they apply to every track:
   never money spent. It is a burn meter for quota.
 - The budget is quota and wall-clock, not dollars. Never drop a tier or trim a
   stratum to save money; there is no money to save.
-- `python -m uv run de check` is the gate. No cloud CI.
+- `python -m uv run de check` is the gate. No CI gates this repository; the
+  one workflow it has publishes the site.
 - Golden files pin the corpus byte-exact. Regeneration needs `pytest --bless`
   and the diff belongs in review.
 - Commits attributed to the GitHub noreply address.

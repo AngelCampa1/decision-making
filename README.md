@@ -237,13 +237,7 @@ Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 uv sync --group dev
 ```
 
-Add `--group docs` if you will publish the site. Nothing else needs it: the
-staleness gate is pure Python and offline, so a contributor who never publishes
-still gets its refusal.
-
-```bash
-uv sync --group dev --group docs
-```
+That is the whole install. There is no second dependency group.
 
 Run the full local gate, which is lint, types, tests, coverage floors, and the
 repository-integrity checks:
@@ -252,17 +246,33 @@ repository-integrity checks:
 uv run de check
 ```
 
-There is no cloud CI, and no workflow directory for one either. `de check` is
-bound to `pre-commit` (fast subset) and `pre-push` (everything), so a red tree
-can't be pushed. It makes no model calls; model-backed evaluation is run
-explicitly from [`scripts/`](scripts/). The website is built the same way, by
-hand on a machine, and pushed to `gh-pages` by `de site --deploy`.
+**No CI gates this repository.** `de check` is bound to `pre-commit` (fast
+subset) and `pre-push` (everything), so a red tree can't be pushed, and it runs
+on a machine where you can watch it. It makes no model calls; model-backed
+evaluation is run explicitly from [`scripts/`](scripts/).
 
-That arrangement cannot check one thing, and it is stated here rather than
-papered over. The site gate proves the committed build matches the current
-tree. It does not prove that build was ever pushed. `de check` is offline on
-purpose, so it cannot consult `origin/gh-pages`, and a green gate beside a
-build that never left the machine is exactly as green as a deployed one.
+There is now one workflow, and it publishes rather than checks.
+[`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml) builds
+the site and deploys it to GitHub Pages on every push to `main`. Nothing else
+can publish: the Pages source is the workflow, there is no `gh-pages` branch,
+and no laptop has a way to push one.
+
+That replaced the step this section used to admit it could not check. The site
+gate proves the committed build matches the current tree; it never proved the
+build was pushed, and for six days in August 2026 the live site was a
+hand-written page nothing here had ever touched. Publishing is now a function
+of `main` instead of a function of who remembered. `de check` is still offline
+on purpose and still cannot see the live site, so the question is answered on
+demand by a separate command:
+
+```bash
+uv run de deployed
+```
+
+It fetches what the site says about its own origin and compares that against
+`origin/main`. Exit 0 means the live site is a build of the current `main`,
+1 means it is behind, and 2 means the question could not be answered — which is
+deliberately not the same as 0.
 
 Several of its steps check the method rather than the code, each one added
 after the failure it prevents had already happened here:

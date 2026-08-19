@@ -360,8 +360,9 @@ If you are an agent contributing here rather than a user installing the skills:
   for: it says how to keep going — derive the parameter or record the choice,
   adjudicate the failures blind, run the grid, confirm the finding.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
-  coverage floors, skill validation, run provenance and integrity wiring. There
-  is no cloud CI. Run it before you believe anything works.
+  coverage floors, skill validation, run provenance and integrity wiring. No CI
+  gates this repository — the one workflow it has publishes the site and checks
+  nothing. Run `de check` before you believe anything works.
 - **Editing a document means rebuilding the site in the same change.** The site
   under `site/` renders this repository's markdown *in place* — `docs/`,
   `notebook/`, `results/`, `skills/` and the root are read by the build, never
@@ -373,11 +374,20 @@ If you are an agent contributing here rather than a user installing the skills:
   action, so this will fire often. It is the price of not having two copies.
 
   **What that gate cannot see, stated so nobody mistakes green for correct.** It
-  proves the site was *built* from the current tree. It does not prove the build
-  was ever *pushed*: `de check` is offline and deterministic by design, so it
-  cannot consult `origin/gh-pages`, and a green gate beside a build that never
-  left the machine is exactly as green as a deployed one. Only
-  `de site --deploy` closes that, and nothing checks that you ran it.
+  proves the site was *built* from the current tree. It does not prove anyone is
+  serving that build: `de check` is offline and deterministic by design, so it
+  cannot look at the live site, and a green gate beside a page nobody is serving
+  is exactly as green as a deployed one.
+
+  **Publishing itself is no longer yours to remember.** Merging to `main` runs
+  `.github/workflows/deploy-site.yml`, which builds the site and deploys it to
+  Pages. There is no `gh-pages` branch and no local publish command; the
+  `de site --deploy` flag was removed on 2026-08-19 after it published a build
+  of a work-in-progress commit from a feature branch, because it force-pushed
+  whatever local `HEAD` happened to be. What is left for you is asking whether
+  it landed: `python -m uv run de deployed` fetches the live site's own record
+  of which commit produced it and compares that against `origin/main`. It exits
+  2 when it cannot tell, which is deliberately not the same as 0.
 - **A published run must carry its own provenance, and the gate enforces it.**
   `results/<skill>/<date>-<sha7>[-slug]/README.md` must declare
   `**Answer key:** <label set> v<n>` matching the `set_version` in the records
