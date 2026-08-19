@@ -83,9 +83,12 @@ The same step requires a run to declare the answer-key version its numbers were
 computed under, and refuses a README whose declared version disagrees with the
 records beside it.
 
-One run is baselined out of this rule by name, with its reason written down:
-`results/decision-making/2026-08-12-40b6ba5/`, the 365-call run published with
-no prediction. See [`results/provenance-baseline.txt`](../results/provenance-baseline.txt).
+Two runs are baselined out of this rule by name, with their reasons written
+down: `results/decision-making/2026-08-12-40b6ba5/`, the 365-call run published
+with no prediction, and `results/evidence-ledger/2026-08-10-baseline-corpus/`,
+which predates the convention. This read *one* until 2026-08-19, while the file
+it points at named two. See
+[`results/provenance-baseline.txt`](../results/provenance-baseline.txt).
 
 ### 3b. For `confirm` runs: built, tested, and never yet used
 
@@ -209,8 +212,12 @@ not by secrecy.
 
 We test verifiers before trusting them: fixtures of known-correct, known-wrong,
 paraphrased, and boundary responses, run through the verifier first. Every zero
-score is classified as agent failure, verifier defect, environment leak, or
-infrastructure error rather than assumed to be the first.
+score is classified rather than assumed to be the model's fault. The code admits
+six causes, not the four this section listed until 2026-08-19: `agent_wrong`,
+`format_violation`, `infrastructure`, `item_defect`, `verifier_defect` and
+`environment_leak`. Separating a bad item from a bad checker is the deliberate
+one — they have completely different fixes, and the omission here had the spec
+disagreeing with `scorers/answer.py` for as long as both existed.
 
 Judges produce secondary metrics only; no primary metric is ever a judge score.
 They emit a binary verdict plus a written critique rather than a Likert rating,

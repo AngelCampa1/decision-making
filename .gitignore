@@ -86,3 +86,8 @@ results/track-0/
 # same reasons as results/calibration/ apply. Completed runs are published as
 # results/<skill>/<date>-<sha7>/ with the numbers they produced.
 results/triggers/
+
+# Agent-local scratch: session config and throwaway worktrees. Untracked and
+# unignored, it put a scratch worktree's Python under `ruff check .` and broke
+# the gate for every session at once.
+.claude/
