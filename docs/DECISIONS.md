@@ -24,6 +24,26 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-19 — The answer key's header described a four-row router table
+
+**Commits:** `c55d4af`
+
+`datasets/triggers/decision-making.yaml`'s header said `route` "names which of
+the four procedures the SKILL.md router should select". The table has offered
+six since `ae55b5b`. Corrected to say which procedure, and to name the gap
+rather than write around it: no positive in this file routes to `council` or
+`hinge`, which is deferred on the record in `corpus-baseline.txt`.
+
+**Comment only.** No `route` line is touched, no label moves, and `set_version`
+does not bump — so nothing computed from this key changes and no published
+number is affected. The entry exists because the path is governed and the gate
+refuses a governed commit without one, not because a label moved.
+
+The reason this is registered rather than folded into a prose sweep: a header
+that undercounts the table is how the unreachable-procedure gap stayed
+invisible in the first place. `_check_unreachable_procedures` now reports it
+mechanically, and this sentence no longer disagrees with it.
+
 ## 2026-08-19 — Track H authoring pass two: five triplets authored, one clean, three cut, one blocked
 
 **Commits:** `b1d97bd`, `e5dc197`
