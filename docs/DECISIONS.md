@@ -26,7 +26,7 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ## 2026-08-19 — Track H authoring pass two: five triplets authored, one clean, three cut, one blocked
 
-**Commits:** `b84e7c0`, `daa1c1e`
+**Commits:** `b84e7c0`
 
 Adds `t01`–`t05` and `index-pass2.yaml` under `datasets/tailoring/`. `index.yaml`
 is untouched, so the shortcut battery does not see them and
