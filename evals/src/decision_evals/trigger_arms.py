@@ -1805,7 +1805,7 @@ def _labels_by_case(rows: Iterable[Record]) -> dict[str, bool]:
 
 
 def _respondent_grid(
-    arms: Mapping[str, Iterable[Record]],
+    arms: Mapping[str, Sequence[Record]],
 ) -> tuple[tuple[Respondent, ...], dict[str, bool], dict[str, dict[Respondent, bool]], int]:
     """``(respondents, labels, correctness, unparseable)`` over a set of arms.
 
@@ -1895,7 +1895,7 @@ def _respondent_grid(
     return tuple(sorted(respondents)), labels, correctness, unparseable
 
 
-def item_difficulty(arms: Mapping[str, Iterable[Record]]) -> dict[str, ItemDifficulty]:
+def item_difficulty(arms: Mapping[str, Sequence[Record]]) -> dict[str, ItemDifficulty]:
     """Per item, correct rows over parsed rows across the respondents.
 
     Estimator 1 of the registered four. The denominator is the respondents whose
@@ -1946,7 +1946,7 @@ def _pearson(xs: Sequence[float], ys: Sequence[float]) -> float | None:
     return covariance / math.sqrt(sum_xx * sum_yy)
 
 
-def item_discrimination(arms: Mapping[str, Iterable[Record]]) -> dict[str, ItemDiscrimination]:
+def item_discrimination(arms: Mapping[str, Sequence[Record]]) -> dict[str, ItemDiscrimination]:
     """Per item, the **corrected** item-total point-biserial.
 
     Estimator 2 of the registered four: the correlation between item *i*'s
@@ -2032,7 +2032,7 @@ def item_discrimination(arms: Mapping[str, Iterable[Record]]) -> dict[str, ItemD
     return results
 
 
-def broken_item_screen(arms: Mapping[str, Iterable[Record]]) -> BrokenItemScreen:
+def broken_item_screen(arms: Mapping[str, Sequence[Record]]) -> BrokenItemScreen:
     """Items at ``p == 0.0``, and separately the items at ``p == 1.0``.
 
     Estimator 3 of the registered four, and the cheapest screen there is: a 0%
@@ -2068,7 +2068,7 @@ def broken_item_screen(arms: Mapping[str, Iterable[Record]]) -> BrokenItemScreen
     )
 
 
-def triple_joint_outcomes(arms: Mapping[str, Iterable[Record]]) -> dict[str, TripleJoint]:
+def triple_joint_outcomes(arms: Mapping[str, Sequence[Record]]) -> dict[str, TripleJoint]:
     """Per triple, the fraction of respondents that got all of its items right.
 
     Estimator 4 of the registered four. The three items of a triple are one
@@ -2140,7 +2140,7 @@ def triple_joint_outcomes(arms: Mapping[str, Iterable[Record]]) -> dict[str, Tri
     return results
 
 
-def item_analysis(arms: Mapping[str, Iterable[Record]]) -> ItemAnalysis:
+def item_analysis(arms: Mapping[str, Sequence[Record]]) -> ItemAnalysis:
     """The four registered item estimators over one respondent set.
 
     Registered in
@@ -2155,6 +2155,12 @@ def item_analysis(arms: Mapping[str, Iterable[Record]]) -> ItemAnalysis:
     the numbers are then about that arm alone and the discrimination column is
     mostly undefined, which is a property of the denominator rather than of the
     corpus.
+
+    The values are ``Sequence`` and not ``Iterable`` because this walks each one
+    five or six times -- once per estimator, and :func:`broken_item_screen`
+    twice on its own. A generator would be empty from the second walk onward and
+    the diagnosis would be ``arm 'x' holds no records``, which names the caller's
+    argument type as a corpus defect.
 
     Positives and negatives are never averaged together: two means come back and
     there is no third.
