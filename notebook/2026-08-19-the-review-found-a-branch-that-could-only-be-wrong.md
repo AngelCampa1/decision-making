@@ -88,3 +88,55 @@ unpinned, because the plugin-validation step shells out to it and
 failure rather than a skip. Pinning the version trades a supply-chain surface
 for a gate that goes stale silently, and that is the file's author's call rather
 than this pass's. Recorded here rather than dropped.
+
+## Addendum: a band over a coin toss
+
+Pushing this branch was refused by `pre-push` on
+`test_an_abort_keeps_the_calls_it_already_paid_for` — a test in the runner suite
+that nothing in this change touches. It passed 5 of 5 times on its own and 3 of
+3 times running its whole file, and failed twice under the load of a full
+`de check`. That test had already been widened once the same day, after CI
+returned `[5, 5, 5, 5, 5, 0, 5, 5]`, to allow `{0, len(items) - 1}`.
+
+**My first diagnosis was wrong and is recorded here because it was.** The helper
+chose its one failing call with `if not first.is_set(): first.set()`, a check and
+a set rather than one step, with every thread released from a barrier at the same
+instant. Two threads reading the flag before either wrote it would raise twice
+and lose a success. I fixed it with a lock and moved on.
+
+Then I measured it: 4000 trials of the bare pattern, then 120 trials of the real
+experiment through `run_arm`, old helper and new, counting both survivors and
+raisers.
+
+| | raisers | survivors |
+|---|---|---|
+| check-then-set | `{1: 120}` | `{0: 119, 1: 1}` |
+| locked | `{1: 120}` | `{0: 119, 5: 1}` |
+
+**Exactly one call raised, every time, in both arms.** The race is real in
+principle and was not the cause of anything. The lock fixed nothing.
+
+The actual mechanism is in `run_arm`: it waits with `FIRST_COMPLETED`, so the
+returned set holds whatever had finished *by then*. How many successes share a
+batch with the failure is a timing property of the machine, not a property of the
+drain — and 119 of 120 trials kept nothing at all, because the failure usually
+arrives alone. No assertion over a survivor count can be true of that. The
+`{0, n - 1}` band was not too strong or too weak; it was a band over a coin toss,
+and both it and the `len(set(...)) == 1` before it were the same mistake
+twice.
+
+So the batch is now made whole by construction — `wait` is patched to
+`ALL_COMPLETED` for that test — and the assertion is `[len(items) - 1] * 8`,
+every trial, no band. Ten consecutive runs pass. Reintroducing the defect
+(`raise` instead of `failure = failure or exc; continue`) fails it three times
+out of three, with survivor counts `[4, 3, 4, 0, 3, 5, 2, 1]`,
+`[2, 5, 3, 4, 2, 2, 2, 3]`, `[2, 5, 3, 4, 2, 2, 2, 4]` — the set-iteration-order
+spread the test docstring has described from the beginning, and note that the
+old band would have accepted the `0`s and `5`s in it.
+
+**This is the estimator rule again, in its third costume today.** The first was a
+refusal that could not return correct. The second was the same shape in a test:
+an assertion whose subject was noise, so it could not fail *for the reason it
+named*. It failed for load. The rule as written asks whether some possible
+response would score above zero; the question it is really asking is whether the
+thing being measured is the thing the sentence is about.

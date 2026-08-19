@@ -11,6 +11,8 @@ from __future__ import annotations
 import json
 import threading
 from collections.abc import Callable
+from concurrent.futures import ALL_COMPLETED
+from concurrent.futures import wait as futures_wait
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
@@ -241,26 +243,52 @@ def test_an_authentication_failure_still_stops_a_concurrent_run(
         )
 
 
-def _one_fails_after_all_arrive(width: int) -> Callable[[str, str, bool], CliResult]:
-    """A `CallFn` where every call parks until all of them have arrived.
+def _one_of_them_fails() -> Callable[[str, str, bool], CliResult]:
+    """A `CallFn` where exactly one call raises and the rest succeed.
 
-    Then exactly one raises. Parking first is what puts the failure and the
-    successes into a single `wait()` batch, which is the case the drain in
-    `run_arm` exists for; without it the failure usually completes alone and
-    the batch has nothing to lose.
+    Which one is whichever takes the lock first, and that does not matter: the
+    batch is made deterministic by `_batch_is_whole` rather than by timing here.
     """
-    barrier = threading.Barrier(width, timeout=30)
-    first = threading.Event()
+    chooser = threading.Lock()
+    chosen = False
 
     def one_bad_apple(prompt: str, system_prompt: str, append: bool) -> CliResult:
         del prompt, system_prompt, append
-        barrier.wait()
-        if not first.is_set():
-            first.set()
+        nonlocal chosen
+        with chooser:
+            mine, chosen = not chosen, True
+        if mine:
             raise AuthenticationError("nope")
         return _result("ANSWER: nope")
 
     return one_bad_apple
+
+
+def _batch_is_whole(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Make `run_arm` see every in-flight call in one `wait()` return.
+
+    Without this the test asks a timing question. `run_arm` waits with
+    `FIRST_COMPLETED`, so the returned set holds whatever finished by then --
+    the failure sometimes arrives alone, sometimes with one success, sometimes
+    with all of them. That is not a property of the drain, and no assertion over
+    a survivor count is true of it.
+
+    Measured on 2026-08-19 over 120 trials of the barrier-parked version this
+    replaces: exactly one call raised every single time, and the checkpoint
+    still came back holding 0 records 119 times and 1 record once. So the
+    `{0, n - 1}` band was a band over a coin toss, and it failed a full
+    `de check` and a `pre-push` while passing eight consecutive runs of this
+    file on its own.
+
+    Waiting for all of them instead puts the failure and every success into one
+    batch by construction -- the case the drain exists for, and the only one
+    where "did it keep them" has an answer.
+    """
+    monkeypatch.setattr(
+        runner,
+        "wait",
+        lambda fs, timeout=None, return_when=None: futures_wait(fs, return_when=ALL_COMPLETED),
+    )
 
 
 def _counts_into(made: list[str]) -> Callable[[str, str, bool], CliResult]:
@@ -347,7 +375,9 @@ def test_a_concurrent_run_stops_where_the_serial_one_does(
     assert len(set(counts.values())) == 1, f"call count varied with concurrency: {counts}"
 
 
-def test_an_abort_keeps_the_calls_it_already_paid_for(items: list[Item], tmp_path: Path) -> None:
+def test_an_abort_keeps_the_calls_it_already_paid_for(
+    items: list[Item], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """A failure must not discard its own batch's successes.
 
     Returning on the first failing future threw away calls that had already
@@ -355,10 +385,14 @@ def test_an_abort_keeps_the_calls_it_already_paid_for(items: list[Item], tmp_pat
     order -- twelve trials produced three different checkpoints from the same
     inputs. Those calls were made and paid for, so discarding them makes the
     ledger under-read the real burn and makes an aborted run irreproducible.
+
+    Eight trials rather than one, because set iteration order is exactly what
+    the defect rides on: a single trial can put the failure last and see every
+    success written by the broken code too.
     """
+    _batch_is_whole(monkeypatch)
     survivors = []
     for attempt in range(8):
-        one_bad_apple = _one_fails_after_all_arrive(len(items))
         checkpoint = tmp_path / f"run-{attempt}.jsonl"
         with pytest.raises(RunError):
             run_arm(
@@ -366,7 +400,7 @@ def test_an_abort_keeps_the_calls_it_already_paid_for(items: list[Item], tmp_pat
                 ARM,
                 model="haiku",
                 checkpoint=checkpoint,
-                call=one_bad_apple,
+                call=_one_of_them_fails(),
                 ledger=BudgetLedger(limit_usd=10.0),
                 concurrency=len(items),
             )
@@ -376,21 +410,13 @@ def test_an_abort_keeps_the_calls_it_already_paid_for(items: list[Item], tmp_pat
         assert all(record.arm == ARM.arm for record in records)
         survivors.append(len(records))
 
-    # Not `len(set(survivors)) == 1`, which is what this asserted until the
-    # first CI run returned [5, 5, 5, 5, 5, 0, 5, 5]. Draining the batch does
-    # not make the *count* deterministic and cannot: which futures are in a
-    # given `wait()` return is a timing property, and sometimes the failure
-    # completes alone before any success has landed.
-    #
-    # What the drain does guarantee is that no success is discarded from a
-    # batch that also contained the failure. So the observable invariant is
-    # that a trial keeps either none of them or all of them, never some -- and
-    # an intermediate count is precisely the defect. Before the fix the same
-    # experiment returned 3, 2 and 1 across trials.
-    allowed = {0, len(items) - 1}
-    assert set(survivors) <= allowed, (
-        f"an abort kept a partial batch: {survivors}, expected each trial in {sorted(allowed)}. "
-        "Returning on the first failing future discarded whichever successes sorted after it."
+    # Every trial, not "most", and not "one of two allowed values". With the
+    # batch made whole there is one right answer: exactly one call raised, so
+    # `len(items) - 1` succeeded, and the drain has to have kept all of them.
+    assert survivors == [len(items) - 1] * 8, (
+        f"an abort dropped successes from its own batch: {survivors}, expected "
+        f"{len(items) - 1} every time. Returning on the first failing future "
+        "discarded whichever successes sorted after it."
     )
 
 
