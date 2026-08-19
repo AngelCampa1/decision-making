@@ -766,17 +766,24 @@ def report_against(done: dict[tuple[str, int], dict[str, object]], other: Path, 
     proven and inert, the exact shape `decision_evals.wiring` exists to refuse
     one level up. A guard that refuses a comparison nobody runs refuses nothing.
 
-    A refusal from any of the four is **printed, not swallowed**: it is the
-    output. "These two arms cannot be compared, and here is which axis they
-    differ on" is the answer to the question `--against` asks.
+    A refusal from any of them is **printed, not swallowed**: it is the output.
+    "These two arms cannot be compared, and here is which axis they differ on"
+    is the answer to the question `--against` asks.
 
-    Nothing is collected for this: pointed at an already-complete checkpoint the
-    run makes zero calls and prints the comparison.
+    Nothing extra is collected for this: pointed at a checkpoint whose own arm
+    this run has already completed, the run makes zero calls and prints the
+    comparison. `--against` by itself collects nothing.
+
+    `ValueError` is caught beside `OSError`, because `load_arm` raises
+    `UnicodeDecodeError` on a cp1252 checkpoint and `json.JSONDecodeError` on a
+    half-written line and both are `ValueError` subclasses. This runs after
+    every model call has been made, on a path the caller typed, so an
+    unreadable file must cost the comparison and not the run's report.
     """
     print(f"\n{'=' * 60}\nAGAINST {other.name}\n{'=' * 60}")
     try:
         rows = load_arm(other)
-    except OSError as error:
+    except (OSError, ValueError) as error:
         print(f"  not available: {error}")
         return
     if not rows:
@@ -915,9 +922,10 @@ def main() -> int:
         type=Path,
         help=(
             "also score this run's arm against another checkpoint, paired per case id "
-            "with the registered Wilcoxon. Pointed at a complete checkpoint the run "
-            "makes no calls and prints only the comparison; a comparability guard that "
-            "refuses prints the refusal"
+            "with the registered Wilcoxon. This collects nothing itself, but the run it "
+            "is attached to still does: it is free only when THIS run's own checkpoint "
+            "is already complete, and otherwise the run makes its calls first as usual. "
+            "A comparability guard that refuses prints the refusal"
         ),
     )
     parser.add_argument(

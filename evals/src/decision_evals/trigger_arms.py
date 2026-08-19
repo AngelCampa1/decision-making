@@ -21,9 +21,11 @@ labels come from the trigger set and the records come from the runner.
 
 from __future__ import annotations
 
+import json
 import math
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from statistics import median
 from typing import Any, Literal
 
@@ -2196,16 +2198,22 @@ def item_analysis(arms: Mapping[str, Iterable[Record]]) -> ItemAnalysis:
     )
 
 
-def load_arm(path: Any) -> list[dict[str, Any]]:
+def load_arm(path: Path | str) -> list[Record]:
     """Every JSONL record at ``path``, read as UTF-8.
 
     The encoding is explicit because it has bitten this repository: Windows
     defaults to cp1252 and a checkpoint containing a typographic dash raises
-    ``UnicodeDecodeError`` halfway through scoring a completed run.
-    """
-    import json
-    from pathlib import Path
+    ``UnicodeDecodeError`` halfway through scoring a completed run. That, and
+    ``json.JSONDecodeError`` on a half-written line, are the two failures a
+    caller has to handle, and **both are ``ValueError`` subclasses rather than
+    ``OSError``** -- a caller catching only the second loses a completed run's
+    report to a file it merely read.
 
+    Raises:
+        OSError: if ``path`` cannot be read.
+        UnicodeDecodeError: if it is not UTF-8.
+        json.JSONDecodeError: if a non-blank line is not one JSON object.
+    """
     lines = Path(path).read_text(encoding="utf-8").splitlines()
     return [json.loads(line) for line in lines if line.strip()]
 

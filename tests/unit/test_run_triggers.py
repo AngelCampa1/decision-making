@@ -746,6 +746,47 @@ class TestAgainstReachesCompare:
         assert "REFUSED" in out
         assert "label revisions" in out
 
+    def test_a_label_that_moved_inside_one_key_version_is_refused(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """Identical model behaviour, one moved label, and no stamp to catch it.
+
+        Every verdict here is the same in both arms and both are stamped
+        `set_version: 4`, so all four stamp guards pass. Before the label guard
+        this printed accuracy 1.0000 against 0.6667 and an item-moved line.
+        """
+        moved = [dict(record) for record in _paired_rows()]
+        moved[0]["should_fire"] = False
+        other = tmp_path / "verdicts-relabelled.jsonl"
+        other.write_text("\n".join(json.dumps(record) for record in moved), encoding="utf-8")
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_against(done, other, "arm")
+        out = capsys.readouterr().out
+        assert "REFUSED" in out
+        assert "both labels" in out
+        assert "accuracy" not in out
+
+    def test_an_unreadable_checkpoint_costs_the_comparison_not_the_report(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """`load_arm` raises `ValueError`, not `OSError`, on a corrupt file.
+
+        This runs after every model call has been made, on a path the caller
+        typed. A half-written line and a cp1252 checkpoint both raise
+        `ValueError` subclasses, and catching only `OSError` loses a completed
+        run's report to a file the run did not write.
+        """
+        broken = tmp_path / "half-written.jsonl"
+        broken.write_text('{"case": "p1", "repeat":', encoding="utf-8")
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_against(done, broken, "arm")
+        assert "not available" in capsys.readouterr().out
+
+        latin = tmp_path / "cp1252.jsonl"
+        latin.write_bytes(b'{"case": "p\x961"}\n')
+        runner.report_against(done, latin, "arm")
+        assert "not available" in capsys.readouterr().out
+
     def test_an_empty_checkpoint_is_reported_not_compared(
         self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
     ) -> None:
