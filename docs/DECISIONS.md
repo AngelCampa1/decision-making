@@ -26,11 +26,13 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ## 2026-08-19 — Track H authoring pass two: five triplets authored, one clean, three cut, one blocked
 
-**Commits:** `b84e7c0`
+**Commits:** `b1d97bd`, `e5dc197`
 
 Adds `t01`–`t05` and `index-pass2.yaml` under `datasets/tailoring/`. `index.yaml`
 is untouched, so the shortcut battery does not see them and
-`corpus-baseline.txt` is neither relied on nor invalidated. `h01`–`h03` are
+`corpus-baseline.txt` is neither relied on nor invalidated. The triplet files
+landed in a separate commit because they had been committed on a shared branch
+by another session and had never reached `main`. `h01`–`h03` are
 byte-identical to their committed form: they are evidence of the pass-one shape
 and are not edited or deleted.
 
@@ -80,7 +82,7 @@ implying two independent confirmations.
 
 ## 2026-08-19 — `council` and `hinge` are the correct answer for no positive, and that is deferred rather than fixed
 
-**Commits:** `19c4e7c`
+**Commits:** `2ccfdb6`
 
 The shipped router table grew from four procedures to six earlier the same day.
 The answer key did not grow with it: every `route:` label in both corpora still
