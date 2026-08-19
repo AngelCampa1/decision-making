@@ -83,13 +83,47 @@ WAITING
 SO
   Wait for Thursday. Answer Friday morning.`,
   },
+  {
+    ord: '05',
+    name: 'Hear both sides',
+    file: 'council.md',
+    when: 'Two answers are both good and you argued one first.',
+    before: 'Should we sell the company or keep building it?',
+    after: `TWO CASES
+  Sell.  The price beats last year.
+  Stay.  The new product ships in March.
+
+WHERE THEY CLASH
+  Does the March date hold?
+  One side needs it. One side does not.
+
+SO
+  Answer that date first. It picks the side.`,
+  },
+  {
+    ord: '06',
+    name: 'Ask or decide',
+    file: 'hinge.md',
+    when: 'A fact is missing and you cannot tell if it matters.',
+    before: 'I do not know their budget. Do I send the proposal?',
+    after: `MISSING
+  their budget
+
+TRY IT BOTH WAYS
+  Big budget:    send it.
+  Small budget:  send it.
+
+SO
+  The budget does not change the answer.
+  Send it today. Stop waiting.`,
+  },
 ];
 
 const counts = [
-  { value: '4,240', label: 'model calls on record' },
+  { value: '13', label: 'runs published in full' },
   { value: '0', label: 'skills proven' },
-  { value: '8', label: 'of our own tests found broken' },
-  { value: '89%', label: 'of the test set a word count can pass' },
+  { value: '11', label: 'of our own tests found broken' },
+  { value: '0.71', label: 'the best score with no model at all' },
 ];
 
 const arms = [
@@ -117,7 +151,7 @@ const arms = [
           <p><strong>We have not proven this works.</strong> No skill here has passed a
           real test. The scorecard is empty on purpose.</p>
           <p>We built the measuring tools first. Every result is public. So are the
-          eight times we found our own test broken.</p>
+          eleven times we found our own test broken.</p>
         </div>
       </div>
 
@@ -143,7 +177,7 @@ const arms = [
     <p class="bad-answer">&ldquo;&hellip;and given the rain in Paraguay, pack a raincoat.&rdquo;</p>
     <p>A big choice and a small one get the same thought. That is the other half of the problem.</p>
 
-    <h2>Four methods. It reads one.</h2>
+    <h2>Six methods. It reads one.</h2>
     <p>It asks one question first. What is hard here? The answer picks the method.</p>
 
     <ol class="procedures breakout">
@@ -171,9 +205,10 @@ const arms = [
     </p>
 
     <h2>It picks one, then answers</h2>
-    <p>More than one can apply. Then they run in order. Each one feeds the next.</p>
+    <p>More than one can apply. Then four of them run in order. Each one feeds the next.</p>
     <p class="chain">sort the pile &rarr; check it fits &rarr; follow what it starts &rarr; now or later</p>
     <p>Two is usually enough. Three means you have two choices, not one.</p>
+    <p>The last two do not join that chain. Each one runs on its own.</p>
     <p>The point is the answer. Four neat blocks and no advice is homework.</p>
     <p>It also knows when to stay off. A lookup is not a choice. Neither is a bug hunt.</p>
 
@@ -214,9 +249,10 @@ const arms = [
     </div>
 
     <p>
-      We have made about 4,240 model calls. They all ask one thing. Does the skill turn
+      We have written up thirteen runs in full. They all ask one thing. Does the skill turn
       on at the right time? None of them ask if it helps you choose better. We have not
-      run that test yet.
+      run that test yet. One of the thirteen is void. It answers nothing, and we say so
+      rather than quietly drop it.
     </p>
     <p>
       We changed how the skill describes itself five times. Not one change made it
@@ -227,13 +263,14 @@ const arms = [
     <div class="caveat">
       <p class="caveat__label">Then we checked the test set itself</p>
       <p>
-        <strong>You can pass 89% of it by counting words.</strong> Long message, real
-        choice. Short message, not a choice. No model needed.
+        <strong>You could pass 89% of the old one by counting words.</strong> Long
+        message, real choice. Short message, not a choice. No model needed. Our best
+        score on it was 98%. So every early result was a fight over nine points.
       </p>
       <p>
-        Our highest score is 95.6%. So every result above was a fight over about six
-        points. That makes our own work look worse. We found it, and we are writing it
-        here. We are building a new test set now.
+        That makes our own work look worse. We found it and we wrote it down anyway.
+        Then we built a new test set. On the new one the best word trick gets 0.71. Our
+        best score is 0.95. Now the gap is real.
       </p>
     </div>
 
@@ -242,9 +279,9 @@ const arms = [
       not rule what you may install. Use it if it helps you. Drop it if it does not.
     </p>
     <p>
-      We also list the times we broke our own tests. Eight so far. Every one ran clean
-      and handed back a number that looked fine. Nothing crashed. That is why we keep
-      looking.
+      We also list the times we broke our own tests. Eleven so far. Every one ran clean
+      and handed back a number that looked fine. Nothing crashed. Not one was caught by
+      a test failing. That is why we keep looking.
     </p>
 
     <div class="cta">
@@ -279,6 +316,15 @@ const arms = [
     <p>
       We write down what we expect before each run. The date goes into git history. We
       cannot move it later. A guess made after the fact is not a guess.
+    </p>
+    <p>
+      We do not write the answer key either. Three copies of the model label the test set
+      blind. None of them sees our label, or the other two. We set one rule before we ran
+      it. If too many labels move, we throw the test set out.
+    </p>
+    <p>
+      <a href={`${base}/docs/methods/`}>How we test, in full.</a> Every method, what it
+      guards against, and whether we have actually run it. Some we have not.
     </p>
 
     <h2>Who this is for</h2>

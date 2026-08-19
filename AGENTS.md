@@ -363,6 +363,29 @@ If you are an agent contributing here rather than a user installing the skills:
   two tables underneath it listed seven and eight. A count in prose that is not
   recomputed from the table below it is a hand-maintained number like any other.
   Corrections there are appended, not rewritten.
+- **Every third published run, sweep `README.md` and `docs/` for drift, and land
+  the sweep as a dated `notebook/` entry.** Count published runs from
+  `docs/RUN_INDEX.md`, which is generated and cannot itself drift. The bullet
+  above covers `docs/STATUS.md` on the day a run lands; this one covers
+  everything a run does *not* touch, which is where the rot actually
+  accumulates. A sweep does three things: recompute every count stated in prose
+  against the table or directory underneath it; re-read `docs/README.md` as an
+  index, since documents get added and never regrouped; and read the living
+  documents for a description that has stopped being true. The notebook entry
+  names what moved and what did not, so the next sweep can see when the last one
+  ran.
+
+  **Nothing checks this, and the reason is deliberate.** `de check` refuses a
+  reference that does not resolve and will never judge whether the sentence
+  around it is true — `evals/src/decision_evals/docs.py` declines to grow into a
+  prose linter, because an advisory gate becomes noise before somebody turns it
+  off. So the failure mode is silent by construction, and the first sweep found
+  it in four places at once: `docs/README.md` counted fourteen documents over a
+  directory holding sixteen, the site landing page offered four procedures when
+  the skill routes to six, `README.md` reported seven published runs against
+  thirteen in the generated index, and its call total predated four runs. Every
+  one of those overstated or understated by drifting, not by anyone deciding
+  anything.
 - Commits must be attributed to the GitHub noreply address; `de check` refuses
   otherwise.
 - Golden files pin the generated corpus byte-exact. Regenerating them needs
