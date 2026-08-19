@@ -26,9 +26,14 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ## 2026-08-19 — Track H authoring pass two: five triplets authored, one clean, three cut, one blocked
 
-**Commits:** `b84e7c0`
+**Commits:** `91f2313`, `b84e7c0`
 
-Adds `t01`–`t05` and `index-pass2.yaml` under `datasets/tailoring/`. `index.yaml`
+Adds `t01`–`t05` and `index-pass2.yaml` under `datasets/tailoring/`. The
+authoring landed over two commits: `91f2313` carried the fifteen scenario files
+in as a pre-switch checkpoint, and `b84e7c0` added pass two's dispositions to
+`index-pass2.yaml`. Both are named because both moved the answer key, and an
+entry that names only the second leaves the commit that wrote the files
+unexplained. `index.yaml`
 is untouched, so the shortcut battery does not see them and
 `corpus-baseline.txt` is neither relied on nor invalidated. `h01`–`h03` are
 byte-identical to their committed form: they are evidence of the pass-one shape
