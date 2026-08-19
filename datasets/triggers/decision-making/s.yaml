@@ -140,9 +140,17 @@ positive:
     route: [timing, cascade]
     turn: "The build is green and the release notes are written. Can I deploy, or is there something I'm missing?"
     why: >-
-      v2 x-n22, lengthened to match its negatives and otherwise unchanged. It
-      has never fired in any arm on any version and it stays, because dropping
-      it would raise recall for free on a maintainer's opinion.
+      v2 x-n22, and the "otherwise unchanged" this line used to claim was
+      false. The v2 turn was "The build is green. Can I deploy?" — seven words,
+      firing in no arm on any version. Lengthening it to match its negatives
+      also softened it: it gained a second settled prerequisite and, at the
+      end, "or is there something I'm missing?", which asks for help directly
+      rather than for a go/no-go. That is a different item, and it fires — 11
+      of 14 rows across the seven v4 verdict files in `results/triggers/`,
+      0/2 only in the in-situ arm. Annotation corrected 2026-08-19; no label
+      and no turn text moved. It stays a positive on the 2026-08-13 reasoning,
+      which is untouched by this: a green build answers whether the code
+      compiles, not whether to ship.
   - id: s14p
     triple: s14
     band: s

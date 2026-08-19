@@ -37,3 +37,96 @@ includes:
   - m.yaml
   - l.yaml
   - xl.yaml
+
+# --- v2 -> v4 item identity -------------------------------------------------
+#
+# Which version 2 item each carried-over turn descends from, and whether the
+# text survived the rebuild. Added 2026-08-19, after `s13p` was found carrying
+# "v2 x-n22, lengthened to match its negatives and otherwise unchanged. It has
+# never fired in any arm on any version" -- both halves false. The turn gained
+# "and the release notes are written" and "or is there something I'm missing?",
+# and it fires in 11 of the 14 v4 rows on disk.
+#
+# The drift was invisible because the only record of descent was a sentence
+# inside `why`. Prose cannot be diffed: nothing could ask "is s13p still the
+# turn x-n22 was?", so an annotation about the v2 item kept being read as an
+# annotation about the v4 one for as long as the two ids sat in the same string.
+#
+# `load_trigger_set` reads `skill`, `includes`, `version`,
+# `length_separability_ceiling` and the case lists, and ignores keys it does
+# not know -- so this block loads with the set on every call and costs no schema
+# change, no dataclass field and no test. It is data for a rebuild to diff
+# against, not something the gate scores. `text:` is the claim a future pass
+# should check:
+#
+#   verbatim  -- byte-identical to the v2 turn
+#   edited    -- same scenario and same ask, wording changed
+#   rewritten -- new scenario; only the mechanism carried over
+#
+# Only direct descent is recorded. `l08p` and `xl07p` say "like v2's p12",
+# which is a comparison and not ancestry, and they are deliberately absent.
+ancestry:
+  from: datasets/triggers/decision-making.yaml
+  from_version: 2
+  items:
+    - id: s01p
+      v2: p04
+      text: verbatim
+    - id: s02p
+      v2: p05
+      text: verbatim
+    - id: s03p
+      v2: p06
+      text: verbatim
+    - id: s04p
+      v2: p07
+      text: verbatim
+    - id: s05p
+      v2: p08
+      text: edited
+      note: >-
+        Three words longer to match its negatives: "or leave it?" added to the
+        closing question.
+    - id: s07p
+      v2: p10
+      text: verbatim
+    - id: s08p
+      v2: p11
+      text: edited
+      note: 'Five words longer: "rather than the next one".'
+    - id: s09p
+      v2: p12
+      text: edited
+      note: 'One word longer: "with this" became "with this one".'
+    - id: s10p
+      v2: p13
+      text: edited
+      note: 'Three words longer: "on it" and "here" added.'
+    - id: s11p
+      v2: p01
+      text: edited
+      note: >-
+        Two words shorter: "Do I sign the renewal?" became "Do I sign?". Band XL
+        carries the real pile; this is kept as its short form.
+    - id: s12p
+      v2: p03
+      text: rewritten
+      note: >-
+        Scenario replaced -- group chat to conflicting spreadsheets -- and the
+        ask made implicit. p03 said "what should I actually do", which made the
+        label easy.
+    - id: s13p
+      v2: x-n22
+      text: edited
+      note: >-
+        The one this block exists for. Seven words to nineteen, and the added
+        clause "or is there something I'm missing?" asks for help rather than
+        for a go/no-go. x-n22 fired in no arm on any version; s13p fires in 11
+        of 14 v4 rows. Treat any v2-era statement about x-n22 as being about a
+        different turn. No label moved.
+    - id: s09n2
+      v2: n07
+      text: rewritten
+      note: >-
+        Mechanism only -- "talk me through how people usually do this" -- on a
+        new scenario, so that it sits in s09's triple.
