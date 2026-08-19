@@ -1330,7 +1330,23 @@
   title   = {To Call or Not to Call: Diagnosing Intrinsic Over-Calling Bias in
              {LLM} Agents},
   journal = {arXiv preprint arXiv:2605.18882},
-  year    = {2026}
+  year    = {2026},
+  quote   = {On the When2Call benchmark, six models from three families show
+             high call accuracy but much lower no-call accuracy, leaving
+             overall accuracy in the 55\%-70\% range.},
+  note    = {Quote from the abstract, added 2026-08-19 after the entry was
+             found carrying none. It was cited in
+             notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md
+             for "six models in three families", and the citation gate missed
+             the missing evidence field only because "six" and "three" are
+             spelled as words: _CLAIM_NUMBER matches digits beside a percent or
+             pp, not number words. The abstract does support the claim, in the
+             wording "six models from three families". Two limits travel with
+             it: the asymmetry is measured on When2Call, not on any corpus
+             resembling this repository's, and the paper's own contribution is
+             the mechanistic account (SAE-recovered call/no_call features, an
+             activation-margin offset, and steering that cancels it) rather
+             than the descriptive gap this repository borrows.},
 }
 
 @article{oodagame2022,
@@ -1515,14 +1531,22 @@
 % Cited in notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md,
 % which registers the first item-level estimators this instrument has had.
 %
-% NO AUTHOR LINES. These four were recorded from their abstracts and the
-% author lists were not captured with them. The citation gate indexes on the
-% arXiv identifier and the `quote` field, so they resolve as they stand -- but
-% an author line has to be added before any of them is cited in paper/.
+% AUTHORS AND TITLES ADDED 2026-08-19, from the arXiv abstract pages. The
+% first recording of these four omitted the author lines -- disclosed in a
+% banner here at the time -- and also carried SHORT NAMES in the `title`
+% field, which was NOT disclosed and read as though the titles had been
+% recorded. `aba2026` was the sharpest case: its title said "Automated
+% Benchmark Auditing" while its own note said ABA abbreviates "Auto Benchmark
+% Audit", so the two fields contradicted each other and neither was the real
+% title. All four now carry the title and author list printed on the abstract
+% page. Found by an adversarial review of the notebook entry that cites them;
+% recorded in that entry's second appended correction.
 % ---------------------------------------------------------------------------
 
 @article{benchbench2026,
-  title   = {{BenchBench}},
+  author  = {Zheng, Yandan and Luo, Haoran and Lin, Zhenghong and
+             Liu, Wenjin and Tuan, Luu Anh},
+  title   = {{BenchBench}: Benchmarking Automated Benchmark Generation},
   journal = {arXiv preprint arXiv:2603.20807},
   year    = {2026},
   quote   = {BenchBench shows that benchmark-design ability is only moderately
@@ -1542,7 +1566,10 @@
 }
 
 @article{aba2026,
-  title   = {Automated Benchmark Auditing},
+  author  = {Wang, Junlin and Bianchi, Federico and Zhu, Shang and Nie, Fan
+             and Kwon, Yongchan and Dhingra, Bhuwan and Zou, James},
+  title   = {Automated Benchmark Auditing for {AI} Agents and Large Language
+             Models},
   journal = {arXiv preprint arXiv:2605.26079},
   year    = {2026},
   quote   = {Across this corpus, ABA identifies critical issues including
@@ -1554,15 +1581,20 @@
   note    = {Quote from the abstract, recorded 2026-08-19; the two sentences
              are separated in the source and are joined here with an elision
              marker. ABA is the paper's abbreviation for Auto Benchmark Audit,
-             not its title. The corpus is "168 benchmarks across nine
-             domains". Note what the second number is: filtering the flawed
+             the framework -- the paper's title is the one in the field above,
+             and the short `title` this entry carried until 2026-08-19 was
+             neither. The corpus is "168 benchmarks across nine domains".
+             Note what the second number is: filtering the flawed
              tasks out RAISED average performance by 9.9\% and 9.6\% -- a
              level shift on the tasks that remain, not a benchmark score
              moving by that much in either direction.},
 }
 
 @article{agentabstain2026,
-  title   = {{AgentAbstain}},
+  author  = {Liu, Xun and Zhang, Yi Evie and Kasprova, Vira and
+             Rabbani, Parisa and Zahraei, Pardis Sadat and Zhang, Tianyu and
+             Ebrahimpour-Boroojeny, Ali and Chandrasekaran, Varun},
+  title   = {{AgentAbstain}: Do {LLM} Agents Know When Not to Act?},
   journal = {arXiv preprint arXiv:2607.10059},
   year    = {2026},
   quote   = {Across 17 frontier LLMs in 4 agent harnesses, the best agent
@@ -1579,7 +1611,12 @@
 }
 
 @article{benchmarksquared2026,
-  title   = {{Benchmark}$^2$},
+  author  = {Qian, Qi and Huang, Chengsong and Xu, Jingwen and Lv, Changze
+             and Wu, Muling and Liu, Wenhao and Wang, Xiaohua and
+             Wang, Zhenghua and Huang, Zisu and Tian, Muzhao and Xu, Jianhan
+             and Hu, Kun and Wang, He-Da and Hu, Yao and Huang, Xuanjing and
+             Zheng, Xiaoqing},
+  title   = {{Benchmark}$^2$: Systematic Evaluation of {LLM} Benchmarks},
   journal = {arXiv preprint arXiv:2601.03986},
   year    = {2026},
   quote   = {(3) Capability Alignment Deviation, identifying problematic
