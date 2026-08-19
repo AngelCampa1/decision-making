@@ -337,3 +337,228 @@ class TestMainInSitu:
         assert runner.main() == 0
         assert captured["in_situ"] is False
         assert captured["checkpoint"] == runner.CHECKPOINT
+
+
+# --------------------------------------------------------------------------- #
+# The parse-rate floor: it must be decided over every repeat, not repeat 0
+# alone. `done.get((case.id, 0))` used to be the only read a 2-repeat run's
+# void decision was made from -- Track N9 exposed it (see
+# results/decision-making/2026-08-19-505b236-n9-in-situ-void/README.md).
+# --------------------------------------------------------------------------- #
+
+
+def _multi_repeat_set(n_positive: int = 10, n_negative: int = 10) -> TriggerSet:
+    cases = tuple(_case(id=f"p{i}", should_fire=True) for i in range(n_positive)) + tuple(
+        _case(id=f"n{i}", should_fire=False) for i in range(n_negative)
+    )
+    return TriggerSet(skill="decision-making", cases=cases, version=4)
+
+
+def _row(case: TriggerCase, repeat: int, *, parses: bool) -> dict[str, object]:
+    """One checkpoint row, shaped like `collect()`'s output.
+
+    `parses=True` answers correctly (`fired == should_fire`) so a passing gate
+    would also score a clean report; `parses=False` is the unparseable shape
+    `collect()` writes on a `CliError` -- `fired`, `procedure` and `p_fire` all
+    `None`.
+    """
+    return {
+        "case": case.id,
+        "repeat": repeat,
+        "fired": case.should_fire if parses else None,
+        "procedure": case.route if parses else None,
+        "covers": None,
+        "set_version": 4,
+        "model": "haiku",
+        "in_situ": False,
+        "p_fire": None,
+        "should_fire": case.should_fire,
+        "route": case.route,
+        "routes": list(case.routes),
+        "band": case.band,
+        "triple": case.triple,
+        "domain": case.domain,
+        "stakes": case.stakes,
+        "ask": case.ask,
+        "kind": case.kind,
+        "raw": "ok" if parses else "prose with no fire key",
+    }
+
+
+class TestParseRateGateCoversAllRepeats:
+    """Constructs the case the old gate misses: repeat 0 clean enough to clear
+    the 90% floor on its own, repeat 1 bad enough that the true, all-repeats
+    rate falls under it. 20 items, 2 repeats, 40 calls total.
+
+    Every test in this class fails against the pre-fix code, which reads
+    only `done.get((case.id, 0))` (`scripts/run_triggers.py`, historical
+    line ~929) and therefore never observes repeat 1 at all. Run against
+    that code, `test_a_run_with_a_clean_repeat_0_and_a_dirty_repeat_1_is_still_voided`
+    fails with `AssertionError: assert 0 == 1` -- the old gate looks only at
+    repeat 0 (20/20 parses, 100%), clears 90% and returns 0, exactly the
+    "exit zero and be published" failure Track N9's README warned was
+    possible but had not been demonstrated.
+    """
+
+    def _mixed_done(self, trigger_set: TriggerSet) -> dict[tuple[str, int], dict[str, object]]:
+        done: dict[tuple[str, int], dict[str, object]] = {}
+        for case in trigger_set.cases:
+            done[(case.id, 0)] = _row(case, 0, parses=True)
+        # Repeat 1: only the first 6 of 20 cases parse. Aggregate over both
+        # repeats: (20 + 6) / 40 = 0.65, below the 90% floor. Repeat 0 alone:
+        # 20/20 = 1.00, comfortably above it -- the gap the old gate could not
+        # see.
+        for index, case in enumerate(trigger_set.cases):
+            done[(case.id, 1)] = _row(case, 1, parses=index < 6)
+        return done
+
+    def test_a_run_with_a_clean_repeat_0_and_a_dirty_repeat_1_is_still_voided(
+        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        trigger_set = _multi_repeat_set()
+        mixed_done = self._mixed_done(trigger_set)
+
+        monkeypatch.setattr(runner, "load_trigger_set", lambda path: trigger_set)
+        monkeypatch.setattr(runner, "collect", lambda *a, **k: mixed_done)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py", "--repeats", "2"])
+
+        assert runner.main() == 1
+        out = capsys.readouterr().out
+        assert "below the 90% floor" in out
+        # The printed rate is the aggregate over all 40 calls (0.65), not the
+        # repeat-0-only rate (1.00) the old gate would have reported.
+        assert "65%" in out
+        assert "40 call(s)" in out
+
+    def test_repeat_0_alone_would_have_cleared_the_floor(self) -> None:
+        """Documents *why* this case is the one the old gate missed."""
+        trigger_set = _multi_repeat_set()
+        mixed_done = self._mixed_done(trigger_set)
+        repeat_0_rows = [row for (_, repeat), row in mixed_done.items() if repeat == 0]
+        assert all(row["fired"] is not None for row in repeat_0_rows)
+        assert len(repeat_0_rows) == 20  # 20/20 = 100% >= the 90% floor
+
+
+class TestParseRateGateKnownGoodCase:
+    """Standing rule 2: a falsifier must clear a known-good case before it may
+    fail anything. A clean run -- every repeat, every case, parses -- must
+    still pass under the fixed gate.
+    """
+
+    def test_a_fully_clean_two_repeat_run_still_passes(
+        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        trigger_set = _multi_repeat_set()
+        done: dict[tuple[str, int], dict[str, object]] = {}
+        for case in trigger_set.cases:
+            for repeat in (0, 1):
+                done[(case.id, repeat)] = _row(case, repeat, parses=True)
+
+        monkeypatch.setattr(runner, "load_trigger_set", lambda path: trigger_set)
+        monkeypatch.setattr(runner, "collect", lambda *a, **k: done)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py", "--repeats", "2"])
+
+        assert runner.main() == 0
+        assert "below the 90% floor" not in capsys.readouterr().out
+
+    def test_a_clean_single_repeat_run_still_passes(
+        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """`--repeats 1` (the default) is the shape every published arm used
+        before N9 -- this is the case the fix must not disturb.
+        """
+        trigger_set = _multi_repeat_set()
+        monkeypatch.setattr(runner, "collect", _fake_collect_from_labels)
+        monkeypatch.setattr(runner, "load_trigger_set", lambda path: trigger_set)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py"])
+
+        assert runner.main() == 0
+        assert "below the 90% floor" not in capsys.readouterr().out
+
+
+class TestParseRateOverAllRepeats:
+    """Unit-level coverage of the function the gate now calls."""
+
+    def test_counts_unparseable_across_every_repeat(self) -> None:
+        trigger_set = _multi_repeat_set(n_positive=2, n_negative=2)
+        done: dict[tuple[str, int], dict[str, object]] = {}
+        for case in trigger_set.cases:
+            done[(case.id, 0)] = _row(case, 0, parses=True)
+            done[(case.id, 1)] = _row(case, 1, parses=False)
+        unparseable, total = runner.parse_rate_over_all_repeats(trigger_set, done, 2)
+        assert total == 8  # 4 cases * 2 repeats
+        assert unparseable == 4  # every repeat-1 row
+
+    def test_a_missing_row_counts_as_unparseable(self) -> None:
+        """Collection stopped early: repeat 1 was never attempted for anyone.
+
+        A smaller denominator from missing calls must not let an interrupted
+        run look cleaner than a completed one.
+        """
+        trigger_set = _multi_repeat_set(n_positive=2, n_negative=2)
+        done = {(case.id, 0): _row(case, 0, parses=True) for case in trigger_set.cases}
+        unparseable, total = runner.parse_rate_over_all_repeats(trigger_set, done, 2)
+        assert total == 8
+        assert unparseable == 4  # the 4 missing repeat-1 rows
+
+    def test_repeats_1_matches_the_old_repeat_0_only_behaviour(self) -> None:
+        """The known-good case for the function itself: at `repeats=1` there is
+        only one repeat to read, so the new denominator and the old one agree.
+        """
+        trigger_set = _multi_repeat_set(n_positive=3, n_negative=3)
+        done = {(case.id, 0): _row(case, 0, parses=True) for case in trigger_set.cases}
+        unparseable, total = runner.parse_rate_over_all_repeats(trigger_set, done, 1)
+        assert (unparseable, total) == (0, 6)
+
+
+class TestN9Recomputation:
+    """Re-derives Track N9's own headline numbers from its checkpoint, so the
+    fix is checked against the real run that exposed the defect and not only
+    against a constructed example.
+    """
+
+    CHECKPOINT = (
+        Path(__file__).resolve().parents[2]
+        / "results"
+        / "decision-making"
+        / "2026-08-19-505b236-n9-in-situ-void"
+        / "verdicts-in-situ.jsonl"
+    )
+
+    def _load(self) -> dict[tuple[str, int], dict[str, object]]:
+        return runner.load_done(self.CHECKPOINT)
+
+    def test_the_checkpoint_is_258_items_by_2_repeats(self) -> None:
+        done = self._load()
+        assert len(done) == 516
+        assert {repeat for _, repeat in done} == {0, 1}
+        assert len({case_id for case_id, _ in done}) == 258
+
+    def test_repeat_0_alone_reads_the_published_0_8566(self) -> None:
+        done = self._load()
+        repeat_0 = [row for (_, repeat), row in done.items() if repeat == 0]
+        parsed = sum(1 for row in repeat_0 if row["fired"] is not None)
+        assert round(parsed / len(repeat_0), 4) == 0.8566
+
+    def test_repeat_1_alone_reads_the_published_0_8721(self) -> None:
+        done = self._load()
+        repeat_1 = [row for (_, repeat), row in done.items() if repeat == 1]
+        parsed = sum(1 for row in repeat_1 if row["fired"] is not None)
+        assert round(parsed / len(repeat_1), 4) == 0.8721
+
+    def test_the_new_gate_reads_the_aggregate_0_8643_and_still_voids(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        done = self._load()
+        case_ids = sorted({case_id for case_id, _ in done})
+        cases = tuple(
+            _case(id=cid, should_fire=bool(done[(cid, 0)]["should_fire"])) for cid in case_ids
+        )
+        trigger_set = TriggerSet(skill="decision-making", cases=cases, version=4)
+
+        unparseable, total = runner.parse_rate_over_all_repeats(trigger_set, done, 2)
+        rate = (total - unparseable) / total
+        assert total == 516
+        assert unparseable == 70
+        assert round(rate, 4) == 0.8643
+        assert rate < 0.9  # the disposition is still void under the new gate

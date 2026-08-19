@@ -295,6 +295,51 @@ def load_done(path: Path) -> dict[tuple[str, int], dict[str, object]]:
     return done
 
 
+def parse_rate_over_all_repeats(
+    trigger_set: TriggerSet, done: dict[tuple[str, int], dict[str, object]], repeats: int
+) -> tuple[int, int]:
+    """``(unparseable, total)`` over every call the run was asked to make.
+
+    Every one of ``repeats`` repeats for every case in ``trigger_set``, not
+    repeat 0 alone. The parse-rate floor exists to catch format compliance
+    breaking down, and format compliance is a per-call property: a repeat that
+    came back as unparseable prose is a failure in that repeat regardless of
+    whether a sibling repeat of the same item happened to parse. Averaging
+    that away at the item level -- "parseable if any repeat parsed" -- would
+    let a lucky repeat mask a broken one; on Track N9's data it reads 0.957
+    (247 of 258 items have at least one parseable repeat) against 0.8643 over
+    all 516 calls, a ten-point gap that would have flipped N9's disposition
+    from void to published.
+
+    This also keeps "unparseable" meaning the same thing everywhere in this
+    file: it is the same per-call test :func:`decision_evals.trigger_arms.summarise`
+    already applies when it excludes ``fired is None`` rows from every rate.
+
+    A case with no row at all for a given repeat -- collection stopped early
+    or crashed before reaching it -- counts as unparseable rather than being
+    dropped from the denominator, for the same reason the old repeat-0 loop
+    treated a missing row that way: a smaller denominator from missing calls
+    must not let an interrupted run look cleaner than a completed one.
+
+    Before this function existed the floor read ``done.get((case.id, 0))``
+    only, so a 2-repeat run's void decision was made on half its calls. Track
+    N9 (``results/decision-making/2026-08-19-505b236-n9-in-situ-void/``)
+    exposed it: repeat 0 alone parses at 0.8566, repeat 1 alone at 0.8721, the
+    aggregate this function computes at 0.8643. All three sit below the 90%
+    floor so N9's void was the right call, but only by luck -- a run whose
+    repeat 0 happened to clear 0.90 while repeat 1 dragged the true rate under
+    it would have exited 0 and been published as a passing run.
+    """
+    total = len(trigger_set.cases) * repeats
+    unparseable = sum(
+        1
+        for case in trigger_set.cases
+        for repeat in range(repeats)
+        if (row := done.get((case.id, repeat))) is None or row["fired"] is None
+    )
+    return unparseable, total
+
+
 def collect(
     trigger_set: TriggerSet,
     description: str,
@@ -919,6 +964,22 @@ def main() -> int:
     if args.confidence:
         report_calibration(done)
 
+    # The parse-rate floor is decided over every repeat the run made, not
+    # repeat 0 alone -- see `parse_rate_over_all_repeats` for why repeat 0 is
+    # not a stand-in for the run and why "every call" is the denominator
+    # rather than "every item with at least one parseable repeat". This check
+    # runs before the repeat-0 report below is built, so a run that fails it
+    # never reaches a report that could only ever describe half the calls.
+    gate_unparseable, gate_total = parse_rate_over_all_repeats(trigger_set, done, args.repeats)
+    gate_rate = (gate_total - gate_unparseable) / gate_total if gate_total else 0.0
+    if gate_rate < 0.9:
+        print(
+            f"\n*** parse rate {gate_rate:.0%} over all {gate_total} call(s) across "
+            f"{args.repeats} repeat(s), below the 90% floor."
+        )
+        print("*** This measured format compliance rather than firing. Stopping.")
+        return 1
+
     # The single-run report below describes repeat 0, and is kept because
     # precision and recall are what the skill is judged on. With repeats > 1 the
     # stability block above is the one that says whether to believe it.
@@ -934,10 +995,6 @@ def main() -> int:
         routes[case.turn] = row["procedure"]  # type: ignore[assignment]
 
     scored = tuple(c for c in trigger_set.cases if c.turn in verdicts)
-    if len(scored) < 0.9 * len(trigger_set.cases):
-        print(f"\n*** parse rate {len(scored) / len(trigger_set.cases):.0%}, below the 90% floor.")
-        print("*** This measured format compliance rather than firing. Stopping.")
-        return 1
 
     # `replace`, not a fresh TriggerSet: reconstructing one from `skill` and
     # `cases` alone drops `version` back to its default of 1, which is the field
