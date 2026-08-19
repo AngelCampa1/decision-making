@@ -27,6 +27,7 @@ from decision_evals.trigger_arms import (
     per_item_correctness,
     summarise,
     summarise_by_band,
+    venue_comparable,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -710,4 +711,72 @@ class TestModelsComparable:
         a = [row("p1", fired=True, should_fire=True) | {"set_version": 1, "model": "haiku"}]
         b = [row("p1", fired=True, should_fire=True) | {"set_version": 3, "model": "sonnet"}]
         with pytest.raises(ArmError, match="different label revisions"):
+            compare(a, b)
+
+
+class TestVenueComparable:
+    """Track N9. The description sits in a different place, not just a
+    different tier or a different label revision -- ``--append-system-prompt``
+    versus ``--system-prompt``.
+
+    Standing rule 2: this guard must be shown passing a known-good case before
+    it is shown refusing a bad one. `test_two_arms_at_the_same_venue_compare`
+    and `test_two_unstamped_arms_are_both_treated_as_substituted` are the
+    known-good cases; the rest are the refusals.
+    """
+
+    def test_two_arms_at_the_same_venue_compare(self) -> None:
+        """Known-good case, run first: both arms in situ, same venue, no refusal."""
+        a = [
+            row("p1", fired=True, should_fire=True) | {"in_situ": True},
+            row("n1", fired=False, should_fire=False) | {"in_situ": True},
+        ]
+        assert venue_comparable(a, a) is None
+        assert compare(a, a).p_value == 1.0
+
+    def test_two_unstamped_arms_are_both_treated_as_substituted(self) -> None:
+        """Every arm published before this stamp existed sent the description via
+
+        --system-prompt -- `ask()` built every `Conversation` with no `in_situ`
+        argument at all, which resolves to `in_situ=False` by the parameter's
+        own default. So two unstamped arms are exactly as comparable as they
+        were yesterday, unlike the model guard's unstamped case.
+        """
+        a = [row("p1", fired=True, should_fire=True)]
+        b = [row("p1", fired=False, should_fire=True)]
+        assert venue_comparable(a, b) is None
+        assert compare(a, b).n_shared == 1
+
+    def test_an_explicit_false_matches_an_unstamped_row(self) -> None:
+        """`in_situ=False` and an absent field are the same fact, not two."""
+        a = [row("p1", fired=True, should_fire=True) | {"in_situ": False}]
+        b = [row("p1", fired=True, should_fire=True)]
+        assert venue_comparable(a, b) is None
+
+    def test_an_in_situ_arm_against_an_unstamped_one_is_refused(self) -> None:
+        """The transition where the risk is real: N9's own comparison against N6."""
+        a = [row("p1", fired=True, should_fire=True) | {"in_situ": True}]
+        b = [row("p1", fired=False, should_fire=True)]
+        reason = venue_comparable(a, b)
+        assert reason is not None
+        assert "in situ" in reason
+        assert "substituted" in reason
+        with pytest.raises(ArmError, match="different prompt venues"):
+            compare(a, b)
+
+    def test_the_label_guard_runs_before_the_venue_guard(self) -> None:
+        """Both differ; the reported reason is the one this repository has
+
+        already been burned by -- checked so the ordering in `compare` does not
+        silently change which refusal a caller sees.
+        """
+        a = [row("p1", fired=True, should_fire=True) | {"set_version": 1, "in_situ": True}]
+        b = [row("p1", fired=True, should_fire=True) | {"set_version": 3, "in_situ": False}]
+        with pytest.raises(ArmError, match="different label revisions"):
+            compare(a, b)
+
+    def test_the_model_guard_runs_before_the_venue_guard(self) -> None:
+        a = [row("p1", fired=True, should_fire=True) | {"model": "haiku", "in_situ": True}]
+        b = [row("p1", fired=True, should_fire=True) | {"model": "sonnet", "in_situ": False}]
+        with pytest.raises(ArmError, match="ran on different models"):
             compare(a, b)

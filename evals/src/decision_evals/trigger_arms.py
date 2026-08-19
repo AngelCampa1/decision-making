@@ -1357,6 +1357,52 @@ def models_comparable(a: Iterable[Record], b: Iterable[Record]) -> str | None:
     )
 
 
+def venue_comparable(a: Iterable[Record], b: Iterable[Record]) -> str | None:
+    """Whether two arms sent the description through the same prompt venue.
+
+    Track N9. ``run_triggers.py``'s own module docstring names the gap this
+    guards against: every number in Track L, Track M and N6 was measured with
+    the description as the *entire* system prompt (``--system-prompt``); N9
+    sends the same description **appended to** the CLI's own system prompt
+    (``--append-system-prompt``, ``Conversation(in_situ=True)``) instead. A
+    comparison spanning the two would answer N9's own question by fiat -- by
+    which arm happened to land in the diff -- rather than by measurement.
+
+    **An absent ``in_situ`` is False, not unknown, and that is the opposite
+    call from :func:`models_comparable` for a reason specific to this field.**
+    There, ``--model`` already carried a default that could be silently
+    overridden before the stamp existed, so an unstamped record's tier
+    genuinely could have been anything -- filling in the default would be
+    standing rule 1's invented parameter. ``in_situ`` has no such history:
+    before this parameter existed, ``run_triggers.py``'s ``ask()`` built every
+    ``Conversation`` with no ``in_situ`` argument at all, and
+    ``Conversation.__init__``'s own default resolves that to
+    ``in_situ=False``. There is no call this file has ever made that could
+    have been in situ without the stamp saying so. So an absent value is read
+    as False, the same way :func:`label_versions_comparable` reads an absent
+    ``set_version`` as 1: it states what happened rather than declaring the
+    past unrecoverable, and every arm published before this row existed
+    remains comparable to every other one, none of it retroactively voided.
+    """
+    venues_a = {bool(row.get("in_situ", False)) for row in a}
+    venues_b = {bool(row.get("in_situ", False)) for row in b}
+    if len(venues_a | venues_b) <= 1:
+        return None
+
+    def _label(in_situ: bool) -> str:
+        return "in situ (--append-system-prompt)" if in_situ else "substituted (--system-prompt)"
+
+    named_a = sorted(_label(v) for v in venues_a)
+    named_b = sorted(_label(v) for v in venues_b)
+    return (
+        f"these arms were sent through different prompt venues: {named_a} against "
+        f"{named_b}. One appends the description to the CLI's own system prompt and "
+        "the other replaces it outright -- exactly the position N9 exists to test, so "
+        "comparing them would decide that question by which arm was in the diff rather "
+        "than by measurement."
+    )
+
+
 def per_item_correctness(records: Iterable[Record]) -> dict[str, float]:
     """Per case id, the share of repeats where the arm's verdict matched its label.
 
@@ -1396,6 +1442,8 @@ def compare(a: Iterable[Record], b: Iterable[Record]) -> ArmComparison:
     if (reason := label_versions_comparable(rows_a, rows_b)) is not None:
         raise ArmError(reason)
     if (reason := models_comparable(rows_a, rows_b)) is not None:
+        raise ArmError(reason)
+    if (reason := venue_comparable(rows_a, rows_b)) is not None:
         raise ArmError(reason)
 
     left, right = per_item_correctness(rows_a), per_item_correctness(rows_b)

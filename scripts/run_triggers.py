@@ -21,7 +21,7 @@ receipt asserted, so nothing on disk can influence the decision.
 Usage:
     python scripts/run_triggers.py [--model haiku] [--skill decision-making]
                                    [--repeats 5] [--confidence] [--arm one|four]
-                                   [--set PATH] [--band s|m|l|xl]
+                                   [--set PATH] [--band s|m|l|xl] [--in-situ]
 
 ``--set`` names the corpus. It defaults to ``datasets/triggers/<skill>.yaml``,
 which is version 2 and is what every published number was measured on, and the
@@ -49,6 +49,15 @@ mechanically by :mod:`decision_evals.unbundle` from the shipped bundle, so the
 race varies structure and nothing else. Its own checkpoint, for the same reason
 as ``--confidence`` -- and the two flags are refused together, because two
 changes to the response contract in one run measure neither.
+
+``--in-situ`` is Track N9: the same one-turn call, description and question
+unchanged, sent via ``--append-system-prompt`` instead of ``--system-prompt``
+so the description joins the CLI's own system prompt rather than replacing
+it -- the position every deployed call actually uses. It moves the venue, not
+the response contract, so it is refused alongside ``--confidence``,
+``--entries``/``--arm four`` and a non-``full`` ``--description``: combining
+any of them would confound venue with a second manipulation. Its own
+checkpoint, for the same reason as the arms above.
 """
 
 from __future__ import annotations
@@ -123,9 +132,13 @@ SYSTEM = (
 
 #: The same task with a probability attached. Track K6 ranks *elicited
 #: confidence* above every other framework-derived skill candidate on evidence
-#: strength, and `stats/calibration.py` has been property-tested to 100% coverage
-#: since the first week without ever being called by anything. This is the first
-#: forecast this repository has asked a model for.
+#: strength, and `stats/calibration.py` had been property-tested to 100% coverage
+#: since the first week without ever being called by anything. **This arm is what
+#: called it**, and the sentence above stayed in the past tense only from
+#: 2026-08-19, when a Track S update quoted it as still true. A comment that
+#: describes a gap its own code closed is the documentation defect this
+#: repository keeps finding; the tense is the fix. This is the first forecast
+#: this repository has asked a model for.
 #:
 #: It asks for **P(this tool should be invoked)**, not for confidence in the
 #: model's own answer. The two are different quantities and only the first is a
@@ -197,6 +210,8 @@ def ask(
     model: str,
     system: str,
     allowed: tuple[str, ...] = PROCEDURES,
+    *,
+    in_situ: bool = False,
 ) -> tuple[Verdict, str]:
     """The verdict **and the raw reply**.
 
@@ -204,12 +219,19 @@ def ask(
     whitelist discarded every answer in a 365-call run and the records kept
     nothing to recover from — the run had to be repeated. ``ShardedRecord`` had
     already learned this and says so in its own docstring; this runner had not.
+
+    ``in_situ`` is Track N9's venue switch. ``Conversation`` already threads it
+    to ``build_command``, which sends ``--append-system-prompt`` instead of
+    ``--system-prompt`` -- the description joins the CLI's own system prompt
+    rather than replacing it, which is the position every deployed call
+    actually uses. Conversation length is untouched: still one turn, still a
+    fresh isolated process per call. Only where the description sits changes.
     """
     header = "Tool descriptions" if system is SYSTEM_FOUR else "Tool description"
     prompt = f"## {header}\n\n{description}\n\n## User message\n\n{case.turn}"
     with (
         isolated_cwd("de-trigger-") as cwd,
-        Conversation(system_prompt=system, model=model, cwd=cwd) as chat,
+        Conversation(system_prompt=system, model=model, cwd=cwd, in_situ=in_situ) as chat,
     ):
         result = chat.send(prompt)
         chat.receipt.assert_isolated()
@@ -227,6 +249,18 @@ CHECKPOINT_CONFIDENCE = REPO_ROOT / "results" / "triggers" / "verdicts-confidenc
 #: response contract is a different run, and a shared path plus a resume would
 #: have merged the two arms of the experiment into one indistinguishable pile.
 CHECKPOINT_FOUR = REPO_ROOT / "results" / "triggers" / "verdicts-four.jsonl"
+
+#: Track N9's venue arm, again on its own file. `--confidence` and `--arm four`
+#: earn a separate checkpoint because they change the *response contract*;
+#: `in_situ` changes neither the question asked nor the schema of the answer,
+#: but it changes what the model sees when it answers -- the description sits
+#: beside the CLI's own system prompt instead of replacing it. That is a
+#: different venue producing the number, by the same reasoning the file's
+#: module docstring already gives for corpora and description variants: a
+#: shared path plus a resume would silently merge N9's arm into N6's reference
+#: run, and N9 exists specifically to keep the two comparable rather than
+#: conflated.
+CHECKPOINT_IN_SITU = REPO_ROOT / "results" / "triggers" / "verdicts-in-situ.jsonl"
 
 
 def load_done(path: Path) -> dict[tuple[str, int], dict[str, object]]:
@@ -250,6 +284,7 @@ def collect(
     system: str = SYSTEM,
     checkpoint: Path = CHECKPOINT,
     entry_names: dict[str, str] | None = None,
+    in_situ: bool = False,
 ) -> dict[tuple[str, int], dict[str, object]]:
     """Run every case `repeats` times, checkpointing after each call.
 
@@ -269,7 +304,9 @@ def collect(
                     continue
                 allowed = tuple(entry_names) if entry_names else PROCEDURES
                 try:
-                    (fired, procedure, p_fire), raw = ask(description, case, model, system, allowed)
+                    (fired, procedure, p_fire), raw = ask(
+                        description, case, model, system, allowed, in_situ=in_situ
+                    )
                 except IsolationError:
                     raise
                 except CliError as error:
@@ -301,6 +338,27 @@ def collect(
                     # the tier survived only as prose in a hand-written README.
                     # `models_comparable` refuses a comparison that spans it.
                     "model": model,
+                    # N9's venue. True means the description was appended to
+                    # the CLI's own system prompt (`--append-system-prompt`,
+                    # the position every deployed call actually uses); False
+                    # means it replaced the system prompt outright, which is
+                    # every arm published before this row existed.
+                    #
+                    # Always written, unlike `model`. An absent `model` had to
+                    # be read as *unknown* (N8) because `--model` already had a
+                    # default that could be silently overridden before the
+                    # stamp existed, so an unstamped record's tier genuinely
+                    # could have been anything. `in_situ` has no such history:
+                    # before this parameter existed, `ask()` built every
+                    # `Conversation` with no `in_situ` argument at all, which
+                    # `Conversation.__init__`'s own default resolves to
+                    # `in_situ=False` -- there is no call this file ever made
+                    # that could have been in situ without this stamp. So
+                    # `venue_comparable` (trigger_arms.py) treats an absent
+                    # value as False, the same way `label_versions_comparable`
+                    # treats an absent `set_version` as 1: it states what
+                    # happened rather than declaring the past unrecoverable.
+                    "in_situ": in_situ,
                     "p_fire": p_fire,
                     "should_fire": case.should_fire,
                     "route": case.route,
@@ -647,6 +705,17 @@ def main() -> int:
         help="also elicit p_fire and score it; writes a separate checkpoint",
     )
     parser.add_argument(
+        "--in-situ",
+        action="store_true",
+        help=(
+            "N9: send the description via --append-system-prompt instead of "
+            "--system-prompt. Conversation length is unchanged -- still one turn. "
+            "Own checkpoint; refused alongside --confidence, --entries/--arm four "
+            "and a non-'full' --description, which vary the response contract "
+            "rather than the venue"
+        ),
+    )
+    parser.add_argument(
         "--arm",
         choices=("one", "four"),
         default="one",
@@ -697,6 +766,18 @@ def main() -> int:
     if args.description != "full" and (n_entries is not None or args.confidence):
         print("--description varies the trigger text; --entries and --confidence vary")
         print("the response contract. Two manipulations in one run measure neither.")
+        return 1
+    # N9 moves one thing: where the description sits (--append-system-prompt vs
+    # --system-prompt), holding the question, the schema and the description
+    # text fixed at N6's `full` arm so the comparison is against a single
+    # reference run rather than a moving target. --confidence and --entries/
+    # --arm four change the response contract; --description changes the text
+    # itself. Combining any of them with --in-situ would confound venue with a
+    # second manipulation, the same reasoning the two checks above already use.
+    if args.in_situ and (n_entries is not None or args.confidence or args.description != "full"):
+        print("--in-situ moves only where the description sits. --confidence and")
+        print("--entries/--arm four change the response contract; --description changes")
+        print("the text. Two manipulations in one run measure neither -- run them separately.")
         return 1
 
     default_set = REPO_ROOT / TRIGGERS_DIR / f"{args.skill}.yaml"
@@ -768,6 +849,16 @@ def main() -> int:
             )
     if args.description != "full":
         checkpoint = CHECKPOINT.with_name(f"verdicts-{args.description}.jsonl")
+    if args.in_situ:
+        # N9's venue, on its own file for the reason `CHECKPOINT_IN_SITU`'s own
+        # comment gives: `--confidence` and `--arm four` earn a separate
+        # checkpoint because they change the response contract, and `in_situ`
+        # earns one because it changes the venue the same call is made from. A
+        # shared path plus a resume would silently pool an appended-prompt
+        # verdict with a substituted-prompt one under one case id. Mutually
+        # exclusive with the three branches above by the refusal already run,
+        # so this assignment cannot be overwritten by any of them.
+        checkpoint = CHECKPOINT_IN_SITU
     if set_path != default_set:
         # A different corpus is a different answer key, so it cannot share a
         # checkpoint with any arm above. `load_done` resumes on (case id,
@@ -797,6 +888,7 @@ def main() -> int:
             system=system,
             checkpoint=checkpoint,
             entry_names=entry_names,
+            in_situ=args.in_situ,
         )
     except IsolationError as error:
         print(f"ISOLATION FAILURE, stopping: {error}")

@@ -258,9 +258,15 @@ real. Calibration training is still the strongest candidate *and* is one
 re-analysis away from the rest.
 
 **Calibration has no counterpart among the four shipped procedures.** Nothing in
-`decision-making` elicits a probability, so nothing can be scored for
-calibration — while `stats/calibration.py` is property-tested at 100% coverage
-and has never been called. That makes **elicited confidence the top-ranked skill
+`decision-making` elicits a probability from the *user's* decision, so no shipped
+procedure can be scored for calibration. **`stats/calibration.py` is no longer
+uncalled, and this paragraph said it was until 2026-08-19** — the `--confidence`
+arm wires it: `scripts/run_triggers.py` calls `murphy_decomposition`,
+`smooth_calibration_error`, `expected_calibration_error` and `reliability_curve`
+on the elicited `p_fire`. What that scores is *"P(this tool should be invoked)"*,
+a forecast with an outcome, and not a procedure's advice. So the module is
+wired and the gap is narrower than it was: no *skill* elicits a probability,
+though the harness now does. That makes **elicited confidence the top-ranked skill
 candidate**: the only one whose parent intervention has medium-to-large
 controlled effects in humans, it needs no new corpus, and it converts a list of
 considerations into a number that can be scored.
@@ -702,7 +708,7 @@ they were consolidated the same day they were written (see Track M).
 | S6 | a clarify-or-decide procedure — ask for more, or decide under incomplete information | named in the founding brief, not written |
 | S7 | Re-derive each of the above from Track K's catalogue, or mark it invented | **done 2026-08-12.** `cascade`, `timing` and `fit` trace to named frameworks; `ledger` is invented outright. None of the four traces to a framework with strong prescriptive evidence — see [`DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md) |
 | S8 | **A retirement rule.** "Daily use is evidence" currently has no failure condition — no threshold at which use retires a procedure. Evidence that cannot come out negative is not evidence. | **done 2026-08-12.** 14 consecutive days disabled → `WITHDRAWN`, clocked from a dated `notebook/` line. Blocks the plugin through the existing promotion gate, not a second mechanism, so it operates rather than being written down |
-| S9 | **`ledger.md` is first in line for replacement.** It is the one procedure with no external support, and Track K6 ranks *elicited confidence* above it on evidence — the only candidate whose parent intervention has medium-to-large controlled effects in humans | opened by K |
+| S9 | **`ledger.md` is first in line for replacement.** Three independent lines now name it — no framework trace (S7/K6), the top-ranked outside candidate is elicited confidence (K6), and it is worst-routed in all six description arms run to date (N6, N7) — but only the first two bear on the procedure's *content*; the third is a router finding and does not by itself add weight to a content-replacement case. See below | opened by K, strengthened by N6/N7 2026-08-19, not settled |
 
 **The maintainer's daily use is evidence.** Not publishable as a headline, and
 the fastest signal available: a skill that fires when it should not, or produces
@@ -717,6 +723,139 @@ taken, and it computed a leverage ratio nobody asked for. That was professional
 casefiles with an option menu, not personal decisions, so the skill is still
 worth having and worth testing. But if any of the four comes back `NULL`, this
 is the one to bet on.
+
+#### S9 — three lines now name `ledger`, and only two of them bear on content — 2026-08-19
+
+**1. Framework provenance (Track S7 / K6, done 2026-08-12).** `cascade`,
+`timing` and `fit` each trace to a named decision framework; `ledger` traces to
+nothing in the catalogue.
+[`docs/DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md)'s audit table reads:
+*"Invented. Diagnosticity and relevance ranking are real ideas, but no named
+decision framework prescribes this procedure."* The sentence right after adds
+the qualifier that matters: *"`ledger.md` is not thereby wrong. It is the
+procedure with the least external support and the most exposure, and it should
+be first in line behind any candidate that has a literature."*
+
+**2. A ranked outside candidate (Track K6, done 2026-08-12).**
+`DECISION_FRAMEWORKS.md` ranks elicited confidence first among skill
+candidates: *"This is the only candidate whose parent intervention has
+medium-to-large controlled effects in humans, it needs no new corpus, and it
+turns an unused, fully tested module into an outcome. It also fixes the
+measurement problem the pre-mortem finding raises: a number can be scored for
+accuracy, whereas a list of considerations can only be counted."* This ranks
+what to build next; it is not a measurement of `ledger` in use.
+
+**3. Measured routing behaviour (Track N6 and N7, 2026-08-18/19, new).**
+`ledger` is the worst-routed of the four procedures — over the same 19
+first-route-labelled positives, `rule="first"` (equality against
+`routes[0]`) — in **every one of the six description arms run to date**, not
+only the three N6 registered:
+
+| arm | run | cascade (n=16/32) | fit (n=15/30) | ledger (n=19/38) | timing (n=15/30) |
+|---|---|---|---|---|---|
+| `stakes-shown` | N6 | 1.000 | 0.733 | 0.579 | 0.833 |
+| `full` | N6 | 0.875 | 0.833 | 0.474 | 0.767 |
+| `stakes-named` | N7 | 0.906 | 0.700 | 0.474 | 0.867 |
+| `no-exclusions` | N7 | 0.844 | 0.900 | 0.526 | 0.833 |
+| `no-opener` | N7 | 0.906 | 0.800 | 0.395 | 0.767 |
+| `opener-only` | N6 | 0.594 | 0.533 | 0.105 | 0.900 |
+
+n counts are (distinct labelled items / parsed records across 2 repeats),
+identical across all six arms — the same 65 labelled positives throughout.
+N6's figures are quoted from its own README (0.474, 0.579, 0.105, its
+registered Q3, "met"). N7's figures (0.526, 0.395, 0.474) were computed for
+this update with `decision_evals.trigger_arms.routing_by_procedure(records,
+rule="first")` against the committed checkpoints in
+[`results/decision-making/2026-08-19-d52236a-n7-remaining-arms/`](../results/decision-making/2026-08-19-d52236a-n7-remaining-arms/)
+(`verdicts-no-exclusions.jsonl`, `verdicts-no-opener.jsonl`,
+`verdicts-stakes-named.jsonl`) — `results/triggers/` was not touched, per the
+run that may be writing there. The method was checked against N6's own
+checkpoints first and reproduced its published 0.474 / 0.579 / 0.105 exactly,
+before being trusted on N7 data nobody had scored this way. N7 did not
+pre-register a `ledger`-worst prediction of its own; this is a confirmatory
+check this update requested, not a second pre-registration, and it is
+reported here as descriptive for that reason.
+
+**The honest counter-argument, and it must not collapse into lines 1–2.**
+Lines 1 and 2 are about `ledger`'s *content* — what the procedure says to do,
+and how that compares against the literature. Line 3 is about the *router* —
+whether the model, given the current `SKILL.md` table and description, sends a
+turn to the file matching its label. Those are different failures with
+different remedies, and this repository has already mistaken one for the
+other once: the M-track "router-table defect" diagnosis (Track M, 2026-08-12)
+found `p06` and `p07` routed wrong not because their target procedures were
+badly designed but because two table rows used colliding words —
+`cascade` claimed "the order," `timing` claimed "when," and in ordinary use
+those are one idea — and both were fixed, or queued for fixing (Track L6), by
+editing the *table*, not the procedure.
+
+`ledger` being worst-routed is the same shape of finding. A procedure the
+router sends work to incorrectly may be a good procedure with a bad
+description, and the corpus itself supplies a candidate explanation available
+here too: `ledger`'s condition is "a pile of context ending in a question
+about what to do" — the broadest and least precisely stated of the four — and
+it is labelled on the largest stratum, 19 of 65 positives against 15–16 for
+the other three. A routing failure concentrated on the largest, vaguest-stated
+bucket is at least as consistent with "the row is hard to write precisely" as
+with "the underlying idea is worse." Nothing run so far distinguishes these
+two readings. Line 3 does not, on its own, add weight to the case for
+replacing `ledger`'s content — it adds weight to a *different* case, that
+`ledger`'s row needs the same tightening `timing` and `cascade` already have
+queued.
+
+**What each line licenses.** Lines 1 and 2 license naming `ledger` first in
+the replacement queue and naming elicited confidence as the specific
+candidate. Line 3 licenses a **routing fix** — rewrite `ledger`'s condition to
+be as narrow as `fit`'s or `timing`'s, the L6 edit class already queued — and,
+at most, a lowered prior that a procedure this hard to route accurately may
+also be one worth cutting. It does not license concluding `ledger`'s content
+is worse than the other three's: routing accuracy has never been shown to
+track content quality on this instrument.
+
+**What would settle it, and what it costs.** Separating "bad description"
+from "bad content" needs the same design M4/M5/M6 already used to separate
+structure from content for firing: hold one fixed, vary the other. Rewrite
+`ledger`'s router-table row and description to be as narrowly stated as
+`fit`'s or `timing`'s — an L6-shaped edit, no new corpus — then re-run the N6/N7
+routing comparison. If `ledger` stops being worst, Line 3 was a description
+artefact and Lines 1–2 stand alone as the content case. If `ledger` is still
+worst-routed after a genuinely tightened description, that is new evidence
+bearing on content, not just on the table. Cost: one rewrite, free, plus a
+routing re-run at N6/N7's scale — 1,548 calls, already paid for once and cheap
+to repeat on the checkpointed harness. Deciding what content should replace
+`ledger`, if lines 1–2 carry the day regardless of line 3, is separate work,
+and K6's Rank 1 (elicited confidence) is the standing proposal for it.
+
+**A fourth thread, added 2026-08-18, complicates the elicited-confidence
+replacement rather than confirming it — and it must not be smoothed over.**
+`paper/refs.bib`'s `sun2025overconfident` entry (arXiv:2505.02151 — five LLMs,
+algorithmically constructed reasoning problems with known ground truth) reads:
+*"We find that all five LLMs we study are overconfident: they overestimate the
+probability that their answer is correct between 20% and 60%. Humans have
+accuracy similar to the more advanced LLMs, but far lower overconfidence."*
+The entry's note adds two findings this repository carries nowhere else: LLM
+overconfidence grows sharply relative to humans' as stated certainty falls,
+and *showing a human an LLM's answer raises the human's accuracy while more
+than doubling the human's own overconfidence.*
+
+That cuts both ways and is reported as such rather than resolved. It
+strengthens the case for building elicited confidence as a **scored, internal
+instrument** — K6's own proposal is to score the number against
+`stats/calibration.py`, and a model this badly calibrated is exactly the kind
+of model whose calibration is worth measuring against a scorer that already
+exists and is already wired to the `--confidence` arm — where it scores
+*"P(this tool should be invoked)"*, a forecast with an outcome, rather than a
+probability handed to a person. But it weakens the case
+for elicited confidence as a **user-facing replacement procedure** shipped the
+way `ledger.md` is — a probability handed to a person by a model that
+overestimates its own correctness by 20 to 60 points is not obviously safer
+than `ledger`'s qualitative pile-sorting, and the paper's own finding that
+exposure to an LLM's stated answer more than doubles a human's overconfidence
+suggests a naively shipped confidence number could leave the reader *more*
+miscalibrated, not less. A model that is badly calibrated is a model whose
+elicited confidence may not be worth eliciting on its own — only once
+something scores and corrects it, which is what K6 named and nothing here has
+built.
 
 ### Track L — Skill variants: which formulation is best
 
