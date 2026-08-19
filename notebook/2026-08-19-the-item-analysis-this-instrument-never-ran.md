@@ -156,3 +156,119 @@ mislabelled, never a licence to move a label — that is Track N3's blind
 adjudication, and the answer key stays at v4 through all of this. Nothing
 computed here may change a `should_fire` field without a `docs/DECISIONS.md`
 entry and a fresh adjudication.
+
+---
+
+## Appended 2026-08-19 — the scoring, and what an adversarial re-derivation found
+
+**Appended, not edited.** Every prediction above stands as it was written,
+including the two this section falsifies and the one it shows could not have
+been scored at all. Rewriting a band after seeing the data is the single thing
+this directory exists to prevent, and a prediction improved after the fact is
+worth less than a wrong one left standing.
+
+### Scores
+
+| | registered | observed | |
+|---|---|---|---|
+| P1 | ≤4 positives and ≥8 negatives at `p == 0` | 0 positives, **1** negative | **falsified** |
+| P2 | median `r_pb` in [0.05, 0.35] | 0.5153 over 73, 0.0000 over 258 | **unscoreable** |
+| P3 | 6–30 items with negative discrimination | 15 | met, weakly |
+| P4 | joint in [0.55, 0.75], above independence | 0.7568, above a baseline that was wrong | **falsified** |
+| P5 | XL has the lowest joint accuracy | `l` 0.5238 is lowest; `xl` 0.6176 | **falsified** |
+
+Headline figures, for the record: mean difficulty 0.9913 over positives and
+0.8614 over negatives; median `r_pb` 0.5153 over the 73 items where it is
+defined; floor 0 positives and 1 negative (`l19n1`); ceiling 81 positives and
+103 negatives; mean joint 0.7568 over 86 triples; 15 items discriminating
+negatively. Both "already observed" facts held across all six arms.
+
+### P4's anchor is factually wrong, and the error is instructive
+
+The entry states that N6's `full` arm reports firing accuracy 0.8566 at repeat
+0. **It does not.** N6 `full` at repeat 0 is 244/258 = **0.9457**. 0.8566 is the
+*parse rate* at repeat 0 of the **N9 in-situ arm** — the void run this same
+entry excludes by name, three sections above the prediction that anchors on it
+(`results/decision-making/2026-08-19-505b236-n9-in-situ-void/README.md:20`).
+
+So the independence baseline should have been about **0.74**, not 0.629: pooled
+accuracy cubed is 0.7405, and the composition-aware product for one positive and
+two negatives, `p_pos · p_neg²`, is 0.7356. Against the observed 0.7568 the real
+margin over independence is **+0.008 to +0.021**, not the +0.128 the registered
+anchor implies. P4 is falsified on its band — 0.7568 sits above the 0.75 ceiling
+— and its direction claim survives only weakly: the triples do clear
+independence, by about a fiftieth of what a reader of the prediction would
+expect.
+
+P4 also **failed to name its estimator**, which the standing rule requires. Mean
+over 86 triples and pooled over all 1,032 respondent-triple cells both give
+0.7568 here, and they agree only because every denominator is exactly 12. The
+median over triples is **0.8750**. Three defensible readings, two numbers, one
+of which would have been reported as the result.
+
+### P2 was unreachable, not merely ambiguous
+
+P2 registered the median `r_pb` "over the 258 items". `r_pb` is undefined for
+the 185 constant items, so the real denominator is **73**. The two readings of
+that one sentence straddle the band rather than sitting near each other: 0.5153
+over the 73 defined, and exactly 0.0000 over 258 if the undefined items are
+counted as zero. One reading falsifies the band from above; the other lands
+inside it on an artefact of counting non-measurements.
+
+Worse, the band could not have been hit. A margin-preserving null — curveball
+swaps holding both the respondent totals and the item difficulties fixed, so
+only the *pattern* of who got what right is destroyed — gives a null median
+`r_pb` of **0.4450, 95% [0.4048, 0.5068]** over 300 draws at 5,000 swaps, with
+`n_defined` = 73, matching the observed denominator exactly. That null sits
+**above** P2's ceiling of 0.35. Given these margins, no arrangement of the data
+consistent with them would have produced a median inside the registered band.
+
+The observed 0.5153 clears the null's upper tail outright: 0 of 300 draws
+reached it. A lower-precision run at 120 draws and 1,500 swaps agreed at 0.4463
+and gave the more conservative p = 0.0083, so better mixing tightened the tail
+rather than moving the conclusion. A bootstrap over the 12 respondents puts the
+observed median in **[0.3893, 0.6969]** — an interval as wide as the band it is
+being compared against, which is the noise the "where I expect to be wrong"
+section predicted and underestimated.
+
+This is the **sixth** pre-registration defect of the family this repository
+keeps recording, and the first where the band could not have been hit at all.
+The earlier five were bands set too tight, scored on the wrong denominator, or
+written after the run. This one was arithmetically unreachable from the corpus's
+own margins before a single number was computed.
+
+P3 has the mirror-image problem and it is worth naming even though P3 was met:
+**99.8% of bootstrap draws satisfy [6, 30]**, so the band is close to
+unfalsifiable and "met" is barely evidence of anything.
+
+P1's failure is a denominator error of the same family. The "at least 8
+negatives" threshold came from an observation on **two** respondents and was
+scored on **twelve**, where `p == 0` for a negative means firing in all twelve
+rather than in both of two. One item survives that: `l19n1`.
+
+### The arithmetic is sound
+
+An independent scorer that imports nothing from `decision_evals` reproduced all
+258 difficulties, all 258 discriminations including which are `None`, and all 86
+joint outcomes, with **zero disagreements at 1e-12**. Every criticism above is
+about what was registered and what is wired, not about what the estimators
+compute.
+
+That confirmation also caught one of its own: a `print` in the reviewer's scratch
+script still carried a verdict label written against an earlier, weaker null — a
+within-respondent shuffle that leaves item margins free, which lands at 0.272 and
+does fall inside the band. The null was strengthened and the label was not
+updated with it. The number governs, not the label, and the label is void.
+
+### A live wiring defect, open
+
+`run_triggers.py`'s wired caller passes **one arm**, which is n=2 respondents.
+At n=2 every defined point-biserial is forced to ±1 by construction, and the
+report prints `median_discrimination = 1.0` with no caveat; `format_item_analysis`
+warns only at n < 2. That is this repository's plausible-zero failure mode
+inverted into a **plausible one** — a number that looks like a strong result,
+arrives through a clean run, and is an artefact of the denominator.
+
+The registered 12-respondent analysis has **no wired entry point**. It is
+reachable from the test suite and from an explicit call, and not from anything a
+run does. Stated here as open rather than fixed.
