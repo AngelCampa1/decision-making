@@ -1120,6 +1120,129 @@ column on the case rather than a property the set happens to have.
 | **N7** | **Descriptive re-run** — the remaining three `--description` arms (`no-exclusions`, `no-opener`, `stakes-named`; N6 already ran `full`, `stakes-shown` and `opener-only`) × 258 × 2 repeats. | 1,548 calls | **done 2026-08-19**, 0 unparseable. All six arms now on one corpus. **Only 1 of 5 predictions met cleanly.** The top three arms — `no-opener`, `stakes-shown`, `full` — are **not distinguishable** at n=258 (p=0.86, p=0.35); deleting the exclusion list is the one change that measurably matters (−11pp accuracy, 3× FPR). **L7's band 4 still fails** — no arm reaches FPR ≤ 0.06 — and this run's own prediction 5 substituted thresholds and would have reported it broken. [Run](../results/decision-making/2026-08-19-d52236a-n7-remaining-arms/README.md) |
 | **N8** | **Stamp the model into the record.** `--model` is a CLI argument with a default and the tier survives only as prose in a hand-written README; the verdict records carry `case`, `fired`, `route`, `repeat` and no model at all. Same shape as the label-versioning defect: a run parameter that changes every number, recoverable only from someone remembering to type it. Needs a comparability guard beside `label_versions_comparable`. | free | **done 2026-08-13.** `run_triggers.py` writes `model`; `models_comparable` refuses a comparison spanning tiers, and `compare` raises on it. **An absent `model` is unknown, not the default** — `--model` could have been passed and the record would look identical, so filling in `haiku` would be standing rule 1's invented parameter. Two unstamped arms therefore still compare (no published comparison is retroactively voided) and a stamped arm against an unstamped one is refused, which is the transition where the risk is real |
 | **N9** | **Proxy validation.** `run_triggers.py`'s own module docstring names the gap and this table has never scheduled the measurement: the harness shows the model a description and one message and asks whether it would fire; deployment shows it a description *appended to* a longer system prompt, mid-session, after other turns. N9 takes the first, cheapest step — the same 258-item corpus, key v4, `haiku`, the `full` description, sent through `Conversation(in_situ=True)` (`--append-system-prompt`) instead of `--system-prompt`, one turn, against the existing **N6** `full` arm as the unmodified reference. Conversation length is held at one turn on both sides — see below for why. | 516 calls | **ran 2026-08-19 and is void.** All 516 calls made and refused: the gate reads **repeat 0 only** and saw 0.8566 against its 0.90 floor; the aggregate over all 516 is 0.8643. No prediction is scored. None of the 70 unparseable responses contains a `"fire"` key, the substring "fire", or any JSON at all — they are prose, the model answering as Claude Code rather than emitting the contract. Parse rate splits into **two clusters, not a gradient**: `technical`/`money`/`career` 0.9135 against `relationships`/`health` 0.7892, Fisher **p = 0.00011**, while no adjacent pair in the sorted order is distinguishable. Identity-refusal language never appears in `technical` or `career`. **The gate's blindness to repeat 1 is a standing instrument gap** and is recorded rather than fixed. The venue question stays open and **will** need an in-situ arm whose output contract survives the host prompt — a new pre-registration, not a re-score of this one. [Run](../results/decision-making/2026-08-19-505b236-n9-in-situ-void/README.md) |
+| **N10** | **Re-measure the six-procedure description.** `docs/DECISIONS.md`'s 2026-08-19 entry retired all ten prior description arms — M4, M5, L5, L7's two, N6's three, N7's three — because none of them describes the string `SKILL.md` ships at `0.3.0`. N10 **will** re-run the same instrument `unbundle.py` already provides: all six `DESCRIPTION_VARIANTS` (`full`, `no-exclusions`, `opener-only`, `no-opener`, `stakes-named`, `stakes-shown` — unchanged names, new inputs, since `description_variant` derives each from whatever `SKILL.md` currently ships) × 258 items (`datasets/triggers/decision-making/index.yaml` v4) × 2 repeats, mirroring N6+N7's combined design exactly so the two are comparable in scope if nothing else. **This run will not be able to separate why any difference appears.** One commit (`ae55b5b`) changed three things at once — the description's enumeration clause (four conditions → six), the procedure set the router table names (four rows → six), and `ledger`'s router-row wording — and every arm in this run will see all three simultaneously; a divergence from N6/N7 will be a statement about the shipped edit as a whole, not about any one part of it. What *will be* separable: the six arms will still vary wording alone against each other, holding the new router table fixed across all six, so the L5/L7-shaped question ("does this description edit move firing accuracy") will stay answerable **within** this run exactly as it did in N6/N7. Only the **cross-run** question ("did the 2026-08-19 edit help") will be confounded, and constructing an arm that separates the three sub-changes would mean shipping a description that misstates the procedure set — the exact inconsistency the maintainer ruled out when landing `ae55b5b`. `ledger`'s routing accuracy under its rewritten row will be a **new instrument reading**, not a continuation of the six prior figures (0.105–0.579); a notebook entry naming the estimator, its denominator, and a numeric band **will** need to be registered before this run launches, and this row does not attempt that prediction. **No `description_version` or `skill_version` field exists in the verdict record schema** (`scripts/run_triggers.py`'s row dict carries `set_version`, `model`, `in_situ` and nothing that identifies which `SKILL.md` revision produced the description) and `trigger_arms.py` has no fourth `*_comparable` guard beside `label_versions_comparable`, `models_comparable` and `venue_comparable` to refuse a comparison spanning them — so nothing today would stop `compare()` from running an N10 arm against an N6 arm and reporting a p-value for a difference that is actually two different products. That gap **will** need a guard of the same shape before N10's numbers are compared against anything published before it. | 3,096 calls | **not started** |
+
+#### N10 — the six-procedure description, and what one run cannot separate
+
+**Why now, and why the whole battery rather than one arm.** `docs/DECISIONS.md`'s
+2026-08-19 entry is explicit: *"Not one of them describes the string that now
+ships. No number anywhere in this repository may be presented as a measurement
+of the current description."* Re-running only `full` — the shipped string,
+verbatim — would answer whether the description that ships still fires
+correctly, but it would leave every comparative claim from L5 and L7 (does
+`stakes-shown` beat `full`, does the exclusion list do anything) permanently
+retired: those claims are about the *shape* of the description, and shape is
+what the other five arms exist to isolate. N10 will therefore rerun the full
+six-arm battery, not a subset, for the same reason N7 finished what N6 started
+rather than leaving three arms unmeasured against the current corpus.
+
+**The arms, unchanged in name and mechanism.** `unbundle.py`'s
+`DESCRIPTION_VARIANTS` is `("full", "no-exclusions", "opener-only",
+"no-opener", "stakes-named", "stakes-shown")` — read from the file today, and
+identical to the tuple N6 and N7 ran against. Nothing about the module
+changed; `description_variant(description, variant)` still derives each arm
+mechanically from whatever `description` it is handed, via `shared_scope`'s
+`_OPENER_END` / `_EXCLUSIONS_START` markers. What changed is only the input:
+handed `SKILL.md`'s `0.3.0` frontmatter instead of `0.2.1`'s, the same six
+functions produce six different strings, because the opener's routing-summary
+sentence itself now enumerates six conditions instead of four. The variant
+names are therefore a coincidence of counting, not a relationship — six
+`DESCRIPTION_VARIANTS` measuring a description that names six procedures is
+two unrelated sixes landing in the same row, worth stating so a reader does
+not infer a connection that is not there.
+
+**Call count, derived rather than invented.** 258 items (index.yaml v4, 86
+triples — s 24, m 24, l 21, xl 17 — confirmed against N3's closure figures) ×
+2 repeats (ICC 0.83–0.85, Track I, the same repeat count N6, N7 and N9 already
+used) × 6 arms = **3,096 calls**, identical to N6's 1,548 plus N7's 1,548,
+because N10 is those two runs' design repeated against a different input
+rather than a new design.
+
+**What separates and what does not, stated plainly rather than assumed away.**
+Commit `ae55b5b` moved three things at once, verified by reading the diff
+`docs/DECISIONS.md`'s entry names:
+
+1. The description's routing-summary clause — four conditions rewritten to
+   six, one sentence.
+2. The router table itself — four rows to six, `council.md` and `hinge.md`
+   added.
+3. `ledger`'s router-row wording — rewritten independently of the count change,
+   per the 2026-08-19 Track S9 entry, to separate it from `cascade`.
+
+Every arm N10 runs will see all three at once, because they already live in
+one `SKILL.md` today and `description_variant` reads the whole frontmatter/body
+pair. **A run comparing N10 against N6/N7 will not be able to attribute a
+difference to any one of the three** — it will only be able to say the shipped
+artifact, taken whole, scored differently or the same. This is not a gap this
+row failed to close; it is very likely not closeable without shipping an
+inconsistent artifact.
+An arm that varies (2) while holding (1) at "four conditions" would ship a
+description that undercounts its own router table — exactly the defect
+`docs/DECISIONS.md` names as the reason `ae55b5b` was landed as one change
+rather than deferred. Isolating (1) from (3) is more plausible in principle
+(a router-row rewrite that does not touch the description's own text) but is
+not attempted here and is not free: it is Track 0.7's ablation machinery,
+applied to a skill body rather than a sub-agent dispatch, and it is new
+scope, not a natural extension of this row.
+
+**What will separate and will not be confounded.** The comparison **among**
+N10's six arms — the L5/L7 question, "does this wording choice move firing
+accuracy" — will hold the router table and the procedure set fixed across all
+six, exactly as N6 and N7's six arms did. So N10 will answer the wording
+question cleanly, the same way its two predecessors did; what it will not be
+able to answer cleanly is whether the 2026-08-19 edit as a whole helped,
+because "as a whole" is three changes bundled into one comparison.
+
+**The routing question — a prediction, not written here.** `ledger` was the
+worst-routed procedure in all six prior arms (0.105–0.579, Q3 in N6, restated
+in the 2026-08-19 Track S9 entry alongside the `ledger → cascade` count: 77 of
+the confusion-pair traffic across N6+N7's six checkpointed arms). Its router
+row was rewritten specifically to separate it from `cascade`. Whether the new
+row helps is exactly the kind of claim the registered-band rule in `CLAUDE.md`
+exists for, and it is not this row's to answer: a notebook entry **will** need
+to name the estimator (first-route match rate against `ledger`-labelled
+items, most likely, mirroring N6's Q3 — but that choice belongs in the
+prediction, not here), its denominator (the count of `route == "ledger"`
+items, 19 in N6's construction, subject to change now the corpus may resolve
+differently against six new arms), and a numeric band set against the
+observed ceiling rather than a round number, per the L7 recall-band defect
+this file already recorded. That entry must exist and its first commit must
+be an ancestor of N10's run commit before N10 launches, per the run-provenance
+rule. This row states what must be registered; it does not register it.
+
+**The comparability gap, investigated rather than assumed.** `trigger_arms.py`
+carries three guards — `label_versions_comparable` (keyed on the record's
+`set_version`), `models_comparable` (keyed on `model`), `venue_comparable`
+(keyed on `in_situ`) — each raising `ArmError` inside `compare()` when two
+arms differ on the field it checks. Reading `scripts/run_triggers.py`'s
+verdict-row construction (`row = {...}`, in `main()`'s scoring loop) shows
+what is and is not stamped: `case`, `repeat`, `fired`, `procedure`, `covers`,
+`set_version`, `model`, `in_situ`, `p_fire`, `should_fire`, `route`, and the
+full `routes` tuple. **Nothing identifies which revision of `SKILL.md`
+produced the description a given verdict was scored against.** `set_version`
+tracks the answer key (`datasets/triggers/`), not the skill; a description
+edit with no corpus edit moves `set_version` not at all, which is exactly the
+2026-08-13 label-versioning defect's shape one axis over — a run parameter
+that changes every number in the run, recoverable today only from a human
+remembering which commit was checked out. `compare()` would run an N10 `full`
+arm against N6's `full` arm and return a p-value with no refusal at all,
+because none of the three existing guards inspects the field that changed.
+
+**Recommendation: add a fourth guard, `skill_versions_comparable`, before
+N10's numbers are compared against anything published before it.** The shape
+already exists three times over — stamp `SKILL.md`'s frontmatter
+`metadata.version` (`0.2.1`, `0.3.0`, …) into each verdict row at write time,
+the same way `model` and `in_situ` are stamped now; add a `*_comparable`
+function reading that field the way the other three read theirs; wire it into
+`compare()`'s guard chain. An absent value on a pre-N10 record reads as
+`0.2.1` rather than *unknown* — every record on disk today was in fact scored
+against that version or an earlier one, no CLI flag could have silently
+produced a different value the way `--model` could, so the record is telling
+the truth by omission, the same reasoning `venue_comparable`'s docstring gives
+for treating an absent `in_situ` as `False`. This is a recommendation, not an
+implementation — it belongs beside N10's launch, not inside this document.
+
+---
 
 #### N9 — the proxy the module docstring names, and the cheapest step toward closing it
 
