@@ -1,6 +1,6 @@
 # Documentation index
 
-Fifteen documents, and they answer different questions. This is the map.
+Sixteen documents, and they answer different questions. This is the map.
 
 ## Start here
 
@@ -8,7 +8,7 @@ Fifteen documents, and they answer different questions. This is the map.
 | --- | --- |
 | [`STATUS.md`](STATUS.md) | Where the work actually is. Every run on record, what it showed, which measurements turned out to be broken, which tracks are untouched. The ledger. |
 | [`../SCORECARD.md`](../SCORECARD.md) | What may be publicly claimed about a skill. Empty on purpose, plus the verdict vocabulary and the retirement rule. |
-| [`RESEARCH_PROGRAMME.md`](RESEARCH_PROGRAMME.md) | What the tracks are. The goal, what the literature already settles, and fifteen tracks in eight parts. Read this before proposing experiment work. |
+| [`RESEARCH_PROGRAMME.md`](RESEARCH_PROGRAMME.md) | What the tracks are. The goal, what the literature already settles, and sixteen tracks in eight parts. Read this before proposing experiment work. |
 
 ## Method
 
@@ -20,6 +20,7 @@ Fifteen documents, and they answer different questions. This is the map.
 | [`DECISIONS.md`](DECISIONS.md) | Why the answer key or the shipped skill changed, per commit. A label move shifts every number computed from it, so the reasoning lives here. |
 | [`HARNESS_DISCLOSURE.md`](HARNESS_DISCLOSURE.md) | The ETCSOVG disclosure record: execution, tools, context, scheduling, observability, verification, governance. |
 | [`EVAL_SET_DATASHEET.md`](EVAL_SET_DATASHEET.md) | Datasheet for the evaluation corpus: motivation, composition, collection, known problems. |
+| [`TAILORING_CORPUS_SPEC.md`](TAILORING_CORPUS_SPEC.md) | How to author a Track H triplet: eight salience dimensions, fifteen disqualifiers, and the falsifier battery. Every rule in it comes from an authored triplet that failed. |
 
 ## What is known, and what is not
 
