@@ -139,6 +139,27 @@ one at a time and write the result into `key.salience_match`.
    must be balanced for penalty language.** Either both name a consequence or
    neither does. Write the two inserts stripped of their nouns and check that
    the skeletons are interchangeable.
+8. **Same relation to the causal-rule sentence, and this is the one pass two
+   failed.** Identify the base sentence containing the question's terminal
+   event and stating what it depends on. Both inserts must stand in the *same*
+   lexical relation to it: either both name the actor it names, or neither
+   does. In pass two, `t01` and `t02` achieved this naturally — both inserts
+   route through Halbrook, through the Council — and the discriminating
+   difference is carried by the *object* that actor acts on. In `t03`, `t04`
+   and `t05` the two inserts name different actors and only the governing one
+   appears in the rule sentence, giving a pooled AUC of 0.740 (0.800 with
+   proper nouns dropped) against a band of [0.40, 0.60]. Dropping entity names
+   makes it **worse**, so renaming is not the repair.
+
+   **A companion rule, from the same review: the base's neutralising sentence
+   must identify the matched entity by a property, never by its name.** Naming
+   it inside the sentence that excludes it — "its own published calendar",
+   "publish separate calendars", "outside my demise" — lets a reader find the
+   decoy from the base alone, before the insert is read.
+
+   This feature is **not yet in** `tailoring.FEATURES`, so the battery does not
+   currently compute it. It was found by two readers rather than by the gate,
+   which is the whole lesson of pass two: the battery is a floor.
 
 ### 4.1 The asymmetric-neutraliser rule
 
@@ -249,6 +270,16 @@ named in the same breath.
     unmotivated phrase that is load-bearing only in the matched arm, which is a
     tell. A base that signals a correction is coming biases toward movement on
     the arm where movement is scored as failure.
+15. **The governing fact admits a defensible reading under which it does not
+    govern.** The registered kill names a *matched* fact that governs; this is
+    its mirror, and it is worse, because it depresses `P(change | governing)`
+    through item ambiguity while looking exactly like a model that failed to
+    notice. The primary is a difference of two probabilities, so an ambiguous
+    governing arm biases it toward zero and makes a null unreadable. `t01` (a
+    reader may decline to read "30-litre returnable containers" as kegs) and
+    `t05` (a slot *offered* is not a slot taken, against a base saying "that is
+    the one I hold") were both cut on this — caught by blind re-derivation from
+    prompt text alone, and by nothing else.
 
 ---
 

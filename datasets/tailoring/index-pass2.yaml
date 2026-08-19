@@ -38,6 +38,71 @@ set_version: 2
 design: triplet
 arms: [base, governing, matched]
 status: proposed
+clean: [t03]
+blocked_pending_tau: [t04]
+cut: [t01, t02, t05]
+
+#: DISPOSITIONS ARE THREE, NOT TWO, AND THE THIRD IS RECOVERABLE.
+#: t04 is BLOCKED, not cut. Its relative movement is 0.333, the smallest in
+#: the set (t01 0.667, t02 1.000, t03 1.000, t05 0.500), and the movement
+#: threshold tau HAS NEVER BEEN DERIVED. Any tau above 1/3 makes t04's
+#: governing arm a guaranteed false negative -- structurally impossible
+#: rather than hard. Counting it as usable would be inventing a bound for an
+#: underived parameter, which is standing rule 1. If a derived tau lands at
+#: or below 1/3, t04 returns unchanged; above, it was never usable.
+#:
+#: THE GENERALISABLE PART, WHICH IS A RULE FOR PASS THREE AND NOT A FACT
+#: ABOUT t04: downward corrections are BOUNDED -- a date can only come
+#: forward as far as today -- while upward ones are not. So down-arms sit
+#: lowest on relative movement by construction. The author's deliberate
+#: 3-up/2-down split bought sign-robustness (a scorer with a sign error
+#: cannot pass) and paid for it in threshold headroom, which was not
+#: anticipated when the split was chosen.
+
+#: THREE CUTS, BY THREE DIFFERENT CHECKS. Recorded here because which check
+#: caught which item is the useful part of the record, not the count.
+#:  t02 -- maintainer ruling. Over-determined neutralisation (two independent
+#:         settlers, either alone closing the item) plus a shared-venue
+#:         capacity objection the author could not design away.
+#:  t01 -- blind re-derivation. A reader who declines to treat "30-litre
+#:         returnable containers" as necessarily kegs answers 6 rather than
+#:         10, so the GOVERNING arm may not govern.
+#:         DISSENT, RECORDED INTACT SO A LATER PASS CAN OVERTURN THIS CUT.
+#:         The adversarial reviewer rated t01 the STRONGEST of the five and
+#:         the only item resisting both formulations of the causal-rule
+#:         shortcut -- its neutraliser shares no term with its insert, so a
+#:         reader must know that a 30-litre returnable is a keg. Both
+#:         readings can hold at once: the two readers were answering
+#:         different questions, one asking whether a surface feature
+#:         separates the arms and the other whether a professional could
+#:         defensibly decline the governing fact. The cut stands for pass
+#:         two's yield on the second question. It is not a finding that t01
+#:         is badly made.
+#:  t05 -- blind re-derivation. The earlier roadworthiness slot is OFFERED,
+#:         not accepted, and the prompt has him say of 2026-09-09 "that is
+#:         the one I hold", so 28 is defensible and the GOVERNING arm may not
+#:         govern.
+#:
+#: THE FAILURE CLASS t01 AND t05 DIED OF IS NOT THE ONE THE REGISTERED KILL
+#: NAMES, AND IS JUST AS FATAL. The kill fails a pass when a MATCHED fact
+#: governs. An ambiguous GOVERNING fact is the mirror defect: it depresses
+#: P(change | governing) through item ambiguity while looking identical to a
+#: model that failed to notice. The primary is a difference of two
+#: probabilities, so an ambiguous governing arm biases it toward zero and a
+#: null becomes unreadable. Same family as "an estimator that cannot return a
+#: non-zero value is not a measurement".
+
+#: WHY THIS MANIFEST MAY NOT BE MERGED, STATED BEFORE THE TRIPLET LIST.
+#: Two statements, both true, and a reader who collapses them has been misled.
+#:  (1) Pass two did not trigger the registered kill's clause 2. A single
+#:      surface feature must separate the arms in EVERY triplet to fire it;
+#:      `causal_rule_overlap` separates three of five (t03, t04, t05; t01 and
+#:      t02 tie). Three is not every.
+#:  (2) Its output still cannot be merged. That same feature's pooled AUC is
+#:      0.740 (0.800 with proper nouns dropped), far outside
+#:      `corpus.SEPARABILITY_BAND` of [0.40, 0.60], so it raises a finding the
+#:      moment it is coded into `tailoring.FEATURES`.
+#: Not triggering the kill and being clean are different things.
 
 triplets:
   - id: t01
@@ -46,7 +111,21 @@ triplets:
     direction: up
     values: {base: 6, governing: 10, matched: 6}
     files: [t01-cider-packaging-base.yaml, t01-cider-packaging-governing.yaml, t01-cider-packaging-matched.yaml]
+  #: CUT on maintainer ruling, 2026-08-19, for two independent reasons, both
+  #: raised by the author before the review confirmed them. (a) The matched
+  #: fact is OVER-DETERMINED: the base closes the requirement list at two
+  #: items ("Those two things are the whole of it") AND states she passed
+  #: anaesthesia on 2024-03-13, so either settler alone neutralises the insert
+  #: and the two-hop read the design is built on collapses to one. That is
+  #: pass one's failure inverted -- pass one under-neutralised and the matched
+  #: fact governed; this over-neutralises and the item stops being hard.
+  #: (b) Both sittings are at Ardenshire Hall, so shared-venue capacity is an
+  #: objection the author could not design away and recorded rather than hid.
+  #: The three files stay on disk. They are evidence of the failure mode, and
+  #: nothing in this repository is deleted for being wrong.
   - id: t02
+    status: cut
+    cut_reason: over-determined neutralisation; shared-venue capacity objection
     domain: veterinary_credentialing
     unit: weeks
     direction: up
@@ -103,6 +182,18 @@ design_notes:
     is solved by a model that always increases the answer, and the same
     sign-blindness that spec §7 records in the falsifier battery would go
     unmeasured in the triplets.
+  integrality_is_also_a_tell: >-
+    Recorded rather than repaired, and repairing it is forbidden. The blind
+    re-derivation found that four of the five WRONG matched readings also
+    produce whole numbers (11 weeks, 13/12 weeks, 9 weeks, 14 days); only
+    t04's wrong reading is ragged at about 4.1 months. That four-of-five is
+    DESIRABLE: a distractor whose wrong reading yields a ragged number is one
+    a model can reject on form rather than on reasoning. So t04 is the WEAKEST
+    on this axis, not the strongest, and integrality-as-a-tell belongs to the
+    same leak family as everything else found in this pass -- it simply runs
+    in the corpus's favour on four items and against it on one. t04's wrong
+    reading must NOT be made integral to tidy this up; that would remove the
+    record of the defect rather than the defect.
   integrality: >-
     Every date in t01-t03 is an exact multiple of 7 days from 2026-08-19; every
     date in t04 falls on the 19th; t05 is in days throughout. All fifteen arm
