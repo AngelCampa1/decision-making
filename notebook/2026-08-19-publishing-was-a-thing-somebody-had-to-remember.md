@@ -147,6 +147,47 @@ The general form, which is the part worth keeping: **a second signal that agrees
 with the first by construction is not corroboration.** It felt like defence in
 depth and was arithmetic.
 
+## Outcome, appended after the switchover
+
+Landed as `8e14a5f`. Against the predictions above:
+
+- **Prediction 2 was wrong.** I said the merge's own run would build green and
+  **fail** at `deploy-pages`, because Pages was still `build_type: legacy`. Both
+  jobs went green on the first run, including `deploy`. `actions/deploy-pages@v5`
+  created and served a deployment while the Pages API still reported
+  `build_type: legacy, source: {branch: gh-pages}`. So a repository does not
+  have to be switched to Actions before an Actions deployment will serve; the
+  deployment supersedes the branch on its own, and the setting is a description
+  that lags rather than a precondition.
+- **Prediction 4 therefore did not happen.** There was no 404 window at all,
+  because there was never a moment with the source switched and no deployment
+  behind it. The switchover I planned as a two-step with an outage window turned
+  out to be a one-step with none. Flipping `build_type` to `workflow` afterwards
+  was a correction to the recorded configuration, not the thing that made the
+  site work, and `de deployed` returned the same answer either side of it.
+- **Prediction 6 was wrong for the same reason.** I expected `de deployed` to
+  exit 2 between the merge and the flip, the gh-pages-served site having no
+  provenance file. It exited **0** immediately: the file was served at 200, and
+  that file exists only in the Actions artifact and never in `gh-pages`, which
+  is what proves the Actions deployment was already live.
+- **Predictions 3 and 5 held.** `de deployed` reported
+  *the live site is a build of 8e14a5f, which is origin/main*, exit 0, with no
+  CDN lag observed at roughly 40 seconds after the deployment.
+
+Verified by hand as well as by the command, per step 10: `/agents/`,
+`/docs/autonomous_work_order/`-style paths and `/docs/` all 200; the new
+sentence *"Deploying is not yours to do"* is present in the work order's served
+HTML; `_astro/_root_.DcQjYH9t.css` resolves 200; and this entry is listed in
+`/notebook/` and serves at its own URL.
+
+`gh-pages` is deleted, remote and local. It was `7958aa9`.
+
+**The thing worth keeping from this.** Three of six predictions were wrong, all
+in the same direction and all for one reason: I modelled the Pages *source
+setting* as a gate on deployment, and it is not one. Nothing bad followed,
+because the plan was ordered so that the uncertain step came after a step that
+kept the site up. That ordering was worth more than the predictions were.
+
 ## What the adversarial review found
 
 Dispatched against the finished branch with a brief to break it. It re-derived
