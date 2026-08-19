@@ -1509,3 +1509,86 @@
              a better-grounded source than the marketing and simulation
              material the earlier passes turned up.},
 }
+
+% ---------------------------------------------------------------------------
+% Item analysis, 2026-08-19 -- benchmark-item quality and paired abstention.
+% Cited in notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md,
+% which registers the first item-level estimators this instrument has had.
+%
+% NO AUTHOR LINES. These four were recorded from their abstracts and the
+% author lists were not captured with them. The citation gate indexes on the
+% arXiv identifier and the `quote` field, so they resolve as they stand -- but
+% an author line has to be added before any of them is cited in paper/.
+% ---------------------------------------------------------------------------
+
+@article{benchbench2026,
+  title   = {{BenchBench}},
+  journal = {arXiv preprint arXiv:2603.20807},
+  year    = {2026},
+  quote   = {BenchBench shows that benchmark-design ability is only moderately
+             correlated with answer-time strength (Spearman rho ~0.37),
+             invalidity is negatively associated with discrimination (Pearson
+             r~0.62), and the resulting designer--answerer matrices enable
+             scalable audits of format/modality/language fidelity and
+             suite-dependent self/family interactions.},
+  note    = {Quote from the abstract, recorded 2026-08-19. READ THE QUOTE
+             BEFORE CITING THE NUMBER: the abstract prints `r~0.62` and puts
+             the direction in words only -- there is no minus sign in the
+             source -- so a citation writing r = -0.62 asserts a character the
+             paper does not print. No n, no confidence interval and no p
+             accompany it, and the abstract does not say whether the
+             correlation is per-item or per-suite, which are different claims
+             at different denominators.},
+}
+
+@article{aba2026,
+  title   = {Automated Benchmark Auditing},
+  journal = {arXiv preprint arXiv:2605.26079},
+  year    = {2026},
+  quote   = {Across this corpus, ABA identifies critical issues including
+             ambiguous task design, execution environment conflicts, and
+             incorrect ground truths in over 25.7\% of the evaluated tasks.
+             [...] filtering out these tasks with issues shifts model rankings
+             and increases average performance on SWE-bench Verified and
+             Terminal-Bench 2 by 9.9\% and 9.6\%, respectively.},
+  note    = {Quote from the abstract, recorded 2026-08-19; the two sentences
+             are separated in the source and are joined here with an elision
+             marker. ABA is the paper's abbreviation for Auto Benchmark Audit,
+             not its title. The corpus is "168 benchmarks across nine
+             domains". Note what the second number is: filtering the flawed
+             tasks out RAISED average performance by 9.9\% and 9.6\% -- a
+             level shift on the tasks that remain, not a benchmark score
+             moving by that much in either direction.},
+}
+
+@article{agentabstain2026,
+  title   = {{AgentAbstain}},
+  journal = {arXiv preprint arXiv:2607.10059},
+  year    = {2026},
+  quote   = {Across 17 frontier LLMs in 4 agent harnesses, the best agent
+             (Gemini 3.1 Pro) achieves only 59.5\% paired accuracy (correct on
+             both the act and abstain sides of each paired task).},
+  note    = {Quote from the abstract, recorded 2026-08-19. "paired accuracy"
+             is lower case in the source and is not a proper noun. Cited in
+             notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md
+             for the SHAPE of the statistic only: this repository's triples
+             are one positive and two negatives, so generalising a pair to a
+             triple is this repository's move and not the paper's, and it
+             borrows no number from it -- 59.5\% is over pairs and is a
+             baseline for nothing computed here.},
+}
+
+@article{benchmarksquared2026,
+  title   = {{Benchmark}$^2$},
+  journal = {arXiv preprint arXiv:2601.03986},
+  year    = {2026},
+  quote   = {(3) Capability Alignment Deviation, identifying problematic
+             instances where stronger models fail but weaker models succeed
+             within the same model family.},
+  note    = {Quote from the abstract, recorded 2026-08-19. The abstract gives
+             no threshold, no count and no effect size for the signal, so it
+             licenses the IDEA of a negative-discrimination screen and no
+             number attached to one. Its unit is a model family; six
+             description arms of one skill at one model tier are not that,
+             which is the gap the notebook entry citing it has to carry.},
+}
