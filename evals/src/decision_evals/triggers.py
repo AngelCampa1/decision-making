@@ -612,7 +612,7 @@ def _scan(repo_root: Path) -> tuple[list[str], list[tuple[str, Finding]]]:
         findings.extend(
             (_scope(path, repo_root), finding)
             for finding in _check_unreachable_procedures(
-                trigger_set, skills_dir / name / "SKILL.md", path
+                trigger_set, skills_dir / name / "SKILL.md", path, repo_root
             )
         )
         findings.extend(_check_corpus_rules(trigger_set, path, repo_root))
@@ -684,7 +684,7 @@ def _check_drafts(
         findings.extend(
             (_scope(index, repo_root), finding)
             for finding in _check_unreachable_procedures(
-                draft, skills_dir / draft.skill / "SKILL.md", index
+                draft, skills_dir / draft.skill / "SKILL.md", index, repo_root
             )
         )
         findings.extend(_check_corpus_rules(draft, index, repo_root))
@@ -763,7 +763,7 @@ def _check_routes(trigger_set: TriggerSet, skill_path: Path, path: Path) -> list
 
 
 def _check_unreachable_procedures(
-    trigger_set: TriggerSet, skill_path: Path, path: Path
+    trigger_set: TriggerSet, skill_path: Path, path: Path, repo_root: Path
 ) -> list[Finding]:
     """Every procedure the router offers must be the right answer somewhere.
 
@@ -798,21 +798,26 @@ def _check_unreachable_procedures(
         rows = router_rows(parse_skill(skill_path).body)
     except (OSError, UnbundleError):
         return []
+    # `router_rows` raises rather than returning an empty list, so `offered` is
+    # never empty here and no guard against that is written: an unreachable
+    # branch is a branch nothing can test.
     offered = {row.name for row in rows}
-    if not offered:
-        return []
-    # A set that labels no routes at all is a version-2 corpus, archived rather
-    # than fixed. Reporting every procedure as unreachable there is noise.
+    # There is deliberately no escape hatch for a set that labels no routes at
+    # all. The first draft carried one, justified as "a version-2 corpus,
+    # archived rather than fixed" -- and the only version-2 corpus on disk
+    # labels four routes and fires this check, so the justifying example did
+    # not exist. What the hatch actually bought was silence on the input where
+    # the finding is loudest: a corpus authored with positives and no `route:`
+    # labels yet, where *every* procedure is unreachable. Silence cannot be
+    # baselined and cannot be noticed; a finding can be both.
     labelled = {name for case in trigger_set.positives for name in case.routes}
-    if not labelled:
-        return []
     unreachable = sorted(offered - labelled)
     if not unreachable:
         return []
     return [
         Finding(
             f"unreachable:{','.join(unreachable)}",
-            f"{path}: {len(unreachable)} of {len(offered)} procedures in "
+            f"{_scope(path, repo_root)}: {len(unreachable)} of {len(offered)} procedures in "
             f"{skill_path.parent.name}'s router table are the correct answer for no "
             f"positive: {', '.join(unreachable)}. `evaluate_routing` scores a chosen "
             "procedure against the case's declared routes, so these can only ever be "

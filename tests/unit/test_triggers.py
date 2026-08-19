@@ -540,14 +540,19 @@ class TestEveryOfferedProcedureIsReachable:
         """Standing rule 2: the falsifier runs against a known-good case first."""
         skill = self._skill(tmp_path)
         both = self._both(tmp_path)
-        assert _check_unreachable_procedures(load_trigger_set(both), skill, both) == []
+        assert _check_unreachable_procedures(load_trigger_set(both), skill, both, tmp_path) == []
 
     def test_a_procedure_no_positive_routes_to_is_reported(self, tmp_path: Path) -> None:
         skill = self._skill(tmp_path)
         one = self._one(tmp_path, "ledger")
-        findings = _check_unreachable_procedures(load_trigger_set(one), skill, one)
+        findings = _check_unreachable_procedures(load_trigger_set(one), skill, one, tmp_path)
         assert [finding.key for finding in findings] == ["unreachable:fit"]
         assert "counted wrong" in findings[0].message
+        # a56cd8f exists to put the corpus path in the message, because the two
+        # shipped corpora otherwise raise byte-identical strings and the reader
+        # cannot tell which one is being reported. Nothing asserted it until
+        # this line, so reverting that commit passed the whole suite.
+        assert findings[0].message.startswith("datasets/triggers/demo.yaml: ")
 
     def test_the_key_names_the_whole_set(self, tmp_path: Path) -> None:
         """A baseline naming two procedures must not cover a corpus missing one.
@@ -555,6 +560,13 @@ class TestEveryOfferedProcedureIsReachable:
         Identity is the set of things that went wrong, not the wording -- the
         rule ``Finding`` already documents and the reason the shortcut battery's
         keys enumerate every leaking feature.
+
+        This asserted ``== []`` until it was reviewed: the body tested the
+        zero-label escape hatch while the name and the docstring described set
+        identity, so the property named here was checked nowhere. The hatch is
+        gone, and the same fixture now exercises the property the name claims --
+        a corpus labelling nothing leaves *both* procedures unreachable, and the
+        key must name both rather than either.
         """
         skill = self._skill(tmp_path)
         directory = tmp_path / "datasets" / "triggers"
@@ -568,15 +580,25 @@ class TestEveryOfferedProcedureIsReachable:
             "  - id: n01\n    turn: What is the capital of France?\n    why: a lookup\n",
             encoding="utf-8",
         )
-        # No route labelled at all: a version-2 corpus, archived rather than
-        # fixed. Reporting both procedures unreachable there is noise.
-        assert _check_unreachable_procedures(load_trigger_set(path), skill, path) == []
+        findings = _check_unreachable_procedures(load_trigger_set(path), skill, path, tmp_path)
+        assert [finding.key for finding in findings] == ["unreachable:fit,ledger"]
+
+    def test_a_missing_skill_file_is_not_an_error_here(self, tmp_path: Path) -> None:
+        """The ``OSError`` half of the ``except``; the child covered only the other.
+
+        ``test_a_skill_with_no_router_table_is_not_an_error`` reaches the same
+        clause through ``UnbundleError``, so branch coverage is satisfied by
+        either and neither implies the other.
+        """
+        one = self._one(tmp_path, "ledger")
+        absent = tmp_path / "skills" / "demo" / "SKILL.md"
+        assert _check_unreachable_procedures(load_trigger_set(one), absent, one, tmp_path) == []
 
     def test_a_skill_with_no_router_table_is_not_an_error(self, tmp_path: Path) -> None:
         skill = self._skill(tmp_path)
         skill.write_text(self.SKILL.split("| What is hard")[0], encoding="utf-8")
         one = self._one(tmp_path, "x")
-        assert _check_unreachable_procedures(load_trigger_set(one), skill, one) == []
+        assert _check_unreachable_procedures(load_trigger_set(one), skill, one, tmp_path) == []
 
     def test_the_shipped_corpus_reports_council_and_hinge(self) -> None:
         """The finding this check was written for, asserted rather than described."""
@@ -586,6 +608,7 @@ class TestEveryOfferedProcedureIsReachable:
             load_trigger_set(corpus),
             repo / "skills" / "decision-making" / "SKILL.md",
             corpus,
+            repo,
         )
         assert [finding.key for finding in findings] == ["unreachable:council,hinge"]
 
