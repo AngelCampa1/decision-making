@@ -262,8 +262,9 @@ working directory, never about a commit. The tip of `main` imported a module
 that had never been committed. Two living documents linked paths that
 `.gitignore` excludes by design, so those links cannot resolve for anyone who
 clones this. The site manifest recorded a build from a file that is not in the
-repository. Every one of those is the gate working correctly on a tree it had
-never been shown. Written up in
+repository. A test asserting that published checkpoints exist found one where it
+wanted two, because the second is under an ignored path. Every one of those is
+the gate working correctly on a tree it had never been shown. Written up in
 [`notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`](notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md).
 
 A second workflow publishes rather than checks.

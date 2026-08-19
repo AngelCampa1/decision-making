@@ -212,17 +212,24 @@ measurement was run twice.** 40 items, three ways, on `ollama/qwen3:4b` at
 `temperature=0`. Within a single process invocation a serial repeat agreed with
 serial on the exact text of 31 of 40 items and then 13 of 40, while the
 concurrent pass at `concurrency=8` agreed on 0 of 40 both times. `input_tokens`
-matched exactly, so the prompts were byte-identical and the change is the
-server's: batching concurrent requests changes the reduction order, and a
-reasoning chain thousands of tokens long gives one flipped token room to
-propagate. `runner.CONCURRENCY_UNSAFE` refuses the combination rather than
-recording it here and hoping.
+matched exactly on all 40 items in the second measurement and on 39 of 40 in the
+first, the exception being an infrastructure zero that recorded no tokens at
+all. So the prompts were byte-identical wherever a call was actually made, and
+the change is the server's: batching concurrent requests changes the reduction
+order, and a reasoning chain thousands of tokens long gives one flipped token
+room to propagate. The cleanest form of the comparison holds elapsed time
+fixed by pairing *adjacent* arms: at the same ~23 minute separation,
+serial-vs-serial is 0.775 and 0.325 while serial-vs-concurrent is 0.000 twice.
+`runner.CONCURRENCY_UNSAFE` refuses the combination rather than recording it
+here and hoping.
 
 **The `dev` arena does not reproduce its own text across runs, and that is the
-larger disclosure.** Two *serial* runs of the same 40 prompts an hour apart also
-agree on 0 of 40. So no two runs on this backend may be compared by exact text,
-whatever their concurrency, and the serial floor itself moved from 0.775 to
-0.325 between the two measurements. On the parsed answer, which is what reaches
+larger disclosure.** Serial runs in different invocations agree on only 0 of 40
+and 7 of 40 across the two available pairs. So no two runs on this backend may
+be compared by exact text, whatever their concurrency, and the serial repeat
+itself is not a rate: agreement falls in one contiguous block of each run, so
+0.775 and 0.325 are two locations of a change-point reported as though they
+were two estimates of a proportion. On the parsed answer, which is what reaches
 a published number, every pairing lands between 0.825 and 0.975, and the
 concurrent arms are not separable from cross-run serial variation at n=40.
 Treat `dev`-arena agreement below roughly ten points as noise until somebody

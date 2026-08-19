@@ -29,6 +29,7 @@ from decision_evals.runner import (
     completed_keys,
     iter_items,
     load_records,
+    local_call,
     run_arm,
 )
 from decision_evals.solvers.arms import build_arm
@@ -153,6 +154,10 @@ def test_calls_really_do_overlap(items: list[Item], tmp_path: Path) -> None:
     that measured nothing. A `concurrency` argument nothing acts on would pass
     every other test here.
     """
+    # A partial final cycle would block until the timeout and then fail with a
+    # barrier error naming nothing about the fixture, so the dependency is
+    # asserted rather than left to whoever next edits `tests/conftest.py`.
+    assert len(items[:6]) % 3 == 0, "this test needs a multiple of the barrier width"
     barrier = threading.Barrier(3, timeout=30)
 
     def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
@@ -236,18 +241,146 @@ def test_an_authentication_failure_still_stops_a_concurrent_run(
         )
 
 
+def _one_fails_after_all_arrive(width: int) -> Callable[[str, str, bool], CliResult]:
+    """A `CallFn` where every call parks until all of them have arrived.
+
+    Then exactly one raises. Parking first is what puts the failure and the
+    successes into a single `wait()` batch, which is the case the drain in
+    `run_arm` exists for; without it the failure usually completes alone and
+    the batch has nothing to lose.
+    """
+    barrier = threading.Barrier(width, timeout=30)
+    first = threading.Event()
+
+    def one_bad_apple(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del prompt, system_prompt, append
+        barrier.wait()
+        if not first.is_set():
+            first.set()
+            raise AuthenticationError("nope")
+        return _result("ANSWER: nope")
+
+    return one_bad_apple
+
+
+def _counts_into(made: list[str]) -> Callable[[str, str, bool], CliResult]:
+    """A `CallFn` that records every prompt it was asked for.
+
+    A factory rather than a closure defined in the loop, which binds the loop
+    variable late and is what ruff's B023 is about.
+    """
+
+    def counting(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del system_prompt, append
+        made.append(prompt)
+        # Charges exactly what `expected_cost_usd` authorises below. With the
+        # default 0.001 the ledger never catches up with the authorisation and
+        # the serial arm runs to the end, so the comparison would pass for the
+        # wrong reason.
+        return _result("ANSWER: nope", cost=0.02)
+
+    return counting
+
+
 def test_the_budget_still_stops_a_concurrent_run(items: list[Item], tmp_path: Path) -> None:
-    """Authorised before dispatch, so the window may overshoot -- but it stops."""
+    """And it stops after the same number of calls the serial path would make.
+
+    This asked for `limit_usd=0.0` until the adversarial review of 2026-08-19,
+    which refuses the first item before anything is dispatched -- so it
+    exercised the serial refusal with a `concurrency` argument attached and
+    made zero calls. It could not have caught what it was for: authorisation
+    read `spent_usd`, which only advances when a record comes back, so every
+    call in one window saw the same balance and the budget could refuse
+    nothing beyond the first item. Six items at $0.02 against a $0.021 limit
+    ran all six.
+
+    The limit here authorises exactly one call, and the assertion is on the
+    number of calls actually made rather than on the exception alone.
+    """
+    made: list[str] = []
+
+    def counting(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del system_prompt, append
+        made.append(prompt)
+        return _result("ANSWER: nope")
+
     with pytest.raises(RunError, match="stopping before"):
         run_arm(
             items,
             ARM,
             model="haiku",
             checkpoint=tmp_path / "run.jsonl",
-            call=_answers_correctly(items),
-            ledger=BudgetLedger(limit_usd=0.0),
-            concurrency=4,
+            call=counting,
+            ledger=BudgetLedger(limit_usd=0.021),
+            expected_cost_usd=0.02,
+            concurrency=len(items),
         )
+    assert len(made) == 1, f"the window authorised {len(made)} calls against a limit for one"
+
+
+def test_a_concurrent_run_stops_where_the_serial_one_does(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """The budget is not a different budget at a different concurrency.
+
+    Reserving at dispatch is what makes this hold; charging only on completion
+    made the answer depend on the window size.
+    """
+    counts: dict[int, int] = {}
+    for concurrency in (1, 2, len(items)):
+        made: list[str] = []
+        counting = _counts_into(made)
+
+        with pytest.raises(RunError, match="stopping before"):
+            run_arm(
+                items,
+                ARM,
+                model="haiku",
+                checkpoint=tmp_path / f"run-{concurrency}.jsonl",
+                call=counting,
+                ledger=BudgetLedger(limit_usd=0.05),
+                expected_cost_usd=0.02,
+                concurrency=concurrency,
+            )
+        counts[concurrency] = len(made)
+
+    assert len(set(counts.values())) == 1, f"call count varied with concurrency: {counts}"
+
+
+def test_an_abort_keeps_the_calls_it_already_paid_for(items: list[Item], tmp_path: Path) -> None:
+    """A failure must not discard its own batch's successes.
+
+    Returning on the first failing future threw away calls that had already
+    succeeded alongside it, and which ones survived depended on set iteration
+    order -- twelve trials produced three different checkpoints from the same
+    inputs. Those calls were made and paid for, so discarding them makes the
+    ledger under-read the real burn and makes an aborted run irreproducible.
+    """
+    survivors = []
+    for attempt in range(8):
+        one_bad_apple = _one_fails_after_all_arrive(len(items))
+        checkpoint = tmp_path / f"run-{attempt}.jsonl"
+        with pytest.raises(RunError):
+            run_arm(
+                items,
+                ARM,
+                model="haiku",
+                checkpoint=checkpoint,
+                call=one_bad_apple,
+                ledger=BudgetLedger(limit_usd=10.0),
+                concurrency=len(items),
+            )
+        records = load_records(checkpoint)
+        # Whatever survived must be intact. A torn line is the one thing
+        # `load_records` refuses, so reaching here at all is part of the check.
+        assert all(record.arm == ARM.arm for record in records)
+        survivors.append(len(records))
+
+    assert len(set(survivors)) == 1, (
+        f"an abort wrote a different number of records across trials: {survivors}. "
+        "Draining the batch is what makes this deterministic; returning on the "
+        "first failing future discarded whichever successes sorted after it."
+    )
 
 
 @pytest.mark.parametrize("bad", [0, -1])
@@ -322,13 +455,44 @@ def test_the_falsifier_may_re_measure_an_unsafe_model(items: list[Item], tmp_pat
     assert len(records) == len(items)
 
 
+def test_a_bare_model_name_cannot_smuggle_past_the_register(tmp_path: Path) -> None:
+    """The register matches the recorded string, so the request must carry it.
+
+    `build_payload` strips a `label/` prefix and tolerates a bare name, and
+    `parse_completion` stamps the label back on. So `qwen3:4b` reached the same
+    server and produced records reading `ollama/qwen3:4b` while the guard never
+    fired -- and `qwen3:4b` is what `ollama list` prints, so it is the natural
+    thing to type. The register may only shrink by measurement, not by typo.
+    """
+    del tmp_path
+    with pytest.raises(RunError, match="does not name its venue"):
+        local_call("qwen3:4b")
+
+
+def test_the_register_is_not_case_sensitive(items: list[Item], tmp_path: Path) -> None:
+    """`Ollama/` is the same venue and was accepted at concurrency 4."""
+    with pytest.raises(RunError, match="different text under concurrency"):
+        run_arm(
+            items,
+            ARM,
+            model="Ollama/qwen3:4b",
+            checkpoint=tmp_path / "run.jsonl",
+            call=_answers_correctly(items),
+            ledger=BudgetLedger(limit_usd=10.0),
+            concurrency=4,
+        )
+
+
 def test_an_unmeasured_model_is_not_refused(items: list[Item], tmp_path: Path) -> None:
     """Unmeasured is not the same as unsafe, and the register says only what was run.
 
     Claiming otherwise would be the inverse of this repository's usual error:
     asserting a result for a venue nobody has tested.
     """
-    assert not any(prefix.startswith("haiku") for prefix in CONCURRENCY_UNSAFE)
+    # Asked the other way round until the 2026-08-19 review: `prefix.startswith
+    # ("haiku")` interrogates the register, not the model, and stays true even
+    # when haiku is genuinely registered unsafe.
+    assert not "haiku".startswith(tuple(CONCURRENCY_UNSAFE))
     records = run_arm(
         items,
         ARM,

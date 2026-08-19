@@ -32,7 +32,7 @@ from decision_evals.generators.generate import Item
 from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
 from decision_evals.providers.claude_code import preflight as cli_preflight
 from decision_evals.providers.claude_code import run as cli_run
-from decision_evals.providers.openai_compatible import Endpoint
+from decision_evals.providers.openai_compatible import Endpoint, ollama
 from decision_evals.providers.openai_compatible import run as openai_run
 from decision_evals.scorers.answer import score_item
 from decision_evals.solvers.arms import ArmPrompt, render_item
@@ -99,9 +99,10 @@ class RunRecord:
 #: tokens long.
 #:
 #: **Read the scope carefully, because the replication narrowed it.** The claim
-#: is about text, within one invocation. Two *serial* runs an hour apart also
-#: agree on 0 of 40, so serial is not reproducible here either and no two runs
-#: on this backend may be compared by text at all. On the parsed answer -- the
+#: is about text, within one invocation. Cross-invocation serial agreement is
+#: also low and unstable -- the two available pairs give 0 of 40 and 7 of 40 --
+#: so serial is not a way to make this backend reproducible either, and no two
+#: runs on it may be compared by text. On the parsed answer -- the
 #: quantity that reaches a published number -- the concurrent arms sit at 0.850
 #: and 0.825 against a cross-invocation serial baseline of 0.875, which at n=40
 #: separates nothing. So this refusal rests on the prose result, and it is a
@@ -147,6 +148,21 @@ def local_call(model: str, endpoint: Endpoint | None = None) -> CallFn:
         RunError: The in-situ arm was requested. It has no local meaning, and
             the refusal is deliberate.
     """
+
+    label = (endpoint or ollama()).label
+    if not model.lower().startswith(f"{label.lower()}/"):
+        # `build_payload` strips a `label/` prefix and tolerates a bare name,
+        # and `parse_completion` stamps the label back on, so `qwen3:4b` is a
+        # working request whose records claim to be `ollama/qwen3:4b`. That is
+        # exactly the string `CONCURRENCY_UNSAFE` matches on, so a bare name
+        # un-registers the venue by typo -- and `qwen3:4b` is what `ollama
+        # list` prints, so it is the natural thing to type. The register is
+        # meant to shrink by measurement.
+        raise RunError(
+            f"model {model!r} does not name its venue. Use {label}/{model!r} so the "
+            f"record, the arena gate and the concurrency register all see which "
+            f"server produced it."
+        )
 
     def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
         if append:
@@ -240,19 +256,24 @@ def run_arm(
     say.** Records are written in *completion* order rather than item order, so
     two runs over the same items need not produce byte-identical files; nothing
     downstream reads a checkpoint positionally, and resume is keyed on
-    ``(item_id, arm)``. The budget is authorised before dispatch, so up to
-    ``concurrency`` calls may be authorised against a ledger that does not yet
-    know what the in-flight ones cost -- the overshoot is bounded by the window,
-    and the ledger is a burn meter rather than a spend cap. And when a run
-    aborts, results still in flight are discarded rather than written, so resume
-    re-runs them; that is what makes the abort safe rather than partial.
+    ``(item_id, arm)``. The budget is *reserved* at dispatch and released when
+    the record arrives, so a window cannot authorise more than the limit allows.
+    That is a correction, not a design note: charging only on completion meant
+    every call in one window read the same balance, and six items at $0.02
+    against a $0.021 limit ran all six while the serial path stopped after one.
+    And when a run aborts, the batch that contained the failure is drained
+    first, so calls that already succeeded and were already paid for are kept;
+    only results still in flight are discarded, and resume re-runs those.
 
     **It was measured twice, and the second run narrowed what the first one
     licensed.** The prediction above was registered before this code existed.
     Within one invocation, concurrent-against-serial agreed on the exact text of
     0 of 40 items both times, against a serial repeat of 31 of 40 and 13 of 40,
-    so :data:`CONCURRENCY_UNSAFE` refuses the combination. But two serial runs an
-    hour apart also agree on 0 of 40, so serial reproducibility is not a property
+    so :data:`CONCURRENCY_UNSAFE` refuses the combination. The sharpest form of
+    that comparison is between *adjacent* arms, which controls for elapsed time:
+    at the same ~23 minute separation, serial-vs-serial is 0.775 and 0.325 while
+    serial-vs-concurrent is 0.000 twice. But cross-invocation serial agreement is
+    itself only 0 of 40 and 7 of 40, so serial reproducibility is not a property
     this backend has either, and on the parsed answer nothing separates the arms
     at n=40. Every other backend is unmeasured, which is a different thing from
     safe.
@@ -271,16 +292,20 @@ def run_arm(
     if concurrency < 1:
         raise RunError(f"concurrency must be at least 1, got {concurrency}")
 
-    unsafe = sorted(prefix for prefix in CONCURRENCY_UNSAFE if model.startswith(prefix))
+    # Case-folded, because `Ollama/qwen3:4b` is the same venue and was
+    # accepted at concurrency 4 before this line was.
+    lowered = model.lower()
+    unsafe = sorted(prefix for prefix in CONCURRENCY_UNSAFE if lowered.startswith(prefix))
     if concurrency > 1 and unsafe and not measuring_concurrency:
         raise RunError(
             f"{model} is measured to return different text under concurrency, so "
             f"concurrency={concurrency} would add a known source of variation to a "
             f"venue that already has one. Measured twice: within an invocation the "
             f"concurrent arm agreed with serial on 0 of 40 items both times, against "
-            f"a serial repeat of 31 of 40 and 13 of 40. Note that two serial runs an "
-            f"hour apart also agree on 0 of 40, so serial is not a way to make this "
-            f"backend reproducible either. Run it serially, or pass "
+            f"a serial repeat of 31 of 40 and 13 of 40. Note that serial runs in "
+            f"different invocations agree on only 0 of 40 and 7 of 40 either, so "
+            f"serial is not a way to make this backend reproducible. Run it "
+            f"serially, or pass "
             f"measuring_concurrency=True if you are the falsifier re-measuring it."
         )
 
@@ -289,8 +314,17 @@ def run_arm(
     pending = [item for item in items if (item.item_id, arm.arm) not in done]
     produced: list[RunRecord] = []
 
-    def authorise(item: Item) -> str:
-        """Charge the ledger for one item and return the prompt to send."""
+    # What has been authorised and not yet paid for. Without it the ledger
+    # cannot refuse anything inside one window: `assert_can_afford` reads
+    # `spent_usd`, which only advances when a record comes *back*, so every
+    # call dispatched together sees the same balance. Measured before the fix:
+    # six items at $0.02 against a $0.021 limit ran all six, burning 5.7x the
+    # limit and raising nothing, while the serial path stopped after one.
+    reserved = 0.0
+
+    def authorise(item: Item) -> tuple[str, float]:
+        """Reserve the cost of one item and return its prompt and that cost."""
+        nonlocal reserved
         # Rendered once. The string that was measured is the string that is
         # sent, because measuring one and sending another is how a length
         # experiment stops being about length.
@@ -301,23 +335,24 @@ def run_arm(
             else estimate_cost_usd(prompt_chars=len(prompt) + len(arm.system_prompt))
         )
         try:
-            ledger.assert_can_afford(amount)
+            ledger.assert_can_afford(amount + reserved)
         except Exception as exc:
             raise RunError(f"stopping before {item.item_id}: {exc}") from exc
-        return prompt
+        reserved += amount
+        return prompt, amount
 
     with (
         checkpoint.open("a", encoding="utf-8") as handle,
         ThreadPoolExecutor(max_workers=concurrency) as pool,
     ):
         submitted = 0
-        in_flight: set[Future[RunRecord]] = set()
+        in_flight: dict[Future[RunRecord], float] = {}
 
         while submitted < len(pending) or in_flight:
             while len(in_flight) < concurrency and submitted < len(pending):
                 item = pending[submitted]
-                prompt = authorise(item)
-                in_flight.add(
+                prompt, amount = authorise(item)
+                in_flight[
                     pool.submit(
                         _run_one,
                         item,
@@ -327,19 +362,35 @@ def run_arm(
                         prompt=prompt,
                         identity=identity,
                     )
-                )
+                ] = amount
                 submitted += 1
 
-            finished, in_flight = wait(in_flight, return_when=FIRST_COMPLETED)
+            finished, _ = wait(set(in_flight), return_when=FIRST_COMPLETED)
+
+            # Drain the whole batch before re-raising. Returning early on the
+            # first failure discarded calls that had already *succeeded* in the
+            # same batch, and which ones survived depended on set iteration
+            # order -- the same inputs produced three different checkpoints
+            # across twelve trials. Those calls were paid for, so throwing them
+            # away makes the ledger under-read the real burn by up to
+            # `concurrency - 1` calls on every abort.
+            failure: RunError | None = None
             for future in finished:
+                reserved -= in_flight.pop(future)
+                try:
+                    record = future.result()
+                except RunError as exc:
+                    failure = failure or exc
+                    continue
                 # One writer, on this thread. Appending to one handle from
                 # several threads interleaves partial lines, and a corrupt
                 # interior line is the one thing `load_records` refuses.
-                record = future.result()
                 ledger = ledger.record(record.cost_usd)
                 handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
                 handle.flush()
                 produced.append(record)
+            if failure is not None:
+                raise failure
     return produced
 
 
