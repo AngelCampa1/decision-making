@@ -976,6 +976,87 @@ column on the case rather than a property the set happens to have.
 | **N6** | **Confirmatory re-run** — `full`, `stakes-shown`, `opener-only` × 258 × 2 repeats. Two repeats, not five: ICC 0.83–0.85 (Track I). | 1,548 calls | **done 2026-08-18**, 0 unparseable. Q1 **met** (+0.0976 [0.0459, 0.1493]), Q2's sign holds (+0.0079), Q3 **met** — `ledger` worst-routed in all three arms — **Q4 falsified**: `settled` is at the bottom, not the top. All three arms clear the 0.7054 stump. [Run](../results/decision-making/2026-08-18-e632659-n6-confirmatory/README.md) |
 | **N7** | **Descriptive re-run** — the remaining three `--description` arms (`no-exclusions`, `no-opener`, `stakes-named`; N6 already ran `full`, `stakes-shown` and `opener-only`) × 258 × 2 repeats. | 1,548 calls | |
 | **N8** | **Stamp the model into the record.** `--model` is a CLI argument with a default and the tier survives only as prose in a hand-written README; the verdict records carry `case`, `fired`, `route`, `repeat` and no model at all. Same shape as the label-versioning defect: a run parameter that changes every number, recoverable only from someone remembering to type it. Needs a comparability guard beside `label_versions_comparable`. | free | **done 2026-08-13.** `run_triggers.py` writes `model`; `models_comparable` refuses a comparison spanning tiers, and `compare` raises on it. **An absent `model` is unknown, not the default** — `--model` could have been passed and the record would look identical, so filling in `haiku` would be standing rule 1's invented parameter. Two unstamped arms therefore still compare (no published comparison is retroactively voided) and a stamped arm against an unstamped one is refused, which is the transition where the risk is real |
+| **N9** | **Proxy validation.** `run_triggers.py`'s own module docstring names the gap and this table has never scheduled the measurement: the harness shows the model a description and one message and asks whether it would fire; deployment shows it a description *appended to* a longer system prompt, mid-session, after other turns. N9 takes the first, cheapest step — the same 258-item corpus, key v4, `haiku`, the `full` description, sent through `Conversation(in_situ=True)` (`--append-system-prompt`) instead of `--system-prompt`, one turn, against the existing **N6** `full` arm as the unmodified reference. Conversation length is held at one turn on both sides — see below for why. | 516 calls | |
+
+#### N9 — the proxy the module docstring names, and the cheapest step toward closing it
+
+**The gap, verified rather than taken on report.** `scripts/run_triggers.py`'s
+module docstring says plainly what the instrument is not: *"The real harness
+decides differently: the description sits among other skills, in a longer
+context, with the model mid-task. This measures the description's
+discriminative content, not the deployed firing rate."* The word "proxy"
+appears nowhere else in this document — `grep -n "proxy"
+docs/RESEARCH_PROGRAMME.md` matches only that docstring's own paraphrase above
+— and no row before this one schedules the measurement that would bound the
+gap. Every number in Track L, every number in Track M, and all three of N6's
+arms were measured in a venue where the description **is** the entire system
+prompt and the turn under test is the only message sent.
+
+**What is compared.** The same four constants N6 already fixed — 258 items,
+key v4, `haiku`, the `full` description — run once more with the description
+appended rather than substituted, against N6's own `full` arm (accuracy
+0.9360, precision 0.8601, recall 0.9651, FPR 0.0785;
+[`results/decision-making/2026-08-18-e632659-n6-confirmatory/`](../results/decision-making/2026-08-18-e632659-n6-confirmatory/README.md))
+as the reference. No new reference run is needed; N6 already paid for it.
+
+**The two mechanisms this reuses already exist, checked by reading the code
+rather than by trusting this description of it:**
+
+1. **A secure multi-turn transport, already used by every trigger call.**
+   `Conversation` (`evals/src/decision_evals/providers/claude_code.py`, line
+   511). Its class docstring states the isolation finding directly:
+   `--no-session-persistence` (one of `ISOLATION_FLAGS`, line 54) blocks
+   `--resume`, which is cross-process, but does not block turns sent
+   in-process over `--input-format stream-json` — multi-turn needed no
+   isolation flag relaxed to work. `run_triggers.py`'s `ask()` function
+   already opens a `Conversation` at line 212 and sends exactly one turn at
+   line 214.
+2. **An `in_situ` mechanism, already a first-class parameter.**
+   `build_command` (same file, `def build_command` at line 163) sets
+   `prompt_flag = "--append-system-prompt" if in_situ else "--system-prompt"`
+   at line 209; `Conversation.__init__` (line 547) already accepts and
+   threads through `in_situ: bool = False`. `evals/src/decision_evals/solvers/arms.py`
+   already treats `in_situ` as a fifth named arm (`ARM_NAMES`, line 40) for
+   Track G, deliberately ordered last because "it answers a different
+   question from the other four: not 'does the skill help' but 'does it
+   still help when it is not the only thing in the prompt'" (lines 37–39).
+   `run_triggers.py` has no such arm and no `--in-situ` flag. Wiring one
+   through is the only new code this row needs — both machines it calls
+   already run.
+
+**Call count, derived rather than invented.** One new arm (`full`, in_situ) ×
+258 items × 2 repeats = **516 calls**. Two repeats, not five, for the reason
+N6 and N7 already used rather than a fresh choice here: Track I measured ICC
+0.83–0.85 for this instrument.
+
+**The risk in the design, named rather than absorbed silently.** An `in_situ`
+arm that *also* inserts turns before the one under test confounds two changes
+in a single comparison — prompt **position** (appended vs substituted) and
+conversation **length** (one turn vs several) — and a divergence from N6 could
+then be credited to either. N9 holds conversation length fixed at one turn on
+both sides and moves only position. That is a deliberate scope cut, not an
+oversight: how many prior turns, what they should discuss, and how they
+should be authored is exactly the kind of unmeasured parameter standing rule
+1 forbids inventing. The docstring's "longer context, mid-task" clause names
+a real second gap but supplies no number for turn count or content, and
+authoring that corpus is separate work this row does not fund.
+
+**What a large divergence would mean, and what it would not.** If N9's arm
+lands outside N6's `full` arm's interval, every published trigger number —
+all of Track L, all of Track M, N6's three arms — is a statement about a
+venue nobody deploys in, measuring the description's discriminative content
+in a position it never occupies at inference time. That is not a hypothetical
+tacked on for effect; it is the stated reason this row exists. A null
+result — N9 inside N6's interval — says position alone does not move firing
+behaviour, which is one of the two gaps the docstring names, not both.
+
+**What N9 does not settle.** It moves the venue one step closer to
+deployment and no further. After it runs, the residual gap is exactly the
+half of the docstring's sentence N9 does not touch: "the turn under test
+arrives after other turns" — a real session has other skills present, a task
+already under way, and a context this corpus does not supply. Closing that
+half needs its own row, its own derived turn count, and its own check against
+N9's position-only result so the two effects are not read as one.
 
 #### N4's route changed on 2026-08-18, and the threat it controls did not
 
