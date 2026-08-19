@@ -2005,9 +2005,55 @@ fact? If not, it is a preference survey and it is cut.
 
 | # | Experiment | Cost | State |
 |---|---|---|---|
-| H1 | **Phase 0: the control arm, before a corpus.** 20 invented life cores × 3 files (base / governing fact changed / matched non-governing fact changed) = **60 files**, ~35,000 newly authored characters (~1,200 per base core, ~150 per variant delta, ~1,500 per triplet × 20, plus ~5,000 for the falsifier battery); the on-disk corpus is ~72,000 characters because each variant is a whole file repeating its base, and the two figures are not interchangeable. **Control arm only, no skill arm** — the question is not *does `fit.md` help* but *is there anything here for it to help with*. 20 × 3 × 2 repeats = **120 generation calls**; 3 judges × 120 responses = **360 blind extraction calls** (`ADJUDICATORS = 3` in `scripts/adjudicate.py`); 2 planted triplets × 3 hand-written responses × 3 judges = **18 falsifier calls**. Two repeats, not five, derived from Track I's ICC 0.83 to 0.85 exactly as N6, N7 and N9 derived it rather than chosen here. Primary: Youden's J, which is identically the programme's `d` (see below), over **40 sensitivity and 40 specificity events, clustered on the 20 triplets and never pooled over the 60 files**, by `stats.cluster.cluster_bootstrap_diff` with the triplet id as the cluster label. Pre-registered kill: **unaided J ≥ 0.70 closes the venue**, the value reached at sensitivity 0.85 and specificity 0.85, and 0.85 is `ADMISSIBILITY_CEILING` in `scripts/probe_casefile.py`. Prediction registered before authoring: [`notebook/2026-08-19-prediction-track-h-phase-0.md`](../notebook/2026-08-19-prediction-track-h-phase-0.md). | 498 calls | not started |
+| H1 | **Phase 0: the control arm, before a corpus.** 20 invented life cores × 3 files (base / governing fact changed / matched non-governing fact changed) = **60 files**, ~35,000 newly authored characters (~1,200 per base core, ~150 per variant delta, ~1,500 per triplet × 20, plus ~5,000 for the falsifier battery); the on-disk corpus is ~72,000 characters because each variant is a whole file repeating its base, and the two figures are not interchangeable. **Control arm only, no skill arm** — the question is not *does `fit.md` help* but *is there anything here for it to help with*. 20 × 3 × 2 repeats = **120 generation calls**; 3 judges × 120 responses = **360 blind extraction calls** (`ADJUDICATORS = 3` in `scripts/adjudicate.py`); 2 planted triplets × 3 hand-written responses × 3 judges = **18 falsifier calls**. Two repeats, not five, derived from Track I's ICC 0.83 to 0.85 exactly as N6, N7 and N9 derived it rather than chosen here. Primary: Youden's J, which is identically the programme's `d` (see below), over **40 sensitivity and 40 specificity events, clustered on the 20 triplets and never pooled over the 60 files**, by `stats.cluster.cluster_bootstrap_diff` with the triplet id as the cluster label. Pre-registered kill: **unaided J ≥ 0.70 closes the venue**, the value reached at sensitivity 0.85 and specificity 0.85, and 0.85 is `ADMISSIBILITY_CEILING` in `scripts/probe_casefile.py`. Prediction registered before authoring: [`notebook/2026-08-19-prediction-track-h-phase-0.md`](../notebook/2026-08-19-prediction-track-h-phase-0.md). | 498 calls | **corpus authoring blocked; see below** |
 
 #### H1: Phase 0, and the deviation it commits
+
+**Authoring status, 2026-08-19: two passes run, two usable triplets against the
+twenty this row costs.** The 498-call figure above and every number feeding it
+assume twenty triplets exist. They do not, and the observed yield is the reason
+this row now says *blocked* rather than *not started*.
+
+| pass | authored | clean | blocked | cut |
+|---|---|---|---|---|
+| one | 3 | 0 | 0 | 3 |
+| two | 5 | 1 (`t03`) | 1 (`t04`) | 3 (`t01`, `t02`, `t05`) |
+
+Pass one failed both of its checks — two of three matched facts governed, and a
+single register feature separated all six inserts
+([entry](../notebook/2026-08-19-the-h1-form-failed-and-the-two-dials-are-one-dial.md)).
+Pass two changed the neutralisation from *margin* to *categorical* and removed
+both failure modes completely, but the failure moved rather than disappearing:
+one triplet over-neutralised into triviality and two bought their difficulty by
+making the **governing** fact ambiguous
+([entry](../notebook/2026-08-19-h1-pass-two-five-authored-one-clean.md)).
+
+**The registered kill did not fire and Track H survives**, since the kill closes
+the track only if passes two *and* three fail. That is a weaker statement than it
+sounds, and two things must be read with it. The corpus **cannot be merged**: a
+causal-rule-overlap feature reaches pooled AUC 0.740, and 0.800 with proper nouns
+dropped, against `SEPARABILITY_BAND` of [0.40, 0.60]. And that feature is **not**
+in `tailoring.FEATURES`, so the battery does not currently compute it — it was
+found by two readers, not by the gate.
+
+**What this does to the cost line, stated rather than left for a reader to
+notice.** At roughly one usable triplet per five authored, twenty triplets is on
+the order of a hundred authored — some 700,000 characters of authored prose
+before a single generation call. That is the same authoring bill that closed
+Track G, arriving at a different track by a different route, and it is the open
+question about this venue rather than a detail of it. Nothing here has costed a
+smaller H1: whether the primary is estimable at ten triplets, or five, is a power
+question nobody has asked, and asking it is cheaper than authoring ninety more.
+
+**τ has a registered rule and no derived number, and those are different.** The
+threshold is defined below as the maximum relative difference between two repeats
+of the same **base** prompt, which carry no perturbation — a noise floor,
+computed before any contrast is examined. It cannot be derived without the run's
+own base arm, so it does not exist yet, which is why `t04` is *blocked* rather
+than cut: its relative movement is 0.333, and any τ above 1/3 would make its
+governing arm a structural false negative. A τ that high would also mean some
+base swung more than a third between identical repeats, which would be its own
+finding — so the block is standing rule 1 being obeyed, not a coin flip.
 
 **The deviation, named as one.** This section says Track H is *"Not a separate
 venue, but a task family that runs inside C, D, E and F"*. C, D, E and F have not
