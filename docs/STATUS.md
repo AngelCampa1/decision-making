@@ -86,6 +86,7 @@ therefore **~4,816**, not ~4,600. See
 | `math` sharded conversations | **closed — real null** | `p_discordant` = 0.000 |
 | `actions` tool-use | **closed — no measurement exists** | no object is comparable across the arms |
 | **trigger instrument** | **working** | 2,555 calls, 0 unparseable, 0 isolation failures |
+| `tailoring` triplets (Track H) | **building — blocked** | 2 usable of 8 authored across two passes; causal-rule overlap AUC 0.740 against a [0.40, 0.60] band |
 
 ---
 
@@ -394,7 +395,7 @@ for personal information, digest pinned — in
 | **E** — handoff fidelity | 🔴 not started |
 | **F** — end-to-end | 🔴 not started |
 | **G** — volume / long context | 🔴 demoted; harness fixed and canary-verified to 101k tokens, no corpus |
-| **H** — tailoring, life decisions | 🔴 not started; construct and its evidence now identified |
+| **H** — tailoring, life decisions | 🟡 H1 authoring under way; 2 usable triplets of the 20 its row costs, registered kill did not fire, corpus not mergeable |
 | **J** — write-up and release | 🔴 not started |
 
 ---
