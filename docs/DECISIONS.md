@@ -31,13 +31,20 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 Corrects an annotation, and adds the block that would have caught it.
 
 `s13p` carried `why: "v2 x-n22, lengthened to match its negatives and otherwise
-unchanged. It has never fired in any arm on any version."` Both halves are false
-on the version 4 corpus. The v2 turn was "The build is green. Can I deploy?" —
-seven words, and it fired in no arm on any version. The v4 turn is "The build is
-green and the release notes are written. Can I deploy, or is there something I'm
-missing?", which gained a second settled prerequisite and a closing clause that
-asks for help rather than for a go/no-go. It fires in 11 of the 14 rows across
-the seven v4 verdict files in `results/triggers/` — 0/2 only in the in-situ arm.
+unchanged. It has never fired in any arm on any version, and it stays, because
+dropping it would raise recall for free on a maintainer's opinion."` The first
+two sentences are false on the version 4 corpus. The v2 turn was "The build is
+green. Can I deploy?" — seven words, and it fired in no arm on any version. The
+v4 turn is "The build is green and the release notes are written. Can I deploy,
+or is there something I'm missing?", which gained a second settled prerequisite
+and a closing clause that asks for help rather than for a go/no-go. It fires in
+11 of the 14 rows across the seven v4 verdict files — `verdicts-{full,opener-only,stakes-shown}.jsonl`
+under `results/decision-making/2026-08-18-e632659-n6-confirmatory/`,
+`verdicts-{no-exclusions,no-opener,stakes-named}.jsonl` under
+`results/decision-making/2026-08-19-d52236a-n7-remaining-arms/`, and
+`verdicts-in-situ.jsonl` under
+`results/decision-making/2026-08-19-505b236-n9-in-situ-void/` — 0/2 only in the
+in-situ arm.
 
 **No label moved and no turn text changed.** The answer key stays at version 4,
 `should_fire` stays true on the 2026-08-13 reasoning — a green build answers
@@ -54,6 +61,14 @@ diffed.** Nothing could ask "is `s13p` still the turn `x-n22` was?", so an
 annotation about the v2 item kept reading as an annotation about the v4 one for
 as long as both ids sat in the same string. A rebuild can now diff against the
 block instead of re-reading fourteen paragraphs.
+
+**Outstanding, 2026-08-19.** The replacement `why` this entry describes cites
+those fourteen rows as being in `results/triggers/`, and no verdict file has
+ever been written there — `run_triggers.py` writes `verdicts-<description>.jsonl`
+beside the run README, and the paths are the seven named above. The same wrong
+directory was written into this entry and is corrected in place here; the copy
+in `datasets/triggers/decision-making/s.yaml` is a governed path and needs its
+own commit and its own entry, so it is left standing and named here instead.
 
 `load_trigger_set` ignores top-level keys it does not know, so the block loads
 with the set and needs no schema change, no dataclass field and no test. It is
