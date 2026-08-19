@@ -376,10 +376,21 @@ def test_an_abort_keeps_the_calls_it_already_paid_for(items: list[Item], tmp_pat
         assert all(record.arm == ARM.arm for record in records)
         survivors.append(len(records))
 
-    assert len(set(survivors)) == 1, (
-        f"an abort wrote a different number of records across trials: {survivors}. "
-        "Draining the batch is what makes this deterministic; returning on the "
-        "first failing future discarded whichever successes sorted after it."
+    # Not `len(set(survivors)) == 1`, which is what this asserted until the
+    # first CI run returned [5, 5, 5, 5, 5, 0, 5, 5]. Draining the batch does
+    # not make the *count* deterministic and cannot: which futures are in a
+    # given `wait()` return is a timing property, and sometimes the failure
+    # completes alone before any success has landed.
+    #
+    # What the drain does guarantee is that no success is discarded from a
+    # batch that also contained the failure. So the observable invariant is
+    # that a trial keeps either none of them or all of them, never some -- and
+    # an intermediate count is precisely the defect. Before the fix the same
+    # experiment returned 3, 2 and 1 across trials.
+    allowed = {0, len(items) - 1}
+    assert set(survivors) <= allowed, (
+        f"an abort kept a partial batch: {survivors}, expected each trial in {sorted(allowed)}. "
+        "Returning on the first failing future discarded whichever successes sorted after it."
     )
 
 

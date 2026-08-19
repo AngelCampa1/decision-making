@@ -25,6 +25,10 @@
 #                    not). Fetching it is how a clean checkout reaches the state
 #                    the tests describe, and the hash check means it cannot
 #                    quietly become a different corpus.
+#   claude CLI       the plugin-manifest step validates through it and treats
+#                    its absence as a failure, which is pinned by a test. The
+#                    first CI run found exactly that, on a runner that had no
+#                    reason to have it.
 
 name: check
 
@@ -64,6 +68,18 @@ jobs:
       # checking something other than what it claims to.
       - name: install uv
         run: python -m pip install --upgrade uv
+
+      # `de check`'s plugin-manifest step shells out to `claude plugin
+      # validate`, and `test_a_missing_cli_fails_the_gate` pins that a missing
+      # CLI *fails* rather than skips -- a deliberate choice, so the runner gets
+      # the CLI instead of the gate getting an exemption. Validation reads local
+      # JSON and needs no auth, which is why this works without a key.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: install the claude CLI
+        run: npm install -g @anthropic-ai/claude-code
 
       - name: cache the uv download cache
         uses: actions/cache@v4

@@ -756,7 +756,11 @@ class TestSiteCommand:
         monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
         monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
 
-        result = runner.invoke(app, ["site", "--deploy"])
+        # Wide, because Rich wraps the usage error to the terminal and an
+        # 80-column runner splits `--deploy` across a line inside the panel.
+        # The first CI run failed here while passing on a wider terminal, which
+        # is a property of the assertion rather than of the CLI.
+        result = runner.invoke(app, ["site", "--deploy"], env={"COLUMNS": "200"})
         assert result.exit_code != 0
         # Specifically rejected as an unknown option, rather than failing for
         # any of the several other reasons `de site` can fail.
