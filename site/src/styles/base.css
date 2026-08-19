@@ -280,9 +280,22 @@
   box-sizing: border-box;
 }
 
+/* `scroll-padding-top` because `.site-header` is sticky.
+ *
+ * Without it every in-page anchor lands its target underneath the header. The
+ * landing page's own primary call to action was the case that showed it: `#install`
+ * scrolled to a heading measured at top 0, bottom 29, under a header whose bottom
+ * edge is 88 -- the heading was covered completely and the visitor arrived at body
+ * text with no title above it. The skip link's `#main` and every cross-document
+ * fragment link had the same fault.
+ *
+ * The value clears the header at its tallest, which is the two-row layout below
+ * 32rem, plus a line of breathing room. Chromium already accounts for the sticky
+ * header when *focus* moves; it does not when the fragment does. */
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: 6.5rem;
 }
 
 /* The blanket reduced-motion block, which is deliberately redundant.

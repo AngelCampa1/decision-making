@@ -61,10 +61,15 @@ from decision_evals.site import input_files, site_present
 #: whole design exists to prevent.
 CLAIMS_PATH: Final = "site/claims.json"
 
-#: Where a published claim can be stated. Astro pages are the site's prose;
-#: ``.ts`` carries the shared data the pages map over; ``.svelte`` is not used
-#: today and is listed so that adding one does not silently leave the gate
-#: behind.
+#: Where a published claim can be stated. Astro pages are the site's prose,
+#: ``.ts`` carries the shared data the pages map over, and ``.svelte`` is the
+#: router demo island.
+#:
+#: This comment said ``.svelte`` "is not used today" in the commit that added
+#: ``site/src/components/RouterDemo.svelte`` and imported it into the landing
+#: page. Two independent reviews found it on 2026-08-19. A comment describing
+#: the arena a check runs in is exactly the kind of sentence this module exists
+#: to stop being wrong, and it was wrong about itself.
 SCANNED_PAGES: Final[tuple[str, ...]] = (
     "site/src/**/*.astro",
     "site/src/**/*.ts",
@@ -92,6 +97,10 @@ _DECORATION: Final = str.maketrans("", "", "~%,")
 _CLAIM_FIELDS: Final[tuple[str, ...]] = ("id", "value", "source", "quote", "why")
 _CLAIM_OPTIONAL: Final[tuple[str, ...]] = ("rounded", "latest")
 _RETRACTION_FIELDS: Final[tuple[str, ...]] = ("phrase", "source", "quote", "why")
+
+#: Top-level keys the register may carry. Anything else is a misspelt section,
+#: which reads as an absent one -- see the check in :func:`check_claims`.
+_SECTIONS: Final[tuple[str, ...]] = ("note", "claims", "retractions")
 
 
 @dataclass(frozen=True)
@@ -177,6 +186,27 @@ def _missing_fields(
         if entry.get(field) is not None and not isinstance(entry.get(field), str)
     ]
     return problems
+
+
+def _unknown_fields(entry: dict[str, object], known: tuple[str, ...]) -> list[str]:
+    """Keys nobody reads.
+
+    Every guard in this module is opt-in: a claim without ``latest`` is not
+    checked for currency, and one without ``rounded`` is not checked for
+    arithmetic. So a key that is merely ignored is a guard that is merely
+    absent, and the two are indistinguishable from the outside.
+
+    An adversarial review on 2026-08-19 spelled ``latest`` as ``lastest`` and
+    appended a superseded total to the real ``docs/STATUS.md``: green, silently,
+    with the guard gone. ``round`` for ``rounded`` did the same to the rounding
+    check, and ``retraction`` for ``retractions`` deleted the entire retraction
+    register while the step went on printing "0 retraction(s)" as though that
+    were the design.
+
+    A typo in a register is a typo. A typo that turns a check off without
+    saying so is the failure this module exists to make impossible.
+    """
+    return sorted(key for key in entry if key not in known)
 
 
 def load_claims(repo_root: Path) -> tuple[list[Claim], list[Retraction]]:
@@ -290,7 +320,16 @@ def _numeric_issues(claim: Claim, source_text: str) -> list[str]:
                 f"expression ({error.msg}). Nothing can be checked against a pattern "
                 "that does not compile."
             ]
-        found = [match.group(0) for match in pattern.finditer(source_text)]
+        # Group 1 when the pattern has one, so `latest` can carry the context
+        # that identifies the figure without that context becoming part of what
+        # is compared. Without it the pattern has to be a bare number shape,
+        # which either misses the next correction or matches every unrelated
+        # number below it -- both of which happened on 2026-08-19, in that
+        # order, to this claim.
+        found = [
+            match.group(1) if match.groups() else match.group(0)
+            for match in pattern.finditer(source_text)
+        ]
         if not found:
             issues.append(
                 f"{where} declares `latest` as `{claim.latest}` and nothing in "
@@ -335,7 +374,7 @@ def _shape_issues(
 ) -> list[ClaimIssue]:
     if not isinstance(entry, dict):
         return [ClaimIssue(CLAIMS_PATH, f"{where} is not an object.")]
-    return [
+    issues = [
         ClaimIssue(
             CLAIMS_PATH,
             f"{where} has no string `{field}`. Every field is required, `why` included: "
@@ -345,6 +384,18 @@ def _shape_issues(
         )
         for field in _missing_fields(entry, required, optional)
     ]
+    issues += [
+        ClaimIssue(
+            CLAIMS_PATH,
+            f"{where} has `{field}`, which nothing reads. Known fields are "
+            f"{', '.join(f'`{name}`' for name in (*required, *optional))}. Every guard "
+            "here is opt-in, so a key nobody reads is a check nobody runs: `lastest` "
+            "for `latest` turned off the currency check and passed a superseded total, "
+            "silently.",
+        )
+        for field in _unknown_fields(entry, (*required, *optional))
+    ]
+    return issues
 
 
 def _claim_issues(repo_root: Path, claims: list[Claim]) -> list[ClaimIssue]:
@@ -472,6 +523,21 @@ def check_claims(repo_root: Path) -> list[ClaimIssue]:
                 "has no `claims` array at the top level. The register's shape is "
                 "`{note, claims, retractions}`; anything else reads as an empty register "
                 "and reports green over a page full of numbers.",
+            )
+        ]
+
+    # Same reasoning as `_unknown_fields`, one level up and worse. `retraction`
+    # for `retractions` deletes the whole retraction register, and the step goes
+    # on printing "0 retraction(s)" as though nothing were wrong -- an absent
+    # section and a misspelt one are indistinguishable to every check below.
+    stray = sorted(key for key in data if key not in _SECTIONS)
+    if stray:
+        return [
+            ClaimIssue(
+                CLAIMS_PATH,
+                f"has top-level {', '.join(f'`{key}`' for key in stray)}, which nothing "
+                f"reads. The register's shape is {', '.join(f'`{k}`' for k in _SECTIONS)}. "
+                "A misspelt section is an empty section, and an empty section is green.",
             )
         ]
 

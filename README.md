@@ -174,8 +174,10 @@ originally claimed:
   for the best description arm (`stakes-shown`), 0.9863 for `confidence`. So
   every result above was competing for about nine
   points over a ruler, and five nulls is also what a ceiling looks like. Both
-  readings must be reported until the corpus is rebuilt, which is
-  [Track N](docs/RESEARCH_PROGRAMME.md).
+  readings must be reported for every result measured on that key, which is all
+  of them above. [Track N](docs/RESEARCH_PROGRAMME.md) rebuilt the corpus, and
+  runs measured on the new one carry the version 4 figure instead — the two keys
+  are not comparable and are never mixed.
 
 ## How claims are made
 

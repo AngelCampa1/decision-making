@@ -83,7 +83,11 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
 
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="lockup" href={`${base}/`}>
+        {/* `aria-label` because the visible name is not always there. Below
+            32rem `.lockup__word` is display:none and the mark is decorative
+            (`aria-hidden`), which left the home link of every page with no
+            accessible name at all on a phone -- announced as just "link". */}
+        <a class="lockup" href={`${base}/`} aria-label="decision-making-skills, home">
           <Mark width={30} segments={facts.count} state={state} />
           <span class="lockup__word">decision-making-skills</span>
         </a>
@@ -102,7 +106,14 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
           }
         </nav>
 
-        <div class="theme-toggle" role="group" aria-label="Colour theme">
+        {/* `hidden` until the script that gives these buttons behaviour has
+            run. Server-rendered, they were three focusable controls announced
+            as a labelled group, none of them marked pressed and none of them
+            doing anything -- the page reads the system theme correctly without
+            them, so with no JavaScript the honest thing is not to offer the
+            choice. The copy buttons alongside already work this way: they are
+            created by the script rather than shipped inert. */}
+        <div class="theme-toggle" role="group" aria-label="Colour theme" hidden>
           <button type="button" data-theme-set="system">sys</button>
           <button type="button" data-theme-set="light">light</button>
           <button type="button" data-theme-set="dark">dark</button>
@@ -144,6 +155,8 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
     <script is:inline>
       (function () {
         var root = document.documentElement;
+        var toggle = document.querySelector('.theme-toggle');
+        if (toggle) toggle.hidden = false;
         function paint() {
           var t = localStorage.getItem('theme') || 'system';
           document.querySelectorAll('[data-theme-set]').forEach(function (b) {
