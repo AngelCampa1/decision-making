@@ -187,3 +187,69 @@ datasets/triggers/decision-making/index.yaml|matched:ask:type_token_ratio
 # sentences across most of the corpus, out of scope for an opener-focused
 # fix, and is not a baseline entry because it has never crossed the gate on
 # the shipped corpus.
+
+# ADDED 2026-08-19. Not a corpus leak like every entry above -- a gap between
+# the corpus and the skill it is the answer key for. The shipped router table
+# grew from four rows to six that day (`council`, `hinge`) and the key was not
+# grown with it, so two of the six procedures the description now offers are
+# the correct answer for no positive in either corpus.
+#
+# WHY THAT IS A MEASUREMENT DEFECT AND NOT A TODO. `evaluate_routing` scores
+# `chosen in case.routes`. A model that correctly selects `council` cannot be
+# credited; the answer can only ever land in `incorrect`. An arm offered six
+# procedures therefore carries two ways to be wrong that the four-procedure
+# arms it would be compared against did not have, and the gap between them
+# reads as a description effect when it is a menu-size artefact. This is the
+# fourth instance of "an estimator that cannot return a non-zero value is not a
+# measurement" in this repository and the second caught in source before any
+# call was made.
+#
+# WHY IT IS DEFERRED RATHER THAN FIXED TODAY. Authoring positives for two new
+# procedures is a change to the answer key: a new `set_version`, and a set of
+# published numbers that `trigger_arms.label_versions_comparable` will refuse
+# to compare across. That is a unit of work with a governance cost, not a typo,
+# and doing it quietly under a run in flight is how a key change gets mistaken
+# for a model result -- which has happened here once already, on 2026-08-13,
+# and moved recall three to five points on every arm on disk without a single
+# call being re-made.
+#
+# WHAT IT DOES AND DOES NOT BLOCK, corrected by adversarial review 2026-08-19
+# after the first draft of this entry overstated it. It blocks *less* than it
+# first appeared:
+#
+#   - Firing is unaffected. Which procedure gets named does not change whether
+#     a turn fired, and firing is the primary quantity -- `decision-making.yaml`
+#     line 31 says routing "is a *secondary* label" and N7, the design template
+#     for the next run, reports routing zero times.
+#   - The cross-arm comparison this entry was written to prevent is *already*
+#     refused mechanically. `trigger_arms.skill_versions_comparable` raises on
+#     a comparison where one side stamps `skill_version` and the other does
+#     not, which is exactly the six-procedure-against-four case. The guard
+#     landed in 6e2028c, before this finding was noticed.
+#   - The leak is *measurable* rather than merely feared: `default_procedures`
+#     and `run_triggers._PROCEDURE_SCHEMA` both read the router table live, so
+#     a model can say `council`, it parses, and the name is stamped into every
+#     row.
+#
+# So what stands is narrower: a pooled routing accuracy computed here is a
+# six-way choice scored against a four-way key, and its ceiling cost is not
+# small -- flipping every currently-correct row on the 15 of 65 labelled items
+# carrying council/hinge conditions moves the best arm 0.792 -> 0.631. The
+# honest readout is routing over the four reachable procedures with the
+# `council`/`hinge` selection rate reported beside it descriptively, over a
+# declared denominator of 65 items / 130 rows, and no cross-run routing
+# comparison registered at all.
+#
+# CLOSED BY: positives authored for `council` and `hinge` in both corpora, the
+# key version bumped, and the arms re-run rather than re-scored. Dropping the
+# two procedures from the router table would also close it and is the other
+# real option; it is not the assumed one.
+datasets/triggers/decision-making.yaml|unreachable:council,hinge
+
+# Same finding, the banded version-3 corpus. Both corpora are labelled from
+# the same router table, so both went stale on the same edit.
+#
+# CLOSED BY: the same condition as the entry above -- positives authored for
+# `council` and `hinge` here too, the key version bumped, and the arms re-run
+# rather than re-scored; or the two rows dropped from the router table.
+datasets/triggers/decision-making/index.yaml|unreachable:council,hinge

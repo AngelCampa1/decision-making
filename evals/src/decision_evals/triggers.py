@@ -609,6 +609,12 @@ def _scan(repo_root: Path) -> tuple[list[str], list[tuple[str, Finding]]]:
             )
         issues.extend(_check_separability(trigger_set, path))
         issues.extend(_check_routes(trigger_set, skills_dir / name / "SKILL.md", path))
+        findings.extend(
+            (_scope(path, repo_root), finding)
+            for finding in _check_unreachable_procedures(
+                trigger_set, skills_dir / name / "SKILL.md"
+            )
+        )
         findings.extend(_check_corpus_rules(trigger_set, path, repo_root))
     draft_issues, draft_findings = _check_drafts(triggers_dir, skills_dir, skills, repo_root)
     issues.extend(draft_issues)
@@ -675,6 +681,12 @@ def _check_drafts(
             )
             continue
         issues.extend(_check_routes(draft, skills_dir / draft.skill / "SKILL.md", index))
+        findings.extend(
+            (_scope(index, repo_root), finding)
+            for finding in _check_unreachable_procedures(
+                draft, skills_dir / draft.skill / "SKILL.md"
+            )
+        )
         findings.extend(_check_corpus_rules(draft, index, repo_root))
     return issues, findings
 
@@ -747,6 +759,66 @@ def _check_routes(trigger_set: TriggerSet, skill_path: Path, path: Path) -> list
         for case in trigger_set.cases
         for name in case.routes
         if name not in known
+    ]
+
+
+def _check_unreachable_procedures(trigger_set: TriggerSet, skill_path: Path) -> list[Finding]:
+    """Every procedure the router offers must be the right answer somewhere.
+
+    :func:`_check_routes` enforces the other direction -- corpus labels must name
+    a procedure that exists -- and its docstring already describes what this one
+    catches, in mirror image: a label aimed at nothing leaves "every number kept
+    computing", so "accuracy would simply fall, and it would look like a model
+    result."
+
+    Adding a procedure does that from the other side. On 2026-08-19 the shipped
+    router grew from four rows to six while the answer key kept labelling only
+    the original four, which makes ``council`` and ``hinge`` answers that are
+    **wrong by construction**: :func:`evaluate_routing` scores ``chosen in
+    case.routes``, so the two new names can only ever increment ``incorrect``.
+    An arm offered six procedures then has two ways to be wrong that the
+    four-procedure arms it is compared against did not have, and the resulting
+    gap reads as a description effect rather than as a menu-size artefact.
+
+    This is the fourth instance of "an estimator that cannot return a non-zero
+    value is not a measurement" in this repository, and the second caught in
+    source before any call was made.
+
+    Baselineable rather than fatal: authoring items for a new procedure is a
+    change to the answer key, which means a new key version and a set of
+    published numbers that may not be compared across it. That is a unit of
+    work, not a typo, so it is deferred on the record the way corpus leaks are
+    -- and printed on every run.
+    """
+    from decision_evals.corpus import Finding
+
+    try:
+        rows = router_rows(parse_skill(skill_path).body)
+    except (OSError, UnbundleError):
+        return []
+    offered = {row.name for row in rows}
+    if not offered:
+        return []
+    # A set that labels no routes at all is a version-2 corpus, archived rather
+    # than fixed. Reporting every procedure as unreachable there is noise.
+    labelled = {name for case in trigger_set.positives for name in case.routes}
+    if not labelled:
+        return []
+    unreachable = sorted(offered - labelled)
+    if not unreachable:
+        return []
+    return [
+        Finding(
+            f"unreachable:{','.join(unreachable)}",
+            f"{len(unreachable)} of {len(offered)} procedures in "
+            f"{skill_path.parent.name}'s router table are the correct answer for no "
+            f"positive: {', '.join(unreachable)}. `evaluate_routing` scores a chosen "
+            "procedure against the case's declared routes, so these can only ever be "
+            "counted wrong -- an arm that offers them carries error the arms it is "
+            "compared against could not have. Report routing accuracy over the "
+            f"reachable procedures and the leak rate to {'/'.join(unreachable)} "
+            "separately, or author items for them and version the key.",
+        )
     ]
 
 
