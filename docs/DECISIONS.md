@@ -24,6 +24,60 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-19 — Track H authoring pass two: five triplets authored, one clean, three cut, one blocked
+
+**Commits:** `b84e7c0`, `daa1c1e`
+
+Adds `t01`–`t05` and `index-pass2.yaml` under `datasets/tailoring/`. `index.yaml`
+is untouched, so the shortcut battery does not see them and
+`corpus-baseline.txt` is neither relied on nor invalidated. `h01`–`h03` are
+byte-identical to their committed form: they are evidence of the pass-one shape
+and are not edited or deleted.
+
+Labels carry `set_version: 2`. Pass-two labels sharing `1` with the `h` corpus
+would be a silent collision of exactly the kind `label_versions_comparable`
+exists to refuse.
+
+**The registered kill did not fire.** No matched fact was shown to govern — the
+reviewer briefed to prove it reported it could not — and no single surface
+feature separates the arms in every triplet: causal-rule overlap reaches 3 of 5,
+a sharper reviewer formulation 4 of 5, and `t01` resists both. The kill closes
+Track H only if passes two *and* three fail, so the closure condition can no
+longer be satisfied and **the track survives**. That is a literal reading, applied
+in the same direction as the refusal earlier the same day to treat 3 of 5 as
+"every".
+
+**Not firing the kill and being clean are different statements.** That feature's
+pooled AUC is 0.740, and 0.800 with proper nouns dropped, far outside
+`SEPARABILITY_BAND` — so this corpus cannot be merged as it stands, and would
+raise a finding the moment the feature is coded.
+
+**Three cuts by three different checks**, which is the useful part of the record
+rather than the count. `t02` on maintainer ruling: over-determined neutralisation
+where either settler alone closes it, plus a shared-venue objection that could
+not be designed away. `t01` and `t05` on blind re-derivation, which read only
+`elicited` and `prompt` and found their *governing* arms admit a defensible
+reading under which they do not govern — a failure class the kill does not name,
+now disqualifier 15, and worse than the one it does name because it biases the
+primary toward zero while looking like a model that failed to notice.
+
+`t04` is **blocked pending τ, not cut**. Its relative movement is 0.333, τ has
+never been derived, and any τ above 1/3 makes its governing arm a guaranteed
+false negative. Counting it usable would invent a bound for an underived
+parameter, which is standing rule 1. If a derived τ lands at or below 1/3 it
+returns unchanged.
+
+**The dissent is recorded rather than resolved.** The adversarial reviewer rated
+`t01` the strongest of the five and the only item resisting both shortcut
+formulations, and would have cut `t04` where this register only blocks it. Both
+readings can hold at once — the readers were answering different questions — and
+`index-pass2.yaml` carries the reviewer's reasoning intact so a later pass can
+overturn the cut.
+
+**Reviewer B never reported.** Clause 1 therefore rests on one adversarial
+reviewer plus the blind re-derivation, and the notebook entry says so rather than
+implying two independent confirmations.
+
 ## 2026-08-19 — `council` and `hinge` are the correct answer for no positive, and that is deferred rather than fixed
 
 **Commits:** `19c4e7c`
