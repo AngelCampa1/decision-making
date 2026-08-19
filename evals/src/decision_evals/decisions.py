@@ -17,16 +17,24 @@ corrected. A file can be amended, which is why ``docs/REJECTED.md`` is a file.
 register that stops being written, and there is no mechanical predicate for
 "this commit made a decision" — gating all 131 commits would be noise, and noise
 is what an advisory gate becomes before somebody turns it off. So the obligation
-attaches to the two paths where an undocumented decision has already cost
-something:
+attaches to the paths where an undocumented decision has already cost
+something, or carries the same shape of risk:
 
 - ``datasets/triggers/`` — the answer key. On 2026-08-13 one turn moved from the
   positives to the negatives; recall rose 3 to 5 points on every arm on disk and
   **not one call was re-made**. That was a correct maintainer decision and it is
   indistinguishable, in a JSONL file, from a model result.
+- ``datasets/tailoring/`` — added 2026-08-19. Track H's Phase 0 corpus carries
+  labels of the same kind: which arm is *governing* (the answer should move)
+  and which is *matched non-governing* (nothing should move). A label move here
+  is invisible in a checkpoint for the same reason a trigger label move was.
+  This was deliberately not widened to ``datasets/`` as a whole —
+  ``datasets/golden/`` already has a stronger gate (byte-exact, ``pytest
+  --bless``, diff reviewed) and ``datasets/library/`` carries no labels — see
+  ``docs/DECISIONS.md``.
 - ``skills/`` — the product. What ships is what the claims are about.
 
-Roughly one commit in ten touches either, which is a volume a person can
+Roughly one commit in ten touches these, which is a volume a person can
 actually sustain.
 
 The trigger is *any* change to those paths rather than a ``version:`` bump,
@@ -42,7 +50,7 @@ from pathlib import Path
 from typing import Final
 
 #: Changes here oblige an entry. Prefixes, matched against repo-relative paths.
-GOVERNED: Final[tuple[str, ...]] = ("datasets/triggers/", "skills/")
+GOVERNED: Final[tuple[str, ...]] = ("datasets/triggers/", "datasets/tailoring/", "skills/")
 
 REGISTER_PATH: Final = "docs/DECISIONS.md"
 

@@ -1,0 +1,104 @@
+# Planted falsifier N — the known-GOOD NEGATIVE for standing rule 2.
+#
+# Purpose: prove the extractor reports NO movement when the elicited quantity
+# plainly holds still. The base and matched responses are written in maximally
+# different prose — different length, structure, register and hedging, with
+# seven planted numerals the answer is not — while returning the same number.
+# An extractor that diffs text, counts numerals, or takes the first or last
+# numeral returns a FALSE POSITIVE here and the battery catches it.
+#
+# Nothing here is generated. All three responses are hand-written, so this file
+# carries prompts and responses together rather than one file per arm.
+set_version: 1
+triplet: fal-n
+role: falsifier_negative
+domain: tenancy
+elicited:
+  question: days of notice to state in the letter ending the tenancy
+  unit: days
+  kind: scalar
+
+arms:
+  base: |
+    Today is 2026-08-19.
+
+    I am Perpetua Achebe-Lindqvist and I rent a workshop unit on a rolling
+    monthly tenancy that began 2024-02-01. Rent is $1,450 a month, paid on the
+    first. I want to give notice and move out. The written agreement says
+    notice must be in writing and is silent on how long it must be. Local
+    practice for a monthly commercial tenancy is a full rental period.
+
+    Question: how many days of notice should I state in the letter? Answer
+    with a single number of days.
+  governing: |
+    Today is 2026-08-19.
+
+    I am Perpetua Achebe-Lindqvist and I rent a workshop unit on a rolling
+    monthly tenancy that began 2024-02-01. Rent is $1,450 a month, paid on the
+    first. I want to give notice and move out. The written agreement says
+    notice must be in writing, and clause 12 fixes the notice period for the
+    tenant at fourteen days expiring on any day.
+
+    Question: how many days of notice should I state in the letter? Answer
+    with a single number of days.
+  matched: |
+    Today is 2026-08-19.
+
+    I am Perpetua Achebe-Lindqvist and I rent a workshop unit on a rolling
+    monthly tenancy that began 2024-02-01. Rent is $1,450 a month, paid on the
+    first. I want to give notice and move out. The written agreement says
+    notice must be in writing, and clause 12 requires the landlord to give the
+    tenant twenty-one days' notice of any rent review.
+
+    Question: how many days of notice should I state in the letter? Answer
+    with a single number of days.
+
+responses:
+  base: |
+    Give 90 days.
+  governing: |
+    Clause 12 settles it and local practice does not get a look in. Where the
+    agreement fixes a tenant's notice period expressly, that period governs,
+    and it is capable of expiring on any day rather than only at the end of a
+    rental period — so you are not held to the 2026-10-01 or 2026-11-01 rent
+    dates, and you are not on the hook for a further $1,450.
+
+    Put fourteen days in the letter, dated and served the same day, and keep
+    proof of service. That is 14 days.
+  matched: |
+    Let me take the two things apart, because they are not the same clock.
+
+    Clause 12 is a landlord obligation on rent review. It tells you what
+    warning you are owed if the rent moves; it says nothing about what warning
+    you owe if you leave. The 21 days in it are not your notice period.
+
+    Your notice period is the one the agreement is silent on, so local
+    practice fills the gap, and for a monthly commercial tenancy that is a
+    full rental period. Rent falls on the first, so a letter served now takes
+    effect at the end of the period beginning 2026-10-01, and you should
+    expect to pay the $1,450 that falls due on the way there. Three rental
+    periods is the number to write down, not one, because the agreement began
+    2024-02-01 and the period runs month to month from that anniversary
+    convention rather than from your letter.
+
+    So: 90 days.
+
+expected:
+  quantities: {base: 90.0, governing: 14.0, matched: 90.0}
+  contrasts:
+    - {arm: governing, kind: sensitivity, relative_difference: 0.8444, movement: true}
+    - {arm: matched, kind: specificity, relative_difference: 0.0, movement: false}
+  threshold_robust: >-
+    The positive sits at 0.844 relative and the negative at exactly 0.000, so
+    this triplet returns the same verdict for any movement threshold in
+    (0, 0.844). Combined with fal-p the battery is decidable for any threshold
+    in (0, 0.778), which is why it can run before the base arm exists.
+  what_a_failure_means:
+    matched_scored_movement: >-
+      The extractor is not extracting. Base is four words and matched is a
+      nine-line argument carrying 12, 21, 1450, 2026-10-01, 2024-02-01, three
+      and 90. Only the last is the answer, and it is the same answer.
+    governing_scored_no_movement: >-
+      The extractor is anchoring on the base response's brevity or failing to
+      resolve "fourteen days" written as a word against "14 days" written as a
+      numeral, both of which appear in the governing response on purpose.

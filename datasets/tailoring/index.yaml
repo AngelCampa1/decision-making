@@ -1,0 +1,52 @@
+# Track H Phase 0 (H1) tailoring corpus — manifest.
+#
+# Registered in notebook/2026-08-19-prediction-track-h-phase-0.md and
+# docs/RESEARCH_PROGRAMME.md #### H1. Authoring rules live in
+# docs/TAILORING_CORPUS_SPEC.md.
+#
+# STATUS: 3 of 20 triplets authored. This is a form-fixing sample, not the
+# corpus. The remaining 17 follow the spec.
+set_version: 1
+design: triplet
+arms: [base, governing, matched]
+
+#: The key. `governs` is not stated in any prompt and must never reach a call.
+answer_key_note: >-
+  The `key` block in each variant file, and `expected.quantities` in each
+  falsifier file, ARE answer keys. datasets/tailoring/ is in
+  evals/src/decision_evals/decisions.py's GOVERNED tuple, so a commit here is
+  refused without a docs/DECISIONS.md entry. set_version is stamped into every
+  file so a label move cannot be invisible in a checkpoint.
+
+triplets:
+  - id: h01
+    domain: startup_finance
+    unit: months
+    files: [h01-raise-timing-base.yaml, h01-raise-timing-governing.yaml, h01-raise-timing-matched.yaml]
+  - id: h02
+    domain: employment_equity
+    unit: weeks
+    files: [h02-notice-weeks-base.yaml, h02-notice-weeks-governing.yaml, h02-notice-weeks-matched.yaml]
+  - id: h03
+    domain: health_cover_timing
+    unit: weeks
+    files: [h03-surgery-weeks-base.yaml, h03-surgery-weeks-governing.yaml, h03-surgery-weeks-matched.yaml]
+
+falsifiers:
+  - id: fal-p
+    role: falsifier_positive
+    file: falsifiers/fal-p-van-sale.yaml
+  - id: fal-n
+    role: falsifier_negative
+    file: falsifiers/fal-n-notice-letter.yaml
+
+falsifier_battery:
+  events: {sensitivity: 2, specificity: 2}
+  required: {sensitivity: 1.0, specificity: 1.0}
+  decidable_threshold_range: "(0, 0.778)"
+  note: >-
+    The registration requires the battery to pass before any J is reported, and
+    separately derives the movement threshold from the run's own base arm. Those
+    two orderings are circular unless the battery's verdict is independent of the
+    threshold. It is: every planted movement is >= 0.778 relative and every
+    planted non-movement is exactly 0.000.

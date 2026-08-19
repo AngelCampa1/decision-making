@@ -70,6 +70,15 @@ def test_a_mixed_changeset_is_governed() -> None:
     assert touches_governed(["README.md", "skills/decision-making/SKILL.md"])
 
 
+def test_the_tailoring_corpus_is_governed() -> None:
+    """Track H's Phase 0 corpus carries labels (governing vs. matched
+    non-governing), which is an answer key in exactly the sense this register
+    exists for — see docs/DECISIONS.md, 2026-08-19. A change under
+    datasets/tailoring/ must now be refused without an entry, the same as one
+    under datasets/triggers/."""
+    assert touches_governed(["datasets/tailoring/tri-001.yaml"])
+
+
 # --------------------------------------------------------------------------- #
 # Parsing
 # --------------------------------------------------------------------------- #

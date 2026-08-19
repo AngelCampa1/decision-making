@@ -1,0 +1,67 @@
+# Track H triplet h02, arm: matched.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 1
+triplet: h02
+arm: matched
+domain: employment_equity
+elicited:
+  question: weeks of notice to give at the current employer, counted from today
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Idris Wallenberg-Osei, a staff engineer at Corvid Freight, where I have
+  worked for four years. I have a signed offer from Tessellate Robotics dated
+  2026-08-14. It lets me start on any Monday between 2026-09-28 and
+  2027-01-11, my choice, with no change to the terms either way.
+
+  What I am weighing:
+
+  - My Corvid contract requires four weeks' written notice. Nothing in it
+    requires more, and there is no garden leave clause.
+  - The routing rewrite I lead ships on 2026-10-16, and I am the only person
+    who has been through the dispatcher code end to end.
+  - Two junior engineers report to me. A proper handover is realistically six
+    weeks of overlap, four at a squeeze.
+  - I exercised my 2024 share options early, in June 2025, and hold 3,900
+    Corvid shares outright.
+  - Plan section 5.7 puts those 3,900 shares, about $58,000 at today's
+    price, under a transfer restriction that does not lift until 2026-11-20.
+  - My holiday balance is eleven days, payable out on leaving either way.
+  - Base salary $198,000. Tessellate's offer is $231,000. I have no financial
+    pressure to leave on any particular date.
+
+  Question: how many weeks of notice should I give at Corvid, counted from
+  today? Answer with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Plan section 5.7 puts 3,900 already-owned shares, about $58,000, under a
+    transfer restriction that does not lift until 2026-11-20.
+  governs: false
+  expected_direction: none
+  why_it_does_not_move: >-
+    A transfer restriction runs with shares he already owns. The base states he
+    exercised early in June 2025 and holds them outright, so there is nothing
+    left to vest and nothing conditioned on employment. Leaving in September
+    neither forfeits the shares nor moves 2026-11-20.
+  professional_one_sentence: >-
+    You already own those shares, so the restriction runs with the stock rather
+    than with your job and lifts on 20 November whether you are there or not.
+  salience_match: >-
+    Deliberately the same object as the governing fact: the same equity plan,
+    an adjacent section number, a mid-November date five days later, a share
+    count within 5% and a dollar figure within 5%, both phrased as a date
+    before which the equity is not fully his. The inserts are 158 and 148
+    characters. A reasonable engineer reads either one as "there is money in
+    November that I lose by leaving early".
+  neutraliser_location: >-
+    base prompt: "I exercised my 2024 share options early, in June 2025, and
+    hold 3,900 Corvid shares outright." The matched fact is NOT
+    self-neutralising - the insert says only that a restriction exists.
+meta:
+  personas_invented: true
+  real_personal_data: false

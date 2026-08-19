@@ -1,0 +1,37 @@
+# Track H triplet h03, arm: base.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 1
+triplet: h03
+arm: base
+domain: health_cover_timing
+elicited:
+  question: weeks from today to the earliest date the operation should be scheduled for
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Rosalind Achterberg. I need an elective repair of a torn right rotator
+  cuff. It is not urgent — the surgeon says it will not deteriorate quickly and
+  the choice of date is mine.
+
+  - I start at Ferrous Kite on 2026-09-01, and my cover under their Cascadia
+    Mutual Plan B starts the same day. My current cover ends 2026-08-31.
+  - The same shoulder was injected on 2026-05-04 and I had physiotherapy on it
+    through June.
+  - The surgeon's first free theatre date is 2026-09-28. After that she has a
+    slot most weeks through to February.
+  - The quoted cost is about $19,000 all in.
+  - Recovery is eight weeks in a sling and roughly four months to full
+    strength.
+  - I have a family trip booked for 2026-12-19 that I would rather not spend
+    in a sling, though I would rather get the shoulder right than keep it.
+  - Ferrous Kite has agreed I can take the leave whenever I want it.
+
+  Question: how many weeks from today is the earliest date I should schedule
+  the operation for? Answer with a single number of weeks.
+meta:
+  personas_invented: true
+  real_personal_data: false

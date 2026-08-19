@@ -1,0 +1,62 @@
+# Track H triplet h01, arm: governing.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call. A file
+# that leaks `key` into the prompt is an answer-key defect of the kind that
+# accounts for 21 of 21 scored failures in this repository.
+set_version: 1
+triplet: h01
+arm: governing
+domain: startup_finance
+elicited:
+  question: months from today before sending the first investor email
+  unit: months
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Devora Nkemelu, sole founder of Palisade Loop. We sell scheduling
+  software to independent physiotherapy clinics. We closed a seed round in
+  March 2024 and have not raised since.
+
+  Where things stand, taken from the 2026-08-01 management accounts:
+
+  - Cash in the operating account: $840,000.
+  - Net burn: $70,000 a month. That figure is stated after all receipts,
+    including revenue and any grant drawdown, and it has been flat for five
+    months. The budget holds it flat through 2027-06-30.
+  - Venture debt of $500,000 drawn from Halberd Credit on 2025-06-12.
+    Clause 9.4 requires a minimum cash balance of $300,000, tested monthly;
+    breach is an event of default.
+  - Runway on the face of it: twelve months, to 2027-08-01.
+  - ARR is $1.06m across 214 clinics, growing roughly 4% a month.
+  - Nine people. Two engineers signed on 2026-07-30 to start 2026-10-05, and
+    their cost is already inside the $70,000.
+
+  I want to run a Series A process. Two founders I trust say a process at our
+  stage took them five to six months from the first investor email to money in
+  the bank. Everyone else says "start when you have enough runway", which is
+  advice rather than a number.
+
+  Question: how many months from today should I wait before sending the first
+  investor email? Answer with a single number of months.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Clause 9.4 of the Halberd venture debt sets a hard floor of $300,000
+    unrestricted cash, tested monthly.
+  governs: true
+  expected_direction: down
+  why_it_moves: >-
+    The floor is not spendable. Usable cash is $840,000 - $300,000 = $540,000,
+    which at $70,000 a month is 7.7 months, not twelve. A five-to-six-month
+    process started four months from today would breach the covenant mid-raise.
+    The wait must shrink toward zero.
+  professional_one_sentence: >-
+    You have 7.7 months of spendable runway, not twelve, because $300,000 of
+    your cash is a covenant floor you default on touching, so a five-month
+    raise has to open now rather than in the spring.
+  neutraliser_location: n/a
+meta:
+  personas_invented: true
+  real_personal_data: false

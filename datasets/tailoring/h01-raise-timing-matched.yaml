@@ -1,0 +1,70 @@
+# Track H triplet h01, arm: matched.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call. A file
+# that leaks `key` into the prompt is an answer-key defect of the kind that
+# accounts for 21 of 21 scored failures in this repository.
+set_version: 1
+triplet: h01
+arm: matched
+domain: startup_finance
+elicited:
+  question: months from today before sending the first investor email
+  unit: months
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Devora Nkemelu, sole founder of Palisade Loop. We sell scheduling
+  software to independent physiotherapy clinics. We closed a seed round in
+  March 2024 and have not raised since.
+
+  Where things stand, taken from the 2026-08-01 management accounts:
+
+  - Cash in the operating account: $840,000.
+  - Net burn: $70,000 a month. That figure is stated after all receipts,
+    including revenue and any grant drawdown, and it has been flat for five
+    months. The budget holds it flat through 2027-06-30.
+  - $260,000 of that cash is an advance under the Aria Innovation Grant,
+    received 2025-06-12. Clause 6.2 restricts it to the qualifying R&D
+    programme; unspent amounts are repayable.
+  - Runway on the face of it: twelve months, to 2027-08-01.
+  - ARR is $1.06m across 214 clinics, growing roughly 4% a month.
+  - Nine people. Two engineers signed on 2026-07-30 to start 2026-10-05, and
+    their cost is already inside the $70,000.
+
+  I want to run a Series A process. Two founders I trust say a process at our
+  stage took them five to six months from the first investor email to money in
+  the bank. Everyone else says "start when you have enough runway", which is
+  advice rather than a number.
+
+  Question: how many months from today should I wait before sending the first
+  investor email? Answer with a single number of months.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Clause 6.2 of the Aria Innovation Grant restricts $260,000 of the cash
+    balance to the qualifying R&D programme and makes it repayable if unspent.
+  governs: false
+  expected_direction: none
+  why_it_does_not_move: >-
+    The advance is already inside the $840,000 and the R&D spend it funds is
+    already inside the $70,000, which the base states is net of all receipts
+    including grant drawdown. It changes neither the numerator nor the
+    denominator of the runway, so the answer is the base answer.
+  professional_one_sentence: >-
+    The grant cash is already in your bank figure and the spend it funds is
+    already in your net burn, so it moves neither side of the runway division.
+  salience_match: >-
+    Same shape as the governing fact and deliberately so: a six-figure sum,
+    dated the same day, restricted by a numbered clause in an instrument signed
+    with an outside party, and phrased as money you cannot freely use. The two
+    inserts are 172 and 179 characters. A reasonable founder reads either one
+    and thinks "so my real runway is lower than twelve months".
+  neutraliser_location: >-
+    base prompt, the net-burn bullet: "stated after all receipts, including
+    revenue and any grant drawdown". The matched fact is NOT self-neutralising;
+    a reader who does not link it back to that phrase will move the answer.
+meta:
+  personas_invented: true
+  real_personal_data: false

@@ -1,0 +1,101 @@
+# Planted falsifier P — the known-GOOD POSITIVE for standing rule 2.
+#
+# Purpose: prove the extractor reports movement when the elicited quantity
+# plainly moves. The prose of the three responses is near-identical on purpose,
+# so an extractor that scores prose similarity instead of the quantity returns a
+# FALSE NEGATIVE here and the battery catches it. Distractor numerals (mileage,
+# resale prices, dates) are planted ahead of the answer so a first-numeral
+# extractor also fails.
+#
+# Nothing here is generated. All three responses are hand-written, so this file
+# carries prompts and responses together rather than one file per arm.
+set_version: 1
+triplet: fal-p
+role: falsifier_positive
+domain: personal_vehicle
+elicited:
+  question: months to keep the van before selling it
+  unit: months
+  kind: scalar
+
+arms:
+  base: |
+    Today is 2026-08-19.
+
+    I am Halvard Ntuli. I run a two-person cabinet-fitting business and own a
+    2021 panel van, 96,000 miles, worth about $14,200 today. It depreciates
+    roughly $220 a month. Servicing runs $1,100 a year. Work is steady and I
+    have no plans to change what I carry.
+
+    Question: how many months should I keep the van before selling it? Answer
+    with a single number of months.
+  governing: |
+    Today is 2026-08-19.
+
+    I am Halvard Ntuli. I run a two-person cabinet-fitting business and own a
+    2021 panel van, 96,000 miles, worth about $14,200 today. It depreciates
+    roughly $220 a month. Servicing runs $1,100 a year. Work is steady and I
+    have no plans to change what I carry. The manufacturer's powertrain
+    warranty ends at 100,000 miles, and I cover about 1,000 miles a month.
+
+    Question: how many months should I keep the van before selling it? Answer
+    with a single number of months.
+  matched: |
+    Today is 2026-08-19.
+
+    I am Halvard Ntuli. I run a two-person cabinet-fitting business and own a
+    2021 panel van, 96,000 miles, worth about $14,200 today. It depreciates
+    roughly $220 a month. Servicing runs $1,100 a year. Work is steady and I
+    have no plans to change what I carry. My road-tax band changes at the
+    2027-04-01 rate review, adding about $95 a year to the running cost.
+
+    Question: how many months should I keep the van before selling it? Answer
+    with a single number of months.
+
+responses:
+  base: |
+    On these numbers there is no cliff to plan around. At $220 a month of
+    depreciation and $1,100 a year of servicing you are paying roughly $312 a
+    month to hold an asset worth $14,200, which is ordinary for a working van.
+    Nothing in what you have told me makes one month better than the next, so
+    the sensible horizon is the ordinary one: sell when the resale curve
+    steepens, around 120,000 miles.
+
+    Keep the van for 18 months.
+  governing: |
+    On these numbers there is a cliff to plan around. At $220 a month of
+    depreciation and $1,100 a year of servicing you are paying roughly $312 a
+    month to hold an asset worth $14,200, which is ordinary for a working van.
+    But at 1,000 miles a month you cross the 100,000-mile powertrain warranty
+    limit, and an out-of-warranty van of this age carries a resale discount
+    that dwarfs the depreciation you are worried about.
+
+    Keep the van for 4 months.
+  matched: |
+    On these numbers there is no cliff to plan around. At $220 a month of
+    depreciation and $1,100 a year of servicing you are paying roughly $312 a
+    month to hold an asset worth $14,200, which is ordinary for a working van.
+    The 2027-04-01 rate review adds about $8 a month, which does not change
+    the shape of anything, so the sensible horizon is the ordinary one: sell
+    when the resale curve steepens, around 120,000 miles.
+
+    Keep the van for 18 months.
+
+expected:
+  quantities: {base: 18.0, governing: 4.0, matched: 18.0}
+  contrasts:
+    - {arm: governing, kind: sensitivity, relative_difference: 0.7778, movement: true}
+    - {arm: matched, kind: specificity, relative_difference: 0.0, movement: false}
+  threshold_robust: >-
+    The positive sits at 0.778 relative and the negative at exactly 0.000, so
+    this triplet returns the same verdict for any movement threshold in
+    (0, 0.778). The battery is therefore scoreable BEFORE the registered
+    threshold is derived from the base arm, which the registration's ordering
+    otherwise leaves circular.
+  what_a_failure_means:
+    governing_scored_no_movement: >-
+      The extractor is reading prose, not the quantity. Three responses share
+      almost every sentence and differ by 18 against 4.
+    matched_scored_movement: >-
+      The extractor is reading a distractor numeral. 14,200, 220, 1,100, 312,
+      96,000, 120,000 and 2027-04-01 all appear before the answer.

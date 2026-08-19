@@ -1,0 +1,59 @@
+# Track H triplet h02, arm: governing.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 1
+triplet: h02
+arm: governing
+domain: employment_equity
+elicited:
+  question: weeks of notice to give at the current employer, counted from today
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Idris Wallenberg-Osei, a staff engineer at Corvid Freight, where I have
+  worked for four years. I have a signed offer from Tessellate Robotics dated
+  2026-08-14. It lets me start on any Monday between 2026-09-28 and
+  2027-01-11, my choice, with no change to the terms either way.
+
+  What I am weighing:
+
+  - My Corvid contract requires four weeks' written notice. Nothing in it
+    requires more, and there is no garden leave clause.
+  - The routing rewrite I lead ships on 2026-10-16, and I am the only person
+    who has been through the dispatcher code end to end.
+  - Two junior engineers report to me. A proper handover is realistically six
+    weeks of overlap, four at a squeeze.
+  - I exercised my 2024 share options early, in June 2025, and hold 3,900
+    Corvid shares outright.
+  - My RSU grant has a 4,100-share tranche, about $61,000, that does not
+    vest until 2026-11-15, and section 5.3 forfeits it unless I am on payroll
+    that day.
+  - My holiday balance is eleven days, payable out on leaving either way.
+  - Base salary $198,000. Tessellate's offer is $231,000. I have no financial
+    pressure to leave on any particular date.
+
+  Question: how many weeks of notice should I give at Corvid, counted from
+  today? Answer with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    A 4,100-share RSU tranche worth about $61,000 vests 2026-11-15, and plan
+    section 5.3 forfeits it unless the holder is on payroll on that date.
+  governs: true
+  expected_direction: up
+  why_it_moves: >-
+    Forfeiture is conditioned on employment status on a specific day. Notice
+    must therefore run at least to 2026-11-15, which is 88 days from today, or
+    $61,000 is destroyed. The answer moves from a handover-driven four to six
+    weeks to thirteen.
+  professional_one_sentence: >-
+    Section 5.3 forfeits $61,000 unless you are still on payroll on 15
+    November, so your notice has to run to that date - thirteen weeks, not
+    four.
+  neutraliser_location: n/a
+meta:
+  personas_invented: true
+  real_personal_data: false
