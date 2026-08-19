@@ -140,3 +140,34 @@ an assertion whose subject was noise, so it could not fail *for the reason it
 named*. It failed for load. The rule as written asks whether some possible
 response would score above zero; the question it is really asking is whether the
 thing being measured is the thing the sentence is about.
+
+## Addendum: a test that only failed inside the hook
+
+The push was refused a second time, and this one was mine. The real-git
+integration tests added above — the ones that exist because every other test in
+`test_deployed.py` stubs `subprocess.run` and so tests `_distance` against a
+*model* of git — built their throwaway repository with `cwd=tmp_path` and
+inherited the environment.
+
+`cwd` is not enough. Run from a git hook, which is exactly where `de check` runs
+at `pre-push`, the environment carries `GIT_DIR` and `GIT_INDEX_FILE` pointing at
+the outer repository, and git prefers those over the directory it was given. So
+the tests passed everywhere — alone, in their file, in a full `de check` from a
+shell — and failed only inside the hook, where they tried to commit into this
+repository and were refused. The stray staged file found in the worktree root
+earlier in the day, which looked like debris from a crashed REPL, was this.
+
+Cleaning the helper's own subprocess environment was not enough either, and that
+was the second attempt: `_distance` shells out through `deployed._git`, which
+passes `os.environ` through unchanged and stayed pointed at the outer repository.
+The variables have to leave the *test process*, so `monkeypatch.delenv` strips
+every `GIT_*` before the repository is built.
+
+Verified by reproducing the hook rather than by re-running the hook: with
+`GIT_DIR`, `GIT_INDEX_FILE` and `GIT_WORK_TREE` exported by hand, the file failed
+before the fix and passes after, and the working tree is clean afterwards.
+
+**The pattern is the same one, a fourth time.** A test whose subject was not what
+its name said: it claimed to check `_distance` against real git, and inside a
+hook it was checking it against this repository. It could not have failed for the
+reason it named there, and it could not have passed either.

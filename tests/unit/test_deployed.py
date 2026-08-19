@@ -334,8 +334,32 @@ class TestDistanceAgainstRealGit:
     """
 
     @staticmethod
-    def _repo(tmp_path: Path) -> tuple[Path, str, str]:
-        """Two commits, and their real SHAs."""
+    def _repo(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> tuple[Path, str, str]:
+        """Two commits in a throwaway repository, and their real SHAs.
+
+        **`cwd` is not enough, and the environment has to be cleaned for the
+        whole process rather than for one subprocess.** Run from a git hook --
+        which is where `de check` runs at `pre-push` -- the environment carries
+        `GIT_DIR` and `GIT_INDEX_FILE` pointing at the *outer* repository, and
+        git prefers those over the working directory it was given. These two
+        tests passed everywhere except inside the hook, where they built their
+        commits into this repository instead and were refused; one run left a
+        stray file staged in the worktree root, which is what that was.
+
+        Cleaning only this helper's own subprocess is not enough either, because
+        `_distance` shells out through `deployed._git`, which passes
+        `os.environ` straight through and would still be pointed at the outer
+        repository.
+        """
+        for name in [k for k in os.environ if k.startswith("GIT_")]:
+            monkeypatch.delenv(name, raising=False)
+        for name, value in {
+            "GIT_AUTHOR_NAME": "t",
+            "GIT_AUTHOR_EMAIL": "t@example.invalid",
+            "GIT_COMMITTER_NAME": "t",
+            "GIT_COMMITTER_EMAIL": "t@example.invalid",
+        }.items():
+            monkeypatch.setenv(name, value)
 
         def run(*args: str) -> str:
             return subprocess.run(
@@ -344,13 +368,6 @@ class TestDistanceAgainstRealGit:
                 capture_output=True,
                 text=True,
                 check=True,
-                env={
-                    **os.environ,
-                    "GIT_AUTHOR_NAME": "t",
-                    "GIT_AUTHOR_EMAIL": "t@example.invalid",
-                    "GIT_COMMITTER_NAME": "t",
-                    "GIT_COMMITTER_EMAIL": "t@example.invalid",
-                },
             ).stdout.strip()
 
         run("init", "--quiet")
@@ -362,13 +379,17 @@ class TestDistanceAgainstRealGit:
         run("commit", "--quiet", "-am", "two")
         return tmp_path, first, run("rev-parse", "HEAD")
 
-    def test_an_ancestor_gets_a_counted_distance(self, tmp_path: Path) -> None:
-        root, first, head = self._repo(tmp_path)
+    def test_an_ancestor_gets_a_counted_distance(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        root, first, head = self._repo(monkeypatch, tmp_path)
         assert dep._distance(root, first, head) == "and the live site is 1 commit(s) behind"
 
-    def test_a_commit_this_checkout_never_saw_is_not_counted(self, tmp_path: Path) -> None:
+    def test_a_commit_this_checkout_never_saw_is_not_counted(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
         """An unknown SHA makes `merge-base` exit non-zero for a different
         reason than "not an ancestor", and both must land on the same refusal
         rather than on a fabricated count."""
-        root, _, head = self._repo(tmp_path)
+        root, _, head = self._repo(monkeypatch, tmp_path)
         assert "diverged or it is not in this checkout" in dep._distance(root, "0" * 40, head)
