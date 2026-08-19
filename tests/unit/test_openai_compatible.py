@@ -184,6 +184,40 @@ def test_prompt_tokens_are_not_summed_with_cache_fields() -> None:
     assert result.cache_read_tokens == 0
 
 
+def test_a_reasoning_model_has_its_chain_recorded_rather_than_dropped() -> None:
+    """277 completion tokens for a one-character answer, measured on qwen3:4b.
+
+    Discarding the chain leaves `output_tokens` describing text no scorer reads.
+    """
+    payload = _completion(content="4")
+    payload["choices"][0]["message"]["reasoning"] = "Okay, the user asked..."
+    result = parse_completion(payload, label="ollama", duration_ms=1, cost_usd=0.0)
+    assert result.text == "4"
+    assert result.reasoning == "Okay, the user asked..."
+
+
+def test_the_other_spelling_of_the_reasoning_field_is_read() -> None:
+    """Ollama says `reasoning`; several shims say `reasoning_content`."""
+    payload = _completion()
+    payload["choices"][0]["message"]["reasoning_content"] = "thinking"
+    assert parse_completion(payload, label="ollama", duration_ms=1, cost_usd=0.0).reasoning == (
+        "thinking"
+    )
+
+
+@pytest.mark.parametrize("value", [None, 7, []])
+def test_a_non_string_reasoning_field_reads_as_empty(value: Any) -> None:
+    payload = _completion()
+    payload["choices"][0]["message"]["reasoning"] = value
+    assert parse_completion(payload, label="ollama", duration_ms=1, cost_usd=0.0).reasoning == ""
+
+
+def test_a_model_that_does_not_reason_records_an_empty_chain() -> None:
+    assert (
+        parse_completion(_completion(), label="ollama", duration_ms=1, cost_usd=0.0).reasoning == ""
+    )
+
+
 def test_a_non_object_response_is_refused() -> None:
     with pytest.raises(CliError, match="expected a completion object"):
         parse_completion(["nope"], label="ollama", duration_ms=1, cost_usd=0.0)

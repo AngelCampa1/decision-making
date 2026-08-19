@@ -106,6 +106,23 @@ would be the error this document exists to avoid.
 | Working directory | Not applicable. Nothing reads the filesystem |
 | Isolation receipt | The model card from Ollama's native `/api/show`, refused when it carries a `SYSTEM` prompt. A Modelfile `SYSTEM` line is the local analogue of a planted `CLAUDE.md`. Where a server offers no card, the absence of a receipt is recorded and is **not** reported as a receipt that passed |
 | In-situ arm | **Refused.** There is no pre-existing system prompt to append to, so the call would be the isolated arm under another arm's label |
+| Reasoning output | Returned in a field separate from the answer and **recorded**. Measured on `qwen3:4b`, 2026-08-19: 277 completion tokens for a `content` of `"4"`, the other 276 in `reasoning` |
+
+**The `cot` arm is not safely measurable against a reasoning model, and this is
+a live threat rather than a note.** `solvers/arms.py` compares a
+chain-of-thought arm against the others by asking for reasoning in the prompt.
+A reasoning model reasons whether or not it is asked, and emits the chain in its
+own field. So on `qwen3:4b` the `cot` and `off` arms would differ in what the
+prompt requested and not in what the model did, which is the same defect as
+running the in-situ arm here: two arms with one meaning, and nothing downstream
+able to separate them.
+
+Two things follow. Token counts and scored text describe different objects
+whenever `reasoning` is non-empty, so the p90/p99 figures this document commits
+to reporting must be split by whether a chain was emitted or they will read as
+inflated. And any `dev`-arena grid involving `cot` needs either a non-reasoning
+tag or a pre-registered decision about what the arm means there. Neither has
+been made; nothing has been measured on this backend.
 
 ### T: Tools
 

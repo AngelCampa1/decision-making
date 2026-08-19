@@ -260,7 +260,9 @@ def parse_completion(payload: Any, *, label: str, duration_ms: int, cost_usd: fl
     if not isinstance(choices, list) or not choices:
         raise CliError(f"response carries no choices: {payload!r}")
     message = choices[0].get("message") if isinstance(choices[0], dict) else None
-    text = message.get("content") if isinstance(message, dict) else None
+    if not isinstance(message, dict):
+        raise CliError(f"first choice has no string content: {choices[0]!r}")
+    text = message.get("content")
     if not isinstance(text, str):
         raise CliError(f"first choice has no string content: {choices[0]!r}")
 
@@ -270,6 +272,18 @@ def parse_completion(payload: Any, *, label: str, duration_ms: int, cost_usd: fl
     # weights answered.
     resolved = payload.get("model")
     model = f"{label}/{resolved}" if isinstance(resolved, str) and resolved else label
+
+    # Reasoning models return their chain separately from their answer, and
+    # dropping it is not free. Measured against `qwen3:4b` on 2026-08-19:
+    # `completion_tokens` 277 for a `content` of "4", the other 276 in
+    # `reasoning`. Discarding it leaves `output_tokens` describing text no
+    # scorer ever reads, which is the exact shape of the two instrument defects
+    # this repository has already published -- a clean run, a full checkpoint
+    # and a number that measures the wrong object.
+    #
+    # Servers disagree on the field name: Ollama says `reasoning`, several
+    # OpenAI-compatible shims say `reasoning_content`. Both are read.
+    reasoning = message.get("reasoning") or message.get("reasoning_content") or ""
 
     usage = payload.get("usage") or {}
     return CliResult(
@@ -281,6 +295,7 @@ def parse_completion(payload: Any, *, label: str, duration_ms: int, cost_usd: fl
         duration_ms=duration_ms,
         session_id="",
         context_window=int(_number(usage.get("context_window"))),
+        reasoning=reasoning if isinstance(reasoning, str) else "",
     )
 
 

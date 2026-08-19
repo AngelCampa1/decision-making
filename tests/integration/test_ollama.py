@@ -102,6 +102,28 @@ def test_token_accounting_is_real_rather_than_zero() -> None:
     assert longer.input_tokens > short.input_tokens
 
 
+def test_a_reasoning_model_does_not_lose_its_chain() -> None:
+    """Measured 2026-08-19: 277 completion tokens for a `content` of "4".
+
+    The other 276 were in a `reasoning` field the parser was discarding, which
+    left `output_tokens` describing text no scorer reads. This asserts the two
+    now agree in magnitude rather than by two orders.
+    """
+    _server_or_skip()
+    result = run(
+        "What is 2+2? Answer with the number only.",
+        system_prompt="Answer exactly as asked.",
+        model=MODEL,
+    )
+    assert "4" in result.text
+    if result.output_tokens > 4 * len(result.text):
+        assert result.reasoning, (
+            f"{result.output_tokens} output tokens for {len(result.text)} characters "
+            "of answer and no reasoning recorded: the chain is going somewhere the "
+            "record cannot see."
+        )
+
+
 def test_a_free_call_records_zero_cost_rather_than_nothing() -> None:
     _server_or_skip()
     assert run("Say ok.", system_prompt="Reply with: ok", model=MODEL).cost_usd == 0.0
