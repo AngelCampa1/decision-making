@@ -22,6 +22,7 @@ that direction.
 | [`2026-08-13-abb6862-l7-stakes`](../results/decision-making/2026-08-13-abb6862-l7-stakes/) | v2 | [`2026-08-13-l7-prediction-eager-without-deleting-what-works.md`](../notebook/2026-08-13-l7-prediction-eager-without-deleting-what-works.md) | [`2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier.md`](../notebook/2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier.md) |
 | [`2026-08-18-0ee75d4-n5-realism-probe`](../results/decision-making/2026-08-18-0ee75d4-n5-realism-probe/) | v4 | [`2026-08-18-prediction-n5s-descriptive-probe-runs-at-last.md`](../notebook/2026-08-18-prediction-n5s-descriptive-probe-runs-at-last.md) | **none** |
 | [`2026-08-18-e632659-n6-confirmatory`](../results/decision-making/2026-08-18-e632659-n6-confirmatory/) | v4 | [`2026-08-18-n6-addendum-the-corpus-shrank-and-the-version-had-to-move.md`](../notebook/2026-08-18-n6-addendum-the-corpus-shrank-and-the-version-had-to-move.md) | **none** |
+| [`2026-08-19-d52236a-n7-remaining-arms`](../results/decision-making/2026-08-19-d52236a-n7-remaining-arms/) | v4 | [`2026-08-18-prediction-n7-the-remaining-description-arms.md`](../notebook/2026-08-18-prediction-n7-the-remaining-description-arms.md) | **none** |
 | [`2026-08-10-baseline-corpus`](../results/evidence-ledger/2026-08-10-baseline-corpus/) *(baselined)* | — | **none** | **none** |
 
 ## Notebook entry to run
@@ -45,3 +46,4 @@ that direction.
 | [`2026-08-13-m6b-the-merged-entry-is-not-the-union-of-its-parts.md`](../notebook/2026-08-13-m6b-the-merged-entry-is-not-the-union-of-its-parts.md) | [`2026-08-13-5ccedb9-m6b-third-partition`](../results/decision-making/2026-08-13-5ccedb9-m6b-third-partition/) |
 | [`2026-08-18-n6-addendum-the-corpus-shrank-and-the-version-had-to-move.md`](../notebook/2026-08-18-n6-addendum-the-corpus-shrank-and-the-version-had-to-move.md) | [`2026-08-18-e632659-n6-confirmatory`](../results/decision-making/2026-08-18-e632659-n6-confirmatory/) |
 | [`2026-08-18-prediction-n5s-descriptive-probe-runs-at-last.md`](../notebook/2026-08-18-prediction-n5s-descriptive-probe-runs-at-last.md) | [`2026-08-18-0ee75d4-n5-realism-probe`](../results/decision-making/2026-08-18-0ee75d4-n5-realism-probe/) |
+| [`2026-08-18-prediction-n7-the-remaining-description-arms.md`](../notebook/2026-08-18-prediction-n7-the-remaining-description-arms.md) | [`2026-08-19-d52236a-n7-remaining-arms`](../results/decision-making/2026-08-19-d52236a-n7-remaining-arms/) |
