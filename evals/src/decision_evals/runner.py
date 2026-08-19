@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable, Iterable, Sequence
+from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -171,6 +172,7 @@ def run_arm(
     ledger: BudgetLedger,
     expected_cost_usd: float | None = None,
     identity: NodeIdentity | None = None,
+    concurrency: int = 1,
 ) -> list[RunRecord]:
     """Run one arm over a set of items, resuming from any checkpoint.
 
@@ -185,6 +187,32 @@ def run_arm(
             roughly fivefold, and the ledger authorises *before* the call, so the
             shortfall would have surfaced as a run that stopped mid-stratum.
             Pass a number to pin it, which the budget tests do.
+        concurrency: How many calls may be in flight. ``1`` -- the default --
+            is the sequential loop every published run used, unchanged.
+
+    **Threads rather than asyncio, and it is a real choice.** A call is a
+    subprocess or an HTTP request; both spend their whole life blocked on I/O
+    with the GIL released, so a bounded pool saturates the backend exactly as
+    well as an event loop would. Going async would mean an async :data:`CallFn`
+    and an async rewrite of both providers, which is a large change to two
+    modules at a 100% floor in exchange for nothing measurable. The same
+    argument retires Ray and Dask one step earlier: there is no CPU work here to
+    distribute.
+
+    **Three things concurrency changes, stated because a checkpoint would not
+    say.** Records are written in *completion* order rather than item order, so
+    two runs over the same items need not produce byte-identical files; nothing
+    downstream reads a checkpoint positionally, and resume is keyed on
+    ``(item_id, arm)``. The budget is authorised before dispatch, so up to
+    ``concurrency`` calls may be authorised against a ledger that does not yet
+    know what the in-flight ones cost -- the overshoot is bounded by the window,
+    and the ledger is a burn meter rather than a spend cap. And when a run
+    aborts, results still in flight are discarded rather than written, so resume
+    re-runs them; that is what makes the abort safe rather than partial.
+
+    Whether concurrency changes the *response* is not something this docstring
+    may assert. It is measured, in
+    ``notebook/2026-08-19-prediction-concurrency-must-not-change-results.md``.
 
     Returns:
         The records produced *by this invocation*. Records already on disk from
@@ -192,38 +220,70 @@ def run_arm(
         for analysis anyway and returning them would make the count misleading.
 
     Raises:
-        RunError: An authentication failure, or the budget was reached. Both
-            stop the run rather than being scored, and both leave the checkpoint
-            intact so the run resumes where it stopped.
+        RunError: An authentication failure, the budget was reached, or
+            ``concurrency`` was not positive. The first two stop the run rather
+            than being scored, and both leave the checkpoint intact so the run
+            resumes where it stopped.
     """
+    if concurrency < 1:
+        raise RunError(f"concurrency must be at least 1, got {concurrency}")
+
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
     done = completed_keys(checkpoint)
+    pending = [item for item in items if (item.item_id, arm.arm) not in done]
     produced: list[RunRecord] = []
 
-    with checkpoint.open("a", encoding="utf-8") as handle:
-        for item in items:
-            if (item.item_id, arm.arm) in done:
-                continue
+    def authorise(item: Item) -> str:
+        """Charge the ledger for one item and return the prompt to send."""
+        # Rendered once. The string that was measured is the string that is
+        # sent, because measuring one and sending another is how a length
+        # experiment stops being about length.
+        prompt = render_item(item)
+        amount = (
+            expected_cost_usd
+            if expected_cost_usd is not None
+            else estimate_cost_usd(prompt_chars=len(prompt) + len(arm.system_prompt))
+        )
+        try:
+            ledger.assert_can_afford(amount)
+        except Exception as exc:
+            raise RunError(f"stopping before {item.item_id}: {exc}") from exc
+        return prompt
 
-            # Rendered once. The string that was measured is the string that is
-            # sent, because measuring one and sending another is how a length
-            # experiment stops being about length.
-            prompt = render_item(item)
-            authorised = (
-                expected_cost_usd
-                if expected_cost_usd is not None
-                else estimate_cost_usd(prompt_chars=len(prompt) + len(arm.system_prompt))
-            )
-            try:
-                ledger.assert_can_afford(authorised)
-            except Exception as exc:
-                raise RunError(f"stopping before {item.item_id}: {exc}") from exc
+    with (
+        checkpoint.open("a", encoding="utf-8") as handle,
+        ThreadPoolExecutor(max_workers=concurrency) as pool,
+    ):
+        submitted = 0
+        in_flight: set[Future[RunRecord]] = set()
 
-            record = _run_one(item, arm, model=model, call=call, prompt=prompt, identity=identity)
-            ledger = ledger.record(record.cost_usd)
-            handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
-            handle.flush()
-            produced.append(record)
+        while submitted < len(pending) or in_flight:
+            while len(in_flight) < concurrency and submitted < len(pending):
+                item = pending[submitted]
+                prompt = authorise(item)
+                in_flight.add(
+                    pool.submit(
+                        _run_one,
+                        item,
+                        arm,
+                        model=model,
+                        call=call,
+                        prompt=prompt,
+                        identity=identity,
+                    )
+                )
+                submitted += 1
+
+            finished, in_flight = wait(in_flight, return_when=FIRST_COMPLETED)
+            for future in finished:
+                # One writer, on this thread. Appending to one handle from
+                # several threads interleaves partial lines, and a corrupt
+                # interior line is the one thing `load_records` refuses.
+                record = future.result()
+                ledger = ledger.record(record.cost_usd)
+                handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
+                handle.flush()
+                produced.append(record)
     return produced
 
 

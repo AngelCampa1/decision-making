@@ -9,6 +9,7 @@ silently skips corrupts the result rather than merely wasting time.
 from __future__ import annotations
 
 import json
+import threading
 from collections.abc import Callable
 from dataclasses import replace
 from pathlib import Path
@@ -95,6 +96,171 @@ def test_records_carry_the_stratum_and_cluster_keys(items: list[Item], tmp_path:
     )
     assert {r.template_id for r in records} == {items[0].template_id}
     assert {r.n_distractors for r in records} == {i.n_distractors for i in items}
+
+
+# -- concurrency ------------------------------------------------------------
+
+
+def test_concurrency_produces_the_same_records_as_the_serial_loop(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """The stub is deterministic, so any difference here is the loop's."""
+    common: dict[str, Any] = {
+        "model": "haiku",
+        "call": _answers_correctly(items),
+        "ledger": BudgetLedger(limit_usd=10.0),
+    }
+    serial = run_arm(items, ARM, checkpoint=tmp_path / "a.jsonl", **common)
+    concurrent = run_arm(items, ARM, checkpoint=tmp_path / "b.jsonl", concurrency=4, **common)
+
+    key = lambda records: sorted((r.item_id, r.parsed, r.correct) for r in records)  # noqa: E731
+    assert key(serial) == key(concurrent)
+    assert len(concurrent) == len(items)
+
+
+def test_every_item_is_run_exactly_once_under_concurrency(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """A sliding window that double-submits would be invisible in the totals."""
+    seen: list[str] = []
+    lock = threading.Lock()
+
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del system_prompt, append
+        with lock:
+            seen.append(prompt)
+        return _result("ANSWER: nope")
+
+    records = run_arm(
+        items,
+        ARM,
+        model="haiku",
+        checkpoint=tmp_path / "run.jsonl",
+        call=call,
+        ledger=BudgetLedger(limit_usd=10.0),
+        concurrency=3,
+    )
+    assert len(seen) == len(items)
+    assert len(set(seen)) == len(items)
+    assert len({r.item_id for r in records}) == len(items)
+
+
+def test_calls_really_do_overlap(items: list[Item], tmp_path: Path) -> None:
+    """Otherwise the pool is a slow serial loop and the whole change is inert.
+
+    The failure this guards is the one the repository keeps finding: a clean run
+    that measured nothing. A `concurrency` argument nothing acts on would pass
+    every other test here.
+    """
+    barrier = threading.Barrier(3, timeout=30)
+
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del prompt, system_prompt, append
+        # Only returns once three calls are simultaneously inside it.
+        barrier.wait()
+        return _result("ANSWER: nope")
+
+    records = run_arm(
+        items[:6],
+        ARM,
+        model="haiku",
+        checkpoint=tmp_path / "run.jsonl",
+        call=call,
+        ledger=BudgetLedger(limit_usd=10.0),
+        concurrency=3,
+    )
+    assert len(records) == 6
+
+
+def test_the_checkpoint_survives_concurrent_completion(items: list[Item], tmp_path: Path) -> None:
+    """One writer on the calling thread; interleaved lines are unreadable."""
+    checkpoint = tmp_path / "run.jsonl"
+    run_arm(
+        items,
+        ARM,
+        model="haiku",
+        checkpoint=checkpoint,
+        call=_answers_correctly(items),
+        ledger=BudgetLedger(limit_usd=10.0),
+        concurrency=4,
+    )
+    lines = checkpoint.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == len(items)
+    assert all(json.loads(line)["item_id"] for line in lines)
+    assert len(load_records(checkpoint)) == len(items)
+
+
+def test_a_concurrent_run_resumes_on_the_same_keys(items: list[Item], tmp_path: Path) -> None:
+    """Completion-order writes must not break `(item_id, arm)` resume."""
+    checkpoint = tmp_path / "run.jsonl"
+    call = _answers_correctly(items)
+    run_arm(
+        items[:3],
+        ARM,
+        model="haiku",
+        checkpoint=checkpoint,
+        call=call,
+        ledger=BudgetLedger(limit_usd=10.0),
+        concurrency=3,
+    )
+    second = run_arm(
+        items,
+        ARM,
+        model="haiku",
+        checkpoint=checkpoint,
+        call=call,
+        ledger=BudgetLedger(limit_usd=10.0),
+        concurrency=3,
+    )
+    assert len(second) == len(items) - 3
+    assert len(load_records(checkpoint)) == len(items)
+
+
+def test_an_authentication_failure_still_stops_a_concurrent_run(
+    items: list[Item], tmp_path: Path
+) -> None:
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del prompt, system_prompt, append
+        raise AuthenticationError("revoked")
+
+    with pytest.raises(RunError, match="authentication failed"):
+        run_arm(
+            items,
+            ARM,
+            model="haiku",
+            checkpoint=tmp_path / "run.jsonl",
+            call=call,
+            ledger=BudgetLedger(limit_usd=10.0),
+            concurrency=4,
+        )
+
+
+def test_the_budget_still_stops_a_concurrent_run(items: list[Item], tmp_path: Path) -> None:
+    """Authorised before dispatch, so the window may overshoot -- but it stops."""
+    with pytest.raises(RunError, match="stopping before"):
+        run_arm(
+            items,
+            ARM,
+            model="haiku",
+            checkpoint=tmp_path / "run.jsonl",
+            call=_answers_correctly(items),
+            ledger=BudgetLedger(limit_usd=0.0),
+            concurrency=4,
+        )
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+def test_a_non_positive_concurrency_is_refused(items: list[Item], tmp_path: Path, bad: int) -> None:
+    with pytest.raises(RunError, match="at least 1"):
+        run_arm(
+            items,
+            ARM,
+            model="haiku",
+            checkpoint=tmp_path / "run.jsonl",
+            call=_answers_correctly(items),
+            ledger=BudgetLedger(limit_usd=10.0),
+            concurrency=bad,
+        )
 
 
 # -- resumability -----------------------------------------------------------
