@@ -7,6 +7,7 @@ fail — particularly the git-identity guard, whose whole job is to refuse.
 
 from __future__ import annotations
 
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -756,16 +757,20 @@ class TestSiteCommand:
         monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
         monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
 
-        # Wide, because Rich wraps the usage error to the terminal and an
-        # 80-column runner splits `--deploy` across a line inside the panel.
-        # The first CI run failed here while passing on a wider terminal, which
-        # is a property of the assertion rather than of the CLI.
-        result = runner.invoke(app, ["site", "--deploy"], env={"COLUMNS": "200"})
+        result = runner.invoke(app, ["site", "--deploy"])
         assert result.exit_code != 0
+        # Rich renders this error into a panel, wraps it to the terminal width
+        # and styles the option name, which puts escape sequences *between* the
+        # two dashes -- so the literal `--deploy` is not in `output` on a
+        # coloured terminal even though it is plainly on screen. The first two
+        # CI runs failed here while every local run passed. Strip the escapes
+        # and unwrap before asserting on text.
+        plain = re.sub(r"\x1b\[[0-9;]*m", "", result.output)
+        plain = " ".join(plain.split())
         # Specifically rejected as an unknown option, rather than failing for
         # any of the several other reasons `de site` can fail.
-        assert "No such option" in result.output
-        assert "--deploy" in result.output
+        assert "No such option" in plain
+        assert "--deploy" in plain
 
 
 class TestDeployedCommand:

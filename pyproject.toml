@@ -373,10 +373,33 @@ to be able to name the thing it is correcting.\
 # means whoever clones this actually gets the evidence the sentence rests on.
 # Prefer `git add -f` whenever the file may be committed at all.
 #
-# The register stays for the case where it may not. `datasets/holdout/*.jsonl`
-# is ignored on purpose until a verdict publishes, so a document naming the
-# holdout cannot be fixed by committing it, and the only options would be a
-# silenced gate or a deleted sentence. That is what this table is for, and
-# empty is its correct state until then.
+# The register stays for the case where it may not, and that case arrived the
+# same day. A build artefact can never be committed: `.venv/Scripts/de.exe` is
+# Windows-only -- a Linux checkout has `.venv/bin/de` -- and `site/node_modules`
+# is installed per checkout and by design absent from the job that runs the
+# gate. Both are named in living documents for good reasons, and the first CI
+# run refused all three references. Committing them is not an option, so this
+# is the table's purpose rather than a workaround for it.
+#
+# `datasets/holdout/*.jsonl` is the other shape and has not needed an entry yet:
+# ignored on purpose until a verdict publishes, so a document naming the holdout
+# has no committable file behind it either.
 # --------------------------------------------------------------------------- #
 [tool.decision-evals.docs-ignored-paths]
+".venv/Scripts/de.exe" = """
+Named in `AGENTS.md`, `CLAUDE.md` and `docs/AUTONOMOUS_WORK_ORDER.md`, which \
+explain why parallel sessions cannot share one virtualenv: a second gate gets \
+`os error 32` while the first holds this file open. The path is Windows-only \
+and the environment is a build artefact, so it exists on the machine that hit \
+the problem and can never be committed anywhere.\
+"""
+"site/node_modules" = """
+Named in `docs/AUTONOMOUS_WORK_ORDER.md` as one of the per-checkout costs of \
+working in a worktree. Installed by `npm ci` and ignored by `.gitignore`; the \
+job that runs `de check` never installs it, because the site staleness gate is \
+a pure-Python hash comparison and only the deploy workflow builds.\
+"""
+"site/node_modules/" = """
+The same directory with a trailing slash, which the same sentence also uses. \
+Two spellings of one path rather than two paths.\
+"""
