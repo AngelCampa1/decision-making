@@ -37,9 +37,12 @@ built the other way round: the harness came first, and the claim is still
 What that costs, in practice, is a set of mechanisms that make it hard to
 overclaim by accident. The answer key is relabelled blind by three independent
 model instances that never see the maintainer's label, against a kill threshold
-fixed before the run. Every prediction is committed to `notebook/` before its
-run, and `de check` refuses a published run whose prediction cannot be shown by
-git ancestry to predate its data. The key carries a version stamped into every
+fixed before the run. Every prediction since the convention was adopted is committed
+to `notebook/` before its run, and `de check` refuses a published run whose
+prediction cannot be shown by git ancestry to predate its data. Two runs predate
+the rule and are baselined by name in
+[`results/provenance-baseline.txt`](results/provenance-baseline.txt), a list
+that may only shrink. The key carries a version stamped into every
 record, and comparing arms across a version boundary is refused in code. That rule
 exists because one correct label move raised recall on every arm on disk
 without a single call being re-made. Primary metrics are deterministic; a judge never produces one.
@@ -65,7 +68,7 @@ what is actually hard about the decision, and reads only that one.
 | Several positions are each defensible, and whichever was argued first has the advantage | [`council.md`](skills/decision-making/council.md) | the case for each, argued fairly, and which one survives |
 | Something needed to answer is missing, and it is unclear whether asking for it is worth the wait | [`hinge.md`](skills/decision-making/hinge.md) | which gaps would change the answer, and the answer now or the one question to ask |
 
-Where more than one of those four applies they run in the order ledger → fit
+Where more than one of those six applies they run in the order ledger → fit
 → cascade → timing, because each supplies an input to the next. `council.md`
 and `hinge.md` are not in that chain; each runs alone. A seventh file,
 [`placebo.md`](skills/decision-making/placebo.md), is the token- and
@@ -143,11 +146,11 @@ prediction in [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), and
 [`docs/STATUS.md`](docs/STATUS.md) has all of them with links to the data. One
 of the thirteen is **void** and answers nothing.
 
-The call total belongs to the ledger and is not restated here. `docs/STATUS.md`
-last put it at about 4,600, and that figure predates four of the runs above;
-recounting it means separating published records from the working checkpoints
-and re-scores they overlap with, which is a job for the ledger rather than a
-number to guess at in a README. The through-line:
+The call total belongs to the ledger and is not restated here.
+`docs/STATUS.md` keeps it, corrects it by appending, and the site quotes that
+file rather than a second copy. Recounting means separating published records
+from the working checkpoints and re-scores they overlap with, which is a job for
+the ledger rather than a number to guess at in a README. The through-line:
 
 > Five independent manipulations of a skill description, covering structure,
 > content, entry count and composition twice, and not one moved how well it
@@ -162,8 +165,10 @@ originally claimed:
   Wilcoxon p = 0.83). The
   [202-skill shadowing result](https://arxiv.org/abs/2605.24050) may no longer
   be cited as though it reached down to four.
-- The corpus behind every one of those numbers is 89% solvable by counting
-  words. Turn length alone separates the labels at AUC 0.850, and a bare
+- The corpus behind those numbers is 89% solvable by counting
+  words. This scopes to the version 2 answer key and the runs above it,
+  not to everything on record: the corpus was rebuilt, and on the version 4
+  key the best model-free shortcut reaches 0.7054. Turn length alone separates the labels at AUC 0.850, and a bare
   *"fire if ≥ 18 words"* rule scores 0.890 with no model at all. Both sit on
   the version 2 answer key, against the best arm measured on that key: 0.9795
   for the best description arm (`stakes-shown`), 0.9863 for `confidence`. So
@@ -257,8 +262,8 @@ tree. It does not prove that build was ever pushed. `de check` is offline on
 purpose, so it cannot consult `origin/gh-pages`, and a green gate beside a
 build that never left the machine is exactly as green as a deployed one.
 
-Six of its steps check the method rather than the code, each one added after
-the failure it prevents had already happened here:
+Several of its steps check the method rather than the code, each one added
+after the failure it prevents had already happened here:
 
 | Step | Refuses |
 | --- | --- |
@@ -267,14 +272,17 @@ the failure it prevents had already happened here:
 | integrity wiring | a module with a coverage floor that no entry point can reach |
 | decision register | a change to the answer key or the shipped skill with no entry in [`docs/DECISIONS.md`](docs/DECISIONS.md) |
 | documentation | a `de` command, path, or component that this README names and the repository does not have |
+| citations | a claim carrying an arXiv identifier whose entry in [`paper/refs.bib`](paper/refs.bib) has no quote behind it |
+| published claims | a measured number on the website that no longer matches the sentence in the document it came from |
 | site | a published build older than the documents it publishes, naming the files that moved |
 
 The other commands: `de index` regenerates
 [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool
 skill copies, `de site` rebuilds the website and records what it was built from,
 `de lint` checks skill frontmatter and the promotion gate, `de power` prints a
-minimum-detectable-effect table, and `de fetch` downloads the hash-pinned
-third-party corpora.
+minimum-detectable-effect table, `de rescore` re-grades an existing checkpoint
+against a newer answer key without re-making a single call, and `de fetch`
+downloads the hash-pinned third-party corpora.
 
 `de site` needs Node; the gate that demands you run it does not. Editing any
 document the site renders makes the published build stale, so the loop is edit,

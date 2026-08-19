@@ -22,6 +22,8 @@ from typing import Final
 import typer
 
 from decision_evals.citations import census, check_citations, load_baseline
+from decision_evals.claims import census as claims_census
+from decision_evals.claims import check_claims
 from decision_evals.decisions import GOVERNED as DECISION_PATHS
 from decision_evals.decisions import GovernedCommit, check_decisions
 from decision_evals.decisions import census as decisions_census
@@ -197,6 +199,7 @@ def check(
         check_decisions_step(),
         check_checkpoints_step(),
         check_docs_step(),
+        check_claims_step(),
     ]
 
     if not fast:
@@ -735,6 +738,49 @@ def check_docs_step() -> StepResult:
         for command in app.registered_commands
     }
     issues = check_docs(REPO_ROOT, commands - {""})
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def check_claims_step() -> StepResult:
+    """Every measured number the site publishes still says what its source says.
+
+    Added 2026-08-19, after the landing page was found offering four procedures
+    against a skill that routes to six, hardcoding thirteen published runs
+    while another page on the same site derived twelve, and republishing an
+    "about six points" figure that ``docs/STATUS.md`` had retracted six days
+    earlier. None of it was catchable: ``docs.py`` scans ``*.md`` and
+    ``docs/*.md`` and never opens an ``.astro`` file, and ``site.py`` hashes
+    the page for staleness without reading a word of it. Worse, the existing
+    gate laundered it -- editing ``SKILL.md`` made the manifest stale, ``de
+    site`` rehashed, and the wrong page republished green.
+
+    Runs in ``--fast``. Unlike the site step it needs no Node toolchain, and it
+    is the check most likely to fire on a routine edit to ``docs/STATUS.md``,
+    which is when the fix is cheapest.
+
+    Registered limitation: this binds a number to a sentence and cannot tell
+    whether that sentence is still the document's answer. ``docs/STATUS.md``
+    corrects by appending and holds four true totals at once. ``latest``
+    narrows that where a correction takes a recognisable numeric shape and does
+    nothing where it is phrased in words. The ``retractions`` register is the
+    manual remedy, so the hole closes one commit late.
+
+    A second gap, found on the day this shipped: the register cannot tell a
+    published claim from a comment describing one, so a page documenting a
+    retraction is refused for naming it. There is no exemption table for that
+    yet. Reword the comment; do not reprint the retracted phrase.
+    """
+    name = "published claims"
+    _echo_header(name)
+
+    claims, retractions, pages = claims_census(REPO_ROOT)
+    typer.echo(f"{claims} claim(s), {retractions} retraction(s), {pages} page(s) scanned")
+
+    issues = check_claims(REPO_ROOT)
     if not issues:
         return StepResult(name, True)
     for issue in issues:

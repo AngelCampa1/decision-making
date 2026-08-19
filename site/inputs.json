@@ -12,6 +12,7 @@
     "site/package.json",
     "site/package-lock.json",
     "site/inputs.json",
+    "site/claims.json",
     "site/dead-links.json",
     "site/astro.config.mjs",
     "site/src/**/*",

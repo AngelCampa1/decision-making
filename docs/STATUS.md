@@ -74,6 +74,28 @@ by another session closing an `open`-view leak) were not touched. The total is
 therefore **~4,816**, not ~4,600. See
 [`2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md`](../notebook/2026-08-14-n3-continued-the-72-s-and-m-items-n3-left-unadjudicated.md).
 
+**Correction, 2026-08-19, appended. Four runs since the table was last touched,
+and none of them is in it.** Counted by line from the `.jsonl` beside each run's
+`README.md`, so the arithmetic can be checked without trusting this paragraph:
+
+| run | calls | from |
+|---|---|---|
+| N5 realism probe | 86 | `2026-08-18-0ee75d4-n5-realism-probe/realism.jsonl` |
+| N6 confirmatory | 1,548 | `2026-08-18-e632659-n6-confirmatory/` (3 arms x 516) |
+| N7 remaining arms | 1,548 | `2026-08-19-d52236a-n7-remaining-arms/` (3 arms x 516) |
+| N9 in situ, **void** | 516 | `2026-08-19-505b236-n9-in-situ-void/verdicts-in-situ.jsonl` |
+| **new total** | **~8,514** | 4,816 + 86 + 1,548 + 1,548 + 516 |
+
+N9 is counted although the run is void, on the same rule that keeps M5's voided
+365 in the table above: the ledger records calls made, not calls that produced a
+usable number, and a void run is the more expensive kind to forget.
+
+**A figure of 8,550 was briefly published on the site and is wrong.** It added
+36 calls this file cannot account for. The 36 was almost certainly the three
+casefile probes at 12 each, which are already inside the `casefile probe` row's
+44 alongside the 8 canary rows, so it was double-counted. Recounting from
+`results/` gives 8,514, and the site now quotes that.
+
 ---
 
 ## Venues built, and what happened to each

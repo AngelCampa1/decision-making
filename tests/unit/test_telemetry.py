@@ -61,6 +61,13 @@ _RUN_RECORD_CHECKPOINTS = sorted(
     path for path in (REPO_ROOT / "results").rglob("*.jsonl") if _is_run_record_checkpoint(path)
 )
 
+#: The RunRecord checkpoints that are *committed*, so the guard below means the
+#: same thing on a clean checkout as it does on a machine that has run the
+#: experiments. Untracked local run data is still discovered and still
+#: parametrised above; it just cannot be what makes the guard pass. Add a name
+#: here when a run's records are published, not when they appear on disk.
+_TRACKED_CHECKPOINTS = ("results/evidence-ledger/2026-08-10-baseline-corpus/off-arm.jsonl",)
+
 
 class TestPinnedVocabulary:
     """The names are data, so the tests pin them as data."""
@@ -259,8 +266,30 @@ class TestRecordSchema:
         assert all(record.schema_version == 1 for record in records)
 
     def test_the_published_checkpoints_were_actually_found(self) -> None:
-        """Otherwise an empty glob would make the test above vacuously green."""
-        assert len(_RUN_RECORD_CHECKPOINTS) >= 2
+        """Otherwise an empty glob would make the test above vacuously green.
+
+        This asserted ``len(...) >= 2`` until 2026-08-19 and could only pass on
+        a machine that had already run the experiments. Every other RunRecord
+        checkpoint lives under ``results/calibration/``, ``results/track-a/``,
+        ``results/track-0/`` or ``results/triggers/``, all gitignored on
+        purpose by ``.gitignore``; exactly one is committed. So the guard
+        against vacuity was itself satisfied by data the repository does not
+        carry, and the parametrised test above ran over one item everywhere
+        else while this one failed.
+
+        Naming the tracked file fixes both halves. The discovery still cannot
+        silently return nothing, and it now says which file it expects, so a
+        layout move or a first-line shape change fails with the name in the
+        message rather than with an integer that means nothing on its own.
+        """
+        found = {path.relative_to(REPO_ROOT).as_posix() for path in _RUN_RECORD_CHECKPOINTS}
+        missing = sorted(set(_TRACKED_CHECKPOINTS) - found)
+        assert not missing, (
+            f"{missing} is committed RunRecord JSONL that the discovery did not find. "
+            "Either the layout moved or the first line stopped carrying `item_id`, and "
+            "either way test_every_published_run_record_still_loads is not covering "
+            "what it claims to."
+        )
 
 
 def test_the_module_declares_which_names_it_pinned() -> None:

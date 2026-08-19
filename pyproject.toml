@@ -214,6 +214,14 @@ output = "coverage.json"
 # that goes stale silently. A refusal branch here that nothing exercises is a
 # published page quietly disagreeing with the repository.
 "decision_evals/site.py" = { line = 100.0, branch = 100.0 }
+# The gate over the numbers the site publishes. `site.py` proves the pages were
+# rebuilt from the current tree and `docs.py` proves their references resolve;
+# neither opens a `.astro` file, so between them a page said the skill had four
+# procedures while `SKILL.md` routed to six and every step reported green. This
+# binds a published value to the sentence it came from, and a refusal branch
+# that nothing exercises is that failure with a guard installed and inert --
+# which has already happened once here, to `latest`.
+"decision_evals/claims.py" = { line = 100.0, branch = 100.0 }
 # The other half of the label-version guard. `label_versions_comparable` refuses
 # a comparison across a key revision; this is what makes the refusal satisfiable
 # and what stops an unstamped record reaching a stamped one unnoticed. A wrong

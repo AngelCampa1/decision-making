@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { titleFrom, stripReadme } from '../../lib/titles.ts';
+import { shown } from '../../lib/claims.ts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const entries = await getCollection('results');
@@ -29,8 +30,15 @@ runs.sort((a, b) => (a.dir < b.dir ? 1 : -1));
     <div class="caveat">
       <p class="caveat__label">Read these with the corpus caveat</p>
       <p>
-        Every trigger result below was measured on a set that a word count passes 89% of
-        the time. The results are real and the headroom above a ruler is about nine points.
+        Every trigger result published before 2026-08-18 was measured on a set a word
+        count passes {shown('corpus-solvability')} of the time, so those results were
+        competing for about {shown('headroom-points')} over a ruler. The results are real;
+        the room they had was small.
+      </p>
+      <p>
+        It does not apply to every run below. The corpus was rebuilt, and on the new one
+        the best model-free shortcut reaches {shown('word-trick-ceiling')}. Each run names
+        the answer-key version it used.
       </p>
     </div>
 
@@ -83,9 +91,13 @@ runs.sort((a, b) => (a.dir < b.dir ? 1 : -1));
 
   .run-item__dir {
     display: block;
-    font: 600 0.8125rem/1.5 var(--font-mono);
-    color: var(--accent);
+    font: 500 0.8125rem/1.5 var(--font-mono);
+    color: var(--ink-strong);
     font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .run-item a:hover .run-item__dir {
+    color: var(--signal);
   }
 
   .run-item__title {

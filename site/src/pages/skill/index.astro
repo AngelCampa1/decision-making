@@ -1,62 +1,56 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { REPO } from '../../lib/site.ts';
+import { skillFacts } from '../../lib/facts.ts';
+import { verdictState } from '../../lib/verdicts.ts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const procedures = [
-  {
-    file: 'ledger',
-    name: 'ledger',
-    hard: 'A pile of context arrived and it is unclear what the answer turns on',
-    out: 'what bears on it, what was set aside, and why',
-  },
-  {
-    file: 'fit',
-    name: 'fit',
-    hard: 'The advice may be generically right and wrong for this person',
-    out: 'the generic answer, and the facts that would overturn it',
-  },
-  {
-    file: 'cascade',
-    name: 'cascade',
-    hard: 'The action looks fine and the worry is what it starts, or what it spends',
-    out: 'the chain, what it forecloses, and the order',
-  },
-  {
-    file: 'timing',
-    name: 'timing',
-    hard: 'The direction is settled and the question is when',
-    out: 'the undo price, the real deadline, what waiting buys',
-  },
-];
+/**
+ * The procedure list was an array here, and it held four entries for the five
+ * days after the skill started routing to six. Nothing noticed, because an
+ * array of hand-typed rows cannot disagree with itself.
+ *
+ * It now comes from the routing table in `SKILL.md`, which is the thing an
+ * agent actually routes on, so this page cannot describe a skill other than the
+ * one that ships. The eyebrow reads the version and the verdict from the same
+ * frontmatter for the same reason: it said `v0.2.1` while the file said 0.3.0.
+ */
+const facts = await skillFacts();
+const state = verdictState(facts.verdict);
+
+// The chain is the subset that composes, in table order. `council` and `hinge`
+// each stand alone, so naming them in an arrow list would be wrong -- and the
+// list is derived rather than typed so it shortens if the table does.
+const CHAINED = ['ledger', 'fit', 'cascade', 'timing'];
+const chain = facts.procedures.filter((p) => CHAINED.includes(p.file));
 ---
 
 <Base title="The skill &middot; decision-making-skills">
   <div class="page index-page">
     <p class="eyebrow">
-      <span class="verdict" data-verdict="untested">untested</span>
-      <span>v0.2.1 &middot; experimental</span>
+      <span class="verdict" data-verdict={state}>{facts.verdict}</span>
+      <span>v{facts.version} &middot; {facts.status}</span>
     </p>
 
     <h1>decision-making</h1>
     <p class="lede">
-      One skill that routes to one of four procedures depending on what is actually hard
-      about the decision. It reads only that one.
+      One skill that routes to one of {facts.countWord} procedures depending on what is
+      actually hard about the decision. It reads only that one.
     </p>
 
     <ol class="procedures">
       {
-        procedures.map((p, i) => (
+        facts.procedures.map((p) => (
           <li class="proc">
-            <span class="proc__ord">{String(i + 1).padStart(2, '0')}</span>
+            <span class="proc__ord">{p.ord}</span>
             <div>
               <h2 class="proc__name">
-                <a href={`${base}/skill/decision-making/${p.file}/`}>{p.name}</a>
-                <span class="proc__file">{p.file}.md</span>
+                <a href={`${base}/skill/decision-making/${p.file}/`}>{p.file}</a>
+                <span class="proc__file">{p.md}</span>
               </h2>
               <p class="proc__hard">{p.hard}</p>
-              <p class="proc__out">{p.out}</p>
+              <p class="proc__out">{p.produces}</p>
             </div>
           </li>
         ))
@@ -65,8 +59,9 @@ const procedures = [
 
     <p>
       Where more than one applies they run in the order
-      <strong>ledger → fit → cascade → timing</strong>, because each supplies an input to
-      the next. Two is usually the most that earns its place.
+      <strong>{chain.map((p) => p.file).join(' → ')}</strong>, because each supplies an
+      input to the next. Two is usually the most that earns its place. The rest do not
+      join that chain; each one runs on its own.
     </p>
 
     <h2>The router</h2>
@@ -132,7 +127,7 @@ const procedures = [
 
   .proc__ord {
     font: 600 0.75rem/1.9 var(--font-mono);
-    color: var(--ink-faint);
+    color: var(--ink-muted);
   }
 
   .proc__name {
@@ -152,7 +147,7 @@ const procedures = [
   .proc__file {
     font-size: 0.75rem;
     font-weight: 400;
-    color: var(--ink-faint);
+    color: var(--ink-muted);
   }
 
   .proc__hard {
