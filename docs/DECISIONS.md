@@ -24,6 +24,51 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-19 — `council` and `hinge` are the correct answer for no positive, and that is deferred rather than fixed
+
+**Commits:** `19c4e7c`
+
+The shipped router table grew from four procedures to six earlier the same day.
+The answer key did not grow with it: every `route:` label in both corpora still
+names one of the original four, and the six occurrences of "council" in the
+corpus text are all the local-authority sense.
+
+`evaluate_routing` scores `chosen in case.routes`. So `council` and `hinge` are
+**wrong by construction** — a model that correctly selects one cannot be
+credited, and the answer can only ever land in `incorrect`. That is the fourth
+instance here of *an estimator that cannot return a non-zero value is not a
+measurement*, and the second caught in source before any call was made. The
+morning's `PROCEDURES` fix was the same edit's first consequence; this is the
+second, one layer further out — the vocabulary was repaired in the instrument
+and not in the key.
+
+`_check_unreachable_procedures` now reports it, wired into both the top-level
+scan and the draft scan. It is a **finding**, not a hard issue, and both corpora
+are listed in `datasets/triggers/corpus-baseline.txt`.
+
+**Why deferred rather than fixed.** Authoring positives for two new procedures
+is a change to the answer key: a new `set_version`, and published numbers that
+`trigger_arms.label_versions_comparable` will refuse to compare across. That is
+a unit of work with a governance cost, not a typo. A gate that reddens every
+commit until it is done gets routed around within the day, which is worse than
+one that prints the gap on every run — and the may-only-shrink rule means it
+cannot quietly stay open.
+
+**The first write-up overstated it and the correction is part of the record.** It
+was drafted as a block on N10. An agent briefed to break the claim found three
+things: N10 is not registered at all (`docs/RESEARCH_PROGRAMME.md` says the row
+"does not register it"); routing is the *secondary* label and N7, N10's design
+template, reports it zero times; and the cross-arm comparison the finding was
+written to prevent is already refused mechanically by
+`skill_versions_comparable`, which landed in `6e2028c` before the finding was
+noticed. What survived is narrower and still not small: a pooled routing accuracy
+computed here is a six-way choice scored against a four-way key, and the ceiling
+cost of that is 0 to about 16 points, over a denominator of 65 items / 130 rows.
+
+**Closed by** positives authored for both procedures, the key version bumped, and
+the arms re-run rather than re-scored — or by dropping the two rows from the
+router table, which is a real option and not the assumed one.
+
 ## 2026-08-19 — a baseline for `datasets/tailoring/`, so the shortcut battery's finding does not permanently redden the gate
 
 **Commits:** `2d848b2`
