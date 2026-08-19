@@ -69,10 +69,20 @@ in mixed batches to reduce this, but it is not eliminated.
 
 ## The datasets
 
-**The trigger corpus is 89% solvable by counting words, and every published
-trigger number sits on it.** Turn length alone separates the positives from the
-negatives at AUC 0.850; a bare *"fire if ≥ 18 words"* rule scores 0.890 with no
-model involved. Both figures are **label version 2**. The best *description*
+**Trigger corpus versions 1 through 3 are 89% solvable by counting words, and
+every Track L and Track M number sits on one of them.** Turn length alone
+separates the positives from the negatives at AUC 0.850; a bare *"fire if ≥ 18
+words"* rule scores 0.890 with no model involved. Both figures are **label
+version 2**.
+
+**Version 4 is not that corpus, and as of 2026-08-18 not every published number
+sits on the old one.** v4's best depth-2 stump over eight trivial features reads
+**0.7054** against a majority baseline of 0.6667 — a corpus a trivial feature
+can nudge rather than solve — and Track N6's three arms cleared it by 12 to 24
+points. **This does not retroactively rescue anything.** Every figure in the
+rest of this paragraph, and every L- and M-track conclusion drawn from them,
+still sits on v1–v3 and still carries the caveat in full. What changed is that
+the sentence may no longer be written about *every* number here. The best *description*
 arm on that key is `stakes-shown` at **0.9795**, and the highest firing accuracy
 on record at all is the `confidence` arm at **0.9863** — the shipped description
 with a probability also elicited, at one repeat rather than five. So **the range

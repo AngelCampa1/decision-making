@@ -26,17 +26,39 @@ answer key or the shipped skill needs a written reason), and **documentation**
 them can put a row in the table below. They govern whether a number is
 *traceable*, not whether it is *good*.
 
-## The caveat that qualifies every number on record
+## The caveat that used to qualify every number on record
 
-Every measurement this repository has made is a **trigger** measurement — does
-the skill fire when it should — and all of them ran on a corpus that is **89%
+Every trigger measurement made before 2026-08-18 ran on a corpus that is **89%
 solvable by counting words** (AUC 0.850 on turn length alone; a bare "fire if
 ≥ 18 words" rule scores 0.890 on the version 2 key, against the best arm on
-that key — 0.9795 to 0.9863). The paired
-comparisons between arms remain valid; the absolute numbers do not travel, and
-"nothing moved discrimination" has a second reading, which is that this is what
-a ceiling looks like. The rebuild is Track N. See
-[`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
+that key — 0.9795 to 0.9863). That has not changed and does not get to change:
+it still applies, in full, to every number computed on trigger corpus versions
+1 through 3 — every published Track L and Track M result. The paired
+comparisons between arms on those versions remain valid; the absolute numbers
+still do not travel, and "nothing moved discrimination" still has the second
+reading that a corpus with nowhere to move explains a null as well as a real
+effect does.
+
+**It can no longer be said of every number on record.** Track N6 (2026-08-18)
+ran on trigger corpus v4 — 258 items,
+`datasets/triggers/decision-making/index.yaml` — whose best depth-2 stump over
+eight trivial features reads **0.7054** against a majority baseline of
+**0.6667**. That is a corpus a trivial feature can barely nudge, not one it
+solves. All three arms N6 ran — `full`, `stakes-shown`, `opener-only` —
+cleared the stump, by 12 to 24 points (accuracy 0.8295, 0.9360, 0.9477 against
+the 0.7054 bar).
+[Run](results/decision-making/2026-08-18-e632659-n6-confirmatory/README.md).
+
+**What that is worth, stated so it is not overclaimed.** One confirmatory run,
+three arms, one corpus revision. It says this instrument, on this corpus, is
+not solved by a trivial feature — it does not say the skill works, does not
+touch `verdict: UNTESTED`, and does not fill in the table below. A trigger
+measurement is about whether the skill fires, not about whether firing
+produces a better decision, and nothing has measured the second question yet.
+
+The rebuild is Track N; N7 is running as this is written, and the corpus's own gates
+(Track N1) still apply to v4 going forward exactly as they applied to v1
+through v3. See [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
 
 None of this touches the table below, which is empty for a different and simpler
 reason: no skill has been measured on whether it improves a decision at all.
