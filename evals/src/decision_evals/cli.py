@@ -22,6 +22,8 @@ from typing import Final
 import typer
 
 from decision_evals.citations import census, check_citations, load_baseline
+from decision_evals.claims import census as claims_census
+from decision_evals.claims import check_claims
 from decision_evals.decisions import GOVERNED as DECISION_PATHS
 from decision_evals.decisions import GovernedCommit, check_decisions
 from decision_evals.decisions import census as decisions_census
@@ -189,6 +191,7 @@ def check(
         _run("mypy", [python, "-m", "mypy"]),
         lint_skills_step(),
         check_triggers_step(),
+        check_tailoring_step(),
         validate_manifests_step(),
         check_citations_step(),
         check_provenance_step(),
@@ -196,6 +199,7 @@ def check(
         check_decisions_step(),
         check_checkpoints_step(),
         check_docs_step(),
+        check_claims_step(),
     ]
 
     if not fast:
@@ -277,6 +281,45 @@ def check_triggers_step() -> StepResult:
         typer.secho(f"  known-open (baselined): {deferred}", fg=typer.colors.YELLOW)
 
     issues = check_trigger_sets(REPO_ROOT)
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def check_tailoring_step() -> StepResult:
+    """The tailoring corpus's governing/matched split, checked for shortcuts.
+
+    Added 2026-08-19 after a human reader, not a gate, noticed that all three
+    authored triplets share one surface tell: every ``governing`` insert names
+    a penalty attached to a status change and every ``matched`` insert is
+    procedural. ``datasets/triggers/`` shipped an equivalent defect once
+    already (see ``check_triggers_step``'s docstring) with no audit until every
+    number computed on it had to be re-read; this closes the same gap for
+    Track H before any model call is made against the corpus.
+
+    The corpus is 3 of a planned 20 triplets and under active revision, so an
+    empty or missing ``index.yaml`` passes with nothing to report rather than
+    failing the gate -- see :func:`decision_evals.tailoring.load_deltas`.
+    """
+    name = "tailoring corpus"
+    _echo_header(name)
+
+    from decision_evals.tailoring import TAILORING_DIR, check_shortcuts, load_deltas
+
+    tailoring_dir = REPO_ROOT / TAILORING_DIR
+    result = load_deltas(REPO_ROOT)
+    for warning in result.warnings:
+        typer.secho(f"  {warning}", fg=typer.colors.YELLOW)
+
+    trigger_set = result.trigger_set
+    typer.echo(
+        f"{len(trigger_set.positives)} governing delta(s), "
+        f"{len(trigger_set.negatives)} matched delta(s)"
+    )
+
+    issues = check_shortcuts(trigger_set, tailoring_dir / "index.yaml")
     if not issues:
         return StepResult(name, True)
     for issue in issues:
@@ -670,6 +713,49 @@ def check_docs_step() -> StepResult:
         for command in app.registered_commands
     }
     issues = check_docs(REPO_ROOT, commands - {""})
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def check_claims_step() -> StepResult:
+    """Every measured number the site publishes still says what its source says.
+
+    Added 2026-08-19, after the landing page was found offering four procedures
+    against a skill that routes to six, hardcoding thirteen published runs
+    while another page on the same site derived twelve, and republishing an
+    "about six points" figure that ``docs/STATUS.md`` had retracted six days
+    earlier. None of it was catchable: ``docs.py`` scans ``*.md`` and
+    ``docs/*.md`` and never opens an ``.astro`` file, and ``site.py`` hashes
+    the page for staleness without reading a word of it. Worse, the existing
+    gate laundered it -- editing ``SKILL.md`` made the manifest stale, ``de
+    site`` rehashed, and the wrong page republished green.
+
+    Runs in ``--fast``. Unlike the site step it needs no Node toolchain, and it
+    is the check most likely to fire on a routine edit to ``docs/STATUS.md``,
+    which is when the fix is cheapest.
+
+    Registered limitation: this binds a number to a sentence and cannot tell
+    whether that sentence is still the document's answer. ``docs/STATUS.md``
+    corrects by appending and holds four true totals at once. ``latest``
+    narrows that where a correction takes a recognisable numeric shape and does
+    nothing where it is phrased in words. The ``retractions`` register is the
+    manual remedy, so the hole closes one commit late.
+
+    A second gap, found on the day this shipped: the register cannot tell a
+    published claim from a comment describing one, so a page documenting a
+    retraction is refused for naming it. There is no exemption table for that
+    yet. Reword the comment; do not reprint the retracted phrase.
+    """
+    name = "published claims"
+    _echo_header(name)
+
+    claims, retractions, pages = claims_census(REPO_ROOT)
+    typer.echo(f"{claims} claim(s), {retractions} retraction(s), {pages} page(s) scanned")
+
+    issues = check_claims(REPO_ROOT)
     if not issues:
         return StepResult(name, True)
     for issue in issues:

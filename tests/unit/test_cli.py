@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
+import yaml
 from typer.testing import CliRunner
 
 from decision_evals import cli
@@ -23,6 +24,7 @@ from decision_evals.cli import (
     check_decisions_step,
     check_git_identity,
     check_provenance_step,
+    check_tailoring_step,
     check_wiring_step,
     lint_skills_step,
     validate_manifests_step,
@@ -252,6 +254,123 @@ class TestCheckCitationsStep:
         result = cli.check_citations_step()
         assert not result.passed
         assert "25 issue(s)" in result.detail
+
+
+class TestTailoringStep:
+    """Wiring for the ``datasets/tailoring/`` shortcut battery.
+
+    ``check_tailoring_step`` delegates its logic to
+    ``decision_evals.tailoring``, which carries its own thorough tests
+    (``tests/unit/test_tailoring_battery.py``, including the real corpus's
+    known-bad register split and a known-good synthetic case). What is worth
+    pinning down here is the wiring itself: the step passes on an empty or
+    absent corpus, fails when the battery finds something, and does not choke
+    on a triplet the battery had to skip.
+    """
+
+    def _write_variant(self, tailoring: Path, filename: str, arm: str, prompt: str) -> None:
+        (tailoring / filename).write_text(
+            yaml.safe_dump({"arm": arm, "prompt": prompt}), encoding="utf-8"
+        )
+
+    def test_passes_when_no_corpus_is_present(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        assert check_tailoring_step().passed
+
+    def test_passes_on_a_corpus_with_no_surface_shortcut(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """Two triplets, the same two shapes with governing/matched swapped.
+
+        Same construction ``test_tailoring_battery.py`` uses for its
+        known-good fixture: swapping which shape is governing and which is
+        matched makes every feature's pooled AUC exactly 0.5, which is the
+        only way one CLI-level test can assert a pass without duplicating the
+        battery's own known-good coverage.
+        """
+        tailoring = tmp_path / "datasets" / "tailoring"
+        tailoring.mkdir(parents=True)
+        shape_a = "Intro.\n- One.\n- The vendor confirmed delivery next Tuesday.\n- Two.\nOutro.\n"
+        shape_b = "Intro.\n- One.\n- On 2025-03-14 the committee approved a small budget.\n- Two.\nOutro.\n"
+        self._write_variant(tailoring, "t1-base.yaml", "base", "Intro.\n- One.\n- Two.\nOutro.\n")
+        self._write_variant(tailoring, "t1-governing.yaml", "governing", shape_a)
+        self._write_variant(tailoring, "t1-matched.yaml", "matched", shape_b)
+        self._write_variant(tailoring, "t2-base.yaml", "base", "Intro.\n- One.\n- Two.\nOutro.\n")
+        self._write_variant(tailoring, "t2-governing.yaml", "governing", shape_b)
+        self._write_variant(tailoring, "t2-matched.yaml", "matched", shape_a)
+        (tailoring / "index.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "triplets": [
+                        {
+                            "id": "t1",
+                            "files": ["t1-base.yaml", "t1-governing.yaml", "t1-matched.yaml"],
+                        },
+                        {
+                            "id": "t2",
+                            "files": ["t2-base.yaml", "t2-governing.yaml", "t2-matched.yaml"],
+                        },
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        assert check_tailoring_step().passed
+
+    def test_fails_when_the_battery_finds_a_shortcut(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        tailoring = tmp_path / "datasets" / "tailoring"
+        tailoring.mkdir(parents=True)
+        self._write_variant(tailoring, "t1-base.yaml", "base", "Intro.\n- One.\n- Two.\nOutro.\n")
+        self._write_variant(
+            tailoring,
+            "t1-governing.yaml",
+            "governing",
+            "Intro.\n- One.\n- Clause 9.4 forfeits the balance on breach of the covenant.\n"
+            "- Two.\nOutro.\n",
+        )
+        self._write_variant(
+            tailoring, "t1-matched.yaml", "matched", "Intro.\n- One.\n- Hi.\n- Two.\nOutro.\n"
+        )
+        (tailoring / "index.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "triplets": [
+                        {
+                            "id": "t1",
+                            "files": ["t1-base.yaml", "t1-governing.yaml", "t1-matched.yaml"],
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = check_tailoring_step()
+        assert not result.passed
+        assert "issue" in result.detail
+
+    def test_a_malformed_triplet_is_skipped_rather_than_crashing_the_step(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        tailoring = tmp_path / "datasets" / "tailoring"
+        tailoring.mkdir(parents=True)
+        (tailoring / "index.yaml").write_text(
+            yaml.safe_dump({"triplets": [{"id": "broken", "files": ["missing.yaml"]}]}),
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        result = check_tailoring_step()
+        assert result.passed
+
+    def test_the_real_corpus_is_flagged(self) -> None:
+        """No monkeypatching: the register split the battery was built to catch
+        is on disk right now, so the step must fail against the real corpus."""
+        assert not check_tailoring_step().passed
 
 
 class TestFetch:
