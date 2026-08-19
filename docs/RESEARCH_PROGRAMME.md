@@ -2114,6 +2114,50 @@ entry records that this rule is a choice and states which way it biases the
 result: conservatively, toward under-reporting movement, which pushes J down and
 so runs *against* the kill.
 
+**That last sentence is half the story, and the missing half is a defect no
+corpus size fixes.** τ is a *maximum* over the n base pairs, so it grows with the
+corpus — and with it the estimand. Reconstructed on 2026-08-19, true J runs
+**0.843 → 0.915 → 0.956 → 0.977** as n goes 5 → 10 → 20 → 40 at one
+parameterisation. So the direction the prediction names is right and its size is
+not fixed: **the bias changes with n**, no two corpus sizes measure the same
+venue, and the drift runs *toward* the kill. Adding triplets makes this worse
+rather than better.
+
+A second consequence of the same rule: τ is one draw shared by every triplet, so
+the clusters are not independent. Measured across-cluster correlation of
+indicators from different triplets is 0.07–0.10, which `cluster_bootstrap_diff`
+resamples i.i.d. and cannot see; realised SD runs ×1.23 to ×2.31 the closed form
+and coverage does **not** improve with n.
+
+**Settle τ before authoring further.** A quantile, or a pooled noise estimate,
+rather than a max over n would remove the drift. Note that this was found in
+source before H1 ran, and that every figure behind it rests on a reconstruction
+rather than a measurement — **no quantity has ever been elicited in this
+harness**. Full account:
+[`notebook/2026-08-19-h1-does-not-need-twenty-and-tau-drifts-with-n.md`](../notebook/2026-08-19-h1-does-not-need-twenty-and-tau-drifts-with-n.md).
+
+**And twenty triplets is not load-bearing.** Simulating the registered *point*
+rule — `Phase0Result.kill` is `j >= 0.70`, not an interval — over 174 cells:
+
+| | n=5 | n=10 | n=15 | n=20 |
+|---|---|---|---|---|
+| P(false kill) at true J = 0.50 | 0.23 | 0.10 | 0.04 | 0.02 |
+| P(kill) at true J = 0.85 | 0.94 | 0.97 | 0.99 | 0.99 |
+
+**Ten is defensible and fifteen comfortable**; ten to twenty buys about eight
+points of false-kill protection for fifty more authored triplets, which at the
+observed one-in-five yield is some 350,000 characters. Pick n as a multiple of
+five and not for tidiness: bootstrap replicate means live on the `k/(2n)` lattice
+and 0.70 is an atom at 5, 10, 15 and 20 but not at 8 or 12, so going from five
+triplets to eight makes the indeterminate rate **26 points worse**.
+
+An interval reading of the same grid says no n between 5 and 20 works at all,
+which is a different question from the one H1 registered — and it is the reading
+the first version of this analysis scored by mistake. Both are reported because
+the gap between them is the finding: if H1 ever wants to *state* headroom rather
+than observe a point estimate under the kill, twenty triplets does not deliver
+it and neither would forty.
+
 **Both non-negotiables hold, and Phase 0 is where they would be cut.** The
 matched non-governing arm is a third of the generation bill and it is the arm
 where nothing is supposed to happen, which is what makes it look free to drop
