@@ -136,26 +136,6 @@ class TestManifestDigest:
         assert dep.manifest_digest(unix) == dep.manifest_digest(windows)
 
 
-class TestManifestMismatch:
-    def test_absent_field_is_not_a_mismatch(self, tmp_path: Path) -> None:
-        """Older deploys carry no digest. Silence is not disagreement."""
-        assert dep._manifest_mismatch({}, tmp_path) is False
-
-    def test_absent_local_manifest_is_not_a_mismatch(self, tmp_path: Path) -> None:
-        assert dep._manifest_mismatch({"build_manifest_sha256": "a"}, tmp_path) is False
-
-    def test_a_different_digest_is_a_mismatch(self, tmp_path: Path) -> None:
-        (tmp_path / "site").mkdir()
-        (tmp_path / dep.MANIFEST_PATH).write_text("{}", encoding="utf-8")
-        assert dep._manifest_mismatch({"build_manifest_sha256": "a"}, tmp_path) is True
-
-    def test_the_same_digest_is_not(self, tmp_path: Path) -> None:
-        (tmp_path / "site").mkdir()
-        (tmp_path / dep.MANIFEST_PATH).write_text("{}", encoding="utf-8")
-        digest = dep.manifest_digest(tmp_path)
-        assert dep._manifest_mismatch({"build_manifest_sha256": digest}, tmp_path) is False
-
-
 class TestCheckDeployed:
     def test_current(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
         _serve(monkeypatch, _provenance())
@@ -187,17 +167,20 @@ class TestCheckDeployed:
         assert state.status == dep.BEHIND
         assert "distance unknown" in state.detail
 
-    def test_behind_on_a_stale_manifest_at_the_right_commit(
+    def test_a_differing_manifest_is_not_reported_as_drift(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
     ) -> None:
-        """The rarest reading, and the one a commit comparison alone misses."""
+        """Pins a decision rather than a behaviour. Comparing the published
+        manifest digest against the local working tree fired on every branch it
+        was tried on, because a checkout is hardly ever sitting exactly on the
+        deployed commit; comparing it against the manifest in the deployed
+        commit can never disagree. The commit SHA already determines the tree,
+        so no verdict is taken from this field."""
         (tmp_path / "site").mkdir()
         (tmp_path / dep.MANIFEST_PATH).write_text("{}", encoding="utf-8")
-        _serve(monkeypatch, _provenance(build_manifest_sha256="stale"))
+        _serve(monkeypatch, _provenance(build_manifest_sha256="something-else"))
         monkeypatch.setattr(dep, "remote_head", lambda root, ref=dep.REMOTE_REF: HEAD)
-        state = dep.check_deployed(tmp_path, "http://x")
-        assert state.status == dep.BEHIND
-        assert "documents that had already moved" in state.detail
+        assert dep.check_deployed(tmp_path, "http://x").status == dep.CURRENT
 
     def test_unreachable_is_not_reported_as_current(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path

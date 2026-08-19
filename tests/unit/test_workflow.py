@@ -30,6 +30,22 @@ WRITER = ROOT / ".github/scripts/write_deployment.py"
 SHA = "f01d325cf1c2199d4f69e845efa9d806c4e805eb"
 
 
+class _Served:
+    """A stand-in for what `urlopen` hands back, as a context manager."""
+
+    def __init__(self, payload: str) -> None:
+        self._payload = payload.encode("utf-8")
+
+    def __enter__(self) -> _Served:
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        return None
+
+    def read(self, amount: int | None = None) -> bytes:
+        return self._payload[:amount]
+
+
 @pytest.fixture(scope="module")
 def workflow() -> dict[str, Any]:
     return yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
@@ -174,10 +190,19 @@ class TestProvenanceWriter:
         record = self._payload(monkeypatch, tmp_path)
 
         assert record["commit"] == SHA
+        # Both sides hash the manifest the same way, which is what makes the
+        # recorded digest worth anything to a human reading it. No verdict is
+        # taken from it; see `deployed.manifest_digest`.
         assert record["build_manifest_sha256"] == dep.manifest_digest(tmp_path)
-        # The reader must accept the writer's own output verbatim.
-        parsed = json.loads(json.dumps(record))
-        assert dep._manifest_mismatch(parsed, tmp_path) is False
+
+        # The reader must accept the writer's own output verbatim, and read the
+        # commit back out of it. This is the contract, end to end.
+        served = json.dumps(record)
+        monkeypatch.setattr(
+            dep.urllib.request, "urlopen", lambda url, timeout=None: _Served(served)
+        )
+        monkeypatch.setattr(dep, "remote_head", lambda root, ref=dep.REMOTE_REF: SHA)
+        assert dep.check_deployed(tmp_path, "http://x").status == dep.CURRENT
 
     def test_an_absent_manifest_is_recorded_as_absent_not_as_zero(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path

@@ -120,9 +120,9 @@ site renders. Commit it with the document.
 
 Publishing is not your job any more. Merging to `main` deploys the site through
 [`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml), and
-nothing on a laptop can publish. That gate still cannot see the live page —
-`de check` is offline by design — so the question is asked separately when you
-want the answer:
+nothing on a laptop can publish. That gate still cannot see the live page,
+because `de check` is offline by design, so the question is asked separately
+when you want the answer:
 
 ```bash
 uv run de deployed

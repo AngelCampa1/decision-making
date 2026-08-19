@@ -171,27 +171,22 @@ def manifest_digest(repo_root: Path) -> str | None:
     Line endings are normalised first, matching ``decision_evals.site._digest``,
     so a Windows and a Linux checkout agree. The workflow that writes this
     digest runs on Linux and the command that reads it usually does not.
+
+    **No verdict is derived from this.** The deploy records the same digest into
+    ``deploy-provenance.json``, where it is worth having when a human is working
+    out what happened, and it is read by the test that holds the writer and this
+    module to the same field names. But comparing it here would be one of two
+    useless things. Against the *working tree* it fires whenever the checkout is
+    not sitting exactly on the deployed commit, which is nearly always, and it
+    did in every branch this was tried on. Against the manifest *in the deployed
+    commit* it can never disagree, because that is the file the workflow hashed
+    -- an estimator with no non-zero outcome, which this repository has a
+    standing rule against shipping. The commit SHA already determines the tree.
     """
     manifest = repo_root / MANIFEST_PATH
     if not manifest.is_file():
         return None
     return hashlib.sha256(manifest.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-
-
-def _manifest_mismatch(record: dict[str, object], repo_root: Path) -> bool:
-    """The live site was built from this commit, against a different manifest.
-
-    Rare, and worth naming separately: it means a deploy ran from the right
-    commit while the manifest in that commit had gone stale, so the pages are a
-    build of documents that had already moved.
-    """
-    published = record.get("build_manifest_sha256")
-    if not isinstance(published, str):
-        return False
-    local = manifest_digest(repo_root)
-    if local is None:
-        return False
-    return published != local
 
 
 def _distance(repo_root: Path, deployed_sha: str, head: str) -> str:
@@ -226,14 +221,6 @@ def check_deployed(
             BEHIND,
             f"the live site is a build of {commit[:7]}, origin/main is at "
             f"{head[:7]}: {_distance(repo_root, commit, head)}",
-        )
-
-    if _manifest_mismatch(record, repo_root):
-        return DeployState(
-            BEHIND,
-            f"the live site is a build of {commit[:7]}, which is origin/main, but "
-            "against a different `site/build-manifest.json`. It published "
-            "documents that had already moved",
         )
 
     return DeployState(CURRENT, f"the live site is a build of {commit[:7]}, which is origin/main")

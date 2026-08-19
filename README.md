@@ -257,10 +257,10 @@ the site and deploys it to GitHub Pages on every push to `main`. Nothing else
 can publish: the Pages source is the workflow, there is no `gh-pages` branch,
 and no laptop has a way to push one.
 
-That replaced the step this section used to admit it could not check. The site
-gate proves the committed build matches the current tree; it never proved the
-build was pushed, and for six days in August 2026 the live site was a
-hand-written page nothing here had ever touched. Publishing is now a function
+This section used to admit a step it could not check, and that step is gone.
+The site gate proves the committed build matches the current tree; it never
+proved the build was pushed, and for six days in August 2026 the live site was
+a hand-written page nothing here had ever touched. Publishing is now a function
 of `main` instead of a function of who remembered. `de check` is still offline
 on purpose and still cannot see the live site, so the question is answered on
 demand by a separate command:
@@ -271,8 +271,8 @@ uv run de deployed
 
 It fetches what the site says about its own origin and compares that against
 `origin/main`. Exit 0 means the live site is a build of the current `main`,
-1 means it is behind, and 2 means the question could not be answered — which is
-deliberately not the same as 0.
+1 means it is behind, and 2 means the question could not be answered. That last
+one is deliberately not the same as 0.
 
 Several of its steps check the method rather than the code, each one added
 after the failure it prevents had already happened here:

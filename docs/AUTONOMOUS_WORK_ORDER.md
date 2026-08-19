@@ -378,7 +378,7 @@ fail until you finish the setup. Gitignored and therefore *not* inherited:
 
 ```bash
 cd .claude/worktrees/<slug>
-python -m uv sync --group dev      # add --group docs if you will deploy
+python -m uv sync --group dev
 python -m uv run de fetch          # datasets/vendor/, or the corpus tests fail
 ```
 
@@ -400,12 +400,15 @@ weighing it, branch the worktree.
 **Maintainer instruction, 2026-08-19.** A unit is not finished when `de check`
 goes green on a branch. It is finished when the change is on `main`, the site
 that renders it is deployed, the deployed page has been fetched and checked, and
-the branch and worktree are gone.
+the branch and worktree are gone. The deploy itself is automatic now; confirming
+it is not.
 
 The merge rules are also in `AGENTS.md`, which carries the worktree and
 `main`-parity requirements. What is only here is the *order*, and steps 9 to 11.
 
-**Steps 9, 10 and 11 are the ones nothing here can check.** The rest are written
+**Steps 10 and 11 are the ones nothing here can check.** Step 9 used to be one
+of them and no longer is: deploying is a workflow rather than a thing somebody
+remembers, and `de deployed` will tell you whether it landed. The rest are written
 down because the order matters — and because `de check` at `pre-push` is *not* a
 safety net you can count on. It fires only if somebody ran `pre-commit install
 --hook-type pre-push` in this clone. Nothing in the repository does that for you,
@@ -533,33 +536,34 @@ load-bearing on their own.
    commits. Go back to step 1 with a fresh fetch and run 4 to 7 again. Do not
    reach for `--no-verify`.
 
-9. **Deploy — from the merge result, which you have to go and stand on.**
-   `de site` builds from wherever the editable package is installed, which is
-   *your* worktree, not `main`. If the merge was not a fast-forward, deploying
-   without this step publishes your branch and silently drops whatever the merge
-   brought in:
+9. **Deploying is not yours to do. Confirming it happened is.** The push in
+   step 8 triggers `.github/workflows/deploy-site.yml`, which builds the site
+   and deploys it to Pages. There is nothing to run, no `--group docs` to
+   remember, no worktree to go and stand on, and no `gh-pages` branch. Wait for
+   the run, then ask the live site what it is serving:
 
    ```bash
-   git merge --ff-only origin/main          # now your tree is the merge result
-   python -m uv sync --group dev --group docs
-   python -m uv run de site --deploy
+   gh run watch                       # or: gh run list --workflow "Deploy site"
+   python -m uv run de deployed
    ```
 
-   The `sync` is not optional bookkeeping: `ghp-import` lives in the `docs`
-   group alone, and a bare `python -m uv sync --group dev` at any point
-   *uninstalls* it, because `uv sync` is exact.
+   `de deployed` fetches `deploy-provenance.json` from the published site — the
+   record the deploying workflow writes into the tree it uploads — and compares
+   the commit in it against `origin/main`. Exit 0 is current, 1 is behind, and
+   **2 is "could not tell", which is deliberately not 0.**
 
-   Deploying from a nested worktree is safe **provided that worktree has its own
-   `.venv`** — checked by running it: `REPO_ROOT` resolves through the editable
-   install to the worktree, so `chdir(REPO_ROOT)` puts `ghp-import` in the right
-   tree and it pushes to the right remote.
+   Two things it does not prove, so do not stop here. A deployment can be green
+   while a route is missing, which is why step 10 still fetches pages by hand.
+   And Pages sits behind a CDN, so a *behind* result within a few minutes of a
+   merge may be cache lag rather than a failed deploy — re-run it before
+   concluding anything.
 
-   This is the step no gate can see. `de check` is offline by design and cannot
-   consult `origin/gh-pages`, so a green gate beside a build that never left the
-   machine is exactly as green as a deployed one. And the deploy
-   **force-pushes** `gh-pages` (`ghp_import(..., push=True, force=True)` →
-   `git push origin gh-pages --force`), so a session that deployed minutes ago is
-   overwritten without a word.
+   **What replaced what, so the old instruction is not resurrected from
+   memory.** This used to be `de site --deploy`, which force-pushed whatever
+   local `HEAD` happened to be. On 2026-08-19 it published a build of a
+   work-in-progress commit from a feature branch, and separately left the
+   published branch 43 minutes behind `main` with nothing to say so. The flag,
+   the `ghp-import` dependency and the `docs` group are all gone.
 
 10. **Then fetch the deployed page and assert against it.** Not the local
     `dist/`, not the manifest.
