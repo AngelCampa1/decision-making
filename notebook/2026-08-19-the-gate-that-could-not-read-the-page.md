@@ -140,3 +140,92 @@ That is the same shape as the two limits already on record. `docs.py` reads
 whether a reference exists, never whether the sentence is true. `site.py` proves
 the site was built, never that it was pushed. Three gates, three standing
 limits: each proves a correspondence, none proves currency.
+
+## Appended the same day: two more, both found by checking rather than by care
+
+**The 375px toggle fix was scoped one breakpoint too narrow, and the same
+control was clipped again at 768.** The remedy above was a two-row header under
+`@media (max-width: 32rem)`. At 768px the header is still one row, the `46rem`
+query that hides the wide nav item has not fired, and `.theme-toggle` — which
+carries `overflow: hidden` because that is what clips its buttons to the rounded
+border — had no `flex-shrink: 0`. So the flex row ran out of room and the group
+shrank, amputating `dark` by 23px while `document.scrollWidth` again reported no
+overflow. Identical failure, identical invisibility, one breakpoint up.
+
+Pinning the toggle then moved the failure rather than removing it: nothing
+clipped, and the row overflowed the viewport by 4px instead, because a flex item
+does not shrink below its min-content width unless told to. The nav is the part
+that can degrade gracefully, so `flex-wrap: wrap` and `min-width: 0` went there.
+Measured clean at 375, 414, 540, 640, 753 and 1425.
+
+The lesson is not "check more widths". It is that the first fix was written
+against the width where the bug was reported, and a fix scoped to the report is
+scoped to nothing.
+
+**And `test_the_published_checkpoints_were_actually_found` asserted `len(...) >=
+2` over a glob that finds two files only on a machine that has already run the
+experiments.** Its own docstring said it existed so the parametrised test above
+it could not be "vacuously green". Exactly one RunRecord checkpoint is
+committed; every other one lives under `results/calibration/`,
+`results/track-a/`, `results/track-0/` or `results/triggers/`, all gitignored on
+purpose. So on any clean checkout the guard against vacuity failed, and on this
+machine it passed for a reason unrelated to what it claimed to check.
+
+It now names the tracked file instead of counting. That is strictly stronger
+where it can be: a layout move or a first-line shape change fails with the path
+in the message, rather than with an integer that means nothing on its own. It
+was confirmed live by pointing it at a moved path and watching it fail, because
+an estimator that cannot return a non-zero value is not a measurement.
+
+This is the fourth thing on this page that reported green, or red, for a reason
+that had nothing to do with the thing it was watching.
+
+## Correction, appended 2026-08-19: four things this entry got wrong
+
+Four adversarial reviewers were run over this branch. Two of them read this
+entry. Corrections go below rather than above, because the entry is the record.
+
+**The quotation in the contrast paragraph was invented.** It reads:
+
+> `--ink-faint` carried a comment reading *"NOT body text. Licensed for >=19px,
+> non-text bounds, and disabled chrome"*
+
+The comment at `f12b444:site/src/styles/base.css:36-37` is:
+
+```
+/* NOT body text. 3.56:1 -- licensed for >=19px, non-text bounds, and the
+ * em-dash null glyph only. */
+```
+
+Three departures, presented in italics inside quotation marks as verbatim: the
+ratio is dropped, `licensed` is recapitalised, and **"disabled chrome" replaces
+"the em-dash null glyph only"** — a wider licence than the comment granted, in
+a paragraph arguing the licence was ignored. This is the defect `509cc13`
+records two commits earlier on this same branch, *"the confirming review found
+a quote I had invented"*, committed by me, two hours before I did it again.
+
+**"twelve text call sites" is six.** `git grep "ink-faint" f12b444 -- site/`
+returns ten lines: three are the token's own definitions across the three theme
+blocks, one is a `stroke:`. Six `color:` call sites across four files.
+
+**"the lookahead could not match it" is a lookbehind.** `(?<=therefore )` is
+lookbehind syntax. `site/claims.json` gets it right in the same commit, which
+means the two records of one event disagree about the mechanism.
+
+**"Seven claims, one file each" is seven claims across five files.** Three of
+them — four procedures, ~4,240 calls, eight broken tests — were all in
+`docs/index.html`, which is the page that turned out to be the one actually
+being served. The phrase was an echo of the README's "Four instances, one file
+each" and did not survive being counted.
+
+**And the diagnosis at the top of this entry is narrower than it reads.** It
+says neither `docs.py` nor `site.py` opens a `.astro` file, which is true and
+was not the whole story: the live page was `docs/index.html`, and the claims
+gate built here scans `site/src/**` and would not have opened that file either.
+`eb966b2` deleted it and repointed Pages at the Astro build. The gate this entry
+is about would not have caught three of the seven claims it opens by counting.
+
+None of the four were found by a gate. Three were found by a reviewer briefed to
+break the work, and the fourth by that reviewer counting something I had
+asserted. The entry's own closing line — that everything on this page reported
+green for a reason unrelated to what it was watching — now includes the entry.

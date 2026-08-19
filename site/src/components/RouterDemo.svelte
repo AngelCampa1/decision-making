@@ -11,9 +11,17 @@
    * The examples are illustrative and the panel says so. They are not recorded
    * runs, and this repository would be the wrong place to blur that.
    *
-   * Every panel is server-rendered into the HTML. With JavaScript off the first
-   * one is visible, the rest are reachable as anchors, and nothing here is the
-   * only route to information that matters.
+   * Every panel is server-rendered into the HTML, so the first one is complete
+   * and readable with JavaScript off.
+   *
+   * The other five are not reachable without it. This comment claimed they were
+   * "reachable as anchors" until an adversarial review on 2026-08-19 checked:
+   * the tabs are buttons with no href, the hidden panels are `display: none`,
+   * and there is no `:target` rule anywhere in the built CSS. What a no-JS
+   * visitor loses is the five worked examples. What they keep is the procedure
+   * list further down the page, which names every method and when it fires --
+   * so nothing here is the only route to a fact, but the demonstration itself
+   * does need the script.
    */
   let { examples = [], segments = 6, repo = '' } = $props();
 
@@ -54,12 +62,40 @@
     active = i;
   }
 
+  /**
+   * Move selection *and* focus together.
+   *
+   * The roving `tabindex` means the unselected tabs are `tabindex="-1"`. Moving
+   * selection without moving focus therefore stranded the focus ring on a tab
+   * that was no longer selected and no longer in the tab order: a sighted
+   * keyboard user saw the ring and the highlight on two different tabs, a
+   * screen-reader user heard nothing change at all, and the next `Tab` went
+   * back *into* the tablist instead of leaving it.
+   *
+   * Up and down as well as left and right, because below 46rem the tabs wrap to
+   * a 3x2 grid and horizontal is no longer the only axis a reader would try.
+   * Home and End because a six-item tablist is long enough to want them.
+   */
   function onKey(event) {
     const last = examples.length - 1;
-    if (event.key === 'ArrowRight') choose(active === last ? 0 : active + 1);
-    else if (event.key === 'ArrowLeft') choose(active === 0 ? last : active - 1);
-    else return;
+    let next;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      next = active === last ? 0 : active + 1;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      next = active === 0 ? last : active - 1;
+    } else if (event.key === 'Home') {
+      next = 0;
+    } else if (event.key === 'End') {
+      next = last;
+    } else {
+      return;
+    }
     event.preventDefault();
+    choose(next);
+    // After the DOM has the new `tabindex`, or focus lands on an element that
+    // is still -1 and the browser drops it.
+    const id = `demo-tab-${examples[next].file}`;
+    requestAnimationFrame(() => document.getElementById(id)?.focus());
   }
 </script>
 

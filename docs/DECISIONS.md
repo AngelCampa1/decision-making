@@ -77,16 +77,39 @@ stated here so nobody later reads its presence as enforcement. Only direct
 descent is recorded: `l08p` and `xl07p` say "like v2's p12", which is a
 comparison rather than ancestry, and they are deliberately absent.
 
+## 2026-08-19 — The answer key's header described a four-row router table
+
+**Commits:** `c55d4af`
+
+`datasets/triggers/decision-making.yaml`'s header said `route` "names which of
+the four procedures the SKILL.md router should select". The table has offered
+six since `ae55b5b`. Corrected to say which procedure, and to name the gap
+rather than write around it: no positive in this file routes to `council` or
+`hinge`, which is deferred on the record in `corpus-baseline.txt`.
+
+**Comment only.** No `route` line is touched, no label moves, and `set_version`
+does not bump — so nothing computed from this key changes and no published
+number is affected. The entry exists because the path is governed and the gate
+refuses a governed commit without one, not because a label moved.
+
+The reason this is registered rather than folded into a prose sweep: a header
+that undercounts the table is how the unreachable-procedure gap stayed
+invisible in the first place. `_check_unreachable_procedures` now reports it
+mechanically, and this sentence no longer disagrees with it.
+
 ## 2026-08-19 — Track H authoring pass two: five triplets authored, one clean, three cut, one blocked
 
-**Commits:** `91f2313`, `b84e7c0`
+**Commits:** `91f2313`, `b84e7c0`, `e5dc197`, `b1d97bd`
 
 Adds `t01`–`t05` and `index-pass2.yaml` under `datasets/tailoring/`. The
-authoring landed over two commits: `91f2313` carried the fifteen scenario files
-in as a pre-switch checkpoint, and `b84e7c0` added pass two's dispositions to
-`index-pass2.yaml`. Both are named because both moved the answer key, and an
-entry that names only the second leaves the commit that wrote the files
-unexplained. `index.yaml`
+authoring landed over two commits on each of two branches, and all four are
+named because all four moved the answer key: `91f2313` carried the fifteen
+scenario files in as a pre-switch checkpoint and `b84e7c0` added pass two's
+dispositions to `index-pass2.yaml`; `e5dc197` and `b1d97bd` are those same two
+changes as they reached `main`, the triplets landing separately there because
+they had been committed on a shared branch by another session and had never
+reached `main`. An entry naming only the dispositions leaves the commit that
+wrote the files unexplained. `index.yaml`
 is untouched, so the shortcut battery does not see them and
 `corpus-baseline.txt` is neither relied on nor invalidated. `h01`–`h03` are
 byte-identical to their committed form: they are evidence of the pass-one shape
@@ -138,7 +161,7 @@ implying two independent confirmations.
 
 ## 2026-08-19 — `council` and `hinge` are the correct answer for no positive, and that is deferred rather than fixed
 
-**Commits:** `19c4e7c`
+**Commits:** `19c4e7c`, `2ccfdb6`
 
 The shipped router table grew from four procedures to six earlier the same day.
 The answer key did not grow with it: every `route:` label in both corpora still

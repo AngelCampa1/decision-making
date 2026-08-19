@@ -87,7 +87,7 @@ rather than on a finding.
 **The matched fact must be the kind of thing a reasonable person would think
 mattered, and that a professional can explain does not.**
 
-A candidate pair passes only if it matches on **all six** dimensions. Check them
+A candidate pair passes only if it matches on **all eight** dimensions. Check them
 one at a time and write the result into `key.salience_match`.
 
 1. **Same object class.** Both facts are the same kind of thing. Two clauses of
@@ -214,7 +214,7 @@ named in the same breath.
    and the item manufactures an answer-key defect. When in doubt, cut; a
    disputed matched fact costs more than a missing triplet.
 3. **The matched insert is self-neutralising** (§4.1).
-4. **The matched fact fails any of the six salience dimensions** (§4).
+4. **The matched fact fails any of the eight salience dimensions** (§4).
 5. **The governing fact changes the *definition* of the elicited quantity**
    rather than its value. An early draft of `h01` asked for "months of runway to
    hold at the raise", which the covenant floor made ambiguous — gross or usable

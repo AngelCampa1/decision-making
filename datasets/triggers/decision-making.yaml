@@ -26,8 +26,11 @@
 # competing facts, an explicit request for a recommendation. Precision measured
 # against negatives that look nothing like triggers is free and means nothing.
 #
-# `route` on a positive case names which of the four procedures the SKILL.md
-# router should select, taken from its own table rather than invented here. It
+# `route` on a positive case names which procedure the SKILL.md router should
+# select, taken from its own table rather than invented here. This said "the
+# four procedures" until 2026-08-19; the table has offered six since `ae55b5b`,
+# and no positive here routes to `council` or `hinge` -- a gap deferred on the
+# record in `corpus-baseline.txt` rather than papered over by this sentence. It
 # is a *secondary* label: firing at all is the primary quantity, and a run that
 # reports routing accuracy without reporting precision has answered the easier
 # question. Cases where the router itself is genuinely ambiguous are marked

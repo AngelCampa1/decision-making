@@ -81,7 +81,7 @@ so a mid-experiment change surfaces as an error rather than as noise.
 
 | Field | Value |
 | --- | --- |
-| Agent | Claude Code CLI, non-interactive (`claude -p`) |
+| Agent | Claude Code CLI, non-interactive (`claude -p`). Every published number. A second backend exists from 2026-08-19, `providers/openai_compatible.py`, an OpenAI-compatible HTTP server. It is `dev`-arena only, has produced nothing published, and is disclosed separately below |
 | CLI version | Recorded per run |
 | Resolved model id | Recorded per run from `--output-format json` |
 | Auth | Subscription OAuth. No API key. `--bare` is unusable: its help states auth is strictly `ANTHROPIC_API_KEY`/`apiKeyHelper` and OAuth is never read. See *Preconditions* below; this is the harness's most fragile assumption |
@@ -89,6 +89,40 @@ so a mid-experiment change surfaces as an error rather than as noise.
 | Repeats | ≥2 independent runs per cell; variance reported |
 | Working directory | A fresh temporary directory per call, outside `D:\code`, via `providers.claude_code.isolated_cwd`. The CLI's auto-memory path is keyed on cwd, so a shared directory would let one call's state reach the next |
 | Temp-directory cleanup | Errors ignored. On Windows the CLI subprocess does not reliably release its cwd before the directory is removed, and a 365-call run died at call 348 with `WinError 32`, raised by the cleanup, after every call had succeeded. Leaked directories are left for the OS to reclaim |
+
+**The second backend, disclosed separately because it is a different harness.**
+That is the whole finding of the two papers above: a result reported without its
+harness is not reproducible, so folding a local server into the table above
+would be the error this document exists to avoid.
+
+| Field | Value |
+| --- | --- |
+| Agent | An OpenAI-compatible HTTP server. Ollama first; the same module reaches vLLM, LM Studio and `llama.cpp` |
+| Arena | `dev` only, enforced in code on the `ollama` model prefix. Emits no verdict |
+| Resolved model id | Recorded per call from the response's `model` field, prefixed with the server label |
+| Auth | None locally. A bearer token where an endpoint wants one |
+| Sampling parameters | **Exposed**, unlike the CLI, and defaulted to `temperature=0` |
+| Cost | `0.0`, recorded rather than omitted. Local inference bills nothing and consumes no subscription quota |
+| Working directory | Not applicable. Nothing reads the filesystem |
+| Isolation receipt | The model card from Ollama's native `/api/show`, refused when it carries a `SYSTEM` prompt. A Modelfile `SYSTEM` line is the local analogue of a planted `CLAUDE.md`. Where a server offers no card, the absence of a receipt is recorded and is **not** reported as a receipt that passed |
+| In-situ arm | **Refused.** There is no pre-existing system prompt to append to, so the call would be the isolated arm under another arm's label |
+| Reasoning output | Returned in a field separate from the answer and **recorded**. Measured on `qwen3:4b`, 2026-08-19: 277 completion tokens for a `content` of `"4"`, the other 276 in `reasoning` |
+
+**The `cot` arm is not safely measurable against a reasoning model, and this is
+a live threat rather than a note.** `solvers/arms.py` compares a
+chain-of-thought arm against the others by asking for reasoning in the prompt.
+A reasoning model reasons whether or not it is asked, and emits the chain in its
+own field. So on `qwen3:4b` the `cot` and `off` arms would differ in what the
+prompt requested and not in what the model did, which is the same defect as
+running the in-situ arm here: two arms with one meaning, and nothing downstream
+able to separate them.
+
+Two things follow. Token counts and scored text describe different objects
+whenever `reasoning` is non-empty, so the p90/p99 figures this document commits
+to reporting must be split by whether a chain was emitted or they will read as
+inflated. And any `dev`-arena grid involving `cot` needs either a non-reasoning
+tag or a pre-registered decision about what the arm means there. Neither has
+been made; nothing has been measured on this backend.
 
 ### T: Tools
 
@@ -164,7 +198,7 @@ turns within an item are not, and are not meant to be.
 
 | Field | Value |
 | --- | --- |
-| Concurrency | Serial within a cell; arms interleaved per item so quota drift cannot align with an arm |
+| Concurrency | Serial within a cell, and every published number was produced that way; arms interleaved per item so quota drift cannot align with an arm. `run_arm` gained a concurrent path on 2026-08-19 and it defaults to 1 |
 | Checkpointing | Resumable across sessions: rate limits, not dollars, are the budget |
 | Ordering | Item order seeded and recorded |
 | Wall-clock | Recorded but not a metric, since it is not comparable across days on a shared quota |
@@ -172,6 +206,41 @@ turns within an item are not, and are not meant to be.
 Interleaving matters more than it looks. A run that completes all `off` items on
 Monday and all `on` items on Tuesday confounds the arm with everything that
 changed in between, including the served model.
+
+**Concurrency is refused on the one backend where it was measured, and the
+measurement was run twice.** 40 items, three ways, on `ollama/qwen3:4b` at
+`temperature=0`. Within a single process invocation a serial repeat agreed with
+serial on the exact text of 31 of 40 items and then 13 of 40, while the
+concurrent pass at `concurrency=8` agreed on 0 of 40 both times. `input_tokens`
+matched exactly on all 40 items in the second measurement and on 39 of 40 in the
+first, the exception being an infrastructure zero that recorded no tokens at
+all. So the prompts were byte-identical wherever a call was actually made, and
+the change is the server's: batching concurrent requests changes the reduction
+order, and a reasoning chain thousands of tokens long gives one flipped token
+room to propagate. The cleanest form of the comparison holds elapsed time
+fixed by pairing *adjacent* arms: at the same ~23 minute separation,
+serial-vs-serial is 0.775 and 0.325 while serial-vs-concurrent is 0.000 twice.
+`runner.CONCURRENCY_UNSAFE` refuses the combination rather than recording it
+here and hoping.
+
+**The `dev` arena does not reproduce its own text across runs, and that is the
+larger disclosure.** Serial runs in different invocations agree on only 0 of 40
+and 7 of 40 across the two available pairs. So no two runs on this backend may
+be compared by exact text, whatever their concurrency, and the serial repeat
+itself is not a rate: agreement falls in one contiguous block of each run, so
+0.775 and 0.325 are two locations of a change-point reported as though they
+were two estimates of a proportion. On the parsed answer, which is what reaches
+a published number, every pairing lands between 0.825 and 0.975, and the
+concurrent arms are not separable from cross-run serial variation at n=40.
+Treat `dev`-arena agreement below roughly ten points as noise until somebody
+measures the run-to-run band properly.
+
+The Claude CLI backend has **not** been measured either way, and unmeasured is
+not safe. Any future grid that wants concurrency on it needs its own falsifier
+first, against its own serial floor. Recorded in
+[`notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md`](../notebook/2026-08-19-concurrency-changes-every-answer-on-a-batching-server.md)
+and corrected in
+[`notebook/2026-08-19-the-replication-moved-the-floor-and-found-a-worse-problem.md`](../notebook/2026-08-19-the-replication-moved-the-floor-and-found-a-worse-problem.md).
 
 ### O: Observability
 

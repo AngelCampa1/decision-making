@@ -145,6 +145,15 @@ class CliResult:
     cache_creation_tokens: int = 0
     cache_read_tokens: int = 0
     context_window: int = 0
+    #: Reasoning the model emitted separately from its answer, empty when the
+    #: backend does not split the two. Measured 2026-08-19 against ``qwen3:4b``:
+    #: 277 completion tokens for a one-character answer, of which 276 were in a
+    #: ``reasoning`` field the parser was discarding. Recorded rather than
+    #: dropped, because ``output_tokens`` counts it and the scorer never sees
+    #: it, and an unexplained gap between those two is the shape of every
+    #: instrument defect on record here. See
+    #: :func:`decision_evals.providers.openai_compatible.parse_completion`.
+    reasoning: str = ""
 
     @property
     def context_fraction(self) -> float:

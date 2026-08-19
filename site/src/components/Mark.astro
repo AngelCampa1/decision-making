@@ -1,56 +1,90 @@
 ---
 /**
- * One row of a forest plot -- the actual Cochrane notation, not a metaphor for
- * it. A vertical line of no effect, a horizontal confidence interval with
- * T-caps, and a square point estimate.
+ * The mark: a ring of segments with exactly one lit.
  *
- * The default geometry encodes this repository's real position, which is more
- * specific than "null": the estimate is clearly positive and the lower bound
- * dips below zero. That is "we have not shown this works" stated
- * geometrically, rather than "this does not work" -- the distinction
- * SCORECARD.md exists to make.
+ * It is the skill's claim drawn rather than described — six procedures, and it
+ * reads one. The segment count is not a constant; it comes from the routing
+ * table in `skills/decision-making/SKILL.md` by way of `src/lib/facts.ts`, so a
+ * seventh procedure redraws the logo. A mark that cannot go out of date with
+ * the product is worth more than a prettier one that can.
  *
- * The interval is exactly symmetric about the estimate (27 units each side),
- * so it is a legitimate interval and survives anyone who checks. That matters
- * here more than it would elsewhere.
+ * `state` recolours the lit segment from the verdict vocabulary. The default,
+ * `untested`, is grey and dashed: an absence of a result, not a bad one.
  */
+import { VERDICT_STATES, type VerdictState } from '../lib/verdicts.ts';
+
 interface Props {
-  state?: 'null' | 'provisional' | 'ship' | 'harmful' | 'untested';
+  state?: VerdictState;
+  /** How many segments the ring has. Pass `facts.count`; never hardcode it at a call site. */
+  segments?: number;
+  /** Index of the lit segment, 0-based. */
+  lit?: number;
   width?: number;
   class?: string;
   title?: string;
 }
 
-const { state, width = 64, class: className = '', title } = Astro.props;
-const height = width / 2;
+const {
+  state = 'untested',
+  segments = 6,
+  lit = 0,
+  width = 40,
+  class: className = '',
+  title,
+} = Astro.props;
+
+if (!VERDICT_STATES.includes(state)) {
+  throw new Error(
+    `Mark: unknown verdict state \`${state}\`. The vocabulary is defined in ` +
+      'SCORECARD.md and mirrored in src/lib/verdicts.ts.',
+  );
+}
+
+// Geometry. The ring is inscribed in a 64-unit box with a 5-unit stroke, so the
+// radius leaves half the stroke inside the viewBox on every side.
+const R = 26;
+const STROKE = 5;
+const CIRCUMFERENCE = 2 * Math.PI * R;
+
+// A gap proportional to the arc, so the ring reads the same at six segments as
+// at nine. 22% of each arc is the largest gap that still reads as a ring rather
+// than as loose ticks.
+const arc = CIRCUMFERENCE / segments;
+const drawn = arc * 0.78;
+
+const ring = Array.from({ length: segments }, (_, i) => ({
+  index: i,
+  dasharray: `${drawn.toFixed(3)} ${(CIRCUMFERENCE - drawn).toFixed(3)}`,
+  dashoffset: (-i * arc).toFixed(3),
+}));
 ---
 
 <svg
-  class={`mark ${className}`}
+  class={`mark ${className}`.trim()}
   data-state={state}
-  viewBox="0 0 64 32"
+  data-segments={segments}
+  data-lit={lit}
+  viewBox="0 0 64 64"
   width={width}
-  height={height}
+  height={width}
   fill="none"
   role={title ? 'img' : undefined}
   aria-label={title}
   aria-hidden={title ? undefined : 'true'}
 >
-  <line
-    x1="16" y1="2" x2="16" y2="30"
-    stroke="var(--mark-axis)" stroke-width="var(--mark-w-axis)"
-  />
-  <line
-    x1="5" y1="16" x2="59" y2="16"
-    stroke="var(--mark-ink)" stroke-width="var(--mark-w-data)"
-  />
-  <line
-    x1="5" y1="8" x2="5" y2="24"
-    stroke="var(--mark-ink)" stroke-width="var(--mark-w-data)"
-  />
-  <line
-    x1="59" y1="8" x2="59" y2="24"
-    stroke="var(--mark-ink)" stroke-width="var(--mark-w-data)"
-  />
-  <rect class="mark__estimate" x="27" y="11" width="10" height="10" fill="var(--mark-accent)" />
+  <g transform="rotate(-90 32 32)" stroke-width={STROKE} stroke-linecap="butt">
+    {
+      ring.map((segment) => (
+        <circle
+          class={segment.index === lit ? 'mark__lit' : 'mark__track'}
+          data-index={segment.index}
+          cx="32"
+          cy="32"
+          r={R}
+          stroke-dasharray={segment.dasharray}
+          stroke-dashoffset={segment.dashoffset}
+        />
+      ))
+    }
+  </g>
 </svg>

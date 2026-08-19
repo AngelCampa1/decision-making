@@ -1,0 +1,113 @@
+# The full local gate, run somewhere that is not the maintainer's machine.
+#
+# This workflow checks and never publishes. `deploy-site.yml` is the deployer
+# and is the only thing that touches the public site; splitting them is
+# deliberate, because a gate that can publish is a gate somebody is tempted to
+# skip. An earlier version of this file carried a `deploy` job calling `de site
+# --deploy`, which was removed from the CLI along with the `gh-pages` branch it
+# pushed to -- a branch-sourced site is a second copy of the build that can
+# disagree with the Pages-sourced one.
+#
+# `de check` is offline, deterministic and makes no model calls, which is what
+# makes it a good fit for CI -- there is no quota to spend and no run to
+# schedule. What it could never check locally is the assumption underneath
+# every green run so far: that the repository state which passes is the state
+# that was actually committed. It was not. See
+# `notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`.
+#
+# Two setup steps are load-bearing and neither is a workaround:
+#
+#   fetch-depth: 0   the run-provenance gate walks git ancestry to prove a
+#                    prediction predates its data, and a shallow clone has no
+#                    ancestry to walk.
+#   de fetch         the vendored corpus is pinned by hash and deliberately not
+#                    committed (`datasets/vendor/*.json` is ignored, the lock is
+#                    not). Fetching it is how a clean checkout reaches the state
+#                    the tests describe, and the hash check means it cannot
+#                    quietly become a different corpus.
+#   claude CLI       the plugin-manifest step validates through it and treats
+#                    its absence as a failure, which is pinned by a test. The
+#                    first CI run found exactly that, on a runner that had no
+#                    reason to have it.
+
+name: check
+
+# Pull requests and `main`, not every branch push. This repository takes
+# hundreds of commits a day and the local `pre-push` hook already runs the full
+# gate on each one, so a run per branch push would be noise rather than
+# evidence. What the hook cannot do is check a *commit* rather than a working
+# directory, which is the one thing this workflow exists for, and that only
+# needs to happen where the work merges.
+#
+# The repository is public, so none of this consumes billable minutes.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      # `python -m uv run` is the invocation the documentation tells a
+      # contributor to use, so CI uses it too rather than a separate action --
+      # a gate that runs a different command than the one in the README is
+      # checking something other than what it claims to.
+      - name: install uv
+        run: python -m pip install --upgrade uv
+
+      # `de check`'s plugin-manifest step shells out to `claude plugin
+      # validate`, and `test_a_missing_cli_fails_the_gate` pins that a missing
+      # CLI *fails* rather than skips -- a deliberate choice, so the runner gets
+      # the CLI instead of the gate getting an exemption. Validation reads local
+      # JSON and needs no auth, which is why this works without a key.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: install the claude CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: cache the uv download cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: uv-${{ runner.os }}-
+
+      - name: cache the vendored corpus
+        uses: actions/cache@v4
+        with:
+          path: datasets/vendor
+          key: vendor-${{ hashFiles('datasets/vendor/*.lock.json') }}
+
+      # `de check`'s first step refuses a commit identity it does not
+      # recognise, and a runner has none configured at all. Setting it here is
+      # not a bypass: it is the same address the rule demands, asserted in the
+      # one place a human cannot forget it.
+      - name: configure commit identity
+        run: |
+          git config user.name "Angel Campa"
+          git config user.email "200381496+AngelCampa1@users.noreply.github.com"
+
+      - name: sync dependencies
+        run: python -m uv sync --frozen --group dev
+
+      - name: fetch the vendored corpus
+        run: python -m uv run de fetch
+
+      - name: de check
+        run: python -m uv run de check

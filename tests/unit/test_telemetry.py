@@ -61,6 +61,13 @@ _RUN_RECORD_CHECKPOINTS = sorted(
     path for path in (REPO_ROOT / "results").rglob("*.jsonl") if _is_run_record_checkpoint(path)
 )
 
+#: The RunRecord checkpoints that are *committed*, so the guard below means the
+#: same thing on a clean checkout as it does on a machine that has run the
+#: experiments. Untracked local run data is still discovered and still
+#: parametrised above; it just cannot be what makes the guard pass. Add a name
+#: here when a run's records are published, not when they appear on disk.
+_TRACKED_CHECKPOINTS = ("results/evidence-ledger/2026-08-10-baseline-corpus/off-arm.jsonl",)
+
 
 class TestPinnedVocabulary:
     """The names are data, so the tests pin them as data."""
@@ -253,14 +260,52 @@ class TestRecordSchema:
         These are the runs the notebook cites. A schema change that orphaned
         them would make the cited numbers unrecomputable, which is a worse
         outcome than never adding the columns.
+
+        This asserted ``schema_version == 1`` until 2026-08-19, and passed only
+        because every checkpoint on disk predated the bump to 2. The first run
+        on the ``dev`` arena wrote v2 records and turned it red, which is the
+        assertion failing rather than the records being wrong: pinned to 1, it
+        could stay green only while nothing new was ever run. What it means to
+        protect is that a record written under *any* schema this code has ever
+        emitted still loads, so that is what it now says.
         """
         records = load_records(checkpoint)
         assert records
-        assert all(record.schema_version == 1 for record in records)
+        assert all(1 <= record.schema_version <= RECORD_SCHEMA_VERSION for record in records)
+        # A v1 record predates the node columns. They must read as `None`,
+        # which is the true value for a single-call run, rather than as
+        # something the loader invented to fill the gap.
+        assert all(
+            record.conversation_id is None and record.turn_index is None
+            for record in records
+            if record.schema_version == 1
+        )
 
     def test_the_published_checkpoints_were_actually_found(self) -> None:
-        """Otherwise an empty glob would make the test above vacuously green."""
-        assert len(_RUN_RECORD_CHECKPOINTS) >= 2
+        """Otherwise an empty glob would make the test above vacuously green.
+
+        This asserted ``len(...) >= 2`` until 2026-08-19 and could only pass on
+        a machine that had already run the experiments. Every other RunRecord
+        checkpoint lives under ``results/calibration/``, ``results/track-a/``,
+        ``results/track-0/`` or ``results/triggers/``, all gitignored on
+        purpose by ``.gitignore``; exactly one is committed. So the guard
+        against vacuity was itself satisfied by data the repository does not
+        carry, and the parametrised test above ran over one item everywhere
+        else while this one failed.
+
+        Naming the tracked file fixes both halves. The discovery still cannot
+        silently return nothing, and it now says which file it expects, so a
+        layout move or a first-line shape change fails with the name in the
+        message rather than with an integer that means nothing on its own.
+        """
+        found = {path.relative_to(REPO_ROOT).as_posix() for path in _RUN_RECORD_CHECKPOINTS}
+        missing = sorted(set(_TRACKED_CHECKPOINTS) - found)
+        assert not missing, (
+            f"{missing} is committed RunRecord JSONL that the discovery did not find. "
+            "Either the layout moved or the first line stopped carrying `item_id`, and "
+            "either way test_every_published_run_record_still_loads is not covering "
+            "what it claims to."
+        )
 
 
 def test_the_module_declares_which_names_it_pinned() -> None:

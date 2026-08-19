@@ -7,8 +7,8 @@ fail — particularly the git-identity guard, whose whole job is to refuse.
 
 from __future__ import annotations
 
+import re
 import sys
-import types
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -31,6 +31,7 @@ from decision_evals.cli import (
 )
 from decision_evals.corpora import CorpusError
 from decision_evals.decisions import DecisionIssue
+from decision_evals.deployed import DeployState
 from decision_evals.provenance import ProvenanceIssue, discover_runs
 from decision_evals.provenance import RunRecord as ProvenanceRun
 from decision_evals.site import INPUTS_PATH as SITE_INPUTS_PATH
@@ -199,12 +200,10 @@ class TestRunStep:
         assert "command not found" in result.detail
 
     def test_detects_a_non_zero_exit_code(self) -> None:
-        import sys
 
         assert not cli._run("failing", [sys.executable, "-c", "raise SystemExit(3)"]).passed
 
     def test_detects_a_zero_exit_code(self) -> None:
-        import sys
 
         assert cli._run("passing", [sys.executable, "-c", "pass"]).passed
 
@@ -746,66 +745,57 @@ class TestSiteCommand:
         assert (tmp_path / SITE_MANIFEST_PATH).read_text(encoding="utf-8") == render_manifest(
             tmp_path
         )
-        assert "not deployed" in result.output
+        assert "not published" in result.output
 
-    def test_deploy_refuses_without_the_docs_group(
-        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-    ) -> None:
-        """`ghp-import` is in the `docs` group, not `dev`, so this is the state
-        every contributor who never publishes is in."""
+    def test_the_deploy_flag_is_gone(self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+        """Publishing moved to `.github/workflows/deploy-site.yml` on
+        2026-08-19. The flag force-pushed whatever local HEAD happened to be,
+        which published a build of a feature branch once before it was removed,
+        so this asserts it cannot quietly come back."""
         monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
         _site_project(tmp_path, installed=True)
         monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
         monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
-        monkeypatch.setitem(sys.modules, "ghp_import", None)
 
         result = runner.invoke(app, ["site", "--deploy"])
-        assert result.exit_code == 1
-        assert "uv sync --group dev --group docs" in result.output
-        # Still written: the build succeeded and only publishing failed.
-        assert (tmp_path / SITE_MANIFEST_PATH).exists()
+        assert result.exit_code != 0
+        # Rich renders this error into a panel, wraps it to the terminal width
+        # and styles the option name, which puts escape sequences *between* the
+        # two dashes -- so the literal `--deploy` is not in `output` on a
+        # coloured terminal even though it is plainly on screen. The first two
+        # CI runs failed here while every local run passed. Strip the escapes
+        # and unwrap before asserting on text.
+        plain = re.sub(r"\x1b\[[0-9;]*m", "", result.output)
+        plain = " ".join(plain.split())
+        # Specifically rejected as an unknown option, rather than failing for
+        # any of the several other reasons `de site` can fail.
+        assert "No such option" in plain
+        assert "--deploy" in plain
 
-    def test_deploy_publishes_the_built_directory(
-        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+
+class TestDeployedCommand:
+    """Wiring only. The readings themselves are covered in `test_deployed.py`."""
+
+    def test_a_current_site_exits_zero(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli, "check_deployed", lambda root: DeployState(cli.DEPLOY_CURRENT, "current")
+        )
+        result = runner.invoke(app, ["deployed"])
+        assert result.exit_code == 0
+        assert "current" in result.output
+
+    def test_a_stale_site_exits_one(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli, "check_deployed", lambda root: DeployState(cli.DEPLOY_BEHIND, "behind")
+        )
+        assert runner.invoke(app, ["deployed"]).exit_code == 1
+
+    def test_an_unaskable_site_exits_two_rather_than_zero(
+        self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
-        _site_project(tmp_path, installed=True)
-        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
-        monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
-        monkeypatch.setattr(cli, "_git_output", lambda args: "abc1234")
-
-        seen: dict[str, object] = {}
-
-        def fake_ghp(srcdir: str, **kwargs: object) -> None:
-            seen["srcdir"] = srcdir
-            seen.update(kwargs)
-
-        module = types.ModuleType("ghp_import")
-        module.ghp_import = fake_ghp  # type: ignore[attr-defined]
-        monkeypatch.setitem(sys.modules, "ghp_import", module)
-
-        result = runner.invoke(app, ["site", "--deploy"])
-        assert result.exit_code == 0, result.output
-        assert seen["srcdir"] == str(tmp_path / "site" / "dist")
-        # Jekyll drops every path beginning with an underscore, which is where
-        # Astro puts its bundles.
-        assert seen["nojekyll"] is True
-        assert seen["push"] is True
-        assert seen["mesg"] == "site: build from abc1234"
-
-    def test_deploy_names_an_unknown_commit_rather_than_an_empty_one(
-        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-    ) -> None:
-        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
-        _site_project(tmp_path, installed=True)
-        monkeypatch.setattr(cli.shutil, "which", lambda _: "npm")
-        monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: _Completed(0))
-        monkeypatch.setattr(cli, "_git_output", lambda args: None)
-
-        seen: dict[str, object] = {}
-        module = types.ModuleType("ghp_import")
-        module.ghp_import = lambda srcdir, **kw: seen.update(kw)  # type: ignore[attr-defined]
-        monkeypatch.setitem(sys.modules, "ghp_import", module)
-
-        assert runner.invoke(app, ["site", "--deploy"]).exit_code == 0
-        assert seen["mesg"] == "site: build from unknown"
+        """The distinction the command exists to preserve: not knowing is not
+        the same as being up to date."""
+        monkeypatch.setattr(
+            cli, "check_deployed", lambda root: DeployState("unreachable", "no answer")
+        )
+        assert runner.invoke(app, ["deployed"]).exit_code == 2

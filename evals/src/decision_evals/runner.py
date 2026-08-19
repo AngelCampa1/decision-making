@@ -22,14 +22,18 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable, Iterable, Sequence
+from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import Final
 
 from decision_evals.budget import BudgetLedger, estimate_cost_usd
 from decision_evals.generators.generate import Item
 from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
 from decision_evals.providers.claude_code import preflight as cli_preflight
 from decision_evals.providers.claude_code import run as cli_run
+from decision_evals.providers.openai_compatible import Endpoint, ollama
+from decision_evals.providers.openai_compatible import run as openai_run
 from decision_evals.scorers.answer import score_item
 from decision_evals.solvers.arms import ArmPrompt, render_item
 from decision_evals.telemetry import RECORD_SCHEMA_VERSION, NodeIdentity
@@ -80,6 +84,37 @@ class RunRecord:
     turn_index: int | None = None
 
 
+#: Model prefixes measured to return *different text* when calls run
+#: concurrently, and therefore refused above ``concurrency=1``.
+#:
+#: ``ollama`` is here because it was measured twice, not because it is
+#: suspected. The registered falsifier ran 40 items three ways on
+#: ``ollama/qwen3:4b`` at ``temperature=0``, and then again: within a single
+#: process invocation, a serial repeat agreed with serial on the exact text of
+#: 31 of 40 and then 13 of 40, while the concurrent pass at ``concurrency=8``
+#: agreed on **0 of 40 both times**. Prompts were byte-identical, so the request
+#: is not what changed. A server that batches concurrent requests multiplies
+#: different matrix shapes, which changes the floating-point reduction order,
+#: which flips a token, which cascades through a reasoning chain thousands of
+#: tokens long.
+#:
+#: **Read the scope carefully, because the replication narrowed it.** The claim
+#: is about text, within one invocation. Cross-invocation serial agreement is
+#: also low and unstable -- the two available pairs give 0 of 40 and 7 of 40 --
+#: so serial is not a way to make this backend reproducible either, and no two
+#: runs on it may be compared by text. On the parsed answer -- the
+#: quantity that reaches a published number -- the concurrent arms sit at 0.850
+#: and 0.825 against a cross-invocation serial baseline of 0.875, which at n=40
+#: separates nothing. So this refusal rests on the prose result, and it is a
+#: precaution rather than a demonstration that concurrency moves decisions.
+#:
+#: It is also a statement about a venue rather than about concurrency, which is
+#: why it is a register of prefixes and not a flat refusal. It may only shrink,
+#: and it shrinks by measurement:
+#: ``notebook/2026-08-19-the-replication-moved-the-floor-and-found-a-worse-problem.md``.
+CONCURRENCY_UNSAFE: Final[frozenset[str]] = frozenset({"ollama/"})
+
+
 class RunError(RuntimeError):
     """The run cannot proceed."""
 
@@ -94,6 +129,62 @@ def default_call(model: str, cwd: str) -> CallFn:
             model=model,
             cwd=cwd,
             in_situ=append,
+        )
+
+    return call
+
+
+def local_call(model: str, endpoint: Endpoint | None = None) -> CallFn:
+    """A :data:`CallFn` bound to an OpenAI-compatible server.
+
+    The substitution :data:`CallFn` was written for. No ``cwd``, because nothing
+    here reads the filesystem; the contamination channel that replaces it is a
+    Modelfile ``SYSTEM`` line, and
+    :func:`~decision_evals.providers.openai_compatible.assert_isolated` is what
+    checks it. Call that before a run rather than trusting a clean-looking
+    response.
+
+    Raises:
+        RunError: The in-situ arm was requested. It has no local meaning, and
+            the refusal is deliberate.
+    """
+
+    label = (endpoint or ollama()).label
+    if not model.lower().startswith(f"{label.lower()}/"):
+        # `build_payload` strips a `label/` prefix and tolerates a bare name,
+        # and `parse_completion` stamps the label back on, so `qwen3:4b` is a
+        # working request whose records claim to be `ollama/qwen3:4b`. That is
+        # exactly the string `CONCURRENCY_UNSAFE` matches on, so a bare name
+        # un-registers the venue by typo -- and `qwen3:4b` is what `ollama
+        # list` prints, so it is the natural thing to type. The register is
+        # meant to shrink by measurement.
+        raise RunError(
+            f"model {model!r} does not name its venue. Use {label}/{model!r} so the "
+            f"record, the arena gate and the concurrency register all see which "
+            f"server produced it."
+        )
+
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        if append:
+            # In situ means `--append-system-prompt`: the skill arrives on top
+            # of whatever Claude Code already puts in the system prompt, which
+            # is the whole point of the arm -- it is the ecological control
+            # against the isolated arms. A raw completion has no pre-existing
+            # system prompt to append to, so running it here would send the
+            # isolated prompt and label the record `in_situ`. That is not a
+            # degraded measurement, it is two arms with one meaning, and the
+            # scorer could not tell them apart afterwards.
+            raise RunError(
+                "the in-situ arm has no meaning against a raw completion endpoint: "
+                "there is no existing system prompt to append to, so the call would "
+                "be the isolated arm wearing another arm's label. Run it on the CLI "
+                "backend, or drop it from the local grid and say which."
+            )
+        return openai_run(
+            prompt,
+            system_prompt=system_prompt,
+            model=model,
+            endpoint=endpoint,
         )
 
     return call
@@ -128,6 +219,8 @@ def run_arm(
     ledger: BudgetLedger,
     expected_cost_usd: float | None = None,
     identity: NodeIdentity | None = None,
+    concurrency: int = 1,
+    measuring_concurrency: bool = False,
 ) -> list[RunRecord]:
     """Run one arm over a set of items, resuming from any checkpoint.
 
@@ -142,6 +235,48 @@ def run_arm(
             roughly fivefold, and the ledger authorises *before* the call, so the
             shortfall would have surfaced as a run that stopped mid-stratum.
             Pass a number to pin it, which the budget tests do.
+        concurrency: How many calls may be in flight. ``1`` -- the default --
+            is the sequential loop every published run used, unchanged.
+        measuring_concurrency: Permit ``concurrency > 1`` on a model listed in
+            :data:`CONCURRENCY_UNSAFE`. Only the falsifier that populates that
+            register may pass it: the register exists because such a run was
+            measured to change every answer, and the one job that still needs to
+            make those calls is the job that re-measures it.
+
+    **Threads rather than asyncio, and it is a real choice.** A call is a
+    subprocess or an HTTP request; both spend their whole life blocked on I/O
+    with the GIL released, so a bounded pool saturates the backend exactly as
+    well as an event loop would. Going async would mean an async :data:`CallFn`
+    and an async rewrite of both providers, which is a large change to two
+    modules at a 100% floor in exchange for nothing measurable. The same
+    argument retires Ray and Dask one step earlier: there is no CPU work here to
+    distribute.
+
+    **Three things concurrency changes, stated because a checkpoint would not
+    say.** Records are written in *completion* order rather than item order, so
+    two runs over the same items need not produce byte-identical files; nothing
+    downstream reads a checkpoint positionally, and resume is keyed on
+    ``(item_id, arm)``. The budget is *reserved* at dispatch and released when
+    the record arrives, so a window cannot authorise more than the limit allows.
+    That is a correction, not a design note: charging only on completion meant
+    every call in one window read the same balance, and six items at $0.02
+    against a $0.021 limit ran all six while the serial path stopped after one.
+    And when a run aborts, the batch that contained the failure is drained
+    first, so calls that already succeeded and were already paid for are kept;
+    only results still in flight are discarded, and resume re-runs those.
+
+    **It was measured twice, and the second run narrowed what the first one
+    licensed.** The prediction above was registered before this code existed.
+    Within one invocation, concurrent-against-serial agreed on the exact text of
+    0 of 40 items both times, against a serial repeat of 31 of 40 and 13 of 40,
+    so :data:`CONCURRENCY_UNSAFE` refuses the combination. The sharpest form of
+    that comparison is between *adjacent* arms, which controls for elapsed time:
+    at the same ~23 minute separation, serial-vs-serial is 0.775 and 0.325 while
+    serial-vs-concurrent is 0.000 twice. But cross-invocation serial agreement is
+    itself only 0 of 40 and 7 of 40, so serial reproducibility is not a property
+    this backend has either, and on the parsed answer nothing separates the arms
+    at n=40. Every other backend is unmeasured, which is a different thing from
+    safe.
 
     Returns:
         The records produced *by this invocation*. Records already on disk from
@@ -149,38 +284,113 @@ def run_arm(
         for analysis anyway and returning them would make the count misleading.
 
     Raises:
-        RunError: An authentication failure, or the budget was reached. Both
-            stop the run rather than being scored, and both leave the checkpoint
-            intact so the run resumes where it stopped.
+        RunError: An authentication failure, the budget was reached, or
+            ``concurrency`` was not positive. The first two stop the run rather
+            than being scored, and both leave the checkpoint intact so the run
+            resumes where it stopped.
     """
+    if concurrency < 1:
+        raise RunError(f"concurrency must be at least 1, got {concurrency}")
+
+    # Case-folded, because `Ollama/qwen3:4b` is the same venue and was
+    # accepted at concurrency 4 before this line was.
+    lowered = model.lower()
+    unsafe = sorted(prefix for prefix in CONCURRENCY_UNSAFE if lowered.startswith(prefix))
+    if concurrency > 1 and unsafe and not measuring_concurrency:
+        raise RunError(
+            f"{model} is measured to return different text under concurrency, so "
+            f"concurrency={concurrency} would add a known source of variation to a "
+            f"venue that already has one. Measured twice: within an invocation the "
+            f"concurrent arm agreed with serial on 0 of 40 items both times, against "
+            f"a serial repeat of 31 of 40 and 13 of 40. Note that serial runs in "
+            f"different invocations agree on only 0 of 40 and 7 of 40 either, so "
+            f"serial is not a way to make this backend reproducible. Run it "
+            f"serially, or pass "
+            f"measuring_concurrency=True if you are the falsifier re-measuring it."
+        )
+
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
     done = completed_keys(checkpoint)
+    pending = [item for item in items if (item.item_id, arm.arm) not in done]
     produced: list[RunRecord] = []
 
-    with checkpoint.open("a", encoding="utf-8") as handle:
-        for item in items:
-            if (item.item_id, arm.arm) in done:
-                continue
+    # What has been authorised and not yet paid for. Without it the ledger
+    # cannot refuse anything inside one window: `assert_can_afford` reads
+    # `spent_usd`, which only advances when a record comes *back*, so every
+    # call dispatched together sees the same balance. Measured before the fix:
+    # six items at $0.02 against a $0.021 limit ran all six, burning 5.7x the
+    # limit and raising nothing, while the serial path stopped after one.
+    reserved = 0.0
 
-            # Rendered once. The string that was measured is the string that is
-            # sent, because measuring one and sending another is how a length
-            # experiment stops being about length.
-            prompt = render_item(item)
-            authorised = (
-                expected_cost_usd
-                if expected_cost_usd is not None
-                else estimate_cost_usd(prompt_chars=len(prompt) + len(arm.system_prompt))
-            )
-            try:
-                ledger.assert_can_afford(authorised)
-            except Exception as exc:
-                raise RunError(f"stopping before {item.item_id}: {exc}") from exc
+    def authorise(item: Item) -> tuple[str, float]:
+        """Reserve the cost of one item and return its prompt and that cost."""
+        nonlocal reserved
+        # Rendered once. The string that was measured is the string that is
+        # sent, because measuring one and sending another is how a length
+        # experiment stops being about length.
+        prompt = render_item(item)
+        amount = (
+            expected_cost_usd
+            if expected_cost_usd is not None
+            else estimate_cost_usd(prompt_chars=len(prompt) + len(arm.system_prompt))
+        )
+        try:
+            ledger.assert_can_afford(amount + reserved)
+        except Exception as exc:
+            raise RunError(f"stopping before {item.item_id}: {exc}") from exc
+        reserved += amount
+        return prompt, amount
 
-            record = _run_one(item, arm, model=model, call=call, prompt=prompt, identity=identity)
-            ledger = ledger.record(record.cost_usd)
-            handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
-            handle.flush()
-            produced.append(record)
+    with (
+        checkpoint.open("a", encoding="utf-8") as handle,
+        ThreadPoolExecutor(max_workers=concurrency) as pool,
+    ):
+        submitted = 0
+        in_flight: dict[Future[RunRecord], float] = {}
+
+        while submitted < len(pending) or in_flight:
+            while len(in_flight) < concurrency and submitted < len(pending):
+                item = pending[submitted]
+                prompt, amount = authorise(item)
+                in_flight[
+                    pool.submit(
+                        _run_one,
+                        item,
+                        arm,
+                        model=model,
+                        call=call,
+                        prompt=prompt,
+                        identity=identity,
+                    )
+                ] = amount
+                submitted += 1
+
+            finished, _ = wait(set(in_flight), return_when=FIRST_COMPLETED)
+
+            # Drain the whole batch before re-raising. Returning early on the
+            # first failure discarded calls that had already *succeeded* in the
+            # same batch, and which ones survived depended on set iteration
+            # order -- the same inputs produced three different checkpoints
+            # across twelve trials. Those calls were paid for, so throwing them
+            # away makes the ledger under-read the real burn by up to
+            # `concurrency - 1` calls on every abort.
+            failure: RunError | None = None
+            for future in finished:
+                reserved -= in_flight.pop(future)
+                try:
+                    record = future.result()
+                except RunError as exc:
+                    failure = failure or exc
+                    continue
+                # One writer, on this thread. Appending to one handle from
+                # several threads interleaves partial lines, and a corrupt
+                # interior line is the one thing `load_records` refuses.
+                ledger = ledger.record(record.cost_usd)
+                handle.write(json.dumps(asdict(record), ensure_ascii=False) + "\n")
+                handle.flush()
+                produced.append(record)
+            if failure is not None:
+                raise failure
     return produced
 
 

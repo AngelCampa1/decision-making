@@ -5,6 +5,7 @@
   <img src="site/public/lockup-light.png" alt="decision-making-skills" width="440">
 </picture>
 
+[![Check](https://github.com/AngelCampa1/decision-making-skills/actions/workflows/check.yml/badge.svg)](https://github.com/AngelCampa1/decision-making-skills/actions/workflows/check.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.13%2B-blue.svg)](pyproject.toml)
 [![Status](https://img.shields.io/badge/status-pre--alpha-orange.svg)](docs/STATUS.md)
@@ -37,9 +38,12 @@ built the other way round: the harness came first, and the claim is still
 What that costs, in practice, is a set of mechanisms that make it hard to
 overclaim by accident. The answer key is relabelled blind by three independent
 model instances that never see the maintainer's label, against a kill threshold
-fixed before the run. Every prediction is committed to `notebook/` before its
-run, and `de check` refuses a published run whose prediction cannot be shown by
-git ancestry to predate its data. The key carries a version stamped into every
+fixed before the run. Every prediction since the convention was adopted is committed
+to `notebook/` before its run, and `de check` refuses a published run whose
+prediction cannot be shown by git ancestry to predate its data. Two runs predate
+the rule and are baselined by name in
+[`results/provenance-baseline.txt`](results/provenance-baseline.txt), a list
+that may only shrink. The key carries a version stamped into every
 record, and comparing arms across a version boundary is refused in code. That rule
 exists because one correct label move raised recall on every arm on disk
 without a single call being re-made. Primary metrics are deterministic; a judge never produces one.
@@ -65,7 +69,7 @@ what is actually hard about the decision, and reads only that one.
 | Several positions are each defensible, and whichever was argued first has the advantage | [`council.md`](skills/decision-making/council.md) | the case for each, argued fairly, and which one survives |
 | Something needed to answer is missing, and it is unclear whether asking for it is worth the wait | [`hinge.md`](skills/decision-making/hinge.md) | which gaps would change the answer, and the answer now or the one question to ask |
 
-Where more than one of those four applies they run in the order ledger → fit
+Where more than one of those six applies they run in the order ledger → fit
 → cascade → timing, because each supplies an input to the next. `council.md`
 and `hinge.md` are not in that chain; each runs alone. A seventh file,
 [`placebo.md`](skills/decision-making/placebo.md), is the token- and
@@ -143,11 +147,11 @@ prediction in [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), and
 [`docs/STATUS.md`](docs/STATUS.md) has all of them with links to the data. One
 of the thirteen is **void** and answers nothing.
 
-The call total belongs to the ledger and is not restated here. `docs/STATUS.md`
-last put it at about 4,600, and that figure predates four of the runs above;
-recounting it means separating published records from the working checkpoints
-and re-scores they overlap with, which is a job for the ledger rather than a
-number to guess at in a README. The through-line:
+The call total belongs to the ledger and is not restated here.
+`docs/STATUS.md` keeps it, corrects it by appending, and the site quotes that
+file rather than a second copy. Recounting means separating published records
+from the working checkpoints and re-scores they overlap with, which is a job for
+the ledger rather than a number to guess at in a README. The through-line:
 
 > Five independent manipulations of a skill description, covering structure,
 > content, entry count and composition twice, and not one moved how well it
@@ -162,15 +166,19 @@ originally claimed:
   Wilcoxon p = 0.83). The
   [202-skill shadowing result](https://arxiv.org/abs/2605.24050) may no longer
   be cited as though it reached down to four.
-- The corpus behind every one of those numbers is 89% solvable by counting
-  words. Turn length alone separates the labels at AUC 0.850, and a bare
+- The corpus behind those numbers is 89% solvable by counting
+  words. This scopes to the version 2 answer key and the runs above it,
+  not to everything on record: the corpus was rebuilt, and on the version 4
+  key the best model-free shortcut reaches 0.7054. Turn length alone separates the labels at AUC 0.850, and a bare
   *"fire if ≥ 18 words"* rule scores 0.890 with no model at all. Both sit on
   the version 2 answer key, against the best arm measured on that key: 0.9795
   for the best description arm (`stakes-shown`), 0.9863 for `confidence`. So
   every result above was competing for about nine
   points over a ruler, and five nulls is also what a ceiling looks like. Both
-  readings must be reported until the corpus is rebuilt, which is
-  [Track N](docs/RESEARCH_PROGRAMME.md).
+  readings must be reported for every result measured on that key, which is all
+  of them above. [Track N](docs/RESEARCH_PROGRAMME.md) rebuilt the corpus, and
+  runs measured on the new one carry the version 4 figure instead — the two keys
+  are not comparable and are never mixed.
 
 ## How claims are made
 
@@ -230,13 +238,7 @@ Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 uv sync --group dev
 ```
 
-Add `--group docs` if you will publish the site. Nothing else needs it: the
-staleness gate is pure Python and offline, so a contributor who never publishes
-still gets its refusal.
-
-```bash
-uv sync --group dev --group docs
-```
+That is the whole install. There is no second dependency group.
 
 Run the full local gate, which is lint, types, tests, coverage floors, and the
 repository-integrity checks:
@@ -245,20 +247,52 @@ repository-integrity checks:
 uv run de check
 ```
 
-There is no cloud CI, and no workflow directory for one either. `de check` is
-bound to `pre-commit` (fast subset) and `pre-push` (everything), so a red tree
-can't be pushed. It makes no model calls; model-backed evaluation is run
-explicitly from [`scripts/`](scripts/). The website is built the same way, by
-hand on a machine, and pushed to `gh-pages` by `de site --deploy`.
+**The gate runs locally, and from now on in CI as well.** `de check` is bound to
+`pre-commit` (fast subset) and `pre-push` (everything), so a red tree can't be
+pushed, and it runs on a machine where you can watch it. It makes no model
+calls; model-backed evaluation is run explicitly from [`scripts/`](scripts/).
+Because it is offline and deterministic, the same command runs unchanged in
+[`.github/workflows/check.yml`](.github/workflows/check.yml) on every push and
+pull request. That workflow is new and has not run yet: until it does, nothing
+here has been checked anywhere except the machine it was written on.
 
-That arrangement cannot check one thing, and it is stated here rather than
-papered over. The site gate proves the committed build matches the current
-tree. It does not prove that build was ever pushed. `de check` is offline on
-purpose, so it cannot consult `origin/gh-pages`, and a green gate beside a
-build that never left the machine is exactly as green as a deployed one.
+**Simulating a clean clone is what found the reason to want that.** Checking out
+the committed tree on its own showed the gate had only ever been asked about a
+working directory, never about a commit. The tip of `main` imported a module
+that had never been committed. Two living documents linked paths that
+`.gitignore` excludes by design, so those links cannot resolve for anyone who
+clones this. The site manifest recorded a build from a file that is not in the
+repository. A test asserting that published checkpoints exist found one where it
+wanted two, because the second is under an ignored path. Every one of those is
+the gate working correctly on a tree it had never been shown. Written up in
+[`notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`](notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md).
 
-Six of its steps check the method rather than the code, each one added after
-the failure it prevents had already happened here:
+A second workflow publishes rather than checks.
+[`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml) builds
+the site and deploys it to GitHub Pages on every push to `main`, and the Pages
+source is that workflow. Nothing on a machine can publish: the `de site
+--deploy` flag and the `ghp-import` dependency behind it were both removed, and
+the `gh-pages` branch they pushed to is retired.
+
+This section used to admit a step it could not check, and that step is gone.
+The site gate proves the committed build matches the current tree; it never
+proved the build was pushed, and for six days in August 2026 the live site was
+a hand-written page nothing here had ever touched. Publishing is now a function
+of `main` instead of a function of who remembered. `de check` is still offline
+on purpose and still cannot see the live site, so the question is answered on
+demand by a separate command:
+
+```bash
+uv run de deployed
+```
+
+It fetches what the site says about its own origin and compares that against
+`origin/main`. Exit 0 means the live site is a build of the current `main`,
+1 means it is behind, and 2 means the question could not be answered. That last
+one is deliberately not the same as 0.
+
+Several of its steps check the method rather than the code, each one added
+after the failure it prevents had already happened here:
 
 | Step | Refuses |
 | --- | --- |
@@ -267,14 +301,17 @@ the failure it prevents had already happened here:
 | integrity wiring | a module with a coverage floor that no entry point can reach |
 | decision register | a change to the answer key or the shipped skill with no entry in [`docs/DECISIONS.md`](docs/DECISIONS.md) |
 | documentation | a `de` command, path, or component that this README names and the repository does not have |
+| citations | a claim carrying an arXiv identifier whose entry in [`paper/refs.bib`](paper/refs.bib) has no quote behind it |
+| published claims | a measured number on the website that no longer matches the sentence in the document it came from |
 | site | a published build older than the documents it publishes, naming the files that moved |
 
 The other commands: `de index` regenerates
 [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool
 skill copies, `de site` rebuilds the website and records what it was built from,
 `de lint` checks skill frontmatter and the promotion gate, `de power` prints a
-minimum-detectable-effect table, and `de fetch` downloads the hash-pinned
-third-party corpora.
+minimum-detectable-effect table, `de rescore` re-grades an existing checkpoint
+against a newer answer key without re-making a single call, and `de fetch`
+downloads the hash-pinned third-party corpora.
 
 `de site` needs Node; the gate that demands you run it does not. Editing any
 document the site renders makes the published build stale, so the loop is edit,

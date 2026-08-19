@@ -1,6 +1,7 @@
 // @ts-check
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
+import svelte from '@astrojs/svelte';
 import rewriteLinks from './src/lib/remark-rewrite-links.mjs';
 import rehypeTables from './src/lib/rehype-tables.mjs';
 
@@ -14,6 +15,10 @@ import rehypeTables from './src/lib/rehype-tables.mjs';
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 
 export default defineConfig({
+  // Svelte is here for exactly one island, the router demo on the landing page.
+  // It is loaded `client:visible`, and all of its panels are server-rendered, so
+  // the page is complete and readable before any of this arrives.
+  integrations: [svelte()],
   site: 'https://angelcampa1.github.io',
   base: '/decision-making-skills',
   // Astro's default content cache is node_modules/.astro, which survives a

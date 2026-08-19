@@ -15,7 +15,7 @@
  *    carries pass/fail on colour alone (WCAG 1.4.1). They become `✓`/`✕` in the
  *    status inks with a visually-hidden word.
  */
-import { visit } from 'unist-util-visit';
+import { SKIP, visit } from 'unist-util-visit';
 
 /** A cell that is a measurement: 0.9529, 2,555, ~4,240, 89%, +2.9pp, -0.03, n/a dash. */
 const NUMERIC = /^[~+-]?[\d,]+(\.\d+)?\s*(%|pp|x|ms|s)?$/i;
@@ -50,8 +50,54 @@ function addClass(node, cls) {
   node.properties.className = list;
 }
 
+/**
+ * Give every rendered table its own scroller.
+ *
+ * `base.css` has carried `.doc__body > .table-scroll` and an `overflow-x: auto`
+ * rule since the redesign, and nothing ever produced the wrapper: an
+ * adversarial review on 2026-08-19 found `.table-scroll` exactly once in a
+ * 155-page build, on the one hand-written page. So 114 rendered pages had a
+ * hard-minimum-width table (`thead th` and `.num` are both `white-space:
+ * nowrap`) and nowhere to spend it, and the *document* scrolled instead --
+ * `/scorecard/` by 371px at 320px wide, dragging the prose sideways with it.
+ * WCAG 1.4.10 Reflow, on every page with a table.
+ *
+ * A selector written for a wrapper no renderer produces is the CSS spelling of
+ * this repository's floored-module-with-no-caller defect, and it reported
+ * nothing either.
+ *
+ * `tabindex="0"` so the region can be scrolled from the keyboard in every
+ * engine. Chromium makes overflowing containers focusable on its own; Safari
+ * does not, which is a 2.1.1 failure there and invisible from here.
+ *
+ * Deliberately no `role="region"`: it needs a name to be worth anything, these
+ * tables have no captions to name them from, and a dozen landmarks called
+ * "Table" on one page is a worse reading experience than none.
+ */
+function wrapTables(tree) {
+  visit(tree, 'element', (node, index, parent) => {
+    if (node.tagName !== 'table' || !parent || index === null) return;
+    const classes = parent.properties?.className;
+    const already =
+      parent.tagName === 'div' && (Array.isArray(classes) ? classes : []).includes('table-scroll');
+    if (already) return;
+    parent.children[index] = {
+      type: 'element',
+      tagName: 'div',
+      properties: { className: ['table-scroll'], tabIndex: 0 },
+      children: [node],
+    };
+    // Do not descend into the wrapper we just built, or the table inside it is
+    // visited again. Astro renders an entry more than once per build, which is
+    // why every transform in this file has to be idempotent.
+    return [SKIP, index + 1];
+  });
+}
+
 export default function rehypeTables() {
   return function transformer(tree) {
+    wrapTables(tree);
+
     // --- emoji ticks, anywhere in the document ------------------------------
     visit(tree, 'element', (node) => {
       if (!node.children) return;

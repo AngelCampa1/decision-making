@@ -620,13 +620,19 @@ class TestTheShippedBaseline:
         # `unreachable:council,hinge` gap on both corpora -- the router table
         # grew two rows and the answer key did not grow with it.
         assert len(deferred) == 5
-        assert (
-            sum(
-                "are the correct answer for no positive: council, hinge" in message
-                for message in deferred
-            )
-            == 2
-        )
+        unreachable = [
+            message
+            for message in deferred
+            if "are the correct answer for no positive: council, hinge" in message
+        ]
+        assert len(unreachable) == 2
+        # Counting to two was satisfied by two byte-identical strings, which is
+        # the defect a56cd8f fixed rather than evidence that it holds. The two
+        # corpora must be named, and named distinctly.
+        assert {message.split(":", 1)[0] for message in unreachable} == {
+            "datasets/triggers/decision-making.yaml",
+            "datasets/triggers/decision-making/index.yaml",
+        }
         assert any(
             "'sentence_count' on the 'turn' view puts the positive at an extreme" in message
             for message in deferred

@@ -318,7 +318,11 @@ def test_the_manifest_says_it_is_generated_and_what_it_cannot_prove(tmp_path: Pa
     payload = json.loads(render_manifest(repo))
     assert payload["generated_by"] == "de site"
     assert "Do not edit" in payload["note"]
-    assert "never that it was pushed" in payload["note"]
+    # The limitation the note has to keep stating. The wording moved on
+    # 2026-08-19 when publishing became a workflow: the manifest never proved
+    # the build was pushed, and it still does not prove anybody is serving it.
+    assert "never that anybody is serving it" in payload["note"]
+    assert "de deployed" in payload["note"]
     assert sorted(payload["inputs"]) == ["README.md", "docs/STATUS.md"]
 
 

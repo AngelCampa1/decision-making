@@ -1,11 +1,11 @@
 ---
-import '@fontsource-variable/source-serif-4/opsz.css';
-import '@fontsource-variable/source-serif-4/opsz-italic.css';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/600.css';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import '../styles/base.css';
 import Mark from '../components/Mark.astro';
 import { REPO, NAV } from '../lib/site.ts';
+import { skillFacts } from '../lib/facts.ts';
+import { verdictState } from '../lib/verdicts.ts';
 
 interface Props {
   title: string;
@@ -14,11 +14,30 @@ interface Props {
   ogDescription?: string;
 }
 
+/**
+ * The social card understated the procedure count for five days after the skill
+ * started routing to six, because it was a default parameter nobody had reason
+ * to look at. Defaults cannot be async, so the facts are read first and the
+ * props fall back to them below.
+ *
+ * The count is not spelled out here on purpose. `site/claims.json` refuses any
+ * page carrying a retracted phrase, and it cannot tell a published claim from a
+ * comment describing one — so a comment that quoted the old wording would fail
+ * the gate that exists to catch the old wording. Say what was wrong; do not
+ * reprint it.
+ *
+ * Deliberately no measured numbers here. This string is cached by every crawler
+ * that has ever seen the page and cannot be corrected once posted, so it says
+ * only what is structurally true.
+ */
+const facts = await skillFacts();
+const state = verdictState(facts.verdict);
+
 const {
   title,
-  description = 'A free file your AI agent reads when you face a hard choice. Four methods, and it reads one. We have not proven any of it yet. Every result is public.',
+  description = `A free file your AI agent reads when you have a hard call to make. ${facts.countWord} methods, and it reads one. Nothing here is proven yet, and every result is public.`,
   ogTitle = 'An agent skill for hard choices. Nothing proven yet.',
-  ogDescription = 'Four methods. Your agent reads one. Free, and one line installs it. Every result is public. So are the eight times we found our own test broken.',
+  ogDescription = `${facts.countWord} procedures. Your agent reads one. Free, and one line installs it. Every result is public, including the ones that went badly.`,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -64,8 +83,12 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
 
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="lockup" href={`${base}/`}>
-          <Mark width={40} />
+        {/* `aria-label` because the visible name is not always there. Below
+            32rem `.lockup__word` is display:none and the mark is decorative
+            (`aria-hidden`), which left the home link of every page with no
+            accessible name at all on a phone -- announced as just "link". */}
+        <a class="lockup" href={`${base}/`} aria-label="decision-making-skills, home">
+          <Mark width={30} segments={facts.count} state={state} />
           <span class="lockup__word">decision-making-skills</span>
         </a>
 
@@ -83,7 +106,14 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
           }
         </nav>
 
-        <div class="theme-toggle" role="group" aria-label="Colour theme">
+        {/* `hidden` until the script that gives these buttons behaviour has
+            run. Server-rendered, they were three focusable controls announced
+            as a labelled group, none of them marked pressed and none of them
+            doing anything -- the page reads the system theme correctly without
+            them, so with no JavaScript the honest thing is not to offer the
+            choice. The copy buttons alongside already work this way: they are
+            created by the script rather than shipped inert. */}
+        <div class="theme-toggle" role="group" aria-label="Colour theme" hidden>
           <button type="button" data-theme-set="system">sys</button>
           <button type="button" data-theme-set="light">light</button>
           <button type="button" data-theme-set="dark">dark</button>
@@ -112,8 +142,11 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
             <li><a href={REPO}>GitHub</a></li>
           </ul>
           <p class="site-footer__stamp">
-            Apache-2.0 &middot; Angel Campa<br />
-            scorecard: 0 proven / 0 shipped
+            {/* Read from the skill's own frontmatter, so this line cannot
+                outlive a promotion the way a typed-in count would. */}
+            <span>Apache-2.0 &middot; Angel Campa</span>
+            <span>decision-making v{facts.version}</span>
+            <span class="verdict" data-verdict={state}>{facts.verdict}</span>
           </p>
         </div>
       </div>
@@ -122,6 +155,8 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
     <script is:inline>
       (function () {
         var root = document.documentElement;
+        var toggle = document.querySelector('.theme-toggle');
+        if (toggle) toggle.hidden = false;
         function paint() {
           var t = localStorage.getItem('theme') || 'system';
           document.querySelectorAll('[data-theme-set]').forEach(function (b) {

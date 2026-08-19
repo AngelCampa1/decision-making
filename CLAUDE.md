@@ -220,6 +220,116 @@ If you are an agent contributing here rather than a user installing the skills:
   task abandoned mid-corpus to report four files that were simply somebody
   else's work in progress.
 
+- **Work in your own worktree, and rejoin `main` on a schedule.** The bullet
+  above says how to share one working tree politely. Stop sharing it. A session
+  that will run longer than a few minutes gets its own:
+
+  ```bash
+  git worktree add -b <topic> .claude/worktrees/<topic> origin/main
+  ```
+
+  **Inside the repository, under `.claude/worktrees/`** — corrected 2026-08-19,
+  having said the opposite here. `.gitignore` already carries `.claude/`, so a
+  nested tree neither shows in `git status` nor can be staged. The other reason
+  once given — that a nested tree is matched by `site/inputs.json` globs — was
+  measured and is **false**: with three nested worktrees on disk,
+  `input_files()` returns 192 inputs and zero under that directory. The cost of
+  the location is that an ignored directory is easy to destroy; see
+  [Starting the work](docs/AUTONOMOUS_WORK_ORDER.md#starting-the-work-which-directory-the-worktree-goes-in),
+  which also lists the setup a fresh worktree needs before the gate will pass.
+  Its own tree, its own `.venv`, its own gate.
+
+  Three failures, one cause, all of them on 2026-08-19 in a single shared tree:
+
+  - **`de check` is whole-repo and it is bound to `pre-commit` and
+    `pre-push`.** So another session's half-written module fails *your* push.
+    Four sessions each read "4 of 18 steps failed", each concluded it was
+    blocked, and not one of the failures belonged to the session reading it.
+    That is a hold-and-wait cycle: nobody can land until everybody is done, and
+    nobody is done because they are all waiting.
+  - **`.venv/Scripts/de.exe` is a shared lock.** `uv run` tries to reinstall it
+    and gets `os error 32` while another session is mid-gate. `python -m uv run
+    --no-sync` gets you past it; a worktree with its own `.venv` means it never
+    happens. Do not kill the other session's processes.
+  - **A failed `pre-commit` stashes and restores the whole tree**, which
+    destroys uncommitted work belonging to sessions that were not committing.
+    Eighteen files went that way and came back only from
+    `~/.cache/pre-commit/patch*`, which is not a backup and is not guaranteed to
+    be there next time.
+
+  **Nothing in the index is safe, and the gate cannot see the difference.**
+  `f12b444` committed `from decision_evals.claims import ...` into `cli.py`
+  without committing `claims.py`, which existed only in the index. `main`'s tip
+  did not import at all — `de` was unrunnable on a fresh checkout — while four
+  sessions tried to push to it and read the failure as somebody else's mess.
+  Every gate passed locally because every tree had the file on disk. **A gate
+  that runs in the working tree cannot see what the commit is missing.** So:
+  commit, do not stage, and if you want to know what you actually committed,
+  check it out somewhere clean.
+
+  **Rejoin often, and the interval is short.** A long-horizon branch is the case
+  this rule exists for, not the exception to it. Fetch, rebase onto
+  `origin/main`, and push your branch **at least daily and at least every ten
+  commits**, whichever comes first:
+
+  ```bash
+  git fetch origin && git rebase origin/main && git push -u origin <topic>
+  ```
+
+  Push the branch even when the work is unfinished. An unpushed branch is one
+  `git worktree remove` from gone, and a branch that has not touched `main` in a
+  week is a merge nobody volunteers for — `feat/toolchain` sat 22 commits behind
+  `main` on 2026-08-19 with nothing of its own committed anywhere. Rebasing
+  daily also means you find out that `main` is broken on the day it breaks,
+  rather than on the day you try to land.
+
+  Landing is a merge to `main` from a green worktree, and `--no-verify` is not
+  how a red gate gets resolved. If the gate is red on your own isolated tree,
+  it is yours and it is real.
+
+  **After landing, local `main` and `origin/main` must name the same commit.**
+  Check it, do not assume it:
+
+  ```bash
+  git fetch origin && git rev-parse main origin/main   # two identical lines
+  ```
+
+  The reason this needs saying is that the obvious way to land does not do it.
+  Pushing a topic branch straight onto the remote branch —
+  `git push origin <topic>:main` — moves `origin/main` and leaves the local ref
+  exactly where it was. Nothing warns you: `git status` in a worktree on another
+  branch has nothing to report, and the next session to read local `main`
+  reads a commit that is no longer the tip.
+
+  Nor can you always fix it from where you are. `main` is usually checked out
+  in *some* worktree — on 2026-08-19 it was not in `D:\code\decision-making` at
+  all, which had a topic branch checked out, but in another session's
+  scratchpad worktree — and git refuses to update a branch ref that is checked
+  out anywhere. `git fetch origin main:main` is rejected. `git worktree list`
+  tells you which path holds it. So either land from that worktree and push
+  from there, or fast-forward it in place afterwards:
+
+  ```bash
+  git -C <the-worktree-holding-main> merge --ff-only origin/main
+  ```
+
+  Do **not** reach for `git update-ref refs/heads/main`. It bypasses the
+  checked-out protection rather than satisfying it, and the worktree holding
+  `main` is then left with a HEAD pointing somewhere its index and working tree
+  do not match — which presents to that session as a working tree full of
+  deletions it did not make. That is the failure this whole worktree section
+  exists to stop, reintroduced by the command that looked like a shortcut.
+
+
+  **Landing does not stop at the merge.** The ordered sequence — catch up,
+  adversarial review, fix, regenerate, rebuild the site, commit, full `de
+  check`, merge, deploy, fetch the deployed page, remove the worktree and
+  branch — is
+  [Landing the work](docs/AUTONOMOUS_WORK_ORDER.md#landing-the-work). Its last
+  three steps are the ones nothing here can check: that the build was *pushed*,
+  that the deployed page was *fetched and asserted against*, and that the
+  worktree and branch were removed — unless another session is standing in
+  them, which outranks the tidying.
 - **Work is sub-agent driven, reviews are adversarial, and no finding is
   believed until it is confirmed.** Maintainer instruction, 2026-08-13. Dispatch
   units of work to sub-agents and run the independent ones concurrently; give
@@ -254,8 +364,16 @@ If you are an agent contributing here rather than a user installing the skills:
   for: it says how to keep going — derive the parameter or record the choice,
   adjudicate the failures blind, run the grid, confirm the finding.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
-  coverage floors, skill validation, run provenance and integrity wiring. There
-  is no cloud CI. Run it before you believe anything works.
+  coverage floors, skill validation, run provenance and integrity wiring. Run it
+  before you believe anything works. It also runs in CI
+  (`.github/workflows/check.yml`), which is not a convenience: checking out the
+  committed tree on its own showed the gate had only ever been asked about a
+  working directory, never about a commit. `main`'s tip imported an uncommitted
+  module, two documents linked ignored paths, and the site manifest recorded a
+  build from a file not in the repository. Green locally means green *here*.
+  Only a clean checkout can say green on a clean clone, and that workflow has
+  not run yet. See `notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`.
+  A second workflow, `deploy-site.yml`, publishes the site and checks nothing.
 - **Setup, and the loop underneath the gate.** `uv sync --group dev` installs
   it; add `--group docs` only to publish the site. `python -m uv run de check
   --fast` skips tests, coverage and the site rebuild — that is the pre-commit
@@ -280,11 +398,20 @@ If you are an agent contributing here rather than a user installing the skills:
   action, so this will fire often. It is the price of not having two copies.
 
   **What that gate cannot see, stated so nobody mistakes green for correct.** It
-  proves the site was *built* from the current tree. It does not prove the build
-  was ever *pushed*: `de check` is offline and deterministic by design, so it
-  cannot consult `origin/gh-pages`, and a green gate beside a build that never
-  left the machine is exactly as green as a deployed one. Only
-  `de site --deploy` closes that, and nothing checks that you ran it.
+  proves the site was *built* from the current tree. It does not prove anyone is
+  serving that build: `de check` is offline and deterministic by design, so it
+  cannot look at the live site, and a green gate beside a page nobody is serving
+  is exactly as green as a deployed one.
+
+  **Publishing itself is no longer yours to remember.** Merging to `main` runs
+  `.github/workflows/deploy-site.yml`, which builds the site and deploys it to
+  Pages. There is no `gh-pages` branch and no local publish command; the
+  `de site --deploy` flag was removed on 2026-08-19 after it published a build
+  of a work-in-progress commit from a feature branch, because it force-pushed
+  whatever local `HEAD` happened to be. What is left for you is asking whether
+  it landed: `python -m uv run de deployed` fetches the live site's own record
+  of which commit produced it and compares that against `origin/main`. It exits
+  2 when it cannot tell, which is deliberately not the same as 0.
 - **A published run must carry its own provenance, and the gate enforces it.**
   `results/<skill>/<date>-<sha7>[-slug]/README.md` must declare
   `**Answer key:** <label set> v<n>` matching the `set_version` in the records
