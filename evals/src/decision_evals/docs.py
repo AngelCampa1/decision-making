@@ -32,6 +32,18 @@ path in it resolved. That defect is invisible here and always will be. The
 same standing limitation is registered for
 :mod:`decision_evals.provenance` and :mod:`decision_evals.wiring`.
 
+**And a reference can be correct while being unresolvable, which took until
+2026-08-19 to notice.** This gate ran on the authoring machine every time, so
+"the path exists" meant "exists in the working directory". The first run
+against a clean clone found two living documents naming files under
+``results/track-0/`` and ``results/triggers/``, both excluded by ``.gitignore``
+because an append-only run checkpoint cannot be committed mid-run. The
+sentences are true, the files are real, and no reader who clones this
+repository will ever see them. :func:`load_ignored_paths` is the register that
+lets such a reference stand while declaring the absence, exactly as
+``de report`` is declared. It carries one refusal rather than two, and the
+asymmetry is explained there.
+
 **Scope is the living documentation only.** ``notebook/`` and the published
 ``results/**/README.md`` are append-only records of what was true when they
 were written -- a notebook entry naming ``de report`` in 2026-08-11 is correct
@@ -72,6 +84,10 @@ UNLISTED_DIRS: Final[frozenset[str]] = frozenset()
 
 #: ``pyproject.toml`` table naming commands that are mentioned while absent.
 ABSENT_TABLE: Final[tuple[str, ...]] = ("tool", "decision-evals", "docs-absent-commands")
+
+#: ``pyproject.toml`` table naming paths that are mentioned while deliberately
+#: untracked. Same shape and same discipline as :data:`ABSENT_TABLE`.
+IGNORED_TABLE: Final[tuple[str, ...]] = ("tool", "decision-evals", "docs-ignored-paths")
 
 #: An inline code span: `` `de check` ``.
 _CODE_SPAN: Final = re.compile(r"`([^`\n]+)`")
@@ -128,6 +144,21 @@ def code_fragments(text: str) -> list[str]:
     return [*_FENCE.findall(text), *_CODE_SPAN.findall(without_fences)]
 
 
+def _load_register(repo_root: Path, table: tuple[str, ...]) -> dict[str, str]:
+    """One ``pyproject.toml`` table of declaration to reason, or ``{}``."""
+    pyproject = repo_root / "pyproject.toml"
+    if not pyproject.is_file():
+        return {}
+    node: object = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+    for key in table:
+        if not isinstance(node, dict):
+            return {}
+        node = node.get(key, {})
+    if not isinstance(node, dict):
+        return {}
+    return {str(key): str(value) for key, value in node.items()}
+
+
 def load_absent_commands(repo_root: Path) -> dict[str, str]:
     """Commands named in the documentation while deliberately not existing.
 
@@ -136,17 +167,28 @@ def load_absent_commands(repo_root: Path) -> dict[str, str]:
     ``[tool.decision-evals.unwired]`` the register may only shrink, and an
     entry that becomes a real command is itself an error.
     """
-    pyproject = repo_root / "pyproject.toml"
-    if not pyproject.is_file():
-        return {}
-    node: object = tomllib.loads(pyproject.read_text(encoding="utf-8"))
-    for key in ABSENT_TABLE:
-        if not isinstance(node, dict):
-            return {}
-        node = node.get(key, {})
-    if not isinstance(node, dict):
-        return {}
-    return {str(key): str(value) for key, value in node.items()}
+    return _load_register(repo_root, ABSENT_TABLE)
+
+
+def load_ignored_paths(repo_root: Path) -> dict[str, str]:
+    """Paths named in the documentation while deliberately untracked.
+
+    Added 2026-08-19, when the gate was first run against a clean clone instead
+    of a working directory and two living documents were found naming files
+    that ``.gitignore`` excludes on purpose -- an append-only run checkpoint
+    cannot be committed mid-run, so ``results/track-0/`` and
+    ``results/triggers/`` are ignored by a stated and correct decision. The
+    consequence nobody had noticed is that those references can never resolve
+    for anyone who clones this repository, and the gate was right to say so.
+
+    Deleting the sentences would lose real information: the checkpoint exists,
+    it is what the surrounding claim rests on, and a reader reproducing the run
+    will have it. So the reference stays and the absence is declared, exactly
+    as ``de report`` is. The register carries the same two refusals, which is
+    what stops it becoming a place to put inconvenient failures: an entry whose
+    path exists is an error, and so is an entry named nowhere.
+    """
+    return _load_register(repo_root, IGNORED_TABLE)
 
 
 def check_command_references(repo_root: Path, commands: set[str]) -> list[DocIssue]:
@@ -234,7 +276,9 @@ def repo_paths(fragments: list[str], top_level: set[str]) -> set[str]:
 def check_path_references(repo_root: Path) -> list[DocIssue]:
     """Every relative link and repo path in the living documentation resolves."""
     top_level = {path.name for path in repo_root.iterdir() if path.is_dir()}
+    ignored = load_ignored_paths(repo_root)
     issues: list[DocIssue] = []
+    named: set[str] = set()
 
     for path in scanned_files(repo_root):
         where = _relative(path, repo_root)
@@ -248,13 +292,36 @@ def check_path_references(repo_root: Path) -> list[DocIssue]:
             # never reach here -- :func:`link_targets` drops them -- so the
             # remainder is always a non-empty path.
             target = reference.split("#", 1)[0]
+            named.add(target)
             if (base / target).resolve().exists():
+                continue
+            if target in ignored:
                 continue
             issues.append(
                 DocIssue(
                     where,
                     f"`{reference}` does not exist. A link the reader cannot follow is "
-                    "the same defect as a command that does not run.",
+                    "the same defect as a command that does not run. Fix the reference, "
+                    "or declare it under `[tool.decision-evals.docs-ignored-paths]` if "
+                    "the point is that `.gitignore` excludes it deliberately.",
+                )
+            )
+
+    # Only the may-only-shrink refusal, and the asymmetry with
+    # :data:`ABSENT_TABLE` is deliberate. A declared-absent command that turns
+    # into a real command is an error on every machine, because the command
+    # registry is in the source tree. A declared-untracked path *does* exist on
+    # the machine that ran the experiment and does not on a clean clone, so
+    # existence is not evidence of a stale entry -- refusing on it would put the
+    # gate red for the maintainer and green in CI, which is the failure this
+    # register was written to fix, inverted.
+    for reference in sorted(ignored):
+        if reference not in named:
+            issues.append(
+                DocIssue(
+                    "pyproject.toml",
+                    f"`{reference}` is declared untracked and is named nowhere in the "
+                    "documentation. Delete the line.",
                 )
             )
     return issues

@@ -28,10 +28,19 @@
 
 name: check
 
+# Pull requests and `main`, not every branch push. This repository takes
+# hundreds of commits a day and the local `pre-push` hook already runs the full
+# gate on each one, so a run per branch push would be noise rather than
+# evidence. What the hook cannot do is check a *commit* rather than a working
+# directory, which is the one thing this workflow exists for, and that only
+# needs to happen where the work merges.
+#
+# The repository is public, so none of this consumes billable minutes.
 on:
   push:
-    branches: ["**"]
+    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: check-${{ github.ref }}

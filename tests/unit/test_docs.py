@@ -30,6 +30,7 @@ from decision_evals.docs import (
     component_entries,
     link_targets,
     load_absent_commands,
+    load_ignored_paths,
     repo_paths,
     scanned_files,
 )
@@ -245,6 +246,65 @@ def test_illustrative_paths_are_not_resolved() -> None:
     assert repo_paths(["results/<skill>/<date>/README.md"], top) == set()
     assert repo_paths(["results/**/summary.json"], top) == set()
     assert repo_paths(["uv run de check"], top) == set()
+
+
+# --------------------------------------------------------------------------- #
+# The untracked-path register
+# --------------------------------------------------------------------------- #
+
+
+def test_a_declared_untracked_path_may_be_named(tmp_path: Path) -> None:
+    """`docs/STATUS.md` has to name the checkpoint its claim rests on.
+
+    `.gitignore` excludes `results/triggers/` because an append-only run file
+    cannot be committed mid-run, so the reference cannot resolve on a clean
+    clone and the gate was right to refuse it before this register existed.
+    """
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/A.md": "adjudicated into `results/triggers/adjudication.jsonl`.",
+            "pyproject.toml": (
+                "[tool.decision-evals.docs-ignored-paths]\n"
+                '"results/triggers/adjudication.jsonl" = "append-only, ignored"\n'
+            ),
+        },
+        dirs=("results",),
+    )
+    assert check_path_references(repo) == []
+
+
+def test_a_declared_untracked_path_nobody_mentions_is_refused(tmp_path: Path) -> None:
+    """The register may only shrink, same as the absent-command one."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/A.md": "nothing to see",
+            "pyproject.toml": (
+                '[tool.decision-evals.docs-ignored-paths]\n"results/gone.jsonl" = "why"\n'
+            ),
+        },
+        dirs=("results",),
+    )
+    issues = check_path_references(repo)
+    assert issues == [
+        DocIssue(
+            "pyproject.toml",
+            "`results/gone.jsonl` is declared untracked and is named nowhere in the "
+            "documentation. Delete the line.",
+        )
+    ]
+
+
+def test_an_undeclared_missing_path_still_names_the_register(tmp_path: Path) -> None:
+    """The refusal has to say how to declare a deliberate absence."""
+    repo = _repo(tmp_path, {"docs/A.md": "[b](GONE.md)"})
+    issues = check_path_references(repo)
+    assert "docs-ignored-paths" in issues[0].message
+
+
+def test_no_pyproject_means_no_untracked_declarations(tmp_path: Path) -> None:
+    assert load_ignored_paths(tmp_path) == {}
 
 
 # --------------------------------------------------------------------------- #
