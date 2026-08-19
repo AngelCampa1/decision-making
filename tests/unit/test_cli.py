@@ -367,10 +367,21 @@ class TestTailoringStep:
         result = check_tailoring_step()
         assert result.passed
 
-    def test_the_real_corpus_is_flagged(self) -> None:
-        """No monkeypatching: the register split the battery was built to catch
-        is on disk right now, so the step must fail against the real corpus."""
-        assert not check_tailoring_step().passed
+    def test_the_real_corpus_is_baselined_rather_than_failing(
+        self, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """No monkeypatching: the register split the battery was built to
+        catch is on disk right now, and it is exactly what
+        ``datasets/tailoring/corpus-baseline.txt`` defers -- the corpus is
+        committed as evidence of a failed authoring pass, not a defect to
+        chase, and re-adding it here would be re-declaring the step's own
+        purpose. The finding must still be visible: printed as
+        ``known-open (baselined)`` rather than swallowed, the same contract
+        ``check_triggers_step`` gives its own baseline.
+        """
+        result = check_tailoring_step()
+        assert result.passed
+        assert "known-open (baselined)" in capsys.readouterr().out
 
 
 class TestFetch:

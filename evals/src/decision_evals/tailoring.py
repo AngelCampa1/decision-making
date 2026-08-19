@@ -58,7 +58,9 @@ from decision_evals.corpus import (
     MATCHED_Z,
     SEPARABILITY_BAND,
     Check,
+    Finding,
     attainable_auc,
+    load_baseline_file,
     matched_attainable,
     matched_dispersion_z,
     matched_null_se,
@@ -75,6 +77,29 @@ INDEX_NAME: Final = "index.yaml"
 #: nothing here is run through ``check_trigger_sets``, which is the check that
 #: would reject a set naming a skill that does not exist in ``skills/``.
 SET_LABEL: Final = "tailoring"
+
+#: The corpus's baseline scope -- the identity a finding's key is combined
+#: with to form a baseline entry (``<scope>|<key>``). One constant rather than
+#: something derived from whatever ``Path`` a caller hands ``check_shortcuts``,
+#: because there is exactly one index file for this corpus, unlike the trigger
+#: corpus's one-file-per-skill layout that needs :func:`~decision_evals.
+#: triggers._scope` to compute it per call.
+CORPUS_SCOPE: Final = f"{TAILORING_DIR}/{INDEX_NAME}"
+
+#: Same file format and the same may-only-shrink rule as
+#: :data:`decision_evals.corpus.CORPUS_BASELINE_PATH`, for this corpus instead
+#: of the trigger corpus's.
+TAILORING_BASELINE_PATH: Final = "datasets/tailoring/corpus-baseline.txt"
+
+
+def load_tailoring_baseline(repo_root: Path) -> set[str]:
+    """Baselined tailoring-corpus finding keys, one per line, ``#`` for comments.
+
+    Thin wrapper over :func:`decision_evals.corpus.load_baseline_file` for
+    :data:`TAILORING_BASELINE_PATH`, mirroring
+    :func:`decision_evals.corpus.load_corpus_baseline` for the trigger corpus.
+    """
+    return load_baseline_file(repo_root, TAILORING_BASELINE_PATH)
 
 
 class TailoringSetError(ValueError):
@@ -352,16 +377,38 @@ def inert_features(checks: tuple[Check, ...]) -> tuple[str, ...]:
     return tuple(check.feature for check in checks if check.inert)
 
 
-def check_shortcuts(trigger_set: TriggerSet, path: Path) -> list[str]:
-    """Every shortcut this battery can see, as reportable issue strings.
+def check_shortcuts(trigger_set: TriggerSet, path: Path) -> list[Finding]:
+    """Every shortcut this battery can see, as keyed :class:`~decision_evals.corpus.Finding`.
 
     Mirrors ``decision_evals.corpus._check_leaks`` and ``_check_matched``'s
-    wording and structure: the pooled statistic against
+    wording, structure **and key scheme**: the pooled statistic against
     :data:`~decision_evals.corpus.SEPARABILITY_BAND`, and the paired (matched)
     statistic against :data:`~decision_evals.corpus.MATCHED_Z` null standard
-    errors. An empty ``trigger_set`` (no triplets loaded) produces no issues:
-    every statistic below returns its chance value on no data, same as the
-    trigger battery's own functions do.
+    errors. An empty ``trigger_set`` (no triplets loaded) produces no
+    findings: every statistic below returns its chance value on no data, same
+    as the trigger battery's own functions do.
+
+    **The leak finding is combined across every leaking feature into one key,
+    the same way ``_check_leaks`` keys a derived (non-``turn``) view rather
+    than the gated one.** This corpus has exactly one view (``delta``, the
+    inserted text -- see :func:`battery_report`), so there is no per-feature
+    count gate to calibrate a threshold for; instead every feature that leaks
+    at all is folded into a single ``leak:delta:<feature,feature,...>`` key,
+    sorted and comma-joined. **That is what makes a baseline naming this
+    finding safe rather than a blanket exemption**: the key names the whole
+    set of features that went wrong, not any one of them or the corpus in
+    general, so a fifth feature joining the set -- or a fourth dropping out --
+    changes the key and the old baseline entry stops matching. See
+    ``docs/DECISIONS.md`` and ``datasets/tailoring/corpus-baseline.txt`` for
+    the entry this shipped with, and
+    ``test_tailoring_battery.py::TestTheBaselineIsNarrowRatherThanBlanket``
+    for the proof that a fifth feature is not deferred by a baseline naming
+    four.
+
+    The matched finding is left per-feature (``matched:delta:<feature>``),
+    matching ``_check_matched``'s treatment of every view: its threshold is
+    already a per-feature z rather than a count, so there is nothing to
+    combine.
 
     **``Check.cancels`` is deliberately not read here, and that omission is
     itself checked rather than assumed.** ``matched_dispersion_z`` answers "is
@@ -383,23 +430,35 @@ def check_shortcuts(trigger_set: TriggerSet, path: Path) -> list[str]:
     revision of the corpus design allows more than one matched fact per
     triplet, this reasoning stops holding and the check belongs back in.
     """
-    issues: list[str] = []
-    for check in battery_report(trigger_set):
-        if check.leaks:
-            low, high = SEPARABILITY_BAND
-            issues.append(
-                f"{path}: {check.feature!r} alone separates governing deltas from matched "
-                f"deltas at AUC {check.auc:.3f}, outside [{low:.2f}, {high:.2f}]. A corpus a "
-                "single surface feature solves measures that feature, not the domain "
-                "reasoning the triplet is meant to test."
+    findings: list[Finding] = []
+    checks = battery_report(trigger_set)
+    low, high = SEPARABILITY_BAND
+
+    leaking = [check for check in checks if check.leaks]
+    if leaking:
+        detail = "; ".join(f"{check.feature} {check.auc:.3f}" for check in leaking)
+        findings.append(
+            Finding(
+                f"leak:delta:{','.join(sorted(check.feature for check in leaking))}",
+                f"{path}: {len(leaking)} feature(s) separate governing deltas from matched "
+                f"deltas alone, outside [{low:.2f}, {high:.2f}] -- {detail}. A corpus a "
+                "surface feature solves measures that feature, not the domain reasoning "
+                "the triplet is meant to test.",
             )
+        )
+
+    for check in checks:
         if check.matched_leaks:
             direction = "above" if check.matched > 0.5 else "below"
-            issues.append(
-                f"{path}: within its own triplet, the governing delta's {check.feature!r} "
-                f"sits {direction} the matched delta's in {check.matched:.3f} of comparisons "
-                f"-- {check.matched_z:.2f} null standard errors from chance, above "
-                f"{MATCHED_Z} (pooled AUC {check.auc:.3f}). A model can tell governing from "
-                "matched on this feature alone, whatever the underlying reasoning."
+            findings.append(
+                Finding(
+                    f"matched:delta:{check.feature}",
+                    f"{path}: within its own triplet, the governing delta's {check.feature!r} "
+                    f"sits {direction} the matched delta's in {check.matched:.3f} of "
+                    f"comparisons -- {check.matched_z:.2f} null standard errors from chance, "
+                    f"above {MATCHED_Z} (pooled AUC {check.auc:.3f}). A model can tell "
+                    "governing from matched on this feature alone, whatever the underlying "
+                    "reasoning.",
+                )
             )
-    return issues
+    return findings
