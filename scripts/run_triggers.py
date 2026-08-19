@@ -725,8 +725,12 @@ def report_item_analysis(done: dict[tuple[str, int], dict[str, object]], arm: st
     difficulty, corrected item-total discrimination, the broken-item screen and
     the per-triple joint outcome. Every number this repository has published
     about this corpus is an **arm** statistic averaged over 258 items; not one is
-    an item statistic, and the register the pre-registration cites puts the cost
-    at r = -0.62 between item invalidity and item discrimination.
+    an item statistic, and the register the pre-registration cites associates
+    item invalidity with item discrimination at a Pearson r of about 0.62,
+    negative in direction. Stated that way because BenchBench states it that
+    way: its abstract prints the magnitude and gives the direction in words, so
+    writing `-0.62` asserts a character the source does not print. See the
+    `note` on `benchbench2026` in `paper/refs.bib`.
 
     **A respondent is one `(arm, repeat)` pair, and this call sees one arm**, so
     the respondent count here is this run's repeat count and nothing more. The
