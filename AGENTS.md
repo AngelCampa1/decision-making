@@ -221,13 +221,19 @@ If you are an agent contributing here rather than a user installing the skills:
   that will run longer than a few minutes gets its own:
 
   ```bash
-  git worktree add ../decision-making-wt-<topic> -b <topic>
+  git worktree add -b <topic> .claude/worktrees/<topic> origin/main
   ```
 
-  A sibling directory, not one inside the repository: a worktree under
-  `.claude/worktrees/` is matched by `site/inputs.json` globs and shows up in
-  this repository's own `git status`, which is the problem it was meant to
-  solve. Its own tree, its own `.venv`, its own gate.
+  **Inside the repository, under `.claude/worktrees/`** — corrected 2026-08-19,
+  having said the opposite here. `.gitignore` already carries `.claude/`, so a
+  nested tree neither shows in `git status` nor can be staged. The other reason
+  once given — that a nested tree is matched by `site/inputs.json` globs — was
+  measured and is **false**: with three nested worktrees on disk,
+  `input_files()` returns 192 inputs and zero under that directory. The cost of
+  the location is that an ignored directory is easy to destroy; see
+  [Starting the work](docs/AUTONOMOUS_WORK_ORDER.md#starting-the-work-which-directory-the-worktree-goes-in),
+  which also lists the setup a fresh worktree needs before the gate will pass.
+  Its own tree, its own `.venv`, its own gate.
 
   Three failures, one cause, all of them on 2026-08-19 in a single shared tree:
 
@@ -310,6 +316,16 @@ If you are an agent contributing here rather than a user installing the skills:
   deletions it did not make. That is the failure this whole worktree section
   exists to stop, reintroduced by the command that looked like a shortcut.
 
+
+  **Landing does not stop at the merge.** The ordered sequence — catch up,
+  adversarial review, fix, regenerate, rebuild the site, commit, full `de
+  check`, merge, deploy, fetch the deployed page, remove the worktree and
+  branch — is
+  [Landing the work](docs/AUTONOMOUS_WORK_ORDER.md#landing-the-work). Its last
+  three steps are the ones nothing here can check: that the build was *pushed*,
+  that the deployed page was *fetched and asserted against*, and that the
+  worktree and branch were removed — unless another session is standing in
+  them, which outranks the tidying.
 - **Work is sub-agent driven, reviews are adversarial, and no finding is
   believed until it is confirmed.** Maintainer instruction, 2026-08-13. Dispatch
   units of work to sub-agents and run the independent ones concurrently; give
