@@ -1,9 +1,9 @@
 # Decision register
 
-**Every change to `datasets/triggers/` or `skills/` needs an entry here, and
-`de check` refuses one that does not have it.**
+**Every change to `datasets/triggers/`, `datasets/tailoring/` or `skills/`
+needs an entry here, and `de check` refuses one that does not have it.**
 
-Those two paths are the answer key and the product. A change to either moves
+Those paths are answer keys, or the product. A change to any of them moves
 numbers that are already published: on 2026-08-13 one turn moved from the
 positives to the negatives, recall rose 3 to 5 points on every arm on disk, and
 **not one call was re-made**. That was a correct maintainer decision, and in a
@@ -23,6 +23,74 @@ for the full argument; nothing here was reconstructed from memory.
 Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
+
+## 2026-08-19 — `datasets/tailoring/` added to the decision register
+
+**Commits:** `fb295c8`
+
+Track H's Phase 0 corpus at `datasets/tailoring/` carries an answer key in
+exactly the sense this register exists for: each triplet's arms are labelled
+*governing* (the answer should move) or *matched non-governing* (nothing
+should move). A label move there is invisible in a checkpoint and would shift
+every number computed from it — the same failure mode as the 2026-08-13
+trigger incident this register was built for, where one turn moved from the
+positives to the negatives and recall rose 3 to 5 points on every arm on disk
+with not one call re-made.
+
+`GOVERNED` in [`decisions.py`](../evals/src/decision_evals/decisions.py) now
+reads `("datasets/triggers/", "datasets/tailoring/", "skills/")`.
+[`docs/TAILORING_CORPUS_SPEC.md`](TAILORING_CORPUS_SPEC.md) §6 had already
+flagged this as an open maintainer question — *"whether this subtree should be
+added is a maintainer question and `index.yaml` raises it"* — and this entry
+answers it. That spec's governance note now describes the old state and should
+be updated in the same pass that fills in the commit above.
+
+**Not widened to `datasets/` as a whole, on purpose.** `datasets/golden/`
+already carries a stronger obligation than a register entry: golden files are
+pinned byte-exact, and regenerating them needs an explicit `pytest --bless`
+whose diff goes through review. Stacking a second, weaker gate on top of that
+one is not an improvement. `datasets/library/` carries no labels — it is
+padding prose, not an answer key — so gating it would be exactly the noise
+this register's own module docstring warns against: gating every path would be
+noise, and noise is what an advisory gate becomes before somebody turns it
+off.
+
+**`datasets/probe/` is left open, deliberately.** It carries admissibility
+labels and is arguably in the same position as `datasets/tailoring/`, but
+nothing published currently depends on it moving. That is a separate decision
+for whoever is working that track to make and record, not decided here.
+
+**The ordering problem, and it is sharper here than `730e14a`'s.** `730e14a`
+named a commit (`ae55b5b`) that itself touched `skills/` — a genuinely
+governed path — so once it existed, citing it satisfied `check_decisions`
+cleanly; the only wait was for the sha to exist. This entry is different: the
+commit that adds the `datasets/tailoring/` prefix touches only
+`evals/src/decision_evals/decisions.py` and `tests/unit/test_decisions.py`,
+neither of which is itself a governed path. `check_decisions` requires every
+cited commit to be one that *touched* a governed path
+(`test_an_entry_naming_an_ungoverned_commit_is_refused` pins this), so naming
+that commit here will not just be pending — it will fail validation outright
+once filled in, the same way an unrelated sha would.
+
+So the `**Commits:**` line above is left as an explicit placeholder rather
+than a sha, and `de check` will report this entry as incomplete until one of
+two things happens, which is a call for whoever lands the commit rather than
+one made here: either the code change is folded into a commit that also
+touches a governed path (for instance, alongside the first authored file
+landing under `datasets/tailoring/`), which then has a real commit this entry
+can legitimately cite — or the maintainer decides this particular entry
+documents a decision about the gate itself rather than a change the gate's
+mechanical rule was built to catch, and is exempted the way `docs/DECISIONS.md`
+already allows for prose that predates the first heading. Either way, this is
+not decided in this entry.
+
+**Resolved 2026-08-19: the first option.** `fb295c8` carries the `GOVERNED` change, the corpus and the spec in one commit, so the sha above names a commit that genuinely touched `datasets/tailoring/` and `check_decisions` accepts it on the same rule as every other entry. The exemption route was not taken — an entry that documents the gate is still a change to a governed path once the corpus lands beside it, and carving out a special case for the commit that installs a rule is the kind of exception that is invisible later.
+
+**A regression test pins the coupling.**
+`tests/unit/test_decisions.py::test_the_tailoring_corpus_is_governed` asserts
+`touches_governed(["datasets/tailoring/tri-001.yaml"])`, which fails against
+the old two-entry tuple — confirmed by running it before this change:
+`AssertionError: assert False where False = touches_governed(['datasets/tailoring/tri-001.yaml'])`.
 
 ## 2026-08-19 — the shipped description now enumerates six procedures, and that retires ten arms
 
