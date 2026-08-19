@@ -1,8 +1,8 @@
 {
   "generated_by": "de site",
   "inputs": {
-    "AGENTS.md": "ba71f0a9052b83fe60fadd2f35024a3c0d3eeaafee0faedf8248273fef6374f8",
-    "CLAUDE.md": "ba71f0a9052b83fe60fadd2f35024a3c0d3eeaafee0faedf8248273fef6374f8",
+    "AGENTS.md": "91d683511a0c2abb537ce520caa5b1806c88ef4cb8db53ade2d819e82521fd8b",
+    "CLAUDE.md": "91d683511a0c2abb537ce520caa5b1806c88ef4cb8db53ade2d819e82521fd8b",
     "CONTRIBUTING.md": "b92e56e0f304396df2cf4fc7643601f5037d2af24972ae7836544404b60578f2",
     "README.md": "bbfdd106905dd4e9b6137edc616294d300c8d373261aba756c56bcea65348a39",
     "SCORECARD.md": "d1d2fbd028052b43b3e659501f16646915ffe474877fb0f9a32775b0211eb959",
@@ -19,7 +19,7 @@
     "docs/README.md": "587ab9b55b5bdfee2ed4751807b8351ca8055bcc6fa29d94d1346a005fd7efc1",
     "docs/REJECTED.md": "f1605bbb97dffef1a1d632846ec2920cd6e225fd3d594bb6a9d5d02355b20522",
     "docs/RELATED_WORK.md": "94f0c5869cdc7b7a03647f22479c5e97243befc71459abe3edaf4788c0cbd55b",
-    "docs/RESEARCH_PROGRAMME.md": "72aa06c87091a7cc12c4d31522cd40af239054d761e13ef6fd4cd390a4d3543f",
+    "docs/RESEARCH_PROGRAMME.md": "0720bc27c3b1594b7368568cee4392dcf63b37304194ffc1d02e09a2ab4ebd9c",
     "docs/RUN_INDEX.md": "c53ef4cc08187d39ec7dff7fa30928880cc329adce86a18f7eb884e808e1d83f",
     "docs/STATUS.md": "560e05f0babed6b81a959dba4719f31c41422b63a77f77f22874ba20b21dfb94",
     "docs/TAILORING_CORPUS_SPEC.md": "99ff08e0c3f912c5f5263d7bc4b0e3c337374c1c1e9de0541011fe4f324fa10e",
@@ -123,6 +123,7 @@
     "notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md": "9029aadad832b8afa7c245a853c32dd16fcb2accad54c9ffcdc61e2927f90861",
     "notebook/2026-08-18-the-rewrite-round-eleven-of-twelve-and-one-retirement.md": "d147fe27d4a82d5c14370d47cc7a4d460a5b0b672bafbadfd2d10b7318fc91ec",
     "notebook/2026-08-19-five-venues-closed-and-what-that-is-evidence-of.md": "7456f7f8aea21546481d0d8c32d31ded44158790fdb652e0c859514b44c2a690",
+    "notebook/2026-08-19-h1-pass-two-five-authored-one-clean.md": "1fb75db7260b95654e57ee6881b1153b226954bb6fa6fbec8bb5a26b4a2cc729",
     "notebook/2026-08-19-n7-four-of-five-predictions-wrong-and-a-band-i-substituted.md": "b388eb598870344b7d206dbbd2588e91dcbfb196366b51b8da3ae59d86e3c11e",
     "notebook/2026-08-19-n9-the-in-situ-arm-refused-to-answer-in-json.md": "210a727c16bf4ed61e8c063691bc43c021a1e3a85c355fb7bdd82fd49c75af9f",
     "notebook/2026-08-19-prediction-n9-does-position-move-firing.md": "5b50d58069b3fa2bb8c7629f4481e49f90efbefa88b96dc041350859205a832e",
