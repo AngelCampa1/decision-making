@@ -30,18 +30,21 @@ does not work*, and [`SCORECARD.md`](SCORECARD.md) exists to keep those apart.
 
 ## The skill
 
-One skill, `decision-making`, that routes to one of four procedures depending on
+One skill, `decision-making`, that routes to one of six procedures depending on
 what is actually hard about the decision — and reads only that one.
 
 | What is hard | Procedure | What it produces |
 | --- | --- | --- |
-| A pile of context arrived and it is unclear what the answer turns on | [`ledger.md`](skills/decision-making/ledger.md) | what bears on it, what was set aside, and why |
+| A pile of context arrived and it is unclear which fact decides it — the choice itself, not what acting on it would set off | [`ledger.md`](skills/decision-making/ledger.md) | what bears on it, what was set aside, and why |
 | The advice may be generically right and wrong for this person | [`fit.md`](skills/decision-making/fit.md) | the generic answer, and the facts that would overturn it |
 | The action looks fine and the worry is what it starts, or what it spends | [`cascade.md`](skills/decision-making/cascade.md) | the chain, what it forecloses, and the order |
 | The direction is settled and the question is when | [`timing.md`](skills/decision-making/timing.md) | the undo price, the real deadline, what waiting buys |
+| Several positions are each defensible, and whichever was argued first has the advantage | [`council.md`](skills/decision-making/council.md) | the case for each, argued fairly, and which one survives |
+| Something needed to answer is missing, and it is unclear whether asking for it is worth the wait | [`hinge.md`](skills/decision-making/hinge.md) | which gaps would change the answer, and the answer now or the one question to ask |
 
-Where more than one applies they run in the order **ledger → fit → cascade →
-timing**, because each supplies an input to the next. A fifth file,
+Where more than one of those four applies they run in the order **ledger → fit
+→ cascade → timing**, because each supplies an input to the next. `council.md`
+and `hinge.md` are not in that chain; each runs alone. A seventh file,
 [`placebo.md`](skills/decision-making/placebo.md), is the token- and
 structure-matched control arm; it ships alongside because a skill that only
 beats nothing has not been measured against the thing that would fake it.

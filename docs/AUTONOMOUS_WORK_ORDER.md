@@ -296,6 +296,17 @@ A gate on evidence is not a gate on a person.
   --bless` and the diff belongs in review.
 - **Report what happened, not what was attempted.** If a step was skipped, say
   which and why. If tests fail, quote the output.
+- **Never `git stash` in this working tree, and never as a sub-agent.** The tree
+  is shared by several concurrent sessions, so a stash is not scoped to the
+  files you are working on — it takes everyone's uncommitted work with it and
+  hands it back only if the pop succeeds. On 2026-08-19 a sub-agent stashed the
+  whole tree to diff its four files against a clean checkout, while three other
+  sessions had uncommitted edits to `docs/`, `skills/` and `results/` in it. It
+  popped cleanly and nothing was lost, and it self-reported, which is the only
+  reason this is a note rather than a recovery. **`git show HEAD:<path>` and
+  `git diff -- <path>` answer the same question and touch nothing.** The risk is
+  not that stash is broken — it is that its blast radius is the tree and the
+  reason to reach for it is always a single file.
 
 ## As you go
 

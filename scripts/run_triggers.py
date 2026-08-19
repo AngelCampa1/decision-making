@@ -96,12 +96,12 @@ from decision_evals.trigger_arms import (  # noqa: E402
     summarise_by_band,
 )
 from decision_evals.triggers import (  # noqa: E402
-    PROCEDURES,
     TRIGGERS_DIR,
     TriggerCase,
     TriggerSet,
     Verdict,
     decision,
+    default_procedures,
     evaluate,
     evaluate_routing,
     load_trigger_set,
@@ -116,6 +116,22 @@ from decision_evals.unbundle import (  # noqa: E402
     entries_grouped,
 )
 
+#: The procedure names from the shipped skill's own router table, as the
+#: ``"name"|"name"|...`` fragment the JSON contract below shows the model.
+#: Built from :func:`~decision_evals.triggers.default_procedures` rather than
+#: listed here, so a procedure added to or removed from the router table
+#: changes what the judge is offered without this file being edited.
+#:
+#: Read at import: unlike ``default_procedures`` inside ``triggers.py`` (which
+#: resolves lazily precisely because it is imported by nearly everything in
+#: the package), ``SYSTEM`` and ``SYSTEM_CONFIDENCE`` below are module-level
+#: strings this script's tests read as data (``runner.SYSTEM``), so they must
+#: exist as values rather than calls -- and this script is never imported for
+#: anything but running or testing itself, so the narrower blast radius is
+#: acceptable here in a way it is not for ``triggers.py``.
+_PROCEDURE_SCHEMA = "|".join(f'"{name}"' for name in default_procedures())
+_N_PROCEDURES = len(default_procedures())
+
 #: The judge sees the skill's own description and router table and nothing else.
 #: Not the procedure bodies: what the harness has in context when it decides
 #: whether to fire is the frontmatter description, and giving it more would
@@ -124,10 +140,10 @@ SYSTEM = (
     "You decide whether a tool should be used. You are given one tool's "
     "description and one message a user sent. Answer with a single line of "
     "JSON and nothing else:\n"
-    '{"fire": true|false, "procedure": "ledger"|"fit"|"cascade"|"timing"|null}\n'
+    f'{{"fire": true|false, "procedure": {_PROCEDURE_SCHEMA}|null}}\n'
     "`fire` is whether this tool should be invoked for this message. "
-    "`procedure` is which of the tool's four procedures applies, or null if you "
-    "would not invoke it or cannot tell."
+    f"`procedure` is which of the tool's {_N_PROCEDURES} procedures applies, or "
+    "null if you would not invoke it or cannot tell."
 )
 
 #: The same task with a probability attached. Track K6 ranks *elicited
@@ -156,18 +172,18 @@ SYSTEM_CONFIDENCE = (
     "You decide whether a tool should be used. You are given one tool's "
     "description and one message a user sent. Answer with a single line of "
     "JSON and nothing else:\n"
-    '{"fire": true|false, "procedure": "ledger"|"fit"|"cascade"|"timing"|null, '
+    f'{{"fire": true|false, "procedure": {_PROCEDURE_SCHEMA}|null, '
     '"p_fire": 0.0}\n'
     "`fire` is whether this tool should be invoked for this message. "
-    "`procedure` is which of the tool's four procedures applies, or null if you "
-    "would not invoke it or cannot tell. "
+    f"`procedure` is which of the tool's {_N_PROCEDURES} procedures applies, or "
+    "null if you would not invoke it or cannot tell. "
     "`p_fire` is your probability between 0 and 1 that this tool should be "
     "invoked -- not how confident you are in your own answer. Use the full range: "
     "0.5 means genuinely undecided, and a well-calibrated 0.7 is right about "
     "seven times in ten."
 )
 
-#: Track M4's other arm: the same four procedures presented as **four separate
+#: Track M4's other arm: the shipped procedures presented as **separate
 #: tools** rather than one tool with a router.
 #:
 #: The task is deliberately the same shape — fire or do not, and name which — so
@@ -209,7 +225,7 @@ def ask(
     case: TriggerCase,
     model: str,
     system: str,
-    allowed: tuple[str, ...] = PROCEDURES,
+    allowed: tuple[str, ...] | None = None,
     *,
     in_situ: bool = False,
 ) -> tuple[Verdict, str]:
@@ -219,6 +235,10 @@ def ask(
     whitelist discarded every answer in a 365-call run and the records kept
     nothing to recover from — the run had to be repeated. ``ShardedRecord`` had
     already learned this and says so in its own docstring; this runner had not.
+
+    ``allowed`` defaults to ``None``, which :func:`~decision_evals.triggers.decision`
+    resolves to :func:`~decision_evals.triggers.default_procedures` itself --
+    the shipped skill's own procedures, not a list copied here.
 
     ``in_situ`` is Track N9's venue switch. ``Conversation`` already threads it
     to ``build_command``, which sends ``--append-system-prompt`` instead of
@@ -302,7 +322,7 @@ def collect(
             for index, case in enumerate(cases):
                 if (case.id, repeat) in done:
                     continue
-                allowed = tuple(entry_names) if entry_names else PROCEDURES
+                allowed = tuple(entry_names) if entry_names else default_procedures()
                 try:
                     (fired, procedure, p_fire), raw = ask(
                         description, case, model, system, allowed, in_situ=in_situ

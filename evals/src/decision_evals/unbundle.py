@@ -47,9 +47,19 @@ _ROW: Final = re.compile(
 )
 
 #: The first sentence of the bundle description, which states *when to use it at
-#: all*. Shared by all four arms because it is the part that is not about which
+#: all*. Shared by every arm because it is the part that is not about which
 #: procedure applies.
-_OPENER_END: Final = "Routes to one of four"
+#:
+#: Deliberately does not include the number word ("four", "six", ...). The
+#: 2026-08-19 SKILL.md edit that added `council` and `hinge` turned "Routes to
+#: one of four" into "Routes to one of six" and broke this marker outright --
+#: hard-coding "six" here would only move the fragility to the next procedure
+#: added or removed. The split only needs to find where this sentence ends;
+#: the text on either side of the count is stable, so the count is the one
+#: thing dropped. It cannot be read from `router_rows(body)` instead, because
+#: `shared_scope` takes only the description, not the body -- the fix is to
+#: stop needing the count, not to plumb it through a second parameter.
+_OPENER_END: Final = "Routes to one of"
 
 #: The exclusions, which are also not about which procedure applies.
 _EXCLUSIONS_START: Final = "Do not use for"
@@ -123,7 +133,7 @@ def shared_scope(description: str) -> tuple[str, str]:
 #: skill-variant axis this repository can currently power: firing has 73 items
 #: and is stable across repeats, where routing has 14 and cannot reject.
 #:
-#: Subtraction, not rewriting, for the same reason `four_arm` derives rather than
+#: Subtraction, not rewriting, for the same reason `full_arm` derives rather than
 #: authors. Three variants each removing one named part answers *what does that
 #: part buy* — three fresh descriptions would answer *which prose did I like*.
 #: L5's arms. Each deletes a named part of the shipped description and adds
@@ -206,8 +216,18 @@ def description_variant(description: str, variant: str) -> str:
     return f"{middle} {exclusions}".strip()
 
 
-def four_arm(description: str, body: str) -> dict[str, str]:
-    """Name-to-description for the unbundled arm.
+def full_arm(description: str, body: str) -> dict[str, str]:
+    """Name-to-description for the fully unbundled arm: one entry per router row.
+
+    Named ``full`` rather than after a row count on purpose -- it was
+    ``four_arm`` for as long as the router table had four rows. The
+    2026-08-19 SKILL.md edit that added `council` and `hinge` made that name
+    wrong while changing nothing about what the function does: it never
+    counted to four, it always called ``entries`` with ``n`` set to
+    ``len(router_rows(body))``. Only the name lagged the mechanism. Fixed the
+    same way as the ``_OPENER_END`` marker above: by removing the number
+    rather than updating it, so the next procedure added or removed does not
+    repeat this.
 
     Args:
         description: the bundle's ``description`` frontmatter field.

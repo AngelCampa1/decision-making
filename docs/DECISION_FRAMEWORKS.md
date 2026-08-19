@@ -20,8 +20,14 @@ while self-generated ones came in at roughly zero or negative
 ([arXiv:2602.12670](https://arxiv.org/abs/2602.12670)).
 
 So this document does two jobs. It catalogues what the decision literature
-actually supports, and it audits the four procedures already shipped against
-that catalogue. The audit's finding is at the bottom and it is mixed.
+actually supports, and it audits the four procedures shipped at the time
+against that catalogue. The audit's finding is at the bottom and it is mixed.
+
+**Two more procedures shipped on 2026-08-19 — `council.md` and `hinge.md` —
+and this audit does not cover them.** It ran against the four that existed when
+it was written and has not been rerun. A future pass should either trace each
+new procedure to a named mechanism in the catalogue below or mark it invented,
+rather than inheriting a verdict from an audit that never saw it.
 
 ## The rule this document is written under
 

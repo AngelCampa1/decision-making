@@ -46,6 +46,47 @@ def trigger_set() -> TriggerSet:
     return load_trigger_set(CORPUS)
 
 
+# --------------------------------------------------------------------------- #
+# SYSTEM / SYSTEM_CONFIDENCE: the contract must offer every shipped procedure
+# --------------------------------------------------------------------------- #
+
+
+class TestSystemPromptsOfferEveryShippedProcedure:
+    """The router table grew from four rows to six (`council`, `hinge`) on
+    2026-08-19 while these prompts still offered only the original four in
+    their JSON contract. A model routing correctly to either new procedure
+    could not express it, and the old hard-coded whitelist in `triggers.py`
+    would have discarded the answer even if it tried.
+
+    Every test here would fail against the old hard-coded
+    ``'{"fire": true|false, "procedure": "ledger"|"fit"|"cascade"|"timing"|null}'``
+    -- `council` and `hinge` are new to the string, and the count in the prose
+    used to be literally the word "four".
+    """
+
+    def test_system_names_every_procedure_from_the_shipped_router_table(self) -> None:
+        from decision_evals.triggers import default_procedures
+
+        for name in default_procedures():
+            assert f'"{name}"' in runner.SYSTEM
+
+    def test_system_confidence_names_every_procedure_too(self) -> None:
+        from decision_evals.triggers import default_procedures
+
+        for name in default_procedures():
+            assert f'"{name}"' in runner.SYSTEM_CONFIDENCE
+
+    def test_system_prose_does_not_hardcode_the_word_four(self) -> None:
+        assert "four procedures" not in runner.SYSTEM
+        assert "four procedures" not in runner.SYSTEM_CONFIDENCE
+
+    def test_system_prose_states_the_real_count(self) -> None:
+        from decision_evals.triggers import default_procedures
+
+        assert f"{len(default_procedures())} procedures" in runner.SYSTEM
+        assert f"{len(default_procedures())} procedures" in runner.SYSTEM_CONFIDENCE
+
+
 def _case(**overrides: Any) -> TriggerCase:
     defaults: dict[str, Any] = {
         "id": "p1",

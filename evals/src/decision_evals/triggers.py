@@ -20,6 +20,7 @@ import json
 import re
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
@@ -31,9 +32,43 @@ from decision_evals.unbundle import UnbundleError, router_rows
 if TYPE_CHECKING:  # `corpus` imports TriggerSet from here; the cycle is real at runtime.
     from decision_evals.corpus import Finding
 
-#: The four procedures the shipped router offers. The default whitelist for
-#: :func:`decision`; an M5 arm overrides it with its own entry names.
-PROCEDURES: Final = ("ledger", "fit", "cascade", "timing")
+#: Repository root, three levels up from this file
+#: (``evals/src/decision_evals/triggers.py``).
+_REPO_ROOT: Final = Path(__file__).resolve().parents[3]
+
+#: Where the shipped skill's router table lives. :func:`default_procedures`
+#: reads this file rather than a hardcoded list, so a procedure added to or
+#: removed from the table changes the whitelist below with it.
+_SKILL_PATH: Final = _REPO_ROOT / "skills" / "decision-making" / "SKILL.md"
+
+
+@lru_cache(maxsize=1)
+def default_procedures() -> tuple[str, ...]:
+    """The procedure names in the shipped skill's router table.
+
+    The default whitelist for :func:`decision`, and what :func:`routing_is_by_name`
+    checks an arm's offered names against. An M5-style arm overrides both with its
+    own entry names -- this is only the *default*.
+
+    Was a hardcoded ``("ledger", "fit", "cascade", "timing")`` until 2026-08-19,
+    when the router table grew from four rows to six (``council``, ``hinge``)
+    while this list stayed at the original four. A model that correctly routed
+    to one of the two new procedures could not express it -- the JSON contract
+    shown to it did not offer the name -- and if it answered anyway this
+    whitelist would have discarded the answer as unparseable. The run would have
+    completed clean and reported routing accuracy computed over a set that
+    structurally excluded two of six procedures: the same shape as the parser
+    whitelist that discarded every name an n=2 arm could offer
+    (``routing_is_by_name``'s own docstring) and the routing report graded
+    against names an arm never offered -- both on 2026-08-12, both a clean run
+    and a plausible zero.
+
+    Computed from :data:`_SKILL_PATH` lazily and cached rather than at import:
+    importing this module must not fail because the skill file is mid-edit in
+    another session, and most of this module's callers never need the answer.
+    """
+    document = parse_skill(_SKILL_PATH)
+    return tuple(row.name for row in router_rows(document.body))
 
 
 def routing_is_by_name(offered: Iterable[str]) -> bool:
@@ -53,7 +88,7 @@ def routing_is_by_name(offered: Iterable[str]) -> bool:
     count is ``covers`` — did the named entry contain the labelled procedure —
     and its chance level moves with ``n``, so it is not comparable across arms.
     """
-    return all(name in PROCEDURES for name in offered)
+    return all(name in default_procedures() for name in offered)
 
 
 #: How separable a trigger set may be by turn length alone.
@@ -721,7 +756,7 @@ _JSON = re.compile(r"\{[^{}]*\}")
 Verdict = tuple[bool | None, str | None, float | None]
 
 
-def decision(text: str, allowed: tuple[str, ...] = PROCEDURES) -> Verdict:
+def decision(text: str, allowed: tuple[str, ...] | None = None) -> Verdict:
     """Parse the verdict, returning ``(None, None, None)`` when format was ignored.
 
     Unparseable answers are counted and excluded rather than read as "did not
@@ -732,7 +767,15 @@ def decision(text: str, allowed: tuple[str, ...] = PROCEDURES) -> Verdict:
     absence never invalidates the verdict: a run that asked for a probability and
     got a usable decision without one has produced a firing observation and no
     forecast, which is exactly what should be recorded.
+
+    ``allowed`` defaults to :func:`default_procedures` -- resolved here, inside
+    the call, rather than baked into the signature. A default evaluated at
+    function-definition time would read the skill file at import, and this
+    function is imported by nearly everything in the package; a default
+    resolved per call reads it only when a verdict is actually being scored.
     """
+    if allowed is None:
+        allowed = default_procedures()
     match = _JSON.search(text)
     if not match:
         return None, None, None
@@ -743,16 +786,19 @@ def decision(text: str, allowed: tuple[str, ...] = PROCEDURES) -> Verdict:
     fired = payload.get("fire")
     if not isinstance(fired, bool):
         return None, None, None
-    # The four-skill arm names a tool where the one-entry arm names a procedure.
-    # They are the same four strings and the same question, so they land in the
+    # The unbundled arm names a tool where the one-entry arm names a procedure.
+    # They are the same strings and the same question, so they land in the
     # same column and the two arms stay comparable on one metric.
     procedure = payload.get("procedure", payload.get("tool"))
     raw = payload.get("p_fire")
     p_fire = float(raw) if isinstance(raw, int | float) and 0.0 <= raw <= 1.0 else None
     # ``allowed`` is a parameter because the offered names are not always the
-    # four procedures. An M5 arm at n=2 offers ``ledger-fit`` and
+    # shipped procedures. An M5 arm at n=2 offers ``ledger-fit`` and
     # ``cascade-timing``, and a hard-coded whitelist silently nulled all 365 of
     # them on 2026-08-12: the run finished clean, firing was unaffected, and
     # routing read 0.000 because every answer had been discarded rather than
-    # because the model had failed.
+    # because the model had failed. A hard-coded whitelist that simply fell
+    # behind the router table -- rather than being handed the wrong names for
+    # one arm -- is the same failure one layer earlier, caught 2026-08-19
+    # before a run, not after one.
     return fired, procedure if procedure in allowed else None, p_fire

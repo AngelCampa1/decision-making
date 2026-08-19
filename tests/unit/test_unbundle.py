@@ -28,7 +28,7 @@ from decision_evals.unbundle import (
     description_variant,
     entries,
     entries_grouped,
-    four_arm,
+    full_arm,
     router_rows,
     shared_scope,
 )
@@ -97,13 +97,13 @@ class TestSharedScope:
         assert opener == "Use when deciding."
 
 
-class TestFourArm:
+class TestFullArm:
     def test_one_entry_per_row(self) -> None:
-        assert list(four_arm(DESCRIPTION, BODY)) == ["ledger", "fit"]
+        assert list(full_arm(DESCRIPTION, BODY)) == ["ledger", "fit"]
 
     def test_every_arm_carries_the_shared_scope_unchanged(self) -> None:
         opener, exclusions = shared_scope(DESCRIPTION)
-        for text in four_arm(DESCRIPTION, BODY).values():
+        for text in full_arm(DESCRIPTION, BODY).values():
             assert text.startswith(opener)
             assert text.endswith(exclusions)
 
@@ -112,7 +112,7 @@ class TestFourArm:
         opener, exclusions = shared_scope(DESCRIPTION)
         middles = {
             text.removeprefix(opener).removesuffix(exclusions).strip()
-            for text in four_arm(DESCRIPTION, BODY).values()
+            for text in full_arm(DESCRIPTION, BODY).values()
         }
         assert len(middles) == 2
 
@@ -132,21 +132,27 @@ class TestFourArm:
         # declared here rather than hidden -- it is identical across all four
         # arms, so it cannot differentiate them.
         allowed = words(DESCRIPTION + " " + BODY) | {"produces"}
-        for text in four_arm(DESCRIPTION, BODY).values():
+        for text in full_arm(DESCRIPTION, BODY).values():
             assert words(text) <= allowed
 
 
 class TestAgainstTheShippedSkill:
     """These run against the real file, so a skill edit that breaks M4 fails here."""
 
-    def test_the_shipped_bundle_splits_into_four(self) -> None:
+    def test_the_shipped_bundle_splits_one_entry_per_row(self) -> None:
+        """Was ``test_..._splits_into_four`` until the 2026-08-19 SKILL.md edit
+        added `council` and `hinge`, at which point hard-coding the four names
+        would have been exactly the fragility the marker fix above avoids.
+        Checked against `router_rows` instead, so a future row added or
+        removed moves both sides of this assertion together.
+        """
         document = parse_skill(SHIPPED)
-        arms = four_arm(str(document.frontmatter["description"]), document.body)
-        assert set(arms) == {"ledger", "fit", "cascade", "timing"}
+        arms = full_arm(str(document.frontmatter["description"]), document.body)
+        assert set(arms) == {row.name for row in router_rows(document.body)}
 
     def test_each_shipped_arm_is_a_usable_description(self) -> None:
         document = parse_skill(SHIPPED)
-        for name, text in four_arm(str(document.frontmatter["description"]), document.body).items():
+        for name, text in full_arm(str(document.frontmatter["description"]), document.body).items():
             assert 100 < len(text) < 1024, name
 
     def test_a_procedure_composes_its_own_row(self) -> None:
@@ -214,8 +220,8 @@ class TestEntries:
 | The question is when | `timing.md` | the undo price |
 """
 
-    def test_n_equal_to_the_row_count_is_the_four_arm(self) -> None:
-        assert entries(DESCRIPTION, self.FOUR, 4) == four_arm(DESCRIPTION, self.FOUR)
+    def test_n_equal_to_the_row_count_is_the_full_arm(self) -> None:
+        assert entries(DESCRIPTION, self.FOUR, 4) == full_arm(DESCRIPTION, self.FOUR)
 
     def test_n_one_is_a_single_entry_covering_everything(self) -> None:
         out = entries(DESCRIPTION, self.FOUR, 1)
@@ -247,9 +253,13 @@ class TestEntries:
                 assert words(text) <= allowed, n
 
     def test_the_shipped_skill_partitions_at_every_n(self) -> None:
+        """``range(1, 5)`` used to be ``range(1, len(rows) + 1)`` in disguise,
+        back when the table had four rows. Derived from `router_rows` now, so
+        it still covers every valid ``n`` after `council` and `hinge`."""
         document = parse_skill(SHIPPED)
         description = str(document.frontmatter["description"])
-        for n in range(1, 5):
+        row_count = len(router_rows(document.body))
+        for n in range(1, row_count + 1):
             assert len(entries(description, document.body, n)) == n
 
 
@@ -286,20 +296,32 @@ class TestEntriesGrouped:
     partly the collision being hidden. This is how that gets varied.
     """
 
-    SPLIT = (("ledger", "cascade"), ("fit", "timing"))
+    #: Covers all six shipped rows (ledger, fit, cascade, timing, council,
+    #: hinge) and, like the original four-row SPLIT this replaced, keeps
+    #: `cascade` and `timing` -- the pair diagnosed as colliding -- in
+    #: different groups so a confusion between them stays observable.
+    SPLIT = (("ledger", "cascade", "hinge"), ("fit", "timing", "council"))
 
     def test_it_reproduces_the_contiguous_partition(self) -> None:
-        """``entries`` is this function with the grouping table order gives."""
+        """``entries`` is this function with the grouping table order gives.
+
+        The grouping below is `entries(..., 2)`'s own contiguous split of the
+        shipped table's six rows (3 and 3), written out by hand so the two
+        code paths are checked against each other rather than against
+        themselves.
+        """
         document = parse_skill(SHIPPED)
         description = str(document.frontmatter["description"])
         assert entries(description, document.body, 2) == entries_grouped(
-            description, document.body, (("ledger", "fit"), ("cascade", "timing"))
+            description,
+            document.body,
+            (("ledger", "fit", "cascade"), ("timing", "council", "hinge")),
         )
 
     def test_an_alternative_pairing_uses_the_same_words(self) -> None:
         """The manipulation is the grouping and nothing else.
 
-        Both arms are the same four rows merged two ways, so the multiset of
+        Both arms are the same six rows merged two ways, so the multiset of
         words across all entries must be identical. If it ever is not, the arm
         has started varying prose as well as grouping and cannot be read.
         """
@@ -307,7 +329,7 @@ class TestEntriesGrouped:
         description = str(document.frontmatter["description"])
         contiguous = entries(description, document.body, 2)
         split = entries_grouped(description, document.body, self.SPLIT)
-        assert list(split) == ["ledger-cascade", "fit-timing"]
+        assert list(split) == ["ledger-cascade-hinge", "fit-timing-council"]
         assert Counter(_words(contiguous)) == Counter(_words(split))
 
     def test_clause_order_stays_table_order(self) -> None:
@@ -315,7 +337,9 @@ class TestEntriesGrouped:
         document = parse_skill(SHIPPED)
         description = str(document.frontmatter["description"])
         built = entries_grouped(
-            description, document.body, (("timing", "ledger"), ("fit",), ("cascade",))
+            description,
+            document.body,
+            (("timing", "ledger"), ("fit",), ("cascade",), ("council", "hinge")),
         )
         assert "ledger-timing" in built
 

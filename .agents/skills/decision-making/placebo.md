@@ -11,6 +11,8 @@ the difference.
 | A choice they are close to | Steadiness | Not being swept along by their framing |
 | A worry underneath the question | Attention | Noticing what was not quite said |
 | A request for a straight answer | Nerve | Giving one |
+| Two courses they keep alternating between | Even-handedness | Giving the weaker-sounding one a real hearing |
+| A gap they have noticed and not resolved | Judgement | Deciding whether it actually bears on the outcome |
 
 ## Where to begin
 
@@ -31,6 +33,16 @@ been built on.
 
 Equally, do not treat every gap as disqualifying. Most decisions are made
 without complete information and waiting for completeness is its own answer.
+
+Having formed a view, the useful next move is to ask what would have to be true
+for it to be wrong, and then to look for that rather than for more support. The
+second is easier and feels like the same activity. It is not, and the
+difference tends to show up only after the decision has been acted on.
+
+Where the honest answer is that two courses are close, say that they are close.
+A forced ranking between options that genuinely sit level presents a precision
+the situation does not contain, and the person will act on the precision rather
+than on the closeness, which is the part that was true.
 
 ## Saying it well
 

@@ -9,7 +9,6 @@ import yaml
 
 from decision_evals.generators.loader import REPO_ROOT
 from decision_evals.triggers import (
-    PROCEDURES,
     TriggerCase,
     TriggerSet,
     TriggerSetError,
@@ -17,6 +16,7 @@ from decision_evals.triggers import (
     _check_separability,
     check_trigger_sets,
     decision,
+    default_procedures,
     evaluate,
     evaluate_routing,
     length_separability,
@@ -519,6 +519,51 @@ class TestVerdictParsingHonoursTheOfferedNames:
         assert procedure is None
 
 
+class TestDefaultProceduresIsDerivedNotHardcoded:
+    """2026-08-19: the router table grew from four rows to six (`council`,
+    `hinge`) while `PROCEDURES` stayed a hardcoded four-tuple. A model that
+    correctly routed to either new procedure could not express it in the JSON
+    contract, and if it named one anyway the old whitelist would have silently
+    discarded the answer -- a clean run reporting routing accuracy computed
+    over a set that structurally excluded two of six procedures.
+
+    Every test here would have failed against the old
+    ``PROCEDURES: Final = ("ledger", "fit", "cascade", "timing")``.
+    """
+
+    def test_default_procedures_has_all_six_shipped_rows(self) -> None:
+        assert default_procedures() == (
+            "ledger",
+            "fit",
+            "cascade",
+            "timing",
+            "council",
+            "hinge",
+        )
+
+    def test_default_procedures_agrees_with_an_independent_parse_of_the_router_table(
+        self,
+    ) -> None:
+        """Re-derives the answer a second way, rather than trusting the cache."""
+        from decision_evals.skills import parse_skill
+        from decision_evals.unbundle import router_rows
+
+        skill_path = REPO_ROOT / "skills" / "decision-making" / "SKILL.md"
+        rows = router_rows(parse_skill(skill_path).body)
+        assert default_procedures() == tuple(row.name for row in rows)
+
+    def test_council_is_not_silently_discarded(self) -> None:
+        """The concrete failure: an offered new-procedure answer used to vanish."""
+        assert decision('{"fire": true, "procedure": "council"}') == (True, "council", None)
+
+    def test_hinge_is_not_silently_discarded(self) -> None:
+        assert decision('{"fire": true, "procedure": "hinge"}') == (True, "hinge", None)
+
+    def test_a_name_the_skill_genuinely_does_not_offer_is_still_dropped(self) -> None:
+        """The whitelist still whitelists -- it is derived, not removed."""
+        assert decision('{"fire": true, "procedure": "premortem"}') == (True, None, None)
+
+
 class TestRoutingIsByName:
     """The same defect one layer out, found scoring M5 on 2026-08-12.
 
@@ -531,7 +576,7 @@ class TestRoutingIsByName:
     """
 
     def test_the_shipped_procedure_names_are_gradeable_by_name(self) -> None:
-        assert routing_is_by_name(PROCEDURES)
+        assert routing_is_by_name(default_procedures())
 
     def test_a_four_entry_arm_is_gradeable_by_name(self) -> None:
         """n=4 partitions one procedure per entry, so the names coincide."""
@@ -539,6 +584,22 @@ class TestRoutingIsByName:
 
     def test_a_two_entry_arm_is_not(self) -> None:
         assert not routing_is_by_name(("ledger-fit", "cascade-timing"))
+
+    def test_a_real_n2_arm_built_from_the_shipped_six_row_table_is_not_gradeable(
+        self,
+    ) -> None:
+        """Runs the same falsifier as above against the real table, not a
+        stand-in tuple, so a table edit that reshuffles names cannot leave
+        this test passing for the wrong reason.
+        """
+        from decision_evals.skills import parse_skill
+        from decision_evals.unbundle import entries
+
+        skill_path = REPO_ROOT / "skills" / "decision-making" / "SKILL.md"
+        document = parse_skill(skill_path)
+        description = str(document.frontmatter["description"])
+        entry_names = entries(description, document.body, 2)
+        assert not routing_is_by_name(entry_names)
 
     def test_one_unmatchable_name_is_enough(self) -> None:
         """A partition need not be uniform; any merged entry voids the measure."""

@@ -14,17 +14,26 @@ skill* and is empty on purpose.
 
 ## The one-line version
 
-**Seven results are in, ten measurements were caught being broken, no skill
+**Eleven results are in, eleven measurements were caught being broken, no skill
 has been evaluated end-to-end — and the instrument that produced every trigger
 result was solvable at 0.890 by counting words, which is
 [Track N](RESEARCH_PROGRAMME.md) and is now rebuilt: the best shortcut on the
-261-item corpus is a stump at 0.701 against a 0.667 baseline, a lift of 0.034.**
+**258**-item corpus is a stump at **0.7054** against a 0.6667 baseline, a lift
+of **0.0387**. One of the eleven, **N9, is void** and answers nothing.**
 
 *The counts above read "six" and "five" until 2026-08-13, and "eight" until
 2026-08-14, each time because the tables below had already grown past them. A
 summary line that is not recomputed from the table under it is a hand-maintained
 number like any other — and it has now drifted twice, which says the lesson was
 recorded and not learned.*
+
+*Drifted a third time, corrected 2026-08-19. It read "seven" while the table
+below had gained N5, N6 and N7 — three published runs that were in
+`results/` and not in the ledger. The corpus figures in the same sentence
+were stale by one revision: 261 items and a 0.701 stump are the **pre-shrink**
+numbers, from before `l15` was retired. On v4 the stump is 0.7054 against
+0.6667. Three drifts now, all of the same shape, and the count has never once
+been wrong in the direction of claiming less than the tables held.*
 
 ---
 
@@ -91,6 +100,10 @@ therefore **~4,816**, not ~4,600. See
 | **Track I** | how many repeats are needed? | ICC 0.83–0.85. **Two, not five.** Cut every later arm by 60%. |
 | **Track K** | does the decision literature support any of this? | 4 of 11 popular frameworks have **no located controlled evaluation**. Patient decision aids have 209 RCTs. LLM assistance moves process measures and did not move the one outcome measure tested. |
 | **L7** | can the description be eager without deleting the parts that work? | **Showing beat naming.** `stakes-shown` reaches **FPR 0.000 / recall 0.912 / precision 1.000** and **dominates `no-opener` on both axes** — the first Pareto improvement of one arm over another here. The two openers are not distinguishable (p = 0.257). Band 4, the experiment, failed: **the precision/recall frontier is intact after seven arms.** Band 6 passed against expectation — both stakes openers score 0/2 on tabs-vs-spaces while `opener-only` fires 5/5, so the criterion reads content and not sentence shape. |
+| **N5** | are the generated turns realistic? | **Descriptive only, and the registered prediction failed.** `composed` 0.302 [0.215, 0.406] against a registered >0.50. Band is **perfectly confounded with em/en-dash presence** — all 38 `l`/`xl` items carry one, none of the 48 `s`/`m` items do — so band and punctuation cannot be told apart here. |
+| **N6** | do the description findings survive the rebuilt corpus? | **Three of four bands met, Q4 falsified.** Q1 +0.0976 [0.0459, 0.1493]; `ledger` worst-routed in all three arms; `settled` is at the **bottom** of the routing table, not the top as registered. `opener-only`'s pooled FPR 0.250 is one band coming apart (`l` 0.524). Triple ICC **0.00–0.06** against the 0.315 the power arithmetic assumed, so that planning figure may not be reused. |
+| **N7** | which description arm is best, all six on one corpus? | **One of five predictions met cleanly, and the top three arms are indistinguishable** — `no-opener` 0.9496, `stakes-shown` 0.9477, `full` 0.9360, p = 0.86 and p = 0.35. L7's precision/recall frontier is **intact after ten arms**. A pre-registration defect is recorded against this run. |
+| **N9** | does the venue move firing? | **Void — no answer.** 516 calls made and refused on parse rate, no prediction scored. Reported here so the row is not mistaken for unrun. What broke is described in [the run record](../results/decision-making/2026-08-19-505b236-n9-in-situ-void/README.md) and is exploratory. |
 
 **The through-line:** five independent manipulations of a skill description —
 structure, content, count, composition twice — and **not one moved how well it
@@ -156,6 +169,7 @@ statistic, used by every gate since the corpus was designed.
 
 | defect | what it read | what was true |
 |---|---|---|
+| **the parse-rate gate reads repeat 0 only** | `run_triggers.py:918` prints one parse rate and voids the run on it, described everywhere as the run's parse rate | `row = done.get((case.id, 0))` — the gate never looks at repeat 1. On N9 that is 0.8566 against an aggregate of 0.8643; both are below the floor so the disposition held **by luck**. A run whose repeat 0 cleared 0.90 while repeat 1 dragged the aggregate under would exit zero and publish. Found by adversarial review 2026-08-19, recorded, **not fixed** |
 | **pooled AUC used on a matched corpus** | `word_count` at 0.517, "as clean as this battery can print" | the matched within-triple statistic read 0.660 at 3.24 null SE. A pooled AUC ranks positives against negatives from *other* triples, where body variation swamps the ask, so it is structurally blind to a rank held inside a triple — two-thirds of its comparisons are between items sharing nothing |
 | `_shared_body` cut the common prefix back to the last **space**, and bodies end in a **newline** | opener features constant within every triple, reading exactly **0.500** | the body's final word leaked into every derived `ask` and became its first "sentence". Fifth inert-estimator instance, and it was in the module whose job is hunting inert estimators |
 
@@ -368,11 +382,11 @@ for personal information, digest pinned — in
 |---|---|
 | **0** — instrument (transport) | ✅ done |
 | **I** — reliability | ✅ done |
-| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 done** — all items blind-adjudicated, and the 12 disputes resolved 2026-08-18 by rewriting the asks rather than moving labels: 11 of 12 now agree with the key, `l15` retired, corpus at **258 items / 86 triples**, movement 0.004, no label moved — the answer key nonetheless moved **3 → 4** later the same day, because version 3 had named four different corpora and N6 would have been the first run ever to stamp it; N4 rerouted to a public human-written source and [surveyed](../notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md) — 4 of 8 candidates clear the redistribution bar, LMSYS-Chat-1M and ShareGPT are killed by it, and nothing may be fetched until the chosen source's licence is read directly, **N5's 10% human audit retired 2026-08-18** — its sheet was a self-assessment by the corpus's own author, still addressed to 120 items at key v3, and a forced choice against N4's human turns **will** replace it once N4's source is fetched, which it has not been; **N5's descriptive probe ran the same day for the first time** — 86 calls, `composed` 0.302 [0.215, 0.406], the registered >0.50 prediction falsified, and band inseparable from em-dash presence, **N6 done 2026-08-18** — 1,548 calls, 0 unparseable, three of four registered bands met and Q4 falsified in all three arms; `opener-only`'s pooled FPR of 0.250 is one band coming apart (`l` 0.524). The triple ICC is 0.00–0.06 against the 0.315 the power arithmetic assumed, so that planning figure may not be reused. **N7 done 2026-08-19** — 1,548 calls, 0 unparseable, all six description arms now on one corpus at one key and tier. One of five predictions met cleanly; the top three arms are statistically indistinguishable, and L7's precision/recall frontier is intact after ten arms. A pre-registration defect is recorded against this run: prediction 5 re-derived L7's band-4 thresholds from N6's observed numbers while citing L7, which flipped the verdict. **N9** (proxy validation — the description appended rather than substituted) was added to the programme on 2026-08-18 and has not run. Blocks every future L and M claim and retro-qualifies every past one. |
+| **N** — the trigger corpus | 🟡 **started.** N1 shortcut battery done; **N2 done** — grown by two merges to 87 triples, 261 items (S 24, M 24, L 22, XL 17); **N8 done** — the model tier is in the record and a comparison spanning tiers is refused; **N3 done** — all items blind-adjudicated, and the 12 disputes resolved 2026-08-18 by rewriting the asks rather than moving labels: 11 of 12 now agree with the key, `l15` retired, corpus at **258 items / 86 triples**, movement 0.004, no label moved — the answer key nonetheless moved **3 → 4** later the same day, because version 3 had named four different corpora and N6 would have been the first run ever to stamp it; N4 rerouted to a public human-written source and [surveyed](../notebook/2026-08-18-n4-the-licence-survey-and-what-it-could-not-verify.md) — 4 of 8 candidates clear the redistribution bar, LMSYS-Chat-1M and ShareGPT are killed by it, and nothing may be fetched until the chosen source's licence is read directly, **N5's 10% human audit retired 2026-08-18** — its sheet was a self-assessment by the corpus's own author, still addressed to 120 items at key v3, and a forced choice against N4's human turns **will** replace it once N4's source is fetched, which it has not been; **N5's descriptive probe ran the same day for the first time** — 86 calls, `composed` 0.302 [0.215, 0.406], the registered >0.50 prediction falsified, and band inseparable from em-dash presence, **N6 done 2026-08-18** — 1,548 calls, 0 unparseable, three of four registered bands met and Q4 falsified in all three arms; `opener-only`'s pooled FPR of 0.250 is one band coming apart (`l` 0.524). The triple ICC is 0.00–0.06 against the 0.315 the power arithmetic assumed, so that planning figure may not be reused. **N7 done 2026-08-19** — 1,548 calls, 0 unparseable, all six description arms now on one corpus at one key and tier. One of five predictions met cleanly; the top three arms are statistically indistinguishable, and L7's precision/recall frontier is intact after ten arms. A pre-registration defect is recorded against this run: prediction 5 re-derived L7's band-4 thresholds from N6's observed numbers while citing L7, which flipped the verdict. **N9 ran 2026-08-19 and is void** — 516 calls refused on parse rate, no prediction scored; the first registered void condition here to actually fire. The 70 unparseable responses carry no `"fire"` key and no JSON at all: they are the model answering as Claude Code. Parse rate is **two clusters, not a gradient** — `technical`/`money`/`career` 0.9135 against `relationships`/`health` 0.7892, Fisher p = 0.00011 — and identity-refusal language never appears in `technical` or `career`. **An adversarial review found the gate reads repeat 0 only**, so it graded this run on half its calls; the disposition survives because every reading is below every floor, which is luck rather than verification. So the harness still has **no measurement of how the shipped description behaves in the venue anybody uses**, and closing that needs a new arm and a new pre-registration. Blocks every future L and M claim and retro-qualifies every past one. |
 | **K** — frameworks review | 🟡 three passes; K4 waits on Track A |
 | **M** — skill design | 🟡 M1–M6b done; M3 has no estimator on a merged arm; **all of it now carries the Track N caveat** |
 | **L** — skill variants | 🟡 L5 and **L7 run**; L7 unpublished; **same Track N caveat** |
-| **S** — ship the skills | 🔴 not started |
+| **S** — ship the skills | 🟡 **started 2026-08-19.** S5 (`council.md`) and S6 (`hinge.md`) written, the last two procedures the founding brief named; S9's router half done — `ledger`'s row retargeted against its confusion pair (`cascade`, 77 records). **The shipped description now enumerates six procedures, which retires all ten description arms as measurements of what ships** — see [`DECISIONS.md`](DECISIONS.md). Nothing here is measured; all of it is `UNTESTED` |
 | **A** — replication | 🔴 A1 closed both families; A2 needs harder items |
 | **B** — attribution | 🔴 not started |
 | **C** — evidence aggregation | 🔴 not started |

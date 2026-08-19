@@ -192,5 +192,12 @@ number computed before the change incomparable with every number after it.
   cannot run until a human-written comparison source clears the outside-data
   rule. Target and status are both now 0, and the honest reading is that this
   limitation got *more* open, not less.
+- **And the source survey that exists does not serve this corpus.** The eight
+  candidates surveyed on 2026-08-18 are conversational corpora, chosen for
+  Track N4, which wants human *turns* for the trigger corpus. This corpus needs
+  human *word problems*, and **no candidate for that has been surveyed, read or
+  cleared.** The two needs had been read as one; they are not. Recorded
+  2026-08-19 in
+  [`notebook/2026-08-19-two-realism-gaps-and-one-survey.md`](../notebook/2026-08-19-two-realism-gaps-and-one-survey.md).
 - **Single author, single session, ten templates.** Idiom and structure are
   correlated across the corpus in ways that are hard to see from inside it.

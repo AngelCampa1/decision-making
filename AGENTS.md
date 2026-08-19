@@ -81,9 +81,10 @@ though it reached down to four.
 - **decision-making** — when someone is trying to decide something and wants help
   deciding it: "help me think this through", "should I take it", "what would you
   do", or a pile of context ending in a question about what to do. It routes to
-  one of four procedures depending on what is actually hard — too much context,
-  advice that may not fit this person, downstream consequences, or timing — and
-  reads only that one. Skip it for lookups, for creative or exploratory work, and
+  one of six procedures depending on what is actually hard — too much context,
+  advice that may not fit this person, downstream consequences, timing, several
+  positions that are each defensible, or a missing fact that may or may not
+  matter — and reads only that one. Skip it for lookups, for creative or exploratory work, and
   when the person wants information rather than a recommendation.
 
 One entry, not four. Four separate decision skills would have four descriptions
@@ -134,7 +135,7 @@ Claude-specific keys live in the plugin overlay.
 ## What is actually proven
 
 **Nothing yet.** `decision-making` carries `verdict: UNTESTED` and ships as
-`experimental`, and so do all four procedures inside it. See
+`experimental`, and so do all six procedures inside it. See
 [`SCORECARD.md`](SCORECARD.md) for the verdict vocabulary and what each one
 licenses you to claim.
 
@@ -317,6 +318,45 @@ If you are an agent contributing here rather than a user installing the skills:
   removed a file necessarily names the file it removed. Do not "fix" a stale
   reference in any of them. Deliberately absent commands go in
   `[tool.decision-evals.docs-absent-commands]`, which may only shrink.
+- **Prose a human reads goes through the `humanizer` skill before it is
+  committed.** `README.md` is the case that names the rule and it is not the only
+  one: `CONTRIBUTING.md`, `SCORECARD.md` and the living documents under `docs/` are
+  read by people deciding whether to trust this repository, and until 2026-08-19 not
+  one of them had ever been through a writing pass. **Nothing checks this.** The
+  documentation gate reads whether a reference resolves, never whether the sentence
+  around it is worth reading, and `evals/src/decision_evals/docs.py` refuses to grow
+  into a prose linter on purpose — "a gate that flags prose becomes noise, and noise
+  is what an advisory gate becomes before somebody turns it off". So this one is on
+  you.
+
+  `third-grade-copy` does **not** apply here. The writing rule one directory up
+  pairs the two for marketing copy and exempts technical docs; these are technical
+  docs, and a third-grade reading level would strip the precision they exist to
+  carry.
+
+  Three things the pass may never do, each because something breaks:
+
+  - **Change a number, a confidence interval, a p-value, an arXiv identifier or a
+    quoted sentence.** The citation gate resolves identifiers against
+    `paper/refs.bib` per markdown *block*, so rewrapping alone can move a claim
+    number into a block with an identifier that has no `quote` field behind it.
+  - **Delete a correction-in-place.** Humanizer's diff-anchored-writing pattern says
+    a document should describe what is rather than narrate what changed. Here the
+    narration is load-bearing: `[tool.decision-evals.docs-absent-commands]` refuses
+    an entry named nowhere in the documentation, and `screen`, `confirm` and
+    `report` are named nowhere except the paragraphs correcting the claim that they
+    existed. Cutting those paragraphs fails `de check`.
+  - **Flatten a hedge that carries epistemic status.** *"We have not shown this
+    works"* is not the same statement as *"this does not work"*, and keeping those
+    apart is the whole job. Collapse stacked hedges; leave the load-bearing one.
+
+  Excluded, and it is the list that appears everywhere else in this file.
+  `notebook/`, `results/`, `docs/DECISIONS.md` and `docs/STATUS.md` are dated
+  records, and a record rewritten for style is a record destroyed. `AGENTS.md`,
+  `CLAUDE.md` and `docs/AUTONOMOUS_WORK_ORDER.md` are agent instructions rather
+  than human prose, and this file additionally carries the skill description that
+  Tracks L, M and N are measured on — rewriting it would make every published
+  number incomparable.
 - **A published run updates `docs/STATUS.md` in the same change.** It is the
   ledger and it is hand-maintained, so it is the one file that drifts silently:
   on 2026-08-13 its summary line read "six results, five measurements" while the
