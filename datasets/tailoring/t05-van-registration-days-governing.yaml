@@ -1,0 +1,63 @@
+# Track H triplet t05, arm: governing. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t05
+arm: governing
+domain: vehicle_registration
+elicited:
+  question: days from today until the van may legally be driven on the road
+  unit: days
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Bartholomew Enescu-Adeyemi. I have imported a 1974 Dorlan panel van
+  into Ardenshire and it cleared customs on 2026-08-12. It cannot go on the
+  road until it carries an Ardenshire registration.
+
+  Where things stand:
+
+  - Registration is issued exactly seven days after a roadworthiness pass,
+    and the van may be driven from the day it is issued.
+  - Roadworthiness testing is done by Trellick Testing. The first free slot
+    when I booked was 2026-09-09, and that is the one I hold.
+  - A vehicle first registered from 1980 onwards must also carry a pass from
+    Sarnhow Emissions, which is a separate body on a separate site.
+  - My insurance has been in force since 2026-08-19.
+  - The van is mechanically sound and the previous owner kept a full service
+    record for it.
+  - Storage at the port costs me nothing until the end of the year.
+  - Trellick Testing has offered me an earlier roadworthiness slot on
+    2026-08-26.
+
+  Question: how many days from today until the van may legally be driven on
+  the road? Answer with a single number of days.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Trellick Testing has offered me an earlier roadworthiness slot on
+    2026-08-26.
+  governs: true
+  expected_direction: down
+  expected_value: 14
+  arithmetic: >-
+    Roadworthiness pass 2026-08-26, registration issued exactly seven days
+    later on 2026-09-02, van drivable that day. 2026-08-19 to 2026-09-02 is
+    14 days. Relative movement (28 - 14) / 28 = 0.500, downward.
+  rounding: >-
+    None required; the unit is days. Tolerance 0.
+  why_it_moves: >-
+    The base makes the roadworthiness pass the only event registration waits
+    on, and registration the only event driving waits on. An earlier
+    roadworthiness date therefore moves the answer by exactly the amount the
+    test moves.
+  professional_one_sentence: >-
+    Registration is seven days after the roadworthiness pass and nothing
+    else, so take the 2026-08-26 slot and you are on the road on 2026-09-02 -
+    fourteen days, not twenty-eight.
+  neutraliser_location: n/a
+meta:
+  personas_invented: true
+  real_personal_data: false

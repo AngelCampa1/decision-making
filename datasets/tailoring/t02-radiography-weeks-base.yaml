@@ -1,0 +1,48 @@
+# Track H triplet t02, arm: base. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t02
+arm: base
+domain: veterinary_credentialing
+elicited:
+  question: weeks from today until she may take radiographs unsupervised
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Sunniva Achterberg-Ruiz, a veterinary nurse at Kettleburn Veterinary
+  Group in Ardenshire. I passed the Ardenshire Veterinary Council's
+  anaesthesia module on 2024-03-13 and hold that certificate to 2031.
+
+  Where things stand:
+
+  - The Council lets a nurse take radiographs with no vet in the room once
+    she holds an accepted exposure log and a pass in the radiation-safety
+    module. Those two things are the whole of it.
+  - My log of 40 supervised exposures was accepted on 2026-06-30 and stands
+    for two years.
+  - I am booked to sit the radiation-safety module at Ardenshire Hall on
+    2026-09-23.
+  - The Council issues a result exactly one week after a sitting, and a
+    nurse may work unsupervised from the day her result is issued.
+  - Every module is examiner-led and the Council runs each one to its own
+    published calendar.
+  - Kettleburn has a vet on site every day, so nothing here changes what I
+    can do in the meantime.
+
+  Question: how many weeks from today until I may take radiographs
+  unsupervised? Answer with a single number of weeks.
+key:
+  expected_value: 6
+  arithmetic: >-
+    She sits on 2026-09-23 and the result is issued exactly one week later,
+    2026-09-30. 2026-08-19 to 2026-09-30 is 42 days, exactly 6 weeks.
+  rounding: >-
+    None required. Every date in this triplet is an exact multiple of 7 days
+    from 2026-08-19, so all three arms are integral in weeks. Tolerance 0.
+meta:
+  personas_invented: true
+  real_personal_data: false

@@ -1,0 +1,47 @@
+# Track H triplet t03, arm: base. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t03
+arm: base
+domain: research_governance
+elicited:
+  question: weeks from today until participant recruitment can begin
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Nkemdi Oyelaran-Fossey, a doctoral researcher at the Brackwater
+  Institute. My study is a set of interviews with retired ferry crews.
+
+  Where things stand:
+
+  - The Institute's research office issued my sponsor letter on 2026-06-10.
+    A sponsor letter stands for the life of the study it names.
+  - I lodged my application with the Institute's ethics committee on
+    2026-08-05, with the sponsor letter in the bundle.
+  - Once an application is lodged the committee decides on the papers in
+    front of it.
+  - The committee sits monthly and hands down its decision letter at the
+    sitting. Mine is on the agenda for 2026-09-16.
+  - Recruitment may begin the day the committee's decision letter is issued.
+  - The committee and the research office publish separate calendars.
+  - I have twenty-two willing participants already identified through a
+    retired seafarers' association.
+
+  Question: how many weeks from today until I can begin recruiting
+  participants? Answer with a single number of weeks.
+key:
+  expected_value: 4
+  arithmetic: >-
+    The committee sits 2026-09-16 and issues its decision letter at the
+    sitting; recruitment may begin that day. 2026-08-19 to 2026-09-16 is
+    28 days, exactly 4 weeks.
+  rounding: >-
+    None required. Every date in this triplet is an exact multiple of 7 days
+    from 2026-08-19, so all three arms are integral in weeks. Tolerance 0.
+meta:
+  personas_invented: true
+  real_personal_data: false

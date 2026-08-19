@@ -1,0 +1,106 @@
+# Track H triplet t03, arm: matched. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t03
+arm: matched
+domain: research_governance
+elicited:
+  question: weeks from today until participant recruitment can begin
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Nkemdi Oyelaran-Fossey, a doctoral researcher at the Brackwater
+  Institute. My study is a set of interviews with retired ferry crews.
+
+  Where things stand:
+
+  - The Institute's research office issued my sponsor letter on 2026-06-10.
+    A sponsor letter stands for the life of the study it names.
+  - I lodged my application with the Institute's ethics committee on
+    2026-08-05, with the sponsor letter in the bundle.
+  - Once an application is lodged the committee decides on the papers in
+    front of it.
+  - The committee sits monthly and hands down its decision letter at the
+    sitting. Mine is on the agenda for 2026-09-16.
+  - Recruitment may begin the day the committee's decision letter is issued.
+  - The committee and the research office publish separate calendars.
+  - I have twenty-two willing participants already identified through a
+    retired seafarers' association.
+  - The Institute's research office has moved its September sitting to
+    2026-10-21 and will approve nothing before that date.
+
+  Question: how many weeks from today until I can begin recruiting
+  participants? Answer with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    The Institute's research office has moved its September sitting to
+    2026-10-21 and will approve nothing before that date.
+  governs: false
+  expected_direction: none
+  expected_value: 4
+  arithmetic: >-
+    Unchanged from base. The committee still sits 2026-09-16 and recruitment
+    begins that day. 2026-08-19 to 2026-09-16 is 28 days, exactly 4 weeks.
+    Relative movement 0.000.
+  rounding: >-
+    None required; 28 days is an exact multiple of 7. Tolerance 0.
+  why_it_does_not_move: >-
+    The only thing she needed from the research office was the sponsor
+    letter, and the base states it was issued on 2026-06-10, that a sponsor
+    letter stands for the life of the study it names, and that it went into
+    the bundle she lodged on 2026-08-05. The base separately states that once
+    an application is lodged the committee decides on the papers in front of
+    it, so nothing further is asked of the research office, and that the two
+    bodies publish separate calendars.
+  professional_one_sentence: >-
+    Your sponsor letter was issued in June, stands for the life of the study
+    and is already in the bundle, so the research office has nothing left to
+    do and the committee still sits on 2026-09-16.
+  salience_match: >-
+    Same object class (a monthly sitting of a Brackwater Institute body
+    whose output she needs), same surface form (identical sentence skeleton;
+    the two inserts differ in the body name and one date and in nothing
+    else), same magnitude (dates 7 days apart), same alarm ("the Institute
+    body I am waiting on has slipped a month and will approve nothing until
+    late October"), same length (word counts identical, characters within
+    one), same position (final bullet before the question in both), same
+    deontic register (both end on the identical clause "and will approve
+    nothing before that date", so both score one procedural cue and neither
+    scores a penalty cue - the lexicon gap is -1 for both).
+  neutraliser_location: >-
+    base prompt, first bullet, six bullets above the insert point: "The
+    Institute's research office issued my sponsor letter on 2026-06-10. A
+    sponsor letter stands for the life of the study it names." Supported by
+    the third bullet, "Once an application is lodged the committee decides on
+    the papers in front of it." The insert is NOT self-neutralising - it
+    states only that the office has slipped.
+  preconditions_enumerated: >-
+    Every date and gate in the base checked against the matched fact.
+    (1) Does she still need anything from the research office? No - the
+    sponsor letter was issued 2026-06-10 and stands for the life of the
+    study.
+    (2) Could the letter expire or need re-issuing before 2026-09-16? No -
+    "for the life of the study it names", which is unbounded within this
+    prompt.
+    (3) Is the letter still required to be in front of the committee? Yes,
+    and it is - lodged in the bundle on 2026-08-05.
+    (4) Could the committee defer her case because the research office has
+    slipped? No - "once an application is lodged the committee decides on the
+    papers in front of it", and the papers are complete.
+    (5) Do the two bodies share a calendar, so that one slipping moves the
+    other? No - "The committee and the research office publish separate
+    calendars." This is the objection most likely to be pressed, since both
+    inserts use the word "sitting", and it is recorded here rather than
+    hidden.
+    (6) Is recruitment gated on anything other than the decision letter? No -
+    the base names the decision letter as the single start condition.
+    (7) Does participant availability gate anything? No - twenty-two are
+    already identified and the base attaches no date to them.
+meta:
+  personas_invented: true
+  real_personal_data: false

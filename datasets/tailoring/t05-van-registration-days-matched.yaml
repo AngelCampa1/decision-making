@@ -1,0 +1,100 @@
+# Track H triplet t05, arm: matched. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t05
+arm: matched
+domain: vehicle_registration
+elicited:
+  question: days from today until the van may legally be driven on the road
+  unit: days
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Bartholomew Enescu-Adeyemi. I have imported a 1974 Dorlan panel van
+  into Ardenshire and it cleared customs on 2026-08-12. It cannot go on the
+  road until it carries an Ardenshire registration.
+
+  Where things stand:
+
+  - Registration is issued exactly seven days after a roadworthiness pass,
+    and the van may be driven from the day it is issued.
+  - Roadworthiness testing is done by Trellick Testing. The first free slot
+    when I booked was 2026-09-09, and that is the one I hold.
+  - A vehicle first registered from 1980 onwards must also carry a pass from
+    Sarnhow Emissions, which is a separate body on a separate site.
+  - My insurance has been in force since 2026-08-19.
+  - The van is mechanically sound and the previous owner kept a full service
+    record for it.
+  - Storage at the port costs me nothing until the end of the year.
+  - Sarnhow Emissions has offered me an earlier emissions-test slot on
+    2026-08-26.
+
+  Question: how many days from today until the van may legally be driven on
+  the road? Answer with a single number of days.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Sarnhow Emissions has offered me an earlier emissions-test slot on
+    2026-08-26.
+  governs: false
+  expected_direction: none
+  expected_value: 28
+  arithmetic: >-
+    Unchanged from base. Roadworthiness pass stays 2026-09-09, registration
+    2026-09-16, van drivable that day. 2026-08-19 to 2026-09-16 is 28 days.
+    Relative movement 0.000.
+  rounding: >-
+    None required; the unit is days. Tolerance 0.
+  why_it_does_not_move: >-
+    The van needs no emissions test. The base states that a vehicle first
+    registered from 1980 onwards must also carry a Sarnhow pass, and the
+    opening paragraph states the van is a 1974 Dorlan panel van, which is
+    before 1980. An earlier slot for a test he does not need cannot move a
+    registration date that the base ties to the roadworthiness pass alone.
+  professional_one_sentence: >-
+    A 1974 van is outside the from-1980 emissions requirement, so that slot
+    is not yours to take and registration still turns on the 2026-09-09
+    roadworthiness date.
+  salience_match: >-
+    Same object class (an Ardenshire testing body offering an earlier slot
+    for a statutory pre-registration test on the same vehicle), same surface
+    form (identical sentence skeleton: "<body> has offered me an earlier
+    <test> slot on <date>"), same magnitude (the same date in both), same
+    alarm ("a test I have to pass before registering just came free two
+    weeks earlier"), same length (characters within two; the matched insert
+    is one word longer, which offsets t02's one-word gap in the other
+    direction), same position (final bullet before the question in both),
+    same deontic register (neither insert names a consequence and neither
+    names a procedural step; the lexicon gap is 0 for both, and both are
+    offers of an earlier date, so valence is matched too).
+  neutraliser_location: >-
+    Two sentences, both far from the insert point, which is the last bullet.
+    (a) Opening paragraph: "I have imported a 1974 Dorlan panel van into
+    Ardenshire". (b) Third bullet: "A vehicle first registered from 1980
+    onwards must also carry a pass from Sarnhow Emissions, which is a
+    separate body on a separate site." Neither refers to the other and the
+    insert refers to neither. The insert is NOT self-neutralising - it states
+    only that a slot is free.
+  preconditions_enumerated: >-
+    Every date and gate in the base checked against the matched fact.
+    (1) Does the van need an emissions test at all? No - 1974, and the
+    requirement runs from 1980 onwards.
+    (2) Does registration wait on anything but the roadworthiness pass? No -
+    "issued exactly seven days after a roadworthiness pass".
+    (3) Could booking the emissions slot free or block the Trellick slot?
+    No - the base states Sarnhow is a separate body on a separate site.
+    (4) Could the offer be read as evidence that Trellick also has capacity?
+    That is speculation about a body the insert does not name, not a
+    correction a professional would make; recorded rather than hidden.
+    (5) Does insurance gate the answer? No - in force since 2026-08-19, before
+    every date in every arm.
+    (6) Does the customs clearance date gate it? No - 2026-08-12 is past.
+    (7) Direction check: this matched fact can only move a test date earlier,
+    and the test it moves is not on the path, so no reading of it produces a
+    smaller answer.
+meta:
+  personas_invented: true
+  real_personal_data: false

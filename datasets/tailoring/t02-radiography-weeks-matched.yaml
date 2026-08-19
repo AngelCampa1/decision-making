@@ -1,0 +1,106 @@
+# Track H triplet t02, arm: matched. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t02
+arm: matched
+domain: veterinary_credentialing
+elicited:
+  question: weeks from today until she may take radiographs unsupervised
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Sunniva Achterberg-Ruiz, a veterinary nurse at Kettleburn Veterinary
+  Group in Ardenshire. I passed the Ardenshire Veterinary Council's
+  anaesthesia module on 2024-03-13 and hold that certificate to 2031.
+
+  Where things stand:
+
+  - The Council lets a nurse take radiographs with no vet in the room once
+    she holds an accepted exposure log and a pass in the radiation-safety
+    module. Those two things are the whole of it.
+  - My log of 40 supervised exposures was accepted on 2026-06-30 and stands
+    for two years.
+  - I am booked to sit the radiation-safety module at Ardenshire Hall on
+    2026-09-23.
+  - The Council issues a result exactly one week after a sitting, and a
+    nurse may work unsupervised from the day her result is issued.
+  - Every module is examiner-led and the Council runs each one to its own
+    published calendar.
+  - Kettleburn has a vet on site every day, so nothing here changes what I
+    can do in the meantime.
+  - The Council has cancelled the 2026-09-16 anaesthesia sitting at
+    Ardenshire Hall; the next one is 2026-11-11.
+
+  Question: how many weeks from today until I may take radiographs
+  unsupervised? Answer with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    The Council has cancelled the 2026-09-16 anaesthesia sitting at
+    Ardenshire Hall; the next one is 2026-11-11.
+  governs: false
+  expected_direction: none
+  expected_value: 6
+  arithmetic: >-
+    Unchanged from base. She sits radiation-safety on 2026-09-23 and the
+    result is issued 2026-09-30. 2026-08-19 to 2026-09-30 is 42 days,
+    exactly 6 weeks. Relative movement 0.000.
+  rounding: >-
+    None required; 42 days is an exact multiple of 7. Tolerance 0.
+  why_it_does_not_move: >-
+    Two independent reasons, either of which is sufficient. The base states
+    the Council's requirement for unsupervised radiography is an accepted
+    exposure log plus a radiation-safety pass, and that those two things are
+    the whole of it, so an anaesthesia sitting is not on the path at all.
+    Separately, the opening paragraph states she passed the anaesthesia
+    module on 2024-03-13 and holds the certificate to 2031, so she has no
+    reason to sit it on any date. Her own sitting on 2026-09-23 is untouched.
+  professional_one_sentence: >-
+    Anaesthesia is not part of the radiography requirement and you passed it
+    in 2024 anyway, so that cancellation leaves your 2026-09-23 sitting and
+    your 2026-09-30 result exactly where they were.
+  salience_match: >-
+    Same object class (a cancelled Ardenshire Veterinary Council module
+    sitting at the same hall), same surface form (identical sentence
+    skeleton, one module name and two dates apart, both carrying two dates),
+    same magnitude (cancelled sittings one week apart, replacement sittings
+    one week apart), same alarm ("the Council has cancelled a September
+    exam and the next one is November"), same length (see the battery
+    figures in the pass-two report; word counts differ by one), same
+    position (final bullet before the question in both), same deontic
+    register (both are flat cancellations; neither insert names a
+    consequence, a penalty or a procedural step, and the lexicon gap is 0
+    for both).
+  neutraliser_location: >-
+    Two sentences, both far from the insert point, which is the last bullet.
+    (a) Opening paragraph: "I passed the Ardenshire Veterinary Council's
+    anaesthesia module on 2024-03-13 and hold that certificate to 2031."
+    (b) First bullet: "The Council lets a nurse take radiographs with no vet
+    in the room once she holds an accepted exposure log and a pass in the
+    radiation-safety module. Those two things are the whole of it." The
+    insert is NOT self-neutralising - it states only that a sitting is off.
+  preconditions_enumerated: >-
+    Every date and gate in the base checked against the matched fact.
+    (1) Is anaesthesia part of the radiography requirement? No - the first
+    bullet enumerates the requirement and closes the list.
+    (2) Does she need to sit anaesthesia for any reason? No - passed
+    2024-03-13, certificate to 2031, which is past every date in the prompt.
+    (3) Could the cancellation displace her own 2026-09-23 sitting through
+    shared hall capacity? The base states every module is examiner-led and
+    the Council runs each one to its own published calendar, so the two
+    sittings do not share an examiner or a calendar. This is the objection
+    most likely to be pressed and it is recorded here rather than hidden.
+    (4) Does the exposure log go stale before 2026-09-30? No - accepted
+    2026-06-30 and stands for two years.
+    (5) Does the one-week result interval depend on which module sat? No -
+    the base states it for a sitting generally.
+    (6) Does anything in the base make her unsupervised date depend on
+    Kettleburn's staffing? No - the on-site vet bullet governs what she may
+    do meanwhile, not when the Council issues a result.
+meta:
+  personas_invented: true
+  real_personal_data: false
