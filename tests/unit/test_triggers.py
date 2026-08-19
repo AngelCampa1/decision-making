@@ -539,13 +539,13 @@ class TestEveryOfferedProcedureIsReachable:
     def test_a_covered_router_table_is_silent(self, tmp_path: Path) -> None:
         """Standing rule 2: the falsifier runs against a known-good case first."""
         skill = self._skill(tmp_path)
-        assert _check_unreachable_procedures(load_trigger_set(self._both(tmp_path)), skill) == []
+        both = self._both(tmp_path)
+        assert _check_unreachable_procedures(load_trigger_set(both), skill, both) == []
 
     def test_a_procedure_no_positive_routes_to_is_reported(self, tmp_path: Path) -> None:
         skill = self._skill(tmp_path)
-        findings = _check_unreachable_procedures(
-            load_trigger_set(self._one(tmp_path, "ledger")), skill
-        )
+        one = self._one(tmp_path, "ledger")
+        findings = _check_unreachable_procedures(load_trigger_set(one), skill, one)
         assert [finding.key for finding in findings] == ["unreachable:fit"]
         assert "counted wrong" in findings[0].message
 
@@ -570,21 +570,22 @@ class TestEveryOfferedProcedureIsReachable:
         )
         # No route labelled at all: a version-2 corpus, archived rather than
         # fixed. Reporting both procedures unreachable there is noise.
-        assert _check_unreachable_procedures(load_trigger_set(path), skill) == []
+        assert _check_unreachable_procedures(load_trigger_set(path), skill, path) == []
 
     def test_a_skill_with_no_router_table_is_not_an_error(self, tmp_path: Path) -> None:
         skill = self._skill(tmp_path)
         skill.write_text(self.SKILL.split("| What is hard")[0], encoding="utf-8")
-        assert (
-            _check_unreachable_procedures(load_trigger_set(self._one(tmp_path, "x")), skill) == []
-        )
+        one = self._one(tmp_path, "x")
+        assert _check_unreachable_procedures(load_trigger_set(one), skill, one) == []
 
     def test_the_shipped_corpus_reports_council_and_hinge(self) -> None:
         """The finding this check was written for, asserted rather than described."""
         repo = Path(__file__).resolve().parents[2]
+        corpus = repo / "datasets" / "triggers" / "decision-making.yaml"
         findings = _check_unreachable_procedures(
-            load_trigger_set(repo / "datasets" / "triggers" / "decision-making.yaml"),
+            load_trigger_set(corpus),
             repo / "skills" / "decision-making" / "SKILL.md",
+            corpus,
         )
         assert [finding.key for finding in findings] == ["unreachable:council,hinge"]
 

@@ -612,7 +612,7 @@ def _scan(repo_root: Path) -> tuple[list[str], list[tuple[str, Finding]]]:
         findings.extend(
             (_scope(path, repo_root), finding)
             for finding in _check_unreachable_procedures(
-                trigger_set, skills_dir / name / "SKILL.md"
+                trigger_set, skills_dir / name / "SKILL.md", path
             )
         )
         findings.extend(_check_corpus_rules(trigger_set, path, repo_root))
@@ -684,7 +684,7 @@ def _check_drafts(
         findings.extend(
             (_scope(index, repo_root), finding)
             for finding in _check_unreachable_procedures(
-                draft, skills_dir / draft.skill / "SKILL.md"
+                draft, skills_dir / draft.skill / "SKILL.md", index
             )
         )
         findings.extend(_check_corpus_rules(draft, index, repo_root))
@@ -762,7 +762,9 @@ def _check_routes(trigger_set: TriggerSet, skill_path: Path, path: Path) -> list
     ]
 
 
-def _check_unreachable_procedures(trigger_set: TriggerSet, skill_path: Path) -> list[Finding]:
+def _check_unreachable_procedures(
+    trigger_set: TriggerSet, skill_path: Path, path: Path
+) -> list[Finding]:
     """Every procedure the router offers must be the right answer somewhere.
 
     :func:`_check_routes` enforces the other direction -- corpus labels must name
@@ -810,7 +812,7 @@ def _check_unreachable_procedures(trigger_set: TriggerSet, skill_path: Path) -> 
     return [
         Finding(
             f"unreachable:{','.join(unreachable)}",
-            f"{len(unreachable)} of {len(offered)} procedures in "
+            f"{path}: {len(unreachable)} of {len(offered)} procedures in "
             f"{skill_path.parent.name}'s router table are the correct answer for no "
             f"positive: {', '.join(unreachable)}. `evaluate_routing` scores a chosen "
             "procedure against the case's declared routes, so these can only ever be "
