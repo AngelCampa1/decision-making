@@ -3,6 +3,10 @@
 This file is read by Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode
 and others. Claude Code reads `CLAUDE.md`; the two carry the same content here.
 
+**Edit this file, not `CLAUDE.md`.** `CLAUDE.md` is a byte-exact mirror written
+by `de mirror`, and `de check` refuses a tree where it has fallen behind. An
+edit made to `CLAUDE.md` is reverted by the next build.
+
 **It is also the product.** Skill *availability* is the dominant term in whether
 a skill helps at all. Two independent benchmarks agree on the direction:
 
@@ -235,7 +239,7 @@ If you are an agent contributing here rather than a user installing the skills:
 
 - **The experiment programme lives in
   [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md)** — the goal, what
-  the literature already settles, and fifteen tracks you can be pointed at.
+  the literature already settles, and sixteen tracks you can be pointed at.
   Start there before proposing experiment work. **Track K runs first** (the
   decision-frameworks review, free, no instrument), **Track S runs in parallel
   from day one** (the skills themselves), and Track 0 blocks the measurement
@@ -252,6 +256,19 @@ If you are an agent contributing here rather than a user installing the skills:
 - `python -m uv run de check` is the full local gate — lint, types, tests,
   coverage floors, skill validation, run provenance and integrity wiring. There
   is no cloud CI. Run it before you believe anything works.
+- **Setup, and the loop underneath the gate.** `uv sync --group dev` installs
+  it; add `--group docs` only to publish the site. `python -m uv run de check
+  --fast` skips tests, coverage and the site rebuild — that is the pre-commit
+  subset and the right loop while iterating, but it is not the gate, so run the
+  whole thing before believing anything. A single file is `python -m uv run
+  pytest tests/unit/test_claims.py`. `uv` is not on PATH here, hence `python -m
+  uv`.
+- **Where the code is.** `evals/src/decision_evals/` is the harness and the
+  gates: `cli.py` wires every `de check` step, and each step lives in the module
+  it is named after — `docs.py`, `provenance.py`, `decisions.py`, `wiring.py`,
+  `skills.py`. `scripts/run_triggers.py` is the runner behind every model call on
+  record. `datasets/` is the answer key, `skills/` the product, `results/` and
+  `notebook/` the record. `README.md` carries the full component table.
 - **Editing a document means rebuilding the site in the same change.** The site
   under `site/` renders this repository's markdown *in place* — `docs/`,
   `notebook/`, `results/`, `skills/` and the root are read by the build, never
