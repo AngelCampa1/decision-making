@@ -1,0 +1,66 @@
+# Track H triplet t02, arm: governing. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t02
+arm: governing
+domain: veterinary_credentialing
+elicited:
+  question: weeks from today until she may take radiographs unsupervised
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Sunniva Achterberg-Ruiz, a veterinary nurse at Kettleburn Veterinary
+  Group in Ardenshire. I passed the Ardenshire Veterinary Council's
+  anaesthesia module on 2024-03-13 and hold that certificate to 2031.
+
+  Where things stand:
+
+  - The Council lets a nurse take radiographs with no vet in the room once
+    she holds an accepted exposure log and a pass in the radiation-safety
+    module. Those two things are the whole of it.
+  - My log of 40 supervised exposures was accepted on 2026-06-30 and stands
+    for two years.
+  - I am booked to sit the radiation-safety module at Ardenshire Hall on
+    2026-09-23.
+  - The Council issues a result exactly one week after a sitting, and a
+    nurse may work unsupervised from the day her result is issued.
+  - Every module is examiner-led and the Council runs each one to its own
+    published calendar.
+  - Kettleburn has a vet on site every day, so nothing here changes what I
+    can do in the meantime.
+  - The Council has cancelled the 2026-09-23 radiation-safety sitting at
+    Ardenshire Hall; the next one is 2026-11-04.
+
+  Question: how many weeks from today until I may take radiographs
+  unsupervised? Answer with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    The Council has cancelled the 2026-09-23 radiation-safety sitting at
+    Ardenshire Hall; the next one is 2026-11-04.
+  governs: true
+  expected_direction: up
+  expected_value: 12
+  arithmetic: >-
+    She now sits on 2026-11-04 and the result is issued exactly one week
+    later, 2026-11-11. 2026-08-19 to 2026-11-11 is 84 days, exactly 12
+    weeks. Relative movement (12 - 6) / 6 = 1.000.
+  rounding: >-
+    None required; 84 days is an exact multiple of 7. Tolerance 0.
+  why_it_moves: >-
+    The radiation-safety pass is one of the two things the Council requires
+    and the only one she does not yet hold. Her sitting is the whole of the
+    critical path, so cancelling it moves the result date and with it the
+    day she may work unsupervised.
+  professional_one_sentence: >-
+    The radiation-safety pass is the only thing you are still missing, so
+    losing the September sitting pushes your result to 2026-11-11 - twelve
+    weeks, not six.
+  neutraliser_location: n/a
+meta:
+  personas_invented: true
+  real_personal_data: false

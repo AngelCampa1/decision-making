@@ -1,0 +1,104 @@
+# Track H triplet t04, arm: matched. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t04
+arm: matched
+domain: utility_connection_fitout
+elicited:
+  question: months from today until the bakery opens
+  unit: months
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Idony Vasconcelos-Karim and I am opening a bakery in Unit 6,
+  Harrowgate Yard, in Ardenshire. My lease starts on 2026-09-01.
+
+  Where things stand:
+
+  - The fit-out takes exactly three months once the three-phase supply is
+    energised, and I open the day it completes.
+  - Ostrand Power has quoted the three-phase energisation for 2026-11-19.
+  - Every oven, proving cabinet and dishwasher in the specification is
+    electric, and the fit-out drawings show no gas appliance anywhere in
+    the unit.
+  - The unit's gas supply was capped in 2024.
+  - My landlord has asked Fennholt Gas to reinstate the yard meter as part
+    of his own works, which sit outside my demise in the meter housing.
+  - The shopfitters are booked open-ended and start the week the supply is
+    live.
+  - I have thirty-one months left to run on the lease after the fit-out.
+  - Fennholt Gas has brought the yard meter reinstatement forward to
+    2026-09-23.
+
+  Question: how many months from today until the bakery opens? Answer with
+  a single number of months.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Fennholt Gas has brought the yard meter reinstatement forward to
+    2026-09-23.
+  governs: false
+  expected_direction: none
+  expected_value: 6
+  arithmetic: >-
+    Unchanged from base. Energisation stays at 2026-11-19, fit-out is three
+    months, opening 2027-02-19 - six calendar months from 2026-08-19.
+    Relative movement 0.000.
+  rounding: >-
+    None required; every date falls on the 19th. Tolerance 0.
+  why_it_does_not_move: >-
+    Gas is not an input to this bakery or to this fit-out. The base states
+    every oven, proving cabinet and dishwasher in the specification is
+    electric and the drawings show no gas appliance anywhere in the unit; it
+    states the supply was capped in 2024; and it states the reinstatement is
+    the landlord's own work, outside her demise, in the meter housing. The
+    fit-out clock is keyed to the three-phase energisation and to nothing
+    else.
+  professional_one_sentence: >-
+    You have no gas appliance and the meter is the landlord's work outside
+    your demise, so pulling that date forward changes nothing - you still
+    open on 2027-02-19.
+  salience_match: >-
+    Same object class (a utility undertaker re-quoting a connection date at
+    the same unit), same surface form (identical sentence skeleton:
+    "<undertaker> has brought the <connection> forward to <date>"), same
+    magnitude (dates 4 days apart), same alarm ("the utility work at my unit
+    just moved a month earlier, so maybe I open sooner"), same length (word
+    counts identical at 10, characters within two), same position (final
+    bullet before the question in both), same deontic register (neither
+    insert names a consequence and neither names a procedural step; the
+    lexicon gap is 0 for both, and both are good news rather than bad, so
+    valence is matched too).
+  neutraliser_location: >-
+    base prompt, third and fifth bullets, four and two bullets above the
+    insert point: "Every oven, proving cabinet and dishwasher in the
+    specification is electric, and the fit-out drawings show no gas appliance
+    anywhere in the unit" and "My landlord has asked Fennholt Gas to reinstate
+    the yard meter as part of his own works, which sit outside my demise in
+    the meter housing." The insert is NOT self-neutralising - it states only
+    a date change.
+  preconditions_enumerated: >-
+    Every date and gate in the base checked against the matched fact.
+    (1) Does the fit-out need gas? No - all-electric specification, no gas
+    appliance in the drawings.
+    (2) Is the fit-out clock keyed to anything but energisation? No - "exactly
+    three months once the three-phase supply is energised", shopfitters "start
+    the week the supply is live".
+    (3) Could the landlord's gas works block access to the unit and delay the
+    fit-out? They sit outside the demise in the meter housing, and in this
+    arm they move earlier rather than later, so they cannot delay anything
+    even if they did touch the unit.
+    (4) Could the reinstatement being earlier let the bakery open earlier by
+    some other route? There is no route - opening is defined as fit-out
+    completion and fit-out start is defined as energisation.
+    (5) Does the 2026-09-01 lease start interact? No - it precedes both
+    energisation dates in every arm.
+    (6) Direction check: this matched fact can only move a date earlier, and
+    the quantity's only input moves later or not at all, so no reading of it
+    produces a larger answer either.
+meta:
+  personas_invented: true
+  real_personal_data: false

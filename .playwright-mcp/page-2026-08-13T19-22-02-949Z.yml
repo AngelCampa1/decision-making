@@ -1,0 +1,317 @@
+- generic [active] [ref=f5e1]:
+  - link "Skip to content" [ref=f5e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - link "decision-making-skills" [ref=f5e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f5e9]:
+        - link "skill" [ref=f5e10] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f5e11] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f5e12] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+        - link "notebook" [ref=f5e13] [cursor=pointer]:
+          - /url: /decision-making-skills/notebook/
+        - link "docs" [ref=f5e14] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/
+      - group "Colour theme" [ref=f5e15]:
+        - button "sys" [ref=f5e16] [cursor=pointer]
+        - button "light" [ref=f5e17] [cursor=pointer]
+        - button "dark" [pressed] [ref=f5e18] [cursor=pointer]
+  - main [ref=f5e19]:
+    - article [ref=f5e20]:
+      - paragraph [ref=f5e21]:
+        - generic [ref=f5e22]: published run record ·
+        - link [ref=f5e23] [cursor=pointer]:
+          - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/results/decision-making/2026-08-13-abb6862-l7-stakes/README.md
+          - code [ref=f5e24]: results/decision-making/2026-08-13-abb6862-l7-stakes/README.md
+      - generic [ref=f5e25]:
+        - heading "Track L7 — an eager opener that keeps the boilerplate" [level=1] [ref=f5e26]
+        - paragraph [ref=f5e27]:
+          - strong [ref=f5e28]: 2026-08-13.
+          - text: 73 cases × 2 repeats × 2 arms =
+          - strong [ref=f5e29]:
+            - text: 292 isolated
+            - code [ref=f5e30]: claude -p
+            - text: calls
+          - text: ", Haiku, 0 unparseable, 0 isolation failures. Code at"
+          - code [ref=f5e31]: abb6862
+          - text: .
+        - paragraph [ref=f5e32]:
+          - text: The maintainer chose
+          - strong [ref=f5e33]: eager
+          - text: "and named what the skill should key on: stakes, real consequences, complexity, nuance. The only eager arm on record was"
+          - code [ref=f5e34]: opener-only
+          - text: ", which reaches recall 0.956 by"
+          - emphasis [ref=f5e35]: deleting
+          - text: the routing summary and the exclusion list — the two clauses L5 measured at −5.8pp and −3.7pp of false firing. That is eagerness by subtraction and it costs 12.9% of ordinary turns.
+        - paragraph [ref=f5e36]:
+          - text: L7 asks whether eagerness is reachable by
+          - strong [ref=f5e37]: widening the opener while keeping both clauses verbatim
+          - text: . Two arms, because the design question —
+          - emphasis [ref=f5e38]: name
+          - text: the criteria or
+          - emphasis [ref=f5e39]: show
+          - text: them by example — is empirical, and asking a person a question the instrument answers for 146 calls is the wrong way round.
+        - table [ref=f5e40]:
+          - rowgroup [ref=f5e41]:
+            - row [ref=f5e42]:
+              - columnheader "arm" [ref=f5e43]
+              - columnheader "opener" [ref=f5e44]
+          - rowgroup [ref=f5e45]:
+            - row [ref=f5e46]:
+              - cell [ref=f5e47]:
+                - code [ref=f5e48]: stakes-named
+              - cell [ref=f5e49]:
+                - emphasis [ref=f5e50]: “…and the choice has stakes — it is costly to undo, several things pull against each other, or it lands on someone else.”
+            - row [ref=f5e51]:
+              - cell [ref=f5e52]:
+                - code [ref=f5e53]: stakes-shown
+              - cell [ref=f5e54]:
+                - emphasis [ref=f5e55]: ”…‘should I take the offer’, ‘do I raise this now or wait’, ‘is it worth the risk’, ‘what does this commit us to’…”
+        - paragraph [ref=f5e56]: Same middle, same exclusions, matched length (within 10%, observed 6%).
+        - heading "Results" [level=2] [ref=f5e57]
+        - table [ref=f5e58]:
+          - rowgroup [ref=f5e59]:
+            - row [ref=f5e60]:
+              - columnheader "arm" [ref=f5e61]
+              - columnheader "FPR" [ref=f5e62]
+              - columnheader "recall" [ref=f5e63]
+              - columnheader "precision" [ref=f5e64]
+              - columnheader "accuracy" [ref=f5e65]
+              - columnheader "never fired" [ref=f5e66]
+          - rowgroup [ref=f5e67]:
+            - row [ref=f5e68]:
+              - cell [ref=f5e69]:
+                - code [ref=f5e70]: opener-only
+              - cell "0.1286" [ref=f5e71]
+              - cell [ref=f5e72]:
+                - strong [ref=f5e73]: "0.9529"
+              - cell "0.735" [ref=f5e74]
+              - cell "—" [ref=f5e75]
+              - cell "—" [ref=f5e76]
+            - row [ref=f5e77]:
+              - cell [ref=f5e78]:
+                - code [ref=f5e79]: no-exclusions
+              - cell "0.0571" [ref=f5e80]
+              - cell [ref=f5e81]:
+                - strong [ref=f5e82]: "0.9529"
+              - cell "0.845" [ref=f5e83]
+              - cell "—" [ref=f5e84]
+              - cell "—" [ref=f5e85]
+            - row [ref=f5e86]:
+              - cell [ref=f5e87]:
+                - code [ref=f5e88]: full
+                - text: (shipped)
+              - cell "0.0179" [ref=f5e89]
+              - cell "0.9294" [ref=f5e90]
+              - cell "0.941" [ref=f5e91]
+              - cell "—" [ref=f5e92]
+              - cell [ref=f5e93]:
+                - code [ref=f5e94]: x-n22
+            - row [ref=f5e95]:
+              - cell [ref=f5e96]:
+                - strong [ref=f5e97]:
+                  - code [ref=f5e98]: stakes-shown
+              - cell [ref=f5e99]:
+                - strong [ref=f5e100]: "0.0000"
+              - cell "0.9118" [ref=f5e101]
+              - cell [ref=f5e102]:
+                - strong [ref=f5e103]: "1.0000"
+              - cell [ref=f5e104]:
+                - strong [ref=f5e105]: "0.9795"
+              - cell [ref=f5e106]:
+                - code [ref=f5e107]: x-n22
+            - row [ref=f5e108]:
+              - cell [ref=f5e109]:
+                - code [ref=f5e110]: stakes-named
+              - cell "0.0179" [ref=f5e111]
+              - cell "0.8824" [ref=f5e112]
+              - cell "0.9375" [ref=f5e113]
+              - cell "0.9589" [ref=f5e114]
+              - cell [ref=f5e115]:
+                - code [ref=f5e116]: x-n03
+                - text: ","
+                - code [ref=f5e117]: x-n22
+            - row [ref=f5e118]:
+              - cell [ref=f5e119]:
+                - code [ref=f5e120]: no-opener
+              - cell "0.0036" [ref=f5e121]
+              - cell "0.9059" [ref=f5e122]
+              - cell "—" [ref=f5e123]
+              - cell "—" [ref=f5e124]
+              - cell [ref=f5e125]:
+                - code [ref=f5e126]: x-n20
+        - paragraph [ref=f5e127]:
+          - strong [ref=f5e128]: Showing beat naming.
+          - code [ref=f5e129]: stakes-shown
+          - text: did not fire once across 110 negative observations and
+          - strong [ref=f5e130]:
+            - text: dominates
+            - code [ref=f5e131]: no-opener
+            - text: on both axes
+          - text: — the first Pareto improvement of one arm over another here. It does not dominate
+          - code [ref=f5e132]: full
+          - text: ": 1.8 points of FPR bought for 1.8 points of recall is a trade."
+        - paragraph [ref=f5e133]:
+          - text: The two openers are
+          - strong [ref=f5e134]: not distinguishable
+          - text: ": paired Wilcoxon p = 0.257, 4 of 73 items differing, 3 favouring"
+          - code [ref=f5e135]: shown
+          - text: .
+        - heading "The bands, as registered" [level=2] [ref=f5e136]
+        - table [ref=f5e137]:
+          - rowgroup [ref=f5e138]:
+            - row [ref=f5e139]:
+              - columnheader "#" [ref=f5e140]
+              - columnheader "Band" [ref=f5e141]
+              - columnheader "Result" [ref=f5e142]
+              - columnheader [ref=f5e143]
+          - rowgroup [ref=f5e144]:
+            - row [ref=f5e145]:
+              - cell "1" [ref=f5e146]
+              - cell "parseable ≥ 98%" [ref=f5e147]
+              - cell "146/146 both arms" [ref=f5e148]
+              - cell "passed" [ref=f5e149]: ✓
+            - row [ref=f5e151]:
+              - cell "2" [ref=f5e152]
+              - cell [ref=f5e153]:
+                - text: both arms beat
+                - code [ref=f5e154]: opener-only
+                - text: on FPR
+              - cell "0.018, 0.000" [ref=f5e155]
+              - cell "passed" [ref=f5e156]: ✓
+            - row [ref=f5e158]:
+              - cell "3" [ref=f5e159]
+              - cell "one arm reaches recall ≥ 0.94" [ref=f5e160]
+              - cell "best 0.912" [ref=f5e161]
+              - cell "failed" [ref=f5e162]: ✕
+            - row [ref=f5e164]:
+              - cell "4" [ref=f5e165]
+              - cell [ref=f5e166]:
+                - strong [ref=f5e167]:
+                  - text: one arm at FPR ≤ 0.06
+                  - emphasis [ref=f5e168]: and
+                  - text: recall ≥ 0.94
+              - cell "neither" [ref=f5e169]
+              - cell "failed" [ref=f5e170]: ✕
+            - row [ref=f5e172]:
+              - cell "5" [ref=f5e173]
+              - cell "the arms differ on FPR (descriptive)" [ref=f5e174]
+              - cell "0.018 vs 0.000" [ref=f5e175]
+              - cell "passed" [ref=f5e176]: ✓
+            - row [ref=f5e178]:
+              - cell "6" [ref=f5e179]
+              - cell "neither fires on the lowest-stakes negatives" [ref=f5e180]
+              - cell "0/2 both arms" [ref=f5e181]
+              - cell "passed" [ref=f5e182]: ✓
+        - paragraph [ref=f5e184]:
+          - strong [ref=f5e185]: Band 4 was the experiment and it failed.
+          - text: The precision/recall frontier is intact after seven arms — a description moves where on the line the skill sits, not the line.
+        - paragraph [ref=f5e186]:
+          - strong [ref=f5e187]: Band 3 was unsettable and was set anyway.
+          - code [ref=f5e188]: x-n22
+          - text: fires in no arm on any version, a fact stated in the prediction’s own
+          - emphasis [ref=f5e189]: “where I expect to be wrong”
+          - text: section, so the ceiling was 16/17 = 0.941. A recall band must be set against the observed per-item ceiling, not a round number.
+        - paragraph [ref=f5e190]:
+          - strong [ref=f5e191]: Band 6 passed and was the one expected to fail.
+          - text: Both stakes openers score 0/2 on tabs-vs-spaces, variable naming, list-vs-set and the plot twist, while
+          - code [ref=f5e192]: opener-only
+          - text: fires
+          - strong [ref=f5e193]: 5/5 on all four
+          - text: . The stakes criterion reads content, not sentence shape.
+        - heading "The item that separates the two openers" [level=2] [ref=f5e194]
+        - paragraph [ref=f5e195]:
+          - code [ref=f5e196]: x-n03
+          - emphasis [ref=f5e197]: “Should I learn Rust?”
+          - text: —
+          - code [ref=f5e198]: stakes-shown
+          - text: 2/2,
+          - code [ref=f5e199]: stakes-named
+          - strong [ref=f5e200]: 0/2
+          - text: . Naming stakes as a criterion makes the model apply it strictly, and a real decision about a person’s own time does not look expensive.
+          - code [ref=f5e201]: stakes-named
+          - text: refuses exactly the two positives (
+          - code [ref=f5e202]: x-n03
+          - text: ","
+          - code [ref=f5e203]: x-n22
+          - text: ) that were kept on a maintainer’s judgement. It is the most coherent behaviour in the run and it disagrees with the answer key.
+        - heading "Limits" [level=2] [ref=f5e204]
+        - list [ref=f5e205]:
+          - listitem [ref=f5e206]:
+            - strong [ref=f5e207]: The corpus is solvable at 0.890 by counting words
+            - text: (
+            - code [ref=f5e208]: length_separability
+            - text: AUC 0.850).
+            - code [ref=f5e209]: stakes-shown
+            - text: at 0.9795 is nine points above a ruler. Whether showing beats naming on turns a real person would send is not established here and cannot be on this corpus — see
+            - strong [ref=f5e210]: Track N
+            - text: in
+            - link [ref=f5e211] [cursor=pointer]:
+              - /url: /decision-making-skills/docs/research_programme/
+              - code [ref=f5e212]: docs/RESEARCH_PROGRAMME.md
+            - text: .
+          - listitem [ref=f5e213]:
+            - strong [ref=f5e214]: These openers are authored
+            - text: ", not derived. Every earlier arm in Tracks L and M was produced by deletion or mechanical partition precisely so no result could be “the prose I happened to write”. No deletion of the shipped description produces a stakes criterion, so L7 gives that up and substitutes constraint: same middle, same exclusions, matched length, both written before either ran."
+          - listitem [ref=f5e215]:
+            - strong [ref=f5e216]: One model tier, one instrument.
+            - text: Haiku, and a proxy — the model is shown the description and asked whether it would fire, which is not the same as a description sitting among other skills in a real session.
+          - listitem [ref=f5e217]:
+            - strong [ref=f5e218]: Reference arms re-scored, not re-run.
+            - code [ref=f5e219]: full
+            - text: ","
+            - code [ref=f5e220]: opener-only
+            - text: ","
+            - code [ref=f5e221]: no-opener
+            - text: and
+            - code [ref=f5e222]: no-exclusions
+            - text: are v1 checkpoints re-scored against v2 labels.
+            - code [ref=f5e223]: summarise()
+            - text: reads
+            - code [ref=f5e224]: should_fire
+            - text: from the record, so the naive call reports v1 silently; the figures above are re-scored explicitly at the call site.
+        - paragraph [ref=f5e225]:
+          - strong [ref=f5e226]: "Answer key:"
+          - link [ref=f5e227] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/datasets/triggers/decision-making.yaml
+            - code [ref=f5e228]: datasets/triggers/decision-making.yaml
+          - strong [ref=f5e229]: v2
+          - text: ". Not comparable with a v1 run: on 2026-08-13 one turn moved from the positives to the negatives and recall rose on every arm on disk with no call re-made."
+        - paragraph [ref=f5e230]:
+          - text: "Prediction:"
+          - link [ref=f5e231] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-13-l7-prediction-eager-without-deleting-what-works/
+            - code [ref=f5e232]: notebook/2026-08-13-l7-prediction-eager-without-deleting-what-works.md
+          - text: ", committed at"
+          - code [ref=f5e233]: 1cfd90b
+          - text: before either arm ran.
+        - paragraph [ref=f5e234]:
+          - text: "Outcome:"
+          - link [ref=f5e235] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier/
+            - code [ref=f5e236]: notebook/2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier.md
+          - text: .
+  - contentinfo [ref=f5e237]:
+    - generic [ref=f5e239]:
+      - paragraph [ref=f5e241]: Nothing here is proven. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f5e242]:
+        - listitem [ref=f5e243]:
+          - link "Results" [ref=f5e244] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f5e245]:
+          - link "Scorecard" [ref=f5e246] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f5e247]:
+          - link "Research log" [ref=f5e248] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f5e249]:
+          - link "Limitations" [ref=f5e250] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f5e251]:
+          - link "GitHub" [ref=f5e252] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f5e253]: "Apache-2.0 · Angel Campa scorecard: 0 proven / 0 shipped"

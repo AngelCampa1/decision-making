@@ -1,0 +1,225 @@
+- generic [active] [ref=f13e1]:
+  - link "Skip to content" [ref=f13e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f13e3]:
+    - generic [ref=f13e4]:
+      - link "decision-making-skills" [ref=f13e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f13e9]:
+        - link "skill" [ref=f13e10] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f13e11] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f13e12] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+        - link "notebook" [ref=f13e13] [cursor=pointer]:
+          - /url: /decision-making-skills/notebook/
+        - link "docs" [ref=f13e14] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/
+      - group "Colour theme" [ref=f13e15]:
+        - button "sys" [ref=f13e16] [cursor=pointer]
+        - button "light" [ref=f13e17] [cursor=pointer]
+        - button "dark" [pressed] [ref=f13e18] [cursor=pointer]
+  - main [ref=f13e19]:
+    - article [ref=f13e20]:
+      - paragraph [ref=f13e21]:
+        - generic [ref=f13e22]: repository ·
+        - link [ref=f13e23] [cursor=pointer]:
+          - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/SCORECARD.md
+          - code [ref=f13e24]: SCORECARD.md
+      - generic [ref=f13e25]:
+        - heading "Scorecard" [level=1] [ref=f13e26]
+        - paragraph [ref=f13e27]:
+          - strong [ref=f13e28]: Hand-maintained, and this line used to claim otherwise.
+          - text: It read
+          - emphasis [ref=f13e29]:
+            - text: “generated artifact — do not edit by hand;
+            - code [ref=f13e30]: de report
+            - text: rebuilds this from
+            - code [ref=f13e31]: results/**/summary.json
+            - text: ", and"
+            - code [ref=f13e32]: de check
+            - text: fails the build if the committed copy differs.”
+          - text: "None of that was true: there is no"
+          - code [ref=f13e33]: de report
+          - text: command, no
+          - code [ref=f13e34]: summary.json
+          - text: under
+          - code [ref=f13e35]: results/
+          - text: ", and no scorecard step in"
+          - code [ref=f13e36]: de check
+          - text: . The file had not changed since the initial commit, so nothing ever tested the promise.
+        - paragraph [ref=f13e37]:
+          - text: Correcting it rather than building the generator, because the table is still empty. A generator written now would be written against a results schema no run has produced. When the first confirmatory run lands,
+          - code [ref=f13e38]: de report
+          - text: gets built and this paragraph gets replaced by the guarantee it describes.
+        - paragraph [ref=f13e39]:
+          - text: What
+          - emphasis [ref=f13e40]: is
+          - text: "enforced today is the promotion gate:"
+          - code [ref=f13e41]: de lint
+          - text: refuses to let a skill carrying
+          - code [ref=f13e42]: UNTESTED
+          - text: or
+          - code [ref=f13e43]: WITHDRAWN
+          - text: sit in
+          - code [ref=f13e44]: plugin/skills/
+          - text: ", and"
+          - code [ref=f13e45]: de check
+          - text: runs it. That check is real and has teeth. The table below does not.
+        - paragraph [ref=f13e46]:
+          - text: "Four more checks over the method itself were added on 2026-08-13, each after the failure it prevents had already happened here:"
+          - strong [ref=f13e47]: run provenance
+          - text: (a published run must state its answer-key version and name a prediction that can be shown to predate its data),
+          - strong [ref=f13e48]: integrity wiring
+          - text: (a module with a coverage floor that no entry point reaches is refused),
+          - strong [ref=f13e49]: the decision register
+          - text: (a change to the answer key or the shipped skill needs a written reason), and
+          - strong [ref=f13e50]: documentation
+          - text: (a
+          - code [ref=f13e51]: de
+          - text: command or path that this repository does not have is refused). None of them can put a row in the table below. They govern whether a number is
+          - emphasis [ref=f13e52]: traceable
+          - text: ", not whether it is"
+          - emphasis [ref=f13e53]: good
+          - text: .
+        - heading "The caveat that qualifies every number on record" [level=2] [ref=f13e54]
+        - paragraph [ref=f13e55]:
+          - text: Every measurement this repository has made is a
+          - strong [ref=f13e56]: trigger
+          - text: measurement — does the skill fire when it should — and all of them ran on a corpus that is
+          - strong [ref=f13e57]: 89% solvable by counting words
+          - text: (AUC 0.850 on turn length alone; a bare “fire if ≥ 18 words” rule scores 0.890 on the version 2 key, against the best arm on that key — 0.9795 to 0.9863). The paired comparisons between arms remain valid; the absolute numbers do not travel, and “nothing moved discrimination” has a second reading, which is that this is what a ceiling looks like. The rebuild is Track N. See
+          - link [ref=f13e58] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+            - code [ref=f13e59]: docs/LIMITATIONS.md
+          - text: .
+        - paragraph [ref=f13e60]: "None of this touches the table below, which is empty for a different and simpler reason: no skill has been measured on whether it improves a decision at all."
+        - heading "Skills" [level=2] [ref=f13e61]
+        - table [ref=f13e62]:
+          - rowgroup [ref=f13e63]:
+            - row [ref=f13e64]:
+              - columnheader "Skill" [ref=f13e65]
+              - columnheader "Verdict" [ref=f13e66]
+              - columnheader "Primary metric" [ref=f13e67]
+              - columnheader "Effect" [ref=f13e68]
+              - columnheader "95% CI" [ref=f13e69]
+              - columnheader "p" [ref=f13e70]
+              - columnheader "q (BH)" [ref=f13e71]
+              - columnheader "N" [ref=f13e72]
+              - columnheader "Model" [ref=f13e73]
+              - columnheader "Run" [ref=f13e74]
+          - rowgroup [ref=f13e75]:
+            - row [ref=f13e76]:
+              - cell [ref=f13e77]:
+                - emphasis [ref=f13e78]: none yet
+              - cell [ref=f13e79]
+              - cell [ref=f13e80]
+              - cell [ref=f13e81]
+              - cell [ref=f13e82]
+              - cell [ref=f13e83]
+              - cell [ref=f13e84]
+              - cell [ref=f13e85]
+              - cell [ref=f13e86]
+              - cell [ref=f13e87]
+        - paragraph [ref=f13e88]:
+          - strong [ref=f13e89]: "proven: 0 / shipped: 0"
+        - paragraph [ref=f13e90]:
+          - text: No skill has been evaluated yet. The harness is being built first, deliberately — see
+          - link [ref=f13e91] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/protocol/
+            - code [ref=f13e92]: docs/PROTOCOL.md
+          - text: for the standing methodology and the verdict vocabulary, and
+          - link [ref=f13e93] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+            - code [ref=f13e94]: notebook/
+          - text: for the running research log.
+        - heading "Verdict vocabulary" [level=2] [ref=f13e95]
+        - table [ref=f13e96]:
+          - rowgroup [ref=f13e97]:
+            - row [ref=f13e98]:
+              - columnheader "Verdict" [ref=f13e99]
+              - columnheader "Meaning" [ref=f13e100]
+          - rowgroup [ref=f13e101]:
+            - row [ref=f13e102]:
+              - cell [ref=f13e103]:
+                - code [ref=f13e104]: SHIP
+              - cell "Beat control at q < 0.10 with every guard passing, placebo-controlled, and replicated on a freshly generated holdout" [ref=f13e105]
+            - row [ref=f13e106]:
+              - cell [ref=f13e107]:
+                - code [ref=f13e108]: PROVISIONAL
+              - cell "Same, but not yet replicated" [ref=f13e109]
+            - row [ref=f13e110]:
+              - cell [ref=f13e111]:
+                - code [ref=f13e112]: "NULL"
+              - cell [ref=f13e113]:
+                - text: Confidence interval includes zero, or the effect is smaller than the pre-registered minimum detectable effect. Back to the workbench; ships as
+                - code [ref=f13e114]: experimental
+            - row [ref=f13e115]:
+              - cell [ref=f13e116]:
+                - code [ref=f13e117]: HARMFUL
+              - cell "Significantly worse, or a guard was violated. Off by default pending redesign" [ref=f13e118]
+            - row [ref=f13e119]:
+              - cell [ref=f13e120]:
+                - code [ref=f13e121]: UNTESTED
+              - cell "No confirmation run. Cannot carry a proven badge" [ref=f13e122]
+            - row [ref=f13e123]:
+              - cell [ref=f13e124]:
+                - code [ref=f13e125]: WITHDRAWN
+              - cell "The maintainer stopped using it. See the retirement rule below" [ref=f13e126]
+        - paragraph [ref=f13e127]:
+          - text: A verdict governs the
+          - emphasis [ref=f13e128]: public claim
+          - text: ", not whether a skill is usable."
+          - code [ref=f13e129]: "NULL"
+          - text: means we have not shown it works, which is not the same as showing it does not.
+        - heading "The retirement rule" [level=2] [ref=f13e130]
+        - paragraph [ref=f13e131]:
+          - text: The maintainer’s daily use is the fastest signal this project has, and until now it could only come out positive. A procedure that fires when it should not, or that produces a worse answer than thinking directly, had no way of being recorded as such.
+          - strong [ref=f13e132]: Evidence that cannot come out negative is not evidence
+          - text: ", so here is the failure condition."
+        - paragraph [ref=f13e133]:
+          - strong [ref=f13e134]:
+            - text: A procedure disabled for 14 consecutive days is marked
+            - code [ref=f13e135]: WITHDRAWN
+            - text: .
+        - list [ref=f13e136]:
+          - listitem [ref=f13e137]:
+            - text: The clock starts at a dated line in
+            - link [ref=f13e138] [cursor=pointer]:
+              - /url: /decision-making-skills/notebook/
+              - code [ref=f13e139]: notebook/
+            - text: saying the procedure was turned off and why. Turning it back on is another dated line.
+          - listitem [ref=f13e140]: Fourteen days is chosen to survive a holiday and not to survive disinterest. It is a judgement, not a measurement, and it is written down before any procedure is near it so that it cannot be chosen to spare one.
+          - listitem [ref=f13e141]:
+            - code [ref=f13e142]: WITHDRAWN
+            - text: blocks the plugin exactly as
+            - code [ref=f13e143]: UNTESTED
+            - text: does — enforced by
+            - code [ref=f13e144]: de lint
+            - text: ", not by intention."
+          - listitem [ref=f13e145]:
+            - text: It is reversible. A withdrawn procedure that is rewritten and used again returns to
+            - code [ref=f13e146]: UNTESTED
+            - text: ", and the notebook keeps both entries."
+        - paragraph [ref=f13e147]: This is not a public claim about the procedure. It says the person who wrote it stopped reaching for it, which is worth exactly as much as that sounds — and considerably more than an evidence channel that only ever agrees with itself.
+  - contentinfo [ref=f13e148]:
+    - generic [ref=f13e150]:
+      - paragraph [ref=f13e152]: Nothing here is proven. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f13e153]:
+        - listitem [ref=f13e154]:
+          - link "Results" [ref=f13e155] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f13e156]:
+          - link "Scorecard" [ref=f13e157] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f13e158]:
+          - link "Research log" [ref=f13e159] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f13e160]:
+          - link "Limitations" [ref=f13e161] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f13e162]:
+          - link "GitHub" [ref=f13e163] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f13e164]: "Apache-2.0 · Angel Campa scorecard: 0 proven / 0 shipped"

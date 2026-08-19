@@ -1,0 +1,48 @@
+# Track H triplet t01, arm: base. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t01
+arm: base
+domain: food_production_scheduling
+elicited:
+  question: weeks from today until batch 41 is packaged
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Perpetua Halloran-Mbeki and I run Marrowfield Cider, a four-person
+  cidery in Ardenshire. Batch 41 went into the fermenter on 2026-07-22.
+
+  Where things stand:
+
+  - Batch 41 finishes fermenting on 2026-09-16 and then needs exactly two
+    weeks of cold conditioning in my own tanks before it can be packaged.
+  - Batch 41 is sold in full to Sedgeley Taverns, who take everything in
+    30-litre returnable containers and sell none of it through shops.
+  - All of my packaging is done under contract at Halbrook Works, eleven
+    miles away. No other contract packer in Ardenshire takes work from
+    cideries our size.
+  - Halbrook runs a kegging hall and a bottling hall on separate licences,
+    separate schedules and separate crews.
+  - Halbrook packages a Marrowfield batch on the first working day I ask
+    for once the cider is ready, and a run takes a single day.
+  - Sedgeley's haulier collects from the Halbrook yard on the day of the run.
+
+  Question: how many weeks from today until batch 41 is packaged? Answer
+  with a single number of weeks.
+key:
+  expected_value: 6
+  arithmetic: >-
+    Fermentation ends 2026-09-16. Two weeks of conditioning puts the cider
+    ready on 2026-09-30. Halbrook packages on the first working day asked
+    for, so the run is 2026-09-30. 2026-08-19 to 2026-09-30 is 42 days,
+    exactly 6 weeks.
+  rounding: >-
+    None required. Every date in this triplet is an exact multiple of 7 days
+    from 2026-08-19, so all three arms are integral in weeks. Tolerance 0.
+meta:
+  personas_invented: true
+  real_personal_data: false

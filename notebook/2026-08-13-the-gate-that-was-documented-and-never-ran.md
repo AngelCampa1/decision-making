@@ -1,0 +1,189 @@
+# The gate that was documented and never ran
+
+**2026-08-13.** Not a run. An audit of the work system itself, prompted by the
+maintainer asking whether decisions here are actually being documented. The
+short answer is that research decisions are documented unusually well and
+**process obligations were the only rules in the repository with no gate** —
+which is the same sentence this notebook has now written four times about four
+different things.
+
+## What the audit found
+
+Fifty-one dated entries, predictions registered before runs, corrections
+appended rather than rewritten. I checked the append-only rule mechanically:
+eight entries have more than one commit and **all eight are appended
+`Correction` or `Superseded` blocks**, not silent rewrites. The rule is holding.
+
+Six holes, in severity order.
+
+### 1. `prereg.py` is documented as operating and has never run
+
+`docs/PROTOCOL.md` §3 was in the present indicative: *"A confirmation run
+refuses to start unless…"* followed by six conditions. All six are implemented.
+The module carries a **100% line-and-branch floor** under a `pyproject.toml`
+heading that reads "Integrity locks: every refusal branch needs a test asserting
+it refuses".
+
+There are zero `preregistration/` files, and **no caller reaches the module** —
+`scripts/run_triggers.py`, the script behind all 2,555 calls of the one working
+instrument, contains no reference to `arena` or `prereg`.
+
+Formally it is scoped to `confirm`, which has never run, so nothing was
+bypassed. That is exactly what makes it dangerous: the tests pass, the floor is
+met, the gate reports green, and `CLAUDE.md` separately records **four
+pre-registration slips in a single day** — including a 365-call run launched
+with no bands — every one of which those refusal branches exist to prevent.
+
+**This is the second occurrence of this shape.** The docstring on
+`cli.check_triggers_step` records the first: *"The module was written and tested
+to 100% and called by nothing, so there was no run in which the mismatch could
+surface."* Twice is a pattern, and nothing in the gate detected either.
+
+### 2. Documentation was the only obligation with no gate
+
+`de check` enforced git identity, lint, format, types, skill lint, trigger sets,
+manifests, citations, tests and coverage floors. It enforced none of:
+
+- a prediction exists and its commit predates the run
+- a run states which answer-key version produced its numbers
+- a registered band names its estimator *and* its denominator
+- a finding links to the data behind it
+
+`CLAUDE.md` reaches the right conclusion — *"Remembering does not work; the
+count is four for four"* — and then the remedy adopted for the fifth was a
+longer paragraph asking people to remember.
+
+### 3. The published prose carried no answer-key version
+
+The code fix from this morning is sound: `label_versions_comparable` refuses a
+cross-version comparison, records default to v1, `run_triggers.py` stamps
+`set_version`. **It guards the JSONL and cannot guard the prose**, and the prose
+is what gets quoted. Seven published READMEs carried tables of numbers with no
+version anywhere, and the fact that they are all v1 lived in exactly one
+notebook entry written the same day.
+
+### 4. Linkage ran one way
+
+Run READMEs link forward to prediction and outcome, consistently. Roughly 30 of
+51 notebook entries contain no `results/` path at all — so from a finding you
+could not reach its data. That is the direction anyone re-reading a result
+travels, and it is the direction the three scorer defects here were caught by
+travelling.
+
+### 5 and 6. Two venues, one unindexed; and a hand-maintained status file
+
+Maintainer rationale is genuinely recorded — in commit bodies, and they are
+good ones. `d43c490` carries the full reasoning for moving `x-n21`; `1aa99de`
+flags that the rename breaks existing installs as a deliberate call. But
+`git log` is not greppable by topic and is invisible to anyone reading `docs/`.
+`docs/STATUS.md` is honest about being hand-maintained and is still a set of
+numbers transcribed by hand from run READMEs.
+
+## What now exists
+
+Two new steps in `de check`, both of which fail on the tree as it stood this
+morning:
+
+- **`run provenance`** (`decision_evals.provenance`). Every published run must
+  name itself `<date>-<sha7>`, carry a README, declare `**Answer key:** … v<n>`,
+  and register a `Prediction:` whose first commit is an ancestor of the run's
+  commit. The declared version is checked against `set_version` in the records
+  beside it, which is the rule that **binds the prose to the data**.
+- **`integrity wiring`** (`decision_evals.wiring`). Every module carrying a
+  coverage floor must be reachable by import from an entry point, or be declared
+  under `[tool.decision-evals.unwired]` with the condition that would wire it.
+  The register may only shrink, and an entry that becomes reachable is itself an
+  error.
+
+Plus `docs/RUN_INDEX.md`, generated by `de index` and checked for staleness, so
+hole 4 is closed by derivation rather than by anyone maintaining a second index.
+
+`docs/PROTOCOL.md` §3 now splits into 3a — the notebook prediction, which is
+what every run on record was actually registered by, and which is now enforced —
+and 3b, the confirmation gate, in the future tense with its unreachability
+stated.
+
+## Two things I got wrong on the way, both plausible
+
+Recorded because both produced a confident wrong answer that looked like a
+finding.
+
+**The import graph, twice.** My first reachability pass reported **11**
+unreachable floored modules including the entire `stats` subpackage — the code
+"every published number flows through". Two bugs: relative imports inside an
+`__init__.py` resolved one package too high, and a breadth-first search that
+marked modules visited at *enqueue* time and so never parsed anything past the
+entry points. Fixing both gives **1**. Had I stopped at the first number I would
+have written up a five-module dead statistics layer that does not exist. Both
+bugs now have named tests.
+
+**The prediction heuristic.** Reading the first notebook link in a README rather
+than the labelled `Prediction:` line reported `1bd87b8` as having a prediction
+that postdated it. It does not — the first link is a passing citation. Wrong in
+the direction that matters: that heuristic would also have *passed* a run that
+registered nothing.
+
+## What is not fixed
+
+- **Hole 5 has no gate.** A `Decision:` trailer convention is the obvious fix
+  and it is not backfillable — history would have to be rewritten. Nothing was
+  invented to paper over this.
+- **`docs/STATUS.md` is still hand-transcribed.** `RUN_INDEX.md` gives it a
+  generated companion for the run table; the numbers in it are still copied.
+- **Two runs are baselined**, by name, with reasons, in
+  `results/provenance-baseline.txt`. `2026-08-12-40b6ba5` cannot be repaired:
+  a prediction written now would postdate its data, which is precisely what the
+  gate refuses. It stays published, because deleting it would destroy the
+  evidence that the failure happened.
+
+## Prediction
+
+Registered before the next audit of this kind, whenever that is.
+
+**The next defect of this shape will not be caught by these two gates.** They
+check that a record exists, is versioned, and predates its data. They cannot
+check that the *content* is true — an answer key stamp is a claim about which
+labels ran, and nothing verifies it against the run. The four-for-four count is
+about defects that were invisible in a record; both new gates make a *missing*
+record visible and neither makes a *wrong* one visible.
+
+---
+
+**Correction, same day: hole 5 was gateable and I said it was not.**
+
+Not edited above, per the notebook rule. The "What is not fixed" section claims
+a decision register "is not backfillable — history would have to be rewritten".
+**That reason is wrong**, and it was wrong in the flattering direction: it made
+a gap I had chosen not to close sound inherent.
+
+`docs/RUN_INDEX.md`, written in the same session, starts from whatever is on
+disk and grows. A decision register works identically. Backfill affects how
+complete the register looks on day one, not whether the mechanism functions.
+
+Two real obstacles were there and I did not state either:
+
+1. **No mechanical predicate for "this commit made a decision."** Requiring a
+   trailer on all 131 commits is noise, and an advisory gate is one somebody
+   turns off — the argument `citations.py` already makes about its baseline.
+2. **Commit trailers cannot be amended here.** The history *is* the
+   pre-registration evidence and must not be rewritten, so a forgotten trailer
+   would be permanently unfixable. That rules out commits as the store and
+   points at a file, which is what `docs/REJECTED.md` already is.
+
+The fix that follows is a coupling rather than a classifier: the obligation
+attaches to the two paths where an undocumented decision has already cost
+something. **8 commits touch `datasets/triggers/`, 5 touch `skills/` — 13 of
+131.** `de check`'s `decision register` step now refuses a governed commit with
+no entry in `docs/DECISIONS.md`, and refuses an entry naming a commit that
+touched nothing governed.
+
+The trigger is *any* change to those paths rather than a `version:` bump.
+Keying it to version bumps would have let through the defect that motivated it:
+on 2026-08-13 four labels moved and the version bump was a separate commit.
+
+All 13 are backfilled by transcribing the commit bodies, which already carried
+the reasoning. Nothing was reconstructed from memory, and the baseline is empty.
+
+**The prediction above is unchanged and still stands.** This third gate is the
+same kind as the first two: it makes a *missing* record visible and does nothing
+about a *wrong* one.

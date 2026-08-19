@@ -1,0 +1,97 @@
+# Track H triplet t01, arm: matched. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t01
+arm: matched
+domain: food_production_scheduling
+elicited:
+  question: weeks from today until batch 41 is packaged
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Perpetua Halloran-Mbeki and I run Marrowfield Cider, a four-person
+  cidery in Ardenshire. Batch 41 went into the fermenter on 2026-07-22.
+
+  Where things stand:
+
+  - Batch 41 finishes fermenting on 2026-09-16 and then needs exactly two
+    weeks of cold conditioning in my own tanks before it can be packaged.
+  - Batch 41 is sold in full to Sedgeley Taverns, who take everything in
+    30-litre returnable containers and sell none of it through shops.
+  - All of my packaging is done under contract at Halbrook Works, eleven
+    miles away. No other contract packer in Ardenshire takes work from
+    cideries our size.
+  - Halbrook runs a kegging hall and a bottling hall on separate licences,
+    separate schedules and separate crews.
+  - Halbrook packages a Marrowfield batch on the first working day I ask
+    for once the cider is ready, and a run takes a single day.
+  - Sedgeley's haulier collects from the Halbrook yard on the day of the run.
+  - Halbrook's bottling hall is out of service for a vessel recertification
+    until 2026-11-04.
+
+  Question: how many weeks from today until batch 41 is packaged? Answer
+  with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Halbrook's bottling hall is out of service for a vessel recertification
+    until 2026-11-04.
+  governs: false
+  expected_direction: none
+  expected_value: 6
+  arithmetic: >-
+    Unchanged from base. Fermentation ends 2026-09-16, two weeks of
+    conditioning puts the cider ready 2026-09-30, and the kegging hall is
+    free, so the run is 2026-09-30 - 42 days, exactly 6 weeks. Relative
+    movement 0.000.
+  rounding: >-
+    None required; 42 days is an exact multiple of 7. Tolerance 0.
+  why_it_does_not_move: >-
+    None of batch 41 is bottled. The base states it is sold in full to
+    Sedgeley in 30-litre returnable containers with none going through
+    shops, so the batch never enters the bottling hall. The base separately
+    states the two halls run on separate licences, separate schedules and
+    separate crews, and that conditioning happens in Marrowfield's own
+    tanks rather than at Halbrook, so a bottling-hall outage has no channel
+    to the packaging date at all.
+  professional_one_sentence: >-
+    Every drop of batch 41 goes into 30-litre kegs, so a bottling-hall
+    outage does not touch your run and packaging still happens on
+    2026-09-30.
+  salience_match: >-
+    Same object class (a packaging hall at the same contract packer), same
+    surface form (identical sentence skeleton, one hall word and one date
+    apart), same magnitude (dates 7 days apart), same alarm ("the plant that
+    packages my cider is shut until the back end of October"), same length
+    (the matched insert is one character longer - "bottling" against
+    "kegging" - and the word counts are identical at 14), same position
+    (final bullet before the question in both), same deontic register
+    (neither insert names a consequence; both are flat statements of
+    unavailability, with no penalty and no procedural vocabulary in either).
+  neutraliser_location: >-
+    base prompt, third bullet from the top: "Batch 41 is sold in full to
+    Sedgeley Taverns, who take everything in 30-litre returnable containers
+    and sell none of it through shops." Two bullets and one hall-independence
+    bullet sit between it and the insert point. The insert is NOT
+    self-neutralising - it states only that a hall is shut.
+  preconditions_enumerated: >-
+    Every date and gate in the base checked against the matched fact.
+    (1) Is any of batch 41 bottled? No - sold in full in 30-litre returnable
+    containers, none through shops. (2) Do the halls share crews, licences or
+    schedules that would let a bottling outage delay a kegging run? No - the
+    base states all three are separate. (3) Does conditioning happen at
+    Halbrook, where a hall closure could reach it? No - "in my own tanks".
+    (4) Does the haulier collect from inside the bottling hall? No - "from
+    the Halbrook yard". (5) Is the cider-ready date 2026-09-30 moved by
+    anything in the insert? No - fermentation and conditioning are both
+    off-site. (6) Does the alternative-packer sentence create a route by
+    which the bottling outage matters? No - it constrains where the batch can
+    be packaged, not which hall it needs, and the kegging hall is open in
+    this arm.
+meta:
+  personas_invented: true
+  real_personal_data: false

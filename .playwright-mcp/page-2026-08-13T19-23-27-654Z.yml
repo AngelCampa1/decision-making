@@ -1,0 +1,623 @@
+- generic [active] [ref=f9e1]:
+  - link "Skip to content" [ref=f9e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f9e3]:
+    - generic [ref=f9e4]:
+      - link [ref=f9e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f9e8]:
+        - link "skill" [ref=f9e9] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f9e10] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f9e11] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+      - group "Colour theme" [ref=f9e12]:
+        - button "sys" [ref=f9e13] [cursor=pointer]
+        - button "light" [ref=f9e14] [cursor=pointer]
+        - button "dark" [pressed] [ref=f9e15] [cursor=pointer]
+  - main [ref=f9e16]:
+    - article [ref=f9e17]:
+      - paragraph [ref=f9e18]:
+        - generic [ref=f9e19]: documentation ·
+        - link [ref=f9e20] [cursor=pointer]:
+          - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/docs/STATUS.md
+          - code [ref=f9e21]: docs/STATUS.md
+      - generic [ref=f9e22]:
+        - 'heading "Status: what has been run, what it showed, what is left" [level=1] [ref=f9e23]'
+        - paragraph [ref=f9e24]:
+          - strong [ref=f9e25]: Hand-maintained. Last updated 2026-08-13.
+          - text: There is no generator behind this file and it does not pretend otherwise — see the note at the top of
+          - link [ref=f9e26] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+            - code [ref=f9e27]: SCORECARD.md
+          - text: about a status file that claimed to be generated and was not.
+        - paragraph [ref=f9e28]:
+          - link [ref=f9e29] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+            - code [ref=f9e30]: SCORECARD.md
+          - text: answers
+          - emphasis [ref=f9e31]: what may be publicly claimed about a skill
+          - text: and is empty on purpose.
+          - link [ref=f9e32] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/research_programme/
+            - code [ref=f9e33]: RESEARCH_PROGRAMME.md
+          - text: answers
+          - emphasis [ref=f9e34]: what the tracks are
+          - text: .
+          - strong [ref=f9e35]:
+            - text: This file answers
+            - emphasis [ref=f9e36]: where the work actually is
+            - text: .
+        - separator [ref=f9e37]
+        - heading "The one-line version" [level=2] [ref=f9e38]
+        - paragraph [ref=f9e39]:
+          - strong [ref=f9e40]:
+            - text: Seven results are in, eight measurements were caught being broken, no skill has been evaluated end-to-end — and the instrument that produced every trigger result turns out to be solvable at 0.890 by counting words, which is now
+            - link "Track N" [ref=f9e41] [cursor=pointer]:
+              - /url: /decision-making-skills/docs/research_programme/
+            - text: .
+        - paragraph [ref=f9e42]:
+          - emphasis [ref=f9e43]: The counts above read “six” and “five” until 2026-08-13, when both tables below had already grown past them. A summary line that is not recomputed from the table under it is a hand-maintained number like any other.
+        - separator [ref=f9e44]
+        - heading "Model calls on record" [level=2] [ref=f9e45]
+        - table [ref=f9e46]:
+          - rowgroup [ref=f9e47]:
+            - row [ref=f9e48]:
+              - columnheader "family" [ref=f9e49]
+              - columnheader "calls" [ref=f9e50]
+              - columnheader "status" [ref=f9e51]
+          - rowgroup [ref=f9e52]:
+            - row [ref=f9e53]:
+              - cell "trigger arms (M4, M5, M6, M6b, L5, confidence, baseline)" [ref=f9e54]
+              - cell [ref=f9e55]:
+                - strong [ref=f9e56]: 2,555
+              - cell "the working instrument" [ref=f9e57]
+            - row [ref=f9e58]:
+              - cell [ref=f9e59]:
+                - strong [ref=f9e60]: L7
+                - text: (
+                - code [ref=f9e61]: stakes-named
+                - text: ","
+                - code [ref=f9e62]: stakes-shown
+                - text: )
+              - cell [ref=f9e63]:
+                - strong [ref=f9e64]: "292"
+              - cell [ref=f9e65]:
+                - text: run, scored and
+                - strong [ref=f9e66]: published
+                - text: 2026-08-13
+            - row [ref=f9e67]:
+              - cell "M5 first attempt, voided by a parser defect" [ref=f9e68]
+              - cell "365" [ref=f9e69]
+              - cell "kept as evidence" [ref=f9e70]
+            - row [ref=f9e71]:
+              - cell [ref=f9e72]:
+                - text: Track A pilots (
+                - code [ref=f9e73]: math
+                - text: ","
+                - code [ref=f9e74]: actions
+                - text: )
+              - cell "420" [ref=f9e75]
+              - cell "both venues closed" [ref=f9e76]
+            - row [ref=f9e77]:
+              - cell [ref=f9e78]:
+                - text: calibration +
+                - code [ref=f9e79]: evidence-ledger
+                - text: corpora
+              - cell "560" [ref=f9e80]
+              - cell "ceiling, closed" [ref=f9e81]
+            - row [ref=f9e82]:
+              - cell "casefile probe" [ref=f9e83]
+              - cell "44" [ref=f9e84]
+              - cell "clean negative, closed" [ref=f9e85]
+            - row [ref=f9e86]:
+              - cell "Track 0 instrument checks" [ref=f9e87]
+              - cell "8" [ref=f9e88]
+              - cell "passed" [ref=f9e89]
+            - row [ref=f9e90]:
+              - cell [ref=f9e91]:
+                - strong [ref=f9e92]: total
+              - cell [ref=f9e93]:
+                - strong [ref=f9e94]: ~4,240
+              - cell [ref=f9e95]
+        - paragraph [ref=f9e96]:
+          - text: Notional cost only — everything runs on a Claude Max subscription, nothing is billed per call. See
+          - link [ref=f9e97] [cursor=pointer]:
+            - /url: /decision-making-skills/agents/
+            - code [ref=f9e98]: CLAUDE.md
+          - text: .
+        - separator [ref=f9e99]
+        - heading "Venues built, and what happened to each" [level=2] [ref=f9e100]
+        - table [ref=f9e101]:
+          - rowgroup [ref=f9e102]:
+            - row [ref=f9e103]:
+              - columnheader "venue" [ref=f9e104]
+              - columnheader "verdict" [ref=f9e105]
+              - columnheader "why" [ref=f9e106]
+          - rowgroup [ref=f9e107]:
+            - row [ref=f9e108]:
+              - cell [ref=f9e109]:
+                - code [ref=f9e110]: rel-*
+                - text: single-turn relevance
+              - cell [ref=f9e111]:
+                - strong [ref=f9e112]: closed — ceiling
+              - cell "0.946, and 15 of 15 zeros were the answer key" [ref=f9e113]
+            - row [ref=f9e114]:
+              - cell [ref=f9e115]:
+                - code [ref=f9e116]: rel-*
+                - text: rebuilt with colliding distractors
+              - cell [ref=f9e117]:
+                - strong [ref=f9e118]: closed — ceiling
+              - cell "0.971; collisions bought 2.9pp" [ref=f9e119]
+            - row [ref=f9e120]:
+              - cell [ref=f9e121]:
+                - code [ref=f9e122]: probe-*
+                - text: casefiles
+              - cell [ref=f9e123]:
+                - strong [ref=f9e124]: closed — clean negative
+              - cell [ref=f9e125]:
+                - text: 27 trap opportunities,
+                - strong [ref=f9e126]: zero taken
+            - row [ref=f9e127]:
+              - cell [ref=f9e128]:
+                - code [ref=f9e129]: math
+                - text: sharded conversations
+              - cell [ref=f9e130]:
+                - strong [ref=f9e131]: closed — real null
+              - cell [ref=f9e132]:
+                - code [ref=f9e133]: p_discordant
+                - text: = 0.000
+            - row [ref=f9e134]:
+              - cell [ref=f9e135]:
+                - code [ref=f9e136]: actions
+                - text: tool-use
+              - cell [ref=f9e137]:
+                - strong [ref=f9e138]: closed — no measurement exists
+              - cell "no object is comparable across the arms" [ref=f9e139]
+            - row [ref=f9e140]:
+              - cell [ref=f9e141]:
+                - strong [ref=f9e142]: trigger instrument
+              - cell [ref=f9e143]:
+                - strong [ref=f9e144]: working
+              - cell "2,555 calls, 0 unparseable, 0 isolation failures" [ref=f9e145]
+        - separator [ref=f9e146]
+        - heading "Results in hand" [level=2] [ref=f9e147]
+        - table [ref=f9e148]:
+          - rowgroup [ref=f9e149]:
+            - row [ref=f9e150]:
+              - columnheader "run" [ref=f9e151]
+              - columnheader "question" [ref=f9e152]
+              - columnheader "answer" [ref=f9e153]
+          - rowgroup [ref=f9e154]:
+            - row [ref=f9e155]:
+              - cell [ref=f9e156]:
+                - strong [ref=f9e157]: M4
+              - cell "one entry or four separate skills?" [ref=f9e158]
+              - cell [ref=f9e159]:
+                - strong [ref=f9e160]: Indistinguishable on firing
+                - text: (0.956 vs 0.951, p = 0.83). Four are more conservative. The 202-skill shadowing citation no longer reaches down to four.
+            - row [ref=f9e161]:
+              - cell [ref=f9e162]:
+                - strong [ref=f9e163]: L5
+              - cell "which part of a description does the work?" [ref=f9e164]
+              - cell [ref=f9e165]:
+                - text: Routing summary
+                - strong [ref=f9e166]: −5.8pp
+                - text: false firing, exclusions
+                - strong [ref=f9e167]: −3.7pp
+                - text: ", opener"
+                - strong [ref=f9e168]: +1.8pp — it costs
+                - text: . Not a length effect.
+            - row [ref=f9e169]:
+              - cell [ref=f9e170]:
+                - strong [ref=f9e171]: M5
+              - cell "two entries?" [ref=f9e172]
+              - cell "Conservatism floor already at two. Firing unmoved (p = 0.50)." [ref=f9e173]
+            - row [ref=f9e174]:
+              - cell [ref=f9e175]:
+                - strong [ref=f9e176]: M6 + M6b
+              - cell "which two procedures share an entry?" [ref=f9e177]
+              - cell [ref=f9e178]:
+                - strong [ref=f9e179]:
+                  - code [ref=f9e180]: covers
+                  - text: spans 28.6 points across the three partitions
+                - text: of identical vocabulary. A merged entry does not inherit its parts’ pull.
+            - row [ref=f9e181]:
+              - cell [ref=f9e182]:
+                - strong [ref=f9e183]: Track I
+              - cell "how many repeats are needed?" [ref=f9e184]
+              - cell [ref=f9e185]:
+                - text: ICC 0.83–0.85.
+                - strong [ref=f9e186]: Two, not five.
+                - text: Cut every later arm by 60%.
+            - row [ref=f9e187]:
+              - cell [ref=f9e188]:
+                - strong [ref=f9e189]: Track K
+              - cell "does the decision literature support any of this?" [ref=f9e190]
+              - cell [ref=f9e191]:
+                - text: 4 of 11 popular frameworks have
+                - strong [ref=f9e192]: no located controlled evaluation
+                - text: . Patient decision aids have 209 RCTs. LLM assistance moves process measures and did not move the one outcome measure tested.
+            - row [ref=f9e193]:
+              - cell [ref=f9e194]:
+                - strong [ref=f9e195]: L7
+              - cell "can the description be eager without deleting the parts that work?" [ref=f9e196]
+              - cell [ref=f9e197]:
+                - strong [ref=f9e198]: Showing beat naming.
+                - code [ref=f9e199]: stakes-shown
+                - text: reaches
+                - strong [ref=f9e200]: FPR 0.000 / recall 0.912 / precision 1.000
+                - text: and
+                - strong [ref=f9e201]:
+                  - text: dominates
+                  - code [ref=f9e202]: no-opener
+                  - text: on both axes
+                - text: "— the first Pareto improvement of one arm over another here. The two openers are not distinguishable (p = 0.257). Band 4, the experiment, failed:"
+                - strong [ref=f9e203]: the precision/recall frontier is intact after seven arms.
+                - text: Band 6 passed against expectation — both stakes openers score 0/2 on tabs-vs-spaces while
+                - code [ref=f9e204]: opener-only
+                - text: fires 5/5, so the criterion reads content and not sentence shape.
+        - paragraph [ref=f9e205]:
+          - strong [ref=f9e206]: "The through-line:"
+          - text: five independent manipulations of a skill description — structure, content, count, composition twice — and
+          - strong [ref=f9e207]: not one moved how well it discriminates.
+          - text: Every one moved only where it sits on the precision/recall frontier.
+        - paragraph [ref=f9e208]:
+          - strong [ref=f9e209]: And a second reading of that through-line, added 2026-08-13.
+          - text: The trigger corpus is separable by
+          - strong [ref=f9e210]: turn length alone at AUC 0.850
+          - text: ", and a bare"
+          - emphasis [ref=f9e211]: “fire if ≥ 18 words”
+          - text: rule scores
+          - strong [ref=f9e212]: "0.890"
+          - text: with no model on the
+          - strong [ref=f9e213]: version 2
+          - text: key, against the best arm measured on that key —
+          - strong [ref=f9e214]: "0.9795"
+          - text: for the best description arm (
+          - code [ref=f9e215]: stakes-shown
+          - text: ) and
+          - strong [ref=f9e216]: "0.9863"
+          - text: for
+          - code [ref=f9e217]: confidence
+          - text: . So every result above was competing for about
+          - strong [ref=f9e218]: nine points over a ruler
+          - text: . Five nulls is what a ceiling looks like.
+        - paragraph [ref=f9e219]:
+          - strong [ref=f9e220]: Correction, 2026-08-13, appended.
+          - text: This read “0.956 … about six points” until the checkpoints were reconciled. 0.956 is the
+          - code [ref=f9e221]: full
+          - text: arm on the
+          - strong [ref=f9e222]: version 1
+          - text: key, where the same ruler scores 0.877, so the six-point figure was arithmetic across two answer keys — and 0.956 was not the best arm at either version, because
+          - code [ref=f9e223]: no-opener
+          - text: reached 0.967 and
+          - code [ref=f9e224]: confidence
+          - text: 0.973 at v1, and L5 published no accuracy column for anyone to notice. Neither reading is established and both must be reported until the corpus is rebuilt —
+          - link [ref=f9e225] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/superpowers/plans/2026-08-13-trigger-corpus-v3/
+            - code [ref=f9e226]: the v3 plan
+          - text: ","
+          - link [ref=f9e227] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words/
+            - code [ref=f9e228]: the finding
+          - text: .
+        - separator [ref=f9e229]
+        - heading "Measurements caught being broken" [level=2] [ref=f9e230]
+        - paragraph [ref=f9e231]:
+          - text: Recorded because every one of them produced a clean run, a full checkpoint and a plausible number.
+          - strong [ref=f9e232]: None crashed.
+        - table [ref=f9e233]:
+          - rowgroup [ref=f9e234]:
+            - row [ref=f9e235]:
+              - columnheader "defect" [ref=f9e236]
+              - columnheader "what it read" [ref=f9e237]
+              - columnheader "what was true" [ref=f9e238]
+          - rowgroup [ref=f9e239]:
+            - row [ref=f9e240]:
+              - cell [ref=f9e241]:
+                - text: scorer read
+                - code [ref=f9e242]: final_response
+                - text: across arms with different turn counts
+              - cell "45/50 vs 23/50, “clean replication”" [ref=f9e243]
+              - cell "an artefact; crediting the whole conversation reversed it" [ref=f9e244]
+            - row [ref=f9e245]:
+              - cell "parser whitelist dropped every entry name an n=2 arm offers" [ref=f9e246]
+              - cell "routing 0.000 over 365 calls" [ref=f9e247]
+              - cell "nothing had failed" [ref=f9e248]
+            - row [ref=f9e249]:
+              - cell "routing graded against names the arm never offered" [ref=f9e250]
+              - cell "routing 0.000 again" [ref=f9e251]
+              - cell "no answer could have matched" [ref=f9e252]
+            - row [ref=f9e253]:
+              - cell [ref=f9e254]:
+                - code [ref=f9e255]: covers
+                - text: quoted without its denominator
+              - cell "0.743" [ref=f9e256]
+              - cell "or 0.895, depending" [ref=f9e257]
+            - row [ref=f9e258]:
+              - cell [ref=f9e259]:
+                - code [ref=f9e260]: covers
+                - text: compared across partitions
+              - cell "0.743 vs 0.857" [ref=f9e261]
+              - cell "28.6-point range; the measure is retired" [ref=f9e262]
+            - row [ref=f9e263]:
+              - cell "the corpus itself, never audited" [ref=f9e264]
+              - cell "five arm comparisons" [ref=f9e265]
+              - cell [ref=f9e266]:
+                - text: a ruler solves it at 0.890; the movable range is ~9 points, not the ~6 quoted here until 2026-08-13, which compared a v2 ruler with a v1 arm →
+                - strong [ref=f9e267]: Track N
+            - row [ref=f9e268]:
+              - cell "the model tier is not in any record" [ref=f9e269]
+              - cell "every trigger number" [ref=f9e270]
+              - cell [ref=f9e271]:
+                - code [ref=f9e272]: "--model"
+                - text: is a CLI default and the tier survived only as prose in a hand-written README.
+                - strong [ref=f9e273]: Closed 2026-08-13 (N8)
+                - text: ":"
+                - code [ref=f9e274]: run_triggers.py
+                - text: stamps
+                - code [ref=f9e275]: model
+                - text: ", and"
+                - code [ref=f9e276]: models_comparable
+                - text: refuses a comparison spanning tiers
+            - row [ref=f9e277]:
+              - cell [ref=f9e278]:
+                - code [ref=f9e279]: summarise()
+                - text: read
+                - code [ref=f9e280]: should_fire
+                - text: from the record, so a single-arm report on a v1 checkpoint silently emitted v1 numbers
+              - cell [ref=f9e281]:
+                - code [ref=f9e282]: full
+                - text: at recall 0.878 beside
+                - code [ref=f9e283]: stakes-shown
+                - text: at 0.912
+              - cell [ref=f9e284]:
+                - text: a v2 re-score puts
+                - code [ref=f9e285]: full
+                - text: five points higher; the L7 table would have been wrong in the shipped arm’s disfavour
+        - paragraph [ref=f9e286]:
+          - text: "Six of the eight have a guard and tests:"
+          - code [ref=f9e287]: final_responses_comparable
+          - text: ","
+          - code [ref=f9e288]: decision(text, allowed)
+          - text: ","
+          - code [ref=f9e289]: routing_is_by_name
+          - text: ","
+          - code [ref=f9e290]: trigger_arms.covers_rates
+          - text: ", and — since N8 closed on 2026-08-13 —"
+          - code [ref=f9e291]: models_comparable
+          - text: .
+          - strong [ref=f9e292]: Row six is the open one
+          - text: ", and it is Track N’s whole job: nothing can guard a corpus against admitting a shortcut except rebuilding it."
+        - paragraph [ref=f9e293]:
+          - strong [ref=f9e294]: The eighth is still open, and it is the sharpest, because a guard was already there and did not cover it.
+          - code [ref=f9e295]: label_versions_comparable
+          - text: refused the cross-arm comparison, which is the guard working. Nothing refuses a
+          - emphasis [ref=f9e296]: single-arm
+          - text: report — and a single-arm report is what goes in a README. The guard protects comparisons and not statements. Found while scoring L7; see
+          - link "the entry" [ref=f9e297] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/2026-08-13-l7-showing-beat-naming-and-nothing-left-the-frontier/
+          - text: .
+        - paragraph [ref=f9e298]:
+          - strong [ref=f9e299]: The pattern is the finding.
+          - text: Not one of these was caught by a run failing. Every one was caught by somebody asking a question the instrument was not set up to answer — and two of the eight were the maintainer asking, not the tooling.
+        - separator [ref=f9e300]
+        - heading "Open decisions that belong to the maintainer" [level=2] [ref=f9e301]
+        - table [ref=f9e302]:
+          - rowgroup [ref=f9e303]:
+            - row [ref=f9e304]:
+              - columnheader "decision" [ref=f9e305]
+              - columnheader "status" [ref=f9e306]
+          - rowgroup [ref=f9e307]:
+            - row [ref=f9e308]:
+              - cell [ref=f9e309]:
+                - strong [ref=f9e310]: Eager or cautious?
+              - cell [ref=f9e311]:
+                - strong [ref=f9e312]: Answered 2026-08-13 — eager, provisionally.
+                - text: See
+                - link "the notebook entry" [ref=f9e313] [cursor=pointer]:
+                  - /url: /decision-making-skills/notebook/2026-08-13-the-maintainer-picked-eager/
+                - text: .
+            - row [ref=f9e314]:
+              - cell [ref=f9e315]:
+                - code [ref=f9e316]: x-n21
+                - text: /
+                - code [ref=f9e317]: x-n22
+                - text: labels
+              - cell "open — worth 11 points of recall" [ref=f9e318]
+            - row [ref=f9e319]:
+              - cell [ref=f9e320]:
+                - code [ref=f9e321]: x-n03
+                - text: ","
+                - code [ref=f9e322]: x-n20
+                - text: labels
+              - cell "open — largest per-item regressions" [ref=f9e323]
+            - row [ref=f9e324]:
+              - cell [ref=f9e325]:
+                - code [ref=f9e326]: p06
+                - text: label (
+                - code [ref=f9e327]: fit
+                - text: or
+                - code [ref=f9e328]: cascade
+                - text: )
+              - cell "open — the model answers timing-ish in every arm" [ref=f9e329]
+            - row [ref=f9e330]:
+              - cell "Should routing allow several acceptable routes?" [ref=f9e331]
+              - cell "open — must be decided blind to which items failed" [ref=f9e332]
+            - row [ref=f9e333]:
+              - cell "Vendor the spider databases?" [ref=f9e334]
+              - cell "open — needs explicit permission, third-party download" [ref=f9e335]
+            - row [ref=f9e336]:
+              - cell [ref=f9e337]:
+                - strong [ref=f9e338]: Write the N4 holdout turns
+              - cell [ref=f9e339]:
+                - strong [ref=f9e340]: open, and it is the only Track N item that is not mine to do.
+                - text: ~20 turns you author, ideally real messages rather than turns written to order, never seen by me before authoring closes. It is the control on “a model is writing the corpus that will evaluate a model”, which no other gate touches.
+        - paragraph [ref=f9e341]:
+          - text: Trigger corpus v3 is no longer on this list — it stopped being a decision and became
+          - strong [ref=f9e342]:
+            - link "Track N" [ref=f9e343] [cursor=pointer]:
+              - /url: /decision-making-skills/docs/research_programme/
+          - text: on 2026-08-13.
+        - separator [ref=f9e344]
+        - heading "Tracks" [level=2] [ref=f9e345]
+        - table [ref=f9e346]:
+          - rowgroup [ref=f9e347]:
+            - row [ref=f9e348]:
+              - columnheader "track" [ref=f9e349]
+              - columnheader "state" [ref=f9e350]
+          - rowgroup [ref=f9e351]:
+            - row [ref=f9e352]:
+              - cell [ref=f9e353]:
+                - strong [ref=f9e354]: "0"
+                - text: — instrument (transport)
+              - cell "passed done" [ref=f9e355]:
+                - text: ✓
+                - generic [ref=f9e356]: passed
+                - text: done
+            - row [ref=f9e357]:
+              - cell [ref=f9e358]:
+                - strong [ref=f9e359]: I
+                - text: — reliability
+              - cell "passed done" [ref=f9e360]:
+                - text: ✓
+                - generic [ref=f9e361]: passed
+                - text: done
+            - row [ref=f9e362]:
+              - cell [ref=f9e363]:
+                - strong [ref=f9e364]: "N"
+                - text: — the trigger corpus
+              - cell [ref=f9e365]:
+                - text: 🟡
+                - strong [ref=f9e366]: started.
+                - text: N1 shortcut battery done;
+                - strong [ref=f9e367]: N2 done
+                - text: — 40 triples, 120 items, all four bands (S 42, M 30, L 27, XL 21);
+                - strong [ref=f9e368]: N8 done
+                - text: — the model tier is in the record and a comparison spanning tiers is refused; N3–N7 open. Blocks every future L and M claim and retro-qualifies every past one.
+            - row [ref=f9e369]:
+              - cell [ref=f9e370]:
+                - strong [ref=f9e371]: K
+                - text: — frameworks review
+              - cell "🟡 three passes; K4 waits on Track A" [ref=f9e372]
+            - row [ref=f9e373]:
+              - cell [ref=f9e374]:
+                - strong [ref=f9e375]: M
+                - text: — skill design
+              - cell [ref=f9e376]:
+                - text: 🟡 M1–M6b done; M3 has no estimator on a merged arm;
+                - strong [ref=f9e377]: all of it now carries the Track N caveat
+            - row [ref=f9e378]:
+              - cell [ref=f9e379]:
+                - strong [ref=f9e380]: L
+                - text: — skill variants
+              - cell [ref=f9e381]:
+                - text: 🟡 L5 and
+                - strong [ref=f9e382]: L7 run
+                - text: ; L7 unpublished;
+                - strong [ref=f9e383]: same Track N caveat
+            - row [ref=f9e384]:
+              - cell [ref=f9e385]:
+                - strong [ref=f9e386]: S
+                - text: — ship the skills
+              - cell "🔴 not started" [ref=f9e387]
+            - row [ref=f9e388]:
+              - cell [ref=f9e389]:
+                - strong [ref=f9e390]: A
+                - text: — replication
+              - cell "🔴 A1 closed both families; A2 needs harder items" [ref=f9e391]
+            - row [ref=f9e392]:
+              - cell [ref=f9e393]:
+                - strong [ref=f9e394]: B
+                - text: — attribution
+              - cell "🔴 not started" [ref=f9e395]
+            - row [ref=f9e396]:
+              - cell [ref=f9e397]:
+                - strong [ref=f9e398]: C
+                - text: — evidence aggregation
+              - cell "🔴 not started" [ref=f9e399]
+            - row [ref=f9e400]:
+              - cell [ref=f9e401]:
+                - strong [ref=f9e402]: D
+                - text: — delegation quality
+              - cell "🔴 not started" [ref=f9e403]
+            - row [ref=f9e404]:
+              - cell [ref=f9e405]:
+                - strong [ref=f9e406]: E
+                - text: — handoff fidelity
+              - cell "🔴 not started" [ref=f9e407]
+            - row [ref=f9e408]:
+              - cell [ref=f9e409]:
+                - strong [ref=f9e410]: F
+                - text: — end-to-end
+              - cell "🔴 not started" [ref=f9e411]
+            - row [ref=f9e412]:
+              - cell [ref=f9e413]:
+                - strong [ref=f9e414]: G
+                - text: — volume / long context
+              - cell "🔴 demoted; harness fixed and canary-verified to 101k tokens, no corpus" [ref=f9e415]
+            - row [ref=f9e416]:
+              - cell [ref=f9e417]:
+                - strong [ref=f9e418]: H
+                - text: — tailoring, life decisions
+              - cell "🔴 not started; construct and its evidence now identified" [ref=f9e419]
+            - row [ref=f9e420]:
+              - cell [ref=f9e421]:
+                - strong [ref=f9e422]: J
+                - text: — write-up and release
+              - cell "🔴 not started" [ref=f9e423]
+        - separator [ref=f9e424]
+        - heading "Run but not written up" [level=2] [ref=f9e425]
+        - paragraph [ref=f9e426]: The one category this file exists to stop growing quietly.
+        - paragraph [ref=f9e427]:
+          - strong [ref=f9e428]: Empty.
+          - text: L7 was the only entry and was published on 2026-08-13 —
+          - link [ref=f9e429] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-13-abb6862-l7-stakes/
+            - code [ref=f9e430]: results/decision-making/2026-08-13-abb6862-l7-stakes/
+          - text: .
+        - paragraph [ref=f9e431]:
+          - text: Every checkpoint in
+          - code [ref=f9e432]: results/triggers/
+          - text: now corresponds to a published directory under
+          - code [ref=f9e433]: results/decision-making/
+          - text: .
+          - code [ref=f9e434]: de index
+          - text: and the provenance gate — see
+          - code [ref=f9e435]: evals/src/decision_evals/provenance.py
+          - text: — check that a published run has a prediction that predates it. Neither can see a run that was never published at all, which is what this table is for, and it is the reason to keep it here empty rather than delete it.
+        - separator [ref=f9e436]
+        - heading "What is proven" [level=2] [ref=f9e437]
+        - paragraph [ref=f9e438]:
+          - strong [ref=f9e439]: Nothing.
+          - text: Every skill carries
+          - code [ref=f9e440]: "verdict: UNTESTED"
+          - text: and
+          - code [ref=f9e441]: de lint
+          - text: "refuses to let one into the shipped plugin. That is enforced, not aspirational, and it is the point of the repository:"
+          - emphasis [ref=f9e442]: “we have not shown this works”
+          - text: and
+          - emphasis [ref=f9e443]: “this works”
+          - text: are different statements.
+  - contentinfo [ref=f9e444]:
+    - generic [ref=f9e446]:
+      - paragraph [ref=f9e448]: Nothing here is proven. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f9e449]:
+        - listitem [ref=f9e450]:
+          - link "Results" [ref=f9e451] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f9e452]:
+          - link "Scorecard" [ref=f9e453] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f9e454]:
+          - link "Research log" [ref=f9e455] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f9e456]:
+          - link "Limitations" [ref=f9e457] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f9e458]:
+          - link "GitHub" [ref=f9e459] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f9e460]: "Apache-2.0 · Angel Campa scorecard: 0 proven / 0 shipped"

@@ -1,0 +1,265 @@
+- generic [active] [ref=f5e1]:
+  - link "Skip to content" [ref=f5e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - link "decision-making-skills" [ref=f5e5] [cursor=pointer]:
+        - /url: /decision-making-skills/
+      - navigation "Main" [ref=f5e15]:
+        - link "skill" [ref=f5e16] [cursor=pointer]:
+          - /url: /decision-making-skills/skill/
+        - link "results" [ref=f5e17] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "scorecard" [ref=f5e18] [cursor=pointer]:
+          - /url: /decision-making-skills/scorecard/
+        - link "notebook" [ref=f5e19] [cursor=pointer]:
+          - /url: /decision-making-skills/notebook/
+        - link "docs" [ref=f5e20] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/
+      - group "Colour theme" [ref=f5e21]:
+        - button "sys" [pressed] [ref=f5e22] [cursor=pointer]
+        - button "light" [ref=f5e23] [cursor=pointer]
+        - button "dark" [ref=f5e24] [cursor=pointer]
+  - main [ref=f5e25]:
+    - generic [ref=f5e26]:
+      - generic [ref=f5e27]:
+        - paragraph [ref=f5e28]:
+          - generic [ref=f5e29]: UNTESTED
+          - generic [ref=f5e30]: v0.3.0
+          - generic [ref=f5e31]: Apache-2.0
+        - heading "Six procedures. Your agent reads one." [level=1] [ref=f5e32]: Six procedures.Your agent reads one.
+        - paragraph [ref=f5e33]: A free file your AI agent reads when you have a hard call to make. It works out what is hard about the choice first. Then it runs one method for it, not all six.
+        - generic [ref=f5e34]:
+          - link "Install it" [ref=f5e35] [cursor=pointer]:
+            - /url: "#install"
+          - link "See what we found" [ref=f5e36] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+          - link "Read the code" [ref=f5e37] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - region "How the skill picks a procedure" [ref=f5e38]:
+        - generic [ref=f5e40]:
+          - paragraph [ref=f5e42]: “Here is the whole thread. What do I do about Tuesday?”
+          - tablist "Which procedure runs" [ref=f5e51]:
+            - tab "01 ledger" [selected] [ref=f5e52] [cursor=pointer]:
+              - generic [ref=f5e53]: "01"
+              - generic [ref=f5e54]: ledger
+            - tab "02 fit" [ref=f5e55] [cursor=pointer]:
+              - generic [ref=f5e56]: "02"
+              - generic [ref=f5e57]: fit
+            - tab "03 cascade" [ref=f5e58] [cursor=pointer]:
+              - generic [ref=f5e59]: "03"
+              - generic [ref=f5e60]: cascade
+            - tab "04 timing" [ref=f5e61] [cursor=pointer]:
+              - generic [ref=f5e62]: "04"
+              - generic [ref=f5e63]: timing
+            - tab "05 council" [ref=f5e64] [cursor=pointer]:
+              - generic [ref=f5e65]: "05"
+              - generic [ref=f5e66]: council
+            - tab "06 hinge" [ref=f5e67] [cursor=pointer]:
+              - generic [ref=f5e68]: "06"
+              - generic [ref=f5e69]: hinge
+          - tabpanel "01 ledger" [ref=f5e70]:
+            - paragraph [ref=f5e71]: Too much arrived and you cannot tell what matters.
+            - generic [ref=f5e72]: TURNS ON the Lisbon forecast the Tuesday flight SET ASIDE the rain in Paraguay Your trip does not touch it. SO pack for Lisbon
+          - paragraph [ref=f5e73]: Examples, not recorded runs. They show the shape of the answer.
+      - region "Where the work stands" [ref=f5e74]:
+        - generic [ref=f5e75]:
+          - generic [ref=f5e76]: ~8,550
+          - generic [ref=f5e77]: model calls on record
+        - generic [ref=f5e78]:
+          - generic [ref=f5e79]: "12"
+          - generic [ref=f5e80]: runs written up here
+        - generic [ref=f5e81]:
+          - generic [ref=f5e82]: eleven
+          - generic [ref=f5e83]: of our own tests found broken
+        - generic [ref=f5e84]:
+          - generic [ref=f5e85]: "0.71"
+          - generic [ref=f5e86]: best score with no model at all
+      - generic [ref=f5e88]:
+        - paragraph [ref=f5e89]: Where the evidence stands
+        - paragraph [ref=f5e90]:
+          - strong [ref=f5e91]: We have not proven this works.
+          - text: No skill here has passed a real test, and the scorecard is empty on purpose.
+        - paragraph [ref=f5e92]: We built the measuring tools first. Every result is public, and so is every time we caught our own ruler bending.
+      - heading "What goes wrong now" [level=2] [ref=f5e93]
+      - paragraph [ref=f5e94]: Give an agent a pile of facts and a question. It treats every fact as equal.
+      - paragraph [ref=f5e95]: Tell it that it is raining in Paraguay. Then ask about a trip to Lisbon. You may get a raincoat in the answer. The fact arrived, so the agent used it.
+      - paragraph [ref=f5e96]: “…and given the rain in Paraguay, pack a raincoat.”
+      - paragraph [ref=f5e97]: A big choice and a small one get the same thought. That is the other half of the problem.
+      - heading "Six methods. It reads one." [level=2] [ref=f5e98]
+      - paragraph [ref=f5e99]: It asks one question first. What is hard here? The answer picks the method.
+      - list [ref=f5e100]:
+        - listitem [ref=f5e101]:
+          - text: "01"
+          - heading "Sort the pile" [level=3] [ref=f5e102]
+          - paragraph [ref=f5e103]: Too much arrived and you cannot tell what matters.
+          - link "ledger.md" [ref=f5e104] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/skills/decision-making/ledger.md
+        - listitem [ref=f5e105]:
+          - text: "02"
+          - heading "Check it fits you" [level=3] [ref=f5e106]
+          - paragraph [ref=f5e107]: The advice is right in general and may be wrong for you.
+          - link "fit.md" [ref=f5e108] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/skills/decision-making/fit.md
+        - listitem [ref=f5e109]:
+          - text: "03"
+          - heading "Follow what it starts" [level=3] [ref=f5e110]
+          - paragraph [ref=f5e111]: The move looks fine and the worry is what comes next.
+          - link "cascade.md" [ref=f5e112] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/skills/decision-making/cascade.md
+        - listitem [ref=f5e113]:
+          - text: "04"
+          - heading "Now or later" [level=3] [ref=f5e114]
+          - paragraph [ref=f5e115]: You know what to do and not when.
+          - link "timing.md" [ref=f5e116] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/skills/decision-making/timing.md
+        - listitem [ref=f5e117]:
+          - text: "05"
+          - heading "Hear both sides" [level=3] [ref=f5e118]
+          - paragraph [ref=f5e119]: Two answers are each fair and one got argued first.
+          - link "council.md" [ref=f5e120] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/skills/decision-making/council.md
+        - listitem [ref=f5e121]:
+          - text: "06"
+          - heading "Ask or decide" [level=3] [ref=f5e122]
+          - paragraph [ref=f5e123]: A fact is missing and you cannot tell if it matters.
+          - link "hinge.md" [ref=f5e124] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills/blob/main/skills/decision-making/hinge.md
+      - paragraph [ref=f5e125]: More than one can apply. Then they run in order, and each one feeds the next.
+      - paragraph [ref=f5e126]: Two is usually enough. Three means you have two choices, not one.
+      - paragraph [ref=f5e127]: It also knows when to stay off. A lookup is not a choice. Neither is a bug hunt.
+      - heading "Install it in one line" [level=2] [ref=f5e128]
+      - paragraph [ref=f5e129]:
+        - text: The files are plain markdown, which is text you can read yourself. They follow the
+        - link "Agent Skills" [ref=f5e130] [cursor=pointer]:
+          - /url: https://agentskills.io
+        - text: standard. Nothing to build and nothing to convert.
+      - heading "Claude Code" [level=3] [ref=f5e131]
+      - generic [ref=f5e132]:
+        - code [ref=f5e134]: cp -r skills/* .claude/skills/
+        - button "copy" [ref=f5e135] [cursor=pointer]
+      - heading "Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode" [level=3] [ref=f5e136]
+      - generic [ref=f5e137]:
+        - code [ref=f5e139]: cp -r .agents/skills/* ~/.agents/skills/
+        - button "copy" [ref=f5e140] [cursor=pointer]
+      - paragraph [ref=f5e141]: There is also a Claude Code plugin. It ships nothing today. A skill goes in only after it passes a test.
+      - generic [ref=f5e142]:
+        - paragraph [ref=f5e143]: Before you install it
+        - paragraph [ref=f5e144]: We have not shown this helps yet. It is free, and one line takes it back out.
+      - heading "What we found" [level=2] [ref=f5e145]
+      - paragraph [ref=f5e146]: We have made ~8,550 model calls. They all ask one thing. Does the skill turn on at the right time? None of them ask yet whether it helps you choose better.
+      - figure "Does the skill turn on when it should? Firing accuracy by how the skill describes itself. 258 questions, haiku." [ref=f5e147]:
+        - generic [ref=f5e148]:
+          - generic [ref=f5e149]: Does the skill turn on when it should?
+          - generic [ref=f5e150]: Firing accuracy by how the skill describes itself. 258 questions, haiku.
+        - generic [ref=f5e151]:
+          - generic [ref=f5e152]:
+            - generic [ref=f5e153]: no-opener
+            - generic [ref=f5e156]: "0.9496"
+          - generic [ref=f5e157]:
+            - generic [ref=f5e158]: stakes-shown
+            - generic [ref=f5e161]: "0.9477"
+          - generic [ref=f5e162]:
+            - generic [ref=f5e163]: full
+            - generic [ref=f5e166]: "0.9360"
+          - generic [ref=f5e167]:
+            - generic [ref=f5e168]: stakes-named
+            - generic [ref=f5e171]: "0.9341"
+          - generic [ref=f5e172]:
+            - generic [ref=f5e173]: no-exclusions
+            - generic [ref=f5e176]: "0.8314"
+          - generic [ref=f5e177]:
+            - generic [ref=f5e178]: opener-only
+            - generic [ref=f5e181]: "0.8295"
+        - generic [ref=f5e182]:
+          - generic [ref=f5e183]: "0.80"
+          - generic [ref=f5e184]: "1.00"
+        - paragraph [ref=f5e185]:
+          - text: Read from
+          - link "the run record" [ref=f5e186] [cursor=pointer]:
+            - /url: /decision-making-skills/results/decision-making/2026-08-19-d52236a-n7-remaining-arms/
+          - text: ", not typed in."
+      - paragraph [ref=f5e187]: We changed how the skill describes itself, over and over. Not one change made it better at spotting a real choice. Each one only traded one kind of mistake for another.
+      - generic [ref=f5e188]:
+        - paragraph [ref=f5e189]: Then we checked the test set itself
+        - paragraph [ref=f5e190]:
+          - strong [ref=f5e191]: You could pass 89% of the old one by counting words.
+          - text: Long message, real choice. Short message, not a choice. No model needed.
+        - paragraph [ref=f5e192]: So every result on that set was a fight over about nine points. That makes our own work look worse. We found it, we wrote it down, and we built a new set. On the new one the word trick gets 0.71.
+      - paragraph [ref=f5e193]: So why ship the file at all? A verdict rules what we may claim in public. It does not rule what you may install. Use it if it helps you. Drop it if it does not.
+      - paragraph [ref=f5e194]: We also keep a list of the times we broke our own tests. eleven so far. Every one ran clean and handed back a number that looked fine. Nothing crashed. That is why we keep looking.
+      - generic [ref=f5e195]:
+        - link "Read every result" [ref=f5e196] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/status/
+        - link "Read the research log" [ref=f5e197] [cursor=pointer]:
+          - /url: /decision-making-skills/notebook/
+        - link "Read what is wrong with this" [ref=f5e198] [cursor=pointer]:
+          - /url: /decision-making-skills/docs/limitations/
+      - heading "How we test" [level=2] [ref=f5e199]
+      - paragraph [ref=f5e200]: Lots of people share prompt packs. Almost nobody checks if they work. So we run each skill four ways on the same questions.
+      - table [ref=f5e202]:
+        - rowgroup [ref=f5e203]:
+          - row [ref=f5e204]:
+            - columnheader "Version" [ref=f5e205]
+            - columnheader "What we run" [ref=f5e206]
+            - columnheader "What it tells us" [ref=f5e207]
+        - rowgroup [ref=f5e208]:
+          - row [ref=f5e209]:
+            - cell [ref=f5e210]:
+              - code [ref=f5e211]: "off"
+            - cell "We take the skill away." [ref=f5e212]
+            - cell "the floor" [ref=f5e213]
+          - row [ref=f5e214]:
+            - cell [ref=f5e215]:
+              - code [ref=f5e216]: "on"
+            - cell "We add the real skill." [ref=f5e217]
+            - cell "the thing we care about" [ref=f5e218]
+          - row [ref=f5e219]:
+            - cell [ref=f5e220]:
+              - code [ref=f5e221]: placebo
+            - cell "Filler of the same length and shape." [ref=f5e222]
+            - cell "whether the words did the work" [ref=f5e223]
+          - row [ref=f5e224]:
+            - cell [ref=f5e225]:
+              - code [ref=f5e226]: cot
+            - cell "Just \"think step by step\"." [ref=f5e227]
+            - cell "whether a cheap line does the same" [ref=f5e228]
+      - paragraph [ref=f5e229]: A placebo is a fake with the same shape. Beating no skill at all is easy. The placebo is the real test. If filler scores the same, the words did the work.
+      - paragraph [ref=f5e230]: We write down what we expect before each run. The date goes into git history, so we cannot move it later. A guess made after the fact is not a guess.
+      - heading "Who this is for" [level=2] [ref=f5e231]
+      - list [ref=f5e232]:
+        - listitem [ref=f5e233]: You use an AI agent and face real choices.
+        - listitem [ref=f5e234]: You write agent skills and want to know if yours works.
+        - listitem [ref=f5e235]: You study these tools and want the raw data.
+      - heading "Who it is not for" [level=3] [ref=f5e236]
+      - list [ref=f5e237]:
+        - listitem [ref=f5e238]: You want a badge that says this works. There is no badge yet.
+        - listitem [ref=f5e239]: You want a lookup or a bug fix. It stays off for those.
+  - contentinfo [ref=f5e240]:
+    - generic [ref=f5e242]:
+      - paragraph [ref=f5e244]: We have not proven anything here yet. That is a status, not a sales pitch. Use it if it helps you.
+      - list [ref=f5e245]:
+        - listitem [ref=f5e246]:
+          - link "Results" [ref=f5e247] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/status/
+        - listitem [ref=f5e248]:
+          - link "Scorecard" [ref=f5e249] [cursor=pointer]:
+            - /url: /decision-making-skills/scorecard/
+        - listitem [ref=f5e250]:
+          - link "Research log" [ref=f5e251] [cursor=pointer]:
+            - /url: /decision-making-skills/notebook/
+        - listitem [ref=f5e252]:
+          - link "Limitations" [ref=f5e253] [cursor=pointer]:
+            - /url: /decision-making-skills/docs/limitations/
+        - listitem [ref=f5e254]:
+          - link "GitHub" [ref=f5e255] [cursor=pointer]:
+            - /url: https://github.com/AngelCampa1/decision-making-skills
+      - paragraph [ref=f5e256]:
+        - generic [ref=f5e257]: Apache-2.0 · Angel Campa
+        - generic [ref=f5e258]: decision-making v0.3.0
+        - generic [ref=f5e259]: UNTESTED
+  - generic [ref=f5e262]:
+    - button [ref=f5e263]
+    - button [ref=f5e269]
+    - button [ref=f5e273]
+    - button [ref=f5e278]

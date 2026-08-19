@@ -1,0 +1,9 @@
+- generic [active] [ref=f129e1]:
+  - generic [ref=f129e2]: decision-making-skills
+  - heading [level=1] [ref=f129e12]:
+    - text: An agent skill for
+    - emphasis [ref=f129e13]: hard choices
+    - text: .
+  - generic [ref=f129e14]:
+    - paragraph [ref=f129e15]: Nothing proven yet. Every result is public.
+    - generic [ref=f129e16]: untested

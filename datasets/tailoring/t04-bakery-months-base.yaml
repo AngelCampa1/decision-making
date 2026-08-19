@@ -1,0 +1,47 @@
+# Track H triplet t04, arm: base. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t04
+arm: base
+domain: utility_connection_fitout
+elicited:
+  question: months from today until the bakery opens
+  unit: months
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Idony Vasconcelos-Karim and I am opening a bakery in Unit 6,
+  Harrowgate Yard, in Ardenshire. My lease starts on 2026-09-01.
+
+  Where things stand:
+
+  - The fit-out takes exactly three months once the three-phase supply is
+    energised, and I open the day it completes.
+  - Ostrand Power has quoted the three-phase energisation for 2026-11-19.
+  - Every oven, proving cabinet and dishwasher in the specification is
+    electric, and the fit-out drawings show no gas appliance anywhere in
+    the unit.
+  - The unit's gas supply was capped in 2024.
+  - My landlord has asked Fennholt Gas to reinstate the yard meter as part
+    of his own works, which sit outside my demise in the meter housing.
+  - The shopfitters are booked open-ended and start the week the supply is
+    live.
+  - I have thirty-one months left to run on the lease after the fit-out.
+
+  Question: how many months from today until the bakery opens? Answer with
+  a single number of months.
+key:
+  expected_value: 6
+  arithmetic: >-
+    Energisation 2026-11-19, plus exactly three months of fit-out, opens the
+    bakery on 2027-02-19. 2026-08-19 to 2027-02-19 is six calendar months to
+    the day.
+  rounding: >-
+    None required. Every date in this triplet falls on the 19th, so all three
+    arms are whole calendar months from 2026-08-19. Tolerance 0.
+meta:
+  personas_invented: true
+  real_personal_data: false

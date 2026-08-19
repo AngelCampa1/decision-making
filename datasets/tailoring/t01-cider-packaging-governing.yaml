@@ -1,0 +1,65 @@
+# Track H triplet t01, arm: governing. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t01
+arm: governing
+domain: food_production_scheduling
+elicited:
+  question: weeks from today until batch 41 is packaged
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Perpetua Halloran-Mbeki and I run Marrowfield Cider, a four-person
+  cidery in Ardenshire. Batch 41 went into the fermenter on 2026-07-22.
+
+  Where things stand:
+
+  - Batch 41 finishes fermenting on 2026-09-16 and then needs exactly two
+    weeks of cold conditioning in my own tanks before it can be packaged.
+  - Batch 41 is sold in full to Sedgeley Taverns, who take everything in
+    30-litre returnable containers and sell none of it through shops.
+  - All of my packaging is done under contract at Halbrook Works, eleven
+    miles away. No other contract packer in Ardenshire takes work from
+    cideries our size.
+  - Halbrook runs a kegging hall and a bottling hall on separate licences,
+    separate schedules and separate crews.
+  - Halbrook packages a Marrowfield batch on the first working day I ask
+    for once the cider is ready, and a run takes a single day.
+  - Sedgeley's haulier collects from the Halbrook yard on the day of the run.
+  - Halbrook's kegging hall is out of service for a vessel recertification
+    until 2026-10-28.
+
+  Question: how many weeks from today until batch 41 is packaged? Answer
+  with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Halbrook's kegging hall is out of service for a vessel recertification
+    until 2026-10-28.
+  governs: true
+  expected_direction: up
+  expected_value: 10
+  arithmetic: >-
+    The cider is ready on 2026-09-30 as in the base, but the only line that
+    can package it is unavailable until 2026-10-28, which becomes the run
+    date. 2026-08-19 to 2026-10-28 is 70 days, exactly 10 weeks. Relative
+    movement (10 - 6) / 6 = 0.667.
+  rounding: >-
+    None required; 70 days is an exact multiple of 7. Tolerance 0.
+  why_it_moves: >-
+    Batch 41 is sold entirely in 30-litre returnable containers, which is
+    kegged product, and Halbrook is the only packer available to a cidery
+    this size. Losing the kegging hall therefore moves the packaging date
+    from the cider-ready date to the date the hall returns.
+  professional_one_sentence: >-
+    Your whole batch goes into kegs and Halbrook's kegging hall is the only
+    line you have, so the run cannot happen before 2026-10-28 - ten weeks,
+    not six.
+  neutraliser_location: n/a
+meta:
+  personas_invented: true
+  real_personal_data: false

@@ -1,0 +1,64 @@
+# Track H triplet t03, arm: governing. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t03
+arm: governing
+domain: research_governance
+elicited:
+  question: weeks from today until participant recruitment can begin
+  unit: weeks
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Nkemdi Oyelaran-Fossey, a doctoral researcher at the Brackwater
+  Institute. My study is a set of interviews with retired ferry crews.
+
+  Where things stand:
+
+  - The Institute's research office issued my sponsor letter on 2026-06-10.
+    A sponsor letter stands for the life of the study it names.
+  - I lodged my application with the Institute's ethics committee on
+    2026-08-05, with the sponsor letter in the bundle.
+  - Once an application is lodged the committee decides on the papers in
+    front of it.
+  - The committee sits monthly and hands down its decision letter at the
+    sitting. Mine is on the agenda for 2026-09-16.
+  - Recruitment may begin the day the committee's decision letter is issued.
+  - The committee and the research office publish separate calendars.
+  - I have twenty-two willing participants already identified through a
+    retired seafarers' association.
+  - The Institute's ethics committee has moved its September sitting to
+    2026-10-14 and will approve nothing before that date.
+
+  Question: how many weeks from today until I can begin recruiting
+  participants? Answer with a single number of weeks.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    The Institute's ethics committee has moved its September sitting to
+    2026-10-14 and will approve nothing before that date.
+  governs: true
+  expected_direction: up
+  expected_value: 8
+  arithmetic: >-
+    The committee now sits 2026-10-14 and hands down its decision letter at
+    the sitting, so recruitment may begin 2026-10-14. 2026-08-19 to
+    2026-10-14 is 56 days, exactly 8 weeks. Relative movement
+    (8 - 4) / 4 = 1.000.
+  rounding: >-
+    None required; 56 days is an exact multiple of 7. Tolerance 0.
+  why_it_moves: >-
+    The base makes the committee's decision letter the single gate on
+    recruitment and puts her application on the 2026-09-16 agenda. Moving
+    the sitting moves the letter, and the letter is the start date.
+  professional_one_sentence: >-
+    Recruitment starts the day the decision letter is issued and the
+    committee will not now sit until 2026-10-14, so it is eight weeks, not
+    four.
+  neutraliser_location: n/a
+meta:
+  personas_invented: true
+  real_personal_data: false

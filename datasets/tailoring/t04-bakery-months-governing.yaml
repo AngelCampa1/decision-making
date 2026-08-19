@@ -1,0 +1,64 @@
+# Track H triplet t04, arm: governing. Authoring pass two.
+#
+# ONLY the `prompt` block is model-visible. Everything under `key` and `meta` is
+# the answer key and must never reach a generation or extraction call.
+set_version: 2
+triplet: t04
+arm: governing
+domain: utility_connection_fitout
+elicited:
+  question: months from today until the bakery opens
+  unit: months
+  kind: scalar
+prompt: |
+  Today is 2026-08-19.
+
+  I am Idony Vasconcelos-Karim and I am opening a bakery in Unit 6,
+  Harrowgate Yard, in Ardenshire. My lease starts on 2026-09-01.
+
+  Where things stand:
+
+  - The fit-out takes exactly three months once the three-phase supply is
+    energised, and I open the day it completes.
+  - Ostrand Power has quoted the three-phase energisation for 2026-11-19.
+  - Every oven, proving cabinet and dishwasher in the specification is
+    electric, and the fit-out drawings show no gas appliance anywhere in
+    the unit.
+  - The unit's gas supply was capped in 2024.
+  - My landlord has asked Fennholt Gas to reinstate the yard meter as part
+    of his own works, which sit outside my demise in the meter housing.
+  - The shopfitters are booked open-ended and start the week the supply is
+    live.
+  - I have thirty-one months left to run on the lease after the fit-out.
+  - Ostrand Power has brought the three-phase energisation forward to
+    2026-09-19.
+
+  Question: how many months from today until the bakery opens? Answer with
+  a single number of months.
+key:
+  delta_kind: inserted_bullet
+  fact: >-
+    Ostrand Power has brought the three-phase energisation forward to
+    2026-09-19.
+  governs: true
+  expected_direction: down
+  expected_value: 4
+  arithmetic: >-
+    Energisation 2026-09-19, plus exactly three months of fit-out, opens the
+    bakery 2026-12-19. 2026-08-19 to 2026-12-19 is four calendar months to
+    the day. Relative movement (6 - 4) / 6 = 0.333, downward.
+  rounding: >-
+    None required; every date falls on the 19th. Tolerance 0.
+  why_it_moves: >-
+    The base keys the whole timetable to energisation - three months of
+    fit-out from the day the supply goes live, opening the day it completes,
+    shopfitters booked open-ended and starting the week the supply is live.
+    Moving energisation moves the opening by the same amount.
+  professional_one_sentence: >-
+    Your fit-out clock starts at energisation and nothing else, so pulling
+    the supply forward to 2026-09-19 opens you on 2026-12-19 - four months,
+    not six.
+  neutraliser_location: n/a
+meta:
+  personas_invented: true
+  real_personal_data: false

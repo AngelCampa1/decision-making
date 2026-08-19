@@ -1,0 +1,110 @@
+# Track H Phase 0 (H1) tailoring corpus, AUTHORING PASS TWO -- proposed manifest.
+#
+# NOT MERGED INTO index.yaml ON PURPOSE, and this file is a proposal rather than
+# a manifest in force. `evals/src/decision_evals/tailoring.py` reads
+# `datasets/tailoring/index.yaml` and nothing else, so the five triplets below
+# are invisible to `de check` while they live here. That is deliberate for two
+# reasons:
+#
+#  1. `datasets/tailoring/corpus-baseline.txt` states that no fourth triplet may
+#     be added to this directory while its entry stands, because the three `h`
+#     triplets are committed as evidence of a form that failed adversarial
+#     review rather than as a corpus to build on. Merging these five into
+#     `index.yaml` would pool their deltas with `h01`-`h03`, change the
+#     `leak:delta:<features>` key the baseline defers, and turn the gate red for
+#     every other session in this shared tree.
+#  2. The pass-two triplets must not rely on that baseline. They are scored on
+#     their own, over their own five deltas: pooled AUC 0.520
+#     (`delta_char_count`), 0.480 (`delta_word_count`), 0.500 (`numeral_count`,
+#     `has_date`, `penalty_lexicon_gap`); no pooled leak and no matched leak at
+#     `MATCHED_Z = 3.0`.
+#
+# THE HONEST CAVEAT, STATED HERE SO A READER OF THE MANIFEST MEETS IT FIRST.
+# Three of those five features (`numeral_count`, `has_date`,
+# `penalty_lexicon_gap`) are tied within every one of the five triplets by
+# construction, so `inert_features` reports them and those three checks COULD
+# NOT HAVE FAILED. The tying is a consequence of satisfying spec §4 dimensions
+# 2, 3 and 7 -- same surface apparatus, same magnitude, balanced deontic
+# register -- and not of chasing the statistic. It is still true that a clean
+# battery here is evidence about two features, not five.
+#
+# Whoever merges this decides three things the author deliberately did not:
+# whether `h01`-`h03` are retired from `index.yaml` in the same change, what
+# `set_version` the pass-two labels carry (they are stamped `1`, which is the
+# `h` corpus's version, and if the two corpora ever coexist that is a collision
+# `trigger_arms.label_versions_comparable` exists to catch), and the
+# `docs/DECISIONS.md` entry this governed path requires.
+set_version: 2
+design: triplet
+arms: [base, governing, matched]
+status: proposed
+
+triplets:
+  - id: t01
+    domain: food_production_scheduling
+    unit: weeks
+    direction: up
+    values: {base: 6, governing: 10, matched: 6}
+    files: [t01-cider-packaging-base.yaml, t01-cider-packaging-governing.yaml, t01-cider-packaging-matched.yaml]
+  - id: t02
+    domain: veterinary_credentialing
+    unit: weeks
+    direction: up
+    values: {base: 6, governing: 12, matched: 6}
+    files: [t02-radiography-weeks-base.yaml, t02-radiography-weeks-governing.yaml, t02-radiography-weeks-matched.yaml]
+  - id: t03
+    domain: research_governance
+    unit: weeks
+    direction: up
+    values: {base: 4, governing: 8, matched: 4}
+    files: [t03-recruitment-weeks-base.yaml, t03-recruitment-weeks-governing.yaml, t03-recruitment-weeks-matched.yaml]
+  - id: t04
+    domain: utility_connection_fitout
+    unit: months
+    direction: down
+    values: {base: 6, governing: 4, matched: 6}
+    files: [t04-bakery-months-base.yaml, t04-bakery-months-governing.yaml, t04-bakery-months-matched.yaml]
+  - id: t05
+    domain: vehicle_registration
+    unit: days
+    direction: down
+    values: {base: 28, governing: 14, matched: 28}
+    files: [t05-van-registration-days-base.yaml, t05-van-registration-days-governing.yaml, t05-van-registration-days-matched.yaml]
+
+#: Registered before the pass-two adversarial review, so that a reader can see
+#: which properties were designed for rather than discovered afterwards.
+design_notes:
+  neutralisation_is_categorical: >-
+    Pass one neutralised its matched facts by MARGIN -- a 30-day lead time
+    against a slot 40 days out -- and that is what disqualifiers 10 and 11
+    killed: a precondition elsewhere in the base ate the margin in `h03`, and
+    in `h01` the matched fact's own correction landed 0.57 months from the
+    governing one. Every matched fact here is neutralised CATEGORICALLY
+    instead: the fact constrains an object that has no arithmetic channel to
+    the elicited quantity at all. A categorical neutraliser cannot be eaten by
+    a precondition, because there is no margin to eat, and it cannot land near
+    the governing correction, because its correction is exactly zero.
+  both_objects_named_in_the_base: >-
+    Each base names BOTH objects the two inserts constrain, in roles, before
+    either insert appears. Otherwise "the insert that names something already
+    in the base is the matched one" would separate the arms perfectly, which is
+    a shortcut of exactly the shape that killed pass one and which the
+    five-feature battery does not code.
+  register_is_balanced_by_identity: >-
+    Within each triplet the two inserts are the same sentence skeleton, so
+    spec §4 dimension 7 is satisfied by construction rather than by
+    counterbalancing. In `t03` both inserts end on the identical clause "and
+    will approve nothing before that date", giving both a lexicon gap of -1;
+    in the other four neither insert carries penalty or procedural vocabulary
+    and both score 0.
+  direction_is_split: >-
+    Three governing facts move the quantity up (t01, t02, t03) and two move it
+    down (t04, t05). A corpus whose governing facts always increase the answer
+    is solved by a model that always increases the answer, and the same
+    sign-blindness that spec §7 records in the falsifier battery would go
+    unmeasured in the triplets.
+  integrality: >-
+    Every date in t01-t03 is an exact multiple of 7 days from 2026-08-19; every
+    date in t04 falls on the 19th; t05 is in days throughout. All fifteen arm
+    values are integral in their stated unit with tolerance 0, which is
+    disqualifier 13 and which all three pass-one triplets failed.
