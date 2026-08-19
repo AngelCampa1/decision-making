@@ -344,11 +344,38 @@ measurement claim:
 no ignore rule, `git add -A` records a nested worktree as a *gitlink* — mode
 160000, the entry a submodule gets — after which it reports as modified in
 every session forever. That was reproduced deliberately in a scratch repository.
-What was *not* true is the incident once attached to it: the one gitlink this
-repository has had lived in two `WIP:` auto-commits that never reached `main`,
-and no `git rm --cached` appears anywhere in the history. If you ever see mode
-160000 in `git ls-files -s`, the fix is `git rm --cached <path>` — never
-deleting the worktree.
+What was mis-told is narrower than it looks, and the correction runs the other
+way. The claim here until 2026-08-19 was that the one gitlink this repository
+has had "lived in two `WIP:` auto-commits that never reached `main`". Two `WIP:`
+auto-commits is right; *neither reached `main`* was wrong. `91f2313` added the
+entry and **is** an ancestor of `main`; only `f86269a`, which removed it again,
+stayed on a branch. So `main` carried mode 160000 for the whole time this
+paragraph asserted it never had, on the `instrument-redesign` entry under
+`.claude/worktrees/` — and every fresh `git worktree add` materialised an empty
+placeholder directory there, which is how it was finally noticed.
+
+It was removed with `git rm --cached` on 2026-08-19. That is also the first time
+the command appears in the history, so the second half of the old claim was true
+when written and is now false; the entry below is what to do, not a record that
+nobody has had to.
+
+If you ever see mode 160000 in `git ls-files -s`, the fix is `git rm --cached
+<path>` — never deleting the worktree.
+
+**Removing it broke this gate, and the coupling is worth knowing.**
+`check_path_references` treats a code span as a repository path only when its
+first segment is a top-level *directory on disk*. The gitlink made `.claude` one
+in every checkout, including a clean clone, so every `` `.claude/...` `` span in
+these documents was being resolved — and `docs/DECISION_FRAMEWORKS.md` needed a
+`docs-external-paths` line for `thinking-skills/.claude/commands/`, a directory
+in somebody else's repository, purely because of that. With the gitlink gone, `.claude`
+exists only where an agent has made a worktree. The references stop being checked
+on a clean clone and the register lines they justified become "named nowhere",
+which is red in CI and green locally: the inversion that register was written to
+prevent. Both lines are deleted, and both sentences now name a path that either
+resolves or is not a repository path at all. If you add a `` `.claude/…` `` span,
+it will be checked on your machine and invisible in CI — write it so it does not
+need to be.
 
 **What actually keeps the toolchain out of a nested tree**, since the mechanisms
 are not the obvious ones:

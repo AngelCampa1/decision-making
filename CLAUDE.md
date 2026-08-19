@@ -556,13 +556,30 @@ If you are an agent contributing here rather than a user installing the skills:
   prediction turns out wrong, the entry says so rather than being edited.
 - **A recall band is set against the observed per-item ceiling, not a round
   number.** Track L7 registered "at least one arm reaches recall >= 0.94" over
-  17 positives, which needs 16 of 17 — and `x-n22` has never fired in any arm on
-  any version, a fact stated in that same prediction's *"where I expect to be
-  wrong"* section. The ceiling was 0.941 and the band demanded perfection on
-  everything else. This is the fifth pre-registration defect on record and the
-  first that was visible **before** the run rather than after, which makes it
-  the cheapest one to have avoided. Compute the ceiling from the per-item
-  history, then set the band under it.
+  17 positives, which needs 16 of 17 — and on the version 2 corpus it was
+  scored against, `x-n22` had fired in no arm on any version, a fact stated in
+  that same prediction's *"where I expect to be wrong"* section. The ceiling
+  was 0.941 and the band demanded perfection on everything else. This is the
+  fifth pre-registration defect on record and the first that was visible
+  **before** the run rather than after, which makes it the cheapest one to have
+  avoided. Compute the ceiling from the per-item history, then set the band
+  under it.
+
+  **And compute it against the item you are about to run, which is not always
+  the item the history is about.** `x-n22`'s successor in version 4 is `s13p`,
+  and the v3/v4 rebuild did not carry it over intact: *"The build is green. Can
+  I deploy?"* became *"The build is green and the release notes are written. Can
+  I deploy, or is there something I'm missing?"*, where the closing clause asks
+  for help rather than for a go/no-go. It fires in 11 of the 14 v4 rows on
+  disk. The item's own annotation still said "otherwise unchanged" and "never
+  fired in any arm on any version" until 2026-08-19, so a ceiling computed from
+  the per-item history would have been computed for the wrong turn — the
+  failure this rule is meant to prevent, arriving through the door the rule
+  leaves open. Nothing caught it because descent from a v2 item was recorded
+  only as prose inside `why`, and prose cannot be diffed. The `ancestry:` block
+  in `datasets/triggers/decision-making/index.yaml` now maps each carried-over
+  v4 id to its v2 ancestor and says whether the text is verbatim, edited or
+  rewritten; check it before quoting a per-item fact across versions.
 - **A registered band names its estimator and its denominator, not just its
   number.** Four pre-registration slips happened here on 2026-08-12 alone: a band
   asking for `p_discordant` on two task families that have no correctness measure

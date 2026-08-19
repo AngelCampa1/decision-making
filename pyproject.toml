@@ -338,8 +338,6 @@ enforces.\
 # the documentation is a line to delete.
 # --------------------------------------------------------------------------- #
 [tool.decision-evals.docs-external-paths]
-".claude/commands/" = """
-Named in `docs/DECISION_FRAMEWORKS.md`, reviewing wanikua/thinking-skills, which keeps twenty command files there. `.claude/` is a directory here and that one is not, so a true sentence about another project's layout read as a broken link. Delete this line if the review of that library is ever cut."""
 
 [tool.decision-evals.docs-absent-commands]
 "screen" = """
