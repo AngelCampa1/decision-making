@@ -164,7 +164,7 @@
     "site/src/layouts/Base.astro": "2b717f488a52f2df586d480665da1f83e1dcdecd97ebed2defa50fadbaf6852f",
     "site/src/layouts/Doc.astro": "90634b7a093c8f729cd80138751e95e185aba46536dc6fdb17bd152f3ec4ad75",
     "site/src/lib/claims.ts": "5f5a36231dccef2fee68f6a8200726dcd5ba1c9a00b721a5a182cbc249b25cd8",
-    "site/src/lib/facts.ts": "da8454fbe39c497942b2f4a804a57430be9f7554284ea0d489b2de9c6ea890ba",
+    "site/src/lib/facts.ts": "9b072d420dee0baf22ed3ab5461ac93ab88dc006713251a1f25477abb846f28d",
     "site/src/lib/rehype-tables.mjs": "068d93266ba3c6c66bab9786a5c88e569df58d279891e097146ab1e85f9134e0",
     "site/src/lib/remark-rewrite-links.mjs": "eb1cb9401071bc9ceace0a06e6d0b28e8fe5e05ee0da4b9e1861171bb201bdca",
     "site/src/lib/routes.ts": "4f39d7fe1a5e7f44cb169d9cbc05c11cf58a81215bdf4376ed768686b76e7c4e",

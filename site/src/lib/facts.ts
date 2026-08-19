@@ -80,23 +80,46 @@ function code(cell: string): string | null {
   return match ? match[1] : null;
 }
 
+/** A markdown table row, as the source line sits: leading whitespace, then `|`. */
+function isRow(line: string): boolean {
+  return line.trimStart().startsWith('|');
+}
+
 function routingTable(body: string): string[][] {
-  const rows = body.split('\n').filter((line) => line.trimStart().startsWith('|'));
-  const header = rows.findIndex((row) => {
-    const parsed = cells(row);
+  const lines = body.split('\n');
+  const header = lines.findIndex((line) => {
+    if (!isRow(line)) return false;
+    const parsed = cells(line);
     return (
       parsed.length === TABLE_HEADER.length && parsed.every((cell, i) => cell === TABLE_HEADER[i])
     );
   });
   if (header === -1) fail(`no table with the header ${TABLE_HEADER.join(' | ')}`);
 
-  // Header, then the `|---|---|---|` separator, then the rows -- and the rows
-  // stop at the first line that is not a row, so a later table cannot be
-  // absorbed into this one.
+  // Header, then the `|---|---|---|` separator, then the rows.
+  //
+  // Adjacency is read off the source lines, not off a filtered list of every
+  // pipe line in the body. Filtering first deletes the blank line between two
+  // tables, which makes a later table contiguous with this one: an adversarial
+  // review on 2026-08-19 appended a single pipe row inside a fenced example and
+  // the page published "Seven methods." with `ledger.md` listed twice. Nothing
+  // threw, because the loop's `break` was testing cell count on a list that had
+  // already lost the only evidence the table had ended -- and the comment that
+  // used to sit here asserted the opposite of what the code did.
   const body_rows: string[][] = [];
-  for (const row of rows.slice(header + 2)) {
-    const parsed = cells(row);
-    if (parsed.length !== TABLE_HEADER.length) break;
+  for (let i = header + 2; i < lines.length; i += 1) {
+    if (!isRow(lines[i])) break;
+    const parsed = cells(lines[i]);
+    if (parsed.length !== TABLE_HEADER.length) {
+      // Not `break`. A wrong cell count inside the table is a mistyped pipe,
+      // and skipping it silently dropped that row and every row after it --
+      // surfacing, when it surfaced at all, as the backwards check below
+      // complaining about a file that was in the table all along.
+      fail(
+        `routing table row ${i - header - 1} has ${parsed.length} cells, not ` +
+          `${TABLE_HEADER.length}: ${lines[i].trim()}`
+      );
+    }
     body_rows.push(parsed);
   }
   if (body_rows.length < 2) fail('the routing table has fewer than two rows');
@@ -224,20 +247,39 @@ export async function armResults(run: string): Promise<Arm[]> {
   const body = (record as { body?: string }).body;
   if (!body) throw new Error(`Run \`${run}\` has no body to read the arm table from.`);
 
-  const rows = body.split('\n').filter((line) => line.trimStart().startsWith('|'));
-  const header = rows.findIndex((row) => {
-    const parsed = cells(row).map((cell) => cell.toLowerCase());
+  // Line-adjacent, for the same reason `routingTable` is: a run record holds
+  // several tables, and filtering the pipe lines first lets the next one
+  // continue this one.
+  const lines = body.split('\n');
+  const header = lines.findIndex((line) => {
+    if (!isRow(line)) return false;
+    const parsed = cells(line).map((cell) => cell.toLowerCase());
     return parsed[0] === 'arm' && parsed.includes('accuracy');
   });
   if (header === -1) throw new Error(`Run \`${run}\` has no table starting with an \`arm\` column.`);
 
-  const names = cells(rows[header]).map((cell) => cell.toLowerCase());
+  const names = cells(lines[header]).map((cell) => cell.toLowerCase());
   const at = (label: string) => names.indexOf(label);
   const bare = (cell: string) => cell.replace(/[*`]/g, '').trim();
 
+  // Every column this reads, checked before a row is read. `indexOf` returns
+  // -1 for a column that is not there and `parsed[-1]` is `undefined`, so a
+  // renamed column arrived as a bare TypeError out of `bare`, carrying nothing
+  // that named the run, the column or the file.
+  const absent = (['accuracy', 'precision', 'recall', 'fpr'] as const).filter(
+    (label) => at(label) === -1
+  );
+  if (absent.length) {
+    throw new Error(
+      `Run \`${run}\`'s arm table has no ${absent.map((l) => `\`${l}\``).join(', ')} ` +
+        `column. It has: ${names.map((n) => `\`${n}\``).join(', ')}.`
+    );
+  }
+
   const arms: Arm[] = [];
-  for (const row of rows.slice(header + 2)) {
-    const parsed = cells(row);
+  for (let i = header + 2; i < lines.length; i += 1) {
+    if (!isRow(lines[i])) break;
+    const parsed = cells(lines[i]);
     if (parsed.length !== names.length) break;
     const value = (label: string) => Number(bare(parsed[at(label)]));
     arms.push({
