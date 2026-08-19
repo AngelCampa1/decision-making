@@ -826,10 +826,17 @@ pre {
   padding: var(--space-sm) 1.25rem;
 }
 
+/* `flex-wrap` and `min-width: 0` are the other half of the toggle fix above.
+ * A flex item will not shrink below its min-content width unless told to, so
+ * with the toggle pinned the nav simply pushed the row past the viewport
+ * instead: no longer clipped, now overflowing by 4px. The nav is the part that
+ * can degrade gracefully, so it is the part allowed to wrap. */
 .site-nav {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-md);
+  min-width: 0;
   margin-inline-start: auto;
 }
 
@@ -851,8 +858,16 @@ pre {
   border-bottom-color: var(--signal);
 }
 
+/* `flex-shrink: 0` because `overflow: hidden` here is load-bearing: it is what
+ * clips the buttons to the rounded border. As a shrinkable flex item that same
+ * rule silently amputated the last button instead. At 768px the nav still had
+ * its wide item -- the 46rem query that hides it had not fired -- and `dark`
+ * was cut off by 23px while the document reported no overflow, which is the
+ * identical failure fixed at 375px and missed one breakpoint up. Let the nav
+ * take the squeeze; its links can wrap, and a wrapped link is still clickable. */
 .theme-toggle {
   display: inline-flex;
+  flex-shrink: 0;
   margin-inline-start: var(--space-sm);
   border: 1px solid var(--rule);
   border-radius: var(--radius-2);
