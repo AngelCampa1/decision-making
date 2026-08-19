@@ -101,3 +101,72 @@ still compare.
   items. Nothing mechanical catches that; only a human reading the
   may-only-shrink diff would. Recorded rather than fixed, because a threshold
   would be an invented parameter.
+
+---
+
+## Appended the same day: a second review, and four more numbers that were wrong
+
+A second adversarial reviewer read every documentation change on this branch.
+Its findings are corrected in place where the file is a living document, and
+recorded here where the file is a record. Each was reproduced before it was
+acted on.
+
+**The ceiling figures in `size_track_h_phase0.py` were wrong, and so were mine.**
+The source comment on `INDETERMINATE_CEILING` said the smallest usable `n` at
+J = 0.30, ICC = 0 is 10, 12 and 15 at ceilings 0.25, 0.20 and 0.15.
+[The sizing entry](2026-08-19-h1-does-not-need-twenty-and-tau-drifts-with-n.md)
+said 8, 12 and 15. Run against the shipped code over the grid's own
+`[5, 8, 10, 12, 15, 20]`, the indeterminate rates are 0.564, 0.2275, 0.2295,
+0.1415, 0.0825, 0.0260 — so the answers are **8, 12 and 12**. The source was
+wrong twice, that entry was wrong once, and **15 was never the smallest at any
+of the three ceilings**. Note also 8 beating 10, which is the lattice effect
+rather than noise.
+
+**"26 points worse" was one cell stated as a rule.** At true J = 0.85 going from
+five triplets to eight costs 26 points of indeterminate rate; at J = 0.30 it
+*gains* about 36 and n = 8 beats both 5 and 10. The programme stated it as a
+general instruction for choosing `n`, which the grid does not support. Corrected
+there; the lattice argument survives as a reason to prefer a representable
+threshold, not as a monotone cost in `n`.
+
+**The power table never said which cells it was.** Both rows are the symmetric,
+ICC = 0, rho = 0 cells. A reader could not have known. The programme now says so
+and carries the heterogeneity row beside it.
+
+**The yield was quoted against the wrong denominator.** "One usable triplet per
+five authored" is pass two alone. Across both passes it is two usable of eight,
+which is what `docs/STATUS.md` carries — one in four, not one in five. The
+character budgets that hung off it were wrong in the same direction, and the H1
+row's "~72,000 characters on disk" for twenty triplets is what **eight** actually
+measure (72,358, about 9,000 each).
+
+**Counts that had drifted, all corrected in the living documents:** the spec said
+"all six" salience dimensions twice while carrying eight; `AGENTS.md` said
+fifteen tracks against sixteen `### Track` headers; the programme said "the ten
+measurements caught being broken" where the ledger says eleven, and described
+`docs/STATUS.md`'s venues table as five rows when this branch had just made it
+seven.
+
+## One finding declined, with the reason
+
+The reviewer argued the unreachable-procedure gap should make the broken-
+measurement ledger read twelve rather than eleven, and that the site therefore
+understates. **Not taken.** That table's stated criterion is a measurement that
+"produced a clean run, a full checkpoint and a plausible number" — every row is a
+number somebody believed. The router gap was caught in *source* before any run
+computed anything from it, which is a different and cheaper kind of catch, and
+the sizing entry already counts it that way. Inflating a ledger whose entries all
+share a property with one that does not would make the count less informative,
+not more. Recorded rather than done, so the next reader can disagree.
+
+## Still unresolved, and named rather than quietly dropped
+
+- **The sign of τ's effect.** The registered prediction says τ biases against the
+  kill. The reconstruction has true J *rising* with τ, which is toward it. Both
+  statements are in the programme and they may not be compatible. Nothing here
+  settles it, and no artifact exists that could: `size_track_h_phase0.py` takes
+  `true_j` as an input and never models τ.
+- **The 0.740 / 0.800 causal-rule overlap AUC has no artifact.** It is asserted
+  in four documents and computed by no committed code — `causal_rule_overlap` is
+  still not in `tailoring.FEATURES`. It should be read as a reviewer's
+  measurement reported in prose, not as a gate reading, until the feature exists.

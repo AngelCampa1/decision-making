@@ -157,9 +157,15 @@ STATES: Final = (STATE_CLOSES, STATE_SURVIVES, STATE_INDETERMINATE)
 #: as usable. **Chosen, not derived** — standing rule 1 requires saying so. Nothing
 #: in this repository fixes an acceptable rate of "the run answered nothing", and
 #: no prior H1-shaped run exists to derive one from. It moves the answer: at
-#: J = 0.30 and ICC = 0 the smallest usable n is 10 at a ceiling of 0.25, 12 at
-#: 0.20, and 15 at 0.15. What would measure it instead: a stated cost ratio
-#: between authoring a triplet and spending a run that resolves nothing.
+#: J = 0.30 and ICC = 0 the smallest usable n is **8** at a ceiling of 0.25 and
+#: **12** at both 0.20 and 0.15. This comment said 10, 12 and 15 until it was
+#: checked against the shipped code on 2026-08-19; the measured indeterminate
+#: rates over the grid's own ``[5, 8, 10, 12, 15, 20]`` are 0.564, 0.2275,
+#: 0.2295, 0.1415, 0.0825 and 0.0260, so 8 clears 0.25, and 12 clears 0.15 as
+#: well as 0.20 -- 15 was never the smallest at any of the three. Note 8 beating
+#: 10 is the lattice effect :func:`smallest_usable_n` documents, not noise.
+#: What would measure the ceiling instead: a stated cost ratio between authoring
+#: a triplet and spending a run that resolves nothing.
 INDETERMINATE_CEILING: Final = 0.20
 
 #: Rate-mapping names.

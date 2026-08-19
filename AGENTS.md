@@ -329,7 +329,7 @@ If you are an agent contributing here rather than a user installing the skills:
 
 - **The experiment programme lives in
   [`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md)** — the goal, what
-  the literature already settles, and fifteen tracks you can be pointed at.
+  the literature already settles, and sixteen tracks you can be pointed at.
   Start there before proposing experiment work. **Track K runs first** (the
   decision-frameworks review, free, no instrument), **Track S runs in parallel
   from day one** (the skills themselves), and Track 0 blocks the measurement

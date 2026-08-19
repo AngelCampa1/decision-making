@@ -21,7 +21,7 @@ They are not appendices; the work is not doable without them.
 | | |
 |---|---|
 | [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md) | How the work is done. Five standing rules, the sub-agent and adversarial-review method, the confirmation requirement, what may run unattended. Every rule is a failure that already happened here. Read it first. |
-| [`STATUS.md`](STATUS.md) | Where the work actually stopped. Track states, runs on record, and the ten measurements caught being broken. This programme says what a track *is*; that file says how far it got. |
+| [`STATUS.md`](STATUS.md) | Where the work actually stopped. Track states, runs on record, and the eleven measurements caught being broken. This programme says what a track *is*; that file says how far it got. |
 
 How to read this. Sixteen tracks in eight parts. Each track states a question,
 what would kill it, the experiments inside it, and what "done" means. Point at
@@ -1235,7 +1235,7 @@ remembering which commit was checked out. `compare()` would run an N10 `full`
 arm against N6's `full` arm and return a p-value with no refusal at all,
 because none of the three existing guards inspects the field that changed.
 
-**Built on 2026-08-19 in `6e2028c`, and this paragraph described it as a recommendation for a day after it existed.** `skill_versions_comparable` is at `trigger_arms.py` and wired into `compare()`'s guard chain; `run_triggers.py` stamps `metadata.version` into every verdict row. What follows is the argument that produced it, kept because the reasoning is the useful part.
+**Built on 2026-08-19 in `6e2028c`, and this paragraph described it as a recommendation for a day after it existed.** `skill_versions_comparable` is at `trigger_arms.py` and wired into `compare()`'s guard chain; `run_triggers.py` stamps a `skill_version` field into every verdict row, sourced from the `SKILL.md`'s `metadata.version`. What follows is the argument that produced it, kept because the reasoning is the useful part.
 
 Recommendation: add a fourth guard, `skill_versions_comparable`, before
 N10's numbers are compared against anything published before it. The shape
@@ -2007,7 +2007,7 @@ fact? If not, it is a preference survey and it is cut.
 
 | # | Experiment | Cost | State |
 |---|---|---|---|
-| H1 | **Phase 0: the control arm, before a corpus.** 20 invented life cores × 3 files (base / governing fact changed / matched non-governing fact changed) = **60 files**, ~35,000 newly authored characters (~1,200 per base core, ~150 per variant delta, ~1,500 per triplet × 20, plus ~5,000 for the falsifier battery); the on-disk corpus is ~72,000 characters because each variant is a whole file repeating its base, and the two figures are not interchangeable. **Control arm only, no skill arm** — the question is not *does `fit.md` help* but *is there anything here for it to help with*. 20 × 3 × 2 repeats = **120 generation calls**; 3 judges × 120 responses = **360 blind extraction calls** (`ADJUDICATORS = 3` in `scripts/adjudicate.py`); 2 planted triplets × 3 hand-written responses × 3 judges = **18 falsifier calls**. Two repeats, not five, derived from Track I's ICC 0.83 to 0.85 exactly as N6, N7 and N9 derived it rather than chosen here. Primary: Youden's J, which is identically the programme's `d` (see below), over **40 sensitivity and 40 specificity events, clustered on the 20 triplets and never pooled over the 60 files**, by `stats.cluster.cluster_bootstrap_diff` with the triplet id as the cluster label. Pre-registered kill: **unaided J ≥ 0.70 closes the venue**, the value reached at sensitivity 0.85 and specificity 0.85, and 0.85 is `ADMISSIBILITY_CEILING` in `scripts/probe_casefile.py`. Prediction registered before authoring: [`notebook/2026-08-19-prediction-track-h-phase-0.md`](../notebook/2026-08-19-prediction-track-h-phase-0.md). | 498 calls | **corpus authoring blocked; see below** |
+| H1 | **Phase 0: the control arm, before a corpus.** 20 invented life cores × 3 files (base / governing fact changed / matched non-governing fact changed) = **60 files**, ~35,000 newly authored characters (~1,200 per base core, ~150 per variant delta, ~1,500 per triplet × 20, plus ~5,000 for the falsifier battery); the on-disk corpus would be some 180,000 characters, because each variant is a whole file repeating its base and the eight triplets authored so far measure 72,358 -- about 9,000 each, so this row's original ~72,000 estimate for twenty was the cost of eight, and the two figures are not interchangeable. **Control arm only, no skill arm** — the question is not *does `fit.md` help* but *is there anything here for it to help with*. 20 × 3 × 2 repeats = **120 generation calls**; 3 judges × 120 responses = **360 blind extraction calls** (`ADJUDICATORS = 3` in `scripts/adjudicate.py`); 2 planted triplets × 3 hand-written responses × 3 judges = **18 falsifier calls**. Two repeats, not five, derived from Track I's ICC 0.83 to 0.85 exactly as N6, N7 and N9 derived it rather than chosen here. Primary: Youden's J, which is identically the programme's `d` (see below), over **40 sensitivity and 40 specificity events, clustered on the 20 triplets and never pooled over the 60 files**, by `stats.cluster.cluster_bootstrap_diff` with the triplet id as the cluster label. Pre-registered kill: **unaided J ≥ 0.70 closes the venue**, the value reached at sensitivity 0.85 and specificity 0.85, and 0.85 is `ADMISSIBILITY_CEILING` in `scripts/probe_casefile.py`. Prediction registered before authoring: [`notebook/2026-08-19-prediction-track-h-phase-0.md`](../notebook/2026-08-19-prediction-track-h-phase-0.md). | 498 calls | **corpus authoring blocked; see below** |
 
 #### H1: Phase 0, and the deviation it commits
 
@@ -2039,7 +2039,9 @@ in `tailoring.FEATURES`, so the battery does not currently compute it — it was
 found by two readers, not by the gate.
 
 **What this does to the cost line, stated rather than left for a reader to
-notice.** At roughly one usable triplet per five authored, twenty triplets is on
+notice.** At one clean triplet per five authored in pass two -- or two usable of
+eight across both passes, which is the figure `docs/STATUS.md` carries and the
+one to quote for a whole-corpus estimate -- twenty triplets is on
 the order of a hundred authored — some 700,000 characters of authored prose
 before a single generation call. That is the same authoring bill that closed
 Track G, arriving at a different track by a different route, and it is the open
@@ -2070,8 +2072,9 @@ can inhabit, so the deviation is narrower than promotion usually is; it is still
 a deviation.
 
 **Why it goes first, and the argument is structural rather than hopeful.** Four
-of the five venues in `docs/STATUS.md`'s *Venues built* table closed on a
-verifier-backed **accuracy** — relevance labels, trap-taking, arithmetic,
+of the five *closed* venues in `docs/STATUS.md`'s *Venues built* table --
+seven rows now, the other two being the working trigger instrument and Track
+H's own blocked `tailoring` corpus -- closed on a verifier-backed **accuracy** — relevance labels, trap-taking, arithmetic,
 admissibility — with the unaided model at 0.917 to 0.971 on every one. Track H's
 primary is not an accuracy. It is a difference of two rates inside a matched
 triplet, so competence at reading the item raises `P(change | governing)` and
@@ -2146,12 +2149,20 @@ rule — `Phase0Result.kill` is `j >= 0.70`, not an interval — over 174 cells:
 | P(false kill) at true J = 0.50 | 0.23 | 0.10 | 0.04 | 0.02 |
 | P(kill) at true J = 0.85 | 0.94 | 0.97 | 0.99 | 0.99 |
 
+Both rows are the symmetric, ICC = 0, rho = 0 cells of the grid, which the table
+did not say. Heterogeneity moves them: the smallest usable n at J = 0.30 runs
+12, 12, 15, 20, 20 across ICC 0, 0.05, 0.20, 0.50, 0.83.
+
 **Ten is defensible and fifteen comfortable**; ten to twenty buys about eight
 points of false-kill protection for fifty more authored triplets, which at the
-observed one-in-five yield is some 350,000 characters. Pick n as a multiple of
-five and not for tidiness: bootstrap replicate means live on the `k/(2n)` lattice
-and 0.70 is an atom at 5, 10, 15 and 20 but not at 8 or 12, so going from five
-triplets to eight makes the indeterminate rate **26 points worse**.
+observed yield is some 450,000 characters at the measured ~9,000 characters a
+triplet. Pick n as a multiple of five and not for tidiness: bootstrap replicate
+means live on the `k/(2n)` lattice and 0.70 is an atom at 5, 10, 15 and 20 but
+not at 8 or 12. **That penalty is one cell, not a rule.** At true J = 0.85 going
+from five triplets to eight makes the indeterminate rate 26 points worse; at
+true J = 0.30 it makes it about 36 points *better*, and n=8 beats both 5 and 10
+there. The lattice argument is a reason to prefer a representable threshold, not
+a monotone cost in n.
 
 An interval reading of the same grid says no n between 5 and 20 works at all,
 which is a different question from the one H1 registered — and it is the reading
