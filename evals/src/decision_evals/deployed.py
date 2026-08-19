@@ -35,6 +35,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 import urllib.request
@@ -62,6 +63,12 @@ REMOTE_REF: Final = "refs/heads/main"
 #: Seconds. Long enough for a cold CDN edge, short enough that an unreachable
 #: host is an answer rather than a hang.
 TIMEOUT: Final = 10.0
+
+#: Seconds allowed to ``git``. ``ls-remote`` talks to the network too, so the
+#: promise above has to cover it: without this, an unreachable or
+#: auth-challenging remote blocks forever, and on Windows the credential helper
+#: can raise a GUI prompt that never returns to a process nobody is watching.
+GIT_TIMEOUT: Final = 20.0
 
 #: A body larger than this is not the file that was asked for. The record is
 #: well under a kilobyte.
@@ -111,7 +118,13 @@ class DeployState:
 
 
 def _git(repo_root: Path, args: list[str]) -> str | None:
-    """``git`` stdout, or ``None`` when git could not answer."""
+    """``git`` stdout, or ``None`` when git could not answer.
+
+    ``None`` covers every way of not getting an answer -- git missing, a
+    non-zero exit, a hang -- because none of them licenses a verdict about the
+    live site. ``GIT_TERMINAL_PROMPT=0`` turns an authentication challenge into
+    a failure instead of a prompt nobody is at the keyboard to see.
+    """
     try:
         proc = subprocess.run(
             ["git", *args],
@@ -119,8 +132,10 @@ def _git(repo_root: Path, args: list[str]) -> str | None:
             capture_output=True,
             text=True,
             check=False,
+            timeout=GIT_TIMEOUT,
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
         )
-    except OSError:
+    except (OSError, subprocess.TimeoutExpired):
         return None
     if proc.returncode != 0:
         return None
@@ -190,11 +205,25 @@ def manifest_digest(repo_root: Path) -> str | None:
 
 
 def _distance(repo_root: Path, deployed_sha: str, head: str) -> str:
-    """How far behind, in commits, when local history can say."""
+    """How far behind, in commits, when local history can actually say.
+
+    Ancestry is checked first, and that is not ceremony. ``rev-list --count
+    A..B`` answers "commits on B not on A", which equals "how far behind" only
+    when A is an ancestor of B. If ``main`` were force-pushed backwards the
+    deployed commit would be a *descendant* of the new tip, the count would come
+    back ``0``, and this would have reported "0 commit(s) behind" beside a
+    verdict of *behind* -- a self-contradiction covering up a live site that is
+    ahead of the branch.
+    """
+    if _git(repo_root, ["merge-base", "--is-ancestor", deployed_sha, head]) is None:
+        return (
+            "and the deployed commit is not an ancestor of it, so the two have "
+            "diverged or it is not in this checkout"
+        )
     count = _git(repo_root, ["rev-list", "--count", f"{deployed_sha}..{head}"])
     if count is None:
-        return "distance unknown here, the deployed commit is not in this checkout"
-    return f"{count} commit(s) behind"
+        return "and the distance cannot be counted in this checkout"
+    return f"and the live site is {count} commit(s) behind"
 
 
 def check_deployed(
@@ -220,7 +249,7 @@ def check_deployed(
         return DeployState(
             BEHIND,
             f"the live site is a build of {commit[:7]}, origin/main is at "
-            f"{head[:7]}: {_distance(repo_root, commit, head)}",
+            f"{head[:7]}, {_distance(repo_root, commit, head)}",
         )
 
     return DeployState(CURRENT, f"the live site is a build of {commit[:7]}, which is origin/main")

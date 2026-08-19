@@ -758,6 +758,10 @@ class TestSiteCommand:
 
         result = runner.invoke(app, ["site", "--deploy"])
         assert result.exit_code != 0
+        # Specifically rejected as an unknown option, rather than failing for
+        # any of the several other reasons `de site` can fail.
+        assert "No such option" in result.output
+        assert "--deploy" in result.output
 
 
 class TestDeployedCommand:

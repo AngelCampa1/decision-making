@@ -10,6 +10,7 @@ rebuilds the hole this command was added to close.
 from __future__ import annotations
 
 import json
+import subprocess
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
@@ -76,6 +77,30 @@ class TestGit:
     def test_a_failure_is_not_an_answer(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(dep.subprocess, "run", lambda *a, **k: _Completed(1, "x"))
         assert dep._git(Path(), ["rev-parse"]) is None
+
+    def test_a_hang_is_not_an_answer(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """`ls-remote` talks to the network, so the module's timeout promise has
+        to cover git too. Without it an auth-challenging remote blocks forever,
+        and on Windows the credential helper can raise a GUI prompt nobody is
+        there to answer."""
+
+        def hang(*a: object, **k: object) -> _Completed:
+            raise subprocess.TimeoutExpired(cmd="git", timeout=1.0)
+
+        monkeypatch.setattr(dep.subprocess, "run", hang)
+        assert dep._git(Path(), ["ls-remote"]) is None
+
+    def test_it_never_prompts_for_credentials(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        seen: dict[str, object] = {}
+
+        def record(*a: object, **k: object) -> _Completed:
+            seen.update(k)
+            return _Completed(0, "x")
+
+        monkeypatch.setattr(dep.subprocess, "run", record)
+        dep._git(Path(), ["ls-remote"])
+        assert seen["env"]["GIT_TERMINAL_PROMPT"] == "0"  # type: ignore[index]
+        assert seen["timeout"] == dep.GIT_TIMEOUT
 
     def test_a_missing_git_is_not_an_answer(self, monkeypatch: pytest.MonkeyPatch) -> None:
         def boom(*a: object, **k: object) -> _Completed:
@@ -149,23 +174,38 @@ class TestCheckDeployed:
     ) -> None:
         _serve(monkeypatch, _provenance(commit=OTHER))
         monkeypatch.setattr(dep, "remote_head", lambda root, ref=dep.REMOTE_REF: HEAD)
-        monkeypatch.setattr(dep, "_git", lambda root, args: "3")
+        monkeypatch.setattr(dep, "_git", lambda root, args: "" if args[0] == "merge-base" else "3")
         state = dep.check_deployed(tmp_path, "http://x")
         assert state.status == dep.BEHIND
         assert OTHER[:7] in state.detail
         assert HEAD[:7] in state.detail
         assert "3 commit(s) behind" in state.detail
 
-    def test_behind_when_the_deployed_commit_is_not_in_this_checkout(
+    def test_it_does_not_claim_a_distance_when_history_diverged(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
     ) -> None:
-        """A shallow clone, or a commit that was force-pushed away."""
+        """If `main` were force-pushed backwards the deployed commit would be a
+        *descendant* of the new tip and `rev-list --count` would return 0, so
+        the old wording said "0 commit(s) behind" beside a verdict of behind.
+        Ancestry is checked first now."""
         _serve(monkeypatch, _provenance(commit=OTHER))
         monkeypatch.setattr(dep, "remote_head", lambda root, ref=dep.REMOTE_REF: HEAD)
         monkeypatch.setattr(dep, "_git", lambda root, args: None)
         state = dep.check_deployed(tmp_path, "http://x")
         assert state.status == dep.BEHIND
-        assert "distance unknown" in state.detail
+        assert "diverged" in state.detail
+        assert "commit(s) behind" not in state.detail
+
+    def test_it_says_so_when_the_count_is_unavailable(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """Ancestry resolves, the count does not: a shallow clone."""
+        _serve(monkeypatch, _provenance(commit=OTHER))
+        monkeypatch.setattr(dep, "remote_head", lambda root, ref=dep.REMOTE_REF: HEAD)
+        monkeypatch.setattr(dep, "_git", lambda root, args: "" if args[0] == "merge-base" else None)
+        state = dep.check_deployed(tmp_path, "http://x")
+        assert state.status == dep.BEHIND
+        assert "cannot be counted" in state.detail
 
     def test_a_differing_manifest_is_not_reported_as_drift(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path

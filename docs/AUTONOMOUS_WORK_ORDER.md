@@ -543,8 +543,16 @@ load-bearing on their own.
    the run, then ask the live site what it is serving:
 
    ```bash
-   gh run watch                       # or: gh run list --workflow "Deploy site"
+   gh run list --workflow "Deploy site" --limit 1
    python -m uv run de deployed
+   ```
+
+   Not a bare `gh run watch`. With no run id and no TTY it exits with *run ID
+   required when not running interactively*, and this document is written for
+   agents, which are exactly the non-TTY case. To block until it finishes:
+
+   ```bash
+   gh run watch "$(gh run list --workflow 'Deploy site' --limit 1 --json databaseId -q '.[0].databaseId')"
    ```
 
    `de deployed` fetches `deploy-provenance.json` from the published site — the

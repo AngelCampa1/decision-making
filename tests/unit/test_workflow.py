@@ -95,7 +95,13 @@ class TestSafety:
         assert workflow["permissions"]["contents"] == "read"
 
     def test_two_pushes_cannot_race_to_publish(self, workflow: dict[str, Any]) -> None:
-        assert workflow["concurrency"]["group"] == "pages"
+        assert workflow["concurrency"]["group"].startswith("pages")
+
+    def test_a_branch_test_cannot_cancel_a_real_deployment(self, workflow: dict[str, Any]) -> None:
+        """The group is keyed on the ref. With one fixed group, a third run
+        joining cancels the queued one, so a build-only dispatch from a branch
+        could drop an accepted `main` deployment."""
+        assert "github.ref" in workflow["concurrency"]["group"]
 
     def test_a_deploy_is_never_cancelled_halfway(self, workflow: dict[str, Any]) -> None:
         """Aborting mid-upload is how a Pages deployment gets wedged. Queue the
@@ -153,6 +159,40 @@ class TestArtifact:
         assert _using(workflow, "deploy", "actions/deploy-pages")
 
 
+class TestTheBuildActuallyRuns:
+    """Every one of these could be deleted from the workflow and the rest of
+    this file would stay green, which is the failure mode these close: the
+    artifact step only ever checked a path string."""
+
+    def test_the_site_is_built(self, workflow: dict[str, Any]) -> None:
+        runs = [str(s.get("run", "")) for s in _steps(workflow, "build")]
+        assert any("npm run build" in r for r in runs)
+
+    def test_dependencies_are_installed_from_the_lockfile(self, workflow: dict[str, Any]) -> None:
+        """`npm ci`, not `npm install`. The lockfile is the pinned input."""
+        runs = [str(s.get("run", "")) for s in _steps(workflow, "build")]
+        assert any(r.strip() == "npm ci" for r in runs)
+
+    @pytest.mark.parametrize("command", ["npm ci", "npm run build"])
+    def test_npm_runs_in_the_site_project(self, workflow: dict[str, Any], command: str) -> None:
+        """Without this the commands run at the repository root, where there is
+        no `package.json` at all."""
+        step = next(s for s in _steps(workflow, "build") if command in str(s.get("run", "")))
+        assert step.get("working-directory") == "site"
+
+    def test_the_build_happens_before_the_upload(self, workflow: dict[str, Any]) -> None:
+        """Ordering, which nothing else here asserts. An upload placed before
+        the build publishes whatever `dist/` was lying around."""
+        steps = _steps(workflow, "build")
+        built = next(i for i, s in enumerate(steps) if "npm run build" in str(s.get("run", "")))
+        uploaded = next(
+            i
+            for i, s in enumerate(steps)
+            if str(s.get("uses", "")).startswith("actions/upload-pages-artifact")
+        )
+        assert built < uploaded
+
+
 class TestProvenanceWriter:
     """A writer in `.github/scripts/` and a reader in `evals/src/` is exactly the
     shape of drift `site/inputs.json` exists to prevent for the build. These
@@ -180,6 +220,30 @@ class TestProvenanceWriter:
     def test_the_writer_is_invoked_by_the_workflow(self, workflow: dict[str, Any]) -> None:
         scripts = "\n".join(str(s.get("run", "")) for s in _steps(workflow, "build"))
         assert ".github/scripts/write_deployment.py" in scripts
+
+    def test_it_runs_from_the_repository_root(self, workflow: dict[str, Any]) -> None:
+        """The script resolves `site/build-manifest.json` and `site/dist/`
+        relative to the working directory. Both neighbouring steps carry
+        `working-directory: site`, so copying one onto this step is a plausible
+        edit -- and it would write the record to `site/site/dist/`, leaving the
+        published artifact with no provenance at all."""
+        step = next(
+            s for s in _steps(workflow, "build") if "write_deployment.py" in str(s.get("run", ""))
+        )
+        assert "working-directory" not in step
+
+    def test_it_runs_before_the_upload(self, workflow: dict[str, Any]) -> None:
+        """Written after it, the record never reaches the artifact."""
+        steps = _steps(workflow, "build")
+        wrote = next(
+            i for i, s in enumerate(steps) if "write_deployment.py" in str(s.get("run", ""))
+        )
+        uploaded = next(
+            i
+            for i, s in enumerate(steps)
+            if str(s.get("uses", "")).startswith("actions/upload-pages-artifact")
+        )
+        assert wrote < uploaded
 
     def test_what_it_writes_is_what_the_reader_reads(
         self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path

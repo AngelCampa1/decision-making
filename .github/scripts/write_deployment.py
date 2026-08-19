@@ -12,7 +12,7 @@ and the staleness gate would start firing on its own output. A gate that fires
 on its own output is a gate somebody turns off.
 
 The field names are the contract with ``decision_evals.deployed``.
-``tests/unit/test_deployment.py`` asserts the two agree. This file must not
+``tests/unit/test_workflow.py`` asserts the two agree. This file must not
 import the package: the runner installs Node, never Python dependencies, so
 only the standard library is available here.
 """

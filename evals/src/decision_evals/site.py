@@ -37,9 +37,9 @@ current. Both were true. Neither asks what the host serves.
 
 **Publishing is no longer a thing anybody remembers to do.**
 ``.github/workflows/deploy-site.yml`` builds and deploys on push to ``main``,
-the Pages source is that workflow, and there is no ``gh-pages`` branch and no
-local publish command left. So the build being *pushed* is now a property of
-``main`` rather than of a person.
+and the Pages source is that workflow. No local publish command is left, and the
+``gh-pages`` branch it pushed to is retired. So the build reaching the world is
+now a property of ``main`` rather than of a person.
 
 What remains outside this module is unchanged and is still worth stating: this
 gate is offline, so it cannot see the live page, and it never will.

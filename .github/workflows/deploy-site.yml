@@ -34,8 +34,15 @@ permissions:
 # apart must not race for the same slot, and queueing means the later commit
 # wins, which is the right answer. `cancel-in-progress: true` would abort a
 # deploy mid-upload, which is how a Pages deployment gets wedged.
+#
+# The group is keyed on the ref rather than fixed at `pages`, so a build-only
+# dispatch from a branch does not share a slot with real deployments. With one
+# group, a third run joining while one is in progress and one is queued cancels
+# the queued one -- so testing this workflow from a branch could drop a `main`
+# deployment that had already been accepted, and the commit would never be
+# published.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -64,9 +71,16 @@ jobs:
       # `base` are already committed in site/astro.config.mjs. Passing them from
       # this step's outputs, as the Astro starter workflow does, would make the
       # deployed base path a property of the runner rather than of the
-      # repository, and the two could then disagree. This step stays for its
-      # other effect: a clear failure here if Pages is not workflow-sourced,
-      # rather than a confusing one further down.
+      # repository, and the two could then disagree.
+      #
+      # **This step does not validate that Pages is workflow-sourced**, and an
+      # earlier version of this comment claimed it did. Read from the action's
+      # source: with `enablement` left at its default of `false` it calls
+      # `getPagesSite()`, gets whatever site exists, and returns it without
+      # inspecting `build_type`. A legacy-sourced repository sails through here
+      # and fails later at `deploy-pages`, in the other job. The step is kept
+      # for its `page_url` output and as a Pages-API sanity call, which is all
+      # it actually buys.
       - uses: actions/configure-pages@v6
 
       - name: Install

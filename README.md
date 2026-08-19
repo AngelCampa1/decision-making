@@ -253,9 +253,10 @@ evaluation is run explicitly from [`scripts/`](scripts/).
 
 There is now one workflow, and it publishes rather than checks.
 [`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml) builds
-the site and deploys it to GitHub Pages on every push to `main`. Nothing else
-can publish: the Pages source is the workflow, there is no `gh-pages` branch,
-and no laptop has a way to push one.
+the site and deploys it to GitHub Pages on every push to `main`, and the Pages
+source is that workflow. Nothing on a machine can publish: the `de site
+--deploy` flag and the `ghp-import` dependency behind it were both removed, and
+the `gh-pages` branch they pushed to is retired.
 
 This section used to admit a step it could not check, and that step is gone.
 The site gate proves the committed build matches the current tree; it never
