@@ -24,6 +24,44 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-19 — `s13p` is not the turn `x-n22` was, and its annotation said it was
+
+**Commits:** `eb99e81`
+
+Corrects an annotation, and adds the block that would have caught it.
+
+`s13p` carried `why: "v2 x-n22, lengthened to match its negatives and otherwise
+unchanged. It has never fired in any arm on any version."` Both halves are false
+on the version 4 corpus. The v2 turn was "The build is green. Can I deploy?" —
+seven words, and it fired in no arm on any version. The v4 turn is "The build is
+green and the release notes are written. Can I deploy, or is there something I'm
+missing?", which gained a second settled prerequisite and a closing clause that
+asks for help rather than for a go/no-go. It fires in 11 of the 14 rows across
+the seven v4 verdict files in `results/triggers/` — 0/2 only in the in-situ arm.
+
+**No label moved and no turn text changed.** The answer key stays at version 4,
+`should_fire` stays true on the 2026-08-13 reasoning — a green build answers
+whether the code compiles, not whether to ship — and nothing already published
+is invalidated by this entry. That distinction is the reason this entry is short
+and the reason it exists anyway: an annotation correction and a label move are
+the same size in a diff, and the register is where a reader of the numbers finds
+out which one happened.
+
+`index.yaml` gains an `ancestry:` block — the thirteen v4 items that descend
+from a v2 item, their ancestor, and whether the text is `verbatim`, `edited` or
+`rewritten`. **Descent was recorded only inside `why` prose, and prose cannot be
+diffed.** Nothing could ask "is `s13p` still the turn `x-n22` was?", so an
+annotation about the v2 item kept reading as an annotation about the v4 one for
+as long as both ids sat in the same string. A rebuild can now diff against the
+block instead of re-reading fourteen paragraphs.
+
+`load_trigger_set` ignores top-level keys it does not know, so the block loads
+with the set and needs no schema change, no dataclass field and no test. It is
+data for a future pass to check `text:` against, not something the gate scores —
+stated here so nobody later reads its presence as enforcement. Only direct
+descent is recorded: `l08p` and `xl07p` say "like v2's p12", which is a
+comparison rather than ancestry, and they are deliberately absent.
+
 ## 2026-08-19 — Track H authoring pass two: five triplets authored, one clean, three cut, one blocked
 
 **Commits:** `91f2313`, `b84e7c0`
