@@ -270,6 +270,36 @@ class TestCompare:
         with pytest.raises(ArmError, match="share no case ids"):
             compare(a, b)
 
+    def test_two_arms_that_disagree_on_a_label_are_refused(self) -> None:
+        """The reproduction: identical model behaviour, 33 points of difference.
+
+        Every verdict below is the same in both arms. Only `c1`'s label moves,
+        and both arms are stamped at the same `set_version`, so all four stamp
+        guards pass -- `per_item_correctness` folds the label into
+        `fired == should_fire` before anything can pair on it, and the
+        comparison reported accuracy 1.0000 against 0.6667 with an item-moved
+        line under it.
+        """
+        a = [
+            row("c1", fired=True, should_fire=True),
+            row("c2", fired=True, should_fire=True),
+            row("c3", fired=False, should_fire=False),
+        ]
+        b = [dict(record) for record in a]
+        b[0]["should_fire"] = False
+        with pytest.raises(ArmError, match="both labels"):
+            compare(a, b)
+
+    def test_the_label_guard_is_the_one_the_respondent_grid_uses(self) -> None:
+        """Two paths, one refusal. They cannot diverge again."""
+        a = [row("c1", fired=True, should_fire=True)]
+        b = [row("c1", fired=True, should_fire=False)]
+        with pytest.raises(ArmError) as compared:
+            compare(a, b)
+        with pytest.raises(ArmError) as pooled:
+            item_difficulty({"a": a, "b": b})
+        assert str(compared.value) == str(pooled.value)
+
     def test_the_direction_columns_are_not_symmetric(self) -> None:
         a = [row("p1", fired=True, should_fire=True), row("p2", fired=False, should_fire=True)]
         b = [row("p1", fired=False, should_fire=True), row("p2", fired=False, should_fire=True)]

@@ -1502,8 +1502,21 @@ def compare(a: Iterable[Record], b: Iterable[Record]) -> ArmComparison:
     carry different repeat counts, and position would pair a case with a
     different case.
 
+    **The four stamp guards are not enough on their own.** They compare
+    ``set_version``, ``model``, ``in_situ`` and ``skill_version``, which are
+    four claims a file makes about itself; none of them looks at a label. Two
+    arms stamped ``set_version: 4``, identical in every verdict, differing only
+    in one case's ``should_fire``, compared 1.0000 against 0.6667 with an
+    item-moved line under it -- because :func:`per_item_correctness` folds the
+    label away into ``fired == should_fire`` before anything can pair on it.
+    That is the 2026-08-13 "not one call was re-made" defect arriving *inside*
+    one key version, so :func:`_labels_by_case` is the fifth guard and is the
+    same function :func:`_respondent_grid` refuses on.
+
     Raises:
-        ArmError: if the two arms share no case ids.
+        ArmError: if the two arms share no case ids, if either fails one of the
+            four comparability guards, or if one case id carries both labels
+            across them.
     """
     from scipy.stats import wilcoxon
 
@@ -1516,6 +1529,7 @@ def compare(a: Iterable[Record], b: Iterable[Record]) -> ArmComparison:
         raise ArmError(reason)
     if (reason := skill_versions_comparable(rows_a, rows_b)) is not None:
         raise ArmError(reason)
+    _labels_by_case([*rows_a, *rows_b])
 
     left, right = per_item_correctness(rows_a), per_item_correctness(rows_b)
     shared = sorted(set(left) & set(right))
@@ -1747,6 +1761,39 @@ class ItemAnalysis:
         return self.n_unparseable == 0
 
 
+def _labels_by_case(rows: Iterable[Record]) -> dict[str, bool]:
+    """Case id to ``should_fire``, refusing a case that appears under both labels.
+
+    One place where a label map is built, because there are two callers and the
+    consequence of them disagreeing is the defect this repository has already
+    published once. On 2026-08-13 one turn moved from the positives to the
+    negatives; recall rose three to five points on every arm on disk and **not
+    one call was re-made**. `set_version` catches that across a key revision --
+    and catches nothing when two files carry the same stamp and different
+    labels, which is what a hand-edited checkpoint or a half-applied `de
+    rescore` leaves behind.
+
+    Correctness here is ``fired == should_fire`` and nothing else, so a label
+    that differs between two arms silently regrades every row of one of them.
+    :func:`compare` reads 33 points of difference out of two arms whose model
+    behaviour is identical, and prints an item-moved line under it.
+
+    Raises:
+        ArmError: if one case id appears under both labels.
+    """
+    labels: dict[str, bool] = {}
+    for row in rows:
+        case = str(row["case"])
+        label = bool(row["should_fire"])
+        if labels.setdefault(case, label) != label:
+            raise ArmError(
+                f"case {case!r} appears with both labels. A respondent set holding one "
+                "turn as a positive and as a negative is two label revisions read as "
+                "one, and the difference between them is not a model result."
+            )
+    return labels
+
+
 def _respondent_grid(
     arms: Mapping[str, Iterable[Record]],
 ) -> tuple[tuple[Respondent, ...], dict[str, bool], dict[str, dict[Respondent, bool]], int]:
@@ -1805,7 +1852,7 @@ def _respondent_grid(
             if (reason := guard(rows, reference)) is not None:
                 raise ArmError(f"arm {name!r} cannot join this respondent set: {reason}")
 
-    labels: dict[str, bool] = {}
+    labels = _labels_by_case(row for rows in rows_by_arm.values() for row in rows)
     correctness: dict[str, dict[Respondent, bool]] = {}
     respondents: set[Respondent] = set()
     seen: set[tuple[Respondent, str]] = set()
@@ -1813,13 +1860,7 @@ def _respondent_grid(
     for name, rows in rows_by_arm.items():
         for row in rows:
             case = str(row["case"])
-            label = bool(row["should_fire"])
-            if labels.setdefault(case, label) != label:
-                raise ArmError(
-                    f"case {case!r} appears with both labels. A respondent set holding one "
-                    "turn as a positive and as a negative is two label revisions read as "
-                    "one, and the difference between them is not a model result."
-                )
+            label = labels[case]
             respondent: Respondent = (name, int(row["repeat"]))
             respondents.add(respondent)
             if (respondent, case) in seen:
