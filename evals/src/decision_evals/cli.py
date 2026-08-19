@@ -302,11 +302,26 @@ def check_tailoring_step() -> StepResult:
     The corpus is 3 of a planned 20 triplets and under active revision, so an
     empty or missing ``index.yaml`` passes with nothing to report rather than
     failing the gate -- see :func:`decision_evals.tailoring.load_deltas`.
+
+    **Baselined findings are deferred rather than dropped, and printed on
+    every run** -- the same treatment ``check_triggers_step`` gives the
+    trigger corpus, for the same reason: the three triplets on disk are
+    retained as evidence of a form that failed adversarial review (see
+    ``datasets/tailoring/corpus-baseline.txt``), so this step must never read
+    as "the corpus is clean" while it is still red by design.
     """
     name = "tailoring corpus"
     _echo_header(name)
 
-    from decision_evals.tailoring import TAILORING_DIR, check_shortcuts, load_deltas
+    from decision_evals.corpus import apply_corpus_baseline
+    from decision_evals.tailoring import (
+        CORPUS_SCOPE,
+        TAILORING_BASELINE_PATH,
+        TAILORING_DIR,
+        check_shortcuts,
+        load_deltas,
+        load_tailoring_baseline,
+    )
 
     tailoring_dir = REPO_ROOT / TAILORING_DIR
     result = load_deltas(REPO_ROOT)
@@ -319,7 +334,17 @@ def check_tailoring_step() -> StepResult:
         f"{len(trigger_set.negatives)} matched delta(s)"
     )
 
-    issues = check_shortcuts(trigger_set, tailoring_dir / "index.yaml")
+    findings = check_shortcuts(trigger_set, tailoring_dir / "index.yaml")
+    baseline = load_tailoring_baseline(REPO_ROOT)
+    issues, deferred = apply_corpus_baseline(
+        [(CORPUS_SCOPE, finding) for finding in findings],
+        baseline,
+        baseline_path=TAILORING_BASELINE_PATH,
+    )
+
+    for item in deferred:
+        typer.secho(f"  known-open (baselined): {item}", fg=typer.colors.YELLOW)
+
     if not issues:
         return StepResult(name, True)
     for issue in issues:

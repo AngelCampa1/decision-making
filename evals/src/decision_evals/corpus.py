@@ -1284,14 +1284,17 @@ def _check_leaks(checks: Sequence[Check], path: Path) -> list[Finding]:
 CORPUS_BASELINE_PATH: Final = "datasets/triggers/corpus-baseline.txt"
 
 
-def load_corpus_baseline(repo_root: Path) -> set[str]:
-    """Baselined finding keys, one per line, ``#`` for comments.
+def load_baseline_file(repo_root: Path, relative_path: str) -> set[str]:
+    """Baselined finding keys from any file sharing this format, one per line.
 
-    Keys are ``<corpus path>|<finding key>`` -- scoped to the corpus, because
-    ``inert:paste_cues`` is a different fact about a different set and a
-    repository-wide key would exempt a corpus nobody has looked at yet.
+    ``#`` marks a comment. Generalises the trigger corpus's own
+    :func:`load_corpus_baseline` for callers outside ``datasets/triggers/`` --
+    ``datasets/tailoring/corpus-baseline.txt`` is the ``<corpus path>|<finding
+    key>`` format and the may-only-shrink rule applied to a second corpus, and
+    duplicating this four-line parser for it is how one shared format quietly
+    becomes two.
     """
-    path = repo_root / CORPUS_BASELINE_PATH
+    path = repo_root / relative_path
     if not path.is_file():
         return set()
     return {
@@ -1301,8 +1304,20 @@ def load_corpus_baseline(repo_root: Path) -> set[str]:
     }
 
 
+def load_corpus_baseline(repo_root: Path) -> set[str]:
+    """Baselined finding keys, one per line, ``#`` for comments.
+
+    Keys are ``<corpus path>|<finding key>`` -- scoped to the corpus, because
+    ``inert:paste_cues`` is a different fact about a different set and a
+    repository-wide key would exempt a corpus nobody has looked at yet.
+    """
+    return load_baseline_file(repo_root, CORPUS_BASELINE_PATH)
+
+
 def apply_corpus_baseline(
-    findings: Sequence[tuple[str, Finding]], baseline: set[str]
+    findings: Sequence[tuple[str, Finding]],
+    baseline: set[str],
+    baseline_path: str = CORPUS_BASELINE_PATH,
 ) -> tuple[list[str], list[str]]:
     """Split findings into what fails the build and what is merely on the record.
 
@@ -1314,6 +1329,12 @@ def apply_corpus_baseline(
     ``deferred`` is printed on every run rather than swallowed. A reader who
     sees a green gate must still see that two findings are open; a build that
     says nothing has told them the corpus is clean, and it is not.
+
+    ``baseline_path`` names the file a stale-entry refusal points a reader at.
+    It defaults to the trigger corpus's own file so every existing caller is
+    unaffected; a second baseline (``datasets/tailoring/corpus-baseline.txt``)
+    passes its own path so the refusal names the file that actually needs
+    editing rather than the trigger corpus's.
     """
     seen = {f"{scope}|{finding.key}" for scope, finding in findings if finding.key}
     issues = [
@@ -1322,7 +1343,7 @@ def apply_corpus_baseline(
         if not finding.key or f"{scope}|{finding.key}" not in baseline
     ]
     issues += [
-        f"{CORPUS_BASELINE_PATH}: {entry!r} is baselined but matches no current finding. "
+        f"{baseline_path}: {entry!r} is baselined but matches no current finding. "
         "Delete the line -- a baseline that does not shrink when work is done stops "
         "measuring anything, and a finding that changed shape is a new finding."
         for entry in sorted(baseline - seen)

@@ -20,14 +20,18 @@ from pathlib import Path
 import pytest
 import yaml
 
+from decision_evals.corpus import Finding, apply_corpus_baseline
 from decision_evals.tailoring import (
+    CORPUS_SCOPE,
     FEATURES,
+    TAILORING_BASELINE_PATH,
     TailoringSetError,
     battery_report,
     check_shortcuts,
     extract_delta,
     inert_features,
     load_deltas,
+    load_tailoring_baseline,
 )
 from decision_evals.triggers import TriggerCase, TriggerSet
 
@@ -299,8 +303,18 @@ class TestTheGuardPassesAKnownGoodCorpus:
 class TestTheBatteryCatchesTheRealCorpusRegisterSplit:
     def test_the_battery_flags_the_real_corpus(self) -> None:
         result = load_deltas(REPO_ROOT)
-        issues = check_shortcuts(result.trigger_set, Path("datasets/tailoring/index.yaml"))
-        assert issues, "the battery must fire on the known register-split defect"
+        findings = check_shortcuts(result.trigger_set, Path("datasets/tailoring/index.yaml"))
+        assert findings, "the battery must fire on the known register-split defect"
+
+    def test_the_finding_is_keyed_on_the_whole_leaking_set(self) -> None:
+        """The key a baseline entry has to name -- one entry, four features,
+        sorted and comma-joined, mirroring how ``corpus._check_leaks`` keys a
+        derived trigger-corpus view rather than the gated one."""
+        result = load_deltas(REPO_ROOT)
+        findings = check_shortcuts(result.trigger_set, Path("datasets/tailoring/index.yaml"))
+        assert [finding.key for finding in findings] == [
+            "leak:delta:delta_word_count,has_date,numeral_count,penalty_lexicon_gap"
+        ]
 
     def test_penalty_lexicon_gap_perfectly_separates_the_real_arms(self) -> None:
         """The specific feature the register split predicts: governing deltas
@@ -363,8 +377,9 @@ class TestTheMatchedStatisticCatchesAPairedHabit:
         assert length.matched_leaks
 
     def test_check_shortcuts_reports_the_paired_habit(self) -> None:
-        issues = check_shortcuts(_paired_habit_corpus(10), Path("paired.yaml"))
-        assert any("null standard errors" in issue for issue in issues)
+        findings = check_shortcuts(_paired_habit_corpus(10), Path("paired.yaml"))
+        assert any("null standard errors" in finding.message for finding in findings)
+        assert any(finding.key == "matched:delta:delta_char_count" for finding in findings)
 
 
 # --------------------------------------------------------------------------- #
@@ -397,5 +412,160 @@ class TestDispersionIsStructurallyInert:
         """``check_shortcuts`` has no code path that can emit this wording --
         confirmed here rather than merely asserted in the docstring."""
         for corpus in (_balanced_corpus(), _paired_habit_corpus(10)):
-            issues = check_shortcuts(corpus, Path("x.yaml"))
-            assert not any("cancel" in issue for issue in issues)
+            findings = check_shortcuts(corpus, Path("x.yaml"))
+            assert not any("cancel" in finding.message for finding in findings)
+
+
+# --------------------------------------------------------------------------- #
+# The baseline: it may defer the exact four-feature finding the real corpus
+# produces today, and nothing wider. Same treatment as
+# ``test_corpus_battery.py::TestTheBaselineIsNarrowRatherThanBlanket`` and
+# ``TestTheShippedBaseline`` -- a baseline is a falsifier with the sign
+# flipped, so the thing worth demonstrating is not that it defers the known
+# finding (that is what it was written to do) but that a *wider* one still
+# turns the build red.
+# --------------------------------------------------------------------------- #
+
+
+def _five_feature_leak_corpus() -> TriggerSet:
+    """Three triplets where the governing delta leaks on every feature the
+    battery has: longer in words and characters, carrying a date, carrying
+    several numerals, and leaning on penalty vocabulary while the matched
+    delta leans on procedural vocabulary. Built to leak on all five columns
+    of :data:`FEATURES` at once, which the real three-triplet corpus (four
+    of five -- ``delta_char_count`` alone stays inside the band) does not.
+    """
+    cases: list[TriggerCase] = []
+    for index in range(3):
+        cases.append(
+            TriggerCase(
+                id=f"f{index}-governing",
+                turn=(
+                    f"On 2025-0{index + 1}-01 you forfeit access after missing "
+                    "3 payments of $500 each under this clause requirement."
+                ),
+                should_fire=True,
+                why="fixture",
+                triple=f"f{index}",
+            )
+        )
+        cases.append(
+            TriggerCase(
+                id=f"f{index}-matched",
+                turn="Fees apply.",
+                should_fire=False,
+                why="fixture",
+                triple=f"f{index}",
+            )
+        )
+    return TriggerSet(skill="tailoring", cases=tuple(cases))
+
+
+class TestAFifthLeakingFeatureIsNotDeferredByTheShippedBaseline:
+    """The load-bearing test the task asks for: identity is the whole leaking
+    set, not any one feature in it, so a corpus leaking on five features is a
+    *different* finding from the shipped four-feature one and the baseline
+    must not cover it. Run against the real
+    ``datasets/tailoring/corpus-baseline.txt`` on disk rather than a
+    hand-built baseline, so an edit to that file is exactly what this test
+    protects.
+    """
+
+    def test_the_fixture_leaks_on_all_five_features(self) -> None:
+        findings = check_shortcuts(_five_feature_leak_corpus(), Path("x.yaml"))
+        leak = next(f for f in findings if f.key.startswith("leak:delta:"))
+        assert leak.key == (
+            "leak:delta:delta_char_count,delta_word_count,has_date,numeral_count,"
+            "penalty_lexicon_gap"
+        )
+
+    def test_the_shipped_baseline_does_not_defer_it(self) -> None:
+        findings = [
+            (CORPUS_SCOPE, finding)
+            for finding in check_shortcuts(_five_feature_leak_corpus(), Path("x.yaml"))
+        ]
+        baseline = load_tailoring_baseline(REPO_ROOT)
+        issues, deferred = apply_corpus_baseline(
+            findings, baseline, baseline_path=TAILORING_BASELINE_PATH
+        )
+        assert any("5 feature(s)" in issue for issue in issues)
+        assert not any("5 feature(s)" in message for message in deferred)
+
+    def test_a_baseline_naming_the_five_feature_key_would_defer_it(self) -> None:
+        """The contrast case: the mechanism above is the key not matching,
+        not some other reason the finding always fails."""
+        findings = [
+            (CORPUS_SCOPE, finding)
+            for finding in check_shortcuts(_five_feature_leak_corpus(), Path("x.yaml"))
+        ]
+        wide_baseline = {
+            f"{CORPUS_SCOPE}|leak:delta:delta_char_count,delta_word_count,has_date,"
+            "numeral_count,penalty_lexicon_gap"
+        }
+        issues, deferred = apply_corpus_baseline(
+            findings, wide_baseline, baseline_path=TAILORING_BASELINE_PATH
+        )
+        assert issues == []
+        assert any("5 feature(s)" in message for message in deferred)
+
+    def test_dropping_one_feature_from_the_shipped_finding_is_also_not_deferred(self) -> None:
+        """The other direction of may-only-shrink: an *improved* corpus (three
+        leaking features instead of four) produces a different key too, and
+        the stale four-feature baseline entry both fails to cover the new
+        finding and is reported as no longer matching anything current."""
+        narrower = {
+            CORPUS_SCOPE: Finding(
+                "leak:delta:has_date,numeral_count,penalty_lexicon_gap",
+                "x.yaml: 3 feature(s) leak",
+            )
+        }
+        findings = list(narrower.items())
+        baseline = load_tailoring_baseline(REPO_ROOT)
+        issues, _ = apply_corpus_baseline(findings, baseline, baseline_path=TAILORING_BASELINE_PATH)
+        assert any("3 feature(s) leak" in issue for issue in issues)
+        assert any(
+            "is baselined but matches no current finding" in issue and "Delete the line" in issue
+            for issue in issues
+        )
+
+
+class TestTheShippedTailoringBaseline:
+    """The real file against the real corpus."""
+
+    def test_it_defers_exactly_the_known_finding_and_nothing_else(self) -> None:
+        result = load_deltas(REPO_ROOT)
+        findings = [
+            (CORPUS_SCOPE, finding)
+            for finding in check_shortcuts(
+                result.trigger_set, Path("datasets/tailoring/index.yaml")
+            )
+        ]
+        baseline = load_tailoring_baseline(REPO_ROOT)
+        issues, deferred = apply_corpus_baseline(
+            findings, baseline, baseline_path=TAILORING_BASELINE_PATH
+        )
+        assert issues == []
+        assert len(deferred) == 1
+        assert "delta_word_count 0.611" in deferred[0]
+        assert "penalty_lexicon_gap 1.000" in deferred[0]
+
+    def test_every_line_in_the_file_names_the_one_real_corpus(self) -> None:
+        """A baseline entry for a corpus that does not exist would never go
+        stale, which is exactly how one goes unnoticed."""
+        baseline = load_tailoring_baseline(REPO_ROOT)
+        assert {entry.split("|", 1)[0] for entry in baseline} == {CORPUS_SCOPE}
+
+    def test_a_baseline_entry_that_no_longer_matches_fails(self) -> None:
+        stale = load_tailoring_baseline(REPO_ROOT) | {f"{CORPUS_SCOPE}|leak:delta:delta_word_count"}
+        result = load_deltas(REPO_ROOT)
+        findings = [
+            (CORPUS_SCOPE, finding)
+            for finding in check_shortcuts(
+                result.trigger_set, Path("datasets/tailoring/index.yaml")
+            )
+        ]
+        issues, _ = apply_corpus_baseline(findings, stale, baseline_path=TAILORING_BASELINE_PATH)
+        assert any(
+            "is baselined but matches no current finding" in issue and "Delete the line" in issue
+            for issue in issues
+        )

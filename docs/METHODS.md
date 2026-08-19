@@ -35,9 +35,9 @@ serves the four-arm design of §4 and has therefore only ever run on the
 calibration corpus.
 
 **The judge policy is written and has not been exercised.** No judge panel has
-run here. The only multi-model procedures on record are the three-instance
-adjudicator in §2 and a two-auditor distractor filter, and neither is a judge
-scoring model output. So what follows is what `PROTOCOL.md` §7 *commits to*, not
+run here. The only two multi-model procedures in the repository are the
+three-instance adjudicator in §2, which has run, and a two-auditor distractor
+filter, which has not; neither is a judge scoring model output. So what follows is what `PROTOCOL.md` §7 *commits to*, not
 a description of something running: a judge would emit a binary verdict plus a
 written critique rather than a Likert rating; TPR and TNR would be reported
 separately, because blended accuracy lets a judge that agrees with everything
@@ -51,8 +51,9 @@ implementation in this repository** — there is no such estimator in `stats/`.
 
 **A zero is classified rather than assumed.** `ZeroCause` in that same scorer
 module admits six causes — `agent_wrong`, `format_violation`, `infrastructure`,
-`item_defect`, `verifier_defect`, `environment_leak` — and `Score` cannot be
-constructed without naming one. Splitting `item_defect` from `verifier_defect`
+`item_defect`, `verifier_defect`, `environment_leak` — and `Score` carries the
+field as mandatory, though it accepts `None` for a scoring item and three of the
+six need a person reading the trace. Splitting `item_defect` from `verifier_defect`
 is the deliberate departure the module argues for: a bad item and a bad checker
 have completely different fixes. It shares `answer.py`'s scope, so no zero in a
 published trigger run has been through it. The runner's preflight check
@@ -136,9 +137,11 @@ refuses a comparison that straddles a version boundary. A published run's README
 must state its key version, and the gate cross-checks that line against the
 records sitting beside it.
 
-Two sibling guards make the same move on different axes: `models_comparable`
-refuses comparing arms served by different model tiers, and `venue_comparable`
-refuses comparing a substituted system prompt against an appended one. The
+Three sibling guards make the same move on other axes: `models_comparable`
+refuses comparing arms served by different model tiers, `venue_comparable`
+refuses comparing a substituted system prompt against an appended one, and
+`skill_versions_comparable` refuses comparing arms that saw different versions
+of the skill itself. The
 treatment of a *missing* stamp differs between them, and the reasoning is
 written down in each case — an absent key version defaults to 1 because that is
 what those records are, while an absent model is unknown rather than defaulted,
@@ -171,10 +174,14 @@ happened. So the paragraph above describes a design and a written control, not a
 result: the placebo exists, its matching guard runs in `de check`, and it has
 never stood in for anything.
 
-What does run on every call is narrower and worth naming. The format contract is
-concatenated into every arm's system prompt with no way to omit it, and the
-option menu lives in the arm-independent rendering path, so neither can vary
-between arms by construction.
+Two structural guards belong to that same unrun path, and are worth naming as
+design rather than as practice: the format contract is concatenated into every
+arm's system prompt with no way to omit it, and the option menu lives in the
+arm-independent rendering path, so neither can vary between arms by
+construction. Both live in the module `calibrate.py` alone calls. The published
+trigger runs build their prompts elsewhere, in
+[`../scripts/run_triggers.py`](../scripts/run_triggers.py), and are not governed
+by either.
 
 **The rule that organises this section:** *an estimator that cannot return a
 non-zero value is not a measurement, and it does not announce itself.* Two
@@ -195,7 +202,7 @@ The standing negative controls, all in [`../scripts/`](../scripts/):
 | `tree_smoke.py` | Does an ablation survive when surviving text is pinned? | **Ran** — the unpinned first version was confounded |
 | `probe_casefile.py` | Does a candidate venue produce any signal at all? | **Ran** — clean negative, venue closed |
 | `realism_probe.py` | Does the corpus read as text a person sent? | **Ran** — descriptive only, no threshold |
-| `audit_distractors.py` | Do two auditors unanimously agree a distractor is irrelevant? | **Built; never run** — no record on disk, and the auditor models are not installed |
+| `audit_distractors.py` | Do two auditors unanimously agree a distractor is irrelevant? | **Built; never run** — no record on disk, and the two auditors are one provider's models rather than independent ones |
 | `pad.py` | Long-context padding assembler | **Built and unit-tested; never run as an experiment** |
 
 `realism_probe.py` is worth reading for what it refuses to do. It declines to
@@ -240,11 +247,9 @@ skill is the part most pre-registered ML work leaves open.
 It has never been called. It is scoped to the `confirm` arena and no
 confirmation run has happened, so it is declared in
 `[tool.decision-evals.unwired]` with the condition that would wire it. It
-carries a 100% branch floor and no caller, and the repository's own summary of
-that state is the sharpest sentence in the codebase: **a refusal branch with
-100% test coverage and no caller is tested, proven, and inert. The tests pass,
-the floor is met, the gate reports green, and the run it would have refused
-proceeds.**
+carries a 100% branch floor and no caller. `AGENTS.md` puts the consequence in
+one line: **"A tested refusal with no caller is inert, and the gate reports
+green either way."**
 
 **A registered band names its estimator and its denominator, not just its
 number.** At least seven pre-registration defects are on record, and the ledger
@@ -258,11 +263,14 @@ the band either way, which is luck rather than method. One re-derived an earlier
 run's thresholds from a later run's observed numbers while citing the earlier
 run by name, which flipped the verdict.
 
-**Two were caught before the calls were spent**, which makes them the cheapest
-on the list and the only ones that cost nothing: a band that could not be
-reached at any corpus size the project would build, and a recall band computed
-against a per-item ceiling that made it unachievable. Each defect was recorded
-rather than dropped.
+**The ledger separates the ones found after the run from the ones found before
+it**, and that distinction is worth more than the count. The first five were all
+found after their calls were spent. Two later ones were caught beforehand — a
+band that could not be reached at any corpus size the project would build, and
+one flagged in the entry that registered it — and those are the cheapest on the
+list, because nothing had been run yet. A third was *visible* before its run and
+still not acted on, which is a different and worse case. Each defect was
+recorded rather than dropped.
 
 A related rule, learned the same way: **a recall band is set against the
 observed per-item ceiling, not a round number.** One registered band demanded
@@ -327,8 +335,9 @@ the larger number.
 
 The organising claim of this repository is that **every confident wrong number
 it has produced was caught by somebody checking, never by somebody being
-careful.** So the checks are mechanical. `de check` runs sixteen steps; the ones
-that are about method rather than lint:
+careful.** So the checks are mechanical. `de check` runs seventeen steps at the
+time of writing, and the count moves as gates are added; the ones that are about
+method rather than lint:
 
 | Step | Refuses | Added after |
 |---|---|---|
@@ -387,7 +396,8 @@ should pass and confirm the gate passes it.
 **Nothing is believed until it is confirmed.** Work is dispatched to sub-agents,
 every artefact goes to a different agent whose brief is to break it rather than
 approve it, and a result is a hypothesis until an independent agent re-derives
-it from the raw records. A "looks good" review has not run. Three published runs
+it from the raw records. The rule is that a reviewer returning "looks good" has
+not run the task. Three published runs
 record an independent re-derivation, and they are not equivalent: one re-derived
 every figure with its own loading and counting code and named three adopted
 objections; one re-derived through the repository's own estimators and named
@@ -424,16 +434,20 @@ which decides whether it is worth having installed at all.
 
 **And as of 2026-08-19, none of it measures the skill that ships.** Two
 procedures were added that day, which rewrote the `description` field the
-measurements are made against. Ten description arms had been run over 3,096
-calls, and the decision register states the consequence without softening it:
-*"Not one of them describes the string that now ships. No number anywhere in
-this repository may be presented as a measurement of the current description."*
+measurements are made against. Ten description arms had been run against the old
+string — the last six of them over 3,096 calls — and the decision register states
+the consequence without softening it: *"Not one of them describes the string that
+now ships. No number anywhere in this repository may be presented as a
+measurement of the current description, and the six-arm table in `docs/STATUS.md`
+and `docs/RESEARCH_PROGRAMME.md` is from today a historical comparison between
+description forms at a fixed procedure set."*
 The internal comparisons survive, since every arm saw the same items. The
 external one does not. Everything below is a comparison between description
 *forms* at a fixed procedure set, which is a narrower claim than it was the day
 before. Read [`DECISIONS.md`](DECISIONS.md) before quoting any of it.
 
-The through-line, at the point it was written:
+The through-line as [`../README.md`](../README.md) states it, at the point it
+was written:
 
 > Five independent manipulations of a skill description, covering structure,
 > content, entry count and composition twice, and not one moved how well it
@@ -459,11 +473,12 @@ against a rule invented after seeing it.
 [`STATUS.md`](STATUS.md) is the ledger: every run, what it showed, and the
 measurements caught being broken. That last count is around eleven and the
 ledger contradicts itself about it in two places, which is fitting. What holds
-across nearly all of them is the shape — a clean run, a full checkpoint, and a
-plausible number. **Almost none was caught by anything failing.** Two are
-exceptions worth keeping: one surfaced through adversarial review of a run that
-had already voided on its own parse-rate condition, and one was found in a
-module rather than in a run at all.
+across them is that **none was caught by anything failing** — no crash, no red
+test. Almost all share the same shape: a clean run, a full checkpoint, and a
+plausible number. Two sit outside that shape rather than outside the rule: one
+surfaced through adversarial review of a run that had already voided on its own
+parse-rate condition, and one was found in a module rather than in a run at
+all.
 
 And the bottom line, unchanged: [`../SCORECARD.md`](../SCORECARD.md) reads
 **proven: 0**.

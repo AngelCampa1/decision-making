@@ -24,6 +24,66 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-19 — a baseline for `datasets/tailoring/`, so the shortcut battery's finding does not permanently redden the gate
+
+**Commits:** `2d848b2`
+
+`f12b444` gave the tailoring corpus a shortcut battery
+(`check_tailoring_step` in [`cli.py`](../evals/src/decision_evals/cli.py),
+logic in [`tailoring.py`](../evals/src/decision_evals/tailoring.py)) and it
+correctly fires on the three triplets authored so far: `delta_word_count`
+(pooled AUC 0.611), `numeral_count` (0.722), `has_date` (0.667) and
+`penalty_lexicon_gap` (1.000, matched 1.000 too) all separate governing
+deltas from matched deltas alone. That corpus is committed as evidence of a
+form that failed adversarial review (`c010b06`, `fb295c8`) — nothing may be
+authored against it — so the finding is correct and permanent, and a battery
+that stays red forever stops being a signal every other session in this
+repository can read.
+
+**The fix is the same one `datasets/triggers/corpus-baseline.txt` already
+uses, carried over exactly.** `check_shortcuts` in `tailoring.py` used to
+return plain `str`, so no finding carried a stable identity a baseline could
+name. It now returns `decision_evals.corpus.Finding` — the type the trigger
+corpus already uses, not a parallel one — and the four leaking features are
+folded into one combined key, `leak:delta:delta_word_count,has_date,
+numeral_count,penalty_lexicon_gap`, sorted and comma-joined, the same way
+`corpus._check_leaks` keys a *derived* trigger-corpus view (`ask`/`close`/
+`open`) rather than the gated one. `datasets/tailoring/corpus-baseline.txt`
+lists that one entry, printed on every `de check` run as
+`known-open (baselined)` so a green gate is never read as a clean corpus, and
+the file may only shrink — an improvement nobody recorded is an improvement
+the baseline has stopped being able to see.
+
+**Why a combined key rather than one baseline entry per feature.** Identity
+is the whole set of things that went wrong, not any one feature in it: a
+fifth feature joining the leak, or a fourth dropping out, changes the key and
+the existing baseline entry stops matching, which fails the build until
+somebody edits the file with eyes on the new finding. Per-feature keys would
+also have caught a genuinely new feature, but would have let the *set*
+narrow or widen silently as individual keys came and went — the combined key
+makes the whole shape of the defect the thing under version control.
+`tests/unit/test_tailoring_battery.py::TestAFifthLeakingFeatureIsNotDeferredByTheShippedBaseline`
+constructs a synthetic corpus that leaks on all five columns in
+`FEATURES` and confirms the shipped four-feature baseline does not defer it.
+
+`decision_evals.corpus.load_corpus_baseline` and `apply_corpus_baseline` were
+generalised (a new `load_baseline_file(repo_root, relative_path)` helper, and
+an optional `baseline_path` parameter on `apply_corpus_baseline` for the
+stale-entry message) rather than duplicated, so both corpora's baselines run
+through one parser and one may-only-shrink rule.
+
+Whether a baseline is the right call here at all, rather than deleting the
+corpus outright: the corpus is already inert by the terms of `fb295c8` —
+nothing may be authored against it and no fourth triplet may be added — so
+what a baseline buys is exactly the same "on the record, not forgotten"
+property `datasets/triggers/corpus-baseline.txt` buys for closed findings,
+applied to a corpus that will not close by editing but by replacement. That
+is a real argument for deleting the three triplets instead and carrying the
+finding as prose alone. It was not taken here because the corpus is itself
+evidence — of the register-split defect a human reader caught and the
+battery now catches mechanically — and deleting evidence to stop a gate
+turning red is the wrong direction to resolve that tension in.
+
 ## 2026-08-19 — `datasets/tailoring/` added to the decision register
 
 **Commits:** `fb295c8`

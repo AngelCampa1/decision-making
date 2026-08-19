@@ -1,0 +1,52 @@
+# Corpus findings that are on the record and deferred, for
+# datasets/tailoring/.
+#
+# One `<corpus path>|<finding key>` per line, `#` for comments. Same file
+# format and the same semantics as `datasets/triggers/corpus-baseline.txt`:
+# exempt, and it MAY ONLY SHRINK. `de check` fails when a listed entry no
+# longer matches a real finding, because a baseline that does not shrink when
+# work is done has stopped measuring anything. And, as with that file, a line
+# here is *printed on every run* by `check_tailoring_step` as
+# `known-open (baselined)`, so a green gate cannot be read as a clean corpus.
+#
+# WHY THIS ENTRY EXISTS, AND WHY IT IS NOT A LICENSE TO KEEP AUTHORING. The
+# three triplets on disk (`h01`, `h02`, `h03`) are committed as evidence of a
+# form that failed adversarial review, not as a corpus to build on -- see
+# `c010b06` (the authoring pass that failed) and `fb295c8` (the commit that
+# marked `datasets/tailoring/` governed and kept the corpus as evidence rather
+# than deleting it). A human reader, not a gate, first noticed that every
+# `governing` insert names a penalty attached to a status change while every
+# `matched` insert is procedural -- the same shape of shortcut
+# `datasets/triggers/` shipped once already, see
+# `notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words.md`.
+# The shortcut battery added in `f12b444`
+# (`evals/src/decision_evals/tailoring.py`) confirms it on all three triplets:
+# pooled AUC 0.611 (`delta_word_count`), 0.722 (`numeral_count`), 0.667
+# (`has_date`), 1.000 (`penalty_lexicon_gap`, matched 1.000 too). This entry
+# defers exactly that reading so `de check` can stay green for every other
+# session in this repository while the corpus itself stays untouched.
+#
+# Nothing may be authored against these three triplets on the strength of this
+# entry, and no fourth triplet may be added to `datasets/tailoring/` while it
+# stands -- that would be building on evidence of a failed form rather than
+# replacing it. Track H's next authoring pass starts a new corpus under
+# whatever review process closes out `fb295c8`'s objection; when that corpus
+# replaces these three triplets, this entry is deleted rather than edited to
+# match the new one, per the may-only-shrink rule above.
+#
+# THE KEY NAMES THE WHOLE LEAKING SET, NOT ANY ONE FEATURE IN IT. Unlike the
+# trigger corpus's `turn` view, this corpus has exactly one view (`delta`),
+# so there is no per-feature count gate to calibrate -- every feature that
+# leaks at all is folded into one `leak:delta:<feature,feature,...>` key,
+# sorted and comma-joined, mirroring how `corpus.py`'s `_check_leaks` keys a
+# *derived* trigger-corpus view rather than the gated one. See `Finding`'s
+# docstring in `evals/src/decision_evals/corpus.py`: identity is the set of
+# things that went wrong, not the wording. A fifth feature joining the set
+# below is a different key and fails the build; so is a fourth dropping out.
+# Both are the may-only-shrink rule doing its job -- an improvement nobody
+# recorded is an improvement this baseline has stopped being able to see.
+#
+# See `docs/DECISIONS.md`, 2026-08-19, for the entry that added this file.
+#
+# Seeded 2026-08-19, three triplets, one combined finding.
+datasets/tailoring/index.yaml|leak:delta:delta_word_count,has_date,numeral_count,penalty_lexicon_gap
