@@ -216,6 +216,67 @@ If you are an agent contributing here rather than a user installing the skills:
   task abandoned mid-corpus to report four files that were simply somebody
   else's work in progress.
 
+- **Work in your own worktree, and rejoin `main` on a schedule.** The bullet
+  above says how to share one working tree politely. Stop sharing it. A session
+  that will run longer than a few minutes gets its own:
+
+  ```bash
+  git worktree add ../decision-making-wt-<topic> -b <topic>
+  ```
+
+  A sibling directory, not one inside the repository: a worktree under
+  `.claude/worktrees/` is matched by `site/inputs.json` globs and shows up in
+  this repository's own `git status`, which is the problem it was meant to
+  solve. Its own tree, its own `.venv`, its own gate.
+
+  Three failures, one cause, all of them on 2026-08-19 in a single shared tree:
+
+  - **`de check` is whole-repo and it is bound to `pre-commit` and
+    `pre-push`.** So another session's half-written module fails *your* push.
+    Four sessions each read "4 of 18 steps failed", each concluded it was
+    blocked, and not one of the failures belonged to the session reading it.
+    That is a hold-and-wait cycle: nobody can land until everybody is done, and
+    nobody is done because they are all waiting.
+  - **`.venv/Scripts/de.exe` is a shared lock.** `uv run` tries to reinstall it
+    and gets `os error 32` while another session is mid-gate. `python -m uv run
+    --no-sync` gets you past it; a worktree with its own `.venv` means it never
+    happens. Do not kill the other session's processes.
+  - **A failed `pre-commit` stashes and restores the whole tree**, which
+    destroys uncommitted work belonging to sessions that were not committing.
+    Eighteen files went that way and came back only from
+    `~/.cache/pre-commit/patch*`, which is not a backup and is not guaranteed to
+    be there next time.
+
+  **Nothing in the index is safe, and the gate cannot see the difference.**
+  `f12b444` committed `from decision_evals.claims import ...` into `cli.py`
+  without committing `claims.py`, which existed only in the index. `main`'s tip
+  did not import at all — `de` was unrunnable on a fresh checkout — while four
+  sessions tried to push to it and read the failure as somebody else's mess.
+  Every gate passed locally because every tree had the file on disk. **A gate
+  that runs in the working tree cannot see what the commit is missing.** So:
+  commit, do not stage, and if you want to know what you actually committed,
+  check it out somewhere clean.
+
+  **Rejoin often, and the interval is short.** A long-horizon branch is the case
+  this rule exists for, not the exception to it. Fetch, rebase onto
+  `origin/main`, and push your branch **at least daily and at least every ten
+  commits**, whichever comes first:
+
+  ```bash
+  git fetch origin && git rebase origin/main && git push -u origin <topic>
+  ```
+
+  Push the branch even when the work is unfinished. An unpushed branch is one
+  `git worktree remove` from gone, and a branch that has not touched `main` in a
+  week is a merge nobody volunteers for — `feat/toolchain` sat 22 commits behind
+  `main` on 2026-08-19 with nothing of its own committed anywhere. Rebasing
+  daily also means you find out that `main` is broken on the day it breaks,
+  rather than on the day you try to land.
+
+  Landing is a merge to `main` from a green worktree, and `--no-verify` is not
+  how a red gate gets resolved. If the gate is red on your own isolated tree,
+  it is yours and it is real.
+
 - **Work is sub-agent driven, reviews are adversarial, and no finding is
   believed until it is confirmed.** Maintainer instruction, 2026-08-13. Dispatch
   units of work to sub-agents and run the independent ones concurrently; give
