@@ -25,6 +25,7 @@ from decision_evals.trigger_arms import (
     load_arm,
     models_comparable,
     per_item_correctness,
+    skill_versions_comparable,
     summarise,
     summarise_by_band,
     venue_comparable,
@@ -779,4 +780,104 @@ class TestVenueComparable:
         a = [row("p1", fired=True, should_fire=True) | {"model": "haiku", "in_situ": True}]
         b = [row("p1", fired=True, should_fire=True) | {"model": "sonnet", "in_situ": False}]
         with pytest.raises(ArmError, match="ran on different models"):
+            compare(a, b)
+
+
+class TestSkillVersionsComparable:
+    """The fourth guard. `set_version` tracks the corpus; this tracks
+
+    `SKILL.md`'s own `metadata.version`, which is a different axis -- the
+    2026-08-19 bump (0.2.1 -> 0.3.0) rewrote the frontmatter `description`
+    itself (four procedures to six) without moving a single label, so
+    `set_version` alone cannot see it. Before this guard existed, `compare()`
+    silently scored a v0.2.1 arm against a v0.3.0 arm as if they measured the
+    same description; see the reproduction below.
+
+    An absent `skill_version` is read the same way `models_comparable` reads
+    an absent `model` -- unknown, not a default -- because `metadata.version`
+    has moved three times on record (0.2.0, 0.2.1, 0.3.0) and an unstamped
+    row could have run against any of them. That is the opposite call from
+    `venue_comparable`'s `in_situ`, which had no prior value to have been
+    silently at.
+    """
+
+    def test_it_reproduces_the_defect_this_guard_closes(self) -> None:
+        """This is the failure demonstrated against the pre-fix code: two arms
+
+        explicitly stamped at different skill revisions compared cleanly and
+        returned a p-value, because nothing before this guard looked at
+        `skill_version` at all. Run against `trigger_arms.py` before
+        `skill_versions_comparable` was wired into `compare()`, this test's
+        final `pytest.raises` fails -- `compare()` returns
+        `ArmComparison(n_shared=2, n_differing=2, favouring_a=2, favouring_b=0,
+        p_value=0.5, ...)` instead of raising, exactly the two-different-
+        products comparison the task exists to close.
+        """
+        a = [
+            row("p1", fired=True, should_fire=True) | {"skill_version": "0.2.1"},
+            row("n1", fired=False, should_fire=False) | {"skill_version": "0.2.1"},
+        ]
+        b = [
+            row("p1", fired=False, should_fire=True) | {"skill_version": "0.3.0"},
+            row("n1", fired=True, should_fire=False) | {"skill_version": "0.3.0"},
+        ]
+        assert skill_versions_comparable(a, b) is not None
+        with pytest.raises(ArmError, match="different skill revisions"):
+            compare(a, b)
+
+    def test_two_arms_at_the_same_skill_version_compare(self) -> None:
+        """Known-good case, run first: same revision, no refusal."""
+        a = [
+            row("p1", fired=True, should_fire=True) | {"skill_version": "0.3.0"},
+            row("n1", fired=False, should_fire=False) | {"skill_version": "0.3.0"},
+        ]
+        assert skill_versions_comparable(a, a) is None
+        assert compare(a, a).p_value == 1.0
+
+    def test_two_unstamped_arms_still_compare(self) -> None:
+        """Every record on disk predates this field, and none is voided.
+
+        The guard knows nothing about these records and says nothing about
+        them -- the `models_comparable` reading, not the `venue_comparable` one.
+        """
+        a = [row("p1", fired=True, should_fire=True)]
+        b = [row("p1", fired=False, should_fire=True)]
+        assert skill_versions_comparable(a, b) is None
+        assert compare(a, b).n_shared == 1
+
+    def test_a_stamped_arm_against_an_unstamped_one_is_refused(self) -> None:
+        """An absent skill_version is unknown, not the shipped revision.
+
+        Standing rule 1: `metadata.version` has been 0.2.0, 0.2.1 and 0.3.0 on
+        record, and an unstamped row does not say which of those it ran
+        against.
+        """
+        a = [row("p1", fired=True, should_fire=True)]
+        b = [row("p1", fired=False, should_fire=True) | {"skill_version": "0.3.0"}]
+        reason = skill_versions_comparable(a, b)
+        assert reason is not None
+        assert "does not mean any particular" in reason
+        with pytest.raises(ArmError, match="records the skill revision it ran against"):
+            compare(a, b)
+
+    def test_two_different_skill_versions_are_refused(self) -> None:
+        a = [row("p1", fired=True, should_fire=True) | {"skill_version": "0.2.1"}]
+        b = [row("p1", fired=True, should_fire=True) | {"skill_version": "0.3.0"}]
+        reason = skill_versions_comparable(a, b)
+        assert reason is not None
+        assert "0.2.1" in reason
+        assert "0.3.0" in reason
+        with pytest.raises(ArmError, match="different skill revisions"):
+            compare(a, b)
+
+    def test_the_label_guard_runs_before_the_skill_version_guard(self) -> None:
+        a = [row("p1", fired=True, should_fire=True) | {"set_version": 1, "skill_version": "0.2.1"}]
+        b = [row("p1", fired=True, should_fire=True) | {"set_version": 3, "skill_version": "0.3.0"}]
+        with pytest.raises(ArmError, match="different label revisions"):
+            compare(a, b)
+
+    def test_the_venue_guard_runs_before_the_skill_version_guard(self) -> None:
+        a = [row("p1", fired=True, should_fire=True) | {"in_situ": True, "skill_version": "0.2.1"}]
+        b = [row("p1", fired=True, should_fire=True) | {"in_situ": False, "skill_version": "0.3.0"}]
+        with pytest.raises(ArmError, match="different prompt venues"):
             compare(a, b)

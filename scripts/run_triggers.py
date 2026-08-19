@@ -350,12 +350,23 @@ def collect(
     checkpoint: Path = CHECKPOINT,
     entry_names: dict[str, str] | None = None,
     in_situ: bool = False,
+    skill_version: str | None = None,
 ) -> dict[tuple[str, int], dict[str, object]]:
     """Run every case `repeats` times, checkpointing after each call.
 
     Resumable, because two runs already showed the item verdicts moving and the
     honest number needs enough repeats that a lost run would be expensive to
     redo.
+
+    `skill_version` is `metadata.version` from the `SKILL.md` that produced
+    `description` -- `main()` reads it via `parse_skill` rather than this
+    function hardcoding one, because a run of `collect()` against a synthetic
+    or historical description (an `--entries` arm, a `--description` variant)
+    is not necessarily scoring the shipped file at all. `None` is a legitimate
+    caller choice, not an omission: it is what every call site outside
+    `main()` should pass when there is no `SKILL.md` behind the description,
+    and `skill_versions_comparable` (`trigger_arms.py`) already treats an
+    absent value as unknown rather than a default.
     """
     done = load_done(checkpoint)
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
@@ -424,6 +435,23 @@ def collect(
                     # treats an absent `set_version` as 1: it states what
                     # happened rather than declaring the past unrecoverable.
                     "in_situ": in_situ,
+                    # `metadata.version` from the `SKILL.md` that produced
+                    # `description`, or `None` when the caller has none to
+                    # give. `set_version` above tracks the *corpus* label
+                    # revision; this tracks the *skill* revision, and they
+                    # move independently -- the 2026-08-19 bump rewrote the
+                    # frontmatter `description` (four procedures to six)
+                    # without touching a single label. Unlike `in_situ`, an
+                    # absent value here is read as unknown rather than a
+                    # fact: `metadata.version` has moved three times on
+                    # record (0.2.0, 0.2.1, 0.3.0) and the description text
+                    # changed with it each time, so a record written before
+                    # this stamp existed could have run against any of them.
+                    # `skill_versions_comparable` (`trigger_arms.py`) refuses
+                    # a comparison spanning a stamped arm and an unstamped
+                    # one for exactly that reason -- the same call it makes
+                    # for `model`, not the one it makes for `in_situ`.
+                    "skill_version": skill_version,
                     "p_fire": p_fire,
                     "should_fire": case.should_fire,
                     "route": case.route,
@@ -868,6 +896,17 @@ def main() -> int:
 
     document = parse_skill(REPO_ROOT / "skills" / args.skill / "SKILL.md")
     description = str(document.frontmatter["description"]).strip()
+    # `metadata.version` at the moment this description was read -- stamped
+    # onto every row `collect()` writes so `skill_versions_comparable`
+    # (`trigger_arms.py`) can refuse a comparison spanning a revision bump
+    # like 2026-08-19's 0.2.1 -> 0.3.0, which rewrote this same frontmatter
+    # `description` (four procedures to six) under an unchanged `set_version`.
+    _metadata = document.frontmatter.get("metadata")
+    skill_version = (
+        str(_metadata["version"])
+        if isinstance(_metadata, dict) and "version" in _metadata
+        else None
+    )
 
     try:
         description = description_variant(description, args.description)
@@ -954,6 +993,7 @@ def main() -> int:
             checkpoint=checkpoint,
             entry_names=entry_names,
             in_situ=args.in_situ,
+            skill_version=skill_version,
         )
     except IsolationError as error:
         print(f"ISOLATION FAILURE, stopping: {error}")

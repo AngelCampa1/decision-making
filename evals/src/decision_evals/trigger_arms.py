@@ -1403,6 +1403,74 @@ def venue_comparable(a: Iterable[Record], b: Iterable[Record]) -> str | None:
     )
 
 
+def skill_versions_comparable(a: Iterable[Record], b: Iterable[Record]) -> str | None:
+    """Whether two arms were scored against the same revision of the shipped skill.
+
+    On 2026-08-19 the shipped skill went ``0.2.1`` -> ``0.3.0``: two procedures
+    added, the router table grew from four rows to six, and the frontmatter
+    ``description`` -- the text every arm in this file actually sends -- was
+    rewritten with it (``docs/DECISIONS.md``, "the shipped description now
+    enumerates six procedures, and that retires ten arms"). ``set_version``
+    tracks the *corpus* label revision and says nothing about which
+    ``SKILL.md`` produced the description being scored. Without this guard,
+    ``compare()`` would take an arm run against the six-procedure description
+    and one run against the four-procedure description, find none of the three
+    existing guards objecting, and return a p-value for a difference between
+    two products.
+
+    **An absent ``skill_version`` is unknown, not a default -- the same call as
+    :func:`models_comparable`, and the opposite of :func:`venue_comparable`,
+    for the reason :func:`models_comparable` gives.** ``metadata.version`` in
+    ``skills/decision-making/SKILL.md`` has moved three times on record --
+    ``0.2.0`` -> ``0.2.1`` -> ``0.3.0`` -- and the description text changed
+    alongside every one of those bumps. A record written before this stamp
+    existed could have been produced against any of those revisions depending
+    only on when the run happened to be made; nothing in the row says which,
+    so filling one in would be standing rule 1's invented parameter -- exactly
+    the situation ``--model`` was in before it was stamped.
+
+    This is *not* :func:`venue_comparable`'s situation. There, ``in_situ`` had
+    no revision to be silently at, because ``ask()`` never passed the argument
+    at all before the stamp existed, so every historical call resolves to one
+    fact (``False``) and reading an absent value that way states what
+    happened. The skill version has no such single resolution -- it demonstrably
+    took three different values across the runs already on disk -- so the two
+    fields need opposite defaults even though they are stamped by the same
+    function.
+
+    So the three cases are decided the way :func:`models_comparable` decides
+    them:
+
+    * **both unstamped** -- allowed. Neither record says which revision
+      produced it, and the guard says nothing about them either, rather than
+      quietly deciding they must match.
+    * **one stamped, one not** -- refused. The unstamped arm could have run
+      against any prior revision; the stamped one names its revision exactly.
+    * **both stamped and different** -- refused.
+    """
+    versions_a = {row.get("skill_version") for row in a}
+    versions_b = {row.get("skill_version") for row in b}
+    seen = versions_a | versions_b
+    if seen <= {None} or len(seen) <= 1:
+        return None
+    named = sorted(str(version) for version in seen if version is not None)
+    if None in seen:
+        return (
+            f"one of these arms records the skill revision it ran against ({', '.join(named)}) "
+            "and the other does not. An unstamped record does not mean any particular "
+            "revision -- `metadata.version` has moved three times on record and the "
+            "description text changed with it each time -- so the two cannot be shown to "
+            "have run against the same skill, and a revision bump moves the description "
+            "every arm here actually sends."
+        )
+    return (
+        f"these arms were scored against different skill revisions: {sorted(versions_a, key=str)} "
+        f"against {sorted(versions_b, key=str)}. A revision bump rewrites the frontmatter "
+        "description these arms are testing, so the difference between them would not be "
+        "a result about one description."
+    )
+
+
 def per_item_correctness(records: Iterable[Record]) -> dict[str, float]:
     """Per case id, the share of repeats where the arm's verdict matched its label.
 
@@ -1444,6 +1512,8 @@ def compare(a: Iterable[Record], b: Iterable[Record]) -> ArmComparison:
     if (reason := models_comparable(rows_a, rows_b)) is not None:
         raise ArmError(reason)
     if (reason := venue_comparable(rows_a, rows_b)) is not None:
+        raise ArmError(reason)
+    if (reason := skill_versions_comparable(rows_a, rows_b)) is not None:
         raise ArmError(reason)
 
     left, right = per_item_correctness(rows_a), per_item_correctness(rows_b)

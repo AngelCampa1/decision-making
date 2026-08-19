@@ -227,6 +227,84 @@ class TestCollectStampsVenue:
 
 
 # --------------------------------------------------------------------------- #
+# collect(): the skill revision is stamped, with no model call anywhere
+# --------------------------------------------------------------------------- #
+
+
+class TestCollectStampsSkillVersion:
+    """`trigger_arms.skill_versions_comparable` reads this field to refuse a
+
+    comparison spanning a `SKILL.md` revision bump, the same way it already
+    refuses one spanning `--model`. Nothing here calls a model: `ask` is
+    replaced with a fake that returns a scripted verdict, exactly the pattern
+    `TestCollectStampsVenue` above uses for `in_situ`.
+    """
+
+    def test_every_row_carries_the_given_skill_version(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False):
+            return (True, None, None), "raw"
+
+        monkeypatch.setattr(runner, "ask", fake_ask)
+        cases = (_case(id="p1"), _case(id="n1", should_fire=False))
+        trigger_set = TriggerSet(skill="decision-making", cases=cases, version=4)
+        checkpoint = tmp_path / "verdicts.jsonl"
+        done = runner.collect(
+            trigger_set, "d", "haiku", 1, checkpoint=checkpoint, skill_version="0.3.0"
+        )
+        assert len(done) == 2
+        assert all(row["skill_version"] == "0.3.0" for row in done.values())
+
+    def test_the_known_good_case_defaults_to_none_not_a_guess(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A caller that passes nothing gets `None` stamped, not an invented
+
+        revision -- `collect()` does not know which `SKILL.md`, if any, a
+        caller's `description` came from, and standing rule 1 says record
+        that as a fact rather than guess `metadata.version`'s current value.
+        """
+
+        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False):
+            return (True, None, None), "raw"
+
+        monkeypatch.setattr(runner, "ask", fake_ask)
+        cases = (_case(id="p1"),)
+        trigger_set = TriggerSet(skill="decision-making", cases=cases, version=4)
+        checkpoint = tmp_path / "verdicts-default.jsonl"
+        done = runner.collect(trigger_set, "d", "haiku", 1, checkpoint=checkpoint)
+        assert all(row["skill_version"] is None for row in done.values())
+
+    def test_main_reads_the_stamp_from_the_shipped_skills_metadata_version(
+        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """The stamp `main()` actually passes comes from `parse_skill`, not a
+
+        constant -- so a future version bump is picked up with no code change
+        here. Verified against the file on disk rather than a hardcoded
+        string, since that file is what this whole guard exists to track.
+        """
+        from decision_evals.skills import parse_skill
+
+        document = parse_skill(
+            Path(__file__).resolve().parents[2] / "skills" / "decision-making" / "SKILL.md"
+        )
+        expected = str(document.frontmatter["metadata"]["version"])
+
+        captured: dict[str, Any] = {}
+
+        def fake_collect(*args: Any, **kwargs: Any) -> dict[tuple[str, int], dict[str, object]]:
+            captured["skill_version"] = kwargs["skill_version"]
+            return _fake_collect_from_labels(*args, **kwargs)
+
+        monkeypatch.setattr(runner, "collect", fake_collect)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py"])
+        assert runner.main() == 0
+        assert captured["skill_version"] == expected
+
+
+# --------------------------------------------------------------------------- #
 # main(): flag parsing, refusals and checkpoint selection
 # --------------------------------------------------------------------------- #
 
@@ -241,6 +319,7 @@ def _fake_collect_from_labels(
     checkpoint: Path,
     entry_names: dict[str, str] | None,
     in_situ: bool,
+    skill_version: str | None = None,
 ) -> dict[tuple[str, int], dict[str, object]]:
     """Replays `collect()`'s row shape from the labels, with no model call.
 
@@ -259,6 +338,7 @@ def _fake_collect_from_labels(
             "set_version": trigger_set.version,
             "model": model,
             "in_situ": in_situ,
+            "skill_version": skill_version,
             "p_fire": None,
             "should_fire": case.should_fire,
             "route": case.route,
