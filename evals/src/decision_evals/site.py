@@ -25,6 +25,17 @@ the machine is exactly as green as a deployed one. Only ``de site --deploy``
 closes that, and nothing checks that you ran it. That gap is the price of having
 no cloud CI, and it is stated here rather than papered over.
 
+**And on 2026-08-19 the gap turned out to be one level wider than this
+paragraph said.** Pushing ``gh-pages`` is not the last step either: GitHub Pages
+was configured ``source: {branch: main, path: /docs}``, so for six days the
+served site was a hand-written ``docs/index.html`` dated 2026-08-13 and nothing
+here had ever reached it. ``de site --deploy`` printed *published*, this check
+reported the manifest current, and both were true. Neither asks what the host
+serves, and neither can while this stays offline. The Pages source now points
+at ``gh-pages`` and ``docs/index.html`` is deleted, so the two paths cannot
+diverge again — but that is a fact about the repository's settings, not
+something any gate here verifies.
+
 The same standing limitation is registered for :mod:`decision_evals.docs`,
 :mod:`decision_evals.provenance` and :mod:`decision_evals.wiring`.
 """
