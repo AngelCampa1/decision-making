@@ -1127,7 +1127,62 @@ class TestItemDiscrimination:
         assert result.r_pb is None
         assert result.n_respondents == 1
         assert result.undefined is not None
-        assert "needs two" in result.undefined
+        assert "smallest denominator" in result.undefined
+
+    def test_two_respondents_are_refused_because_the_answer_is_forced(self) -> None:
+        """The defect: `--repeats 2` printed `median r_pb +1.000` as a measurement.
+
+        Two points determine a line, so wherever the correlation is defined at
+        all over two respondents it is exactly +1.0 or -1.0. Both signs are
+        constructed here to show the value is a property of the denominator and
+        not of the corpus.
+        """
+        for pattern in ((True, False), (False, True)):
+            rows = [
+                record
+                for repeat, correct in enumerate(pattern)
+                for record in (
+                    scored("t", correct=correct, repeat=repeat),
+                    scored("f0", correct=correct, repeat=repeat),
+                    scored("f1", correct=True, should_fire=False, repeat=repeat),
+                )
+            ]
+            result = item_discrimination({"a": rows})["t"]
+            assert result.r_pb is None, "not +/-1.000: forced by n, not measured"
+            assert result.n_respondents == 2
+            assert result.undefined is not None
+            assert "+1.000 or -1.000" in result.undefined
+
+    def test_the_refusal_reaches_the_dataclass_and_not_only_the_page(self) -> None:
+        """A formatter fix would leave `median_discrimination == 1.0` in the record."""
+        rows = [
+            record
+            for repeat, correct in enumerate((True, False))
+            for record in (
+                scored("t", correct=correct, repeat=repeat),
+                scored("f0", correct=correct, repeat=repeat),
+                scored("f1", correct=True, should_fire=False, repeat=repeat),
+            )
+        ]
+        analysis = item_analysis({"a": rows})
+        assert analysis.median_discrimination is None
+        assert analysis.n_discriminating == 0
+        assert any("--" in line for line in format_item_analysis(analysis))
+
+    def test_three_respondents_are_scored(self) -> None:
+        """The floor is three and not four: n=3 admits nineteen distinct values."""
+        rows = [
+            record
+            for repeat, correct in enumerate((True, True, False))
+            for record in (
+                scored("t", correct=correct, repeat=repeat),
+                scored("f0", correct=correct, repeat=repeat),
+                scored("f1", correct=repeat == 0, should_fire=False, repeat=repeat),
+            )
+        ]
+        result = item_discrimination({"a": rows})["t"]
+        assert result.r_pb is not None
+        assert result.undefined is None
 
 
 class TestBrokenItemScreen:

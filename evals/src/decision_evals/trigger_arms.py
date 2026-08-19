@@ -1593,11 +1593,16 @@ class ItemDiscrimination:
             correlation, and 0.0 would read as "measured, and flat" -- the
             plausible zero this instrument has published four times.
         n_respondents: Respondents whose row for this item parsed. The
-            denominator of the correlation.
+            denominator of the correlation, and it must be at least three:
+            two points determine a line, so a defined correlation over two
+            respondents is +1.0 or -1.0 whatever the data say.
         undefined: Why ``r_pb`` is ``None``, or ``None`` when it is not. Every
             item at ``p == 0.0`` or ``p == 1.0`` lands here by construction,
             which is the arithmetic link between this estimator and the broken-
-            item screen: an item nobody varies on cannot discriminate.
+            item screen: an item nobody varies on cannot discriminate. So does
+            every item under three respondents, which is the arithmetic link to
+            the denominator: at two the value exists and carries no information
+            beyond which repeat scored higher.
     """
 
     case: str
@@ -1909,12 +1914,24 @@ def item_discrimination(arms: Mapping[str, Iterable[Record]]) -> dict[str, ItemD
     :attr:`ItemAnalysis.complete` is reported beside the numbers and
     :func:`format_item_analysis` says so on the page when it is False.
 
-    ``r_pb`` is ``None`` wherever the correlation does not exist -- fewer than
-    two respondents, an item every respondent scored the same on (every floor and
-    ceiling item), or rest-scores that do not vary. The reason is carried in
+    ``r_pb`` is ``None`` wherever the correlation does not exist **or exists
+    only by construction** -- fewer than three respondents, an item every
+    respondent scored the same on (every floor and ceiling item), or rest-scores
+    that do not vary. The reason is carried in
     :attr:`ItemDiscrimination.undefined`, because "no discrimination" and "the
     correlation is undefined here" are different statements and 0.0 says the
     first while meaning the second.
+
+    **Three, not two.** Pearson over two points is a line through two points:
+    where it is defined at all it is exactly +1.0 or -1.0, and the standard
+    ``--repeats 2`` single-arm run therefore reported ``median r_pb +1.000`` as
+    though it were a measurement. n=2 admits exactly two values, n=3 nineteen and
+    n=4 ninety-seven, so three is the smallest non-degenerate denominator and is
+    the floor here. Refusing it in the estimator rather than in
+    :func:`format_item_analysis` is deliberate: a formatter fix would leave
+    :attr:`ItemAnalysis.median_discrimination` equal to 1.0 on the dataclass a
+    scoring script reads, which is the right-on-the-page-wrong-in-the-record
+    split this module exists to stop.
 
     Raises:
         ArmError: as :func:`_respondent_grid` raises it.
@@ -1929,13 +1946,18 @@ def item_discrimination(arms: Mapping[str, Iterable[Record]]) -> dict[str, ItemD
     for case, scores in sorted(correctness.items()):
         respondents = sorted(scores)
         n = len(respondents)
-        if n < 2:
+        if n < 3:
             results[case] = ItemDiscrimination(
                 case=case,
                 should_fire=labels[case],
                 r_pb=None,
                 n_respondents=n,
-                undefined=f"{n} respondent(s) scored this item; a correlation needs two",
+                undefined=(
+                    f"{n} respondent(s) scored this item; three is the smallest "
+                    "denominator that can carry a correlation here. At two, a defined "
+                    "point-biserial is two points and is therefore exactly +1.000 or "
+                    "-1.000 by construction, saying only which repeat scored higher"
+                ),
             )
             continue
         on_item = [float(scores[respondent]) for respondent in respondents]
@@ -2335,10 +2357,12 @@ def format_item_analysis(analysis: ItemAnalysis, *, worst: int = 10) -> Sequence
             "  ^ the grid has holes, so each respondent's rest-score is a count over a "
             "different number of items and partly measures its own parse rate."
         )
-    if analysis.n_respondents < 2:
+    if analysis.n_respondents < 3:
         lines.append(
-            "  ^ one respondent: every p is 0.000 or 1.000 by construction, the screen "
-            "below is just what it got wrong and right, and no correlation exists."
+            "  ^ under three respondents, so no discrimination is reported below. At one "
+            "respondent every p is 0.000 or 1.000 by construction and the screen is just "
+            "what it got wrong and right; at two, a defined correlation is exactly +1.000 "
+            "or -1.000 whatever the data say."
         )
 
     positive = analysis.mean_difficulty_positive
