@@ -577,3 +577,100 @@ def test_load_claims_on_a_repository_with_no_register(tmp_path: Path) -> None:
 
 def test_an_issue_reads_as_a_sentence() -> None:
     assert str(ClaimIssue("site/claims.json", "is missing.")) == "site/claims.json: is missing."
+
+
+# --------------------------------------------------------------------------- #
+# Keys nobody reads
+#
+# Every guard here is opt-in, so a key that is merely ignored is a guard that is
+# merely absent. An adversarial review on 2026-08-19 turned three of them off
+# with one-character typos and the gate stayed green each time.
+# --------------------------------------------------------------------------- #
+def test_a_misspelt_latest_refuses_rather_than_disabling_the_guard(tmp_path: Path) -> None:
+    """`lastest` passed a superseded total, silently. That is the whole point."""
+    appended = f"{DOC}\n**Correction, appended.** The total is therefore ~5,100, not ~4,816.\n"
+    repo = _repo(
+        tmp_path,
+        {SOURCE: appended, **_published("total-model-calls")},
+        claims=_register(_claim(lastest="(?<=therefore )~[0-9],[0-9]{3}")),
+    )
+    issues = check_claims(repo)
+    assert len(issues) == 1
+    assert "`lastest`, which nothing reads" in issues[0].message
+    assert "`latest`" in issues[0].message
+
+
+def test_a_misspelt_rounded_refuses(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        _published("total-model-calls"),
+        claims=_register(_claim(round="~4,800")),
+    )
+    issues = check_claims(repo)
+    assert len(issues) == 1
+    assert "`round`, which nothing reads" in issues[0].message
+
+
+def test_a_misspelt_retractions_section_refuses(tmp_path: Path) -> None:
+    """The worst of the three: the whole register vanishes and the step says so.
+
+    ``census`` went on reporting ``0 retraction(s)`` as though that were the
+    design, which is indistinguishable from a register that declares none.
+    """
+    register = _register(_claim())
+    register["retraction"] = register.pop("retractions")
+    repo = _repo(tmp_path, _published("total-model-calls"), claims=register)
+    issues = check_claims(repo)
+    assert len(issues) == 1
+    assert "top-level `retraction`" in issues[0].message
+    assert "misspelt section is an empty section" in issues[0].message
+
+
+def test_a_known_field_set_still_passes(tmp_path: Path) -> None:
+    """The negative control: every declared key, and no complaint about any."""
+    repo = _repo(
+        tmp_path,
+        _published("total-model-calls"),
+        claims=_register(_claim(rounded=None, latest=None)),
+    )
+    assert check_claims(repo) == []
+
+
+# --------------------------------------------------------------------------- #
+# An anchored `latest`
+# --------------------------------------------------------------------------- #
+def test_latest_compares_group_one_when_the_pattern_captures(tmp_path: Path) -> None:
+    """So the anchor can name the figure without becoming part of it.
+
+    Without this a `latest` has to be a bare number shape, which either misses
+    the next correction or matches every unrelated number below it. Both
+    happened to `total-model-calls` on 2026-08-19, in that order.
+    """
+    appended = f"{DOC}\n| **new total** | **~9,900** | earlier + more |\n"
+    repo = _repo(
+        tmp_path,
+        {SOURCE: appended, **_published("total-model-calls")},
+        claims=_register(
+            _claim(latest=r"(?:new total|total is)[^\n0-9~]{0,30}(~?[0-9]{1,3}(?:,[0-9]{3})+)")
+        ),
+    )
+    issues = check_claims(repo)
+    assert len(issues) == 1
+    assert "is `~9,900`" in issues[0].message
+
+
+def test_an_anchored_latest_ignores_an_unrelated_number_below_it(tmp_path: Path) -> None:
+    """The false refusal a bare number shape produces, asserted as absent.
+
+    A per-run figure appended under the total is not a correction to the total,
+    and a guard that reads it as one refuses with the wrong number named.
+    """
+    appended = f"{DOC}\nThat run made 1,548 calls of its own.\n"
+    repo = _repo(
+        tmp_path,
+        {SOURCE: appended, **_published("total-model-calls")},
+        claims=_register(
+            _claim(latest=r"(?:new total|total is)[^\n0-9~]{0,30}(~?[0-9]{1,3}(?:,[0-9]{3})+)")
+        ),
+    )
+    assert check_claims(repo) == []

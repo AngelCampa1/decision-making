@@ -42,7 +42,17 @@ runs.sort((a, b) => (a.dir < b.dir ? 1 : -1));
       </p>
     </div>
 
-    <p class="index-count">{runs.length} published runs</p>
+    {/* "written up here", not "published runs". `docs/RUN_INDEX.md` is
+        generated and lists thirteen; this collection globs `*​/*​/README.md` and
+        sees twelve, because the baselined `evidence-ledger/2026-08-10-baseline-corpus`
+        has data and no write-up. Both counts are honest about different sets --
+        but stating a smaller number under the generated index's own phrase is
+        the cross-document disagreement this site exists to stop making. */}
+    <p class="index-count">
+      {runs.length} runs written up here &middot; <a href={`${base}/docs/run-index/`}
+        >the full index lists every run</a
+      >
+    </p>
 
     <ul class="run-list">
       {
