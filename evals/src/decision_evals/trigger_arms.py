@@ -24,6 +24,7 @@ from __future__ import annotations
 import math
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
+from statistics import median
 from typing import Any, Literal
 
 #: One checkpoint row, as the runner writes it.
@@ -1542,6 +1543,596 @@ def compare(a: Iterable[Record], b: Iterable[Record]) -> ArmComparison:
     )
 
 
+#: One respondent: an ``(arm, repeat)`` pair.
+#:
+#: The unit of the item analysis registered in
+#: ``notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md``. An arm
+#: is a description variant; a repeat is one pass of that variant over the whole
+#: corpus. Twelve respondents -- six arms at two repeats -- is what the v4
+#: records hold, and it is the denominator that limits every statistic below.
+Respondent = tuple[str, int]
+
+
+@dataclass(frozen=True, slots=True)
+class ItemDifficulty:
+    """How often one item was answered correctly, over the respondents.
+
+    Attributes:
+        case: The case id.
+        should_fire: The item's label. **Carried so a difficulty cannot be
+            averaged across the two.** A positive's difficulty is a miss rate
+            and a negative's is a false-fire rate; pooling them produces a
+            number about neither, which is why :class:`ItemAnalysis` reports the
+            two means separately and never a third.
+        p: Correct rows over parsed rows for this item, correct meaning
+            ``fired == should_fire``. Routing is not in it: ``council`` and
+            ``hinge`` are offered to the model and correct for zero of the 86
+            positives, so a routing term here would be a six-way choice scored
+            against a four-way key.
+        n_respondents: Parsed rows for this item -- the denominator of ``p``,
+            and 12 only when every respondent's row parsed.
+    """
+
+    case: str
+    should_fire: bool
+    p: float
+    n_respondents: int
+
+
+@dataclass(frozen=True, slots=True)
+class ItemDiscrimination:
+    """Corrected item-total point-biserial for one item.
+
+    Attributes:
+        case: The case id.
+        should_fire: The item's label, carried for the same reason as on
+            :class:`ItemDifficulty`.
+        r_pb: Correlation between this item's per-respondent correctness and
+            the respondent's score over **the other items**, or ``None`` when
+            it does not exist. ``None`` rather than 0.0: a constant item has no
+            correlation, and 0.0 would read as "measured, and flat" -- the
+            plausible zero this instrument has published four times.
+        n_respondents: Respondents whose row for this item parsed. The
+            denominator of the correlation.
+        undefined: Why ``r_pb`` is ``None``, or ``None`` when it is not. Every
+            item at ``p == 0.0`` or ``p == 1.0`` lands here by construction,
+            which is the arithmetic link between this estimator and the broken-
+            item screen: an item nobody varies on cannot discriminate.
+    """
+
+    case: str
+    should_fire: bool
+    r_pb: float | None
+    n_respondents: int
+    undefined: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class BrokenItemScreen:
+    """Items every respondent got wrong, and items every respondent got right.
+
+    Anthropic's eval guidance names the cheapest screen there is -- *a 0% pass
+    rate across many trials is most often a signal of a broken task, not an
+    incapable agent*. It is a screen and not a verdict: nothing here may move a
+    label, which is Track N3's blind adjudication and needs a
+    ``docs/DECISIONS.md`` entry.
+
+    The floor is split by label because the two mean different things. A
+    positive at ``p == 0.0`` never fired in any respondent; a negative at
+    ``p == 0.0`` fired in every one.
+
+    Attributes:
+        n_respondents: Respondents in the analysis. **Read this first.** At one
+            respondent every ``p`` is 0.0 or 1.0 by construction and both sets
+            below are simply the items that respondent got wrong and right.
+        floor_positives: Positives at ``p == 0.0``, case-sorted.
+        floor_negatives: Negatives at ``p == 0.0``, case-sorted.
+        ceiling_positives: Positives at ``p == 1.0``. Not a defect signal --
+            the ceiling term, reported because an item nothing varies on
+            contributes no discrimination either way.
+        ceiling_negatives: Negatives at ``p == 1.0``.
+    """
+
+    n_respondents: int
+    floor_positives: tuple[str, ...]
+    floor_negatives: tuple[str, ...]
+    ceiling_positives: tuple[str, ...]
+    ceiling_negatives: tuple[str, ...]
+
+    @property
+    def floor(self) -> tuple[str, ...]:
+        """Every item at ``p == 0.0``, both labels, case-sorted."""
+        return tuple(sorted(self.floor_positives + self.floor_negatives))
+
+    @property
+    def ceiling(self) -> tuple[str, ...]:
+        """Every item at ``p == 1.0``, both labels, case-sorted."""
+        return tuple(sorted(self.ceiling_positives + self.ceiling_negatives))
+
+
+@dataclass(frozen=True, slots=True)
+class TripleJoint:
+    """Whether a respondent got a whole triple right, over the respondents.
+
+    AgentAbstain's Paired Accuracy generalised from a pair to a triple, and the
+    statistic the matched-triple design was built for. A triple is one positive
+    and two negatives written from one body: getting the positive right by
+    firing on everything scores here exactly as badly as it should.
+
+    Attributes:
+        triple: The triple id.
+        joint: Fraction of contributing respondents that got **all** the
+            triple's items right within that respondent's own repeat, or
+            ``None`` when no respondent observed the whole triple.
+        n_respondents: Respondents that observed every item of the triple --
+            the denominator of ``joint``. A respondent with one unparseable row
+            in the triple has no joint outcome and is not counted as a failure.
+        n_items: Items carrying this triple id. Three in the v4 corpus;
+            anything else is named in :attr:`ItemAnalysis.incomplete_triples`,
+            because "all three" over two items is a different statistic.
+    """
+
+    triple: str
+    joint: float | None
+    n_respondents: int
+    n_items: int
+
+
+@dataclass(frozen=True, slots=True)
+class ItemAnalysis:
+    """The four registered item-level estimators over one respondent set.
+
+    Attributes:
+        respondents: Every ``(arm, repeat)`` pair, sorted.
+        n_items: Items with at least one parsed row.
+        n_unparseable: Rows whose ``fired`` is null, across every arm. **Zero
+            is what makes the rest-scores below comparable**: see
+            :func:`item_discrimination` for what a non-zero value does to them.
+        dropped: Items whose every row was unparseable, so they have no
+            difficulty at all. Absent from ``difficulty`` rather than scored as
+            zero, matching :func:`per_item_correctness`.
+        difficulty: Case id to :class:`ItemDifficulty`, every item.
+        discrimination: Case id to :class:`ItemDiscrimination`, every item.
+        screen: The floor and ceiling sets.
+        triples: Triple id to :class:`TripleJoint`, empty when the records
+            carry no triples.
+        triples_unavailable: Why ``triples`` is empty, or ``None``. Carried
+            rather than raised so a v2 checkpoint still yields the other three
+            estimators, and stated rather than left blank so an empty table
+            cannot read as "no triple failed".
+        incomplete_triples: Triple ids holding other than three items.
+        mean_difficulty_positive: Mean ``p`` over the positives, or ``None``
+            when there are none.
+        mean_difficulty_negative: Mean ``p`` over the negatives, or ``None``.
+        median_discrimination: Median ``r_pb`` over the items where it is
+            defined, or ``None`` when it is defined nowhere.
+        n_discriminating: How many items that median was taken over. The
+            denominator, and it is not ``n_items``: every floor and ceiling
+            item is excluded because its correlation does not exist.
+    """
+
+    respondents: tuple[Respondent, ...]
+    n_items: int
+    n_unparseable: int
+    dropped: tuple[str, ...]
+    difficulty: dict[str, ItemDifficulty]
+    discrimination: dict[str, ItemDiscrimination]
+    screen: BrokenItemScreen
+    triples: dict[str, TripleJoint]
+    triples_unavailable: str | None
+    incomplete_triples: tuple[str, ...]
+    mean_difficulty_positive: float | None
+    mean_difficulty_negative: float | None
+    median_discrimination: float | None
+    n_discriminating: int
+
+    @property
+    def n_respondents(self) -> int:
+        """Respondents. The denominator every statistic here is limited by."""
+        return len(self.respondents)
+
+    @property
+    def complete(self) -> bool:
+        """Whether every respondent has a parsed row for every item.
+
+        The condition under which a rest-score is a count over the same 257
+        items for every respondent. When it is False the rest-scores are counts
+        over different numbers of items and partly measure parse rate.
+        """
+        return self.n_unparseable == 0
+
+
+def _respondent_grid(
+    arms: Mapping[str, Iterable[Record]],
+) -> tuple[tuple[Respondent, ...], dict[str, bool], dict[str, dict[Respondent, bool]], int]:
+    """``(respondents, labels, correctness, unparseable)`` over a set of arms.
+
+    One place where the respondent set is built, so the four estimators cannot
+    disagree about who is in it. Correctness is ``fired == should_fire`` and
+    nothing else.
+
+    Raises:
+        ArmError: if no arm is supplied, or one holds no records -- an empty arm
+            contributes no respondent and would silently shrink the denominator
+            the caller named; if two arms fail any of the four comparability
+            guards :func:`compare` applies, for the same reasons it applies
+            them -- pooling two arms into one respondent set is a stronger claim
+            about their comparability than testing one against the other, not a
+            weaker one; if one case id appears under both labels; if one
+            ``(arm, repeat, case)`` cell carries two verdicts, because there is
+            no defensible rule for choosing between them; or if no row parsed
+            anywhere.
+
+            :func:`venue_comparable` is the guard that makes the registered
+            exclusion mechanical rather than a matter of the caller's memory.
+            The pre-registration excludes ``verdicts-in-situ`` on the grounds
+            that 70 of its 516 responses are unparseable and its parse rate
+            splits by domain (Fisher p = 0.00011), so pooling it would put a
+            domain-correlated missing-data mechanism inside an item statistic --
+            and every one of those rows is stamped ``in_situ: true``, so the
+            guard catches the exact file the entry names. Without it the
+            exclusion lived only in whichever list of paths a caller happened to
+            type.
+    """
+    if not arms:
+        raise ArmError(
+            "no arm was supplied, so there is no respondent set. An item analysis over "
+            "nothing would report an empty table, and an empty table and a corpus with no "
+            "broken item look the same to a reader."
+        )
+    rows_by_arm = {name: list(records) for name, records in sorted(arms.items())}
+    for name, rows in rows_by_arm.items():
+        if not rows:
+            raise ArmError(
+                f"arm {name!r} holds no records. It contributes no respondent, so the "
+                "denominator would be smaller than the one the caller asked for and "
+                "nothing would say so."
+            )
+
+    reference = next(iter(rows_by_arm.values()))
+    for name, rows in rows_by_arm.items():
+        for guard in (
+            label_versions_comparable,
+            models_comparable,
+            venue_comparable,
+            skill_versions_comparable,
+        ):
+            if (reason := guard(rows, reference)) is not None:
+                raise ArmError(f"arm {name!r} cannot join this respondent set: {reason}")
+
+    labels: dict[str, bool] = {}
+    correctness: dict[str, dict[Respondent, bool]] = {}
+    respondents: set[Respondent] = set()
+    seen: set[tuple[Respondent, str]] = set()
+    unparseable = 0
+    for name, rows in rows_by_arm.items():
+        for row in rows:
+            case = str(row["case"])
+            label = bool(row["should_fire"])
+            if labels.setdefault(case, label) != label:
+                raise ArmError(
+                    f"case {case!r} appears with both labels. A respondent set holding one "
+                    "turn as a positive and as a negative is two label revisions read as "
+                    "one, and the difference between them is not a model result."
+                )
+            respondent: Respondent = (name, int(row["repeat"]))
+            respondents.add(respondent)
+            if (respondent, case) in seen:
+                raise ArmError(
+                    f"respondent {respondent} carries two verdicts for case {case!r}. One "
+                    "cell of the respondent-by-item grid cannot hold two answers, and "
+                    "there is no defensible rule for picking one -- de-duplicate the "
+                    "checkpoint first."
+                )
+            seen.add((respondent, case))
+            fired = _fired(row)
+            if fired is None:
+                unparseable += 1
+                continue
+            correctness.setdefault(case, {})[respondent] = fired == label
+
+    if not correctness:
+        raise ArmError(
+            f"all {unparseable} row(s) across {len(rows_by_arm)} arm(s) are unparseable; "
+            "there is no item to score."
+        )
+    return tuple(sorted(respondents)), labels, correctness, unparseable
+
+
+def item_difficulty(arms: Mapping[str, Iterable[Record]]) -> dict[str, ItemDifficulty]:
+    """Per item, correct rows over parsed rows across the respondents.
+
+    Estimator 1 of the registered four. The denominator is the respondents whose
+    row for that item parsed -- 12 in the v4 respondent set, and stated per item
+    because it is 12 only when nothing failed to parse.
+
+    Correct is ``fired == should_fire``. Nothing about routing enters, by
+    registration: two of the six procedures the model is offered are correct for
+    zero of the 86 positives, so a routing term would grade a six-way choice
+    against a four-way key.
+
+    The result is keyed by case and carries each item's label, because a
+    positive's difficulty is a miss rate and a negative's is a false-fire rate.
+    They are never averaged together here or anywhere below.
+
+    Raises:
+        ArmError: as :func:`_respondent_grid` raises it.
+    """
+    _, labels, correctness, _ = _respondent_grid(arms)
+    return {
+        case: ItemDifficulty(
+            case=case,
+            should_fire=labels[case],
+            p=sum(1 for correct in scores.values() if correct) / len(scores),
+            n_respondents=len(scores),
+        )
+        for case, scores in sorted(correctness.items())
+    }
+
+
+def _pearson(xs: Sequence[float], ys: Sequence[float]) -> float | None:
+    """Pearson correlation, or ``None`` when either side has no variance.
+
+    ``None`` and not 0.0. A constant vector has no correlation with anything --
+    the quantity does not exist rather than existing and being flat, and this
+    module does not publish a plausible zero.
+    """
+    n = len(xs)
+    mean_x = sum(xs) / n
+    mean_y = sum(ys) / n
+    deviations_x = [x - mean_x for x in xs]
+    deviations_y = [y - mean_y for y in ys]
+    sum_xx = sum(d * d for d in deviations_x)
+    sum_yy = sum(d * d for d in deviations_y)
+    if sum_xx <= 0.0 or sum_yy <= 0.0:
+        return None
+    covariance = sum(dx * dy for dx, dy in zip(deviations_x, deviations_y, strict=True))
+    return covariance / math.sqrt(sum_xx * sum_yy)
+
+
+def item_discrimination(arms: Mapping[str, Iterable[Record]]) -> dict[str, ItemDiscrimination]:
+    """Per item, the **corrected** item-total point-biserial.
+
+    Estimator 2 of the registered four: the correlation between item *i*'s
+    per-respondent correctness and that respondent's score over the *other*
+    items. Corrected item-total, not raw -- the item is removed from the total it
+    is correlated against. At 258 items the inflation a raw correlation carries
+    is small, but the correction costs nothing and its absence is the standard
+    defect.
+
+    The rest-score is the **count** of other items that respondent got right,
+    which is what the pre-registration names. With a complete grid every
+    respondent's count is taken over the same 257 items, and a count and a rate
+    then differ by a constant factor a correlation is invariant to. With
+    unparseable rows they are not the same thing: a count over fewer observed
+    items partly measures how much of the corpus that respondent parsed. So
+    :attr:`ItemAnalysis.complete` is reported beside the numbers and
+    :func:`format_item_analysis` says so on the page when it is False.
+
+    ``r_pb`` is ``None`` wherever the correlation does not exist -- fewer than
+    two respondents, an item every respondent scored the same on (every floor and
+    ceiling item), or rest-scores that do not vary. The reason is carried in
+    :attr:`ItemDiscrimination.undefined`, because "no discrimination" and "the
+    correlation is undefined here" are different statements and 0.0 says the
+    first while meaning the second.
+
+    Raises:
+        ArmError: as :func:`_respondent_grid` raises it.
+    """
+    _, labels, correctness, _ = _respondent_grid(arms)
+    totals: dict[Respondent, int] = {}
+    for scores in correctness.values():
+        for respondent, correct in scores.items():
+            totals[respondent] = totals.get(respondent, 0) + int(correct)
+
+    results: dict[str, ItemDiscrimination] = {}
+    for case, scores in sorted(correctness.items()):
+        respondents = sorted(scores)
+        n = len(respondents)
+        if n < 2:
+            results[case] = ItemDiscrimination(
+                case=case,
+                should_fire=labels[case],
+                r_pb=None,
+                n_respondents=n,
+                undefined=f"{n} respondent(s) scored this item; a correlation needs two",
+            )
+            continue
+        on_item = [float(scores[respondent]) for respondent in respondents]
+        rest = [float(totals[respondent] - int(scores[respondent])) for respondent in respondents]
+        r_pb = _pearson(on_item, rest)
+        undefined: str | None = None
+        if r_pb is None:
+            undefined = (
+                f"every respondent scored the same on this item (p = {sum(on_item) / n:.3f}); "
+                "a constant has no correlation"
+                if len(set(on_item)) == 1
+                else "the rest-scores do not vary across these respondents"
+            )
+        results[case] = ItemDiscrimination(
+            case=case,
+            should_fire=labels[case],
+            r_pb=r_pb,
+            n_respondents=n,
+            undefined=undefined,
+        )
+    return results
+
+
+def broken_item_screen(arms: Mapping[str, Iterable[Record]]) -> BrokenItemScreen:
+    """Items at ``p == 0.0``, and separately the items at ``p == 1.0``.
+
+    Estimator 3 of the registered four, and the cheapest screen there is: a 0%
+    pass rate across many trials is more often a broken task than an incapable
+    agent. It reports; it does not judge. An item on the floor may be
+    mislabelled, may be genuinely hard, or may be the one this description was
+    never going to reach, and telling those apart is a blind adjudication rather
+    than an arithmetic.
+
+    The ceiling set comes back beside it because it is the complementary fact and
+    it is **not** a defect signal -- an item everything gets right may be
+    trivially easy or may hide a shortcut, and neither is decided here.
+
+    Raises:
+        ArmError: as :func:`_respondent_grid` raises it.
+    """
+    difficulty = item_difficulty(arms)
+    respondents, _, _, _ = _respondent_grid(arms)
+
+    def _at(value: float, *, should_fire: bool) -> tuple[str, ...]:
+        return tuple(
+            case
+            for case, item in difficulty.items()
+            if item.p == value and item.should_fire is should_fire
+        )
+
+    return BrokenItemScreen(
+        n_respondents=len(respondents),
+        floor_positives=_at(0.0, should_fire=True),
+        floor_negatives=_at(0.0, should_fire=False),
+        ceiling_positives=_at(1.0, should_fire=True),
+        ceiling_negatives=_at(1.0, should_fire=False),
+    )
+
+
+def triple_joint_outcomes(arms: Mapping[str, Iterable[Record]]) -> dict[str, TripleJoint]:
+    """Per triple, the fraction of respondents that got all of its items right.
+
+    Estimator 4 of the registered four. The three items of a triple are one
+    positive and two negatives written from one body, so a respondent scores here
+    only by firing on the decision *and* declining both non-decisions -- within
+    its own repeat, never pooled across repeats, because a triple answered right
+    across three different passes was never answered right once.
+
+    A respondent with an unparseable row anywhere in the triple has no joint
+    outcome and is dropped from that triple's denominator rather than counted as
+    a failure. The surviving count is on every row.
+
+    Raises:
+        ArmError: if no record carries ``triple`` -- a version 2 checkpoint has
+            none, and an empty table would read as a result; if only some records
+            do, because dropping the rest changes the denominator without saying
+            so; if one case id appears under two triple ids, which is two corpora
+            appended to one respondent set; or as :func:`_respondent_grid` raises
+            it.
+    """
+    respondents, _, correctness, _ = _respondent_grid(arms)
+    rows = [row for _, records in sorted(arms.items()) for row in records]
+
+    carried = [row for row in rows if row.get("triple") is not None]
+    if not carried:
+        raise ArmError(
+            "no record carries 'triple', so there is no triple to score jointly. A version "
+            "2 checkpoint has none, and a per-triple table over a corpus with no triples "
+            "would be an empty table rather than a refusal."
+        )
+    if len(carried) != len(rows):
+        raise ArmError(
+            f"{len(rows) - len(carried)} of {len(rows)} record(s) carry no 'triple'. "
+            "Dropping them would change the denominator without saying so, which is how "
+            "every voided run in this instrument's history reported a plausible number."
+        )
+
+    members: dict[str, set[str]] = {}
+    triple_of: dict[str, str] = {}
+    for row in carried:
+        case = str(row["case"])
+        triple = str(row["triple"])
+        if triple_of.setdefault(case, triple) != triple:
+            raise ArmError(
+                f"case {case!r} appears under two 'triple' labels, {triple_of[case]!r} and "
+                f"{triple!r}. Two runs against different corpora have been appended to one "
+                "respondent set."
+            )
+        members.setdefault(triple, set()).add(case)
+
+    results: dict[str, TripleJoint] = {}
+    for triple, cases in sorted(members.items()):
+        complete = [
+            respondent
+            for respondent in respondents
+            if all(respondent in correctness.get(case, {}) for case in cases)
+        ]
+        joint = (
+            sum(1 for r in complete if all(correctness[case][r] for case in cases)) / len(complete)
+            if complete
+            else None
+        )
+        results[triple] = TripleJoint(
+            triple=triple,
+            joint=joint,
+            n_respondents=len(complete),
+            n_items=len(cases),
+        )
+    return results
+
+
+def item_analysis(arms: Mapping[str, Iterable[Record]]) -> ItemAnalysis:
+    """The four registered item estimators over one respondent set.
+
+    Registered in
+    ``notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md``, which
+    is the pre-registration this implements and does not extend. Every number
+    there is **descriptive**: none of it licenses a claim about an arm, and the
+    entry says so.
+
+    ``arms`` maps an arm name to its records; a respondent is one ``(arm,
+    repeat)`` pair, so six two-repeat arms give the registered twelve. Passing a
+    single arm is legitimate and gives as many respondents as it has repeats --
+    the numbers are then about that arm alone and the discrimination column is
+    mostly undefined, which is a property of the denominator rather than of the
+    corpus.
+
+    Positives and negatives are never averaged together: two means come back and
+    there is no third.
+
+    The registered respondent set is the **six description arms** -- ``full``,
+    ``no-exclusions``, ``no-opener``, ``opener-only``, ``stakes-named``,
+    ``stakes-shown`` -- at two repeats each. ``verdicts-in-situ`` is excluded by
+    that entry, and :func:`_respondent_grid` refuses it rather than trusting the
+    caller to leave it out.
+
+    Raises:
+        ArmError: as :func:`_respondent_grid` raises it. A records set carrying
+            no triples is *not* an error here -- ``triples`` comes back empty
+            with :attr:`ItemAnalysis.triples_unavailable` naming the reason,
+            because the other three estimators are still computable and losing
+            them to a v2 checkpoint would be a worse answer than saying which
+            table is missing.
+    """
+    respondents, labels, correctness, unparseable = _respondent_grid(arms)
+    difficulty = item_difficulty(arms)
+    discrimination = item_discrimination(arms)
+    screen = broken_item_screen(arms)
+
+    triples: dict[str, TripleJoint] = {}
+    triples_unavailable: str | None = None
+    try:
+        triples = triple_joint_outcomes(arms)
+    except ArmError as error:
+        triples_unavailable = str(error)
+
+    positives = [item.p for item in difficulty.values() if item.should_fire]
+    negatives = [item.p for item in difficulty.values() if not item.should_fire]
+    correlations = [item.r_pb for item in discrimination.values() if item.r_pb is not None]
+    return ItemAnalysis(
+        respondents=respondents,
+        n_items=len(difficulty),
+        n_unparseable=unparseable,
+        dropped=tuple(sorted(set(labels) - set(correctness))),
+        difficulty=difficulty,
+        discrimination=discrimination,
+        screen=screen,
+        triples=triples,
+        triples_unavailable=triples_unavailable,
+        incomplete_triples=tuple(name for name, triple in triples.items() if triple.n_items != 3),
+        mean_difficulty_positive=sum(positives) / len(positives) if positives else None,
+        mean_difficulty_negative=sum(negatives) / len(negatives) if negatives else None,
+        median_discrimination=median(correlations) if correlations else None,
+        n_discriminating=len(correlations),
+    )
+
+
 def load_arm(path: Any) -> list[dict[str, Any]]:
     """Every JSONL record at ``path``, read as UTF-8.
 
@@ -1712,4 +2303,129 @@ def format_comparison(name_a: str, name_b: str, comparison: ArmComparison) -> Se
         f"  paired Wilcoxon over {comparison.n_shared} item(s): p = {comparison.p_value:.4f}",
     ]
     lines.extend(f"    {case}: {x:.2f} -> {y:.2f}" for case, x, y in comparison.moved)
+    return lines
+
+
+def format_item_analysis(analysis: ItemAnalysis, *, worst: int = 10) -> Sequence[str]:
+    """The item analysis as lines, respondent count first.
+
+    The respondent count leads because it governs every number underneath it and
+    because it is small: twelve is what the v4 records hold, classical item
+    analysis assumes hundreds, and a table of point estimates with no denominator
+    on the page invites a reading the data cannot support. One respondent is
+    printed with the sentence that says what the screen degenerates to.
+
+    Positives and negatives get their own mean and there is no pooled one, for
+    the reason :class:`ItemDifficulty` gives. ``worst`` bounds the two item lists
+    so a 258-item corpus does not print 258 rows into a run's report; the counts
+    above them are complete either way.
+    """
+    lines = [
+        f"  respondents           {analysis.n_respondents} "
+        f"{', '.join(f'{arm}/r{repeat}' for arm, repeat in analysis.respondents)}",
+        f"  items scored          {analysis.n_items}",
+        f"  unparseable rows      {analysis.n_unparseable}",
+    ]
+    if analysis.dropped:
+        lines.append(
+            f"       no parsed row at all, so no difficulty: {', '.join(analysis.dropped)}"
+        )
+    if not analysis.complete:
+        lines.append(
+            "  ^ the grid has holes, so each respondent's rest-score is a count over a "
+            "different number of items and partly measures its own parse rate."
+        )
+    if analysis.n_respondents < 2:
+        lines.append(
+            "  ^ one respondent: every p is 0.000 or 1.000 by construction, the screen "
+            "below is just what it got wrong and right, and no correlation exists."
+        )
+
+    positive = analysis.mean_difficulty_positive
+    negative = analysis.mean_difficulty_negative
+    lines.extend(
+        [
+            "",
+            f"  DIFFICULTY   mean p over the positives  "
+            f"{'--' if positive is None else f'{positive:.3f}'}"
+            f"   (a miss rate; 1.000 is never missed)",
+            f"               mean p over the negatives  "
+            f"{'--' if negative is None else f'{negative:.3f}'}"
+            f"   (a false-fire rate; 1.000 is never fired)",
+            "               never pooled: the two mean different things.",
+        ]
+    )
+
+    median_r = analysis.median_discrimination
+    lines.extend(
+        [
+            "",
+            f"  DISCRIMINATION  median corrected r_pb  "
+            f"{'--' if median_r is None else f'{median_r:+.3f}'} over "
+            f"{analysis.n_discriminating} of {analysis.n_items} item(s)",
+            "                  the rest are undefined, not zero: an item every "
+            "respondent scored the same on has no correlation.",
+        ]
+    )
+    negatives_first = sorted(
+        (item for item in analysis.discrimination.values() if item.r_pb is not None),
+        key=lambda item: (item.r_pb or 0.0, item.case),
+    )
+    if negatives_first:
+        lowest = negatives_first[:worst]
+        lines.append(f"                  lowest {len(lowest)}:")
+        lines.extend(
+            f"                    {item.case:10s} {item.r_pb or 0.0:+.3f}  "
+            f"p {analysis.difficulty[item.case].p:.3f}"
+            for item in lowest
+        )
+
+    screen = analysis.screen
+    lines.extend(
+        [
+            "",
+            f"  SCREEN  p == 0.000 on {len(screen.floor_positives)} positive(s) and "
+            f"{len(screen.floor_negatives)} negative(s) over "
+            f"{screen.n_respondents} respondent(s)",
+            f"          positives: {', '.join(screen.floor_positives) or 'none'}",
+            f"          negatives: {', '.join(screen.floor_negatives) or 'none'}",
+            f"          p == 1.000 on {len(screen.ceiling_positives)} positive(s) and "
+            f"{len(screen.ceiling_negatives)} negative(s) -- the ceiling term, "
+            "not a defect signal",
+            "          A screen, not a verdict. Nothing here moves a label.",
+        ]
+    )
+
+    lines.append("")
+    if analysis.triples_unavailable is not None:
+        lines.append(f"  TRIPLES not available: {analysis.triples_unavailable}")
+        return lines
+    scored = [triple for triple in analysis.triples.values() if triple.joint is not None]
+    lines.append(
+        f"  TRIPLES  {len(scored)} of {len(analysis.triples)} triple(s) have a joint outcome"
+    )
+    if scored:
+        mean_joint = sum(triple.joint or 0.0 for triple in scored) / len(scored)
+        lines.append(
+            f"           mean J_t  {mean_joint:.3f}   all three items right in one "
+            "respondent's own repeat"
+        )
+        hardest = sorted(scored, key=lambda triple: (triple.joint or 0.0, triple.triple))[:worst]
+        lines.append(f"           lowest {len(hardest)}:")
+        lines.extend(
+            f"             {triple.triple:10s} {triple.joint or 0.0:.3f} "
+            f"over {triple.n_respondents} respondent(s)"
+            for triple in hardest
+        )
+    unscored = [triple.triple for triple in analysis.triples.values() if triple.joint is None]
+    if unscored:
+        lines.append(
+            f"           no respondent observed every item of: {', '.join(unscored)} "
+            "-- absent, not 0.000"
+        )
+    if analysis.incomplete_triples:
+        lines.append(
+            f"           NOT THREE ITEMS: {', '.join(analysis.incomplete_triples)}. "
+            "'All three' over another count is a different statistic."
+        )
     return lines

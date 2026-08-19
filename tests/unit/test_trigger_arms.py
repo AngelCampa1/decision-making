@@ -8,6 +8,7 @@ is not a refactor, it is a fifth estimator.
 
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import Any, ClassVar
 
@@ -16,11 +17,16 @@ import pytest
 from decision_evals.trigger_arms import (
     ArmError,
     bootstrap_rate,
+    broken_item_screen,
     compare,
     covers_rates,
     format_bands,
     format_comparison,
+    format_item_analysis,
     format_rate,
+    item_analysis,
+    item_difficulty,
+    item_discrimination,
     label_versions_comparable,
     load_arm,
     models_comparable,
@@ -28,6 +34,7 @@ from decision_evals.trigger_arms import (
     skill_versions_comparable,
     summarise,
     summarise_by_band,
+    triple_joint_outcomes,
     venue_comparable,
 )
 
@@ -881,3 +888,600 @@ class TestSkillVersionsComparable:
         b = [row("p1", fired=True, should_fire=True) | {"in_situ": False, "skill_version": "0.3.0"}]
         with pytest.raises(ArmError, match="different prompt venues"):
             compare(a, b)
+
+
+# -- item analysis ----------------------------------------------------------
+#
+# Registered in `notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md`
+# before any of it was computed. These tests check the estimators against grids
+# whose answers are known by construction, and check that each refusal fires --
+# a `None` returned where a denominator is empty is the whole point, because
+# this instrument has published a plausible zero four times.
+
+
+def scored(
+    case: str,
+    *,
+    correct: bool | None,
+    should_fire: bool = True,
+    repeat: int = 0,
+    triple: str | None = None,
+) -> dict[str, object]:
+    """One respondent-item cell, written as a correctness rather than a verdict.
+
+    `fired == should_fire` is the only definition of correct in this analysis,
+    so the fixtures say what happened rather than making the reader derive it.
+    `correct=None` is an unparseable row.
+    """
+    fired = None if correct is None else (should_fire if correct else not should_fire)
+    record = row(case, fired=fired, should_fire=should_fire)
+    record["repeat"] = repeat
+    if triple is not None:
+        record["triple"] = triple
+    return record
+
+
+#: Four respondents in one arm. The target item `t` is right for the two high
+#: scorers and wrong for the two low ones, so its discrimination is strongly
+#: positive and its value is known: rest-scores 4/3/1/0 against 1/1/0/0 give
+#: 3/sqrt(10) = 0.9487. Correlating against the *uncorrected* total gives
+#: 4/sqrt(17) = 0.9701, so the two are distinguishable and the correction is
+#: testable rather than asserted.
+def _discriminating_arm(*, target_correct: tuple[bool, ...]) -> dict[str, list[dict[str, Any]]]:
+    fillers = {
+        0: (True, True, True, True),
+        1: (True, True, True, False),
+        2: (True, False, False, False),
+        3: (False, False, False, False),
+    }
+    rows: list[dict[str, Any]] = []
+    for repeat, pattern in fillers.items():
+        rows.append(scored("t", correct=target_correct[repeat], repeat=repeat))
+        rows.extend(
+            scored(f"f{index}", correct=value, should_fire=index % 2 == 0, repeat=repeat)
+            for index, value in enumerate(pattern)
+        )
+    return {"arm": rows}
+
+
+#: Every field in a verdict record that carries routing rather than firing.
+#:
+#: Registered out of the item scores: two of the six procedures the model is
+#: offered are correct for zero of the 86 positives, so a routing term here
+#: would grade a six-way choice against a four-way key.
+ROUTING_FIELDS = ("procedure", "covers", "route", "routes")
+
+
+class TestRespondentGrid:
+    """The refusals every estimator below inherits."""
+
+    def test_no_arm_at_all_is_an_error(self) -> None:
+        with pytest.raises(ArmError, match="no arm was supplied"):
+            item_difficulty({})
+
+    def test_an_empty_arm_is_an_error(self) -> None:
+        """It contributes no respondent, so the denominator shrinks silently."""
+        with pytest.raises(ArmError, match="holds no records"):
+            item_difficulty({"a": [scored("p1", correct=True)], "b": []})
+
+    def test_it_refuses_two_label_revisions(self) -> None:
+        a = [scored("p1", correct=True) | {"set_version": 3}]
+        b = [scored("p1", correct=True) | {"set_version": 4}]
+        with pytest.raises(ArmError, match="different label revisions"):
+            item_difficulty({"a": a, "b": b})
+
+    def test_it_refuses_two_prompt_venues(self) -> None:
+        """The registered exclusion of the N9 in-situ arm, made mechanical."""
+        a = [scored("p1", correct=True) | {"in_situ": False}]
+        b = [scored("p1", correct=True) | {"in_situ": True}]
+        with pytest.raises(ArmError, match="different prompt venues"):
+            item_difficulty({"a": a, "b": b})
+
+    def test_it_refuses_two_skill_revisions(self) -> None:
+        """Same argument one axis over: a bump rewrites the description sent."""
+        a = [scored("p1", correct=True) | {"skill_version": "0.2.1"}]
+        b = [scored("p1", correct=True) | {"skill_version": "0.3.0"}]
+        with pytest.raises(ArmError, match="different skill revisions"):
+            item_difficulty({"a": a, "b": b})
+
+    def test_it_refuses_two_model_tiers(self) -> None:
+        a = [scored("p1", correct=True) | {"model": "haiku"}]
+        b = [scored("p1", correct=True) | {"model": "sonnet"}]
+        with pytest.raises(ArmError, match="different models"):
+            item_difficulty({"a": a, "b": b})
+
+    def test_one_arm_holding_two_tiers_is_caught_too(self) -> None:
+        """The guard runs on every arm against the first, including itself."""
+        mixed = [
+            scored("p1", correct=True) | {"model": "haiku"},
+            scored("p2", correct=True) | {"model": "sonnet"},
+        ]
+        with pytest.raises(ArmError, match="different models"):
+            item_difficulty({"a": mixed})
+
+    def test_a_case_under_both_labels_is_an_error(self) -> None:
+        rows = [
+            scored("p1", correct=True, should_fire=True),
+            scored("p1", correct=True, should_fire=False, repeat=1),
+        ]
+        with pytest.raises(ArmError, match="both labels"):
+            item_difficulty({"a": rows})
+
+    def test_two_verdicts_in_one_cell_is_an_error(self) -> None:
+        """A resumed checkpoint appended twice. There is no rule for picking."""
+        rows = [scored("p1", correct=True), scored("p1", correct=False)]
+        with pytest.raises(ArmError, match="two verdicts"):
+            item_difficulty({"a": rows})
+
+    def test_an_entirely_unparseable_arm_is_an_error(self) -> None:
+        with pytest.raises(ArmError, match="unparseable"):
+            item_difficulty({"a": [scored("p1", correct=None)]})
+
+
+class TestItemDifficulty:
+    """Estimator 1. Correct rows over parsed rows, per item."""
+
+    def test_it_counts_correct_rows_over_respondents(self) -> None:
+        rows = [
+            scored("p1", correct=True, repeat=0),
+            scored("p1", correct=False, repeat=1),
+            scored("p1", correct=False, repeat=2),
+            scored("p1", correct=False, repeat=3),
+        ]
+        item = item_difficulty({"a": rows})["p1"]
+        assert item.p == 0.25
+        assert item.n_respondents == 4
+
+    def test_the_denominator_is_the_parsed_rows_not_the_respondents(self) -> None:
+        rows = [
+            scored("p1", correct=True, repeat=0),
+            scored("p1", correct=None, repeat=1),
+            scored("n1", correct=True, should_fire=False, repeat=0),
+            scored("n1", correct=True, should_fire=False, repeat=1),
+        ]
+        difficulty = item_difficulty({"a": rows})
+        assert difficulty["p1"].n_respondents == 1, "the unparseable row is not a failure"
+        assert difficulty["p1"].p == 1.0
+        assert difficulty["n1"].n_respondents == 2
+
+    def test_each_item_carries_its_label(self) -> None:
+        """So a miss rate can never be averaged with a false-fire rate."""
+        rows = [
+            scored("p1", correct=True),
+            scored("n1", correct=False, should_fire=False),
+        ]
+        difficulty = item_difficulty({"a": rows})
+        assert difficulty["p1"].should_fire is True
+        assert difficulty["n1"].should_fire is False
+
+    def test_a_respondent_is_an_arm_and_a_repeat(self) -> None:
+        arms = {
+            "one": [scored("p1", correct=True), scored("p1", correct=True, repeat=1)],
+            "two": [scored("p1", correct=False), scored("p1", correct=False, repeat=1)],
+        }
+        assert item_difficulty(arms)["p1"].n_respondents == 4
+        assert item_difficulty(arms)["p1"].p == 0.5
+
+    def test_routing_is_not_folded_in(self) -> None:
+        """`council` and `hinge` are correct for zero of the 86 positives.
+
+        A wrong procedure on a correctly fired positive is still correct here,
+        by registration: folding routing in would grade a six-way choice against
+        a four-way key.
+        """
+        rows = [scored("p1", correct=True) | {"procedure": "council", "covers": False}]
+        assert item_difficulty({"a": rows})["p1"].p == 1.0
+
+
+class TestItemDiscrimination:
+    """Estimator 2. Corrected item-total point-biserial."""
+
+    def test_an_item_the_high_scorers_get_right_discriminates_positively(self) -> None:
+        arms = _discriminating_arm(target_correct=(True, True, False, False))
+        result = item_discrimination(arms)["t"]
+        assert result.r_pb is not None
+        assert result.r_pb == pytest.approx(3 / math.sqrt(10), abs=1e-9)
+        assert result.n_respondents == 4
+        assert result.undefined is None
+
+    def test_the_total_is_corrected_and_the_two_answers_differ(self) -> None:
+        """Against the *uncorrected* total the same grid reads 4/sqrt(17).
+
+        The correction is the difference between 0.9487 and 0.9701 here, which is
+        small -- and its absence is the standard defect, so it is pinned.
+        """
+        arms = _discriminating_arm(target_correct=(True, True, False, False))
+        r_pb = item_discrimination(arms)["t"].r_pb
+        assert r_pb == pytest.approx(0.94868, abs=1e-5)
+        assert r_pb != pytest.approx(4 / math.sqrt(17), abs=1e-5)
+
+    def test_an_item_the_low_scorers_get_right_discriminates_negatively(self) -> None:
+        arms = _discriminating_arm(target_correct=(False, False, True, True))
+        assert item_discrimination(arms)["t"].r_pb == pytest.approx(-3 / math.sqrt(10), abs=1e-9)
+
+    def test_a_constant_item_has_no_correlation_rather_than_zero(self) -> None:
+        arms = _discriminating_arm(target_correct=(True, True, True, True))
+        result = item_discrimination(arms)["t"]
+        assert result.r_pb is None, "None, not 0.0 -- the quantity does not exist"
+        assert result.undefined is not None
+        assert "constant" in result.undefined
+
+    def test_constant_rest_scores_have_no_correlation_either(self) -> None:
+        """Every respondent scores the same everywhere else, so nothing to correlate."""
+        rows = [
+            record
+            for repeat in range(4)
+            for record in (
+                scored("t", correct=repeat < 2, repeat=repeat),
+                scored("f0", correct=True, repeat=repeat),
+            )
+        ]
+        result = item_discrimination({"a": rows})["t"]
+        assert result.r_pb is None
+        assert result.undefined is not None
+        assert "rest-scores do not vary" in result.undefined
+
+    def test_one_respondent_cannot_produce_a_correlation(self) -> None:
+        rows = [scored("p1", correct=True), scored("p2", correct=False)]
+        result = item_discrimination({"a": rows})["p1"]
+        assert result.r_pb is None
+        assert result.n_respondents == 1
+        assert result.undefined is not None
+        assert "needs two" in result.undefined
+
+
+class TestBrokenItemScreen:
+    """Estimator 3. Anthropic's 0%-pass-rate screen, split by label."""
+
+    def test_the_floor_and_the_ceiling_are_split_by_label(self) -> None:
+        rows = [
+            record
+            for repeat in range(3)
+            for record in (
+                scored("p-floor", correct=False, repeat=repeat),
+                scored("p-ceiling", correct=True, repeat=repeat),
+                scored("n-floor", correct=False, should_fire=False, repeat=repeat),
+                scored("n-ceiling", correct=True, should_fire=False, repeat=repeat),
+                scored("middle", correct=repeat == 0, repeat=repeat),
+            )
+        ]
+        screen = broken_item_screen({"a": rows})
+        assert screen.n_respondents == 3
+        assert screen.floor_positives == ("p-floor",)
+        assert screen.floor_negatives == ("n-floor",)
+        assert screen.ceiling_positives == ("p-ceiling",)
+        assert screen.ceiling_negatives == ("n-ceiling",)
+        assert screen.floor == ("n-floor", "p-floor")
+        assert screen.ceiling == ("n-ceiling", "p-ceiling")
+        assert "middle" not in screen.floor + screen.ceiling
+
+    def test_a_floor_item_is_exactly_an_item_with_no_discrimination(self) -> None:
+        """The arithmetic link between estimators 2 and 3, asserted rather than said."""
+        arms = _discriminating_arm(target_correct=(False, False, False, False))
+        assert "t" in broken_item_screen(arms).floor
+        assert item_discrimination(arms)["t"].r_pb is None
+
+
+class TestTripleJointOutcomes:
+    """Estimator 4. AgentAbstain's Paired Accuracy, generalised to a triple."""
+
+    @staticmethod
+    def _triple(name: str, *, pattern: tuple[bool, bool, bool], repeat: int) -> list[Any]:
+        return [
+            scored(f"{name}p", correct=pattern[0], repeat=repeat, triple=name),
+            scored(f"{name}n1", correct=pattern[1], should_fire=False, repeat=repeat, triple=name),
+            scored(f"{name}n2", correct=pattern[2], should_fire=False, repeat=repeat, triple=name),
+        ]
+
+    def test_a_respondent_scores_only_by_getting_all_three_right(self) -> None:
+        rows = [
+            *self._triple("t1", pattern=(True, True, True), repeat=0),
+            *self._triple("t1", pattern=(True, True, False), repeat=1),
+        ]
+        result = triple_joint_outcomes({"a": rows})["t1"]
+        assert result.joint == 0.5
+        assert result.n_respondents == 2
+        assert result.n_items == 3
+
+    def test_the_positive_alone_does_not_carry_the_triple(self) -> None:
+        """Firing on everything gets the positive and loses both negatives."""
+        rows = self._triple("t1", pattern=(True, False, False), repeat=0)
+        assert triple_joint_outcomes({"a": rows})["t1"].joint == 0.0
+
+    def test_it_is_within_a_repeat_and_never_pooled_across_them(self) -> None:
+        """Right across three passes was never right once."""
+        rows = [
+            *self._triple("t1", pattern=(True, False, False), repeat=0),
+            *self._triple("t1", pattern=(False, True, False), repeat=1),
+            *self._triple("t1", pattern=(False, False, True), repeat=2),
+        ]
+        assert triple_joint_outcomes({"a": rows})["t1"].joint == 0.0
+
+    def test_a_respondent_with_a_hole_in_the_triple_is_dropped_not_failed(self) -> None:
+        rows = [
+            *self._triple("t1", pattern=(True, True, True), repeat=0),
+            scored("t1p", correct=None, repeat=1, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, repeat=1, triple="t1"),
+            scored("t1n2", correct=True, should_fire=False, repeat=1, triple="t1"),
+        ]
+        result = triple_joint_outcomes({"a": rows})["t1"]
+        assert result.n_respondents == 1, "the holed respondent has no joint outcome"
+        assert result.joint == 1.0
+
+    def test_a_triple_no_respondent_completed_is_none_not_zero(self) -> None:
+        rows = [
+            scored("t1p", correct=None, repeat=0, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, repeat=0, triple="t1"),
+        ]
+        result = triple_joint_outcomes({"a": rows})["t1"]
+        assert result.joint is None, "absent, not 0.000"
+        assert result.n_respondents == 0
+
+    def test_records_with_no_triple_are_refused(self) -> None:
+        with pytest.raises(ArmError, match="no record carries 'triple'"):
+            triple_joint_outcomes({"a": [scored("p1", correct=True)]})
+
+    def test_records_that_only_partly_carry_a_triple_are_refused(self) -> None:
+        rows = [scored("p1", correct=True, triple="t1"), scored("p2", correct=True)]
+        with pytest.raises(ArmError, match="carry no 'triple'"):
+            triple_joint_outcomes({"a": rows})
+
+    def test_a_case_under_two_triples_is_refused(self) -> None:
+        rows = [
+            scored("p1", correct=True, repeat=0, triple="t1"),
+            scored("p1", correct=True, repeat=1, triple="t2"),
+        ]
+        with pytest.raises(ArmError, match="two 'triple' labels"):
+            triple_joint_outcomes({"a": rows})
+
+    def test_a_triple_that_is_not_three_items_still_reports_its_count(self) -> None:
+        rows = [
+            scored("t1p", correct=True, repeat=0, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, repeat=0, triple="t1"),
+        ]
+        assert triple_joint_outcomes({"a": rows})["t1"].n_items == 2
+
+
+class TestItemAnalysis:
+    """The four together, over one respondent set."""
+
+    def test_it_reports_the_shape_of_the_respondent_set(self) -> None:
+        arms = {
+            "one": [scored("p1", correct=True, repeat=repeat, triple="t1") for repeat in range(2)],
+            "two": [scored("p1", correct=False, repeat=repeat, triple="t1") for repeat in range(2)],
+        }
+        analysis = item_analysis(arms)
+        assert analysis.respondents == (("one", 0), ("one", 1), ("two", 0), ("two", 1))
+        assert analysis.n_respondents == 4
+        assert analysis.n_items == 1
+        assert analysis.complete is True
+
+    def test_the_two_means_are_separate_and_there_is_no_third(self) -> None:
+        rows = [
+            scored("p1", correct=True),
+            scored("p2", correct=False),
+            scored("n1", correct=True, should_fire=False),
+        ]
+        analysis = item_analysis({"a": rows})
+        assert analysis.mean_difficulty_positive == 0.5
+        assert analysis.mean_difficulty_negative == 1.0
+        assert not hasattr(analysis, "mean_difficulty")
+
+    def test_a_set_with_one_label_reports_none_for_the_other_mean(self) -> None:
+        analysis = item_analysis({"a": [scored("p1", correct=True)]})
+        assert analysis.mean_difficulty_positive == 1.0
+        assert analysis.mean_difficulty_negative is None, "None, not 0.0"
+
+    def test_the_median_names_the_items_it_was_taken_over(self) -> None:
+        """Not `n_items`: every floor and ceiling item is excluded."""
+        arms = _discriminating_arm(target_correct=(True, True, False, False))
+        arms["arm"].extend(scored("ceiling", correct=True, repeat=repeat) for repeat in range(4))
+        analysis = item_analysis(arms)
+        assert analysis.median_discrimination is not None
+        assert analysis.n_items == 6
+        assert analysis.n_discriminating == 5, "the ceiling item has no correlation to median"
+
+    def test_no_defined_correlation_gives_no_median(self) -> None:
+        analysis = item_analysis({"a": [scored("p1", correct=True)]})
+        assert analysis.median_discrimination is None
+        assert analysis.n_discriminating == 0
+
+    def test_an_item_with_no_parsed_row_is_dropped_and_named(self) -> None:
+        rows = [scored("p1", correct=True), scored("p2", correct=None)]
+        analysis = item_analysis({"a": rows})
+        assert analysis.dropped == ("p2",)
+        assert "p2" not in analysis.difficulty
+        assert analysis.complete is False
+
+    def test_records_with_no_triples_lose_that_table_and_say_why(self) -> None:
+        analysis = item_analysis({"a": [scored("p1", correct=True)]})
+        assert analysis.triples == {}
+        assert analysis.triples_unavailable is not None
+        assert "triple" in analysis.triples_unavailable
+        assert analysis.difficulty, "the other three estimators still ran"
+
+    def test_a_triple_that_is_not_three_items_is_named(self) -> None:
+        rows = [
+            scored("t1p", correct=True, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, triple="t1"),
+        ]
+        assert item_analysis({"a": rows}).incomplete_triples == ("t1",)
+
+
+class TestFormatItemAnalysis:
+    """The report. Every denominator has to reach the page."""
+
+    def test_it_leads_with_the_respondent_count(self) -> None:
+        arms = _discriminating_arm(target_correct=(True, True, False, False))
+        lines = format_item_analysis(item_analysis(arms))
+        assert "respondents" in lines[0]
+        assert "4" in lines[0]
+
+    def test_it_prints_both_difficulty_means_and_labels_them(self) -> None:
+        rows = [
+            scored("p1", correct=True),
+            scored("n1", correct=False, should_fire=False),
+        ]
+        text = "\n".join(format_item_analysis(item_analysis({"a": rows})))
+        assert "miss rate" in text
+        assert "false-fire rate" in text
+        assert "never pooled" in text
+
+    def test_it_says_undefined_rather_than_zero(self) -> None:
+        text = "\n".join(format_item_analysis(item_analysis({"a": [scored("p1", correct=True)]})))
+        assert "undefined, not zero" in text
+        assert "one respondent" in text
+
+    def test_it_names_the_missing_triple_table(self) -> None:
+        text = "\n".join(format_item_analysis(item_analysis({"a": [scored("p1", correct=True)]})))
+        assert "TRIPLES not available" in text
+
+    def test_it_prints_the_joint_table_when_triples_exist(self) -> None:
+        rows = [
+            scored("t1p", correct=True, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, triple="t1"),
+            scored("t1n2", correct=False, should_fire=False, triple="t1"),
+        ]
+        text = "\n".join(format_item_analysis(item_analysis({"a": rows})))
+        assert "mean J_t" in text
+        assert "NOT THREE ITEMS" not in text
+
+    def test_it_flags_a_holed_grid_and_an_unscored_triple(self) -> None:
+        rows = [
+            scored("t1p", correct=None, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, triple="t1"),
+            scored("t1n2", correct=True, should_fire=False, triple="t1"),
+            scored("t2p", correct=True, triple="t2"),
+            scored("t2n1", correct=True, should_fire=False, triple="t2"),
+            scored("t2n2", correct=True, should_fire=False, triple="t2"),
+        ]
+        text = "\n".join(format_item_analysis(item_analysis({"a": rows})))
+        assert "no parsed row at all" in text
+        assert "partly measures its own parse rate" in text
+        assert "absent, not 0.000" in text
+
+    def test_it_flags_a_triple_that_is_not_three_items(self) -> None:
+        rows = [
+            scored("t1p", correct=True, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, triple="t1"),
+        ]
+        text = "\n".join(format_item_analysis(item_analysis({"a": rows})))
+        assert "NOT THREE ITEMS" in text
+
+    def test_it_lists_the_lowest_discriminating_items(self) -> None:
+        arms = _discriminating_arm(target_correct=(False, False, True, True))
+        text = "\n".join(format_item_analysis(item_analysis(arms), worst=2))
+        assert "lowest 2" in text
+        assert "t " in text or "t  " in text
+
+
+class TestItemAnalysisOnTheRecords:
+    """The registered respondent set, as a shape check on the real files.
+
+    Not a result -- the numbers are a separate confirmation pass, and nothing
+    below asserts one. What is asserted is that the estimator sees the twelve
+    respondents, 258 items and 86 triples the pre-registration names, and that
+    **some possible answer would have scored above zero here**. The second is
+    the check `CLAUDE.md` demands and that this instrument has twice published a
+    clean run without: a parser whitelist and a routing table each produced a
+    full checkpoint and a plausible 0.000 with nothing having failed.
+
+    These are the *published* copies of the six checkpoints. The
+    pre-registration names them by their live checkpoint paths
+    (`results/triggers/verdicts-<arm>-decision-making-v4.jsonl`), which are
+    working files a fresh checkout does not carry -- only
+    `results/triggers/verdicts.jsonl` is tracked. Reading the run directories
+    instead means this runs on every checkout rather than skipping on most of
+    them, and it is the same 516 rows either way.
+    """
+
+    #: The six description arms, arm name to (run directory, checkpoint stem).
+    #:
+    #: `verdicts-in-situ.jsonl` under `2026-08-19-505b236-n9-in-situ-void` is
+    #: absent by registration: 70 of its 516 responses are unparseable and its
+    #: parse rate splits by domain (Fisher p = 0.00011), which would put a
+    #: domain-correlated missing-data mechanism inside an item statistic. It is
+    #: left out here *and* refused by `_respondent_grid` if a caller adds it, so
+    #: the exclusion does not rest on this list being remembered --
+    #: `test_the_in_situ_arm_is_refused_rather_than_pooled` is that check.
+    ARMS: ClassVar[dict[str, tuple[str, str]]] = {
+        "full": ("2026-08-18-e632659-n6-confirmatory", "verdicts-full"),
+        "opener-only": ("2026-08-18-e632659-n6-confirmatory", "verdicts-opener-only"),
+        "stakes-shown": ("2026-08-18-e632659-n6-confirmatory", "verdicts-stakes-shown"),
+        "no-exclusions": ("2026-08-19-d52236a-n7-remaining-arms", "verdicts-no-exclusions"),
+        "no-opener": ("2026-08-19-d52236a-n7-remaining-arms", "verdicts-no-opener"),
+        "stakes-named": ("2026-08-19-d52236a-n7-remaining-arms", "verdicts-stakes-named"),
+    }
+
+    #: The arm the pre-registration excludes, for the refusal test below.
+    IN_SITU: ClassVar[tuple[str, str]] = (
+        "2026-08-19-505b236-n9-in-situ-void",
+        "verdicts-in-situ",
+    )
+
+    @classmethod
+    def _paths(cls) -> dict[str, Path]:
+        return {
+            arm: RESULTS / directory / f"{stem}.jsonl"
+            for arm, (directory, stem) in cls.ARMS.items()
+        }
+
+    def test_the_registered_respondent_set_has_the_registered_shape(self) -> None:
+        paths = self._paths()
+        if not all(path.exists() for path in paths.values()):  # pragma: no cover - committed
+            pytest.skip("the v4 arms are not all present")
+        analysis = item_analysis({arm: load_arm(path) for arm, path in paths.items()})
+        assert analysis.n_respondents == 12
+        assert analysis.respondents == tuple(
+            (arm, repeat) for arm in sorted(self.ARMS) for repeat in (0, 1)
+        )
+        assert analysis.n_items == 258
+        assert len(analysis.triples) == 86
+        assert analysis.incomplete_triples == ()
+        assert analysis.dropped == ()
+        assert analysis.complete, "the in-situ arm is excluded; these six parse fully"
+        assert analysis.median_discrimination is not None
+        assert any(item.r_pb not in (None, 0.0) for item in analysis.discrimination.values())
+        assert any(triple.joint not in (None, 0.0) for triple in analysis.triples.values())
+
+    def test_routing_is_absent_from_every_item_score(self) -> None:
+        """Registered: `council` and `hinge` are correct for zero of 86 positives.
+
+        Stripping every routing field out of the records must not move a single
+        difficulty. If it did, a six-way choice would be being graded against a
+        four-way key inside an item statistic.
+        """
+        paths = self._paths()
+        if not all(path.exists() for path in paths.values()):  # pragma: no cover - committed
+            pytest.skip("the v4 arms are not all present")
+        loaded = {arm: load_arm(path) for arm, path in paths.items()}
+        stripped = {
+            arm: [
+                {key: value for key, value in record.items() if key not in ROUTING_FIELDS}
+                for record in records
+            ]
+            for arm, records in loaded.items()
+        }
+        before = item_difficulty(loaded)
+        after = item_difficulty(stripped)
+        assert {case: item.p for case, item in before.items()} == {
+            case: item.p for case, item in after.items()
+        }
+
+    def test_the_in_situ_arm_is_refused_rather_than_pooled(self) -> None:
+        """The registered exclusion, enforced rather than remembered.
+
+        The entry leaves the N9 venue arm out because its missingness correlates
+        with domain. Nothing stops a caller passing it, so `_respondent_grid`
+        refuses it on the stamp every one of its 516 rows carries.
+        """
+        paths = self._paths()
+        directory, stem = self.IN_SITU
+        in_situ = RESULTS / directory / f"{stem}.jsonl"
+        wanted = [*paths.values(), in_situ]
+        if not all(path.exists() for path in wanted):  # pragma: no cover - committed
+            pytest.skip("the v4 arms are not all present")
+        arms = {arm: load_arm(path) for arm, path in paths.items()}
+        arms["in-situ"] = load_arm(in_situ)
+        with pytest.raises(ArmError, match="different prompt venues"):
+            item_analysis(arms)

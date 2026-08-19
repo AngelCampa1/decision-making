@@ -12,6 +12,7 @@ the flags that change the response contract, and is stamped onto every row
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 from pathlib import Path
 from types import ModuleType
@@ -642,3 +643,141 @@ class TestN9Recomputation:
         assert unparseable == 70
         assert round(rate, 4) == 0.8643
         assert rate < 0.9  # the disposition is still void under the new gate
+
+
+# --------------------------------------------------------------------------- #
+# The item analysis, and `--against`.
+#
+# Both exist because of the same failure one level up: an estimator with a
+# coverage floor and no caller is tested, proven and inert. `decision_evals`
+# has shipped four of those. `trigger_arms.item_analysis` is called from the
+# report path here so the fifth is not the item analysis registered on
+# 2026-08-19, and `--against` is what gives `trigger_arms.compare` -- and the
+# four comparability guards inside it -- a caller outside `tests/`.
+# --------------------------------------------------------------------------- #
+
+
+def _paired_rows(*, set_version: int = 4, correct: bool = True) -> list[dict[str, object]]:
+    """Two items in one repeat, shaped like a checkpoint and scored by label."""
+    return [
+        {
+            "case": "p1",
+            "repeat": 0,
+            "fired": correct,
+            "should_fire": True,
+            "set_version": set_version,
+            "model": "haiku",
+            "in_situ": False,
+            "triple": "t1",
+        },
+        {
+            "case": "n1",
+            "repeat": 0,
+            "fired": False,
+            "should_fire": False,
+            "set_version": set_version,
+            "model": "haiku",
+            "in_situ": False,
+            "triple": "t1",
+        },
+    ]
+
+
+class TestItemAnalysisIsReachedFromTheReportPath:
+    def test_main_prints_it(
+        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """The whole point: it runs on a run, not only in a test."""
+        monkeypatch.setattr(runner, "collect", _fake_collect_from_labels)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py"])
+        assert runner.main() == 0
+        out = capsys.readouterr().out
+        assert "ITEM ANALYSIS" in out
+        assert "respondents" in out
+        assert "DIFFICULTY" in out
+        assert "DISCRIMINATION" in out
+        assert "SCREEN" in out
+        assert "TRIPLES" in out
+
+    def test_it_prints_the_reason_rather_than_losing_the_run(
+        self, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """A run that made every call must not lose its report to a refusal."""
+        done = {
+            ("p1", 0): dict(_paired_rows()[0], fired=None),
+        }
+        runner.report_item_analysis(done, "arm")
+        out = capsys.readouterr().out
+        assert "not available" in out
+        assert "unparseable" in out
+
+
+class TestAgainstReachesCompare:
+    def test_it_prints_the_registered_paired_test(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        other = tmp_path / "verdicts-other.jsonl"
+        other.write_text(
+            "\n".join(json.dumps(record) for record in _paired_rows(correct=False)),
+            encoding="utf-8",
+        )
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_against(done, other, "arm")
+        out = capsys.readouterr().out
+        assert "paired Wilcoxon" in out
+        assert "verdicts-other" in out
+
+    def test_a_comparability_guard_refuses_and_the_refusal_is_the_output(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """The reason `compare` needed a caller at all.
+
+        Four guards were tested to their floor and reachable from nothing. This
+        is one of them firing from an entry point.
+        """
+        other = tmp_path / "verdicts-old.jsonl"
+        other.write_text(
+            "\n".join(json.dumps(record) for record in _paired_rows(set_version=3)),
+            encoding="utf-8",
+        )
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_against(done, other, "arm")
+        out = capsys.readouterr().out
+        assert "REFUSED" in out
+        assert "label revisions" in out
+
+    def test_an_empty_checkpoint_is_reported_not_compared(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        other = tmp_path / "empty.jsonl"
+        other.write_text("", encoding="utf-8")
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_against(done, other, "arm")
+        assert "holds no records" in capsys.readouterr().out
+
+    def test_a_missing_checkpoint_is_reported_not_raised(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_against(done, tmp_path / "absent.jsonl", "arm")
+        assert "not available" in capsys.readouterr().out
+
+    def test_main_reaches_it(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        other = tmp_path / "verdicts-unstamped.jsonl"
+        other.write_text(
+            "\n".join(json.dumps(record) for record in _paired_rows()),
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(runner, "collect", _fake_collect_from_labels)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py", "--against", str(other)])
+        assert runner.main() == 0
+        out = capsys.readouterr().out
+        assert f"AGAINST {other.name}" in out
+        # A guard refuses -- this file is stamped at label version 4 and carries
+        # no `skill_version`, while the run stamps both from the corpus and from
+        # `SKILL.md`. Which of the four fires depends on the default corpus, so
+        # only the refusal is asserted here; the guard-by-guard assertions are
+        # above, on `report_against` directly. The refusal *is* the output.
+        assert "REFUSED" in out

@@ -85,12 +85,17 @@ from decision_evals.trigger_arms import (  # noqa: E402
     ArmError,
     bootstrap_rate,
     bootstrap_rate_difference,
+    compare,
     false_positive_rate_by_kind,
     format_bands,
+    format_comparison,
     format_difference,
+    format_item_analysis,
     format_negative_kinds,
     format_rate,
     format_routing,
+    item_analysis,
+    load_arm,
     routing_by_procedure,
     summarise,
     summarise_by_band,
@@ -712,6 +717,84 @@ def report_negative_kinds(done: dict[tuple[str, int], dict[str, object]]) -> Non
         print("  So the ranking is a description of this run, not a difference between kinds.")
 
 
+def report_item_analysis(done: dict[tuple[str, int], dict[str, object]], arm: str) -> None:
+    """The four item estimators registered on 2026-08-19, over this run's repeats.
+
+    Registered in
+    `notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md`: item
+    difficulty, corrected item-total discrimination, the broken-item screen and
+    the per-triple joint outcome. Every number this repository has published
+    about this corpus is an **arm** statistic averaged over 258 items; not one is
+    an item statistic, and the register the pre-registration cites puts the cost
+    at r = -0.62 between item invalidity and item discrimination.
+
+    **A respondent is one `(arm, repeat)` pair, and this call sees one arm**, so
+    the respondent count here is this run's repeat count and nothing more. The
+    registered 12-respondent set is six description arms at two repeats and is
+    assembled by loading their checkpoints together --
+    `trigger_arms.item_analysis` takes a mapping of arm name to records for
+    exactly that reason. What this call is for is that the estimator runs on
+    every run rather than living in a script nobody invokes: four estimators in
+    this repository have been tested to their floor and reached by nothing.
+
+    Printed rather than raised, like `report_bands`: a version 2 checkpoint has
+    no triples, and a run that made every call should not lose its report to a
+    refusal at the end.
+    """
+    print(f"\n{'=' * 60}\nITEM ANALYSIS -- difficulty, discrimination, screen, triples\n{'=' * 60}")
+    try:
+        analysis = item_analysis({arm: list(done.values())})
+    except ArmError as error:
+        print(f"  not available: {error}")
+        return
+    for line in format_item_analysis(analysis):
+        print(line)
+    print(
+        "  Descriptive. Twelve respondents is the registered ceiling and this is one "
+        "arm's worth; no band is scored here and nothing here moves a label."
+    )
+
+
+def report_against(done: dict[tuple[str, int], dict[str, object]], other: Path, arm: str) -> None:
+    """This run's arm against a checkpoint on disk, paired per item.
+
+    The paired Wilcoxon over per-item correctness rates that M4, M5, M6 and L5
+    each registered and each computed in an ad-hoc script at the keyboard. It is
+    here because `trigger_arms.compare` had no caller outside `tests/` -- which
+    made its four comparability guards (`label_versions_comparable`,
+    `models_comparable`, `venue_comparable`, `skill_versions_comparable`) tested,
+    proven and inert, the exact shape `decision_evals.wiring` exists to refuse
+    one level up. A guard that refuses a comparison nobody runs refuses nothing.
+
+    A refusal from any of the four is **printed, not swallowed**: it is the
+    output. "These two arms cannot be compared, and here is which axis they
+    differ on" is the answer to the question `--against` asks.
+
+    Nothing is collected for this: pointed at an already-complete checkpoint the
+    run makes zero calls and prints the comparison.
+    """
+    print(f"\n{'=' * 60}\nAGAINST {other.name}\n{'=' * 60}")
+    try:
+        rows = load_arm(other)
+    except OSError as error:
+        print(f"  not available: {error}")
+        return
+    if not rows:
+        print(f"  not available: {other} holds no records")
+        return
+    try:
+        comparison = compare(list(done.values()), rows)
+    except ArmError as error:
+        print(f"  REFUSED: {error}")
+        return
+    for line in format_comparison(arm, other.stem, comparison):
+        print(line)
+    print(
+        "  The registered estimator, reproducing the four published p-values. It says "
+        "nothing about which arm is better on any measure it was not given."
+    )
+
+
 def report_calibration(done: dict[tuple[str, int], dict[str, object]]) -> None:
     """Is the elicited probability worth anything?
 
@@ -825,6 +908,16 @@ def main() -> int:
             "M6: which procedures share an entry, at a count this fixes. "
             "Groups separated by commas, names within a group by '+', e.g. "
             "'ledger+cascade,fit+timing'. Must cover every procedure once"
+        ),
+    )
+    parser.add_argument(
+        "--against",
+        type=Path,
+        help=(
+            "also score this run's arm against another checkpoint, paired per case id "
+            "with the registered Wilcoxon. Pointed at a complete checkpoint the run "
+            "makes no calls and prints only the comparison; a comparability guard that "
+            "refuses prints the refusal"
         ),
     )
     parser.add_argument(
@@ -1092,6 +1185,9 @@ def main() -> int:
 
     report_bands(done)
     report_negative_kinds(done)
+    report_item_analysis(done, checkpoint.stem)
+    if args.against is not None:
+        report_against(done, Path(args.against), checkpoint.stem)
     if entry_names is None:
         # The per-procedure table grades against the four procedure names. An
         # M5-style arm offering `ledger-fit` cannot be scored that way and
