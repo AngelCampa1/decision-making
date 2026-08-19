@@ -43,6 +43,7 @@ from decision_evals.corpus import (
 from decision_evals.triggers import (
     TriggerCase,
     TriggerSet,
+    _scan,
     check_trigger_sets,
     deferred_corpus_findings,
     load_trigger_set,
@@ -592,7 +593,13 @@ class TestTheShippedBaseline:
     """The real file against the real corpus, and a third leak against both."""
 
     def test_it_defers_exactly_the_known_findings_and_nothing_else(self) -> None:
-        """Three, as of the 2026-08-14 opener-leak fix -- see ``corpus-baseline.txt``.
+        """Five, as of the 2026-08-19 router-table gap -- see ``corpus-baseline.txt``.
+
+        Was three from the 2026-08-14 opener-leak fix until the shipped router
+        grew ``council`` and ``hinge`` without the answer key growing with it,
+        which opened one ``unreachable:`` finding on each of the two corpora.
+        Those two are not shortcut leaks and close differently: by authoring
+        positives and versioning the key, or by dropping the two rows.
 
         Was five right after the 2026-08-14 long-band merge: two `word_count`
         findings had just closed and three opened, including `open`'s
@@ -609,7 +616,17 @@ class TestTheShippedBaseline:
         """
         assert check_trigger_sets(REPO_ROOT) == []
         deferred = deferred_corpus_findings(REPO_ROOT)
-        assert len(deferred) == 3
+        # Five since 2026-08-19: the three shortcut leaks below, plus the
+        # `unreachable:council,hinge` gap on both corpora -- the router table
+        # grew two rows and the answer key did not grow with it.
+        assert len(deferred) == 5
+        assert (
+            sum(
+                "are the correct answer for no positive: council, hinge" in message
+                for message in deferred
+            )
+            == 2
+        )
         assert any(
             "'sentence_count' on the 'turn' view puts the positive at an extreme" in message
             for message in deferred
@@ -630,11 +647,11 @@ class TestTheShippedBaseline:
 
     def test_a_third_finding_on_the_real_corpus_still_fails(self) -> None:
         """Standing rule 2 against the shipped baseline rather than a fixture."""
-        corpus = load_trigger_set(CORPUS)
-        findings = [
-            (CORPUS.relative_to(REPO_ROOT).as_posix(), finding)
-            for finding in check_corpus(corpus, CORPUS)
-        ]
+        # Everything the gate really produces, not one corpus's battery: the
+        # baseline also defers `unreachable:` findings, which come from the
+        # scan rather than from `check_corpus`, and a partial view of the
+        # findings would read those entries as stale.
+        findings = _scan(REPO_ROOT)[1]
         baseline = load_corpus_baseline(REPO_ROOT)
         assert apply_corpus_baseline(findings, baseline)[0] == []
 
@@ -648,7 +665,8 @@ class TestTheShippedBaseline:
         """A baseline entry for a corpus that does not exist would never go stale."""
         baseline = load_corpus_baseline(REPO_ROOT)
         assert {entry.split("|", 1)[0] for entry in baseline} == {
-            "datasets/triggers/decision-making/index.yaml"
+            "datasets/triggers/decision-making.yaml",
+            "datasets/triggers/decision-making/index.yaml",
         }
 
     def test_each_entry_carries_the_condition_that_closes_it(self) -> None:

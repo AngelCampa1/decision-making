@@ -14,6 +14,7 @@ from decision_evals.triggers import (
     TriggerSetError,
     _check_routes,
     _check_separability,
+    _check_unreachable_procedures,
     check_trigger_sets,
     decision,
     default_procedures,
@@ -482,6 +483,110 @@ description: >-
         triggers = repo / "datasets" / "triggers" / "decision-making.yaml"
         skill = repo / "skills" / "decision-making" / "SKILL.md"
         assert _check_routes(load_trigger_set(triggers), skill, triggers) == []
+
+
+class TestEveryOfferedProcedureIsReachable:
+    """The mirror of the class above, and the direction that was missing.
+
+    ``_check_routes`` refuses a label naming a procedure the router does not
+    offer. Nothing refused a procedure the router *does* offer that no label
+    names -- which is the same defect from the other side, and the one the
+    six-procedure router walked into on 2026-08-19.
+
+    The fixtures are restated rather than inherited: subclassing a pytest test
+    class re-runs every parent test inside the child, which would report the
+    same four route-label assertions twice and make the count meaningless.
+    """
+
+    SKILL = TestRouteLabelsMatchTheRouterTable.SKILL
+
+    def _skill(self, tmp_path: Path) -> Path:
+        directory = tmp_path / "skills" / "demo"
+        directory.mkdir(parents=True)
+        path = directory / "SKILL.md"
+        path.write_text(self.SKILL, encoding="utf-8")
+        return path
+
+    def _one(self, tmp_path: Path, route: str) -> Path:
+        directory = tmp_path / "datasets" / "triggers"
+        directory.mkdir(parents=True)
+        path = directory / "demo.yaml"
+        path.write_text(
+            "skill: demo\n"
+            "positive:\n"
+            f"  - id: p01\n    turn: Should I take it?\n    why: a decision\n    route: {route}\n"
+            "negative:\n"
+            "  - id: n01\n    turn: What is the capital of France?\n    why: a lookup\n",
+            encoding="utf-8",
+        )
+        return path
+
+    def _both(self, tmp_path: Path) -> Path:
+        directory = tmp_path / "datasets" / "triggers"
+        directory.mkdir(parents=True)
+        path = directory / "demo.yaml"
+        path.write_text(
+            "skill: demo\n"
+            "positive:\n"
+            "  - id: p01\n    turn: Should I take it?\n    why: a decision\n    route: ledger\n"
+            "  - id: p02\n    turn: Does this apply to me?\n    why: a decision\n    route: fit\n"
+            "negative:\n"
+            "  - id: n01\n    turn: What is the capital of France?\n    why: a lookup\n",
+            encoding="utf-8",
+        )
+        return path
+
+    def test_a_covered_router_table_is_silent(self, tmp_path: Path) -> None:
+        """Standing rule 2: the falsifier runs against a known-good case first."""
+        skill = self._skill(tmp_path)
+        assert _check_unreachable_procedures(load_trigger_set(self._both(tmp_path)), skill) == []
+
+    def test_a_procedure_no_positive_routes_to_is_reported(self, tmp_path: Path) -> None:
+        skill = self._skill(tmp_path)
+        findings = _check_unreachable_procedures(
+            load_trigger_set(self._one(tmp_path, "ledger")), skill
+        )
+        assert [finding.key for finding in findings] == ["unreachable:fit"]
+        assert "counted wrong" in findings[0].message
+
+    def test_the_key_names_the_whole_set(self, tmp_path: Path) -> None:
+        """A baseline naming two procedures must not cover a corpus missing one.
+
+        Identity is the set of things that went wrong, not the wording -- the
+        rule ``Finding`` already documents and the reason the shortcut battery's
+        keys enumerate every leaking feature.
+        """
+        skill = self._skill(tmp_path)
+        directory = tmp_path / "datasets" / "triggers"
+        directory.mkdir(parents=True)
+        path = directory / "demo.yaml"
+        path.write_text(
+            "skill: demo\n"
+            "positive:\n"
+            "  - id: p01\n    turn: Should I take it?\n    why: a decision\n"
+            "negative:\n"
+            "  - id: n01\n    turn: What is the capital of France?\n    why: a lookup\n",
+            encoding="utf-8",
+        )
+        # No route labelled at all: a version-2 corpus, archived rather than
+        # fixed. Reporting both procedures unreachable there is noise.
+        assert _check_unreachable_procedures(load_trigger_set(path), skill) == []
+
+    def test_a_skill_with_no_router_table_is_not_an_error(self, tmp_path: Path) -> None:
+        skill = self._skill(tmp_path)
+        skill.write_text(self.SKILL.split("| What is hard")[0], encoding="utf-8")
+        assert (
+            _check_unreachable_procedures(load_trigger_set(self._one(tmp_path, "x")), skill) == []
+        )
+
+    def test_the_shipped_corpus_reports_council_and_hinge(self) -> None:
+        """The finding this check was written for, asserted rather than described."""
+        repo = Path(__file__).resolve().parents[2]
+        findings = _check_unreachable_procedures(
+            load_trigger_set(repo / "datasets" / "triggers" / "decision-making.yaml"),
+            repo / "skills" / "decision-making" / "SKILL.md",
+        )
+        assert [finding.key for finding in findings] == ["unreachable:council,hinge"]
 
 
 class TestVerdictParsingHonoursTheOfferedNames:
