@@ -1643,9 +1643,17 @@ class BrokenItemScreen:
     ``p == 0.0`` fired in every one.
 
     Attributes:
-        n_respondents: Respondents in the analysis. **Read this first.** At one
-            respondent every ``p`` is 0.0 or 1.0 by construction and both sets
-            below are simply the items that respondent got wrong and right.
+        n_respondents: Respondents in the analysis. **Read this first, and read
+            it as the size of the set rather than as any item's denominator** --
+            an item whose other rows were unparseable sits on the floor over its
+            own handful of respondents, which is why
+            :func:`format_item_analysis` prints each floor item's own count
+            beside it. At one respondent every ``p`` is 0.0 or 1.0 by
+            construction and both sets below are simply the items that
+            respondent got wrong and right. At two, ``p`` can only be 0.0, 0.5
+            or 1.0, so the floor and the ceiling still hold most of the corpus:
+            the screen being borrowed is a 0% rate across *many* trials, and two
+            is not many.
         floor_positives: Positives at ``p == 0.0``, case-sorted.
         floor_negatives: Negatives at ``p == 0.0``, case-sorted.
         ceiling_positives: Positives at ``p == 1.0``. Not a defect signal --
@@ -2387,9 +2395,17 @@ def format_item_analysis(analysis: ItemAnalysis, *, worst: int = 10) -> Sequence
     printed with the sentence that says what the screen degenerates to.
 
     Positives and negatives get their own mean and there is no pooled one, for
-    the reason :class:`ItemDifficulty` gives. ``worst`` bounds the two item lists
-    so a 258-item corpus does not print 258 rows into a run's report; the counts
-    above them are complete either way.
+    the reason :class:`ItemDifficulty` gives. ``worst`` bounds **every** item
+    list here -- the lowest discriminators, the hardest triples and the two
+    floor sets -- so a 258-item corpus does not print 258 rows into a run's
+    report; the counts above each list are complete either way. The floor sets
+    are bounded for the same reason as the others and it bites hardest there:
+    at ``--repeats 1`` every item is at ``p`` 0.0 or 1.0, so the floor is half
+    the corpus.
+
+    Each floor item carries **its own** respondent count, not the set's. An
+    item that parsed on 2 of 12 rows is on the floor over two, and Anthropic's
+    screen is premised on a 0% rate across *many* trials.
     """
     lines = [
         f"  respondents           {analysis.n_respondents} "
@@ -2441,27 +2457,43 @@ def format_item_analysis(analysis: ItemAnalysis, *, worst: int = 10) -> Sequence
         ]
     )
     negatives_first = sorted(
-        (item for item in analysis.discrimination.values() if item.r_pb is not None),
-        key=lambda item: (item.r_pb or 0.0, item.case),
+        ((item.r_pb, item) for item in analysis.discrimination.values() if item.r_pb is not None),
+        key=lambda pair: (pair[0], pair[1].case),
     )
     if negatives_first:
         lowest = negatives_first[:worst]
-        lines.append(f"                  lowest {len(lowest)}:")
+        lines.append(f"                  lowest {len(lowest)} of {len(negatives_first)}:")
         lines.extend(
-            f"                    {item.case:10s} {item.r_pb or 0.0:+.3f}  "
+            f"                    {item.case:10s} {r_pb:+.3f}  "
             f"p {analysis.difficulty[item.case].p:.3f}"
-            for item in lowest
+            for r_pb, item in lowest
         )
 
     screen = analysis.screen
+
+    def _floor(cases: tuple[str, ...]) -> str:
+        """Each floor item with **its own** denominator, capped at ``worst``.
+
+        The set-wide respondent count is not this item's denominator. An item
+        that parsed on 2 of 12 rows sits on the floor over two, and the screen
+        being borrowed here -- a 0% pass rate *across many trials* -- is a claim
+        about the trials that item actually got.
+        """
+        if not cases:
+            return "none"
+        shown = ", ".join(
+            f"{case} (over {analysis.difficulty[case].n_respondents})" for case in cases[:worst]
+        )
+        return shown if len(cases) <= worst else f"{shown}, and {len(cases) - worst} more"
+
     lines.extend(
         [
             "",
             f"  SCREEN  p == 0.000 on {len(screen.floor_positives)} positive(s) and "
-            f"{len(screen.floor_negatives)} negative(s) over "
-            f"{screen.n_respondents} respondent(s)",
-            f"          positives: {', '.join(screen.floor_positives) or 'none'}",
-            f"          negatives: {', '.join(screen.floor_negatives) or 'none'}",
+            f"{len(screen.floor_negatives)} negative(s); the set holds "
+            f"{screen.n_respondents} respondent(s) and each item below carries its own",
+            f"          positives: {_floor(screen.floor_positives)}",
+            f"          negatives: {_floor(screen.floor_negatives)}",
             f"          p == 1.000 on {len(screen.ceiling_positives)} positive(s) and "
             f"{len(screen.ceiling_negatives)} negative(s) -- the ceiling term, "
             "not a defect signal",
@@ -2473,22 +2505,42 @@ def format_item_analysis(analysis: ItemAnalysis, *, worst: int = 10) -> Sequence
     if analysis.triples_unavailable is not None:
         lines.append(f"  TRIPLES not available: {analysis.triples_unavailable}")
         return lines
-    scored = [triple for triple in analysis.triples.values() if triple.joint is not None]
+    scored = [
+        (triple.joint, triple) for triple in analysis.triples.values() if triple.joint is not None
+    ]
     lines.append(
         f"  TRIPLES  {len(scored)} of {len(analysis.triples)} triple(s) have a joint outcome"
     )
     if scored:
-        mean_joint = sum(triple.joint or 0.0 for triple in scored) / len(scored)
-        lines.append(
-            f"           mean J_t  {mean_joint:.3f}   all three items right in one "
-            "respondent's own repeat"
-        )
-        hardest = sorted(scored, key=lambda triple: (triple.joint or 0.0, triple.triple))[:worst]
-        lines.append(f"           lowest {len(hardest)}:")
+        # The mean is over the *complete* triples only. A two-item triple is
+        # cleared by getting two items right, so pooling it with the three-item
+        # ones raises the mean in one direction -- and the line below already
+        # says that "all three" over another count is a different statistic.
+        complete = [(joint, triple) for joint, triple in scored if triple.n_items == 3]
+        partial = [triple for _, triple in scored if triple.n_items != 3]
+        if complete:
+            mean_joint = sum(joint for joint, _ in complete) / len(complete)
+            lines.append(
+                f"           mean J_t  {mean_joint:.3f}   over the {len(complete)} triple(s) "
+                "holding three items: all three right in one respondent's own repeat"
+            )
+        else:
+            lines.append(
+                "           mean J_t  --   no scored triple holds three items, and "
+                "'all three' over another count is a different statistic"
+            )
+        if partial:
+            lines.append(
+                f"           {len(partial)} scored triple(s) hold other than three items and "
+                "are out of that mean -- named under NOT THREE ITEMS below"
+            )
+        hardest = sorted(scored, key=lambda pair: (pair[0], pair[1].triple))[:worst]
+        lines.append(f"           lowest {len(hardest)} of {len(scored)}:")
         lines.extend(
-            f"             {triple.triple:10s} {triple.joint or 0.0:.3f} "
+            f"             {triple.triple:10s} {joint:.3f} "
             f"over {triple.n_respondents} respondent(s)"
-            for triple in hardest
+            + ("" if triple.n_items == 3 else f", {triple.n_items} item(s)")
+            for joint, triple in hardest
         )
     unscored = [triple.triple for triple in analysis.triples.values() if triple.joint is None]
     if unscored:

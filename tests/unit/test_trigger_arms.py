@@ -1459,6 +1459,74 @@ class TestFormatItemAnalysis:
         assert "lowest 2" in text
         assert "t " in text or "t  " in text
 
+    def test_each_floor_item_carries_its_own_denominator(self) -> None:
+        """The screen is a 0% rate across *many* trials, so how many is the point.
+
+        `p-floor` parsed once and the set holds two respondents. Reported over
+        the set's count it reads as an item that failed twice.
+        """
+        rows = [
+            scored("p-floor", correct=False, repeat=0),
+            scored("p-floor", correct=None, repeat=1),
+            scored("n-floor", correct=False, should_fire=False, repeat=0),
+            scored("n-floor", correct=False, should_fire=False, repeat=1),
+        ]
+        text = "\n".join(format_item_analysis(item_analysis({"a": rows})))
+        assert "p-floor (over 1)" in text
+        assert "n-floor (over 2)" in text
+        assert "2 respondent(s)" in text, "the set's own count is still on the page"
+
+    def test_the_floor_lists_are_capped_like_every_other_list(self) -> None:
+        """At `--repeats 1` every item is at p 0.000 or 1.000 and the floor is half the corpus."""
+        rows = [scored(f"p{index}", correct=False) for index in range(5)]
+        text = "\n".join(format_item_analysis(item_analysis({"a": rows}), worst=2))
+        assert "and 3 more" in text
+        assert "p4" not in text
+        assert "5 positive(s)" in text, "the count above the list is complete"
+
+    def test_the_mean_joint_is_over_the_complete_triples_only(self) -> None:
+        """A two-item triple is cleared by getting two right, so pooling is directional.
+
+        `t1` holds three items and is failed; `t2` holds two and is passed.
+        Pooled the mean reads 0.500, which is a statistic about neither.
+        """
+        rows = [
+            scored("t1p", correct=False, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, triple="t1"),
+            scored("t1n2", correct=True, should_fire=False, triple="t1"),
+            scored("t2p", correct=True, triple="t2"),
+            scored("t2n1", correct=True, should_fire=False, triple="t2"),
+        ]
+        lines = format_item_analysis(item_analysis({"a": rows}))
+        mean = next(line for line in lines if "mean J_t" in line)
+        assert "0.000" in mean
+        assert "0.500" not in mean
+        assert "1 triple(s) holding three items" in mean
+        assert any("1 scored triple(s) hold other than three items" in line for line in lines)
+        assert any("NOT THREE ITEMS" in line for line in lines)
+
+    def test_no_complete_triple_gives_no_mean_rather_than_a_pooled_one(self) -> None:
+        rows = [
+            scored("t1p", correct=True, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, triple="t1"),
+        ]
+        lines = format_item_analysis(item_analysis({"a": rows}))
+        mean = next(line for line in lines if "mean J_t" in line)
+        assert "--" in mean
+        assert "1.000" not in mean
+
+    def test_triples_that_exist_and_none_of_which_scored_print_no_mean(self) -> None:
+        """The partial branch: a triple table with nothing in it to average."""
+        rows = [
+            scored("t1p", correct=None, triple="t1"),
+            scored("t1n1", correct=True, should_fire=False, triple="t1"),
+            scored("t1n2", correct=None, triple="t1"),
+        ]
+        lines = format_item_analysis(item_analysis({"a": rows}))
+        assert any("0 of 1 triple(s) have a joint outcome" in line for line in lines)
+        assert not any("mean J_t" in line for line in lines)
+        assert any("absent, not 0.000" in line for line in lines)
+
 
 class TestItemAnalysisOnTheRecords:
     """The registered respondent set, as a shape check on the real files.
