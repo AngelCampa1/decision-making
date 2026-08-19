@@ -65,7 +65,12 @@ def check_bare(fix: bool) -> list[str]:
     if code != 0:
         return []
 
-    _, bare = git("config", "--local", "--get", "core.bare")
+    # `--type=bool` rather than the raw value. Git accepts `1`, `yes` and `on`
+    # as spellings of true and breaks the checkout for all of them, so reading
+    # the raw string reports "clean" on a repository where every working-tree
+    # operation is already failing -- which is precisely the moment this is
+    # reached for. Verified 2026-08-19: `bare = 1` makes `git status` exit 128.
+    _, bare = git("config", "--local", "--type=bool", "--get", "core.bare")
     if bare != "true":
         return []
 
