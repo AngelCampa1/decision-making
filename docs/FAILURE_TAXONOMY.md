@@ -1,17 +1,17 @@
 # Failure taxonomy
 
-Built bottom-up from real traces per the Husain/Shankar loop, seeded with
-Harness-Bench's five categories as a citable prior to confirm or refute. The
-taxonomy determines the metrics, not the other way round.
+We built this bottom-up from real traces per the Husain/Shankar loop, seeded
+with Harness-Bench's five categories as a citable prior to confirm or refute.
+The taxonomy determines the metrics, not the other way round.
 
-**Corpus read so far:** 280 control-arm traces, Haiku, on the pre-rebuild
+Corpus read so far: 280 control-arm traces, Haiku, on the pre-rebuild
 single-turn corpus (`results/evidence-ledger/2026-08-10-baseline-corpus/`).
-**Saturation: not reached, and not close.** 15 zeros is a thin sample and 14 of
+Saturation is not reached, and not close. 15 zeros is a thin sample, and 14 of
 them came from two variants of one template. Everything below is provisional.
 
 ## The headline finding
 
-**Fifteen of fifteen zeros were item defects, not agent failures.**
+Fifteen of fifteen zeros were item defects, not agent failures.
 
 Every one was labelled `agent_wrong` automatically, because that is what the
 scorer assigns to a parseable answer that does not match ground truth. Every one
@@ -19,15 +19,15 @@ turned out, on reading, to be a case where the model's answer was defensible and
 the ground truth was not.
 
 Reporting the automatic label would have produced a 5% agent error rate that did
-not exist. `agent_wrong` is therefore provisional until a trace is read, and
-`item_defect` is now its own cause rather than being folded into
-`verifier_defect` — the parser and the comparison were correct in all fifteen
+not exist. `agent_wrong` is therefore provisional until somebody reads the
+trace, and `item_defect` is now its own cause rather than a fold into
+`verifier_defect`. The parser and the comparison were correct in all fifteen
 cases, and the fixes are completely different.
 
-The general point, which is not specific to this corpus: **at low difficulty,
-zeros are dominated by benchmark defects.** A failure taxonomy for the *agent*
-cannot be built until the corpus is hard enough to produce agent failures, and
-attempting one earlier will produce a taxonomy of your own mistakes wearing the
+The general point, which is not specific to this corpus: at low difficulty,
+benchmark defects dominate the zeros. You cannot build a failure taxonomy for
+the *agent* until the corpus is hard enough to produce agent failures, and
+attempting one earlier produces a taxonomy of your own mistakes wearing the
 model's name.
 
 ## Item defects, open-coded
@@ -55,9 +55,9 @@ strong predictor: 28 occurrences, 13 of them wrong, against a base rate of 5.4%.
 An 8.6× lift.
 
 It does not hold. 19 of the 28 appeals are in rel-009, the template with no
-stated rule. **Outside rel-008 and rel-009 the code appears 8 times and predicts
-zero failures.** The appeal is a symptom of an item that failed to state its
-rule, not an independent failure mode — the model reaches for outside knowledge
+stated rule. Outside rel-008 and rel-009 the code appears 8 times and predicts
+zero failures. The appeal is a symptom of an item that failed to state its rule,
+not an independent failure mode. The model reaches for outside knowledge
 precisely when the item did not supply the rule, which is reasonable behaviour.
 
 This is the confound the axial-coding step exists to catch, and it would have
@@ -67,7 +67,7 @@ gone into the paper as a finding if the pass had stopped at the correlation.
 
 | Category | Status here |
 | --- | --- |
-| Output-contract violations | **Zero observed.** 280/280 parsed, no format violations in any stratum. Not evidence the guard is unnecessary — the format contract is in every arm and this is the control arm, which is the easiest case for it. |
+| Output-contract violations | **Zero observed.** 280/280 parsed, no format violations in any stratum. Not evidence the guard is unnecessary: the format contract is in every arm, and this is the control arm, which is the easiest case for it. |
 | Tool / recovery failures | **Not applicable.** The harness runs with `--tools ""`. |
 | Evidence / grounding gaps | **Zero observed**, but this corpus cannot produce them: every fact needed is in the prompt and there is nothing to retrieve. |
 | Artifact-commitment failures | **Not applicable** to a single-answer task. |
@@ -76,19 +76,19 @@ gone into the paper as a finding if the pass had stopped at the correlation.
 Four of five are structurally unreachable in this venue. That is itself an
 argument for the accumulation venue described in
 [`ACCUMULATION_VENUE.md`](ACCUMULATION_VENUE.md), where state, continuation and
-grounding become reachable — and a reason not to claim this taxonomy generalises.
+grounding become reachable, and a reason not to claim this taxonomy generalises.
 
 ## What this changes about the metrics
 
-- **Every zero is read before it is counted.** The automatic cause is a triage
-  label, not a result. A run that reports agent error without a trace read is
-  reporting its own defect rate.
-- **`item_defect` counts are reported separately** and never enter the numerator
-  or denominator of an accuracy comparison. An item that should not exist is not
+- Somebody reads every zero before it is counted. The automatic cause is a
+  triage label, not a result. A run that reports agent error without a trace
+  read is reporting its own defect rate.
+- `item_defect` counts are reported separately and never enter the numerator or
+  denominator of an accuracy comparison. An item that should not exist is not
   evidence about an arm.
-- **Format integrity stays a guard rather than a metric.** Nothing here suggests
-  it is at risk, and a guard that has never fired is still worth keeping when the
+- Format integrity stays a guard rather than a metric. Nothing here suggests it
+  is at risk, and a guard that has never fired is still worth keeping when the
   treatment arms are the ones that could break it.
-- **No agent-failure metric is finalised yet**, because no agent failure has been
-  observed. Any taxonomy of how the model fails at ranking has to wait for a
+- No agent-failure metric is finalised yet, because nobody has observed an agent
+  failure. Any taxonomy of how the model fails at ranking has to wait for a
   corpus that can make it fail.

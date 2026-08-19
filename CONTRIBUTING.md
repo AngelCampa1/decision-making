@@ -19,7 +19,7 @@ stale build is pure Python and offline, so it refuses either way.
 uv run de check
 ```
 
-That is the whole local gate — lint, format, types, tests, coverage floors, and
+That is the whole local gate: lint, format, types, tests, coverage floors, and
 seven repository-integrity checks. There is no cloud CI, so `de check` is the
 only thing standing between a mistake and the published record. It is bound to
 `pre-commit` (fast subset) and `pre-push` (everything). Run it before you
@@ -44,19 +44,19 @@ believe anything works.
 
 These are not enforceable by a gate, and they matter more than the ones that are.
 
-- **Predictions go in [`notebook/`](notebook/) before runs.** Dated, one file
-  per entry, `YYYY-MM-DD-a-sentence-about-what-happened.md`.
-- **The notebook is append-only.** If a prediction turns out wrong, the entry
-  says so — append a `Correction` block, never edit it away. This has been
-  checked mechanically and is holding.
-- **A registered band names its estimator and its denominator, not just its
-  number.** If you cannot write the sentence "we will compute X from records Y
+- Predictions go in [`notebook/`](notebook/) before runs. Dated, one file per
+  entry, `YYYY-MM-DD-a-sentence-about-what-happened.md`.
+- The notebook is append-only. If a prediction turns out wrong, the entry says
+  so: append a `Correction` block, never edit it away. This has been checked
+  mechanically and is holding.
+- A registered band names its estimator and its denominator, not just its
+  number. If you cannot write the sentence "we will compute X from records Y
   over denominator Z using function W", the run is not ready.
-- **A recall band is set against the observed per-item ceiling, not a round
-  number.** Compute the ceiling from the per-item history first.
-- **Before believing an outcome, check that some possible response would have
-  scored above zero for that arm.** An estimator that cannot return a non-zero
-  value is not a measurement, and it does not announce itself — this repository
+- A recall band is set against the observed per-item ceiling, not a round
+  number. Compute the ceiling from the per-item history first.
+- Before believing an outcome, check that some possible response would have
+  scored above zero for that arm. An estimator that cannot return a non-zero
+  value is not a measurement, and it does not announce itself. This repository
   has shipped four of them, every one producing a clean run and a plausible
   number.
 
@@ -64,10 +64,35 @@ These are not enforceable by a gate, and they matter more than the ones that are
 for running unattended. [`docs/PROTOCOL.md`](docs/PROTOCOL.md) is the standing
 methodology.
 
+## Writing
+
+Prose a person reads goes through the humanizer skill before it is committed.
+That means [`README.md`](README.md), this file,
+[`SCORECARD.md`](SCORECARD.md), and the living documents under
+[`docs/`](docs/). Nothing enforces it. The documentation gate reads whether a
+reference resolves, not whether the sentence is worth reading.
+
+Three kinds of file are exempt, for three different reasons. Dated records say
+what was true on the day somebody wrote them: [`notebook/`](notebook/),
+[`results/`](results/), [`docs/DECISIONS.md`](docs/DECISIONS.md) and
+[`docs/STATUS.md`](docs/STATUS.md). Generated files are rewritten by the next
+build: [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md) and `CLAUDE.md`. And
+[`AGENTS.md`](AGENTS.md), `CLAUDE.md` and
+[`docs/AUTONOMOUS_WORK_ORDER.md`](docs/AUTONOMOUS_WORK_ORDER.md) are written for
+an agent working mid-task rather than for a person deciding whether to trust the
+work. [`skills/`](skills/) is exempt too, and most sharply: the description
+there is the thing the trigger experiments measure, so an edit for style makes
+the published numbers incomparable.
+
+The pass never touches a number, a citation, a correction left in place, or a
+hedge that is carrying its own weight. *"We have not shown this works"* does not
+get shortened into *"this does not work"*. [`AGENTS.md`](AGENTS.md) states the
+rule in full, including why no gate catches a violation.
+
 ## Changing a skill
 
 `skills/` is the source. `.agents/skills/` and `CLAUDE.md` are generated
-mirrors — edit [`AGENTS.md`](AGENTS.md) and the files under `skills/`, then:
+mirrors, so edit [`AGENTS.md`](AGENTS.md) and the files under `skills/`, then:
 
 ```bash
 uv run de mirror
@@ -82,8 +107,8 @@ A skill may not enter `plugin/skills/` while it carries `UNTESTED` or
 
 Every markdown file under `docs/`, `notebook/`, `results/`, `skills/` and the
 repository root is rendered by the site *in place*. Nothing is copied, so no
-second version of a document exists to disagree with the first — and the price
-is that each build is a snapshot with an expiry nobody can see. Rebuild in the
+second version of a document exists to disagree with the first. The price is
+that each build is a snapshot with an expiry nobody can see. Rebuild in the
 same change:
 
 ```bash
@@ -97,10 +122,10 @@ site renders. Commit it with the document. Publishing is separate and manual:
 uv run de site --deploy
 ```
 
-**What that gate cannot see.** It proves the committed build matches the current
-tree. It does not prove the build was ever pushed, because `de check` is offline
-by design and cannot consult the published branch. Nothing checks that you ran
-`--deploy`.
+That gate cannot see one thing. It proves the committed build matches the
+current tree. It does not prove the build was ever pushed, because `de check` is
+offline by design and cannot consult the published branch. Nothing checks that
+you ran `--deploy`.
 
 ## Reporting that a skill does not work
 
@@ -113,6 +138,6 @@ issue and say so.
 ## Scope
 
 Pull requests that add a skill without a way to measure it will be turned into a
-discussion about how to measure it. That is not a rejection of the skill — it is
+discussion about how to measure it. That is not a rejection of the skill. It is
 the entire premise of the repository. *"We have not shown this works"* and
 *"this works"* are different statements, and keeping them apart is the job.
