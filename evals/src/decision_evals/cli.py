@@ -756,6 +756,15 @@ def validate_manifests_step() -> StepResult:
 #: Item counts worth pricing. 12 is the old probe corpus, 30 the long-context
 #: plan's core count, 233 the largest single shard-count stratum in the vendored
 #: corpus, 527 that corpus minus the Unix-only `code` family, 627 all of it.
+#:
+#: **233 and 527 do not exclude the same thing, and 233 is not A2's n.** 527
+#: drops `code`; 233 does not, and every other line in Track A treats `code` as
+#: ungradable on this stack. The 6-turn stratum without `code` is **212**, and
+#: restricted to the three families A1 established as gradable it is **103** at
+#: 4 turns. Recounted off `datasets/vendor/sharded_instructions_600.json` on
+#: 2026-08-18; see the A-track table in `docs/RESEARCH_PROGRAMME.md`. The rows
+#: are left as they are because `de power` prices item counts rather than
+#: naming an experiment's n, and changing them would move a published table.
 POWER_ROWS: Final[tuple[int, ...]] = (12, 30, 100, 233, 527, 627)
 
 #: Discordance is the input people guess wrong, so it is swept rather than

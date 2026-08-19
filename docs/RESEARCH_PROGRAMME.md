@@ -1408,6 +1408,42 @@ for `p_discordant` on families that have no correctness measure here, which was
 known when it was registered. A pre-registered band needs the estimator named,
 not only the number.
 
+**Sample sizes and detectable effects, consolidated — 2026-08-18.** Three of
+these numbers already exist, scattered across two notebook entries, a CLI
+table (`de power`) and the prose above; two of the five experiments have never
+had a pair count, a repeat count or a design effect written down anywhere in
+this repository — grep of the whole tree comes up empty for both. The table
+below calls `stats/power.required_pairs` and `minimum_detectable_effect`
+directly rather than re-deriving the arithmetic by hand, and it counts the
+corpus on disk rather than trusting the figures already written about it — the
+same discipline the 527-to-315 correction above cost an hour to learn.
+
+**The `design_effect ≈ 2.0` used throughout the A-track prose above is not
+derived — it is `cluster.py`'s own worked-example number** (six variants per
+template, ICC 0.2), carried in as a stand-in. Nothing in the vendored corpus
+has the structure to compute an ICC from: the only groupable unit is task
+family, and three to six families is too few groups for
+`intraclass_correlation` to return anything stable. So it has never been
+replaced with a measured value the way Track N replaced its own placeholder
+with `design_effect(m=3, icc=0.315) = 1.63`. What would replace it: an ICC
+computed from repeated draws within one task family, which needs the same
+repeat measurements A5 is supposed to produce.
+
+| # | Paired unit | Pairs available (counted off the corpus, not read from prose) | Repeats | Design effect | MDE @ 80% power | Status |
+|---|---|---|---|---|---|---|
+| **A1** | one instruction (`task_id`), full-condition response vs. sharded-condition response | **315** — `actions` 105 + `database` 107 + `math` 103, each carrying that family's own full-setting field (`fully_specified_question` or `question`). Counted directly off `sharded_instructions_600.json`; matches the pre-registered figure | **1.** No repeats were run; no ICC has ever been measured for this venue | **assumed 2.0** (see above) | **5.4–9.9pp** unadjusted, **7.6–13.9pp** at the assumed design effect, `p_discordant` swept 0.15–0.50 | **closed** — and not by reaching that MDE. `math`'s observed `p_discordant` is 0.000, so `minimum_detectable_effect` raises `ValueError`: no effect is detectable at any `n`. `database` and `actions` closed on instrument grounds (no gradable object, no comparable object across arms), so the run that actually closed them used 10 pairs per family, not 315 |
+| **A2** | one instruction at a fixed shard count, decisive fact at first / middle / last turn | **212**, counted directly off `sharded_instructions_600.json` for the 6-turn stratum across the five non-`code` families. **Not 233** — the figure this document and `cli.py`'s `POWER_ROWS` both carry for "the largest shard-count stratum" still includes `code`, which every other line in Track A treats as ungradable on this stack. Restricted further to the three families A1 actually established as gradable (`actions` / `database` / `math`), the largest single-turn stratum is **103** (4 turns), not 212 and not 233 | **never written down** | assumed 2.0, same as A1, never computed | **6.6–12.0pp** unadjusted / **9.3–16.9pp** at DE=2.0, `n`=212; **9.4–17.1pp** / **13.1–24.0pp** at `n`=103 if restricted to gradable families | not yet run. Which of the three pairwise position comparisons is the primary registered test is also not stated anywhere |
+| **A3** | undecided — provisionally, one document set handed to a sub-agent, orchestrator decides from the report vs. from the raw documents | **never written down.** No corpus exists; A3 needs Track 0's multi-agent transport, which needs `--tools ""` relaxed and has not run | never written down | never computed | **not computable** — there is no `n` to hand either power function | not run |
+| **A4** | undecided — provisionally, one task, single agent with everything vs. orchestrator + sub-agents | **never written down**, same Track 0 dependency as A3 | never written down | never computed | **not computable** | not run |
+| **A5** | *k* repeats per item, at whichever of A1–A4's venues it runs against | n/a — A5 is a repeat-count question, not a pair-count question | **never written down.** `stats/reliability.repeats_for_reliability(icc, target)` is exactly the function this needs, but it takes an ICC as input, and no venue in A1–A4 has ever had a repeat measured to compute one from | n/a | **not computable** — the repeat count needs the ICC and the ICC needs the pilot A5 itself would be | not run |
+
+Confirmed against
+[`notebook/2026-08-11-twelve-items-could-not-have-found-anything.md`](../notebook/2026-08-11-twelve-items-could-not-have-found-anything.md),
+whose own line already said it: *"A3, A4 and A5 have no item count yet because
+they have no corpus yet."* Nothing built since has changed that, and this table
+is the first place it is said about repeats and the design effect too, not
+only about item counts.
+
 **Depends on.** Track 0.
 
 **Done when.** Five notebook entries, each with its numeric prediction written

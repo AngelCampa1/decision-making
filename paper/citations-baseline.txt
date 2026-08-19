@@ -18,7 +18,7 @@
 # Both opened and read first-hand, verbatim quotes recorded in
 # docs/DECISION_FRAMEWORKS.md's "Sources checked on 2026-08-14" section rather
 # than in paper/refs.bib, because another session was editing refs.bib
-# concurrently with this pass. Move the quotes into a bib entry and delete
-# these two lines when that session's work has landed.
-2412.06593
-2505.02151
+# concurrently with this pass. Closed 2026-08-18 (Track K5): both re-opened
+# first-hand against the arXiv abstract page and the export.arxiv.org API,
+# and given bib entries lou2024anchoring and sun2025overconfident in
+# paper/refs.bib with verbatim quote fields.

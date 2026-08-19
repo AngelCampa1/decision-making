@@ -32,9 +32,16 @@ from typing import Any, Final
 #: unconditionally by :func:`build_command`; there is deliberately no way to
 #: switch them off.
 #:
-#: ``--setting-sources ""`` is the load-bearing one. The others close paths that
-#: are not currently open but would be a confound if a future CLI version
-#: changed a default.
+#: ``--setting-sources ""`` is the load-bearing one for settings, and it is not
+#: the only load-bearing flag here. **Checked live on 2026-08-18 against
+#: claude-code 2.1.159**: dropping ``--disable-slash-commands`` makes the CLI
+#: declare thirteen skills, and dropping the two MCP flags makes it declare nine
+#: pending connectors — on this machine, whose user configuration supplies them.
+#: This comment previously said the others "close paths that are not currently
+#: open", which invited a future reader to trim them as belt-and-braces. They
+#: are open. See ``notebook/2026-08-18-memory-paths-is-not-a-gate.md`` for the
+#: two calls, which are also the first known-good/known-bad pair ever run
+#: against :meth:`InitReceipt.assert_isolated`'s ``skills`` branch.
 ISOLATION_FLAGS: Final[tuple[str, ...]] = (
     "--setting-sources",
     "",
@@ -252,7 +259,25 @@ class InitReceipt:
     Both go live the moment ``--tools`` is relaxed, which Track F plans. The
     memory path is keyed on the working directory, so it would become a
     cross-run state channel that a checkpointed record cannot see. Hence
-    :meth:`assert_isolated` gates on ``tools`` and the rest is recorded.
+    :meth:`assert_isolated` gates on ``tools`` and ``skills``, and the rest —
+    ``agents``, ``memory_paths``, ``api_key_source``, ``model``, ``cwd``,
+    ``session_id`` — is recorded rather than gated.
+
+    **Why ``memory_paths`` specifically is recorded and not gated, checked
+    live rather than assumed (2026-08-18, claude-code 2.1.159).** Unlike
+    ``tools`` and ``skills`` — empty under a healthy isolated call, so a
+    non-empty value is itself the anomaly — ``memory_paths`` reports
+    ``{"auto": "<cwd-keyed-path>"}`` on *every* isolated call, planted
+    ``CLAUDE.md`` or not: ``--setting-sources ""`` blocks that file from being
+    read at all (see ``notebook/2026-08-10-isolation-canary.md``), so nothing
+    a run does today can change what this field says. Refusing whenever it is
+    non-empty would refuse every run this repository has ever made, not the
+    contaminated ones; there is no currently-known shape of this field that
+    distinguishes a clean isolated call from a compromised one. Gating
+    ``assert_isolated`` on it would therefore not be a stricter check, it
+    would be a broken one. See
+    ``notebook/2026-08-18-memory-paths-is-not-a-gate.md`` for the calls this
+    was checked against.
     """
 
     tools: tuple[str, ...] = ()
@@ -290,6 +315,28 @@ class InitReceipt:
             )
 
 
+def _memory_paths(event: dict[str, Any]) -> tuple[str, ...]:
+    """Read ``memory_paths``, which is a mapping on the real CLI, not a list.
+
+    Checked live against claude-code 2.1.159 on 2026-08-18: every ``system``/
+    ``init`` event declares ``{"auto": "<cwd-keyed-path>"}``, never a bare
+    list. A plain ``isinstance(value, list)`` check -- the shape every other
+    field on this event actually has -- silently read this one as ``()``
+    regardless of what the CLI said, on every call this harness has ever
+    made. This is "recorded" being false in production while the class
+    docstring claimed it, the same failure shape as the fields this repository
+    has already found reading a whitelist that discarded everything it was
+    supposed to accept. The list branch stays, since nothing pins the shape
+    upstream and a future CLI could restore it.
+    """
+    value = event.get("memory_paths")
+    if isinstance(value, dict):
+        return tuple(str(item) for item in value.values())
+    if isinstance(value, list):
+        return tuple(str(item) for item in value)
+    return ()
+
+
 def parse_init_receipt(event: dict[str, Any]) -> InitReceipt:
     """Read a ``system``/``init`` event into an :class:`InitReceipt`.
 
@@ -307,7 +354,7 @@ def parse_init_receipt(event: dict[str, Any]) -> InitReceipt:
         tools=strings("tools"),
         skills=strings("skills"),
         agents=strings("agents"),
-        memory_paths=strings("memory_paths"),
+        memory_paths=_memory_paths(event),
         api_key_source=str(event.get("apiKeySource", "")),
         model=str(event.get("model", "")),
         cwd=str(event.get("cwd", "")),

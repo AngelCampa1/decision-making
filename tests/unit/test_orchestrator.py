@@ -33,7 +33,19 @@ from decision_evals.orchestrator import (
     summarise,
 )
 from decision_evals.providers.claude_code import CliResult
-from decision_evals.telemetry import OP_INVOKE_AGENT, OP_INVOKE_WORKFLOW, RECORD_SCHEMA_VERSION
+from decision_evals.telemetry import (
+    AGENT_NAME,
+    CONVERSATION_ID,
+    NODE_PARENT_ID,
+    OP_INVOKE_AGENT,
+    OP_INVOKE_WORKFLOW,
+    OPERATION_NAME,
+    RECORD_SCHEMA_VERSION,
+    REQUEST_MODEL,
+    RESPONSE_MODEL,
+    USAGE_INPUT_TOKENS,
+    USAGE_OUTPUT_TOKENS,
+)
 
 TEMPLATE = "Task: {task}\n\n{reports}"
 
@@ -123,6 +135,64 @@ class TestShape:
         """Rule 3, enforced by the schema rather than by remembering."""
         forbidden = {"correct", "score", "admissible", "passed", "verdict"}
         assert forbidden.isdisjoint(NodeRecord.__dataclass_fields__)
+
+
+class TestNodeRecordCarriesTelemetryAttributes:
+    """Track 0.5's production call site.
+
+    ``telemetry.span_attributes()`` was tested to 100% but had no caller
+    outside ``tests/unit/test_telemetry.py``. This tree is the multi-node run
+    the module's own docstring says the vocabulary was written for -- every
+    node already carries a parent, an operation and a trace id -- so every
+    :class:`NodeRecord` now reshapes them through ``span_attributes()`` rather
+    than the mapping only ever existing in a test.
+    """
+
+    def test_a_leaf_records_the_pinned_attribute_mapping(self) -> None:
+        result = _run(_dispatches("a"), ScriptedRunner({"a": "A"}))
+        leaf = next(r for r in result.records if r.node_name == "a")
+        assert leaf.attributes[OPERATION_NAME] == OP_INVOKE_AGENT
+        assert leaf.attributes[CONVERSATION_ID] == "c1"
+        assert leaf.attributes[AGENT_NAME] == "a"
+        assert leaf.attributes[NODE_PARENT_ID] == leaf.parent_node_id
+        assert leaf.attributes[USAGE_INPUT_TOKENS] == leaf.prompt_tokens
+        assert leaf.attributes[USAGE_OUTPUT_TOKENS] == leaf.output_tokens
+
+    def test_the_root_records_no_parent_attribute(self) -> None:
+        """The root is the degenerate case ``span_attributes`` was built for:
+        an absent optional is omitted, not set to ``None``."""
+        result = _run(_dispatches("a"), ScriptedRunner({}))
+        root = next(r for r in result.records if r.node_name == ROOT)
+        assert root.attributes[OPERATION_NAME] == OP_INVOKE_WORKFLOW
+        assert NODE_PARENT_ID not in root.attributes
+
+    def test_request_and_response_model_are_recorded_separately(self) -> None:
+        """The tree asked for ``haiku``; the CLI answered as a dated build."""
+        result = _run(_dispatches("a"), ScriptedRunner({}))
+        leaf = next(r for r in result.records if r.node_name == "a")
+        assert leaf.attributes[REQUEST_MODEL] == "haiku"
+        assert leaf.attributes[RESPONSE_MODEL] == "claude-haiku-4-5-20251001"
+        assert leaf.attributes[REQUEST_MODEL] != leaf.attributes[RESPONSE_MODEL]
+
+    def test_a_record_predating_this_field_defaults_to_an_empty_mapping(self) -> None:
+        """Backward compatibility for every checkpoint already on disk, e.g.
+        ``results/track-0/tree_smoke.jsonl``, which has no ``attributes`` key."""
+        record = NodeRecord(
+            conversation_id="c",
+            node_name="a",
+            node_id="c/0",
+            parent_node_id="c/orchestrator",
+            operation=OP_INVOKE_AGENT,
+            model="m",
+            prompt="p",
+            response="r",
+            report_seen_by_parent="r",
+            prompt_tokens=1,
+            output_tokens=1,
+            cost_usd=0.0,
+            duration_ms=1,
+        )
+        assert record.attributes == {}
 
     def test_records_carry_the_current_schema_version(self) -> None:
         result = _run(_dispatches("a"), ScriptedRunner({}))

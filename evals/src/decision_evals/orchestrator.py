@@ -41,7 +41,7 @@ import json
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
-from typing import Final
+from typing import Any, Final
 
 from decision_evals.budget import BudgetLedger, estimate_cost_usd
 from decision_evals.providers.claude_code import CliResult, Conversation, isolated_cwd
@@ -50,6 +50,7 @@ from decision_evals.telemetry import (
     OP_INVOKE_WORKFLOW,
     RECORD_SCHEMA_VERSION,
     NodeIdentity,
+    span_attributes,
 )
 
 #: The orchestrator's node name and id. Fixed so a record can be found without
@@ -101,6 +102,15 @@ class NodeRecord:
             and a record holding only one of them cannot describe the run.
         prompt_tokens: ``input + cache_creation + cache_read``. The CLI's
             ``input_tokens`` alone is the uncached remainder.
+        attributes: The same node identity and usage, reshaped through
+            :func:`decision_evals.telemetry.span_attributes` into the pinned
+            ``gen_ai.*``/``decision_evals.*`` vocabulary. This is the multi-node
+            tree Track 0.5 was written for -- every field it needs (a parent, a
+            turn's operation, a trace id) already exists on this record; the
+            mapping is a re-expression of them for a trace consumer, not new
+            data. Defaults to ``{}`` so a record written before this field
+            existed loads describing itself accurately rather than claiming a
+            mapping it never computed.
     """
 
     conversation_id: str
@@ -117,6 +127,7 @@ class NodeRecord:
     cost_usd: float
     duration_ms: int
     schema_version: int = RECORD_SCHEMA_VERSION
+    attributes: dict[str, Any] = field(default_factory=dict)
 
     @property
     def was_transformed(self) -> bool:
@@ -285,6 +296,7 @@ def run_tree(
                 prompt=dispatch.prompt,
                 result=result,
                 report_seen_by_parent=seen,
+                request_model=model,
             )
         )
 
@@ -306,6 +318,7 @@ def run_tree(
             prompt=aggregate_prompt,
             result=root_result,
             report_seen_by_parent=None,
+            request_model=model,
         )
     )
 
@@ -481,6 +494,7 @@ def _record(
     prompt: str,
     result: CliResult,
     report_seen_by_parent: str | None,
+    request_model: str,
 ) -> NodeRecord:
     return NodeRecord(
         conversation_id=identity.conversation_id,
@@ -496,6 +510,17 @@ def _record(
         output_tokens=result.output_tokens,
         cost_usd=result.cost_usd,
         duration_ms=result.duration_ms,
+        # The production call site `span_attributes()` was written for: every
+        # node in the tree has a parent, a turn's operation and a trace id, and
+        # this reshapes them into the pinned gen_ai.*/decision_evals.* mapping
+        # rather than each caller re-deriving it by hand.
+        attributes=span_attributes(
+            identity,
+            request_model=request_model,
+            response_model=result.model,
+            input_tokens=result.input_tokens,
+            output_tokens=result.output_tokens,
+        ),
     )
 
 

@@ -56,7 +56,11 @@ _INIT_EVENT = {
     "tools": [],
     "skills": [],
     "agents": ["general-purpose", "Explore"],
-    "memory_paths": ["/tmp/whatever/memory"],
+    # A mapping, not a list -- checked live against claude-code 2.1.159 on
+    # 2026-08-18, where every `system`/`init` event declares
+    # `{"auto": "<cwd-keyed-path>"}`. A list-shaped fixture here would test a
+    # shape the real CLI has never sent.
+    "memory_paths": {"auto": "/tmp/whatever/memory"},
     "apiKeySource": "none",
     "model": "claude-haiku-4-5-20251001",
     "cwd": "/tmp/run",
@@ -168,6 +172,32 @@ class TestInitReceipt:
     def test_an_isolated_receipt_passes(self) -> None:
         parse_init_receipt(_INIT_EVENT).assert_isolated()
         assert parse_init_receipt(_INIT_EVENT).tools_disabled
+
+    def test_memory_paths_reads_the_real_mapping_shape(self) -> None:
+        """The CLI declares this field as ``{"auto": path}``, not a list. A
+        plain ``isinstance(value, list)`` check -- correct for every other
+        field on this event -- silently read it as empty regardless of what
+        the CLI said. Checked live against claude-code 2.1.159, 2026-08-18."""
+        receipt = parse_init_receipt(_INIT_EVENT)
+        assert receipt.memory_paths == ("/tmp/whatever/memory",)
+
+    def test_a_list_shaped_memory_paths_still_parses(self) -> None:
+        """Nothing pins the CLI's shape upstream; this branch is insurance in
+        case it reverts to what an earlier version of this fixture assumed."""
+        event = {**_INIT_EVENT, "memory_paths": ["/tmp/whatever/memory"]}
+        assert parse_init_receipt(event).memory_paths == ("/tmp/whatever/memory",)
+
+    def test_declared_memory_paths_do_not_fail_isolation(self) -> None:
+        """Recorded, not gated -- checked live rather than assumed. A planted
+        CLAUDE.md does not change this field at all under the isolation flag
+        stack (`--setting-sources ""` blocks it from being read in the first
+        place, per notebook/2026-08-10-isolation-canary.md), so there is no
+        known value of this field that distinguishes a clean isolated call
+        from a compromised one. Gating on it would refuse every run, not the
+        contaminated ones."""
+        receipt = parse_init_receipt(_INIT_EVENT)
+        assert receipt.memory_paths
+        receipt.assert_isolated()
 
     def test_declared_agents_do_not_fail_isolation(self) -> None:
         """They are latent under --tools "": declared, unreachable, tested inert."""

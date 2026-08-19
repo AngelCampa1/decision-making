@@ -1184,6 +1184,59 @@
              rescued by moving it here either}
 }
 
+@article{lou2024anchoring,
+  author  = {Lou, Jiaxu and Sun, Yifan},
+  title   = {Anchoring Bias in Large Language Models: An Experimental Study},
+  journal = {arXiv preprint arXiv:2412.06593},
+  year    = {2024},
+  quote   = {Our findings highlight the sensitivity of LLM responses to biased
+             hints. ... simple algorithms such as Chain-of-Thought, Thoughts of
+             Principles, Ignoring Anchor Hints, and Reflection are not
+             sufficient [to mitigate anchoring bias].},
+  note    = {Verified first-hand 2026-08-18 against the arXiv abstract page
+             (v2, 18 Dec 2024) and the export.arxiv.org API for the author list
+             and dates. THE ABSTRACT CARRIES NO HEADLINE NUMBER -- the claim is
+             qualitative: LLM judgments are sensitive to a planted anchor hint,
+             and four mitigation strategies tested (Chain-of-Thought, Thoughts
+             of Principles, Ignoring Anchor Hints, Reflection) are not
+             sufficient on their own; the paper's own fix instead needs hints
+             "from comprehensive angles." Two authors. Cited in
+             docs/DECISION_FRAMEWORKS.md's K3/K4 pass as adjacent-but-not-
+             direct evidence for the consider-the-opposite framework:
+             anchoring is the bias that framework targets, but this paper
+             measures susceptibility to an experimenter-planted anchor, not
+             whether a model spontaneously generates counter-evidence on its
+             own, so the fit is a bias-family match rather than a test of that
+             framework's mechanism}
+}
+
+@article{sun2025overconfident,
+  author  = {Sun, Fengfei and Li, Ningke and Wang, Kailong and Goette, Lorenz},
+  title   = {Large Language Models are overconfident and amplify human bias},
+  journal = {arXiv preprint arXiv:2505.02151},
+  year    = {2025},
+  quote   = {We find that all five LLMs we study are overconfident: they
+             overestimate the probability that their answer is correct
+             between 20\% and 60\%. Humans have accuracy similar to the more
+             advanced LLMs, but far lower overconfidence.},
+  note    = {Verified first-hand 2026-08-18 against the arXiv abstract page
+             (v2, 12 Oct 2025) and the export.arxiv.org API; the abstract text
+             is unchanged from v1 (4 May 2025) apart from the revision date, so
+             the quote holds in the current version. FIVE LLMS, ALGORITHMICALLY
+             CONSTRUCTED REASONING PROBLEMS WITH A KNOWN GROUND TRUTH --
+             confidence is elicited by a protocol matched to a human-subject
+             comparison, not a free-form calibration study. Two findings this
+             repository does not currently carry anywhere: LLM overconfidence
+             grows sharply relative to humans as stated certainty falls, and
+             showing a human an LLM's answer raises the human's accuracy while
+             more than doubling the human's own overconfidence. Cited in
+             docs/DECISION_FRAMEWORKS.md's K3/K4 pass as direct evidence for
+             the calibration/probability-training row: no procedure in this
+             repository currently elicits a probability from the model, so
+             that row is DOCUMENTED in the outside literature rather than
+             DOCUMENTED on this repository's own stack}
+}
+
 @article{knipper2025cognitivebias,
   author  = {Knipper, R. Alexander and Knipper, Charles S. and Zhang, Kaiqi and
              Sims, Valerie and Bowers, Clint and Karmaker, Santu},
