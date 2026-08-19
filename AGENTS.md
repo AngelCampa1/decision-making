@@ -360,9 +360,16 @@ If you are an agent contributing here rather than a user installing the skills:
   for: it says how to keep going — derive the parameter or record the choice,
   adjudicate the failures blind, run the grid, confirm the finding.
 - `python -m uv run de check` is the full local gate — lint, types, tests,
-  coverage floors, skill validation, run provenance and integrity wiring. No CI
-  gates this repository — the one workflow it has publishes the site and checks
-  nothing. Run `de check` before you believe anything works.
+  coverage floors, skill validation, run provenance and integrity wiring. Run it
+  before you believe anything works. It also runs in CI
+  (`.github/workflows/check.yml`), which is not a convenience: checking out the
+  committed tree on its own showed the gate had only ever been asked about a
+  working directory, never about a commit. `main`'s tip imported an uncommitted
+  module, two documents linked ignored paths, and the site manifest recorded a
+  build from a file not in the repository. Green locally means green *here*.
+  Only a clean checkout can say green on a clean clone, and that workflow has
+  not run yet. See `notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`.
+  A second workflow, `deploy-site.yml`, publishes the site and checks nothing.
 - **Editing a document means rebuilding the site in the same change.** The site
   under `site/` renders this repository's markdown *in place* — `docs/`,
   `notebook/`, `results/`, `skills/` and the root are read by the build, never

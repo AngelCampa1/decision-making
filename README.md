@@ -5,6 +5,7 @@
   <img src="site/public/lockup-light.png" alt="decision-making-skills" width="440">
 </picture>
 
+[![Check](https://github.com/AngelCampa1/decision-making-skills/actions/workflows/check.yml/badge.svg)](https://github.com/AngelCampa1/decision-making-skills/actions/workflows/check.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.13%2B-blue.svg)](pyproject.toml)
 [![Status](https://img.shields.io/badge/status-pre--alpha-orange.svg)](docs/STATUS.md)
@@ -246,12 +247,26 @@ repository-integrity checks:
 uv run de check
 ```
 
-**No CI gates this repository.** `de check` is bound to `pre-commit` (fast
-subset) and `pre-push` (everything), so a red tree can't be pushed, and it runs
-on a machine where you can watch it. It makes no model calls; model-backed
-evaluation is run explicitly from [`scripts/`](scripts/).
+**The gate runs locally, and from now on in CI as well.** `de check` is bound to
+`pre-commit` (fast subset) and `pre-push` (everything), so a red tree can't be
+pushed, and it runs on a machine where you can watch it. It makes no model
+calls; model-backed evaluation is run explicitly from [`scripts/`](scripts/).
+Because it is offline and deterministic, the same command runs unchanged in
+[`.github/workflows/check.yml`](.github/workflows/check.yml) on every push and
+pull request. That workflow is new and has not run yet: until it does, nothing
+here has been checked anywhere except the machine it was written on.
 
-There is now one workflow, and it publishes rather than checks.
+**Simulating a clean clone is what found the reason to want that.** Checking out
+the committed tree on its own showed the gate had only ever been asked about a
+working directory, never about a commit. The tip of `main` imported a module
+that had never been committed. Two living documents linked paths that
+`.gitignore` excludes by design, so those links cannot resolve for anyone who
+clones this. The site manifest recorded a build from a file that is not in the
+repository. Every one of those is the gate working correctly on a tree it had
+never been shown. Written up in
+[`notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`](notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md).
+
+A second workflow publishes rather than checks.
 [`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml) builds
 the site and deploys it to GitHub Pages on every push to `main`, and the Pages
 source is that workflow. Nothing on a machine can publish: the `de site

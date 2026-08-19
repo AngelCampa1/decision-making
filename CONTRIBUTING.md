@@ -20,10 +20,14 @@ uv run de check
 ```
 
 That is the whole local gate: lint, format, types, tests, coverage floors, and
-seven repository-integrity checks. **No CI gates this repository**, so `de check`
-is the only thing standing between a mistake and the published record. It is
-bound to `pre-commit` (fast subset) and `pre-push` (everything). Run it before
-you believe anything works.
+seven repository-integrity checks. It is bound to `pre-commit` (fast subset) and
+`pre-push` (everything), and the same command runs in CI on every push and pull
+request. Run it before you believe anything works.
+
+Run it locally anyway, even though CI will. The two are not redundant: local
+tells you the tree in front of you passes, CI tells you the commit passes, and
+the first time those were compared, on a locally simulated clean clone, they
+disagreed in four places.
 
 `de check` makes no model calls and is fully deterministic.
 
