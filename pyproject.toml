@@ -316,6 +316,22 @@ enforces.\
 # command is an error, and an entry named nowhere in the documentation is a
 # line to delete.
 # --------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #
+# Paths the documentation names inside a *different* repository.
+#
+# The path gate resolves any backticked fragment whose first segment is a real
+# top-level directory against this root. That is right for the paths this
+# repository documents and wrong for the ones it describes in others, and the
+# difference is invisible to the regex.
+#
+# Same rules as `unwired` and `docs-absent-commands`: it may only shrink, an
+# entry that starts resolving here is an error, and an entry named nowhere in
+# the documentation is a line to delete.
+# --------------------------------------------------------------------------- #
+[tool.decision-evals.docs-external-paths]
+".claude/commands/" = """
+Named in `docs/DECISION_FRAMEWORKS.md`, reviewing wanikua/thinking-skills, which keeps twenty command files there. `.claude/` is a directory here and that one is not, so a true sentence about another project's layout read as a broken link. Delete this line if the review of that library is ever cut."""
+
 [tool.decision-evals.docs-absent-commands]
 "screen" = """
 Named in `README.md`, which corrects its own instruction to run it. `screen` is \

@@ -73,6 +73,18 @@ UNLISTED_DIRS: Final[frozenset[str]] = frozenset()
 #: ``pyproject.toml`` table naming commands that are mentioned while absent.
 ABSENT_TABLE: Final[tuple[str, ...]] = ("tool", "decision-evals", "docs-absent-commands")
 
+#: ``pyproject.toml`` table naming backticked paths that belong to a *different*
+#: repository. :func:`repo_paths` resolves any fragment whose first segment is a
+#: real top-level directory against this root, which is right for the paths this
+#: repository documents and wrong for the ones it describes in others:
+#: ``docs/DECISION_FRAMEWORKS.md`` reviews a prompt library that keeps twenty
+#: files in ``.claude/commands/``, and ``.claude/`` is a directory here, so a
+#: true sentence about somebody else's layout was reported as a broken link.
+#: Same rules as :data:`ABSENT_TABLE`: the register may only shrink, an entry
+#: that starts resolving here is an error, and an entry named nowhere is a line
+#: to delete.
+EXTERNAL_TABLE: Final[tuple[str, ...]] = ("tool", "decision-evals", "docs-external-paths")
+
 #: An inline code span: `` `de check` ``.
 _CODE_SPAN: Final = re.compile(r"`([^`\n]+)`")
 
@@ -128,6 +140,27 @@ def code_fragments(text: str) -> list[str]:
     return [*_FENCE.findall(text), *_CODE_SPAN.findall(without_fences)]
 
 
+def _load_register(repo_root: Path, table: tuple[str, ...]) -> dict[str, str]:
+    """One ``pyproject.toml`` register of deliberate exceptions, or ``{}``.
+
+    Shared by :func:`load_absent_commands` and :func:`load_external_paths`,
+    which differ only in the table they read. Every way of not having the table
+    is tolerated rather than raising: a repository without one is the state
+    before anybody declares an exception, and the gate has to run there.
+    """
+    pyproject = repo_root / "pyproject.toml"
+    if not pyproject.is_file():
+        return {}
+    node: object = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+    for key in table:
+        if not isinstance(node, dict):
+            return {}
+        node = node.get(key, {})
+    if not isinstance(node, dict):
+        return {}
+    return {str(key): str(value) for key, value in node.items()}
+
+
 def load_absent_commands(repo_root: Path) -> dict[str, str]:
     """Commands named in the documentation while deliberately not existing.
 
@@ -136,17 +169,17 @@ def load_absent_commands(repo_root: Path) -> dict[str, str]:
     ``[tool.decision-evals.unwired]`` the register may only shrink, and an
     entry that becomes a real command is itself an error.
     """
-    pyproject = repo_root / "pyproject.toml"
-    if not pyproject.is_file():
-        return {}
-    node: object = tomllib.loads(pyproject.read_text(encoding="utf-8"))
-    for key in ABSENT_TABLE:
-        if not isinstance(node, dict):
-            return {}
-        node = node.get(key, {})
-    if not isinstance(node, dict):
-        return {}
-    return {str(key): str(value) for key, value in node.items()}
+    return _load_register(repo_root, ABSENT_TABLE)
+
+
+def load_external_paths(repo_root: Path) -> dict[str, str]:
+    """Backticked paths the documentation names inside another repository.
+
+    The path-shaped twin of :func:`load_absent_commands`, and it exists for the
+    same reason: a reference that does not resolve *here* can still be a true
+    sentence. See :data:`EXTERNAL_TABLE`.
+    """
+    return _load_register(repo_root, EXTERNAL_TABLE)
 
 
 def check_command_references(repo_root: Path, commands: set[str]) -> list[DocIssue]:
@@ -232,18 +265,30 @@ def repo_paths(fragments: list[str], top_level: set[str]) -> set[str]:
 
 
 def check_path_references(repo_root: Path) -> list[DocIssue]:
-    """Every relative link and repo path in the living documentation resolves."""
+    """Every relative link and repo path in the living documentation resolves.
+
+    Repo-rooted paths may be excused by :data:`EXTERNAL_TABLE`; markdown links
+    may not. A link is an offer to the reader to follow it, and a link into
+    another repository is written as a URL rather than a relative path, so an
+    unresolvable one is a defect however true the sentence around it is.
+    """
+    external = load_external_paths(repo_root)
     top_level = {path.name for path in repo_root.iterdir() if path.is_dir()}
     issues: list[DocIssue] = []
+    named: set[str] = set()
 
     for path in scanned_files(repo_root):
         where = _relative(path, repo_root)
         text = path.read_text(encoding="utf-8")
+        rooted = repo_paths(code_fragments(text), top_level)
+        named |= rooted
         candidates = [
-            *((reference, path.parent) for reference in link_targets(text)),
-            *((reference, repo_root) for reference in repo_paths(code_fragments(text), top_level)),
+            *((reference, path.parent, False) for reference in link_targets(text)),
+            *((reference, repo_root, True) for reference in rooted),
         ]
-        for reference, base in sorted(candidates, key=lambda item: item[0]):
+        for reference, base, is_rooted in sorted(candidates, key=lambda item: item[0]):
+            if is_rooted and reference in external:
+                continue
             # A fragment identifier is not part of the path. Anchor-only links
             # never reach here -- :func:`link_targets` drops them -- so the
             # remainder is always a non-empty path.
@@ -254,7 +299,42 @@ def check_path_references(repo_root: Path) -> list[DocIssue]:
                 DocIssue(
                     where,
                     f"`{reference}` does not exist. A link the reader cannot follow is "
-                    "the same defect as a command that does not run.",
+                    "the same defect as a command that does not run. Fix the reference, "
+                    "or declare it under `[tool.decision-evals.docs-external-paths]` if "
+                    "it names a path inside another repository.",
+                )
+            )
+
+    return [*issues, *_check_external_register(repo_root, external, named)]
+
+
+def _check_external_register(
+    repo_root: Path, external: dict[str, str], named: set[str]
+) -> list[DocIssue]:
+    """The external-paths register may only shrink, and every line must earn it.
+
+    Both refusals mirror :func:`check_command_references`. An entry that starts
+    resolving here is the more interesting of the two: it means the repository
+    grew the path it was describing in somebody else's, and the excuse now hides
+    a reference the gate should be checking.
+    """
+    issues: list[DocIssue] = []
+    for reference in sorted(external):
+        if (repo_root / reference).resolve().exists():
+            issues.append(
+                DocIssue(
+                    "pyproject.toml",
+                    f"`{reference}` is declared external and now exists here. Delete "
+                    "the entry — an excuse that outlives the situation it describes "
+                    "stops a real reference from being checked.",
+                )
+            )
+        elif reference not in named:
+            issues.append(
+                DocIssue(
+                    "pyproject.toml",
+                    f"`{reference}` is declared external and is named nowhere in the "
+                    "documentation. Delete the line.",
                 )
             )
     return issues
@@ -337,10 +417,11 @@ def check_docs(repo_root: Path, commands: set[str]) -> list[DocIssue]:
     ]
 
 
-def census(repo_root: Path) -> tuple[int, int, int]:
-    """``(files_scanned, components_listed, commands_declared_absent)``."""
+def census(repo_root: Path) -> tuple[int, int, int, int]:
+    """``(files, components, commands_declared_absent, paths_declared_external)``."""
     return (
         len(scanned_files(repo_root)),
         len(component_entries(repo_root)),
         len(load_absent_commands(repo_root)),
+        len(load_external_paths(repo_root)),
     )

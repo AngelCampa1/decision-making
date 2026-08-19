@@ -30,6 +30,7 @@ from decision_evals.docs import (
     component_entries,
     link_targets,
     load_absent_commands,
+    load_external_paths,
     repo_paths,
     scanned_files,
 )
@@ -201,6 +202,85 @@ def test_a_non_table_at_the_leaf_is_tolerated(tmp_path: Path) -> None:
 
 
 # --------------------------------------------------------------------------- #
+# The external-paths register
+#
+# `repo_paths` resolves any backticked fragment whose first segment is a real
+# top-level directory against this root. `docs/DECISION_FRAMEWORKS.md` reviews a
+# prompt library that keeps twenty files in `.claude/commands/`; `.claude/` is a
+# directory here and that one is not, so a true sentence about another project's
+# layout was reported as a broken link.
+# --------------------------------------------------------------------------- #
+
+CLAUDE_COMMANDS_EXTERNAL = """[tool.decision-evals.docs-external-paths]
+".claude/commands/" = "another repository"
+"""
+
+
+def test_an_external_path_may_be_named(tmp_path: Path) -> None:
+    """A path inside another repository is not a broken reference in this one."""
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": _readme(extra="It keeps 20 files in `.claude/commands/`."),
+            "pyproject.toml": CLAUDE_COMMANDS_EXTERNAL,
+        },
+        dirs=(".claude",),
+    )
+    assert check_path_references(repo) == []
+
+
+def test_an_external_path_that_now_exists_here_is_refused(tmp_path: Path) -> None:
+    """An excuse that outlives its situation stops a real reference being checked."""
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": _readme(extra="See `.claude/commands/`."),
+            "pyproject.toml": CLAUDE_COMMANDS_EXTERNAL,
+        },
+        dirs=(".claude/commands",),
+    )
+    assert check_path_references(repo) == [
+        DocIssue(
+            "pyproject.toml",
+            "`.claude/commands/` is declared external and now exists here. Delete "
+            "the entry — an excuse that outlives the situation it describes "
+            "stops a real reference from being checked.",
+        )
+    ]
+
+
+def test_an_external_path_nobody_mentions_is_refused(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {"README.md": _readme(), "pyproject.toml": CLAUDE_COMMANDS_EXTERNAL},
+        dirs=(".claude",),
+    )
+    issues = check_path_references(repo)
+    assert "named nowhere in the documentation" in issues[0].message
+
+
+def test_the_register_does_not_excuse_a_markdown_link(tmp_path: Path) -> None:
+    """A link is an offer to follow it; a cross-repo one is written as a URL."""
+    repo = _repo(
+        tmp_path,
+        {
+            "README.md": _readme(
+                extra="`.claude/commands/` there, and [commands](.claude/commands/) here."
+            ),
+            "pyproject.toml": CLAUDE_COMMANDS_EXTERNAL,
+        },
+        dirs=(".claude",),
+    )
+    issues = check_path_references(repo)
+    assert len(issues) == 1
+    assert "`.claude/commands/` does not exist" in issues[0].message
+
+
+def test_no_pyproject_means_no_external_paths(tmp_path: Path) -> None:
+    assert load_external_paths(tmp_path) == {}
+
+
+# --------------------------------------------------------------------------- #
 # Paths
 # --------------------------------------------------------------------------- #
 
@@ -341,7 +421,7 @@ def test_census_counts_files_components_and_declarations(tmp_path: Path) -> None
         },
         dirs=("docs",),
     )
-    assert census(repo) == (2, 1, 1)
+    assert census(repo) == (2, 1, 1, 0)
 
 
 def test_an_issue_reads_as_a_line() -> None:
