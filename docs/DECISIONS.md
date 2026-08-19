@@ -24,6 +24,266 @@ Format: `## <date> — <title>`, a `**Commits:**` line, then why.
 
 ---
 
+## 2026-08-19 — the shipped description now enumerates six procedures, and that retires ten arms
+
+**Commits:** `ae55b5b`
+
+This entry exists because no single one of the three changes landing today could
+see it. S5 added `council.md`, S6 added `hinge.md`, S9 rewrote `ledger`'s router
+row. Each was scoped correctly and each was reviewed on its own terms. **The
+consequence is only visible when all three are in the tree at once:
+`SKILL.md`'s `description` field enumerates the procedures by name**, so adding
+two rewrites the exact string that Tracks L, M and N have been measuring.
+
+The description now reads *"one of six procedures ... too much context, advice
+that may not fit this person, downstream consequences, timing, several
+positions that are each defensible, or a missing fact that may or may not
+matter"* against the previous four-item list. `dm-1` loses "all four", `dm-4`
+now says the ledger → fit → cascade → timing chain is the four and that
+`council` and `hinge` run outside it, and the body heading reads six.
+Version bumped `0.2.1` → `0.3.0`; the procedure set changed, not the wording.
+
+**What this costs, stated plainly.** Ten description arms have been run against
+the four-procedure string — M4, M5, L5, L7's two, and N6/N7's six across 3,096
+calls. **Not one of them describes the string that now ships.** No number
+anywhere in this repository may be presented as a measurement of the current
+description, and the six-arm table in `docs/STATUS.md` and
+`docs/RESEARCH_PROGRAMME.md` is from today a historical comparison between
+*description forms* at a fixed procedure set, which is a narrower claim than it
+was yesterday. The internal comparisons survive intact — every arm still saw
+the same items — but the external one does not.
+
+**What is not claimed.** Nothing here says the new description routes better,
+worse, or the same. It has never been run. The same applies to `ledger`'s new
+router row: all six routing figures on record (0.105 to 0.579) were measured
+against the old row, and a future run scoring the new one is a different
+instrument, not a continuation.
+
+**One consequence found immediately, before it could produce a number.**
+`triggers.py`'s `PROCEDURES` whitelist and `run_triggers.py`'s `SYSTEM` prompt
+contracts both still enumerated the old four names, so a model routing
+correctly to `council` or `hinge` could not have expressed it and would have
+been discarded if it had. That is the third instance of a defect this
+repository has recorded twice — the estimator's vocabulary and the arm's
+vocabulary drifting apart — and the first caught in the source rather than in
+the numbers. Recorded in
+[`notebook/2026-08-19-the-third-instance-of-a-defect-caught-before-it-ran.md`](../notebook/2026-08-19-the-third-instance-of-a-defect-caught-before-it-ran.md).
+**No trigger run may be launched against the six-procedure skill until that is
+fixed and its regression tests are shown to fail against the old lists.**
+
+**Why this was landed rather than deferred.** The alternative was a router table
+listing six procedures beside a description promising four, which ships a
+description that is simply wrong about the product. An inconsistent skill is a
+worse artefact than an unmeasured one, and this repository's verdict vocabulary
+already has a word for unmeasured — `UNTESTED`, which is what `decision-making`
+has carried since it was written. The re-measurement is a new run against the
+existing `unbundle.py` variants, not new machinery.
+
+---
+
+## 2026-08-19 — Track S5: the council / adversarial-review procedure
+
+**Commits:** `ae55b5b`
+
+Adds `council.md`, the fifth procedure behind the `decision-making` router. S5
+was named in the founding brief and left unwritten in the S1–S9 table since
+2026-08-11: "a council / adversarial-review procedure — argue the positions
+before deciding." It fires where the hard part is none of the other four's —
+not too much context, not advice that may not fit, not downstream consequences,
+not timing — but that two or three positions are each genuinely defensible and
+the one argued first has an unfair advantage over the rest.
+
+Traces to `docs/DECISION_FRAMEWORKS.md`'s K6, Rank 3: consider-the-opposite,
+"as a procedure and not a prompt," named there as the mechanism behind exactly
+this skill ("It is also the framework whose form maps cleanly onto
+sub-agents"). The evidence behind it is **partial**: Lord, Lepper & Preston
+1984 beat a "be fair and unbiased" instruction in two experiments, and a later
+replication attempt moved in the predicted direction without reaching
+significance (same file's K1 evidence table). That puts `council.md` on the
+same footing as `cascade.md`, `fit.md` and `timing.md` — traced to a named
+mechanism, not backed by strong controlled evidence — and ahead of `ledger.md`,
+which traces to nothing and is invented outright.
+
+Ships `experimental` / `verdict: UNTESTED`, matching the other four. Nothing
+has measured it — this entry records that a procedure was written, not that it
+works. `council.md` carries no YAML frontmatter, matching `cascade.md`,
+`fit.md`, `ledger.md` and `timing.md`: only `SKILL.md` does, and its six
+frontmatter fields are unaffected by this change. `SKILL.md`'s router table
+gains a fifth row in the same change (or the one immediately following); its
+"one of four procedures" language and the `dm-1`/`dm-4` claims about "the
+stated order" should be re-read against five, since `council.md` does not
+currently have a stated place in the `ledger → fit → cascade → timing` chain —
+it runs alone, before any of the other four, when it applies at all.
+
+**Addendum, same day — an adversarial review of this and the S6 change found
+two real defects touching `council.md`, both acted on and neither measured.**
+
+First: `council.md`'s opening example was "Fight the layoff or take the
+package." `cascade.md` opens on resigning and `timing.md` uses resigning as its
+undo-cost example, so a real layoff-adjacent question was a three-way collision
+magnet by construction — the same subject matter dressed as three different
+kinds of hard. `cascade.md` and `timing.md` were left untouched, per the
+review's own scope; `council.md`'s example was replaced with "sell the company
+or keep building it," a domain none of the other five procedures uses, and the
+one illustrative fact later in Step 3 (previously severance/search-time, itself
+layoff language) was swapped to match.
+
+Second: the file ran 526 words against 421/434/395/425 for the other four
+non-`hinge.md` procedures — noticeably longer for no stated reason. Trimmed to
+433 by cutting, not compressing: shorter sentences, fewer restated clauses,
+the "three is the practical ceiling" aside shortened. The Step 1/2/3 structure
+and the cross-examination test are unchanged.
+
+`SKILL.md`'s `## Choosing` section was also found to never mention `council.md`
+or `hinge.md` at all — the "runs alone, before any of the other four" placement
+stated two paragraphs above existed only here, in this changelog, not in the
+artefact a reader of the skill actually reads. `SKILL.md` now states it
+directly: `council.md` and `hinge.md` sit outside the four-chain, and outside
+each other, each running alone before `ledger → fit → cascade → timing` when
+they apply. That edit lives in `SKILL.md`, not here; this entry only records
+that it was prompted by re-reading this one's own "it runs alone" line above.
+
+Nothing here is a routing claim. The new example, the trim, and the `Choosing`
+section have not been run against anything.
+
+## 2026-08-19 — Track S6: the clarify-or-decide procedure
+
+**Commits:** `ae55b5b`
+
+Adds `hinge.md`, another new procedure behind the `decision-making` router. S6
+was named in the founding brief and left unwritten in the S1–S9 table since
+2026-08-11: "a clarify-or-decide procedure — ask for more, or decide under
+incomplete information." It fires where the hard part is that a fact is
+missing and it is unclear whether that fact is worth waiting for — not too much
+context (`ledger.md`), not advice that may not fit the person (`fit.md`), not
+downstream consequences (`cascade.md`), not timing of an already-settled
+direction (`timing.md`), and not multiple defensible positions (`council.md`,
+added the same day by Track S5). The procedure's own test: answer the decision
+under each plausible value of the missing fact; if the answer does not move,
+asking is stalling and the decision is made now; if it does move, the fact is
+load-bearing and either gets asked for (one question, if obtainable in time) or
+guessed at explicitly (stated as a guess, not delivered as settled).
+
+No framework trace was attempted for this entry. S7 (2026-08-12) audited the
+original four against `docs/DECISION_FRAMEWORKS.md` and found three traced to
+named mechanisms and one (`ledger.md`) invented; that audit predates `hinge.md`
+and was not rerun here — a future S7-style pass should either trace this
+procedure's information-value test to the decision-analysis literature already
+cited for `fit.md` (breakeven analysis / value of information, K6) or mark it
+invented, rather than assume the trace.
+
+Ships `experimental` / `verdict: UNTESTED`, matching the other four (five, with
+`council.md`). Nothing has measured it. `hinge.md` carries no YAML frontmatter,
+matching the rest: only `SKILL.md` does, and its six portable frontmatter
+fields are unaffected by this change. `SKILL.md`'s router table needs a new row
+distinguishing this procedure by what is hard about the decision (a missing
+fact of unclear consequence) rather than by what the procedure does — left for
+the change that integrates this alongside `council.md`, since both land the
+same day and `SKILL.md` should gain both rows, its "one of four procedures"
+language, and its `dm-1`/`dm-4` claims about "the stated order," in one pass
+rather than two.
+
+**Addendum, same day — an adversarial review found two real defects touching
+`hinge.md`, both acted on and neither measured.**
+
+First: this entry's own paragraph above says "the fact is load-bearing," and
+`ledger.md` Step 1 says "an item is load-bearing only if changing it would
+change the answer" — the identical test, in the identical phrase, in two
+procedures that sit on each other's boundary (a fact *present* in a pile versus
+a fact *absent* from it). `load-bearing` appeared four times in `ledger.md` and
+once in `hinge.md`; a router already confused between `ledger` and `cascade`
+was being asked to also separate `ledger` from a procedure written in
+`ledger`'s own words. `hinge.md` Step 2 was rewritten to test the same thing —
+answer the decision twice, once per plausible value of the missing fact, which
+is unchanged and was the part worth keeping — in its own vocabulary: a fact
+that swings the answer is now called "the hinge," not "load-bearing."
+`ledger.md` was not touched.
+
+The review also supplied a scenario built to fit both `SKILL.md` router rows as
+they stood: a pile of layoff-adjacent signals (a manager's hint, an HR memo, two
+teammates' warnings, a competing offer with a two-week deadline) plus "nobody
+will tell me if my role specifically is on the list." Both rows' wording —
+"unclear which fact decides it" (`ledger`) and "something needed to answer is
+missing" (`hinge`) — could plausibly be read as describing that gap. The rows
+were sharpened on the present-versus-absent distinction Step 1 above already
+made: `ledger`'s row now reads "which already-known fact decides it," and
+`hinge`'s reads "the fact the decision actually turns on was never given, not
+just buried in what's already known." Reasoning through the scenario against
+the new rows: every fact in it (the hint, the memo, the warnings, the deadline)
+is already known, and the one fact the answer actually turns on — whether this
+specific role is on the list — was asked for and refused, so it separates to
+`hinge`, not `ledger`. That is a reasoned check against wording, not a run
+against the corpus.
+
+Second: the file ran 610 words, well past the other five (395–434). Trimmed to
+431, again by cutting rather than compressing — shorter sentences throughout,
+the Abort bullets tightened, Step 3 shortened. Step 2's twice-over test and its
+structure are unchanged, since the review flagged it as the part worth keeping.
+
+`SKILL.md`'s `## Choosing` section, previously silent on where `council.md` and
+`hinge.md` sit, now states both run alone, outside the four-chain, before it
+when they apply — recorded in the S5 addendum above rather than twice. Nothing
+above is a routing claim: the rewritten test, the sharpened rows, the trim, and
+the reasoned check against the reviewer's scenario have not been run against
+anything.
+
+## 2026-08-19 — Track S9 (first half): `ledger`'s router row, tightened against its confusion pair
+
+**Commits:** `ae55b5b`
+
+**Router only. `ledger.md` itself is untouched, and this does not bear on the
+content-replacement question S9 opened.** `docs/RESEARCH_PROGRAMME.md`'s S9
+subsection (2026-08-19) is explicit that three lines now name `ledger` and only
+two of them — framework provenance (S7/K6) and the ranked outside candidate
+(K6) — bear on the procedure's *content*. The third, `ledger` being
+worst-routed in all six description arms measured (0.474, 0.579, 0.105, 0.526,
+0.395, 0.474), is a router finding, and the subsection's own words are "it does
+not by itself add weight to a content-replacement case." This entry acts on
+that third line alone, the way the M-track router-table defect (`cascade`
+claimed "the order," `timing` claimed "when," fixed by editing the table, not
+either procedure) was acted on without touching the procedures it named.
+
+**The confusion pair, found by reading the actual mis-routes rather than
+guessing one.** Across the six checkpointed arms in
+`results/decision-making/2026-08-18-e632659-n6-confirmatory/` and
+`results/decision-making/2026-08-19-d52236a-n7-remaining-arms/`, counting every
+record where the answer key's `route` is `ledger` but the model's `procedure`
+differs: 77 went to `cascade`, 32 to `timing`, 16 to `fit`. `ledger → cascade`
+is not just the largest bucket, it is larger than the other two combined.
+Reading the specific items confirmed it is a real content confusion, not
+sampling noise: the heaviest-misrouted cases (`xl08p` 12/12, `xl14p` 12/12,
+`l01p` 10/12, `xl01p` 10/10, `s21p` 9/10, `l19p` 9/9, `l16p` 9/9) are all
+multi-source piles narrating high-stakes situations — a pension division, a
+redundancy letter with an alternative role, a custody variation, a care-home
+fee dispute, an insurance claim, an unpaid holiday split — where the actual
+difficulty named in each item's `why` field is *which fact the still-open
+choice turns on* ("what in all of it actually decides"), not what a chosen
+action would set in motion. Contrasting against correctly-routed `cascade`
+items of similar length and stakes (`xl06p`, `xl11p`) shows the real
+differentiator: `cascade`'s items state the action is already fine and ask
+what it starts or spends; the misrouted `ledger` items never settle on an
+action at all. The traffic runs almost entirely one direction — only 5 records
+in the same six arms show a non-`ledger` item wrongly landing on `ledger` (3
+`cascade`, 2 `timing`) — so the row needed to pull `ledger`'s own items back,
+not to stop tourists from arriving.
+
+**The edit.** Old row: *"A pile of context arrived and it is unclear what the
+answer turns on."* New row: *"A pile of context arrived and it is unclear which
+fact decides it — the choice itself, not what acting on it would set off."*
+The added clause names the excluded case explicitly, the same edit class used
+for the `cascade`/`timing` collision: give the confused-with row's condition
+the clause that the other row already implicitly relies on.
+
+**This invalidates comparability, and says so rather than leaving it
+implicit.** All six routing figures quoted above (0.474 through 0.900 across
+arms, per S9's table) were measured against the *old* row. None of them
+describe the row now in `SKILL.md`. Nothing has run against the new row, so
+nothing may be claimed about it — not "better," not "fixed," not even
+"different" — until a fresh N6/N7-shaped routing run is scored against it, at
+which point the two are two different instruments and a comparison needs
+`label_versions_comparable`-style bookkeeping, not a before/after read of the
+same number.
+
 ## 2026-08-18 — Version 3 named four different corpora, so it moves to 4 before N6 runs
 
 **Commits:** `19a44c2`
