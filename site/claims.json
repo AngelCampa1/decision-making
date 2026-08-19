@@ -1,0 +1,64 @@
+{
+  "note": "What the pages publish, and the sentence in this repository that backs each one. Read by decision_evals.claims (which refuses a page whose figure no longer resolves to its source) and by the pages themselves (which render `value`). One file, two readers, so the page and the check cannot drift apart. It is not in pyproject.toml because TypeScript cannot read TOML without another dependency, and a generated second copy would recreate the disagreement this design exists to prevent. `source` paths are repository-relative; `quote` is compared after markdown emphasis is stripped and whitespace collapsed, so a hard-wrapped sentence still matches.",
+  "claims": [
+    {
+      "id": "total-model-calls",
+      "value": "~8,514",
+      "rounded": null,
+      "source": "docs/STATUS.md",
+      "quote": "| **new total** | **~8,514** | 4,816 + 86 + 1,548 + 1,548 + 516 |",
+      "latest": "~[0-9],[0-9]{3}",
+      "why": "The ledger's own running total. It is quoted rather than derived because results/triggers/ holds rescored rows that say no call was made, because 6,825 line-counted rows and this figure count different sets, and because STATUS.md corrects by appending -- deriving an integer would force those appended corrections rewritten in place, and they are the evidence itself. latest is unanchored because the newest correction has been a table row twice now, and a lookbehind on prose could not see it."
+    },
+    {
+      "id": "broken-measurements",
+      "value": "eleven",
+      "rounded": null,
+      "source": "docs/STATUS.md",
+      "quote": "eleven measurements were caught being broken",
+      "latest": null,
+      "why": "The count of our own instruments caught reading something that was not there. It grows whenever one is found, and three living documents already disagree about it \u2014 RESEARCH_PROGRAMME.md says ten, METHODS.md says around eleven, the issue template says eight. STATUS.md is the ledger, so it is the one anchor, and the page must not become a fourth answer."
+    },
+    {
+      "id": "corpus-solvability",
+      "value": "89%",
+      "rounded": null,
+      "source": "SCORECARD.md",
+      "quote": "ran on a corpus that is 89% solvable by counting words",
+      "latest": null,
+      "why": "The caveat that qualifies every trigger number published before 2026-08-18, and the least flattering figure on the site. A page that quietly softened it would be the one drift nobody reports, so it is anchored to the sentence in SCORECARD.md that states it in full."
+    },
+    {
+      "id": "headroom-points",
+      "value": "nine points",
+      "rounded": null,
+      "source": "docs/STATUS.md",
+      "quote": "So every result above was competing for about **nine points over a ruler**.",
+      "latest": null,
+      "why": "How much room the arms were ever fighting over. It read `about six points` until 2026-08-13, when the checkpoints were reconciled and the six-point figure turned out to be arithmetic across two answer keys. The superseded phrase is in the retractions below; this is the live one, and pinning it is what stops the page drifting back."
+    },
+    {
+      "id": "word-trick-ceiling",
+      "value": "0.7054",
+      "rounded": "0.71",
+      "source": "SCORECARD.md",
+      "quote": "eight trivial features reads 0.7054 against a majority baseline of 0.6667",
+      "latest": null,
+      "why": "The best a model-free shortcut does on the rebuilt corpus, and the number that says the rebuild worked. The page prints it rounded, so the rounding is declared rather than done by hand: `0.71` has to be what `0.7054` rounds to, and a corpus revision that moved the stump would refuse here instead of leaving a stale two-digit figure that still looks right."
+    }
+  ],
+  "retractions": [
+    {
+      "phrase": "about six points",
+      "source": "docs/STATUS.md",
+      "quote": "This read \"0.956 \u2026 about six points\" until the checkpoints were reconciled.",
+      "why": "The figure compared a version 2 ruler with a version 1 arm, and 0.956 was not the best arm at either version. The live figure is nine points; see the `headroom-points` claim."
+    },
+    {
+      "phrase": "Four methods",
+      "source": "skills/decision-making/SKILL.md",
+      "quote": "Routes to one of six procedures depending on what is actually hard about the decision",
+      "why": "The skill routes to six procedures, not four. `council.md` and `hinge.md` shipped on 2026-08-19 and the landing page went on offering four, which is the drift this whole register was written for."
+    }
+  ]
+}

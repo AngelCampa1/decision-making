@@ -51,6 +51,12 @@ site/dist/
 site/.astro-cache/
 site/.astro/
 
+# Intermediate plates for the brand assets. `scripts/brand_assets.mjs` writes
+# them, a browser rasterises them into `site/public/`, and the PNGs it produces
+# are committed. The plates themselves are regenerable from the script and are
+# not read by anything.
+site/.brand-plates/
+
 # OS
 Thumbs.db
 .DS_Store

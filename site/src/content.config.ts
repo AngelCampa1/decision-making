@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 /**
@@ -39,8 +39,39 @@ const results = defineCollection({
   loader: glob({ pattern: '*/*/README.md', base: '../results', generateId: keepPath }),
 });
 
+/**
+ * The only collection with a schema, because it is the only one the site reads
+ * *facts* out of rather than prose: `src/lib/facts.ts` takes the version, the
+ * status and the verdict from this frontmatter, and the header, the footer and
+ * the social card are rendered from them.
+ *
+ * Every field is optional and unknown keys pass through. The six procedure
+ * files carry no frontmatter at all, and a schema that refused them would make
+ * the routing table unreadable to spite a convention nobody adopted.
+ *
+ * `verdict` is `z.string()` and deliberately not `z.enum`. The vocabulary is
+ * owned by `decision_evals.skills.VERDICTS` and enforced by `de check`; a
+ * second copy of the list here is exactly the kind of disagreement this whole
+ * arrangement removes. `verdictState()` throws on a value it does not know,
+ * which is the check that belongs at the point of use.
+ */
 const skills = defineCollection({
   loader: glob({ pattern: '**/*.md', base: '../skills', generateId: keepPath }),
+  schema: z
+    .object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      license: z.string().optional(),
+      metadata: z
+        .object({
+          version: z.string().optional(),
+          status: z.string().optional(),
+          verdict: z.string().optional(),
+        })
+        .passthrough()
+        .optional(),
+    })
+    .passthrough(),
 });
 
 /**
