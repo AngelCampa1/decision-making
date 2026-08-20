@@ -221,6 +221,59 @@ pinned by tests that say in their docstrings that the behaviour is recorded
 rather than endorsed. Changing either needs a decision about whether the variable
 names the hook or the script, and nobody has written that down.
 
+## The guard had five defects, four in the half that runs on every commit
+
+The hygiene script was reviewed as recovered work, by an agent briefed to break
+it. It found six things; five reproduced. Listing them because the pattern is
+more useful than any one of them: **every single one was a case where the check
+returned a plausible zero, or fired on the wrong thing, and nothing looked
+wrong.**
+
+- **A failed fetch armed the ten-minute suppression window.** `git fetch` creates
+  `FETCH_HEAD` even when it fails, and staleness was read from that mtime alone.
+  One unreachable-remote run therefore blinded the check for ten minutes. This is
+  the exact failure the suite's own central test was written to prevent — "the
+  estimator returns a plausible zero on the situation it exists to catch" —
+  reached through the ordinary offline path instead of by deleting the fetch.
+- **The hook refused the merge that resolves the drift.** Mid-conflict, `main` is
+  both behind and ahead. The guard fired on the merge commit, stated on its
+  second line that `--ff-only` would refuse, and advised `git pull --ff-only` on
+  its fourth. Git answers that with `fatal: Exiting because of unfinished merge.`
+  A guard whose only exit is the bypass teaches the bypass.
+- **`--doctor` false-positived on a genuine bare repository with linked
+  worktrees, and `--fix` then corrupted it** — set `core.bare` false on the
+  shared config and left `git status` failing with `must be run in a work tree`.
+  The repair tool inflicting the symptom it exists to cure, printing "clean" as
+  it went.
+- **A `core.bare` git cannot parse reported clean.** The same defect as `bare = 1`
+  one spelling along, and the reported fix location was wrong: `rev-parse
+  --git-dir` itself exits 128 on `bare = maybe`, so no later exit code is ever
+  reached. Worth recording because the first fix attempt failed for that reason,
+  and a fix that is not re-checked against the original reproduction would have
+  shipped looking correct.
+- **The fetch was never time-boxed**, though the docstring and the hook comment
+  both promised it. `subprocess.run(timeout=…)` kills the child and then blocks
+  draining pipes the transport grandchild still holds: 60.4s measured under a 2s
+  timeout against a hung `ssh`.
+
+Four of the five sit in the drift half, which runs on every commit to `main`.
+
+**The tests did not catch any of them, and they were not bad tests.** 35 tests,
+mutation-checked before the review: removing the fetch failed eight of them. But
+four mutants survived all 35 — most sharply `FETCH_STALE_SECONDS = 10**9`, which
+gates the fetch off entirely without deleting it. The test written to prove the
+fetch is load-bearing was immune, because a fresh `git clone` writes no
+`FETCH_HEAD`, so the staleness window never mattered in the fixture. **A test can
+pin a line against deletion and leave it free to be disabled.**
+
+What made the replacements discriminate was recording every `git` argv around the
+call under test, so a guard is pinned by *what it stops* rather than by a return
+value that a later `return []` produces anyway — two tests were passing with
+their guard deleted for exactly that reason. And backdating fixtures by a fixed
+hour rather than by `FETCH_STALE_SECONDS`, since a test that backdates by the
+constant it tests moves with the mutant. 63 tests now, 13 of 14 mutants dead, the
+fourteenth equivalent and documented rather than given an invented test.
+
 ## What this cost, and what it did not
 
 Nothing here was found by being careful. The gitlink was found by making a
