@@ -339,6 +339,51 @@ xl 17.** No label moved, no version was bumped, no gate crossed, and the two
 
 ---
 
+## Where the corpus is, 2026-08-20
+
+**330 items, 110 triples** — s 30, m 30, l 28, xl 22. The section above is the
+state on 2026-08-14 and stays as written; this is what moved since.
+
+Answer key **v4 → v5**. Twenty-four triples added, seventy-two items, twelve
+positives routing to `council` and twelve to `hinge`, three of each in every
+band. No existing label moved and no existing turn was edited. Routed positives
+go from 65 over four procedures to 89 over six: ledger 19, cascade 16, fit 15,
+timing 15, council 12, hinge 12. Registered in
+[`DECISIONS.md`](DECISIONS.md) under "council and hinge get positives, and the
+key moves to version 5", with the `corrections.jsonl` line that accounts for it.
+
+**Why the version moved rather than the labels being edited in place.**
+`evaluate_routing` scores `chosen in case.routes`. The router table grew to six
+rows on 2026-08-19 and the key did not grow with it, so a model that correctly
+named `council` could only ever be counted wrong. A routing number computed on
+v4 is therefore a six-way choice graded against a four-way key, and
+`label_versions_comparable` is what refuses to put it beside a v5 one. Nothing
+had been scored against v4 — zero records on disk carry `set_version: 4` — so no
+published number is invalidated.
+
+**These items are not adjudicated.** The labels are the author's. The blind
+three-judge round has not run on them, and **no number may be published against
+version 5 until it has.**
+
+**One shortcut finding crossed the gate and is baselined with its arithmetic
+rather than tuned away.** `cancel:close:type_token_ratio` reads 3.23 against a
+gate at 3.0. The rate did not move: the positive is at an extreme of its own
+triple on the closing sentence in 79 of 86 pre-existing triples (0.9186) and 22
+of 24 new ones (0.9167), pooled 101 of 110 (0.9182). The statistic is a
+proportion against a chance rate of 2/3, so its z scales with the square root of
+`n` at a fixed rate. Four items were retuned against it before the mechanism was
+obvious and it moved the wrong way, 3.10 to 3.23; the tuning stopped there,
+because per-item retuning against whichever feature is currently over the line
+is what produced four generations of leak in this corpus.
+
+A real authoring defect was found and fixed in the same pass.
+`matched:turn:type_token_ratio` fired at 3.61 because the positive asks were
+written as deliberation and the negative ones as task requests. Rewriting the
+twelve long-band positive asks at the negatives' lexical density closed it, and
+took the pre-existing `matched:ask:type_token_ratio` from 4.28 to 3.03.
+
+---
+
 ## Open decisions that belong to the maintainer
 
 | decision | status |

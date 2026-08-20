@@ -1116,7 +1116,7 @@ column on the case rather than a property the set happens to have.
 | # | Experiment | Cost | State |
 |---|---|---|---|
 | N1 | The shortcut battery. `corpus.py`: eight trivial features, each held to a two-sided [0.40, 0.60]. The one-sided `MAX_LENGTH_SEPARABILITY = 0.70` it replaces would have passed a set at AUC 0.05, which is solved by a ruler pointing the other way. Plus a depth-2 stump over all eight capped at 0.70, because a battery of singles misses interactions. | free | done |
-| N2 | Author the corpus. 40 triples, 120 items, four bands (≤25 / 40 to 90 / 200 to 400 / 900 to 1500 words), 1:2 positive-to-negative in every band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | done. Authored at 40 triples / 120 items and since grown by two merges to 87 triples, 261 items, then shrunk to **86 triples, 258 items** (S 24, M 24, L 21, XL 17) when `l15` was retired on 2026-08-18, every gate in N1 passing. See below |
+| N2 | Author the corpus. 40 triples, 120 items, four bands (≤25 / 40 to 90 / 200 to 400 / 900 to 1500 words), 1:2 positive-to-negative in every band so the ratio holds across the set and not only inside it. ~11k words of authored bodies. | free | done. Authored at 40 triples / 120 items and since grown by two merges to 87 triples, 261 items, then shrunk to **86 triples, 258 items** (S 24, M 24, L 21, XL 17) when `l15` was retired on 2026-08-18, then grown again to **110 triples, 330 items** (S 30, M 30, L 28, XL 22) by answer key v5 on 2026-08-20, every gate in N1 passing. The v5 items are unadjudicated, which N3 owns and has not done. See below |
 | N3 | Blind label adjudication. Three independent instances label each turn with no access to mine. Pre-registered kill: >20% label movement retires the corpus. 21 of 21 scored failures across three corpora were the answer key, and a 1,200-word turn has fifty times the surface for that. | 360 calls | done 2026-08-14 across two continuations, 261 of 261 items, 3 judges each, 0 unparseable. Movement 12/261 = 0.046 against the 0.20 kill, so the corpus survives by a factor of four, and no band is near it (0.042 s, 0.042 m, 0.045 l, 0.059 xl). Fleiss kappa 0.862. The 12 moves were resolved the same day by rewriting the asks rather than relabelling: 11 of 12 then agreed with the key, `l15` was retired, and movement fell to 0.004. See below |
 | N4 | The human-authored holdout. The threat no gate above touches: a model is authoring the corpus that will evaluate a model. Blind adjudication does not fix it, because the adjudicator is also a model. ~20 turns are drawn from a public human-written corpus that clears the outside-data rule; the labels stay with N3's blind adjudication. Every arm is reported twice. Orderings agree → the threat is bounded by a measurement. Orderings disagree → the model-authored corpus is decoration, and we know it. | ~120 calls | source survey done 2026-08-18: eight candidates, four clear redistribution, OASST1 recommended. No step waits on a person; see below |
 | N5 | Realism. The descriptive machine probe, which asks whether turns read as real or as authored-for-a-benchmark, plus, once N4 lands, a forced choice against N4's human turns: one corpus turn beside one human turn, blind judge, which was sent by a person. That is the instrument `realism_probe.py`'s own docstring names as the sharper one and declines to build for want of real messages, and it carries the known-good case standing rule 2 demands, because which item is human is a fact rather than a taste. 0.5 will mean indistinguishable; above it, the corpus reads as authored and the probe will say by how much. It will still not be a gate: it retires nothing on its own, and it has not run. | 86 done + ~86 to come | descriptive half done 2026-08-18: 86 calls, 0 unparseable, `composed` rate 0.302 [0.215, 0.406] against a registered prediction of >0.50, which is falsified. Band and em-dash presence are the same partition of the sample, so no band claim survives. [Run](../results/decision-making/2026-08-18-0ee75d4-n5-realism-probe/README.md). The 10% human audit is retired: its own sheet recorded that the only auditor available authored the corpus, so it was a self-assessment wearing the words *ground truth*. See below |
@@ -1452,8 +1452,9 @@ tuned to that judge. On blind re-adjudication, 36 calls, 0 unparseable, 11 of
 12 now agree with the key against a registered band of 8. Judge agreement on
 those twelve went 0.611 → 1.000 pairwise and corpus-wide movement 0.046 →
 0.004. `l15` is retired whole, as the one item still disputed after the
-single round the protocol allowed, so the corpus stands at 258 items, 86
-triples: s 24, m 24, l 21, xl 17.
+single round the protocol allowed, so the corpus stood at 258 items, 86
+triples: s 24, m 24, l 21, xl 17. Answer key v5 took it to 330 items in 110
+triples on 2026-08-20; the adjudication described here does not cover those.
 
 No label moved and no version was bumped, so no published number is
 affected. No gate crossed, `imperative_opener` did not pick up the *"Restate…"*
@@ -2360,6 +2361,32 @@ skill revision the week it lands, and every misfire the maintainer hits in daily
 use is a candidate item for the corpus. A finding that never reaches the skill,
 and a skill complaint that never reaches the corpus, both mean the lanes have
 come apart.
+
+---
+
+## Queued, and stopped on purpose
+
+A four-wave plan ran on 2026-08-20 and was stopped partway through the second
+wave. The work that landed is in the tracks above, in the register, and in the
+gate. The work that did not is written down in
+[`the plan stops at wave 1`](../notebook/2026-08-20-the-plan-stops-at-wave-1-and-here-is-what-it-leaves.md),
+which names every remaining item, says which of them are partly built rather
+than unstarted, and reproduces the plan itself, because the plan file lives
+outside this repository and will not survive.
+
+Three of the pending items bind things stated elsewhere in this document, so
+they are repeated here:
+
+- **The twenty-four version 5 triples are unadjudicated.** No number may be
+  published against answer key v5 until the blind three-judge round has run on
+  them. Every downstream run in Part 3 and after is scored against that key.
+- **Concurrency on the Claude CLI backend is unmeasured.** The falsifier has its
+  prediction and its second backend; the run is incomplete. No arm may set
+  `concurrency > 1` on a CLI model until it finishes and is scored.
+- **The `confirm` pathway does not exist.** `de screen`, `de confirm` and
+  `de report` are registered as deliberately absent, and `decision_evals.prereg`
+  is the last entry in `[tool.decision-evals.unwired]`. Until they exist no
+  skill can leave `UNTESTED` and `SCORECARD.md` cannot have a row.
 
 ---
 
