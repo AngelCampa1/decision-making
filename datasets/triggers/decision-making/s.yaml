@@ -146,9 +146,13 @@ positive:
       also softened it: it gained a second settled prerequisite and, at the
       end, "or is there something I'm missing?", which asks for help directly
       rather than for a go/no-go. That is a different item, and it fires — 11
-      of 14 rows across the seven v4 verdict files in `results/triggers/`,
-      0/2 only in the in-situ arm. Annotation corrected 2026-08-19; no label
-      and no turn text moved. It stays a positive on the 2026-08-13 reasoning,
+      of 14 rows across the seven v4 verdict files under
+      `results/decision-making/`, in the three runs named by the 2026-08-19
+      entry in `docs/DECISIONS.md`; 0/2 only in the in-situ arm. Annotation
+      corrected 2026-08-19, and its path corrected 2026-08-20: no verdict file
+      has ever been written to `results/triggers/`, which is where this line
+      used to send a reader. No label and no turn text moved by either
+      correction. It stays a positive on the 2026-08-13 reasoning,
       which is untouched by this: a green build answers whether the code
       compiles, not whether to ship.
   - id: s14p
