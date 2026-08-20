@@ -21,6 +21,9 @@ served model and the quota state. The loop's outer dimension is the item.
 from __future__ import annotations
 
 import json
+import random
+import threading
+import time
 from collections.abc import Callable, Iterable, Sequence
 from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from dataclasses import asdict, dataclass
@@ -29,7 +32,12 @@ from typing import Final
 
 from decision_evals.budget import BudgetLedger, estimate_cost_usd
 from decision_evals.generators.generate import Item
-from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
+from decision_evals.providers.claude_code import (
+    AuthenticationError,
+    CliError,
+    CliResult,
+    RateLimitedError,
+)
 from decision_evals.providers.claude_code import preflight as cli_preflight
 from decision_evals.providers.claude_code import run as cli_run
 from decision_evals.providers.openai_compatible import Endpoint, ollama
@@ -113,6 +121,136 @@ class RunRecord:
 #: and it shrinks by measurement:
 #: ``notebook/2026-08-19-the-replication-moved-the-floor-and-found-a-worse-problem.md``.
 CONCURRENCY_UNSAFE: Final[frozenset[str]] = frozenset({"ollama/"})
+
+
+@dataclass(frozen=True, slots=True)
+class Backoff:
+    """How long to wait after a rate limit, and how many times to try.
+
+    Full jitter, not equal jitter: the delay is drawn uniformly from
+    ``[0, min(max_delay, base_delay * 2 ** attempt)]``. Several workers hit the
+    same wall in the same instant, and a deterministic backoff sends all of them
+    back at the same instant too. Full jitter is the variant that spreads them.
+
+    Attributes:
+        attempts: Tries per call, including the first. ``1`` disables retrying.
+        base_delay: Seconds before the first retry.
+        max_delay: Ceiling on one wait.
+        breaker_trips: Consecutive rate limits, across the whole run and with no
+            successful call between them, after which the run aborts instead of
+            waiting again. A wall that does not move is a quota window that has
+            closed, and the run is checkpointed, so stopping and resuming later
+            costs nothing and burning the remaining items costs the items.
+    """
+
+    attempts: int = 5
+    base_delay: float = 2.0
+    max_delay: float = 60.0
+    breaker_trips: int = 12
+
+    def __post_init__(self) -> None:
+        """Refuse a schedule that cannot be run.
+
+        ``attempts=0`` reads as "do not retry" and means "do not call", which is
+        a whole arm silently producing nothing. A negative delay reaches
+        ``random.uniform`` and comes back as a negative sleep.
+        """
+        if self.attempts < 1:
+            raise ValueError(
+                f"attempts is {self.attempts}. Every call is made at least once, so 1 is the "
+                "floor and 1 is what disables retrying."
+            )
+        if self.base_delay < 0 or self.max_delay < 0:
+            raise ValueError(
+                f"a delay cannot be negative: base_delay={self.base_delay}, "
+                f"max_delay={self.max_delay}."
+            )
+        if self.breaker_trips < 1:
+            raise ValueError(
+                f"breaker_trips is {self.breaker_trips}. A breaker that trips before the first "
+                "rate limit stops every run on the first wall."
+            )
+
+
+#: The schedule a run uses when the caller names none.
+DEFAULT_BACKOFF: Final[Backoff] = Backoff()
+
+
+class Backpressure:
+    """A run-wide pause, tripped by a rate limit and released after a wait.
+
+    **Per-call retry is not enough once the pool has several calls in flight.**
+    Concurrency does not create quota. When the window closes, every worker gets
+    the same refusal at the same moment, and retrying independently sends the
+    same burst back at the same wall -- so the pause has to be shared. A worker
+    that trips this one holds every other worker at :meth:`wait` for the
+    duration, and the pool stops issuing calls it already knows will fail.
+
+    ``sleep``, ``uniform`` and the clock are injected so the tests exercise the
+    schedule rather than spending the schedule.
+    """
+
+    def __init__(
+        self,
+        policy: Backoff | None = None,
+        *,
+        sleep: Callable[[float], None] = time.sleep,
+        uniform: Callable[[float, float], float] = random.uniform,
+    ) -> None:
+        self.policy = policy or DEFAULT_BACKOFF
+        self._sleep = sleep
+        self._uniform = uniform
+        self._lock = threading.Lock()
+        self._open = threading.Event()
+        self._open.set()
+        self._consecutive = 0
+        self.trips = 0
+        self.slept = 0.0
+
+    def wait(self) -> None:
+        """Block while another worker is serving a pause."""
+        self._open.wait()
+
+    def succeeded(self) -> None:
+        """A call got through, so the run is not against the wall any more."""
+        with self._lock:
+            self._consecutive = 0
+
+    def trip(self, attempt: int, retry_after: float | None = None) -> float:
+        """Pause the whole run, and return how long this worker waited.
+
+        Args:
+            attempt: Which retry this is, from zero.
+            retry_after: What the server asked for, when it asked. Used as the
+                ceiling-free delay rather than the computed one, because a
+                number the server sent beats a number we guessed.
+
+        Raises:
+            RunError: The breaker has tripped ``breaker_trips`` times with no
+                successful call between them.
+        """
+        with self._lock:
+            self._consecutive += 1
+            self.trips += 1
+            consecutive = self._consecutive
+            if consecutive > self.policy.breaker_trips:
+                raise RunError(
+                    f"{consecutive - 1} consecutive rate-limited call(s) with none getting "
+                    "through, so the run is stopping rather than waiting again. The window "
+                    "has closed rather than narrowed; the checkpoint holds everything "
+                    "collected so far and resuming later re-runs nothing."
+                )
+            ceiling = min(self.policy.max_delay, self.policy.base_delay * 2**attempt)
+            delay = retry_after if retry_after is not None else self._uniform(0.0, ceiling)
+            self._open.clear()
+
+        try:
+            self._sleep(delay)
+        finally:
+            self._open.set()
+        with self._lock:
+            self.slept += delay
+        return delay
 
 
 class RunError(RuntimeError):
@@ -221,6 +359,7 @@ def run_arm(
     identity: NodeIdentity | None = None,
     concurrency: int = 1,
     measuring_concurrency: bool = False,
+    backoff: Backoff | None = None,
 ) -> list[RunRecord]:
     """Run one arm over a set of items, resuming from any checkpoint.
 
@@ -237,6 +376,10 @@ def run_arm(
             Pass a number to pin it, which the budget tests do.
         concurrency: How many calls may be in flight. ``1`` -- the default --
             is the sequential loop every published run used, unchanged.
+        backoff: How rate limits are waited out, shared across every worker.
+            ``None`` uses :data:`DEFAULT_BACKOFF`. Concurrency does not create
+            quota, so a closed window otherwise turns into ``concurrency``
+            infrastructure zeros per batch as fast as the pool can produce them.
         measuring_concurrency: Permit ``concurrency > 1`` on a model listed in
             :data:`CONCURRENCY_UNSAFE`. Only the falsifier that populates that
             register may pass it: the register exists because such a run was
@@ -341,6 +484,11 @@ def run_arm(
         reserved += amount
         return prompt, amount
 
+    # One instance for the whole run. A pause served by any worker is a pause
+    # every worker observes; a per-worker backoff would send the same burst back
+    # at the same wall.
+    backpressure = Backpressure(backoff)
+
     with (
         checkpoint.open("a", encoding="utf-8") as handle,
         ThreadPoolExecutor(max_workers=concurrency) as pool,
@@ -361,6 +509,7 @@ def run_arm(
                         call=call,
                         prompt=prompt,
                         identity=identity,
+                        backpressure=backpressure,
                     )
                 ] = amount
                 submitted += 1
@@ -402,9 +551,23 @@ def _run_one(
     call: CallFn,
     prompt: str,
     identity: NodeIdentity | None = None,
+    backpressure: Backpressure,
 ) -> RunRecord:
+    """One call, retried while the answer is "come back later".
+
+    A rate limit is not an infrastructure zero. It clears on its own, so scoring
+    it as one records a model failure that never happened and spends the item to
+    do it. `AuthenticationError` still aborts the whole run, as it always has: a
+    revoked token returns a well-formed refusal on every call, so retrying it is
+    a few hundred failures at whatever the backoff costs.
+
+    `backpressure` is shared by every worker, so a pause one of them serves is a
+    pause all of them observe. It is required rather than optional: an optional
+    one defaults to no retrying, which is the behaviour this exists to replace,
+    and `Backoff(attempts=1)` says the same thing where a caller means it.
+    """
     try:
-        result = call(prompt, arm.system_prompt, arm.append)
+        result = _call_with_backoff(arm, call=call, prompt=prompt, backpressure=backpressure)
     except AuthenticationError as exc:
         raise RunError(
             f"authentication failed at {item.item_id}. The run is stopped rather than "
@@ -434,6 +597,37 @@ def _run_one(
         response=result.text,
         identity=identity,
     )
+
+
+def _call_with_backoff(
+    arm: ArmPrompt,
+    *,
+    call: CallFn,
+    prompt: str,
+    backpressure: Backpressure,
+) -> CliResult:
+    """Issue the call, waiting out rate limits until the attempts run out.
+
+    The final attempt is made outside the loop so its refusal propagates
+    untouched: a call that never got through is recorded as the infrastructure
+    zero it is, carrying the server's own message. Written this way rather than
+    with a re-raise inside the loop because the loop then has no unreachable
+    exit to explain, and `Backoff.__post_init__` guarantees at least one try.
+    """
+    for attempt in range(backpressure.policy.attempts - 1):
+        backpressure.wait()
+        try:
+            result = call(prompt, arm.system_prompt, arm.append)
+        except RateLimitedError as exc:
+            backpressure.trip(attempt, exc.retry_after)
+            continue
+        backpressure.succeeded()
+        return result
+
+    backpressure.wait()
+    result = call(prompt, arm.system_prompt, arm.append)
+    backpressure.succeeded()
+    return result
 
 
 def _record(

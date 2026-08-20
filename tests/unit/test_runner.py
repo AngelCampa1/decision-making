@@ -23,10 +23,16 @@ from decision_evals import runner
 from decision_evals.budget import BudgetLedger
 from decision_evals.generators.generate import Item, generate
 from decision_evals.generators.schema import Template
-from decision_evals.providers.claude_code import AuthenticationError, CliError, CliResult
+from decision_evals.providers.claude_code import (
+    AuthenticationError,
+    CliError,
+    CliResult,
+    RateLimitedError,
+)
 from decision_evals.providers.openai_compatible import Endpoint
 from decision_evals.runner import (
     CONCURRENCY_UNSAFE,
+    Backoff,
     RunError,
     completed_keys,
     iter_items,
@@ -910,3 +916,93 @@ def test_blank_lines_in_a_checkpoint_are_ignored(items: list[Item], tmp_path: Pa
     checkpoint.write_text(f"{body[0]}\n\n{body[1]}\n", encoding="utf-8")
 
     assert len(load_records(checkpoint)) == 2
+
+
+# -- rate limits reach the run loop -----------------------------------------
+
+
+def test_a_rate_limited_call_is_retried_rather_than_recorded_as_a_failure(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """The schedule is tested in `test_backpressure.py`; this is the wiring.
+
+    `Backpressure` could be correct in every detail and still never be reached,
+    which is the shape of defect this repository has shipped twice. So one
+    assertion that the pool's own path waits and then completes: without it the
+    item lands as an infrastructure zero and the model is scored on a call it
+    never made.
+    """
+    attempts: list[int] = []
+    answer = _answers_correctly(items)
+
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        attempts.append(1)
+        if len(attempts) < 3:
+            raise RateLimitedError("429")
+        return answer(prompt, system_prompt, append)
+
+    records = run_arm(
+        items[:1],
+        ARM,
+        model="haiku",
+        checkpoint=tmp_path / "run.jsonl",
+        call=call,
+        ledger=BudgetLedger(limit_usd=1.0),
+        backoff=Backoff(base_delay=0.0, max_delay=0.0),
+    )
+    assert len(attempts) == 3
+    assert len(records) == 1
+    assert records[0].zero_cause is None
+
+
+def test_a_wall_that_does_not_move_stops_the_run_rather_than_burning_it(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """Past `attempts`, the item is recorded as the infrastructure failure it is."""
+
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        del prompt, system_prompt, append
+        raise RateLimitedError("429")
+
+    records = run_arm(
+        items[:1],
+        ARM,
+        model="haiku",
+        checkpoint=tmp_path / "run.jsonl",
+        call=call,
+        ledger=BudgetLedger(limit_usd=1.0),
+        backoff=Backoff(attempts=2, base_delay=0.0, max_delay=0.0, breaker_trips=99),
+    )
+    assert records[0].zero_cause == "infrastructure"
+    assert "429" in records[0].response
+
+
+def test_the_last_attempt_getting_through_is_a_normal_record(
+    items: list[Item], tmp_path: Path
+) -> None:
+    """The final call sits outside the retry loop, so it needs its own case.
+
+    Its refusal path is covered above. This is the other side of it: a call that
+    clears on the last try is scored exactly like one that cleared on the first,
+    with no trace of the wait on the record.
+    """
+    attempts: list[int] = []
+    answer = _answers_correctly(items)
+
+    def call(prompt: str, system_prompt: str, append: bool) -> CliResult:
+        attempts.append(1)
+        if len(attempts) == 1:
+            raise RateLimitedError("429")
+        return answer(prompt, system_prompt, append)
+
+    records = run_arm(
+        items[:1],
+        ARM,
+        model="haiku",
+        checkpoint=tmp_path / "run.jsonl",
+        call=call,
+        ledger=BudgetLedger(limit_usd=1.0),
+        backoff=Backoff(attempts=2, base_delay=0.0, max_delay=0.0),
+    )
+    assert len(attempts) == 2
+    assert records[0].zero_cause is None

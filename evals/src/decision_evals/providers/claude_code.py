@@ -120,6 +120,40 @@ class PromptTooLongError(CliError):
     """
 
 
+class RateLimitedError(CliError):
+    """The call was refused because the quota or the server was saturated.
+
+    Separated from :class:`CliError` for the same reason
+    :class:`PromptTooLongError` is, and with the opposite policy. A prompt that
+    overflows the window will overflow every time; a rate limit clears on its
+    own, so scoring it as an infrastructure zero records a model failure that
+    never happened and burns the item.
+
+    The budget here is quota and wall-clock rather than dollars, and the runner
+    can now put several calls in flight at once. Concurrency does not create
+    quota: without backpressure a saturated window turns into `concurrency`
+    failed records per batch, as fast as the pool can produce them.
+
+    Attributes:
+        retry_after: Seconds the server asked us to wait, when it said so.
+            ``None`` when it did not, which is the usual case -- the runner then
+            uses its own backoff rather than inventing a number.
+
+    **What identifies one, and how much of it is verified.** ``api_error_status``
+    of 429 or 529 is the load-bearing signal and is an HTTP semantic rather than
+    a guess. :data:`_RATE_LIMIT_MARKERS` is a secondary heuristic over the
+    message text, and **none of those strings has been observed in this
+    repository's records** -- no run on disk has ever hit one. They are a
+    superset written from the documented shapes, kept because a status field the
+    CLI omits would otherwise leave a quota refusal scored as a model failure,
+    and labelled here so nobody later reads them as measured.
+    """
+
+    def __init__(self, message: str, *, retry_after: float | None = None) -> None:
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
 class AuthenticationError(CliError):
     """The CLI could not authenticate.
 
@@ -371,6 +405,34 @@ def parse_init_receipt(event: dict[str, Any]) -> InitReceipt:
     )
 
 
+#: Statuses that mean "come back later" rather than "this call is wrong".
+#: 429 is a rate limit, 529 is the server declaring itself overloaded. Both
+#: clear without anything changing on this side.
+_RATE_LIMIT_STATUSES: Final[frozenset[int]] = frozenset({429, 529})
+
+#: Message substrings treated as the same thing when no status is present.
+#: **Unobserved.** No record in this repository carries any of them; see
+#: :class:`RateLimitedError` for why they are here anyway and what that costs.
+_RATE_LIMIT_MARKERS: Final[tuple[str, ...]] = (
+    "rate limit",
+    "rate_limit",
+    "usage limit",
+    "overloaded",
+)
+
+
+def _retry_after(payload: dict[str, Any]) -> float | None:
+    """Seconds the server asked for, or ``None`` when it asked for nothing.
+
+    Read rather than defaulted. A number invented here would be indistinguishable
+    from one the server sent, and the runner's own backoff is the honest fallback.
+    """
+    value = payload.get("retry_after", payload.get("retryAfter"))
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return float(value) if value > 0 else None
+
+
 def parse_result(payload: dict[str, Any]) -> CliResult:
     """Turn a ``--output-format json`` payload into a :class:`CliResult`.
 
@@ -388,6 +450,10 @@ def parse_result(payload: dict[str, Any]) -> CliResult:
             )
         if _TOO_LONG_MARKER in message.lower():
             raise PromptTooLongError(message)
+        if status in _RATE_LIMIT_STATUSES or any(
+            marker in message.lower() for marker in _RATE_LIMIT_MARKERS
+        ):
+            raise RateLimitedError(message, retry_after=_retry_after(payload))
         raise CliError(message)
 
     text = payload.get("result")
