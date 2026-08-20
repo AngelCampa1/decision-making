@@ -13,8 +13,11 @@
 
 </div>
 
-Agent skills for making better decisions under uncertainty, plus an evaluation
-harness that measures whether they actually work.
+Agent skills for making better decisions under uncertainty, plus the evaluation
+harness that measures whether they actually work. The harness puts four arms on
+the same items and scores an LLM-as-a-judge panel for inter-rater reliability.
+It refuses to publish a result whose prediction cannot be shown to predate its
+data.
 
 The mark is one row of a forest plot: a line of no effect, an interval, a point
 estimate. The interval crosses zero, which is this repository's position stated
@@ -29,6 +32,31 @@ does not work*, and [`SCORECARD.md`](SCORECARD.md) exists to keep those apart.
 > it showed, which measurements turned out to be broken, and which tracks are
 > still untouched.
 
+## In the usual vocabulary
+
+This repository names things after the failure they defend against rather than
+after the job posting. The translation:
+
+| What it is called elsewhere | What is in this repository |
+| --- | --- |
+| Eval harness, LLM evaluation | `decision_evals`, run offline by `de check` and against live models by [`scripts/run_triggers.py`](scripts/run_triggers.py) |
+| A/B test, ablation study | Four arms on the same items: off, on, a token- and structure-matched placebo, and plain chain-of-thought |
+| LLM-as-a-judge, model-graded evaluation | Three blind adjudicators per turn, resolved by majority against a kill threshold fixed before the run |
+| Inter-rater reliability | Cohen's kappa, Fleiss' kappa and Krippendorff's alpha in [`evals/src/decision_evals/stats/agreement.py`](evals/src/decision_evals/stats/agreement.py), reported next to raw agreement rather than instead of it |
+| Golden dataset | [`datasets/`](datasets/): parameterised templates with computed ground truth, versioned, plus third-party corpora pinned by SHA-256 and fetched by `de fetch` |
+| Tool-use evaluation, function calling | BFCL's own AST match, in [`evals/src/decision_evals/scorers/bfcl.py`](evals/src/decision_evals/scorers/bfcl.py) |
+| Skill routing | One skill that reads one of six procedure files, chosen by what is hard about the decision |
+| Regression pipeline, CI gate | `de check`: lint, types, tests, coverage floors and the integrity checks, bound to pre-commit and pre-push and run again in CI |
+| Observability, OpenTelemetry | GenAI semantic-convention attribute names pinned in [`evals/src/decision_evals/telemetry.py`](evals/src/decision_evals/telemetry.py), adopted as names without the dependency |
+| Multi-agent, sub-agent delegation | A scripted orchestrator with N sub-agents and per-node records, in [`evals/src/decision_evals/orchestrator.py`](evals/src/decision_evals/orchestrator.py) |
+| MCP, Model Context Protocol | Pinned empty at every call (`--strict-mcp-config`), because a connector present in one arm and absent in another is a confound. The full lockdown is in [`docs/HARNESS_DISCLOSURE.md`](docs/HARNESS_DISCLOSURE.md) |
+| Model calibration | The Murphy decomposition, so hedging every forecast toward the base rate is caught by the resolution term |
+| Pre-registration | A dated prediction committed to [`notebook/`](notebook/) before the run, enforced by git ancestry |
+
+Every row names an instrument. What those instruments have found is in
+[`SCORECARD.md`](SCORECARD.md), and none of it is about whether a decision skill
+improves a decision.
+
 ## How this is measured
 
 Most skill libraries ship on the author's word that the thing helps. This one is
@@ -36,9 +64,12 @@ built the other way round: the harness came first, and the claim is still
 `UNTESTED`.
 
 What that costs, in practice, is a set of mechanisms that make it hard to
-overclaim by accident. The answer key is relabelled blind by three independent
-model instances that never see the maintainer's label, against a kill threshold
-fixed before the run. Every prediction since the convention was adopted is committed
+overclaim by accident. The answer key, which is the golden dataset every arm is
+scored against, is relabelled blind by an LLM-as-a-judge panel of three
+independent model instances that never see the maintainer's label, against a
+kill threshold fixed before the run. Their agreement is reported
+chance-corrected, because on this class balance two judges who have learned
+nothing at all still agree most of the time. Every prediction since the convention was adopted is committed
 to `notebook/` before its run, and `de check` refuses a published run whose
 prediction cannot be shown by git ancestry to predate its data. Two runs predate
 the rule and are baselined by name in
@@ -57,8 +88,8 @@ implements it, and whether it has actually run. Several entries say it has not.
 
 ## The skill
 
-One skill, `decision-making`, that routes to one of six procedures depending on
-what is actually hard about the decision, and reads only that one.
+One skill, `decision-making`, whose routing sends a decision to one of six
+procedures depending on what is actually hard about it. It reads only that one.
 
 | What is hard | Procedure | What it produces |
 | --- | --- | --- |
@@ -125,8 +156,8 @@ by how much.
 | --- | --- |
 | `skills/` | The skills, authored to the [Agent Skills](https://agentskills.io) 6-field standard so they work in Claude Code, Codex, Cursor, Copilot, Gemini CLI, Cline, Amp and OpenCode without conversion. Mirrored byte-for-byte to `.agents/skills/` by `de mirror` |
 | `plugin/` | The Claude Code plugin. A skill is copied here only once a confirmation run gives it a verdict, so the directory is currently empty on purpose |
-| `evals/` | `decision_evals`, the harness. Paired experiments, exact tests, cluster-aware resampling |
-| `datasets/` | The answer key: parameterised scenario templates with *computed* ground truth, and the trigger corpus |
+| `evals/` | `decision_evals`, the evaluation harness. Paired experiments, exact tests, cluster-aware resampling, chance-corrected inter-rater reliability, and the OpenTelemetry GenAI attribute names every record is written under |
+| `datasets/` | The answer key, this repository's golden dataset: parameterised scenario templates with *computed* ground truth, the trigger corpus, and SHA-256 lockfiles for the third-party corpora `de fetch` downloads |
 | `results/` | Published run records: raw transcripts and a README per run |
 | `notebook/` | Append-only research log. Predictions go in *before* runs |
 | `docs/` | Protocol, status, the research programme, related work, limitations, and what was rejected. Start at [`docs/README.md`](docs/README.md) |
@@ -139,8 +170,9 @@ by how much.
 
 Nothing about whether a decision skill improves a decision. Every number on
 record measures something upstream of that: whether a skill *fires* when it
-should, which is the question that decides whether it is worth having installed
-at all.
+should. That is the selection question, the same shape as tool selection in a
+function-calling evaluation, and it decides whether a skill is worth having
+installed at all.
 
 Thirteen runs are published, each one indexed with its answer key and its
 prediction in [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), and
@@ -182,8 +214,9 @@ originally claimed:
 
 ## How claims are made
 
-The design puts four arms on the same items: **off**, **on**, **placebo**
-(token- and structure-matched filler), and **cot** (plain "think step by step").
+The design is a within-item A/B comparison with four arms on the same items:
+**off** (the ablation), **on**, **placebo** (token- and structure-matched
+filler), and **cot** (plain "think step by step").
 A skill that beats *off* but not *placebo* is a length effect. A skill that
 doesn't beat *cot* is an expensive way to say "think."
 
@@ -196,7 +229,7 @@ stood in for anything.
 The statistics are exact and resampling-based rather than CLT-based, because at
 our item counts the normal approximation isn't reliable. Templates rather than
 items are the resampling unit, since items from one template are correlated.
-Calibration goes through the Murphy decomposition, so a "skill" that improves
+Model calibration goes through the Murphy decomposition, so a "skill" that improves
 Brier by hedging every forecast toward the base rate is caught by the
 resolution term instead of being scored as a win.
 
@@ -240,8 +273,8 @@ uv sync --group dev
 
 That is the whole install. There is no second dependency group.
 
-Run the full local gate, which is lint, types, tests, coverage floors, and the
-repository-integrity checks:
+Run the full regression pipeline locally. It is lint, types, tests, coverage
+floors, and the repository-integrity checks:
 
 ```bash
 uv run de check
