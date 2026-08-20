@@ -21,8 +21,18 @@ repository where every git command exited 128, because it recognised a setup
 failure only by finding the string `core.bare` in git's stderr. A junk line in
 `.git/config`, or `core.repositoryformatversion = banana`, names neither
 `core.bare` nor "not a git repository", and both break the checkout completely.
-The discriminator is the filesystem now: git refused *and* a `.git` entry is
-here or above. `--fix` repairs neither -- see `_git_is_refusing`.
+`--fix` repairs neither -- see `_git_is_refusing`.
+
+**Deciding that takes two signals, and either one alone gets a case wrong.**
+Replacing the stderr sniff with a filesystem walk moved the wrong answer rather
+than removing it: with discovery blocked by `GIT_CEILING_DIRECTORIES`, a
+healthy checkout was reported as broken, because `.git` was sitting there while
+git had been told not to look at it. And the walk missed bare repositories
+entirely, which carry no `.git` at all, so `git init --bare` plus a junk line in
+`config` still printed `clean`. Both reproduced 2026-08-20. Git's message
+settles the cases it names -- "discovery found nothing" is not a thing a
+filesystem walk can second-guess -- and the filesystem settles the cases where
+the message names nothing. See `_git_is_refusing` and `_repository_shape`.
 
 The drift half *is* a hook, and it is narrow on purpose: it refuses a commit
 on `main` while `main` is behind `origin/main`. Work here happens on branches
@@ -58,6 +68,26 @@ about, and adding the stage would only re-enter the loop above through a second
 door. So this is not an oversight to be tidied up later: do not add
 `pre-merge-commit` in `.pre-commit-config.yaml`.
 
+**Credentials are left alone, and the time-box is what pays for that.** For
+one round of review this fetch ran with `-c credential.helper= -c
+core.askPass=` and the askpass variables emptied, to stop Git Credential
+Manager opening a dialog nobody could see. That does not merely stop a
+*hanging* helper; it stops a *working* one, and on any private HTTPS remote --
+the default GitHub setup -- every fetch the hook made then failed, after which
+the drift check compared against the stale ref on disk and passed, rc 0, with
+nothing on either stream. Measured 2026-08-20 against a local server requiring
+Basic auth: 0.40-0.51s and success with the helper active, 0.07-0.09s and
+failure with it emptied; `GIT_ASKPASS` and `core.askPass` measured the same way
+round. A silent blind spot on every private remote is worse than the ten-second
+stall it replaced, so the switches are gone. What remains is
+`GIT_TERMINAL_PROMPT=0`, which fails git's own prompt rather than waiting on
+it, and `GCM_INTERACTIVE=never`, which git itself does not read and so cannot
+break a fetch GCM is not part of. `credential.interactive=false` looked like
+the same kind of knob and is not -- git core reads it, and it breaks an askpass
+that would have answered -- so it is named in `_fetch` as a switch deliberately
+not thrown. A helper that hangs anyway costs one bounded budget, once per ten
+minutes.
+
 **`origin` is hardcoded, and where that is wrong the check fails open and
 silent.** `REMOTE` is a module constant. On a clone whose upstream is named
 anything else -- `upstream`, a fork remote, a second remote -- or where
@@ -75,6 +105,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import os
+import re
 import stat
 import subprocess
 import sys
@@ -195,75 +226,171 @@ def check_bare(fix: bool) -> list[str]:
     ]
 
 
-def _looks_like_a_repository(start: Path) -> bool:
-    """Whether a `.git` entry sits at `start` or above it.
+#: Git's own words for "discovery ran to exhaustion and found nothing here".
+#: The parenthetical is the load-bearing half, and it is not decoration:
+#: `not a git repository: <path>` *without* it is git having been pointed at
+#: something that is not there -- `GIT_DIR`, or a `.git` file naming a gitdir
+#: that has gone -- which is a broken repository rather than an absent one.
+#: Both messages measured 2026-08-20; they must not be collapsed into a
+#: substring search for "not a git repository".
+DISCOVERY_EXHAUSTED = "not a git repository (or any of the parent directories)"
 
-    Filesystem only, and deliberately so: this is consulted after git has
-    already refused to answer, which makes anything git says about itself
-    unavailable. `.git` is a directory in a main worktree and a file in a
-    linked one, so existence rather than type is the test. The walk upwards
-    mirrors git's own discovery, so that `--doctor` run from a subdirectory of
-    a repository git will not open is not reported as standing outside a
-    repository -- which is the same defect one directory down.
+#: Git names the file it could not parse, so the remedy can name it back
+#: instead of guessing `.git/config`. Matches a local config, a global one and
+#: a system one identically, because git's message does.
+BAD_CONFIG_FILE = re.compile(r"bad config line \d+ in file (?P<path>.+)")
+
+
+def _repository_shape(start: Path) -> str | None:
+    """What on the filesystem says a repository is here, phrased for the report.
+
+    Consulted only where git's own message settles nothing -- see
+    `_git_is_refusing` -- because a git that is refusing every command cannot be
+    asked anything about itself.
+
+    Two shapes, because a repository has two. A checkout carries a `.git`
+    entry: a directory in a main worktree and a file in a linked one, so
+    existence rather than type is the test. The walk upwards mirrors git's own
+    discovery, so that a subdirectory of a checkout git will not open is not
+    reported as standing outside a repository -- the same defect one directory
+    down.
+
+    **A bare repository carries no `.git` at all**, which is how that whole
+    class escaped until 2026-08-20: `git init --bare`, a junk line appended to
+    `config`, `git status` exits 128 with `fatal: bad config line 7 in file
+    ./config` -- and `--doctor` printed `git hygiene: clean`, rc 0, standing in
+    it. Requiring a `.git` entry exempted every bare repository there is. One is
+    recognised by its own shape instead: a `HEAD` file beside `objects/` and
+    `refs/`, which is what git's own `is_git_directory` looks for.
     """
-    return any((directory / ".git").exists() for directory in (start, *start.parents))
+    for directory in (start, *start.parents):
+        if (directory / ".git").exists():
+            return "a .git entry exists at or above this directory."
+        if (
+            (directory / "HEAD").is_file()
+            and (directory / "objects").is_dir()
+            and (directory / "refs").is_dir()
+        ):
+            return f"a bare repository is laid out at {directory}."
+    return None
+
+
+def _said(stderr: str) -> list[str]:
+    """Every non-empty line git wrote, not only the first, as one quoted block.
+
+    The first line was all that used to be quoted, and it threw away the half
+    that mattered for one class: `fatal: detected dubious ownership in
+    repository at ...` is followed by git printing the exact `git config
+    --global --add safe.directory ...` that repairs it. Quoting line one alone
+    dropped git's own remedy and then printed a wrong one underneath. Measured
+    2026-08-20 via `GIT_TEST_ASSUME_DIFFERENT_OWNER=1`.
+
+    The continuation lines are aligned under the first rather than each
+    carrying its own `git said:`, so that a command git printed for the reader
+    to run still looks like a command.
+    """
+    lines = [line.rstrip() for line in stderr.splitlines() if line.strip()] or ["(nothing)"]
+    first, *rest = lines
+    return [f"    git said: {first}", *(f"{' ' * 14}{line}" for line in rest)]
+
+
+def _remedy(stderr: str) -> list[str]:
+    """One line of advice, and only where the evidence supports one.
+
+    Every report used to end with `Start with .git/config -- a value git cannot
+    parse is the usual cause`, which is right for exactly one of the classes
+    that reach here and wrong for the rest. `detected dubious ownership` is
+    repaired by `safe.directory`, and the repository itself is fine. A broken
+    *global* config is repaired in `~/.gitconfig`, and git names that path in
+    its own message. A `GIT_DIR` pointing at nothing leaves the checkout
+    entirely healthy. Three classes newly detected on 2026-08-20, three wrong
+    remedies -- the detection was the improvement, the advice was not.
+
+    So where git names the file it could not parse, that file is named back --
+    and where it does not, there is no specific remedy at all and the quoted
+    `git said:` lines carry it, which for dubious ownership is git's own
+    command.
+    """
+    match = BAD_CONFIG_FILE.search(stderr)
+    if match is None:
+        return []
+    return [
+        f"Start with {match.group('path').strip()} -- a value git cannot parse is the usual cause."
+    ]
 
 
 def _git_is_refusing(stderr: str) -> list[str]:
     """Report a git that will not run here, having already exited non-zero.
 
     `git rev-parse --git-dir` fails for two very different reasons: there is no
-    repository here, or there is one and git is refusing to open it. Nothing
-    git can be asked separates them, because everything git is asked fails the
+    repository here, or there is one and git is refusing to open it. Nothing git
+    can be *asked* separates them, because everything git is asked fails the
     same way. Checked 2026-08-20: `-c core.bare=false` does not override a bad
-    value, `git config -f .git/config` does not sidestep it, and a
-    subdirectory behaves identically.
+    value, `git config -f .git/config` does not sidestep it, and a subdirectory
+    behaves identically.
 
-    **So the discriminator is the filesystem, not the message.** Until
-    2026-08-20 this sniffed stderr for `core.bare` and returned `[]` for
-    everything else, on a stated dichotomy -- the failure either names
-    `core.bare` or is "not a git repository" -- that is false. There is a third
-    class naming neither: a junk line in `.git/config` gives `fatal: bad config
-    line 8 in file .git/config`, and `core.repositoryformatversion = banana`
-    gives its own. Both make every git command in the checkout exit 128, and
-    `--doctor` printed `git hygiene: clean`, rc 0, standing in one. Reproduced
-    and fixed 2026-08-20. `.git` existing while git refuses to open it is
-    message-independent and locale-independent, which the sniff was not.
+    **So two signals answer it, and neither is trusted alone.** Each was the
+    sole discriminator for one round of review, and each was wrong on its own:
+
+    - **What git said, where it names the outcome.** `DISCOVERY_EXHAUSTED` is
+      git reporting that its own walk ran and found nothing, and no filesystem
+      inspection may overrule it. Reproduced 2026-08-20: with
+      `GIT_CEILING_DIRECTORIES` set to a repository's root and the command run
+      from a subdirectory, git says exactly that while `.git` sits one level up
+      -- and a filesystem-only discriminator failed a perfectly healthy
+      repository, rc 1, on the literal case it claimed to exclude.
+    - **What is on disk, where the message names nothing.** A junk line in
+      `.git/config` gives `fatal: bad config line 8 in file .git/config`, and
+      `core.repositoryformatversion = banana` gives its own; both break the
+      checkout completely and neither names `core.bare` or "not a git
+      repository". Sniffing stderr for `core.bare` printed `git hygiene: clean`,
+      rc 0, standing in one. Reproduced 2026-08-20.
+
+    The division is what makes the pair safe. The message is consulted only for
+    the one outcome it states outright, the filesystem only for the messages
+    that state nothing -- so neither signal is ever in a position to produce the
+    other's wrong answer. Both halves are locale-dependent to the extent that
+    git translates its messages, which by default it does not.
 
     `core.bare` keeps its own message where git names it, because that value can
     be repaired by hand and the general case cannot even be named. Neither is
     repaired by `--fix`: `check_bare` returns through here before `fix` is ever
     consulted.
 
-    One case is still missed, and is named rather than guessed at: a repository
-    reached through `GIT_DIR` or `--git-dir` from a directory with no `.git`
-    above it leaves nothing on the filesystem to find.
+    Two cases are still missed, and are named rather than guessed at. A
+    repository reached through `GIT_DIR` or `--git-dir` from a directory with no
+    repository shape above it leaves nothing on the filesystem to find. And a
+    broken *global* config outside any repository is silent here, because this
+    script has no opinion outside a repository -- inside one it is reported,
+    with git's own path in the remedy.
     """
-    said = stderr.splitlines()[0] if stderr.strip() else "(nothing)"
-
     if "core.bare" in stderr:
         return [
             "core.bare cannot be read at all, and git is refusing every command here.",
-            f"    git said: {said}",
+            *_said(stderr),
             "--fix will not touch this one. Git cannot be asked whether the repository is",
             "meant to be bare while the value is unreadable, and `git config` is refusing",
             "for the same reason -- so edit the `bare =` line in .git/config by hand.",
         ]
 
+    if DISCOVERY_EXHAUSTED in stderr:
+        return []  # git looked, and it says there is nothing here to look at
+
     try:
         here = Path.cwd()
     except OSError:  # pragma: no cover - the working directory was deleted under us
         return []
-    if not _looks_like_a_repository(here):
+    shape = _repository_shape(here)
+    if shape is None:
         return []  # no repository here; nothing to have an opinion about
 
     return [
         "git is refusing to operate here, and it is not that there is no repository:",
-        "a .git entry exists at or above this directory.",
-        f"    git said: {said}",
+        shape,
+        *_said(stderr),
         "Every git command in this checkout will fail the same way, including the ones",
         "this script would need to diagnose it, so --fix will not touch this one.",
-        "Start with .git/config -- a value git cannot parse is the usual cause.",
+        *_remedy(stderr),
     ]
 
 
@@ -330,28 +457,64 @@ def _fetch_is_stale(stamp: Path | None) -> bool:
     mattering. That is the safe direction: this fails towards fetching, never
     towards silence.
 
-    **And the stamp has to be a regular file.** `mkdir
-    <git-dir>/de-git-hygiene-fetch` suppressed the check for ten minutes at a
-    time while `_record_fetch` could never arm it -- writing to a directory
-    raises `OSError` and is suppressed -- so the window renewed itself off the
-    directory's own mtime and nothing here could close it. Reproduced 2026-08-20
-    on a `main` one commit behind: rc 0, no fetch.
+    **And the stamp has to be a regular file, tested without following a
+    link.** `mkdir <git-dir>/de-git-hygiene-fetch` suppressed the check for ten
+    minutes at a time while `_record_fetch` could never arm it -- writing to a
+    directory raises `OSError` and is suppressed -- so the window renewed itself
+    off the directory's own mtime and nothing here could close it. Reproduced
+    2026-08-20 on a `main` one commit behind: rc 0, no fetch.
+
+    `stat()` closed that one instance and left the class open, because it
+    follows symlinks. A symlink at the stamp path pointing at any regular file
+    reads as a regular file, so the window was suppressed off an mtime
+    `_record_fetch` never wrote -- and `_record_fetch` writes *through* the
+    link, so a symlink to `.git/config` was truncated by the next successful
+    fetch. Both measured 2026-08-20: `_fetch_is_stale` returned False, and the
+    target came back empty. `lstat` answers about the link itself, so a symlink
+    is no longer mistaken for a regular file here -- and `_record_fetch` carries
+    the other half, because reading with `lstat` does nothing whatever about
+    writing with `write_text`.
+
+    **A hardlink is still indistinguishable, and that is not fixed here.**
+    `lstat` reports a hardlink to `.git/config` as exactly the regular file it
+    is, because that is what it is; `st_nlink > 1` would catch it on some
+    filesystems and not others. The class is narrowed, not closed. Nothing
+    inside the git dir is normally hardlinked, and creating one there is a
+    deliberate act rather than an accident like `mkdir`.
     """
     if stamp is None:
         return True
     try:
-        stamped = stamp.stat()
+        stamped = stamp.lstat()
     except OSError:
         return True  # missing, or unreadable; either way, fetch
     if not stat.S_ISREG(stamped.st_mode):
-        return True  # not something `_record_fetch` could have written
+        return True  # a directory or a symlink; not something `_record_fetch` wrote
     age = time.time() - stamped.st_mtime
     return not 0 <= age <= FETCH_STALE_SECONDS
 
 
 def _record_fetch(stamp: Path | None) -> None:
-    """Arm the suppression window. Called only after a fetch that succeeded."""
+    """Arm the suppression window. Called only after a fetch that succeeded.
+
+    **Nothing is written through a link, and this is the destructive half of the
+    symlink defect.** Teaching `_fetch_is_stale` to use `lstat` stops a symlink
+    *suppressing* the window and does nothing at all about `write_text`
+    following one: measured 2026-08-20 with the stamp path a symlink to a
+    `config` file, a successful fetch left the target empty. `.git/config` is
+    one `ln -s` away from the stamp path, and truncating it breaks the whole
+    checkout -- so this would have destroyed the file the rest of the script
+    exists to complain about.
+
+    So the shape is checked on this side too, and anything already there that is
+    not a plain file is left exactly as it is. `Path.is_symlink`, `exists` and
+    `is_file` all answer False rather than raising, so there is no error branch
+    here to go untested. The cost is the window, never the check: a stamp that
+    is never written is always stale, so the hook simply fetches every time.
+    """
     if stamp is None:
+        return
+    if stamp.is_symlink() or (stamp.exists() and not stamp.is_file()):
         return
     # A repository this cannot write to loses the window, not the check: an
     # unwritable stamp is always stale, so it simply fetches every time.
@@ -372,33 +535,63 @@ def _fetch(timeout: float) -> bool:
     the call returned after **60.21s**; with `DEVNULL`, after 3.00s. The output
     is discarded either way, so there is nothing to lose by not asking for it.
 
-    **Credential helpers are disabled for this one fetch, and
-    `GIT_TERMINAL_PROMPT` alone does not do that.** That variable governs git's
-    *own* prompt; a helper is a separate program git launches, and Git
-    Credential Manager on Windows launches a GUI. Measured 2026-08-20 against a
-    local server answering 401: the fetch returned False after 10.01s -- the
-    whole budget, on every commit, for as long as the credentials stay lapsed --
-    and left an orphaned `git-credential-manager.exe` holding a dialog, one per
-    timed-out fetch, with nothing written anywhere to connect it to a commit
-    because both streams are discarded.
+    **Credential helpers stay enabled, and the last round of review is why
+    that has to be said out loud.** A hanging Git Credential Manager was
+    measured here on 2026-08-20 -- against a local server answering 401 the
+    fetch returned False after 10.01s, the whole budget, on every commit, and
+    left an orphaned `git-credential-manager.exe` holding a dialog nobody could
+    see -- and the fix was `-c credential.helper= -c core.askPass=` with
+    `GIT_ASKPASS` and `SSH_ASKPASS` emptied. That does not disable a *hanging*
+    helper. It disables a *working* one.
 
-    `-c credential.helper=` resets the helper list to empty, `-c core.askPass=`
-    and the emptied askpass variables close the other doors, and
-    `GIT_TERMINAL_PROMPT=0` turns the remaining prompt into an immediate
-    failure -- the same variable, for the same reason, as
-    `decision_evals.deployed._git`. Measured after the change: 0.07s against a
-    hanging helper that had eaten the full budget before it. A fetch that needs
-    credentials is a fetch this hook cannot make, so failing at once beats
-    blocking the commit and then failing anyway.
+    Measured the same day against a local server requiring Basic auth, with a
+    helper that answers correctly: the fetch succeeds in 0.40-0.51s with the
+    helper active and fails in 0.07-0.09s with the list emptied, and the reset
+    takes URL-scoped `credential.<url>.helper` with it. `GIT_ASKPASS` and
+    `core.askPass` measure the same way round: 0.44s and 0.30s answering, both
+    `fatal: could not read Password` once emptied. So on any private HTTPS
+    remote -- the default GitHub plus GCM setup -- every fetch this hook made
+    failed, and `check_main_drift` then compared against the stale ref on disk
+    and returned nothing, rc 0, with both streams discarded. That is the
+    estimator-returns-a-plausible-zero failure, permanent and invisible, traded
+    for a stall that was bounded.
+
+    So the switches are gone. What is left is prompt suppression that does not
+    touch authentication:
+
+    - `GIT_TERMINAL_PROMPT=0` turns git's *own* terminal prompt into an
+      immediate failure -- the same variable, for the same reason, as
+      `decision_evals.deployed._git`. Every successful authenticated fetch
+      measured above had it set, so it costs nothing.
+    - `GCM_INTERACTIVE=never` asks Git Credential Manager not to raise a GUI
+      while leaving stored credentials readable. **Measured only for what it
+      does not break**: an authenticated fetch still succeeds with it set,
+      through a helper (0.44s) and through askpass (0.36s). Git itself does not
+      read the variable, so it cannot break a fetch that GCM is not part of.
+      That it actually suppresses GCM's dialog is *not* measured here -- there
+      is no GCM on the machine these numbers came from -- and against a generic
+      helper that simply sleeps it was measured to do nothing at all. It is a
+      best-effort narrowing, not the defence.
+
+    **`-c credential.interactive=false` was in this list for about an hour and
+    is deliberately not here now.** It looked like the same kind of knob and it
+    is not: git core reads it, and with it set an askpass that would have
+    answered fails with `fatal: unable to get password from user`. Measured
+    2026-08-20 -- rc 128 in 0.09s with it, rc 0 in 0.23s without. It passed a
+    first check only because that check went through a credential *helper*,
+    which returns a stored credential without prompting, so the setting had
+    nothing to suppress. The same over-fix as the one above, one config key
+    over, caught only because the second measurement was taken.
+
+    **The defence is the time-box**, which is now genuinely sound: a helper that
+    hangs anyway costs one bounded budget, once per `FETCH_STALE_SECONDS`, and
+    then the commit proceeds against the ref on disk. A bounded stall that
+    fetches correctly beats an instant failure that never does.
     """
     try:
         proc = subprocess.run(
             [
                 "git",
-                "-c",
-                "credential.helper=",
-                "-c",
-                "core.askPass=",
                 "fetch",
                 REMOTE,
                 PROTECTED_BRANCH,
@@ -410,8 +603,7 @@ def _fetch(timeout: float) -> bool:
             env={
                 **os.environ,
                 "GIT_TERMINAL_PROMPT": "0",
-                "GIT_ASKPASS": "",
-                "SSH_ASKPASS": "",
+                "GCM_INTERACTIVE": "never",
             },
         )
     except (subprocess.TimeoutExpired, OSError):

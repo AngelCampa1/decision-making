@@ -79,6 +79,18 @@ repos:
       # `timeout=3` fetch returned after 60.21s. The fetch now asks for no
       # pipes; the module docstring carries the measurement.
       #
+      # **On a private remote this hook may cost you a bounded pause, and that
+      # is the intended trade rather than a defect.** For part of 2026-08-20 it
+      # ran with credential helpers and askpass disabled, so that a Git
+      # Credential Manager dialog could not stall a commit. That does not
+      # disable a hanging helper, it disables a working one: measured against a
+      # server requiring Basic auth, the fetch succeeded in ~0.5s with the
+      # helper active and failed in ~0.08s with it emptied. Every fetch on a
+      # private HTTPS remote therefore failed, and the drift check then compared
+      # against the stale ref on disk and passed, rc 0, silently -- which is
+      # strictly worse than the stall. Helpers are enabled again; a helper that
+      # hangs costs one `FETCH_TIMEOUT_SECONDS`, at most once every ten minutes.
+      #
       # `stages: [pre-commit]` is the whole list, and `pre-merge-commit` is
       # deliberately absent -- so this does NOT run on a clean merge. That is
       # correct rather than an oversight: a merge is integration, not new work,

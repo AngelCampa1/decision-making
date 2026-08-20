@@ -48,16 +48,18 @@ time-box; see its docstring for what was observed failing.
 
 from __future__ import annotations
 
+import base64
 import contextlib
 import importlib.util
 import inspect
 import os
+import stat
 import subprocess
 import sys
 import threading
 import time
 from collections.abc import Callable, Iterator
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler, SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from types import ModuleType
 from typing import Any, NamedTuple
@@ -98,9 +100,26 @@ COMFORTABLY_STALE_SECONDS = 3600
 #: _no_pipes` compared the passed timeout against the module constant, so
 #: `FETCH_TIMEOUT_SECONDS = 10 -> 100000` -- a hook that blocks a commit for a
 #: day, which is the time-box deleted in all but name -- survived all 63 tests.
-#: A pre-commit hook that can stall a commit for a minute is already broken, so
-#: a minute is the assertion.
+#: A pre-commit hook that stalls a commit for a whole minute is already broken,
+#: so a minute is the value that must *not* pass: the assertion below is strict.
+#: It read `<= 60` until 2026-08-20, admitting the exact number its own sentence
+#: called broken.
 FETCH_BUDGET_CEILING_SECONDS = 60
+
+#: A lower bound, and the same trap one bound over. `FETCH_TIMEOUT_SECONDS =
+#: 0.001` survived all 88 tests on 2026-08-20: the ceiling admitted it, and
+#: `patient_fetch` means no test observes the shipped value behaving. Measured
+#: on a `main` one commit behind, the drift is refused at the shipped budget and
+#: the hook is **silent** at 0.001 -- the time-box deleted from the other end,
+#: and the same plausible zero as a fetch that cannot authenticate.
+#:
+#: The number is a judgement resting on a measurement, and both halves are said
+#: so neither is mistaken for the other. A real fetch is a connect, a handshake
+#: and a ref advertisement; the slowest one measured for this file was 1.54s to
+#: github.com, with a local authenticated one at 0.30-0.51s. Five seconds is
+#: several times the slowest fetch this machine actually made, so a budget under
+#: it cannot reliably finish one.
+FETCH_BUDGET_FLOOR_SECONDS = 5
 
 #: What tests that drive a *real* local fetch patch the budget to. This is test
 #: patience and not a claim about the product: it is deliberately larger than
@@ -323,6 +342,110 @@ def _server_demanding_credentials() -> Iterator[str]:
         server.shutdown()
         server.server_close()
         thread.join(timeout=5)
+
+
+@contextlib.contextmanager
+def _server_serving_a_repository_behind_basic_auth(repo: Path) -> Iterator[str]:
+    """A local HTTP server that serves a real repository, but only to a caller
+    that authenticates.
+
+    The counterpart to `_server_demanding_credentials`, and the one the
+    2026-08-20 review turned on. A server that only ever answers 401 cannot tell
+    a hook that suppresses *prompting* from a hook that has disabled
+    *authentication*: both fail, quickly, and look identical. This one answers
+    the fetch once the credentials arrive, so a fetch that cannot authenticate
+    fails a test instead of passing one.
+
+    Dumb HTTP, which needs `git update-server-info` in the served repository --
+    `_upstream_over_http` does that. Git tries the smart protocol, gets a plain
+    file server, and falls back.
+    """
+
+    expected = "Basic " + base64.b64encode(b"u:p").decode()
+
+    class Handler(SimpleHTTPRequestHandler):
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            super().__init__(*args, directory=str(repo), **kwargs)
+
+        def _unauthorised(self) -> bool:
+            if self.headers.get("Authorization") == expected:
+                return False
+            self.send_response(401)
+            self.send_header("WWW-Authenticate", 'Basic realm="git"')
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return True
+
+        def do_GET(self) -> None:
+            if not self._unauthorised():
+                super().do_GET()
+
+        def do_HEAD(self) -> None:
+            if not self._unauthorised():
+                super().do_HEAD()
+
+        def log_message(self, *_args: object) -> None:
+            pass
+
+    server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield f"http://127.0.0.1:{server.server_address[1]}/"
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
+
+
+def _upstream_over_http(root: Path) -> tuple[Path, Path]:
+    """`_main_left_behind`, with the upstream prepared for a dumb HTTP fetch.
+
+    Returns the clone and the upstream. The caller points the clone's `origin`
+    at whichever server it is testing against.
+    """
+    upstream, seed = _upstream_with_seed(root)
+    work = _clone(root, upstream, "work")
+    _commit(seed, "2\n", "c2")
+    _git(seed, "push", "--quiet", "origin", "main")
+    _git(upstream, "update-server-info")
+    return work, upstream
+
+
+def _install_an_answering_credential_helper(repo: Path, tmp_path: Path) -> None:
+    """A credential helper that supplies the password the server wants.
+
+    The mirror image of `_install_a_hanging_credential_helper`: this is what a
+    working GCM looks like from git's side, and it is what the hook broke.
+    """
+    helper = tmp_path / "answering_helper.py"
+    helper.write_text(
+        "import sys\n"
+        "if sys.argv[1:2] == ['get']:\n"
+        "    print('username=u')\n"
+        "    print('password=p')\n",
+        encoding="utf-8",
+    )
+    executable = sys.executable.replace("\\", "/")
+    _git(repo, "config", "--local", "credential.helper", f"!'{executable}' '{helper.as_posix()}'")
+
+
+def _an_askpass_that_answers(tmp_path: Path) -> Path:
+    """A program git can run to be told the password, on either platform.
+
+    `GIT_ASKPASS` and `core.askPass` name an executable, so this cannot be a
+    bare `.py` file. The wrapper is the only part that differs by platform.
+    """
+    answer = tmp_path / "askpass_answer.py"
+    answer.write_text("print('p')\n", encoding="utf-8")
+    if os.name == "nt":
+        program = tmp_path / "askpass.cmd"
+        program.write_text(f'@"{sys.executable}" "{answer}"\n', encoding="utf-8")
+    else:
+        program = tmp_path / "askpass.sh"
+        program.write_text(f'#!/bin/sh\nexec "{sys.executable}" "{answer}"\n', encoding="utf-8")
+        program.chmod(0o755)
+    return program
 
 
 def _install_a_hanging_credential_helper(repo: Path, tmp_path: Path) -> None:
@@ -642,6 +765,40 @@ class TestIntegrationInProgressIsSilent:
         assert "skipped" in note
         assert "rebase-apply" in note
 
+    def test_a_ragged_answer_keeps_the_exemption_without_naming_a_marker(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The fallback for a `rev-parse` answer that cannot be paired up.
+
+        Untested until 2026-08-20 and it survived mutation: replacing the whole
+        branch with `return None` left all 88 tests passing. It is not
+        decoration -- refusing the merge that resolves the drift is the failure
+        this exemption exists to close, so an answer this cannot interpret keeps
+        the exemption while declining to say which marker it found.
+
+        Git is not asked to produce the ragged shape, because nothing makes it:
+        one line per flag is what it does. `hygiene.git` is replaced instead,
+        which is the only way this branch can be reached at all.
+        """
+        repo = _standalone(tmp_path)
+        monkeypatch.chdir(repo)
+        planted = repo / ".git" / "MERGE_HEAD"
+        planted.write_text("x\n", encoding="utf-8")
+
+        def one_line_for_five_flags(*_args: str) -> tuple[int, str]:
+            return 0, str(planted)
+
+        monkeypatch.setattr(hygiene, "git", one_line_for_five_flags)
+        assert hygiene._integration_in_progress() == "an integration marker"
+
+        def one_line_naming_nothing(*_args: str) -> tuple[int, str]:
+            return 0, str(repo / ".git" / "NOTHING_HERE")
+
+        monkeypatch.setattr(hygiene, "git", one_line_naming_nothing)
+        assert hygiene._integration_in_progress() is None, (
+            "an unpairable answer is not a licence to exempt every commit"
+        )
+
     def test_a_repository_with_no_integration_says_nothing(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
     ) -> None:
@@ -834,6 +991,67 @@ class TestFetchStaleness:
         assert hygiene.check_main_drift(), "an expired window must fetch again"
         assert _behind(work) == 1, "the script fetched"
 
+    def test_a_symlink_where_the_stamp_belongs_is_stale(self, tmp_path: Path) -> None:
+        """`stat()` follows links, so `S_ISREG` closed one instance of a class.
+
+        A symlink at the stamp path pointing at any regular file read as a
+        regular file, so the window was suppressed off an mtime `_record_fetch`
+        never wrote -- the directory defect one indirection over. Measured
+        2026-08-20: `_fetch_is_stale` returned False. `lstat` answers about the
+        link rather than its target.
+        """
+        repo = _standalone(tmp_path)
+        elsewhere = tmp_path / "some-regular-file"
+        elsewhere.write_text("", encoding="utf-8")
+        _stamp(repo).symlink_to(elsewhere)
+
+        assert _stamp(repo).is_file(), "precondition: it looks like a file through the link"
+        assert hygiene._fetch_is_stale(_stamp(repo)) is True
+
+    def test_a_successful_fetch_does_not_write_through_a_symlink(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The destructive half, which `lstat` alone does nothing about.
+
+        `_record_fetch` calls `write_text`, and `write_text` follows a link. The
+        stamp lives inside the git dir, so `.git/config` is one `ln -s` away --
+        and a successful fetch truncated it, breaking the checkout this script
+        exists to complain about. Measured 2026-08-20: the target came back
+        empty.
+        """
+        work = _main_left_behind(tmp_path)
+        precious = work / ".git" / "config"
+        before = precious.read_text(encoding="utf-8")
+        _stamp(work).symlink_to(precious)
+
+        monkeypatch.chdir(work)
+        assert hygiene.check_main_drift(), "a symlink is not a stamp; the check still runs"
+
+        assert precious.read_text(encoding="utf-8") == before, "the fetch destroyed .git/config"
+        assert _stamp(work).is_symlink(), "and it did not replace the link either"
+
+    def test_a_hardlink_is_not_claimed_to_be_caught(self, tmp_path: Path) -> None:
+        """The class is narrowed, not closed, and the docstring says so.
+
+        `lstat` reports a hardlink as the regular file it is, because that is
+        what it is. Pinned as a known limitation rather than left for the next
+        review to discover as a surprise -- and skipped where the filesystem
+        will not make one, since that is the platform's answer and not the
+        script's.
+        """
+        repo = _standalone(tmp_path)
+        target = tmp_path / "target"
+        target.write_text("", encoding="utf-8")
+        try:
+            os.link(target, _stamp(repo))
+        except (OSError, NotImplementedError, AttributeError):  # pragma: no cover
+            pytest.skip("this filesystem will not make a hardlink")
+
+        assert hygiene._fetch_is_stale(_stamp(repo)) is False, (
+            "a hardlink is indistinguishable from the file it links to"
+        )
+        assert stat.S_ISREG(_stamp(repo).lstat().st_mode)
+
     def test_an_unwritable_stamp_location_just_fetches_every_time(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
@@ -847,6 +1065,29 @@ class TestFetchStaleness:
 
         assert not missing.exists()
         assert hygiene._fetch_is_stale(missing) is True
+
+    def test_a_stamp_that_cannot_be_read_is_stale_rather_than_a_traceback(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The broad `except OSError` is load-bearing, and it had no test.
+
+        Narrowed to `FileNotFoundError` the whole suite still passed, and an
+        unreadable stamp would then abort a commit with a traceback out of a
+        pre-commit hook. `PermissionError` is *injected* rather than provoked,
+        and that is a limitation worth stating: this platform would not produce
+        a non-`FileNotFoundError` on demand -- `stat` on a child of a directory
+        denied with `icacls` still succeeded, and the ENOTDIR case surfaces as
+        `FileNotFoundError` (winerror 3), so neither discriminates. Checked
+        2026-08-20.
+        """
+        repo = _standalone(tmp_path)
+        _stamp(repo).write_text("", encoding="utf-8")
+
+        def denied(*_args: object, **_kwargs: object) -> None:
+            raise PermissionError(13, "permission denied")
+
+        monkeypatch.setattr(Path, "lstat", denied)
+        assert hygiene._fetch_is_stale(_stamp(repo)) is True
 
 
 class TestTheFetchIsTimeBoxed:
@@ -892,9 +1133,18 @@ class TestTheFetchIsTimeBoxed:
         hook that can block a commit for a day with the time-box deleted in all
         but name. That is the same shape as the `FETCH_STALE_SECONDS` failure
         that `COMFORTABLY_STALE_SECONDS` was written for, one constant over.
-        The ceiling here is a literal for the same reason.
+        Both bounds here are literals for the same reason.
+
+        **The band is two-sided, because `0 <` was not a bound.**
+        `FETCH_TIMEOUT_SECONDS = 0.001` satisfied it and survived all 88 tests,
+        and a budget no fetch can finish inside is the time-box deleted from
+        below -- measured silent on a `main` that really was behind. The upper
+        bound is strict for a smaller reason: the comment on
+        `FETCH_BUDGET_CEILING_SECONDS` calls a one-minute stall already broken,
+        and `<=` admitted exactly that.
         """
-        assert 0 < SHIPPED_FETCH_TIMEOUT_SECONDS <= FETCH_BUDGET_CEILING_SECONDS
+        assert FETCH_BUDGET_FLOOR_SECONDS <= SHIPPED_FETCH_TIMEOUT_SECONDS
+        assert SHIPPED_FETCH_TIMEOUT_SECONDS < FETCH_BUDGET_CEILING_SECONDS
 
     def test_a_transport_helper_holding_the_pipes_does_not_outlast_the_timeout(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -930,38 +1180,117 @@ class TestTheFetchIsTimeBoxed:
         assert not _stamp(work).exists(), "a fetch that timed out has not succeeded"
 
 
-class TestTheFetchNeverAsksForCredentials:
-    """A fetch that needs a password is one this hook cannot make.
+class TestTheFetchAuthenticatesAndIsBoundedWhenItCannot:
+    """A fetch that needs a password must still be able to get one.
 
-    Measured 2026-08-20 against a remote answering 401: `_fetch(10.0)` returned
-    False after 10.01s -- the whole budget, on every commit, for as long as the
-    credentials stay lapsed -- and left an orphaned `git-credential-manager.exe`
-    behind holding a dialog, one per timed-out fetch, with nothing written
-    anywhere to connect it to the commit it was blocking, because both streams
-    are discarded.
+    This class asserted the opposite for one round of review, under the name
+    `TestTheFetchNeverAsksForCredentials`, and the sentence it was built on --
+    "a fetch that needs credentials is a fetch this hook cannot make" -- was
+    false. A hanging Git Credential Manager was measured on 2026-08-20 costing
+    the whole ten-second budget on every commit, and the fix emptied the helper
+    list, `core.askPass`, `GIT_ASKPASS` and `SSH_ASKPASS`. Emptying those does
+    not disable a *hanging* helper; it disables a *working* one.
 
-    `GIT_TERMINAL_PROMPT=0` does not close this. It governs git's *own* prompt,
-    and a credential helper is a separate program git launches; the variable was
-    measured ineffective against GCM. What closes it is emptying the helper
-    list.
+    Measured the same day against a local server requiring Basic auth and a
+    helper that answers it: success in 0.40-0.51s with the helper active,
+    failure in 0.07-0.09s with the list emptied, and `GIT_ASKPASS` and
+    `core.askPass` the same way round at 0.44s and 0.30s. On a private HTTPS
+    remote every fetch the hook made therefore failed, and `check_main_drift`
+    compared against the stale ref on disk and returned nothing, rc 0, with both
+    streams discarded. End to end through `_fetch`: SILENT before the fix,
+    REFUSED after it, on a `main` genuinely one commit behind.
+
+    So the trade is the other way round. Authentication works, and a helper that
+    hangs costs one bounded budget -- which the time-box now genuinely delivers.
+
+    **The 401-only server cannot police this and never could.** It fails both a
+    hook that suppresses prompting and a hook that has disabled authentication,
+    identically and fast, which is why the over-fix passed a green suite.
+    `_server_serving_a_repository_behind_basic_auth` answers once the
+    credentials arrive, so only one of those two passes now.
     """
 
     #: Long enough that a fetch which went looking for credentials spends
     #: visibly more than the bound asserted below, and short enough that a
     #: regression fails in seconds rather than minutes.
-    BUDGET = 20.0
+    BUDGET = 3.0
 
-    def test_a_401_costs_no_more_than_a_moment(
+    def test_an_authenticated_fetch_still_succeeds(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """The helper hangs; the fetch must not wait for it.
+        """The regression test for the over-fix, through a credential helper.
 
-        Without the fix this test spends the whole budget and then fails, which
-        is exactly what a commit did. `_install_a_hanging_credential_helper`
-        writes the helper into the repository's *own* config, because the
-        sandbox fixture has already emptied the global and system files where
-        `credential.helper = manager` really lives -- without that, this test
-        would pass against the unfixed script and measure nothing.
+        Without it, every assertion in this class is satisfied by a hook that
+        cannot authenticate at all -- which is what shipped.
+        """
+        work, upstream = _upstream_over_http(tmp_path)
+        _install_an_answering_credential_helper(work, tmp_path)
+
+        with _server_serving_a_repository_behind_basic_auth(upstream) as url:
+            _git(work, "remote", "set-url", "origin", url)
+            monkeypatch.chdir(work)
+
+            assert _behind(work) == 0, "precondition: the ref on disk says nothing is wrong"
+            assert hygiene._fetch(PATIENT_FETCH_SECONDS) is True, (
+                "a remote that answers once authenticated must be fetchable"
+            )
+
+        assert _behind(work) == 1, "the fetch brought the remote ref forward"
+
+    def test_an_authenticated_fetch_through_askpass_still_succeeds(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The second door the over-fix closed, and it closed it two ways.
+
+        `GIT_ASKPASS` was emptied in the child environment and `core.askPass`
+        was reset with `-c`, so a repository authenticating through either was
+        blinded exactly as one using a helper was. The username rides in the
+        URL so that only the password is asked for.
+        """
+        work, upstream = _upstream_over_http(tmp_path)
+        monkeypatch.setenv("GIT_ASKPASS", str(_an_askpass_that_answers(tmp_path)))
+
+        with _server_serving_a_repository_behind_basic_auth(upstream) as url:
+            _git(work, "remote", "set-url", "origin", url.replace("http://", "http://u@"))
+            monkeypatch.chdir(work)
+
+            assert hygiene._fetch(PATIENT_FETCH_SECONDS) is True, (
+                "GIT_ASKPASS is a way of authenticating, not a way of prompting"
+            )
+
+        assert _behind(work) == 1, "the fetch brought the remote ref forward"
+
+    def test_the_drift_is_refused_on_a_private_remote(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The whole hook, on the shape the over-fix made permanently silent.
+
+        The ref on disk says zero behind and the remote says one, so this passes
+        only if the fetch inside `check_main_drift` authenticated. It returned
+        `[]` before the fix -- rc 0, nothing on either stream, on a `main` that
+        really had drifted.
+        """
+        work, upstream = _upstream_over_http(tmp_path)
+        _install_an_answering_credential_helper(work, tmp_path)
+
+        with _server_serving_a_repository_behind_basic_auth(upstream) as url:
+            _git(work, "remote", "set-url", "origin", url)
+            monkeypatch.chdir(work)
+
+            assert _behind(work) == 0, "precondition: the ref on disk says nothing is wrong"
+            assert hygiene.check_main_drift(), "a private remote may not blind the drift check"
+
+        assert _stamp(work).exists(), "a fetch that succeeded arms the window"
+
+    def test_a_hanging_credential_helper_costs_one_budget_and_no_more(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The stall is real, it is bounded, and that is the trade.
+
+        This asserted "no more than a moment" until 2026-08-20 and achieved it
+        by making authentication impossible. The bound is the budget now: a
+        helper that never answers is paid for once per `FETCH_STALE_SECONDS`,
+        and then the commit proceeds against the ref on disk.
         """
         upstream, _seed = _upstream_with_seed(tmp_path)
         work = _clone(tmp_path, upstream, "work")
@@ -975,12 +1304,13 @@ class TestTheFetchNeverAsksForCredentials:
             assert hygiene._fetch(self.BUDGET) is False, "a 401 is not a successful fetch"
             elapsed = time.monotonic() - started
 
-        assert elapsed < 10, f"the fetch waited on a credential helper: {elapsed:.1f}s"
+        assert elapsed < self.BUDGET * 5, f"the fetch was not bounded by its budget: {elapsed:.1f}s"
 
-    def test_a_401_does_not_block_the_commit_or_arm_the_window(
+    def test_lapsed_credentials_do_not_block_the_commit_or_arm_the_window(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """End to end: lapsed credentials are offline, and offline is best-effort."""
+        """End to end: a helper that never answers is offline, and offline is
+        best-effort."""
         upstream, _seed = _upstream_with_seed(tmp_path)
         work = _clone(tmp_path, upstream, "work")
         _install_a_hanging_credential_helper(work, tmp_path)
@@ -994,31 +1324,29 @@ class TestTheFetchNeverAsksForCredentials:
             assert hygiene.check_main_drift() == [], "lapsed credentials may not block a commit"
             elapsed = time.monotonic() - started
 
-        assert elapsed < 10, f"the commit waited on a credential helper: {elapsed:.1f}s"
+        assert elapsed < self.BUDGET * 5, f"the commit was not bounded: {elapsed:.1f}s"
         assert not _stamp(work).exists(), "a fetch that failed has not armed the window"
 
-    def test_the_helpers_are_disabled_on_the_fetch_itself(
+    def test_prompting_is_suppressed_and_authentication_is_not(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """The portable half, and the one a fast machine cannot fake.
+        """The switches, asserted as switches -- including the ones not thrown.
 
-        The wall-clock tests above would both pass against a script that merely
-        got lucky with a fast helper. These are the switches, asserted as
-        switches: an emptied helper list, an emptied askpass, and git's own
-        prompt turned into a failure.
+        The wall-clock tests above can only say that something was fast or slow.
+        These say which knobs `_fetch` reaches for, and the negative half is the
+        point: four switches that disable authentication were here and are gone,
+        so re-adding any of them fails this rather than passing everything else.
 
-        The three environment variables are set to the *wrong* values first, and
-        that is load-bearing rather than tidy. `isolated_git` already exports
-        `GIT_TERMINAL_PROMPT=0` for the whole module, and `_fetch` builds its
-        environment on top of `os.environ` -- so asserting the child's value
-        without contradicting the ambient one passed with `_fetch` no longer
-        setting it at all. Checked by mutation, 2026-08-20: an assertion that
-        cannot come out wrong is not an assertion.
+        The environment variables are set to values the fix must leave alone,
+        and that is load-bearing rather than tidy. `_fetch` builds its
+        environment on top of `os.environ`, so asserting a value the ambient
+        environment already carries is an assertion that cannot come out wrong.
         """
         work = _main_left_behind(tmp_path)
         monkeypatch.setenv("GIT_TERMINAL_PROMPT", "1")
-        monkeypatch.setenv("GIT_ASKPASS", "not-empty")
-        monkeypatch.setenv("SSH_ASKPASS", "not-empty")
+        monkeypatch.setenv("GIT_ASKPASS", "a-program-that-answers")
+        monkeypatch.setenv("SSH_ASKPASS", "another-one")
+        monkeypatch.setenv("GCM_INTERACTIVE", "auto")
         monkeypatch.chdir(work)
 
         with _recording_git() as calls:
@@ -1027,15 +1355,24 @@ class TestTheFetchNeverAsksForCredentials:
         fetches = _fetches(calls)
         assert len(fetches) == 1
         argv = fetches[0].argv
-        assert "credential.helper=" in argv, "an empty value resets the helper list"
-        assert "core.askPass=" in argv
-        assert argv.index("credential.helper=") < argv.index("fetch"), "-c goes before the verb"
-
         env = fetches[0].kwargs.get("env")
         assert env is not None
+
+        # Thrown: prompting, and a request that GCM not raise a window.
         assert env["GIT_TERMINAL_PROMPT"] == "0"
-        assert env["GIT_ASKPASS"] == ""
-        assert env["SSH_ASKPASS"] == ""
+        assert env["GCM_INTERACTIVE"] == "never"
+
+        # Not thrown: anything that stops git obtaining credentials at all.
+        # `credential.interactive=false` belongs in this half rather than the
+        # one above, and finding that out cost a measurement: git core reads it,
+        # and it breaks an askpass that would have answered.
+        assert "credential.helper=" not in argv, "an empty helper list is a hook that cannot fetch"
+        assert "core.askPass=" not in argv, "core.askPass answers, it does not prompt"
+        assert "credential.interactive=false" not in argv, (
+            "git core reads this one; it breaks askpass"
+        )
+        assert env["GIT_ASKPASS"] == "a-program-that-answers"
+        assert env["SSH_ASKPASS"] == "another-one"
         assert env.get("PATH") == os.environ.get("PATH"), "the rest of the environment survives"
 
 
@@ -1406,12 +1743,240 @@ class TestGitRefusingEveryCommand:
         """`.git` is a directory in a main worktree and a file in a linked one."""
         plain = tmp_path / "plain"
         (plain / "deep").mkdir(parents=True)
-        assert hygiene._looks_like_a_repository(plain) is False
-        assert hygiene._looks_like_a_repository(plain / "deep") is False
+        assert hygiene._repository_shape(plain) is None
+        assert hygiene._repository_shape(plain / "deep") is None
 
         (plain / ".git").write_text("gitdir: elsewhere\n", encoding="utf-8")
-        assert hygiene._looks_like_a_repository(plain) is True
-        assert hygiene._looks_like_a_repository(plain / "deep") is True
+        assert hygiene._repository_shape(plain) is not None
+        assert hygiene._repository_shape(plain / "deep") is not None
+
+    def test_a_bare_repository_is_recognised_by_its_own_shape(self, tmp_path: Path) -> None:
+        """It carries no `.git`, which exempted the whole class from the walk."""
+        bare = tmp_path / "bare.git"
+        _git(tmp_path, "init", "--quiet", "--bare", "-b", "main", str(bare))
+
+        shape = hygiene._repository_shape(bare)
+        assert shape is not None
+        assert "bare" in shape
+
+        (bare / "refs" / "deep").mkdir(parents=True)
+        assert hygiene._repository_shape(bare / "refs" / "deep") is not None, (
+            "git discovers upwards from a subdirectory of a bare repository too"
+        )
+
+    def test_two_of_the_three_pieces_is_not_a_repository(self, tmp_path: Path) -> None:
+        """The bare shape is HEAD *and* objects *and* refs, so it is hard to
+        stumble into by accident."""
+        nearly = tmp_path / "nearly"
+        (nearly / "objects").mkdir(parents=True)
+        (nearly / "refs").mkdir()
+        assert hygiene._repository_shape(nearly) is None, "no HEAD"
+
+        (nearly / "HEAD").mkdir()
+        assert hygiene._repository_shape(nearly) is None, "HEAD is a directory, not a file"
+
+
+class TestABrokenBareRepositoryIsReported:
+    """`--doctor` printed `clean`, rc 0, in a bare repository git refused.
+
+    The class was exempt by construction: the discriminator required a `.git`
+    entry at or above the directory, and a bare repository has none anywhere.
+    Reproduced 2026-08-20 -- `git init --bare`, a junk line appended to
+    `config`, `git status` exits 128 with `fatal: bad config line 7 in file
+    ./config`, and the doctor reported the repository healthy.
+    """
+
+    def _broken_bare(self, tmp_path: Path) -> Path:
+        bare = tmp_path / "broken.git"
+        _git(tmp_path, "init", "--quiet", "--bare", "-b", "main", str(bare))
+        with (bare / "config").open("a", encoding="utf-8") as handle:
+            handle.write("this is not valid\n")
+        return bare
+
+    def test_it_is_reported_rather_than_reported_clean(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        bare = self._broken_bare(tmp_path)
+
+        refusing = _git_allowing_failure(bare, "status", "--short")
+        assert refusing.returncode == 128, "precondition: git really is refusing to work"
+        assert "core.bare" not in refusing.stderr, "precondition: and it does not name core.bare"
+
+        monkeypatch.chdir(bare)
+        problems = hygiene.check_bare(fix=False)
+
+        assert problems
+        assert any(refusing.stderr.splitlines()[0] in line for line in problems)
+
+    def test_the_doctor_exits_one_rather_than_reporting_clean(
+        self,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        monkeypatch.chdir(self._broken_bare(tmp_path))
+        assert _main(monkeypatch, "--doctor") == 1
+        assert "clean" not in capsys.readouterr().out
+
+    def test_a_healthy_bare_repository_is_still_silent(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The other half, and the one the new shape test could have broken.
+
+        A healthy bare repository never reaches `_git_is_refusing` at all --
+        `rev-parse` exits zero -- so `core.bare = true` is judged by the branch
+        that knows a real bare repository has no index.
+        """
+        bare = tmp_path / "fine.git"
+        _git(tmp_path, "init", "--quiet", "--bare", "-b", "main", str(bare))
+
+        monkeypatch.chdir(bare)
+        assert hygiene.check_bare(fix=False) == []
+        assert _main(monkeypatch, "--doctor") == 0
+
+
+class TestDiscoveryGitDeclinedToDoIsNotADefect:
+    """A healthy repository was failed, rc 1, by the fix for the class above.
+
+    Replacing the stderr sniff with a filesystem walk moved the wrong answer
+    rather than removing it. With `GIT_CEILING_DIRECTORIES` set to a
+    repository's root and the command run from a subdirectory, git stops
+    searching before it reaches `.git` and says so in as many words -- and a
+    walk that only looks at the filesystem sees `.git` sitting right there and
+    calls a perfectly healthy checkout broken. Reproduced 2026-08-20; the
+    previous version was correctly silent, which makes this a regression rather
+    than a gap.
+
+    Git's own message settles it, so it is consulted first and nothing on disk
+    is allowed to overrule it.
+    """
+
+    def test_a_ceiling_that_blocks_discovery_is_not_a_broken_repository(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        repo = _standalone(tmp_path)
+        deep = repo / "a" / "b"
+        deep.mkdir(parents=True)
+
+        monkeypatch.setenv("GIT_CEILING_DIRECTORIES", str(repo))
+        monkeypatch.chdir(deep)
+
+        blocked = _git_allowing_failure(deep, "rev-parse", "--git-dir")
+        assert blocked.returncode != 0, "precondition: discovery really is blocked"
+        assert hygiene.DISCOVERY_EXHAUSTED in blocked.stderr, "precondition: git says so"
+        assert (repo / ".git").is_dir(), "precondition: and the repository is right there"
+
+        assert hygiene.check_bare(fix=False) == [], "a healthy repository may not be failed"
+        assert _main(monkeypatch, "--doctor") == 0
+
+    def test_the_two_not_a_git_repository_messages_are_not_the_same_message(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """`GIT_DIR` pointing nowhere says `not a git repository: <path>`.
+
+        No parenthetical, and it is not discovery reporting an empty result --
+        it is git having been pointed at something that is not there, with the
+        checkout underfoot possibly fine. Collapsing the two into a substring
+        search for "not a git repository" would silence a genuinely broken
+        pointer, so the constant carries the parenthetical.
+        """
+        repo = _standalone(tmp_path)
+        monkeypatch.chdir(repo)
+        monkeypatch.setenv("GIT_DIR", str(tmp_path / "no-such-dir.git"))
+
+        pointed = _git_allowing_failure(repo, "rev-parse", "--git-dir")
+        assert pointed.returncode != 0
+        assert "not a git repository" in pointed.stderr
+        assert hygiene.DISCOVERY_EXHAUSTED not in pointed.stderr
+
+        assert hygiene._git_is_refusing(pointed.stderr), "a broken pointer is still a refusal"
+
+
+class TestTheRemedyFollowsTheEvidence:
+    """Three newly detected classes were all told to start with `.git/config`.
+
+    Detection was the improvement; the advice underneath it was not. Dubious
+    ownership is repaired by `safe.directory` and the repository is fine; a
+    broken *global* config is repaired in the global file, which git names
+    itself; a `GIT_DIR` pointing nowhere leaves the checkout healthy. All three
+    printed `Start with .git/config -- a value git cannot parse is the usual
+    cause`, and for two of them there was nothing wrong with `.git/config` at
+    all.
+    """
+
+    def test_a_config_git_names_is_the_config_the_remedy_names(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A broken *global* config is not repaired in the repository."""
+        repo = _standalone(tmp_path)
+        broken_global = tmp_path / "broken-gitconfig"
+        broken_global.write_text("[core]\n\tjunk line here\n", encoding="utf-8")
+        monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(broken_global))
+        monkeypatch.chdir(repo)
+
+        problems = hygiene.check_bare(fix=False)
+
+        assert problems
+        remedies = [line for line in problems if line.startswith("Start with ")]
+        assert len(remedies) == 1
+        assert str(broken_global) in remedies[0], "git named the file; so does the advice"
+        assert ".git/config" not in remedies[0]
+
+    def test_dubious_ownership_carries_gits_own_command_and_no_invented_one(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """git prints the exact `safe.directory` line; quoting one line lost it.
+
+        `GIT_TEST_ASSUME_DIFFERENT_OWNER` is git's own switch for this, so the
+        message under test is the real one rather than a fixture.
+        """
+        repo = _standalone(tmp_path)
+        monkeypatch.setenv("GIT_TEST_ASSUME_DIFFERENT_OWNER", "1")
+        monkeypatch.chdir(repo)
+
+        refusing = _git_allowing_failure(repo, "rev-parse", "--git-dir")
+        assert "dubious ownership" in refusing.stderr, "precondition: git refuses for that reason"
+
+        problems = hygiene.check_bare(fix=False)
+
+        assert problems
+        assert not [line for line in problems if line.startswith("Start with ")], (
+            "the repository is fine; there is nothing to start with"
+        )
+        assert any("safe.directory" in line for line in problems), (
+            "git printed the fix on a later line, and every line is quoted"
+        )
+        assert sum("git said:" in line for line in problems) == 1, (
+            "one quoted block, with the continuation aligned under it"
+        )
+
+    def test_a_broken_pointer_gets_no_config_advice_at_all(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """`GIT_DIR` pointing nowhere leaves `.git/config` entirely correct."""
+        repo = _standalone(tmp_path)
+        monkeypatch.chdir(repo)
+        monkeypatch.setenv("GIT_DIR", str(tmp_path / "no-such-dir.git"))
+
+        problems = hygiene.check_bare(fix=False)
+
+        assert problems, "a pointer to nothing is still a git that will not run"
+        assert not [line for line in problems if line.startswith("Start with ")]
+        assert any("git said:" in line for line in problems), "git's words carry it instead"
+
+    def test_a_repository_config_git_names_is_still_named(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The one class the old advice was right about keeps it."""
+        repo = _standalone(tmp_path)
+        _break_the_config(repo, "this is not valid")
+        monkeypatch.chdir(repo)
+
+        problems = hygiene.check_bare(fix=False)
+
+        assert any(line.startswith("Start with ") and ".git/config" in line for line in problems), (
+            "here .git/config really is the file git could not parse"
+        )
 
 
 class TestFixRepairs:
