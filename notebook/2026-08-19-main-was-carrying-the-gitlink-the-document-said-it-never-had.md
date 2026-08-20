@@ -87,9 +87,47 @@ dependency. Nothing to keep.
 `site/instrument-redesign` is the same story with two exceptions. Its instrument
 work — the item-analysis estimators, `report_item_analysis`, the notebook entry —
 all landed on `main` by a different route and was then hardened by review that
-the branch never saw. What did *not* land is the pair above: the gitlink removal
-and the recall-band correction. Both are on the consolidation branch; the branch
-they were stranded on is deleted once that lands.
+the branch never saw. What did *not* land is the pair above — the gitlink removal
+and the recall-band correction — **and two tracked files nobody was looking for**:
+`page-2026-08-19T18-10-55-531Z.yml` and `page-2026-08-19T18-14-38-466Z.yml`, 264
+lines each, committed on that branch and on no other ref.
+
+Those two are worth dwelling on, because the method missed them and a review
+caught them. The pass asked two questions — what is untracked in the working
+tree, and what does the branch change in *source* — and these were neither. They
+were tracked, on a branch, and they are snapshot dumps, the category already
+filed as debris. Deleting the branch would have destroyed them, which is exactly
+what the same pass had argued against one commit earlier while committing fifteen
+of their siblings. A category judgement made once ("debris") kept being applied
+after the pass had itself decided the opposite ("committed as a record").
+
+## Two sessions landed the same work, and `main` got the worse copy
+
+While this pass was finishing the hygiene chunk in an isolated worktree, the
+session that wrote it committed its own copy straight onto `main` and pushed:
+`c9f210c`, at 09:18 the following morning. Same script, same `pre-commit` block.
+
+What landed there is the version *before* the review: no
+`tests/unit/test_check_git_hygiene.py` at all, and `check_bare` still reading
+
+```python
+git("config", "--local", "--get", "core.bare")
+```
+
+which is the raw-string comparison that reports `git hygiene: clean` on a
+repository with `bare = 1`. So for several hours `main` carried the guard with
+its one real bug intact and nothing to catch a regression in it.
+
+This is not a complaint about the other session — it committed work it had
+written, which is the normal thing to do. It is a note about what "consolidate
+into `main`" means when `main` is moving: the rebase turned into a conflict whose
+only hunk was the bug fix, and resolving it correctly meant knowing which side
+had been reviewed. A merge that took `main`'s side, or a fast `--ours`, would
+have silently thrown the fix and the 35 tests away and left every gate green.
+
+The isolation was worth it for exactly this reason. Had the pass been working in
+the shared tree, its copy and the other session's copy of the same file would
+have been the same bytes on disk, and there would have been nothing to conflict.
 
 ## The gitlink was holding the documentation gate up
 
