@@ -195,7 +195,7 @@ class TestTheCommittedChangelog:
     """
 
     def test_it_accounts_for_every_version_the_corpus_has_reached(self) -> None:
-        assert check_corrections(REPO_ROOT, 4) == []
+        assert check_corrections(REPO_ROOT, 5) == []
 
     def test_the_one_label_that_ever_moved_is_x_n21(self) -> None:
         text = (REPO_ROOT / CORRECTIONS_PATH).read_text(encoding="utf-8")
@@ -207,7 +207,7 @@ class TestTheCommittedChangelog:
         ]
 
     def test_the_census_counts_what_the_gate_prints(self) -> None:
-        assert census(REPO_ROOT) == (3, 1, 3)
+        assert census(REPO_ROOT) == (4, 1, 4)
 
     def test_a_missing_file_censuses_to_zero_rather_than_raising(self, tmp_path: Path) -> None:
         assert census(tmp_path) == (0, 0, 0)

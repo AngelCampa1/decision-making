@@ -375,9 +375,15 @@ class TestThePerBandBreakdownIsReported:
         ``band value`` pair per band, comma-separated) is unchanged; only the
         number moved, which is what a corpus edit is supposed to do. Re-pin
         again if the corpus moves further.
+
+        Re-pinned 2026-08-20 from ``0.309`` to ``0.293``: version 5 added three
+        `xl` triples for `council` and three for `hinge`, so the band went from
+        seventeen triples to twenty-three and its dispersion rate moved with the
+        denominator. Same reporting mechanism, same check, a different corpus
+        underneath it.
         """
         issues = _messages(check_corpus(load_trigger_set(CORPUS), CORPUS))
-        assert any("xl 0.309" in issue for issue in issues)
+        assert any("xl 0.293" in issue for issue in issues)
 
     def test_a_band_with_no_cases_is_left_out_rather_than_reported_as_chance(self) -> None:
         assert {
@@ -463,9 +469,17 @@ class TestTheThresholdIsDerivedRatherThanChosen:
         ``test_gating_the_derived_views_per_feature_would_have_been_far_worse``
         for why a full re-derivation of ``MIN_LEAKS_PER_VIEW`` waits for the
         corpus size to stop moving.
+
+        Re-pinned 2026-08-20 at 110 triples, and the lower bound is gone rather
+        than lowered. Version 5's twenty-four `council`/`hinge` triples take the
+        rate to **0.0**: not one draw in 8,000 produced a leak, checked at 2,000
+        and at 8,000. A floor of 0.0005 asks for one failure in two thousand
+        draws and the null no longer delivers one, so asserting it would be
+        asserting that the gate is *less* conservative than it now is. The
+        ceiling is what the test was for and it stays.
         """
         rate = null_leak_rate(load_trigger_set(CORPUS), "turn", leaks=1, draws=self.DRAWS)
-        assert 0.0005 <= rate <= 0.01
+        assert rate <= 0.01
 
 
 class TestTheBaselineIsNarrowRatherThanBlanket:
@@ -613,25 +627,33 @@ class TestTheShippedBaseline:
         `matched:`) are unrelated to the opener and still open. The corpus is
         still being worked on as this file is edited, so re-pin this count
         against whatever `corpus-baseline.txt` names once that settles.
+
+        Still five on 2026-08-20, and the membership moved twice rather than
+        once. Version 5 authored `council` and `hinge` positives for the banded
+        corpus, which closed one of the two ``unreachable:`` entries -- the
+        `decision-making.yaml` one stays, because that corpus is superseded and
+        was not fixed. The same commit put ``cancel:close:type_token_ratio``
+        over the gate, not by changing the rate (0.9186 before, 0.9182 after)
+        but by adding twenty-four triples to a proportion whose z scales with
+        the square root of `n`.
         """
         assert check_trigger_sets(REPO_ROOT) == []
         deferred = deferred_corpus_findings(REPO_ROOT)
-        # Five since 2026-08-19: the three shortcut leaks below, plus the
-        # `unreachable:council,hinge` gap on both corpora -- the router table
-        # grew two rows and the answer key did not grow with it.
+        # Five, with different members since 2026-08-20: four shortcut leaks and
+        # one `unreachable:` gap, where it was three leaks and two gaps.
         assert len(deferred) == 5
         unreachable = [
             message
             for message in deferred
             if "are the correct answer for no positive: council, hinge" in message
         ]
-        assert len(unreachable) == 2
-        # Counting to two was satisfied by two byte-identical strings, which is
-        # the defect a56cd8f fixed rather than evidence that it holds. The two
-        # corpora must be named, and named distinctly.
+        assert len(unreachable) == 1
+        # It names the corpus it is about. Counting alone was once satisfied by
+        # two byte-identical strings, which is the defect a56cd8f fixed; now
+        # that only one of the two corpora still carries the gap, naming it is
+        # what stops this passing on a message about the other one.
         assert {message.split(":", 1)[0] for message in unreachable} == {
             "datasets/triggers/decision-making.yaml",
-            "datasets/triggers/decision-making/index.yaml",
         }
         assert any(
             "'sentence_count' on the 'turn' view puts the positive at an extreme" in message
@@ -701,11 +723,19 @@ class TestTheDerivedAsk:
         cannot distinguish from an authored shared body -- and should not try
         to, since a real coincidence is exactly as much of a leak risk as a
         deliberate one.
+
+        Re-pinned 2026-08-20: 141 of the full 180 ``s``/``m`` items. Version 5
+        added twelve short-band triples and seven of them detect a shared body
+        (``s26``, ``s27``, ``s28``, ``s29``, ``m26``, ``m29``, ``m30``), which
+        is the construction working rather than a coincidence -- in those the
+        first negative was authored to repeat the positive's opening sentence
+        verbatim, so there is a real body to strip. The other five diverge in
+        the first clause and keep the whole turn.
         """
         corpus = load_trigger_set(CORPUS)
         asks = VIEWS["ask"](corpus)
         untouched = [case for case in corpus.cases if asks[case.id] == case.turn]
-        assert len([case for case in untouched if case.band in {"s", "m"}]) == 126
+        assert len([case for case in untouched if case.band in {"s", "m"}]) == 141
         assert len([case for case in untouched if case.band == "xl"]) == 0
 
     def test_the_body_is_cut_at_a_word_boundary(self) -> None:

@@ -146,11 +146,22 @@ def test_sample_does_not_alias_the_label_with_triple_parity(trigger_set: Any) ->
 
 
 def test_sample_balances_domain_across_the_labels(trigger_set: Any) -> None:
+    """The bound is derived, for the reason the sibling test above already gives.
+
+    ``sample`` alternates inside each *(band, domain)* group, so one group can
+    leave at most one item of excess and a domain's total excess is bounded by
+    the number of bands it appears in. A flat ``<= 2`` held at 86 triples and
+    failed at 110 (relationships at 9 against 12) with nothing about the design
+    having changed -- the same way the flat bound one test up failed at 87.
+    """
     picked = probe.sample(trigger_set)
+    bands = {case.band for case in picked}
     for domain in {case.domain for case in picked}:
         here = [case for case in picked if case.domain == domain]
         positives = sum(1 for case in here if case.should_fire)
-        assert abs(positives - (len(here) - positives)) <= 2, f"{domain} is skewed by label"
+        assert abs(positives - (len(here) - positives)) <= len(bands), (
+            f"{domain} is skewed by label"
+        )
 
 
 def test_sample_covers_every_band(trigger_set: Any) -> None:

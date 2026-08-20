@@ -390,10 +390,11 @@ negative:
         """
         corpus = REPO_ROOT / "datasets" / "triggers" / "decision-making"
         draft = load_trigger_set(corpus / "index.yaml")
-        # Pinned on purpose, and it did its job: this literal is what made the
-        # 2026-08-18 bump to 4 a reviewed edit rather than a silent one. Unlike
-        # the count below, a version is supposed to move only deliberately.
-        assert draft.version == 4
+        # Pinned on purpose, and it did its job twice: this literal is what made
+        # the 2026-08-18 bump to 4 a reviewed edit rather than a silent one, and
+        # the 2026-08-20 bump to 5 for `council` and `hinge` again. Unlike the
+        # count below, a version is supposed to move only deliberately.
+        assert draft.version == 5
         assert {case.band for case in draft.cases} == {"s", "m", "l", "xl"}
         assert len(draft.positives) * 2 == len(draft.negatives)
 

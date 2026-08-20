@@ -1015,13 +1015,13 @@ positive:
     route: council
     turn: >-
       Pasting the two messages because I keep agreeing with whichever I read
-      last. From Ines (staff eng), Mon 11:20 - "Splitting the billing service
+      last. From Ines (staff eng), Mon 11:20 — "Splitting the billing service
       out is the only thing that fixes this. Every incident in the last six
       months has been the same shape: something unrelated deploys, billing
       goes down, and we find out from a customer. It is one deploy pipeline,
       one database, one blast radius. Two engineers, one quarter. We have done
       this twice before and both times the team stopped being paged." From
-      Marek (principal), Mon 16:05 - "I have watched three of these. What
+      Marek (principal), Mon 16:05 — "I have watched three of these. What
       actually happens is you get the split, and then you get a distributed
       transaction where you used to have a foreign key, and a year of chasing
       consistency bugs that never existed before. The incidents are a test
@@ -1050,11 +1050,11 @@ positive:
     route: council
     turn: >-
       Everything from the last fortnight, pasted, because I do not trust my
-      own read on it any more. From my brother, Sat - "Sell it. None of us
+      own read on it any more. From my brother, Sat — "Sell it. None of us
       lives within two hours. It needs a roof and neither you nor I have
       thirty thousand sitting there. Mum would not have wanted it to become
       the thing that we argue about at Christmas for the next decade, and that
-      is what it will become." From my sister, Sun - "We are not selling the
+      is what it will become." From my sister, Sun — "We are not selling the
       house our mother was born in because of a roof. It has been in the
       family for ninety years. Rent it out, put the rent into the roof, and in
       five years it pays for itself and the grandchildren have somewhere.
@@ -1081,12 +1081,12 @@ positive:
     route: council
     turn: >-
       Two conversations, written up the same evening so I would not smooth
-      them out. Priya, who ran my old department - "Take the head of function
+      them out. Priya, who ran my old department — "Take the head of function
       role. You are thirty-nine. The window where somebody hands you a
       department because they like how you handled one crisis is now, and it
       closes. You will learn the job by doing it badly for a year like
       everyone does. Nobody has ever felt ready and the ones who wait get
-      passed by the ones who did not." Tom, who I worked for before that - "Do
+      passed by the ones who did not." Tom, who I worked for before that — "Do
       not take it. You are good at the work and you have said the work is the
       part you like. Head of function is budget meetings, hiring, and three
       days a week of other people's disagreements. You will be a competent
@@ -1112,15 +1112,15 @@ positive:
     ask: explicit
     route: hinge
     turn: >-
-      Everything the clinic has sent, pasted in order. Letter, 4 March -
+      Everything the clinic has sent, pasted in order. Letter, 4 March —
       "Following the ultrasound we are arranging a core biopsy. The appearance
       is indeterminate and we would not want to draw conclusions from imaging
-      alone." Letter, 19 March - "The biopsy was taken on 17 March. Histology
+      alone." Letter, 19 March — "The biopsy was taken on 17 March. Histology
       is with the regional laboratory. We expect to discuss the result at the
       multidisciplinary meeting on 9 April." Email from the specialist nurse,
-      22 March - "The grade is the thing that matters most for what we offer
+      22 March — "The grade is the thing that matters most for what we offer
       you. Until we have it, both pathways are still open and I would not want
-      to guess." My own note from the phone call, 24 March - asked whether
+      to guess." My own note from the phone call, 24 March — asked whether
       there was any way to get the grade sooner, was told the laboratory is
       running about three weeks and 9 April is already the earliest meeting.
       Separately: my employer needs the sabbatical decision by 31 March, and
@@ -1144,15 +1144,15 @@ positive:
     route: hinge
     turn: >-
       The incident review and the vendor thread, both pasted. Incident review,
-      2 April - "Root cause: the connection pool in the 4.x driver does not
+      2 April — "Root cause: the connection pool in the 4.x driver does not
       release on a failed TLS handshake. Fixed upstream in 6.0. We are on 4.7
-      because 6.0 requires the new licence tier." From procurement, 4 April -
+      because 6.0 requires the new licence tier." From procurement, 4 April —
       "Any move to the new tier goes through the annual vendor review. If we
       start now it lands in about three weeks. I cannot shorten it and I
       cannot start it on a maybe." From the vendor's account manager, 5 April
-      - "I will have to come back to you on whether 4.x stays supported past
+      — "I will have to come back to you on whether 4.x stays supported past
       March next year. I do not want to tell you something and be wrong." From
-      our own head of platform, 5 April - "If 4.x is supported through next
+      our own head of platform, 5 April — "If 4.x is supported through next
       year we patch around this and revisit at renewal. If it is not, we are
       moving this year whatever it costs, and the sooner we start the review
       the better." That last message is the whole thing. The two plans have
@@ -1176,16 +1176,16 @@ positive:
     route: hinge
     turn: >-
       Pasting the messages because reading them back is the only way I can
-      think about it without getting upset. From my sister, Tuesday - "Dad
+      think about it without getting upset. From my sister, Tuesday — "Dad
       told the consultant he did not want to know the staging. The consultant
       respected that. So none of us know, and I am not going to be the one who
-      asks over his head." From my aunt, Tuesday - "Your father has always
+      asks over his head." From my aunt, Tuesday — "Your father has always
       been like this. He does not want to know and he does not want to be
       managed. If you start planning around something he has chosen not to
       hear about, he will notice, and it will change how he spends whatever
-      this is." From my sister, Wednesday - "I know what you are going to say
+      this is." From my sister, Wednesday — "I know what you are going to say
       about the wedding. But moving it forward tells him something, and you
-      cannot untell it." My own note - the venue will move us to July for the
+      cannot untell it." My own note — the venue will move us to July for the
       deposit we have already paid, but only if we tell them by the 15th.
       After that it is next April. July is four months away and April is
       thirteen. If this is the kind of thing where four months and thirteen
@@ -3141,13 +3141,13 @@ negative:
     kind: diagnose
     turn: >-
       Pasting the two messages because I keep agreeing with whichever I read
-      last. From Ines (staff eng), Mon 11:20 - "Splitting the billing service
+      last. From Ines (staff eng), Mon 11:20 — "Splitting the billing service
       out is the only thing that fixes this. Every incident in the last six
       months has been the same shape: something unrelated deploys, billing
       goes down, and we find out from a customer. It is one deploy pipeline,
       one database, one blast radius. Two engineers, one quarter. We have done
       this twice before and both times the team stopped being paged." From
-      Marek (principal), Mon 16:05 - "I have watched three of these. What
+      Marek (principal), Mon 16:05 — "I have watched three of these. What
       actually happens is you get the split, and then you get a distributed
       transaction where you used to have a foreign key, and a year of chasing
       consistency bugs that never existed before. The incidents are a test
@@ -3173,13 +3173,13 @@ negative:
     kind: settled
     turn: >-
       Pasting the two messages because I keep agreeing with whichever I read
-      last. From Ines (staff eng), Mon 11:20 - "Splitting the billing service
+      last. From Ines (staff eng), Mon 11:20 — "Splitting the billing service
       out is the only thing that fixes this. Every incident in the last six
       months has been the same shape: something unrelated deploys, billing
       goes down, and we find out from a customer. It is one deploy pipeline,
       one database, one blast radius. Two engineers, one quarter. We have done
       this twice before and both times the team stopped being paged." From
-      Marek (principal), Mon 16:05 - "I have watched three of these. What
+      Marek (principal), Mon 16:05 — "I have watched three of these. What
       actually happens is you get the split, and then you get a distributed
       transaction where you used to have a foreign key, and a year of chasing
       consistency bugs that never existed before. The incidents are a test
@@ -3205,11 +3205,11 @@ negative:
     kind: compute
     turn: >-
       Everything from the last fortnight, pasted, because I do not trust my
-      own read on it any more. From my brother, Sat - "Sell it. None of us
+      own read on it any more. From my brother, Sat — "Sell it. None of us
       lives within two hours. It needs a roof and neither you nor I have
       thirty thousand sitting there. Mum would not have wanted it to become
       the thing that we argue about at Christmas for the next decade, and that
-      is what it will become." From my sister, Sun - "We are not selling the
+      is what it will become." From my sister, Sun — "We are not selling the
       house our mother was born in because of a roof. It has been in the
       family for ninety years. Rent it out, put the rent into the roof, and in
       five years it pays for itself and the grandchildren have somewhere.
@@ -3219,10 +3219,10 @@ negative:
       ninety days. Probate completes in about six weeks and the three of us
       have to be agreed before it does. Neither of them is being stupid and
       neither of them has moved an inch since the first week. Work out what
-      each of those comes to over ten years. Sale at 340 now against roof-
-      then-rent, using the rental estimate, the roof quote, and the uplift the
-      agent is claiming, and tell me what you have assumed about voids and
-      maintenance.
+      each of those comes to over ten years. Sale at 340 now against
+      roof-then-rent, using the rental estimate, the roof quote, and the
+      uplift the agent is claiming, and tell me what you have assumed about
+      voids and maintenance.
     why: >-
       The same body, and the ask is arithmetic over the two positions.
   - id: l24n2
@@ -3234,11 +3234,11 @@ negative:
     kind: summarise
     turn: >-
       Everything from the last fortnight, pasted, because I do not trust my
-      own read on it any more. From my brother, Sat - "Sell it. None of us
+      own read on it any more. From my brother, Sat — "Sell it. None of us
       lives within two hours. It needs a roof and neither you nor I have
       thirty thousand sitting there. Mum would not have wanted it to become
       the thing that we argue about at Christmas for the next decade, and that
-      is what it will become." From my sister, Sun - "We are not selling the
+      is what it will become." From my sister, Sun — "We are not selling the
       house our mother was born in because of a roof. It has been in the
       family for ninety years. Rent it out, put the rent into the roof, and in
       five years it pays for itself and the grandchildren have somewhere.
@@ -3264,12 +3264,12 @@ negative:
     kind: generate
     turn: >-
       Two conversations, written up the same evening so I would not smooth
-      them out. Priya, who ran my old department - "Take the head of function
+      them out. Priya, who ran my old department — "Take the head of function
       role. You are thirty-nine. The window where somebody hands you a
       department because they like how you handled one crisis is now, and it
       closes. You will learn the job by doing it badly for a year like
       everyone does. Nobody has ever felt ready and the ones who wait get
-      passed by the ones who did not." Tom, who I worked for before that - "Do
+      passed by the ones who did not." Tom, who I worked for before that — "Do
       not take it. You are good at the work and you have said the work is the
       part you like. Head of function is budget meetings, hiring, and three
       days a week of other people's disagreements. You will be a competent
@@ -3293,12 +3293,12 @@ negative:
     kind: lookup
     turn: >-
       Two conversations, written up the same evening so I would not smooth
-      them out. Priya, who ran my old department - "Take the head of function
+      them out. Priya, who ran my old department — "Take the head of function
       role. You are thirty-nine. The window where somebody hands you a
       department because they like how you handled one crisis is now, and it
       closes. You will learn the job by doing it badly for a year like
       everyone does. Nobody has ever felt ready and the ones who wait get
-      passed by the ones who did not." Tom, who I worked for before that - "Do
+      passed by the ones who did not." Tom, who I worked for before that — "Do
       not take it. You are good at the work and you have said the work is the
       part you like. Head of function is budget meetings, hiring, and three
       days a week of other people's disagreements. You will be a competent
@@ -3322,15 +3322,15 @@ negative:
     ask: explicit
     kind: summarise
     turn: >-
-      Everything the clinic has sent, pasted in order. Letter, 4 March -
+      Everything the clinic has sent, pasted in order. Letter, 4 March —
       "Following the ultrasound we are arranging a core biopsy. The appearance
       is indeterminate and we would not want to draw conclusions from imaging
-      alone." Letter, 19 March - "The biopsy was taken on 17 March. Histology
+      alone." Letter, 19 March — "The biopsy was taken on 17 March. Histology
       is with the regional laboratory. We expect to discuss the result at the
       multidisciplinary meeting on 9 April." Email from the specialist nurse,
-      22 March - "The grade is the thing that matters most for what we offer
+      22 March — "The grade is the thing that matters most for what we offer
       you. Until we have it, both pathways are still open and I would not want
-      to guess." My own note from the phone call, 24 March - asked whether
+      to guess." My own note from the phone call, 24 March — asked whether
       there was any way to get the grade sooner, was told the laboratory is
       running about three weeks and 9 April is already the earliest meeting.
       Separately: my employer needs the sabbatical decision by 31 March, and
@@ -3352,15 +3352,15 @@ negative:
     ask: explicit
     kind: lookup
     turn: >-
-      Everything the clinic has sent, pasted in order. Letter, 4 March -
+      Everything the clinic has sent, pasted in order. Letter, 4 March —
       "Following the ultrasound we are arranging a core biopsy. The appearance
       is indeterminate and we would not want to draw conclusions from imaging
-      alone." Letter, 19 March - "The biopsy was taken on 17 March. Histology
+      alone." Letter, 19 March — "The biopsy was taken on 17 March. Histology
       is with the regional laboratory. We expect to discuss the result at the
       multidisciplinary meeting on 9 April." Email from the specialist nurse,
-      22 March - "The grade is the thing that matters most for what we offer
+      22 March — "The grade is the thing that matters most for what we offer
       you. Until we have it, both pathways are still open and I would not want
-      to guess." My own note from the phone call, 24 March - asked whether
+      to guess." My own note from the phone call, 24 March — asked whether
       there was any way to get the grade sooner, was told the laboratory is
       running about three weeks and 9 April is already the earliest meeting.
       Separately: my employer needs the sabbatical decision by 31 March, and
@@ -3383,15 +3383,15 @@ negative:
     kind: diagnose
     turn: >-
       The incident review and the vendor thread, both pasted. Incident review,
-      2 April - "Root cause: the connection pool in the 4.x driver does not
+      2 April — "Root cause: the connection pool in the 4.x driver does not
       release on a failed TLS handshake. Fixed upstream in 6.0. We are on 4.7
-      because 6.0 requires the new licence tier." From procurement, 4 April -
+      because 6.0 requires the new licence tier." From procurement, 4 April —
       "Any move to the new tier goes through the annual vendor review. If we
       start now it lands in about three weeks. I cannot shorten it and I
       cannot start it on a maybe." From the vendor's account manager, 5 April
-      - "I will have to come back to you on whether 4.x stays supported past
+      — "I will have to come back to you on whether 4.x stays supported past
       March next year. I do not want to tell you something and be wrong." From
-      our own head of platform, 5 April - "If 4.x is supported through next
+      our own head of platform, 5 April — "If 4.x is supported through next
       year we patch around this and revisit at renewal. If it is not, we are
       moving this year whatever it costs, and the sooner we start the review
       the better." That last message is the whole thing. The two plans have
@@ -3413,15 +3413,15 @@ negative:
     kind: generate
     turn: >-
       The incident review and the vendor thread, both pasted. Incident review,
-      2 April - "Root cause: the connection pool in the 4.x driver does not
+      2 April — "Root cause: the connection pool in the 4.x driver does not
       release on a failed TLS handshake. Fixed upstream in 6.0. We are on 4.7
-      because 6.0 requires the new licence tier." From procurement, 4 April -
+      because 6.0 requires the new licence tier." From procurement, 4 April —
       "Any move to the new tier goes through the annual vendor review. If we
       start now it lands in about three weeks. I cannot shorten it and I
       cannot start it on a maybe." From the vendor's account manager, 5 April
-      - "I will have to come back to you on whether 4.x stays supported past
+      — "I will have to come back to you on whether 4.x stays supported past
       March next year. I do not want to tell you something and be wrong." From
-      our own head of platform, 5 April - "If 4.x is supported through next
+      our own head of platform, 5 April — "If 4.x is supported through next
       year we patch around this and revisit at renewal. If it is not, we are
       moving this year whatever it costs, and the sooner we start the review
       the better." That last message is the whole thing. The two plans have
@@ -3443,16 +3443,16 @@ negative:
     kind: generate
     turn: >-
       Pasting the messages because reading them back is the only way I can
-      think about it without getting upset. From my sister, Tuesday - "Dad
+      think about it without getting upset. From my sister, Tuesday — "Dad
       told the consultant he did not want to know the staging. The consultant
       respected that. So none of us know, and I am not going to be the one who
-      asks over his head." From my aunt, Tuesday - "Your father has always
+      asks over his head." From my aunt, Tuesday — "Your father has always
       been like this. He does not want to know and he does not want to be
       managed. If you start planning around something he has chosen not to
       hear about, he will notice, and it will change how he spends whatever
-      this is." From my sister, Wednesday - "I know what you are going to say
+      this is." From my sister, Wednesday — "I know what you are going to say
       about the wedding. But moving it forward tells him something, and you
-      cannot untell it." My own note - the venue will move us to July for the
+      cannot untell it." My own note — the venue will move us to July for the
       deposit we have already paid, but only if we tell them by the 15th.
       After that it is next April. July is four months away and April is
       thirteen. If this is the kind of thing where four months and thirteen
@@ -3472,16 +3472,16 @@ negative:
     kind: summarise
     turn: >-
       Pasting the messages because reading them back is the only way I can
-      think about it without getting upset. From my sister, Tuesday - "Dad
+      think about it without getting upset. From my sister, Tuesday — "Dad
       told the consultant he did not want to know the staging. The consultant
       respected that. So none of us know, and I am not going to be the one who
-      asks over his head." From my aunt, Tuesday - "Your father has always
+      asks over his head." From my aunt, Tuesday — "Your father has always
       been like this. He does not want to know and he does not want to be
       managed. If you start planning around something he has chosen not to
       hear about, he will notice, and it will change how he spends whatever
-      this is." From my sister, Wednesday - "I know what you are going to say
+      this is." From my sister, Wednesday — "I know what you are going to say
       about the wedding. But moving it forward tells him something, and you
-      cannot untell it." My own note - the venue will move us to July for the
+      cannot untell it." My own note — the venue will move us to July for the
       deposit we have already paid, but only if we tell them by the 15th.
       After that it is next April. July is four months away and April is
       thirteen. If this is the kind of thing where four months and thirteen
