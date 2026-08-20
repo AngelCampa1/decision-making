@@ -49,7 +49,7 @@ records that none did.
 
 ## 2026-08-20 — The key version says that labels moved, and nothing said which
 
-**Commits:** `92ea9e0`
+**Commits:** `874f843`
 
 Adds `datasets/triggers/corrections.jsonl` and the `de check` step that keeps it
 complete. Governed path, hence this entry.
@@ -93,7 +93,7 @@ cost of a version bump, and it is the reason the file exists.
 
 ## 2026-08-20 — `s13p`'s annotation named a directory no verdict has been written to
 
-**Commits:** `2bc3a26`
+**Commits:** `e9c954d`
 
 Closes the "Outstanding, 2026-08-19" note on the entry below, which is the only
 thing that entry left standing.
