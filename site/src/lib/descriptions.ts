@@ -2,7 +2,7 @@
  *
  * Until 2026-08-20 every page shipped the same `<meta name="description">`.
  * That string is what a search engine prints under the link, so every document
- * in this repository was advertised with one sentence about the skill -- the
+ * in this repository was advertised with one sentence about the skill: the
  * research log, the run records and the limitations page included.
  *
  * These documents carry no frontmatter and must not gain any. `titles.ts` is
@@ -15,7 +15,7 @@
  * a derived string bypasses `decision_evals.claims`, which scans `.astro`,
  * `.ts` and `.svelte` source text and cannot see a sentence assembled at build
  * time out of markdown. `retractedPhrases()` below is the compensation and it
- * is weaker than the gate -- it matches the registered phrase and nothing else.
+ * is weaker than the gate, matching the registered phrase and nothing else.
  */
 import { retractedPhrases } from './claims.ts';
 
@@ -64,7 +64,7 @@ function truncate(text: string, limit: number): string {
  * Falls back rather than throwing. `notebook/` and `results/` are append-only
  * evidence, so a document whose opening happens to be a table, or to quote a
  * phrase this repository has retracted, must not be able to make the site
- * unbuildable -- the only two ways out of that would be editing an append-only
+ * unbuildable. The only two ways out of that would be editing an append-only
  * record or deleting the guard.
  */
 export function descriptionFrom(

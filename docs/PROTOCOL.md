@@ -1,5 +1,7 @@
 # Protocol
 
+**Audience:** the evaluating reader.
+
 Version 1. This is the standing methodology for every skill evaluated in this
 repository. Changes get a new version number and a dated entry in
 [`../notebook/`](../notebook/); they never silently amend a protocol a completed
@@ -89,9 +91,9 @@ statement from a receipt that passed.
 
 ## 3. Pre-registration
 
-There are two mechanisms, and only one of them has ever run. This section said
-otherwise until 2026-08-13, describing the unbuilt one in the present tense
-while every call on record went through neither. The correction is in
+Two mechanisms, and only one of them has ever run. This section said otherwise
+until 2026-08-13, describing the unbuilt one in the present tense while every
+call on record went through neither. The correction is in
 [`notebook/2026-08-13-the-gate-that-was-documented-and-never-ran.md`](../notebook/2026-08-13-the-gate-that-was-documented-and-never-ran.md).
 
 ### 3a. For `dev` and `screen` runs: the standing mechanism
@@ -141,11 +143,11 @@ with the condition that would wire it, and `de check`'s integrity wiring step
 fails if that declaration is ever removed while the module stays unreachable, or
 if it stays after the module becomes reachable.
 
-Editing one word of a skill after pre-registration aborts the run with a diff.
-Proceeding requires writing `-v2.yaml`, which is a new, dated, visible commit.
-The effect is to make prompt tuning an auditable event rather than an invisible
-one. Locking the analysis script matters just as much: a pre-registered metric
-means nothing if the code computing it can be rewritten after seeing the data.
+Editing one word of a skill after pre-registration **will abort** the run with
+a diff. Proceeding would require writing `-v2.yaml`, which is a new, dated,
+visible commit, so prompt tuning becomes an auditable event. Locking the
+analysis script matters just as much: a pre-registered metric means nothing if
+the code computing it can be rewritten after seeing the data.
 
 The stopping rule is fixed N with no interim analysis. The screen/confirm split
 gives cost control without alpha spending, because the two stages use disjoint
@@ -226,12 +228,11 @@ they only gate spending. The holdout regenerates from a seed kept in an
 uncommitted local file outside the repository, and is published after the
 verdict, with a fresh seed for the next run. A file rather than a passphrase: a
 secret only a person can supply makes regeneration wait on one. The exposure
-this adds is real and gets stated rather than glossed. A file on the machine is
-readable by any agent with filesystem access, and a passphrase in someone's head
-is not. We accept it because the seed has to reach the generator through an
-agent either way, and because secrecy was never the contamination mechanism
-here; regeneration between runs is. Contamination is handled by regeneration,
-not by secrecy.
+this adds is real. A file on the machine is readable by any agent with
+filesystem access, and a passphrase in someone's head is not. We accept it
+because the seed has to reach the generator through an agent either way, and
+because secrecy was never the contamination mechanism here; regeneration
+between runs is.
 
 ## 7. Verifiers and judges
 
@@ -241,7 +242,7 @@ score is classified rather than assumed to be the model's fault. The code admits
 six causes, not the four this section listed until 2026-08-19: `agent_wrong`,
 `format_violation`, `infrastructure`, `item_defect`, `verifier_defect` and
 `environment_leak`. Separating a bad item from a bad checker is the deliberate
-one — they have completely different fixes, and the omission here had the spec
+one: they have completely different fixes, and the omission here had the spec
 disagreeing with `scorers/answer.py` for as long as both existed.
 
 Judges produce secondary metrics only; no primary metric is ever a judge score.
@@ -253,8 +254,8 @@ reported separately, because blended accuracy hides agreeableness bias: a judge
 that agrees with everything scores well on a balanced set while catching almost
 no real failures.
 
-That calibration key is model-labelled, and the weakening is stated rather than
-argued away. This paragraph said *human-labelled* until 2026-08-18, when every
+That calibration key is model-labelled, and that weakening is real. This
+paragraph said *human-labelled* until 2026-08-18, when every
 step waiting on a person came out of these plans; what it named had never been
 produced, so the change is from an unavailable key to an available one and not
 from a better key to a worse one. It does mean a judge is calibrated against
@@ -285,16 +286,15 @@ would need to change. The badge reports honest denominators.
 
 A verdict is a claim about one model version at one point in time. Skills
 validated in one month can decay in the next. A periodic drift watch on shipped
-skills is part of the protocol, not an optional extra.
+skills is part of the protocol.
 
 ## 9. Harness disclosure
 
 Every run records its harness configuration against the ETCSOVG checklist
 (Execution, Tool, Context, Scheduling, Observability, Verification,
-Governance). This is not bureaucracy: the harness "is often a stronger
-determinant of agent performance than the model it wraps", and current protocols
-therefore "systematically misattribute harness-level gains to model
-improvements" (arXiv:2605.23950). An agent result without its harness disclosed
+Governance). The harness "is often a stronger determinant of agent performance
+than the model it wraps", and current protocols therefore "systematically
+misattribute harness-level gains to model improvements" (arXiv:2605.23950). An agent result without its harness disclosed
 is not reproducible, and most published ones are not.
 
 In that paper's own 3×3 experiment (three frontier models × three harness

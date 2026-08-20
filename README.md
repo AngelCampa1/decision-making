@@ -13,29 +13,59 @@
 
 </div>
 
-Two things live here. An agent skill that works out what is *hard* about a
-decision and then runs a single procedure for it, one of six. And
-`decision_evals`, the evaluation harness built to find out whether that helps.
+**Audience:** anyone deciding whether this is worth their attention.
 
-The harness is the interesting half. It relabels its own answer key with a blind
-panel of three model instances and reports their agreement chance-corrected. It
-stamps an answer-key version into every record and refuses, in code, to compare
-arms across a version boundary. It pins MCP empty at every call, because a
-connector present in one arm and absent in another is a confound. And it refuses
-to publish a result whose prediction cannot be shown by git ancestry to predate
-its data. Thirteen runs are published under those rules, raw transcripts
-included.
+Two things live here.
 
-What they have found so far is about *firing*, meaning whether a skill turns on
-when it should. Five independent manipulations of a skill's description, across
-structure, content, entry count and composition, each landed the skill somewhere
-new on the precision and recall frontier while its discrimination held flat.
-Then the same apparatus was turned on the corpus itself, which turned out to be
-largely solvable by counting words. That finding retired the corpus and paid for
-the rebuilt one every result since has run on.
+**An agent skill for decisions.** It works out what is *hard* about the choice
+before it answers, then runs one of six procedures built for that specific
+difficulty. Paste in the whole thread and ask what to do about Tuesday:
 
-[`SCORECARD.md`](SCORECARD.md) is empty, and it is the file that gets to say
-otherwise first.
+```text
+LEDGER
+  1. the Lisbon forecast — decides what to pack
+  2. the Tuesday flight — decides when
+
+SET ASIDE
+  - the rain in Paraguay — your trip does not touch it
+
+THEREFORE
+  pack for Lisbon
+```
+
+That is `ledger.md`, the one for when too much context arrived and you cannot
+see which fact decides it. The other five handle advice that is generically
+right and may be wrong for you, consequences you did not price, timing, several
+positions that are each defensible, and a missing fact that may or may not
+matter.
+
+**And `decision_evals`, the harness built to find out whether any of that
+helps.** It relabels its own answer key with a blind panel of three model
+instances and reports their agreement chance-corrected. It stamps an answer-key
+version into every record and refuses, in code, to compare arms across a version
+boundary. It pins MCP empty at every call, because a connector present in one
+arm and absent in another is a confound. And it refuses to publish a result
+whose prediction cannot be shown by git ancestry to predate its data. Thirteen
+runs are published under those rules, raw transcripts included.
+
+What they have found so far is about *firing*: whether a skill switches on when
+it should. Rewriting the skill's description five different ways changed which
+mistakes it made, trading missed decisions against unwanted interruptions, and
+never changed how well it told the two apart. Then the harness was pointed at
+its own test set, and a rule as crude as *fire if the question is long* scored
+close to the real thing. That finding retired the test set and paid for the
+rebuilt one every result since has run on.
+
+One of those runs was aimed at this repository's own argument. A published
+result says that a large skill library crowds out the right skill, and this
+README used to cite it as the reason the skill ships as one entry instead of
+four. The run found nothing of the kind at four entries, so the citation was
+retired from the claim it was supporting and the four-entry arm turned out to
+route better.
+
+No skill here carries a verdict yet, so [`SCORECARD.md`](SCORECARD.md) is empty
+and [`docs/STATUS.md`](docs/STATUS.md) is the ledger of every run on record.
+The skill is free, installs in one line, and comes out again in one line.
 
 ## The skill
 
@@ -182,6 +212,16 @@ No published run has used the placebo or cot arm. Every call on record compares
 variants of the skill's *description*. The four-arm comparison is what a
 confirmation run would do, and no confirmation run has happened.
 
+One of the thirteen published runs is void. It was refused on parse rate before
+any prediction was scored, which is the first registered void condition here to
+fire on its own.
+
+The description arms no longer measure what ships. The shipped description now
+enumerates six procedures, so the ten arms that varied earlier wordings describe
+something the skill has moved past. The harness therefore has no measurement of
+how the shipped description behaves in the venue anybody uses, which qualifies
+every finding above and needs a new arm and a new pre-registration to close.
+
 The corpus behind the earlier results was largely solvable without a model, a
 finding this harness produced about its own instrument. It scopes to answer-key
 version 2 and the runs above it. The rebuilt version 4 corpus is far harder to
@@ -255,6 +295,9 @@ loop is edit, rebuild, commit both:
 ```bash
 uv run de site
 ```
+
+`de site` needs Node and npm on `PATH`, because the site is an Astro project.
+The gate that demands you run it does not.
 
 The other commands: `de index` regenerates
 [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool

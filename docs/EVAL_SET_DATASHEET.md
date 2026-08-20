@@ -1,15 +1,18 @@
 # Eval-set datasheet
 
-Following the *Datasheets for Datasets* convention. Written while the corpus is
-still small, so the answers describe what exists rather than what was intended.
+**Audience:** the evaluating reader.
+
+**What this is.** The corpus behind the distractor experiments, answered in the
+*Datasheets for Datasets* format. Written while the corpus is still small, so
+the answers describe what exists rather than what was intended.
 
 ## Motivation
 
 **Why was this created?** To measure whether a markdown decision skill changes
 an agent's accuracy when a decision depends on a pile of accumulated context.
-Public benchmarks are contaminated and, more importantly, do not isolate the
-variable: we need items where the answer provably turns on a known subset of the
-presented facts.
+Public benchmarks are contaminated, and they do not isolate the variable: this
+needs items where the answer provably turns on a known subset of the presented
+facts.
 
 **Who created it?** Angel Campa (`AngelCampa1`). No external funding.
 
@@ -59,18 +62,18 @@ and the full output is pinned byte-exact by golden files that require an explici
 **Who wrote the templates?** Claude Opus 5, under direction, in a single session.
 That is a real limitation: ten templates from one author in one sitting will
 share idiom and structure in ways a broader corpus would not. The mitigation was
-a 10% human realism audit, and it is retired as of 2026-08-18, along with
-every other step in these plans that waited on a person. It is not retired for
-being unperformed: a single-item realism verdict cannot recover the judge's own
-base rate, and the only reader available had authored the templates, so it was a
-self-assessment either way. What replaces it is a forced choice, chosen
-because it cancels the base rate: one generated problem beside one human-written
-problem of the same shape, judged blind. It also carries a ground truth the
-audit never had, since which item is human is a fact on the record. It needs a public human-written
-word-problem source that clears the outside-data rule in
-[`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md), and no such source has
-been read, fetched or cleared. So the mitigation is currently unavailable rather
-than merely undone, and this limitation stands open.
+a 10% human realism audit, retired on 2026-08-18 along with every other step in
+these plans that waited on a person. The reason it was retired is the
+instrument, not the backlog: a single-item realism verdict cannot recover the
+judge's own base rate, and the only reader available had authored the templates,
+so it was a self-assessment either way. What replaces it is a forced choice,
+chosen because it cancels the base rate: one generated problem beside one
+human-written problem of the same shape, judged blind. It also carries a ground
+truth the audit never had, since which item is human is a fact on the record. It
+needs a public human-written word-problem source that clears the outside-data
+rule in [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md), and no such
+source has been read, fetched or cleared. So the mitigation is currently
+unavailable rather than merely undone, and this limitation stands open.
 
 **What quality filters applied?**
 
@@ -191,7 +194,7 @@ number computed before the change incomparable with every number after it.
   cannot run until a human-written comparison source clears the outside-data
   rule. Target and status are both now 0, and the honest reading is that this
   limitation got *more* open, not less.
-- And the source survey that exists does not serve this corpus. The eight
+- The source survey that exists does not serve this corpus. The eight
   candidates surveyed on 2026-08-18 are conversational corpora, chosen for
   Track N4, which wants human *turns* for the trigger corpus. This corpus needs
   human *word problems*, and no candidate for that has been surveyed, read or

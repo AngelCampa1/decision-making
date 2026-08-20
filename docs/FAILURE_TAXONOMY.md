@@ -1,8 +1,11 @@
 # Failure taxonomy
 
-We built this bottom-up from real traces per the Husain/Shankar loop, seeded
-with Harness-Bench's five categories as a citable prior to confirm or refute.
-The taxonomy determines the metrics, not the other way round.
+**Audience:** the evaluating reader.
+
+**What this is.** The codes this repository scores failures against, built
+bottom-up from real traces per the Husain/Shankar loop and seeded with
+Harness-Bench's five categories as a citable prior to confirm or refute. The
+taxonomy determines the metrics, not the other way round.
 
 Corpus read so far: 280 control-arm traces, Haiku, on the pre-rebuild
 single-turn corpus (`results/evidence-ledger/2026-08-10-baseline-corpus/`).
@@ -46,8 +49,6 @@ and reading the failures, which is the job the clean-room gate has and the reaso
 it is computed on the control arm only.
 
 ## A coded signal that did not survive checking
-
-Worth recording because the first read was wrong.
 
 Coding all 280 responses for *appeals to real-world considerations beyond the
 stated facts* ("in practice", "prudent", "risk of", "typical") looked like a

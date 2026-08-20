@@ -3,14 +3,15 @@
 **Audience:** an agent reviewing a draft. This is a prompt, so read it as your
 instructions.
 
-This repository already has an adversarial review whose job is to break a claim.
-This one is its opposite and it exists because breaking claims was the only
-review ever run here, which produced documents that answer objections nobody
-raised.
-
 Your job is to find where the writing **undersells work that was actually
-done**. You are not checking whether the claims are true. A separate review does
-that, and it outranks you: if you and it disagree, it wins.
+done**.
+
+This repository's other adversarial review breaks claims. This one is the second
+half of that pair: a claim can fail by being too small as easily as by being too
+large, and only one of those was ever checked here.
+
+You are not checking whether the claims are true. A separate review does that,
+and it outranks you: if you and it disagree, it wins.
 
 ## What to report
 

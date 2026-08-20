@@ -2,8 +2,7 @@
 
 **Audience:** anyone looking for the document that answers their question.
 
-Eighteen documents plus three review briefs, each answering something different.
-This is the map.
+Every document here, and the question each one answers.
 
 ## Start here
 

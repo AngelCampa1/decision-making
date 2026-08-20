@@ -1,4 +1,4 @@
-/* `/llms-full.txt` -- the citable documents, concatenated, for a model that has
+/* `/llms-full.txt`: the citable documents, concatenated, for a model that has
  * followed `/llms.txt` and wants the text rather than the links.
  *
  * Deliberately not everything. The repository is ~170 published documents, and
@@ -6,7 +6,7 @@
  * evidence: valuable to a person auditing a specific run, useless as a citation
  * source when it arrives as several megabytes of dated entries. What is here is
  * the skill itself and the documents that say how it is measured and what has
- * come out -- the parts somebody would actually be citing.
+ * come out. Those are the parts somebody would actually be citing.
  *
  * Each document is preceded by its own source path, so a quotation taken from
  * this file can be traced back to the file it came from rather than to this

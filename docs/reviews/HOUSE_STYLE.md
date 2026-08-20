@@ -6,9 +6,9 @@ instructions.
 Check a draft against [`VOICE.md`](../VOICE.md). Read that file first. It is the
 standard and this brief is only the procedure for applying it.
 
-Nothing here is enforced by a gate. `de check` refuses a reference that does not
-resolve and declines to judge the sentence around it, on purpose, so this review
-is the only thing standing between a draft and the repository.
+This review is the only thing standing between a draft and the repository.
+`de check` refuses a reference that does not resolve and declines to judge the
+sentence around it, on purpose, so the judgement here is yours.
 
 ## Procedure
 

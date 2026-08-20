@@ -1,11 +1,13 @@
 # Reproducibility checklist
 
-NeurIPS-style, filled in as the work happens rather than the week before
-submission. `[x]` means the artifact exists and is committed; `[ ]` means it does
-not. A box is never ticked on the strength of an intention.
+**Audience:** the evaluating reader.
 
-Kept in the repository rather than only in the paper so the gap between what is
-claimed and what exists is visible at every commit.
+**What this is.** The NeurIPS-style reproducibility checklist, filled in as the
+work happens rather than the week before submission, and kept in the repository
+so the gap between what is claimed and what exists is visible at every commit.
+
+`[x]` means the artifact exists and is committed; `[ ]` means it does not. A box
+is never ticked on the strength of an intention.
 
 ## Claims
 
@@ -13,15 +15,15 @@ claimed and what exists is visible at every commit.
       result or a citation
 - [ ] The scope of the claims matches the experiments: one harness, one model
       family, tasks with computable ground truth
-- [ ] Limitations are stated in the paper, not only in the repository
-      — source: [`../docs/LIMITATIONS.md`](../docs/LIMITATIONS.md)
+- [ ] Limitations are stated in the paper, not only in the repository.
+      Source: [`../docs/LIMITATIONS.md`](../docs/LIMITATIONS.md)
 - [x] Limitations were written *before* results existed, so they cannot be
       tuned to flatter them
 
 ## Experimental design
 
-- [x] Standing protocol is versioned and public
-      — [`../docs/PROTOCOL.md`](../docs/PROTOCOL.md) v1
+- [x] Standing protocol is versioned and public:
+      [`../docs/PROTOCOL.md`](../docs/PROTOCOL.md) v1
 - [ ] Hypotheses pre-registered before the confirmation run
 - [ ] Pre-registration commits are ancestors of the result commits, verifiably
 - [ ] Skill body and analysis script hashes locked in the pre-registration
@@ -37,20 +39,20 @@ claimed and what exists is visible at every commit.
 - [x] Intervals from a cluster bootstrap over templates, not items
 - [x] CLT deliberately avoided at this N, with the reason recorded
 - [ ] Multiplicity controlled across pre-registered primaries (BH, q = 0.10)
-      — `benjamini_hochberg` is implemented, 100%-covered and exported from
+      `benjamini_hochberg` is implemented, 100%-covered and exported from
       `stats/__init__.py`
       ([`../evals/src/decision_evals/stats/multiplicity.py`](../evals/src/decision_evals/stats/multiplicity.py)),
       but no production code calls it: no confirmation run has produced a
       family of primary p-values yet for it to correct. Implemented-but-unused
-      is not "controlled". The corpus shortcut battery does not need this —
+      is not "controlled". The corpus shortcut battery does not need this:
       `MATCHED_Z = 3.0` is p = 0.0027 two-sided against 176 band×view×feature
       cells, ≈0.47 expected false findings, approximately FDR-safe by
       construction, independently of BH
       ([`../notebook/2026-08-14-the-battery-searches-176-cells-and-nobody-had-costed-that.md`](../notebook/2026-08-14-the-battery-searches-176-cells-and-nobody-had-costed-that.md)).
       What remains open is the actual pre-registered-primaries family, which
       cannot be corrected before it exists.
-- [x] Guards left uncorrected by design, with the asymmetry stated
-      — the design rationale is committed prose
+- [x] Guards left uncorrected by design, with the asymmetry stated.
+      The design rationale is committed prose
       (`stats/multiplicity.py` module docstring), true independent of whether
       the correction above has ever run
 - [ ] Raw p and adjusted q both reported for every primary
@@ -58,8 +60,8 @@ claimed and what exists is visible at every commit.
 - [ ] Underpowered comparisons reported as `UNTESTED` with their MDE, not as
       nulls
 - [x] Statistical code covered at 100% line and branch, with property tests
-      pinning McNemar against `scipy`
-      — Benjamini-Hochberg is a thin wrapper around `statsmodels`, not an
+      pinning McNemar against `scipy`.
+      Benjamini-Hochberg is a thin wrapper around `statsmodels`, not an
       independent implementation checked against it, so nothing here pins
       against `statsmodels`; that self-referential test was deliberately
       removed (`tests/property/test_stats_properties.py`,
@@ -69,11 +71,12 @@ claimed and what exists is visible at every commit.
 
 ## Data
 
-- [x] Eval-set datasheet — [`../docs/EVAL_SET_DATASHEET.md`](../docs/EVAL_SET_DATASHEET.md)
+- [x] Eval-set datasheet: [`../docs/EVAL_SET_DATASHEET.md`](../docs/EVAL_SET_DATASHEET.md)
 - [x] Ground truth computed from template rules, never authored
 - [ ] Template schema published in full
-- [ ] Distractor audit procedure and attrition rate reported — structural half
-      done (50/50 pass), semantic half pending local auditor models
+- [ ] Distractor audit procedure and attrition rate reported. The structural
+      half is done (50/50 pass); the semantic half is pending local auditor
+      models
 - [ ] Difficulty gates run on the control arm only, and stated as such
 - [ ] Public/screen split committed
 - [ ] Holdout seed published after the verdict
@@ -82,10 +85,10 @@ claimed and what exists is visible at every commit.
 
 ## Code and environment
 
-- [x] Code public from the first commit
-      — `github.com/AngelCampa1/decision-making-skills`
-- [x] Apache-2.0 for code — [`../LICENSE`](../LICENSE)
-- [ ] CC-BY-4.0 for the paper — stated as "intended" here, but not committed
+- [x] Code public from the first commit:
+      `github.com/AngelCampa1/decision-making-skills`
+- [x] Apache-2.0 for code: [`../LICENSE`](../LICENSE)
+- [ ] CC-BY-4.0 for the paper. Stated as "intended" here, but not committed
       anywhere: no `paper/LICENSE`, no notice in `paper/main.tex`, no header on
       `paper/refs.bib`. Intention is not the artifact.
 - [x] Dependencies pinned via `uv` lockfile
@@ -95,8 +98,8 @@ claimed and what exists is visible at every commit.
 
 ## Harness
 
-- [x] ETCSOVG disclosure documented
-      — [`../docs/HARNESS_DISCLOSURE.md`](../docs/HARNESS_DISCLOSURE.md)
+- [x] ETCSOVG disclosure documented:
+      [`../docs/HARNESS_DISCLOSURE.md`](../docs/HARNESS_DISCLOSURE.md)
 - [ ] Per-run `config.json` written and committed with results
 - [ ] Isolation canary test passing (planted `CLAUDE.md` not followed)
 - [ ] ≥2 independent runs per cell, with variance reported
@@ -112,11 +115,13 @@ claimed and what exists is visible at every commit.
 - [ ] Means reported with p90 and p99
 - [ ] Negative results reported at the same prominence as positive ones
 - [ ] Figures generated from `results/` by `make paper`, never transcribed
-- [ ] `de report --check` passes: committed scorecard matches the results
+- [ ] Committed scorecard matches the results. No `de report` command exists
+      yet; a future one would check this, and until it does the match is
+      asserted by hand
 
 ## Submission logistics
 
-- [ ] arXiv endorsement for `cs.AI`/`cs.CL` confirmed — **check early, it can
+- [ ] arXiv endorsement for `cs.AI`/`cs.CL` confirmed. **Check early, it can
       take weeks**
 - [ ] `\draftmode` switched off, so `\TODO` expands to nothing
 - [ ] All `% VERIFY` author lists in `refs.bib` checked against the PDFs

@@ -6,14 +6,14 @@
     "url": "https://github.com/AngelCampa1"
   },
   "metadata": {
-    "description": "Decision skills for agents, published with the evidence that earned them a verdict: an evaluation harness, four arms per item, and a scorecard that stays empty until a confirmation run fills it.",
+    "description": "Decision skills for agents, published with the evidence for and against them: an evaluation harness, a four-arm confirmation design, and a scorecard that stays empty until a run fills it.",
     "version": "0.1.0"
   },
   "plugins": [
     {
       "name": "decision-making-skills",
       "source": "./plugin",
-      "description": "Decision skills for agents, each shipped with the evidence for or against it. One skill routes to a procedure chosen by what is hard about the decision; it appears here only after a confirmation run in the evaluation harness assigns it a verdict, so an UNTESTED skill cannot be promoted here.",
+      "description": "Decision skills for agents, each shipped with the evidence for and against it. One skill routes to a procedure chosen by what is hard about the decision. It appears here once a confirmation run in the evaluation harness assigns it a verdict, so an UNTESTED skill stays out.",
       "category": "productivity",
       "license": "Apache-2.0"
     }

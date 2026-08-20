@@ -1,8 +1,11 @@
 # The accumulation venue
 
-Status: designed, not built. This document exists so the design is on the record
-before the number that motivates it arrives, and so the decision to build it can
-be argued with rather than inferred from code.
+**Audience:** the evaluating reader.
+
+A second corpus, designed and not yet built, that tests whether a model can tell
+current material from stale material across an accumulated transcript. The
+design is on the record before the number that motivates it arrives, so the
+decision to build it can be argued with rather than inferred from code.
 
 ## Why a second venue
 
@@ -29,11 +32,11 @@ item is one prompt. Accumulation is therefore *rendered* rather than lived: the
 item is a transcript of prior turns (tool results, retrieved documents, user
 messages) followed by the decision question.
 
-That is a real limitation and it is the honest framing: the model reads an
-accumulated context it did not itself produce. What it shares with the agentic
-setting is the thing under test, a long, unranked, partly stale pile that has to
-be reduced before a decision. What it does not share is error compounding across
-the model's own steps, which this venue cannot measure and should not claim to.
+That is a real limitation: the model reads an accumulated context it did not
+itself produce. What it shares with the agentic setting is the thing under test,
+a long, unranked, partly stale pile that has to be reduced before a decision.
+What it does not share is error compounding across the model's own steps, which
+this venue cannot measure and should not claim to.
 
 ## The mechanism: supersession, not irrelevance
 
@@ -51,7 +54,7 @@ Three properties make this a better instrument than distractor irrelevance:
 Ground truth is not a judgement call. "This figure was revised to 14 after the
 audit" unambiguously supersedes "the figure is 9". There is no
 irrelevant-versus-ambiguous line to walk, so the venue sidesteps the trap that
-dissolved GSM-NoOp's effect entirely rather than trying to navigate it.
+dissolved GSM-NoOp's effect entirely.
 
 It is what the skill actually claims. `evidence-ledger` promises a ranked ledger
 plus a *named discard list*. A superseded value is the clearest case of

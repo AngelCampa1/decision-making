@@ -1,11 +1,13 @@
 # Agent instructions
 
+**Audience:** an agent working in this repository.
+
 Read by Codex, Cursor, Copilot, Gemini CLI, Cline, Amp, OpenCode and others.
 Claude Code reads `CLAUDE.md`, a byte-exact mirror written by `de mirror`.
 **Edit this file only.** `de check` refuses a stale mirror.
 
-Every rule here exists because that failure already happened. The dated
-incidents, the measurements and the citations behind them are in
+Every rule below exists because the failure it prevents already happened here.
+The dated incidents, the measurements and the citations behind them are in
 [`docs/WHY_THESE_RULES.md`](docs/WHY_THESE_RULES.md), which nothing loads per
 turn. Read a section there when you want to know why a rule is worded the way it
 is.
@@ -208,11 +210,13 @@ the record. `README.md` carries the component table and
   refuse an entry named nowhere in the scanned documentation. Prose describing a
   mechanism names the arena and the tense it runs in: a gate scoped to an arena
   that has never run **will refuse**, it does not refuse.
-- **All prose goes through [`docs/VOICE.md`](docs/VOICE.md) and the humanizer
-  skill**, including comments and docstrings. Review with
-  [`docs/reviews/HOUSE_STYLE.md`](docs/reviews/HOUSE_STYLE.md) and
+- **All prose you write goes through [`docs/VOICE.md`](docs/VOICE.md) and the
+  humanizer skill**, including the comments and docstrings you touch. Review
+  with [`docs/reviews/HOUSE_STYLE.md`](docs/reviews/HOUSE_STYLE.md) and
   [`docs/reviews/POSITIONING.md`](docs/reviews/POSITIONING.md). Nothing checks
-  this. Three things the pass may never do:
+  this. It applies going forward and never retroactively: bring a comment up to
+  standard when you change it, and do not sweep the source for style. Three
+  things the pass may never do:
   - **Change a number, a confidence interval, a p-value, an arXiv identifier or
     a quoted sentence.** The rule that a `paper/refs.bib` entry must carry a
     quote before a number may be asserted beside it is scoped to the markdown

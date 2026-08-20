@@ -3,10 +3,10 @@ title: >-
   decision-making-skills: agent skills for decisions under uncertainty, with an
   evaluation harness that measures whether they work
 message: >-
-  If you cite this repository, please cite the software entry below. There is
-  no paper to cite yet: `paper/` is a draft, and no skill in this repository
-  carries a verdict. Please do not cite it as evidence that agent skills
-  improve decisions — see SCORECARD.md, which is empty on purpose.
+  Cite the software entry below. The published results measure whether a skill
+  fires when it should; decision quality is not yet measured, and no skill in
+  this repository carries a verdict. SCORECARD.md holds the verdicts and is
+  empty. `paper/` is a draft, so there is no paper to cite.
 type: software
 authors:
   - family-names: Campa
@@ -15,22 +15,25 @@ authors:
 repository-code: https://github.com/AngelCampa1/decision-making-skills
 url: https://angelcampa1.github.io/decision-making-skills/
 abstract: >-
-  A markdown Agent Skill that routes a decision to one of six procedures —
-  evidence ledger, switching conditions, consequence cascade, decide-or-wait,
-  advice fit, and a council of positions —
-  and a Python evaluation harness (`decision_evals`) that measures whether such
-  a skill actually changes behaviour. The harness is pre-registered and
-  placebo-controlled: every skill is measured against four arms on the same
-  items (off, on, a token- and structure-matched placebo, and plain
-  chain-of-thought), so that a skill beating nothing but not beating filler is
-  reported as a length effect. Labels are re-derived blind by a panel of
-  independent model instances, and the panel's agreement is reported
+  A markdown Agent Skill that routes a decision to one of six procedures:
+  evidence ledger, switching conditions, consequence cascade, decide or wait,
+  council, and ask or decide. It reads only the one it routes to.
+  Beside it is a Python evaluation harness (`decision_evals`) that measures
+  whether such a skill changes behaviour. Runs are pre-registered, and the
+  harness refuses to publish a result whose prediction cannot be shown by git
+  ancestry to predate its data. The four-arm design is written and enforced,
+  and it has not run: a confirmation run compares a skill against four arms on
+  the same items (off, on, a token- and structure-matched placebo, and plain
+  chain-of-thought), so that a skill beating nothing while matching filler is
+  reported as a length effect. `check_placebo_match` refuses a placebo of the
+  wrong size or shape on every local gate run, and no published run has used
+  the placebo or chain-of-thought arm. Labels are re-derived blind by a panel
+  of independent model instances, and the panel's agreement is reported
   chance-corrected (Fleiss' kappa, Krippendorff's alpha) alongside the raw
-  rate rather than instead of it. Statistics are exact and resampling-based, with
-  templates rather than items as the resampling unit, and calibration is
-  reported with the Murphy decomposition. Published results to date measure
-  skill *triggering* — whether a skill fires when it should — not decision
-  quality.
+  rate. Statistics are exact and resampling-based, with templates as the
+  resampling unit, and calibration goes through the Murphy decomposition.
+  Published results to date measure skill *triggering*, whether a skill fires
+  when it should. Decision quality is not yet measured.
 keywords:
   - agent skills
   - LLM evaluation

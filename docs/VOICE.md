@@ -7,6 +7,12 @@ document, every skill body, and every comment and docstring in the source. One
 rule governs all of it: say what is true, in the order a reader needs it, in
 sentences worth reading.
 
+**Applied going forward, never retroactively.** Write to this standard, and
+bring a comment or a docstring up to it when you change that code. Do not sweep
+the source for style, and do not restyle a document you are not otherwise
+working on. A half-applied sweep leaves a package speaking in two voices, which
+is worse than one voice you have not got to yet.
+
 Nothing enforces this file. `de check` refuses a reference that does not resolve
 and declines to judge the sentence around it, because an advisory gate that
 flags prose becomes noise and then gets switched off. The guardrail is a writing
@@ -58,7 +64,8 @@ Each of these was found in this repository, and every example is real.
 
 **Negative parallelism.** Defining a thing by what it is not. It reads as an
 argument with an opponent who is not in the room, and at density it becomes the
-only music in the prose. This repository carried fifty of them in two files.
+only music in the prose. `README.md` and `AGENTS.md` carried fifty between them,
+counting `rather than` and `, not `.
 
 > It is *we have not shown this works*, not *this does not work*.
 
@@ -87,9 +94,9 @@ The reader had not objected. Arguing with them teaches them to.
 still a performance, and it spends the reader's goodwill on nothing. State what
 is true and let the reader draw the conclusion.
 
-**Em dash overuse.** This repository carried 277 of them across eight documents
-and 393 more in the source. A comma, a colon, or a full stop is almost always
-the better mark.
+**Em dash overuse.** The eleven documents rewritten on 2026-08-20 carried 260 of
+them between them, counted as occurrences. A comma, a colon, or a full stop is
+almost always the better mark.
 
 **The rule of three.** Three parallel clauses, three-item lists, three examples,
 arriving because three sounds finished. Use the number of items there are.
@@ -177,9 +184,12 @@ These are load-bearing and they outrank everything above.
 
 1. Read this file and the exemplars.
 2. Run the `humanizer` skill. It applies to drafting as much as to editing, and
-   to every file including source comments. There are no exempt files.
-   `third-grade-copy` does not apply here: these are technical documents and a
-   third-grade reading level would strip the precision they carry.
+   to everything you write, source comments included. No audience is too
+   technical for it and no file is too internal. The one thing it never touches
+   is a record already written: see **The record** above.
+   `third-grade-copy` does not apply here either, because these are technical
+   documents and a third-grade reading level would strip the precision they
+   carry.
 3. Rewrite.
 4. Hand the result to a different agent for review, briefed with
    `docs/reviews/HOUSE_STYLE.md` and `docs/reviews/POSITIONING.md`. A

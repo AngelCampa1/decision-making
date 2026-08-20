@@ -80,6 +80,10 @@ to editing. Then hand the result to a different agent or person, briefed with
 [`docs/reviews/HOUSE_STYLE.md`](docs/reviews/HOUSE_STYLE.md) and
 [`docs/reviews/POSITIONING.md`](docs/reviews/POSITIONING.md).
 
+It applies to what you write, going forward. Bring a comment up to standard when
+you change it. Do not sweep the source for style, and do not restyle a document
+you are not otherwise working on.
+
 Nothing enforces any of this. The documentation gate reads whether a reference
 resolves and declines to judge the sentence around it, on purpose, so the review
 is the only thing between a draft and the repository.

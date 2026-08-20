@@ -1,9 +1,13 @@
 # Decision frameworks: the review this project skipped
 
-Track K1 to K4, and K6. Status: K2 is closed, after four passes, two on
-2026-08-12, a third on 2026-08-13, a fourth on 2026-08-14. Every number below
-was checked against a source on the date of its pass, and every framework
-without a number is marked with what was *not* found rather than left blank.
+**Audience:** the evaluating reader.
+
+A catalogue of decision frameworks graded by the evidence behind each one, and
+an audit of the procedures this repository shipped against that catalogue.
+Tracks K1 to K4, and K6. K2 is closed, after four passes, two on 2026-08-12, a
+third on 2026-08-13, a fourth on 2026-08-14. Every number below was checked
+against a source on the date of its pass, and every framework without a number
+is marked with what was *not* found rather than left blank.
 
 ---
 
@@ -36,12 +40,12 @@ No claim carries a number unless the number was read off a source on
 says *none located*, which is a statement about the search, not about the world,
 and is deliberately weaker than *none exists*.
 
-This rule is not decoration. Three misattributed numbers were written into this
-repository in a single morning on 2026-08-11, all citing real papers that said
-something adjacent. `de check`'s citation gate binds arXiv identifiers to
-verbatim quotes, but almost nothing in the decision literature is on arXiv, so
-the gate cannot see this file's central claims. The discipline has to be manual
-here, and saying so is part of the record.
+Three misattributed numbers were written into this repository in a single
+morning on 2026-08-11, all citing real papers that said something adjacent.
+`de check`'s citation gate binds arXiv identifiers to verbatim quotes, but
+almost nothing in the decision literature is on arXiv, so the gate cannot see
+this file's central claims. The discipline is manual here, and stating that is
+part of the record.
 
 One error was caught by this rule while writing: Morewedge et al. (2015) is in
 *Policy Insights from the Behavioral and Brain Sciences*, not PNAS. From memory
@@ -98,9 +102,8 @@ and training did not improve forecasting ability." The superforecaster findings
 partially survive. The *training* effect, the part that would license a skill,
 is the part in question.
 
-The honest reading is that calibration training remains the strongest candidate
-in the table and that its strength is one contested re-analysis away from the
-rest of the field.
+Calibration training remains the strongest candidate in the table, and its
+strength is one contested re-analysis away from the rest of the field.
 
 Finding 3. Four of eleven frameworks have no controlled evaluation this search could
 find. They are, without exception, the four most likely to be found in a
@@ -132,7 +135,7 @@ brand name, not the brand name, found real evidence for one quarter of WRAP. The
 second pass already established this trick for patient decision aids, where
 "structured decision support" returned 209 trials and "WRAP" returned nothing.
 The fourth pass applied it to WRAP's own four letters one at a time and it
-worked on the first one: "widen your options" is not just a slogan, it is a
+worked on the first one: "widen your options" is more than a slogan. It is a
 testable claim (does considering more than one option, or considering them at
 the same time rather than one after another, produce a better choice), and that
 claim has been tested. Basu & Savani (2017) ran seven lab experiments (≈2,892
@@ -206,13 +209,12 @@ defined than anything authored here.
 
 ## K3: what the existing prompt libraries encode, and in what form
 
-Closed 2026-08-14. The question this track was asked is not "what frameworks
-exist", since K1/K2 already answer that better than any prompt library does. It
-is what form the encoding takes, because the founding observation is a form
-claim: *"the maintainer installed [cc-thinking-skills] and reports it did not
-help. That is data about form, not about the frameworks."* Three
-published libraries were read first-hand for their packaging, not just their
-content.
+Closed 2026-08-14. This track asks what form the encoding takes, because the
+founding observation is a form claim: *"the maintainer installed
+[cc-thinking-skills] and reports it did not help. That is data about form, not
+about the frameworks."* K1/K2 already answer "what frameworks exist" better than
+any prompt library does. Three published libraries were read first-hand for
+their packaging as well as their content.
 
 | Library | Frameworks | Packaging | Trigger mechanism | Evidence claim |
 |---|---|---|---|---|
@@ -375,12 +377,12 @@ today, and it strengthens rather than changes K6's ranking.
 The ranking changed on 2026-08-14, K2's fourth pass, and it is reported here
 rather than folded in quietly. A new candidate, generate options concurrently
 rather than one at a time, the "widen your options" quarter of WRAP, enters at
-Rank 2, ahead of consider-the-opposite. This is not a reshuffle for its own
-sake: Basu & Savani (2017) is seven experiments, ~2,892 participants, every
-simultaneous-vs-sequential comparison significant at p ≤ .02 (one at p < .0001),
-and Dow et al. (2010) is an independent research group, a different domain
-(design prototyping, not choice among described options), and a real behavioural
-outcome (click-through), also significant. Consider-the-opposite's own evidence
+Rank 2, ahead of consider-the-opposite. Basu & Savani (2017) is seven
+experiments, ~2,892 participants, every simultaneous-vs-sequential comparison
+significant at p ≤ .02 (one at p < .0001), and Dow et al. (2010) is an
+independent research group, a different domain (design prototyping, not choice
+among described options), and a real behavioural outcome (click-through), also
+significant. Consider-the-opposite's own evidence
 is two original experiments plus a later replication attempt that moved in the
 right direction without reaching significance. Multiple independent,
 still-standing significant results beat an original-plus-null-replication pair

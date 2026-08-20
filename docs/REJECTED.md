@@ -1,5 +1,7 @@
 # Rejected, deferred, and folded-in frameworks
 
+**Audience:** the evaluating reader.
+
 We considered about eighteen decision and thinking frameworks for the v1 roster.
 Five shipped. This records what happened to the rest and why, so the reasoning
 is auditable and a later decision can overturn it.
@@ -8,7 +10,7 @@ The roster is deliberately small and explicitly revisable. Each additional skill
 costs a full confirmation cycle against a subscription quota, so five is what
 the budget supports today. That is not a claim that the other thirteen are
 worthless. Once the harness exists, promoting something off the bench is a cheap
-experiment rather than an act of faith.
+experiment.
 
 ## The bar
 
@@ -75,8 +77,7 @@ weights will assign them, fluently, with no error bar and no way to distinguish 
 weight it inferred from evidence from one it invented to fill the cell. The
 output then carries the authority of arithmetic. Under
 [`PROTOCOL.md`](PROTOCOL.md) that construction cannot pass a calibration guard,
-because there is nothing to calibrate against, which is a reasonable summary of
-why it does not belong in a decision skill.
+because there is nothing to calibrate against.
 
 ## Reversing any of this
 

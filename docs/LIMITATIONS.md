@@ -1,5 +1,7 @@
 # Limitations
 
+**Audience:** the evaluating reader.
+
 Written before any results exist, so it cannot be tuned to flatter them. We add
 limitations here as we find them, and never trim one because it turned
 inconvenient.
@@ -7,22 +9,22 @@ inconvenient.
 ## The harness
 
 The Claude Code CLI exposes no sampling parameters, so there is no temperature
-control. We run ≥2 independent repeats per cell and report run-to-run variance
-instead of claiming determinism. That is less of a loss than it sounds:
-temperature 0 is not deterministic on hosted inference anyway, and a stated
-variance is more honest than an assumed constant.
+control. We run ≥2 independent repeats per cell and report run-to-run variance.
+That is less of a loss than it sounds: temperature 0 is not deterministic on
+hosted inference anyway, and a stated variance is more honest than an assumed
+constant.
 
 The budget is rate limits, not dollars. Every call runs on a Claude Max
-subscription; there is no API key. The binding constraint is a rolling quota
-rather than a spend cap, so runs are checkpointed and resumable across days, and
-a confirmation run may span several sessions. Wall-clock timing is not
-comparable across runs, so we do not report it as a metric.
+subscription; there is no API key. The binding constraint is a rolling quota,
+so runs are checkpointed and resumable across days, and a confirmation run may
+span several sessions. Wall-clock timing is not comparable across runs, so we
+do not report it as a metric.
 
-Every dollar figure in this repository is notional. `total_cost_usd` is what the
-same tokens would have cost on the API, not money anyone was charged. We report
-it as a unit of account and as a proxy for quota burn, never as spend. A reader
-comparing our per-item cost against an API-billed study is comparing a price to
-a price, not a price to an invoice.
+Every dollar figure in this repository is notional. `total_cost_usd` is what
+the same tokens would have cost on the API. We report it as a unit of account
+and as a proxy for quota burn, never as spend. A reader comparing our per-item
+cost against an API-billed study is comparing a price to a price, not a price
+to an invoice.
 
 `--system-prompt` measures a clean injection, not daily use. Replacing the
 system prompt removes the confounds (tools, other skills, settings, MCP), but
@@ -58,8 +60,8 @@ them; they generate hypotheses and are not evidence.
 
 Guards are uncorrected by design. They are one-sided non-inferiority tests in
 the conservative direction, and correcting them would make it easier for a
-harmful skill to pass. The asymmetry is deliberate, and it is written down here
-so nobody reads it as an oversight.
+harmful skill to pass. The asymmetry is deliberate, and it is stated so nobody
+reads it as an oversight.
 
 The cluster bootstrap assumes templates are exchangeable. If template difficulty
 tracks who wrote a template, or the order the templates were written in, the
@@ -139,10 +141,11 @@ repository, not from a passphrase in anyone's head, because a secret only a
 person can supply is a step that waits on a person. The cost is that any agent
 with filesystem access can now read the seed, where a remembered passphrase was
 not readable by one, so on this machine reconstruction no longer requires
-guessing at all. We accept that rather than having missed it: the seed has to reach the
-generator through an agent either way. Anyone who can run the generator with a
-guessed seed could reconstruct items. Regeneration between runs is what manages
-contamination, not secrecy, and that is the only reason the trade is affordable.
+guessing at all. We accept it deliberately: the seed has to reach the generator
+through an agent either way. Anyone who can run the generator with a guessed
+seed could reconstruct items. Regeneration between runs is what manages
+contamination, not secrecy, and that is the only reason the trade is
+affordable.
 
 ## The judges
 
@@ -166,8 +169,8 @@ recalibrations, though, judge-derived secondaries carry unquantified drift.
 
 Local judge models are weaker. Ollama models supply genuine provider diversity
 at zero cost, which is the active ingredient per RoPoLL, but they are small. We
-buy diversity of failure mode at the price of individual judge quality, and that
-trade is a design choice rather than a free win.
+buy diversity of failure mode at the price of individual judge quality, and we
+made that trade deliberately.
 
 The distractor auditors are not independent, and Ollama is not installed. The
 two-auditor filter is the gate the whole distractor claim rests on, and it
@@ -182,9 +185,9 @@ attrition number carries this caveat wherever anyone reports it.
 
 ## Scope
 
-Five skills is what the budget supports, not what the space contains. The
-framework survey in [`REJECTED.md`](REJECTED.md) records what was left out and
-why. Several of those calls are defensible rather than certain, and the document
+Five skills is what the budget supports. The space is larger. The framework
+survey in [`REJECTED.md`](REJECTED.md) records what was left out and why.
+Several of those calls are defensible rather than certain, and the document
 exists so a future run can overturn them cheaply.
 
 Findings here are about decision-shaped tasks with computable ground truth. That
