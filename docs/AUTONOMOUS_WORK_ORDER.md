@@ -340,42 +340,71 @@ measurement claim:
   before this rule existed** — `.gitignore` carries `.claude/`, and git never
   descends into an ignored directory.
 
-**The gitlink hazard is real as a mechanism and was mis-told as history.** With
-no ignore rule, `git add -A` records a nested worktree as a *gitlink* — mode
-160000, the entry a submodule gets — after which it reports as modified in
-every session forever. That was reproduced deliberately in a scratch repository.
-What was mis-told is narrower than it looks, and the correction runs the other
-way. The claim here until 2026-08-19 was that the one gitlink this repository
-has had "lived in two `WIP:` auto-commits that never reached `main`". Two `WIP:`
-auto-commits is right; *neither reached `main`* was wrong. `91f2313` added the
-entry and **is** an ancestor of `main`; only `f86269a`, which removed it again,
-stayed on a branch. So `main` carried mode 160000 for the whole time this
-paragraph asserted it never had, on the `instrument-redesign` entry under
-`.claude/worktrees/` — and every fresh `git worktree add` materialised an empty
-placeholder directory there, which is how it was finally noticed.
+**The gitlink hazard is real as a mechanism, and this paragraph has now been
+wrong about the history twice in opposite directions.** With no ignore rule,
+`git add -A` records a nested worktree as a *gitlink* — mode 160000, the entry a
+submodule gets — after which it reports as modified in every session forever.
+That was reproduced deliberately in a scratch repository.
 
-It was removed with `git rm --cached` on 2026-08-19. That is also the first time
-the command appears in the history, so the second half of the old claim was true
-when written and is now false; the entry below is what to do, not a record that
-nobody has had to.
+The history is the part that keeps moving, so all three tellings are kept here.
+The first, written on the branch at `f86269a`, said the entry "was committed
+exactly that way" and was removed by `git rm --cached` on 2026-08-19. `b26fd4b`
+replaced it sixteen minutes later with the opposite: that the gitlink "lived in
+two `WIP:` auto-commits that never reached `main`", and that no `git rm --cached`
+appeared anywhere in the history. **The displaced telling was substantially
+right and the correction was wrong**, which is the reverse of the usual
+direction and the reason the original is quoted here rather than left on an
+unmerged branch.
+
+What is true: two `WIP:` auto-commits *touched* the path — `91f2313` added the
+entry, `f86269a` removed it again — but only `f86269a` stayed on a branch.
+`91f2313` **is** an ancestor of `main`, so the entry sat in `main`'s tree for 35
+commits, on the `instrument-redesign` entry under `.claude/worktrees/`. Note
+that "lived in two `WIP:` auto-commits" is true only about which commits touched
+it, and reads as though the entry never got further; it got as far as `main`.
+
+Nothing showed it. A fresh `git worktree add` materialises an empty placeholder
+directory from the gitlink, and `git status` in the new tree is clean, which is
+how it survived every green gate. It was removed with `git rm --cached` on
+2026-08-19 — the command the entry below already prescribed. Whether that
+command had ever been *run* before is not a thing git records: a tree without the
+entry is indistinguishable from a tree where it was removed some other way, so
+`b26fd4b`'s claim about the history was unfalsifiable rather than merely wrong.
 
 If you ever see mode 160000 in `git ls-files -s`, the fix is `git rm --cached
 <path>` — never deleting the worktree.
 
 **Removing it broke this gate, and the coupling is worth knowing.**
 `check_path_references` treats a code span as a repository path only when its
-first segment is a top-level *directory on disk*. The gitlink made `.claude` one
-in every checkout, including a clean clone, so every `` `.claude/...` `` span in
-these documents was being resolved — and `docs/DECISION_FRAMEWORKS.md` needed a
-`docs-external-paths` line for `thinking-skills/.claude/commands/`, a directory
-in somebody else's repository, purely because of that. With the gitlink gone, `.claude`
-exists only where an agent has made a worktree. The references stop being checked
-on a clean clone and the register lines they justified become "named nowhere",
-which is red in CI and green locally: the inversion that register was written to
-prevent. Both lines are deleted, and both sentences now name a path that either
-resolves or is not a repository path at all. If you add a `` `.claude/…` `` span,
-it will be checked on your machine and invisible in CI — write it so it does not
-need to be.
+first segment is a top-level *directory on disk* (and the span contains a `/` and
+no placeholder). The gitlink made `.claude` such a directory in every checkout,
+clean clones included. Two spans were resolved because of it — `` `.claude/` ``
+and `` `.claude/worktrees/` ``, in this file and in `AGENTS.md` — and one line in
+`[tool.decision-evals.docs-external-paths]` existed solely to excuse a third,
+naming a directory in wanikua/thinking-skills that this repository does not have.
+With the gitlink gone, `.claude` exists only where an agent has made a worktree.
+The excused reference stops being extracted on a clean clone, its register line
+becomes "named nowhere", and the gate goes red in CI while staying green on the
+machine that has a worktree.
+
+That one line is deleted — which the register itself demands, since an entry
+named nowhere is a line to delete — and the sentence it excused no longer puts
+the path in a code span. The two spans that remain are safe in both worlds:
+`.claude/worktrees/` resolves wherever `.claude` exists and is invisible where it
+does not.
+
+**`.venv` has the identical coupling and is left alone deliberately.**
+`.venv/Scripts/de.exe` is named in `[tool.decision-evals.docs-ignored-paths]` and
+its span flips on whether `.venv` is a directory, exactly as `.claude` did. It is
+not a live defect, because the world where it fires cannot run the gate: `de`
+lives inside `.venv`, so there is no `de check` without one. Do not "fix" it by
+deleting the line — that would go red on every machine that can actually run
+this.
+
+The rule for a new span, then, is not about `.claude` specifically: **a code span
+naming a path that does not exist here is checked on machines where its first
+segment happens to be a directory and invisible everywhere else.** Write it so
+it does not need excusing.
 
 **What actually keeps the toolchain out of a nested tree**, since the mechanisms
 are not the obvious ones:

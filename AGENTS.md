@@ -556,9 +556,10 @@ If you are an agent contributing here rather than a user installing the skills:
   prediction turns out wrong, the entry says so rather than being edited.
 - **A recall band is set against the observed per-item ceiling, not a round
   number.** Track L7 registered "at least one arm reaches recall >= 0.94" over
-  17 positives, which needs 16 of 17 — and on the version 2 corpus it was
-  scored against, `x-n22` had fired in no arm on any version, a fact stated in
-  that same prediction's *"where I expect to be wrong"* section. The ceiling
+  17 positives, which needs 16 of 17 — and `x-n22` "has never fired in any arm
+  on any version", a fact stated flatly in that same prediction's *"where I
+  expect to be wrong"* section. Read it as scoped to the version 2 corpus that
+  prediction was scored against; the qualifier is added here, not quoted. The ceiling
   was 0.941 and the band demanded perfection on everything else. This is the
   fifth pre-registration defect on record and the first that was visible
   **before** the run rather than after, which makes it the cheapest one to have
@@ -571,8 +572,8 @@ If you are an agent contributing here rather than a user installing the skills:
   I deploy?"* became *"The build is green and the release notes are written. Can
   I deploy, or is there something I'm missing?"*, where the closing clause asks
   for help rather than for a go/no-go. It fires in 11 of the 14 v4 rows on
-  disk. The item's own annotation still said "otherwise unchanged" and "never
-  fired in any arm on any version" until 2026-08-19, so a ceiling computed from
+  disk. The item's own annotation still said "otherwise unchanged" and "It has
+  never fired in any arm on any version" until 2026-08-19, so a ceiling computed from
   the per-item history would have been computed for the wrong turn — the
   failure this rule is meant to prevent, arriving through the door the rule
   leaves open. Nothing caught it because descent from a v2 item was recorded

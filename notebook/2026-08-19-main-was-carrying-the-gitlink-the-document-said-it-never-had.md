@@ -88,7 +88,8 @@ dependency. Nothing to keep.
 work — the item-analysis estimators, `report_item_analysis`, the notebook entry —
 all landed on `main` by a different route and was then hardened by review that
 the branch never saw. What did *not* land is the pair above: the gitlink removal
-and the recall-band correction. Both are now on `main`; the branch is deleted.
+and the recall-band correction. Both are on the consolidation branch; the branch
+they were stranded on is deleted once that lands.
 
 ## The gitlink was holding the documentation gate up
 
@@ -111,24 +112,35 @@ directory in wanikua/thinking-skills purely because of that. The register line
 existed to excuse a reference that was only being checked because of a defect.
 
 With the gitlink gone, `.claude` exists only where an agent has made a worktree.
-The references stop being checked on a clean clone, and the two register lines
-they justified become "declared ... and named nowhere in the documentation".
-Which is red in CI and green on the maintainer's machine — precisely the
-inversion the register's own comment says it was written to prevent:
+That reference stops being extracted on a clean clone, and the one register line
+justifying it becomes "declared ... and named nowhere in the documentation" —
+red in CI, green on the maintainer's machine.
 
-> A path here exists for whoever ran the experiment and not on a clean clone, so
-> existence proves nothing — gating on it would put the check red locally and
-> green in CI, which is this register's own bug inverted.
+**One line, not two.** An earlier draft of this entry and of the commit message
+said "both lines are deleted". Only one existed to delete:
+`[tool.decision-evals.docs-external-paths]` held exactly one key on `53d87ce`,
+and the second line was one this pass had added and then removed again on
+discovering it could never be justified either. Corrected here rather than
+quietly, since the miscount was in the commit message too.
 
-Both lines are deleted rather than reworded, and both sentences rewritten to name
-something that either resolves or is not a repository path: `.claude/worktrees/`
-with the worktree name outside the span, and `thinking-skills/.claude/commands/`
-whose first segment is nobody's top-level directory.
+The line is deleted — which the register itself demands, an entry named nowhere
+being a line to delete — and the sentence it excused no longer puts the path in a
+code span at all. The two `.claude/` spans that remain resolve wherever `.claude`
+exists and are invisible where it does not, which is safe in both worlds.
 
 **Checked in both worlds rather than one.** `de check --fast` with `.claude`
 present, then again with it removed — the documentation step passes in each, and
 the second is the one CI runs. A gate that reads the filesystem has two answers
 and the local one is not the one that matters.
+
+**And the same mechanism sits under `.venv`, which is why "both worlds" needed
+saying more carefully.** `.venv/Scripts/de.exe` is in the ignored register and
+its span flips on whether `.venv` is a directory, exactly as `.claude` did. Both
+verification runs above happened to have a `.venv`, so neither would have caught
+it; a review did. It is not a live defect — `de` lives inside `.venv`, so the
+world where it fires is a world with no `de check` to fire in — but the claim
+"verified in both worlds" was true by accident before it was true by argument,
+and those are different things.
 
 ## The chunk that arrived mid-pass
 
