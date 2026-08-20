@@ -341,6 +341,46 @@ mutation-checked at each step and still missed it, because a mutation suite test
 the code that exists against deletion, not the code that exists against being
 gated off by a constant, a clock, or a leftover file.
 
+## Round four, and the fix was the worst defect yet
+
+The fourth review read the third round's fixes, and found the same shape again —
+but this time the repair was worse than the thing it repaired, which is the first
+time that has happened here.
+
+The credential fix is the case. The measured defect was a credential helper that
+*hangs*: a fetch that costs the whole ten-second budget and leaks a process. The
+fix disabled credential helpers. That stops the hanging ones and the working ones
+alike — measured, a fetch that succeeds in 0.51s with a helper answering fails in
+0.09s without — so on any private remote every fetch this hook makes would have
+failed, silently, with the drift check falling back to the stale ref on disk and
+returning zero. **A bounded, noisy failure was traded for an unbounded, silent
+one, and the gate was green either way.** The blast radius here was nil only
+because this repository's remote is public and fetches anonymously — which is
+also why nothing in the ordinary test suite could have caught it.
+
+The replacement then reopened it once more before shipping.
+`credential.interactive=false` was checked against the helper path and not
+against askpass, where git core reads the same key and answers `fatal: unable to
+get password from user`. It survives now only as a test asserting it is *absent*.
+
+Two more of the same shape. `FETCH_TIMEOUT_SECONDS = 0.001` passed all 88 tests
+while making the check silent on real drift — last round's trap with the
+inequality reversed, after last round's commit message claimed to have closed it.
+And the filesystem discriminator that replaced the message sniff exempted every
+bare repository and false-positived on a healthy one, because each signal alone
+is wrong: git's message settles the cases it names, the filesystem settles the
+ones it does not, and **choosing between them was the error — the previous round
+swapped one partial signal for another and called it a fix.**
+
+**Four rounds, and the honest summary is that this script was never the point.**
+It is 200 lines that shell out to `git`, written to stop one specific mistake,
+and it has produced fourteen real defects under adversarial review — nine of them
+introduced or left by a *previous* round of fixing. Every one had the same
+signature: a plausible zero, a green gate, nothing to see. The rounds converged
+in the end, but what they demonstrate is not that the script is now correct. It
+is that a guard which fails open is extraordinarily hard to know anything about,
+because its failure mode and its success mode are the same observation.
+
 ## This entry broke the rule it cites, and here is the ledger
 
 `AGENTS.md` says `notebook/` is append-only. This entry was edited in place
