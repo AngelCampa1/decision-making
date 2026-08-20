@@ -62,3 +62,24 @@ repos:
         language: system
         pass_filenames: false
         stages: [pre-push]
+
+      # Refuses a commit on `main` while `main` is behind `origin/main`, after
+      # 2026-08-19, when a failed branch switch left the shared checkout on a
+      # `main` that was 47 commits stale. Narrow by design: work here happens
+      # on branches and merges to `main`, so committing directly onto a stale
+      # `main` is already the anomaly, and the hook is silent on every branch.
+      #
+      # It runs `git` and nothing else, so it does not pay uv's startup cost.
+      # The fetch it attempts is best-effort and time-boxed -- offline still
+      # commits, against whatever remote ref is already on disk.
+      #
+      # The same script carries a `--doctor` mode for `core.bare`, which is
+      # deliberately *not* wired here: with `core.bare = true` git aborts the
+      # commit before any hook runs, so no stage can reach it. See the module
+      # docstring.
+      - id: git-hygiene
+        name: git hygiene (main not behind origin/main)
+        entry: python scripts/check_git_hygiene.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
