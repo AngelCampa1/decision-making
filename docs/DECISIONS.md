@@ -47,6 +47,43 @@ merge is exactly where a label could move with no commit of its own to name,
 and the register is where a reader would find out whether one did. This one
 records that none did.
 
+## 2026-08-20 — `s13p`'s annotation named a directory no verdict has been written to
+
+**Commits:** `2bc3a26`
+
+Closes the "Outstanding, 2026-08-19" note on the entry below, which is the only
+thing that entry left standing.
+
+The corrected `why` it describes cites its fourteen rows as being in
+`results/triggers/`. No verdict file has ever been written there:
+`run_triggers.py` writes `verdicts-<description>.jsonl` beside the run README,
+so the seven v4 files sit under `results/decision-making/`, in the three runs
+the entry below names. The copy in `docs/DECISIONS.md` was corrected in place at
+the time; the copy in `datasets/triggers/decision-making/s.yaml` is a governed
+path and was left for its own commit, which is this one.
+
+The replacement wording points at the register rather than repeating the three
+run directories inside the answer key. Two copies of a list is how the first
+version of this annotation went wrong -- descent was recorded only in `why`
+prose, prose cannot be diffed, and an annotation about the v2 item kept reading
+as an annotation about the v4 one. A pointer has one home.
+
+**No label moved, no turn text moved, and `set_version` stays at 4.** The same
+distinction the entry below draws, for the same reason: an annotation correction
+and a label move are the same size in a diff, and the register is where a reader
+of the numbers finds out which one happened. Nothing already published is
+invalidated by this.
+
+**What still is not checked.** The documentation gate resolves backticked paths
+in root `*.md` and `docs/*.md`, and this path was in neither -- it was in a YAML
+file the gate does not read, and it survived a full `de check` for a day
+alongside a register entry that named it. Widening the gate to corpus
+annotations was considered and is not done here: `why` fields are prose about
+runs that have happened, which is the same class as `notebook/` and
+`results/**/README.md`, and those are excluded on purpose because a dated record
+necessarily names things that later moved. So this one was caught by reading,
+and the next one will be too.
+
 ## 2026-08-19 — `s13p` is not the turn `x-n22` was, and its annotation said it was
 
 **Commits:** `eb99e81`
