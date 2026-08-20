@@ -91,6 +91,7 @@ from decision_evals.trigger_arms import (  # noqa: E402
     false_positive_rate_by_kind,
     format_bands,
     format_comparison,
+    format_confusion,
     format_difference,
     format_item_analysis,
     format_negative_kinds,
@@ -719,6 +720,39 @@ def report_negative_kinds(done: dict[tuple[str, int], dict[str, object]]) -> Non
         print("  So the ranking is a description of this run, not a difference between kinds.")
 
 
+def report_confusion(done: dict[tuple[str, int], dict[str, object]]) -> None:
+    """The four cells across the arm, the base rate, and Matthews correlation.
+
+    `evaluate` prints tp/fp/tn/fn for one repeat and always has. What has never
+    been printed is the table across an arm, or the number it makes available:
+    firing accuracy on this corpus has a majority baseline of 2/3, so 0.667 is
+    what an arm that never fires scores and 0.333 is what an arm that always
+    fires scores. Four published runs are scored on accuracy and stay quotable
+    against each other; none of them sat beside the baseline it had to clear.
+
+    Item-weighted, matching the `ACROSS N REPEAT(S)` block above rather than the
+    per-repeat block below it. A `--band` run shares a checkpoint with the full
+    run on purpose, so uneven repeats are the routine state and row weighting
+    hands the over-collected band extra votes in a headline.
+
+    Printed rather than raised, like `report_bands`: a corpus holding one label
+    cannot be scored this way and a run that made every call should not lose its
+    report to that.
+    """
+    print(f"\n{'=' * 60}\nCONFUSION -- the table, the base rate, and MCC\n{'=' * 60}")
+    try:
+        arm = summarise(list(done.values()), weight="item")
+    except ArmError as error:
+        print(f"  not available: {error}")
+        return
+    for line in format_confusion(arm.confusion):
+        print(line)
+    print(
+        f"  accuracy {arm.accuracy:.4f} against that baseline. Reported beside MCC and not "
+        "replaced by it: accuracy is what the published runs were scored on."
+    )
+
+
 def report_item_analysis(
     done: dict[tuple[str, int], dict[str, object]],
     arm: str,
@@ -1261,6 +1295,7 @@ def main() -> int:
     if report.missed:
         print(f"  missed: {', '.join(report.missed)}")
 
+    report_confusion(done)
     report_bands(done)
     report_negative_kinds(done)
     report_item_analysis(done, checkpoint.stem, args.pool or ())

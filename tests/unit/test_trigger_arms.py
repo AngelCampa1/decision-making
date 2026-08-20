@@ -16,12 +16,14 @@ import pytest
 
 from decision_evals.trigger_arms import (
     ArmError,
+    ConfusionMatrix,
     bootstrap_rate,
     broken_item_screen,
     compare,
     covers_rates,
     format_bands,
     format_comparison,
+    format_confusion,
     format_item_analysis,
     format_rate,
     item_analysis,
@@ -1638,3 +1640,193 @@ class TestItemAnalysisOnTheRecords:
         arms["in-situ"] = load_arm(in_situ)
         with pytest.raises(ArmError, match="different prompt venues"):
             item_analysis(arms)
+
+
+class TestConfusionMatrixAndMcc:
+    """Accuracy on this corpus has a majority baseline of 2/3 and never said so.
+
+    86 positives against 172 negatives, so an arm that never fires scores 0.667
+    and an arm that always fires scores 0.333. Neither number is a result and
+    both look like one. MCC is the correlation over the same table, and the
+    distinction it makes and accuracy does not is the reason both are printed.
+    """
+
+    def test_it_is_the_phi_coefficient_over_the_table(self) -> None:
+        matrix = ConfusionMatrix(
+            true_positives=3,
+            false_positives=1,
+            true_negatives=4,
+            false_negatives=2,
+            weight="record",
+        )
+        # (3*4 - 1*2) / sqrt(4 * 5 * 5 * 6) = 10 / sqrt(600)
+        assert matrix.mcc == pytest.approx(10 / math.sqrt(600))
+        assert matrix.n == pytest.approx(10.0)
+        assert matrix.base_rate == pytest.approx(0.5)
+        assert matrix.majority_baseline == pytest.approx(0.5)
+
+    def test_a_perfect_arm_is_one_and_an_inverted_one_is_minus_one(self) -> None:
+        perfect = ConfusionMatrix(
+            true_positives=4,
+            false_positives=0,
+            true_negatives=6,
+            false_negatives=0,
+            weight="record",
+        )
+        inverted = ConfusionMatrix(
+            true_positives=0,
+            false_positives=6,
+            true_negatives=0,
+            false_negatives=4,
+            weight="record",
+        )
+        assert perfect.mcc == pytest.approx(1.0)
+        assert inverted.mcc == pytest.approx(-1.0)
+
+    def test_the_majority_baseline_is_a_property_of_the_corpus(self) -> None:
+        """The 2/3 the reported accuracies have always been sitting on."""
+        matrix = ConfusionMatrix(
+            true_positives=0,
+            false_positives=0,
+            true_negatives=172,
+            false_negatives=86,
+            weight="item",
+        )
+        assert matrix.base_rate == pytest.approx(86 / 258)
+        assert matrix.majority_baseline == pytest.approx(2 / 3)
+
+    def test_both_degenerate_arms_are_undefined_rather_than_zero(self) -> None:
+        """Where this departs from `sklearn`, deliberately.
+
+        An arm that never fires and an arm that always fires are 0.667 and
+        0.333 on accuracy -- a 33-point spread that is entirely class balance.
+        Both have an empty margin, so the coefficient divides by zero. Zero
+        would read as a measurement of no association.
+        """
+        never = ConfusionMatrix(
+            true_positives=0,
+            false_positives=0,
+            true_negatives=172,
+            false_negatives=86,
+            weight="item",
+        )
+        always = ConfusionMatrix(
+            true_positives=86,
+            false_positives=172,
+            true_negatives=0,
+            false_negatives=0,
+            weight="item",
+        )
+        assert never.mcc is None
+        assert always.mcc is None
+
+    def test_a_single_label_table_is_undefined(self) -> None:
+        matrix = ConfusionMatrix(
+            true_positives=0,
+            false_positives=5,
+            true_negatives=5,
+            false_negatives=0,
+            weight="record",
+        )
+        assert matrix.mcc is None
+
+    def test_a_negative_cell_is_refused(self) -> None:
+        with pytest.raises(ArmError, match="negative cell"):
+            ConfusionMatrix(
+                true_positives=-1,
+                false_positives=1,
+                true_negatives=1,
+                false_negatives=1,
+                weight="record",
+            )
+
+    def test_an_all_zero_table_is_refused(self) -> None:
+        """Every property divides by a margin, so there is nothing to describe."""
+        with pytest.raises(ArmError, match="describes no arm"):
+            ConfusionMatrix(
+                true_positives=0,
+                false_positives=0,
+                true_negatives=0,
+                false_negatives=0,
+                weight="record",
+            )
+
+
+class TestSummariseCarriesTheTable:
+    def test_the_cells_agree_with_the_rates_under_record_weighting(self) -> None:
+        rows = [
+            row("p1", fired=True, should_fire=True),
+            row("p2", fired=False, should_fire=True),
+            row("n1", fired=True, should_fire=False),
+            row("n2", fired=False, should_fire=False),
+        ]
+        arm = summarise(rows)
+        matrix = arm.confusion
+        assert (matrix.true_positives, matrix.false_negatives) == (1, 1)
+        assert (matrix.false_positives, matrix.true_negatives) == (1, 1)
+        assert matrix.weight == "record"
+        assert matrix.n == pytest.approx(len(rows))
+        assert arm.recall == pytest.approx(
+            matrix.true_positives / (matrix.true_positives + matrix.false_negatives)
+        )
+        assert arm.false_positive_rate == pytest.approx(
+            matrix.false_positives / (matrix.false_positives + matrix.true_negatives)
+        )
+
+    def test_item_weighting_makes_the_cells_expected_counts(self) -> None:
+        """Uneven repeats are routine here, so the cells must sum to items.
+
+        `p1` is collected twice and fires once; under row weighting it would
+        contribute two cells and outvote the singly-collected items.
+        """
+        rows = [
+            row("p1", fired=True, should_fire=True, repeat=0),
+            row("p1", fired=False, should_fire=True, repeat=1),
+            row("n1", fired=False, should_fire=False),
+        ]
+        matrix = summarise(rows, weight="item").confusion
+        assert matrix.true_positives == pytest.approx(0.5)
+        assert matrix.false_negatives == pytest.approx(0.5)
+        assert matrix.n == pytest.approx(2.0)
+        assert matrix.weight == "item"
+
+    def test_unparseable_rows_are_outside_the_table(self) -> None:
+        """Same rule as the rates: a missing verdict is not a decline to fire."""
+        rows = [
+            row("p1", fired=True, should_fire=True),
+            row("p2", fired=None, should_fire=True),
+            row("n1", fired=False, should_fire=False),
+        ]
+        arm = summarise(rows)
+        assert arm.unparseable == 1
+        assert arm.confusion.n == pytest.approx(2.0)
+
+
+class TestFormatConfusion:
+    def test_it_prints_the_table_the_base_rate_and_the_coefficient(self) -> None:
+        matrix = ConfusionMatrix(
+            true_positives=3,
+            false_positives=1,
+            true_negatives=4,
+            false_negatives=2,
+            weight="record",
+        )
+        lines = "\n".join(format_confusion(matrix))
+        assert "should fire" in lines
+        assert "base rate 0.5000" in lines
+        assert "MCC +0.4082" in lines
+
+    def test_an_undefined_coefficient_names_the_empty_margins(self) -> None:
+        """The conventional 0.000 is stated, not performed."""
+        never = ConfusionMatrix(
+            true_positives=0,
+            false_positives=0,
+            true_negatives=172,
+            false_negatives=86,
+            weight="item",
+        )
+        lines = "\n".join(format_confusion(never))
+        assert "MCC undefined" in lines
+        assert "fired" in lines
+        assert "substitutes 0.000" in lines
+        assert "0.6667" in lines

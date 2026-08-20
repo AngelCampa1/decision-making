@@ -712,6 +712,31 @@ class TestItemAnalysisIsReachedFromTheReportPath:
         assert "unparseable" in out
 
 
+class TestConfusionIsReachedFromTheReportPath:
+    """The majority baseline every reported accuracy has been sitting on."""
+
+    def test_main_prints_it(
+        self, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        monkeypatch.setattr(runner, "collect", _fake_collect_from_labels)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py"])
+        assert runner.main() == 0
+        out = capsys.readouterr().out
+        assert "CONFUSION" in out
+        assert "base rate" in out
+        assert "always-answer-the-larger-class accuracy" in out
+
+    def test_a_corpus_it_cannot_score_costs_the_table_not_the_run(
+        self, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """One label is not an arm, and `summarise` refuses rather than returning 0."""
+        done = {("p1", 0): _paired_rows()[0]}
+        runner.report_confusion(done)
+        out = capsys.readouterr().out
+        assert "not available" in out
+        assert "needs both labels" in out
+
+
 def _write_arm(path: Path, rows: list[dict[str, object]]) -> Path:
     path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
     return path

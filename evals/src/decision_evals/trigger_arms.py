@@ -71,6 +71,118 @@ class ArmError(ValueError):
 
 
 @dataclass(frozen=True, slots=True)
+class ConfusionMatrix:
+    """The 2x2 table behind an arm's rates, and the coefficient over it.
+
+    Firing accuracy on this corpus has a majority baseline of 2/3 -- 86
+    positives against 172 negatives -- so an arm that never fires scores 0.667
+    and an arm that always fires scores 0.333, and the distance between those
+    two numbers is the class balance rather than anything either arm did.
+    Neither of them is reported as such anywhere, because the four cells were
+    printed by `evaluate` per repeat and never assembled across an arm.
+
+    Attributes:
+        true_positives: Positives the arm fired on.
+        false_positives: Negatives the arm fired on.
+        true_negatives: Negatives the arm stayed silent on.
+        false_negatives: Positives the arm stayed silent on.
+        weight: Which denominator the cells were taken over, carried for the
+            same reason :class:`ArmSummary` carries it.
+
+    **The cells are floats and that is not a rounding convenience.** Under
+    ``weight="item"`` a cell is the number of fires an item is expected to
+    produce in *one* repeat, summed over items, so a case collected three times
+    contributes once rather than three times -- the same arithmetic
+    :func:`summarise` already does for precision under that weighting. Under
+    ``weight="record"`` they are whole numbers carried as floats so that one
+    dataclass serves both and a caller cannot read the type as a promise about
+    the denominator.
+
+    Raises:
+        ArmError: on a negative cell, or on a table whose cells are all zero.
+            Every property below divides by a margin, and an empty table is the
+            one input for which there is no table to describe. Refusing at
+            construction makes the properties total for every instance that
+            exists.
+    """
+
+    true_positives: float
+    false_positives: float
+    true_negatives: float
+    false_negatives: float
+    weight: Weight
+
+    def __post_init__(self) -> None:
+        cells = (
+            self.true_positives,
+            self.false_positives,
+            self.true_negatives,
+            self.false_negatives,
+        )
+        if any(cell < 0 for cell in cells):
+            raise ArmError(f"a confusion matrix cannot hold a negative cell: {cells}")
+        if not any(cells):
+            raise ArmError(
+                "an all-zero confusion matrix describes no arm. Every rate below divides "
+                "by a margin of this table, and an empty one has nothing to divide."
+            )
+
+    @property
+    def n(self) -> float:
+        """Everything in the table."""
+        return (
+            self.true_positives + self.false_positives + self.true_negatives + self.false_negatives
+        )
+
+    @property
+    def base_rate(self) -> float:
+        """Share of the table that is positive. The number accuracy hides."""
+        return (self.true_positives + self.false_negatives) / self.n
+
+    @property
+    def majority_baseline(self) -> float:
+        """Accuracy of always predicting whichever class is larger.
+
+        The bar firing accuracy has to clear before it means anything, and it
+        is a property of the corpus rather than of the arm.
+        """
+        return max(self.base_rate, 1.0 - self.base_rate)
+
+    @property
+    def mcc(self) -> float | None:
+        """Matthews correlation over this table, or ``None`` where undefined.
+
+        The correlation between the arm's answers and the labels. Both
+        degenerate arms above sit at 0 whatever the class balance is, which is
+        the property accuracy lacks and the reason this is worth reporting
+        beside it rather than instead of it -- accuracy is what four published
+        runs were scored on and stays quotable against them.
+
+        **Undefined rather than zero when a margin is empty, and that departs
+        from the usual convention** (`sklearn` substitutes 0.0). A zero margin
+        means the arm answered one way for everything, or the table holds one
+        label; the denominator has a zero factor and there is no correlation to
+        report. Returning 0.0 would put *"this arm's answers are uncorrelated
+        with the labels"* and *"this quantity has no value here"* into the same
+        float, and this repository has twice published an estimator that could
+        only return zero. The conventional substitution is stated by
+        :func:`format_confusion`, where a reader can see it being made.
+        """
+        denominator = (
+            (self.true_positives + self.false_positives)
+            * (self.true_positives + self.false_negatives)
+            * (self.true_negatives + self.false_positives)
+            * (self.true_negatives + self.false_negatives)
+        )
+        if denominator <= 0:
+            return None
+        numerator = (
+            self.true_positives * self.true_negatives - self.false_positives * self.false_negatives
+        )
+        return numerator / math.sqrt(denominator)
+
+
+@dataclass(frozen=True, slots=True)
 class ArmSummary:
     """What one arm did on firing.
 
@@ -90,6 +202,12 @@ class ArmSummary:
             was taken over. **Carried in the result so a rate cannot be quoted
             without it**, because the two answers differ whenever repeats are
             uneven and nothing in the number says which one it is.
+        confusion: The 2x2 table the four rates above are computed from, under
+            the same weighting, carrying the base rate and Matthews
+            correlation. Assembled here because ``evaluate`` prints the cells
+            for one repeat and nothing has ever held them across an arm, so
+            every reported accuracy sat beside a majority baseline nobody
+            stated.
     """
 
     n_records: int
@@ -101,6 +219,7 @@ class ArmSummary:
     false_positive_rate: float
     missed: tuple[str, ...]
     weight: Weight
+    confusion: ConfusionMatrix
 
 
 @dataclass(frozen=True, slots=True)
@@ -255,6 +374,17 @@ def summarise(records: Iterable[Record], *, weight: Weight = "record") -> ArmSum
             false_positive_rate=sum(fired_negative) / len(fired_negative),
             missed=missed,
             weight=weight,
+            # Expected fires per item in one repeat, so the cells sum to the
+            # item count rather than the row count and a case collected three
+            # times does not weigh three votes. Same arithmetic as `precision`
+            # two lines up.
+            confusion=ConfusionMatrix(
+                true_positives=expected_true,
+                false_negatives=len(fired_positive) - expected_true,
+                false_positives=expected_false,
+                true_negatives=len(fired_negative) - expected_false,
+                weight=weight,
+            ),
         )
 
     true_positives = sum(1 for row in positives if _fired(row))
@@ -271,6 +401,13 @@ def summarise(records: Iterable[Record], *, weight: Weight = "record") -> ArmSum
         false_positive_rate=false_positives / len(negatives),
         missed=missed,
         weight=weight,
+        confusion=ConfusionMatrix(
+            true_positives=true_positives,
+            false_negatives=len(positives) - true_positives,
+            false_positives=false_positives,
+            true_negatives=len(negatives) - false_positives,
+            weight=weight,
+        ),
     )
 
 
@@ -2268,6 +2405,54 @@ def format_bands(bands: Mapping[str, ArmSummary]) -> Sequence[str]:
             lines.append(
                 f"  band name(s) the corpus does not declare: {', '.join(bands.unrecognised)}"
             )
+    return lines
+
+
+def format_confusion(matrix: ConfusionMatrix) -> Sequence[str]:
+    """The 2x2 table, the base rate it is drawn from, and the coefficient.
+
+    The base rate is printed above the coefficient rather than below it because
+    it is what makes the coefficient worth reading: an arm scoring 0.667
+    accuracy on this corpus has matched the majority baseline exactly and could
+    have done it by never firing.
+
+    Where `ConfusionMatrix.mcc` is undefined this says so, names the margin
+    that is empty, and states the conventional substitution instead of
+    performing it. A reader who wants `sklearn`'s 0.0 can see the step being
+    taken; a reader who wants to know the arm answered one way for everything
+    is told that instead of being handed a number that looks like a
+    measurement.
+
+    Cells print at one decimal because item weighting makes them expected
+    counts rather than counts -- an integer format would round 85.5 to 86 and
+    silently claim a whole item.
+    """
+    lines = [
+        f"  weighted by {matrix.weight}",
+        f"  {'':14s} {'fired':>9s} {'silent':>9s}",
+        f"  {'should fire':14s} {matrix.true_positives:9.1f} {matrix.false_negatives:9.1f}",
+        f"  {'should not':14s} {matrix.false_positives:9.1f} {matrix.true_negatives:9.1f}",
+        f"  base rate {matrix.base_rate:.4f} over {matrix.n:.1f}; "
+        f"always-answer-the-larger-class accuracy is {matrix.majority_baseline:.4f}",
+    ]
+    if (mcc := matrix.mcc) is None:
+        empty = [
+            name
+            for name, margin in (
+                ("fired", matrix.true_positives + matrix.false_positives),
+                ("silent", matrix.true_negatives + matrix.false_negatives),
+                ("should fire", matrix.true_positives + matrix.false_negatives),
+                ("should not", matrix.true_negatives + matrix.false_positives),
+            )
+            if margin <= 0
+        ]
+        lines.append(
+            f"  MCC undefined: the {', '.join(empty)} margin(s) of this table are empty, so "
+            "the coefficient divides by zero. The usual convention substitutes 0.000; that "
+            "is stated here rather than printed as a result."
+        )
+    else:
+        lines.append(f"  MCC {mcc:+.4f}   <- 0 for both degenerate arms, whatever the balance")
     return lines
 
 
