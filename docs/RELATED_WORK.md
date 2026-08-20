@@ -1,5 +1,7 @@
 # Related work
 
+**Audience:** the evaluating reader.
+
 The evidence base this project is built on, current as of August 2026. Organised
 by what each finding *does* for the design rather than by topic, because several
 of these changed decisions rather than merely informing them.
@@ -28,8 +30,7 @@ Haiku 4.5 was statistically indistinguishable from zero. Confidence: low-medium,
 a LessWrong re-analysis, not peer-reviewed.
 *Effect on design:* our distractor audit replicates the two-auditor filter, we
 expect heavy attrition, and expected effect size is revised down, which raises
-required N. This is the single largest threat to the flagship skill's premise,
-and we treat it as one rather than omitting it.
+required N. This is the single largest threat to the flagship skill's premise.
 
 **Chroma Research, "Context Rot"** (2025), 18 models including Claude Opus 4.
 Models above 95% on short prompts fall to 60-70% with semantically related

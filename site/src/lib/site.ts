@@ -5,21 +5,34 @@ export const REPO = 'https://github.com/AngelCampa1/decision-making-skills';
 export const BRANCH = 'main';
 
 /**
- * What this site is, in one sentence, for the machines.
+ * What the skill is, in one sentence, for the machines.
  *
- * Used by the `WebSite` node of every page's structured data, so it is the
- * site-level answer rather than any page's. Deliberately carries no measured
- * number: it is repeated on every page and cached by every crawler that has
- * seen one of them, so it says only what stays true.
+ * Used by the `SoftwareSourceCode` node on the landing page and the skill
+ * index, and as the `/skill/` page's own description. Deliberately carries no
+ * measured number: a crawler caches it and there is no correcting it once
+ * posted, so it says only what stays true.
  */
 export const SKILL_DESCRIPTION =
   'One skill that works out what is hard about a decision, then runs a single ' +
   'procedure for it. Plain markdown, Apache-2.0, and free.';
 
+/**
+ * What this site is, in one sentence.
+ *
+ * The `WebSite` node of every page's structured data carries it, so it is the
+ * site-level answer rather than any page's, and `Doc.astro` falls back to it
+ * for a document whose body yields no summary. Same rule as above: no measured
+ * number.
+ *
+ * It read `placebo-controlled` until 2026-08-20. The placebo arm is written and
+ * `check_placebo_match` sizes it on every gate run, and no published run has
+ * used it, so the present indicative claimed a control that has never stood in
+ * for anything. Arms belong here as a design or not at all.
+ */
 export const SITE_DESCRIPTION =
-  'Agent skills for decisions under uncertainty, plus the evaluation harness ' +
-  'that measures whether they work: pre-registered, placebo-controlled, and ' +
-  'public about what has not been shown.';
+  'Agent skills for decisions under uncertainty, and the evaluation harness ' +
+  'that measures them: pre-registered predictions, blind labels, every run ' +
+  'published.';
 
 export interface NavItem {
   label: string;

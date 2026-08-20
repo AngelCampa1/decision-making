@@ -145,8 +145,8 @@ const counts = [
 ];
 
 const testArms = [
-  ['off', 'We take the skill away.', 'the floor'],
-  ['on', 'We add the real skill.', 'the thing we care about'],
+  ['off', 'No skill at all.', 'the floor'],
+  ['on', 'The real skill.', 'the thing we care about'],
   ['placebo', 'Filler of the same length and shape.', 'whether the words did the work'],
   ['cot', 'Just "think step by step".', 'whether a cheap line does the same'],
 ];
@@ -162,7 +162,7 @@ const testArms = [
  *
  * The count is not spelled out here on purpose. `site/claims.json` refuses any
  * page carrying a retracted phrase, and it cannot tell a published claim from a
- * comment describing one — so a comment that quoted the old wording would fail
+ * comment describing one, so a comment that quoted the old wording would fail
  * the gate that exists to catch the old wording. Say what was wrong; do not
  * reprint it.
  *
@@ -171,7 +171,7 @@ const testArms = [
  * posted, so they say only what is structurally true.
  */
 const DESCRIPTION = `A free file your AI agent reads when you face a hard call. ${facts.countWord} methods, and it reads one. The evaluation harness that measures it is here too.`;
-const OG_TITLE = 'An agent skill for hard choices. Nothing proven yet.';
+const OG_TITLE = 'An agent skill for hard choices, and the harness that measures it.';
 const OG_DESCRIPTION = `${facts.countWord} procedures. Your agent reads one. Free, and one line installs it. Every result is public, including the ones that went badly.`;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -243,12 +243,12 @@ const best = Math.max(...arms.map((a) => a.accuracy));
       <div>
         <p class="status-block__label">Where the evidence stands</p>
         <p>
-          <strong>We have not proven this works.</strong> No skill here has passed a real
-          test. The scorecard is empty on purpose.
+          <strong>We built the measuring tools first.</strong> Every result is public,
+          including the times we caught our own ruler bending.
         </p>
         <p>
-          We built the measuring tools first. Every result is public. So is every time
-          we caught our own ruler bending.
+          No skill here carries a verdict yet. The scorecard stays empty until one
+          earns it.
         </p>
       </div>
     </div>
@@ -379,8 +379,8 @@ const best = Math.max(...arms.map((a) => a.accuracy));
     </div>
 
     <p>
-      So why ship the file at all? A verdict rules what we may claim in public. It does
-      not rule what you may install. Use it if it helps you. Drop it if it does not.
+      A verdict rules what we may claim in public. It does not rule what you may
+      install. Use it if it helps you. Drop it if it does not.
     </p>
     <p>
       We also keep a list of the times we broke our own tests. {
@@ -399,14 +399,14 @@ const best = Math.max(...arms.map((a) => a.accuracy));
 
     <h2>How we test</h2>
     <p>
-      Lots of people share prompt packs. Almost nobody checks if they work. So we run
-      each skill four ways on the same questions.
+      Lots of people share prompt packs. Almost nobody checks if they work. A
+      confirmation run puts a skill through four versions on the same questions.
     </p>
 
     <div class="table-scroll breakout">
       <table>
         <thead>
-          <tr><th>Version</th><th>What we run</th><th>What it tells us</th></tr>
+          <tr><th>Version</th><th>What it gets</th><th>What it tells us</th></tr>
         </thead>
         <tbody>
           {
@@ -428,6 +428,10 @@ const best = Math.max(...arms.map((a) => a.accuracy));
       A placebo is a fake with the same shape. Beating no skill at all is easy. The
       placebo is the one that tells us anything. If filler scores the same, the words did
       nothing.
+    </p>
+    <p>
+      The placebo is written, and a check here refuses one of the wrong size or shape. No
+      run has used it yet, or the step-by-step one.
     </p>
     <p>
       We write down what we expect before each run. The date goes into git history, so we

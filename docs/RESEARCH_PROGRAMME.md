@@ -1,5 +1,7 @@
 # The research programme
 
+**Audience:** the evaluating reader, and in particular anyone picking up a track.
+
 What we are trying to find out: whether a written skill measurably improves the
 decisions an agentic system makes, when that system accumulates context over
 turns and delegates work to sub-agents.
@@ -25,11 +27,7 @@ They are not appendices; the work is not doable without them.
 
 How to read this. Sixteen tracks in eight parts. Each track states a question,
 what would kill it, the experiments inside it, and what "done" means. Point at
-one and there is
-enough here to work for days without asking what next. Track letters (`K`, `A`,
-`0`…) are stable identifiers, referenced from commit messages and the task
-list; they are not an order. The parts are the order, and
-[The tracks](#the-tracks) is the index.
+one and there is enough here to work for days without asking what next.
 
 Two lanes, and they run in parallel. The *product* lane (Part 2) ships skills
 people install and use, and never waits on the research lane. The *research*
@@ -42,7 +40,57 @@ programme is ordered so that the cheapest disconfirming evidence arrives first.
 
 ---
 
-## Where we are, honestly
+## The tracks
+
+| Part | Track | |
+|---|---|---|
+| **1. What is already known** | `K` | Decision frameworks: the review this project skipped |
+|  | `M` | Skill design: how a skill should be built |
+| **2. The product** | `S` | Ship the skills |
+|  | `L` | Skill variants: which formulation is best |
+| **3. The instrument** | `0` | Instrument: multi-turn and delegation |
+|  | `N` | The trigger corpus: is the instrument behind `L` and `M` a fair test? |
+| **4. Does the failure exist** | `A` | Replication |
+|  | `B` | Attribution |
+| **5. Where a skill helps** | `C` | Evidence aggregation |
+|  | `D` | Delegation quality |
+|  | `E` | Handoff fidelity |
+| **6. Confirmation** | `F` | End-to-end |
+| **7. Cross-cutting** | `G` | Volume (demoted) |
+|  | `H` | Tailoring, and life decisions |
+|  | `I` | Reliability as a first-class outcome |
+| **8. Output** | `J` | Write-up and release |
+
+Track letters (`K`, `A`, `0`…) are stable identifiers, referenced from commit
+messages and the task list. The parts are the order.
+
+---
+
+## The venue map
+
+Two binary axes. The repository has lived entirely in one cell.
+
+```text
+                  single call            turns accumulate
+                +--------------------+--------------------+
+  no sub-agents |  V1                |  V2                |
+                |  all work to date  |  the multi-turn    |
+                |  3 corpora, 3 null |  venue             |
+                +--------------------+--------------------+
+  sub-agents    |  V3                |  V4                |
+                |  fan out once,     |  the system the    |
+                |  aggregate once    |  goal describes    |
+                +--------------------+--------------------+
+```
+
+V1 is the cell the literature says is *least* likely to show anything. V4 is
+what "agentic systems that rely on sub-agents" means. V2 and V3 are the
+decompositions that make V4 attributable: without them a V4 result cannot say
+whether the damage came from turns or from delegation.
+
+---
+
+## What has been measured so far
 
 Three corpora were built and all three measured nothing:
 
@@ -118,62 +166,12 @@ in a notebook entry. Both identifiers were resolved against arxiv.org before thi
 version. A search-result summary is not the paper, and two similarly-named
 papers on one topic is the normal case. Track K5 makes `de check` enforce it.
 
-One correction to our own records follows from this table and is a task, not a
-footnote: the plan in
+One correction to our own records follows from this table, and it is a task:
+the plan in
 `docs/superpowers/plans/2026-08-11-long-context-experiment.md` argues repeats are
 near-worthless because between-item variance dominates. That is correct for
 estimating a mean and exactly wrong for estimating reliability, which the
 multi-turn result says is where the effect lives. See Track I.
-
----
-
-## The venue map
-
-Two binary axes. The repository has lived entirely in one cell.
-
-```text
-                  single call            turns accumulate
-                +--------------------+--------------------+
-  no sub-agents |  V1                |  V2                |
-                |  all work to date  |  the multi-turn    |
-                |  3 corpora, 3 null |  venue             |
-                +--------------------+--------------------+
-  sub-agents    |  V3                |  V4                |
-                |  fan out once,     |  the system the    |
-                |  aggregate once    |  goal describes    |
-                +--------------------+--------------------+
-```
-
-V1 is the cell the literature says is *least* likely to show anything. V4 is
-what "agentic systems that rely on sub-agents" means. V2 and V3 are the
-decompositions that make V4 attributable: without them a V4 result cannot say
-whether the damage came from turns or from delegation.
-
----
-
-## The tracks
-
-| Part | Track | |
-|---|---|---|
-| **1. What is already known** | `K` | Decision frameworks: the review this project skipped |
-|  | `M` | Skill design: how a skill should be built |
-| **2. The product** | `S` | Ship the skills |
-|  | `L` | Skill variants: which formulation is best |
-| **3. The instrument** | `0` | Instrument: multi-turn and delegation |
-|  | `N` | The trigger corpus: is the instrument behind `L` and `M` a fair test? |
-| **4. Does the failure exist** | `A` | Replication |
-|  | `B` | Attribution |
-| **5. Where a skill helps** | `C` | Evidence aggregation |
-|  | `D` | Delegation quality |
-|  | `E` | Handoff fidelity |
-| **6. Confirmation** | `F` | End-to-end |
-| **7. Cross-cutting** | `G` | Volume (demoted) |
-|  | `H` | Tailoring, and life decisions |
-|  | `I` | Reliability as a first-class outcome |
-| **8. Output** | `J` | Write-up and release |
-
-Track letters are stable identifiers, not an order; they are referenced from
-commit messages and the task list. The parts are the order.
 
 ---
 
@@ -219,7 +217,7 @@ Eleven frameworks catalogued and graded on *prescriptive* evidence rather than
 popularity. K2's *none located* rows still want a database search. Four results
 bear on what the rest of the programme should build.
 
-K5 closed on 2026-08-12 and reopened on 2026-08-14, and this paragraph did not notice. `paper/citations-baseline.txt` carries two identifiers again: `2412.06593` (anchoring) and `2505.02151` (overconfidence), added by the K3/K4 pass with their quotes recorded in [`DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md) rather than in `paper/refs.bib`, because another session held that file at the time. Neither is in the bibliography today. **Both were added on 2026-08-18** — `paper/refs.bib` carries `lou2024anchoring` and `sun2025overconfident` with their quotes, and `paper/citations-baseline.txt` records the closure — so this sentence was true from 2026-08-14 to 2026-08-18 and is appended to rather than rewritten, the same way the sentence it corrects was. A backlog that may only shrink can still be added to, and the sentence below was true when written and has been false since. What follows is the 2026-08-12 audit as it stood.
+K5 closed on 2026-08-12 and reopened on 2026-08-14, and this paragraph did not notice. `paper/citations-baseline.txt` carries two identifiers again: `2412.06593` (anchoring) and `2505.02151` (overconfidence), added by the K3/K4 pass with their quotes recorded in [`DECISION_FRAMEWORKS.md`](DECISION_FRAMEWORKS.md) rather than in `paper/refs.bib`, because another session held that file at the time. Neither is in the bibliography today. **Both were added on 2026-08-18** (`paper/refs.bib` carries `lou2024anchoring` and `sun2025overconfident` with their quotes, and `paper/citations-baseline.txt` records the closure), so this sentence was true from 2026-08-14 to 2026-08-18 and is appended to rather than rewritten, the same way the sentence it corrects was. A backlog that may only shrink can still be added to, and the sentence below was true when written and has been false since. What follows is the 2026-08-12 audit as it stood.
 
 All 27 baselined
 identifiers were fetched first-hand: 67 cited, 67 in the bibliography, 0
@@ -358,7 +356,7 @@ library, and flagged as a hypothesis rather than filed as a result.
 
 K4 mapped all eleven catalogued frameworks to a target LLM failure mode and
 graded each documented or assumed, after first checking what Track A has
-actually produced rather than assuming coverage: A1's `math` and `actions`
+actually produced: A1's `math` and `actions`
 sub-families are the only two closed, neither establishes a bias mechanism
 (`math` is a ceiling/no-power null; `actions` is unmeasurable, an instrument
 defect), and `database`/A2 to A5 have not run. Two new LLM-bias papers were
@@ -694,7 +692,7 @@ proven* are different acts, and only the second is the thing the evidence rule
 exists to prevent.
 
 Runs from day one, in parallel, never downstream. Every research finding is
-harvested into a skill revision the week it arrives, not at the end.
+harvested into a skill revision the week it arrives.
 
 Shipped state as of 2026-08-11: one skill, `decision-making` v0.2.0,
 `verdict: UNTESTED`, with four procedures behind a router. Not four skills:
@@ -845,7 +843,7 @@ overconfidence grows sharply relative to humans' as stated certainty falls,
 and *showing a human an LLM's answer raises the human's accuracy while more
 than doubling the human's own overconfidence.*
 
-That cuts both ways and is reported as such rather than resolved. It
+That cuts both ways, and both directions are reported. It
 strengthens the case for building elicited confidence as a scored, internal
 instrument. K6's own proposal is to score the number against
 `stats/calibration.py`, and a model this badly calibrated is exactly the kind
@@ -938,7 +936,7 @@ has not seen which two failed, and it must happen before any L6 round is scored
 on routing.
 
 And routing cannot be the outcome any of these are scored on, measured
-2026-08-12, and it is an instrument falsifier rather than a disappointment. The
+2026-08-12, and it is an instrument falsifier. The
 trigger set has 14 routed items. Pairwise across the five repeats, the
 discordance floor from sampling noise alone is `p_discordant` = 0.157: about
 2.2 items flip between two runs of the *identical* skill. `required_pairs` then
@@ -1126,7 +1124,7 @@ column on the case rather than a property the set happens to have.
 | N7 | Descriptive re-run: the remaining three `--description` arms (`no-exclusions`, `no-opener`, `stakes-named`; N6 already ran `full`, `stakes-shown` and `opener-only`) × 258 × 2 repeats. | 1,548 calls | done 2026-08-19, 0 unparseable. All six arms now on one corpus. Only 1 of 5 predictions met cleanly. The top three arms, `no-opener`, `stakes-shown` and `full`, are not distinguishable at n=258 (p=0.86, p=0.35); deleting the exclusion list is the one change that measurably matters (−11pp accuracy, 3× FPR). L7's band 4 still fails, since no arm reaches FPR ≤ 0.06, and this run's own prediction 5 substituted thresholds and would have reported it broken. [Run](../results/decision-making/2026-08-19-d52236a-n7-remaining-arms/README.md) |
 | N8 | Stamp the model into the record. `--model` is a CLI argument with a default and the tier survives only as prose in a hand-written README; the verdict records carry `case`, `fired`, `route`, `repeat` and no model at all. Same shape as the label-versioning defect: a run parameter that changes every number, recoverable only from someone remembering to type it. Needs a comparability guard beside `label_versions_comparable`. | free | done 2026-08-13. `run_triggers.py` writes `model`; `models_comparable` refuses a comparison spanning tiers, and `compare` raises on it. An absent `model` is unknown, not the default: `--model` could have been passed and the record would look identical, so filling in `haiku` would be standing rule 1's invented parameter. Two unstamped arms therefore still compare (no published comparison is retroactively voided) and a stamped arm against an unstamped one is refused, which is the transition where the risk is real |
 | N9 | Proxy validation. `run_triggers.py`'s own module docstring names the gap and this table has never scheduled the measurement: the harness shows the model a description and one message and asks whether it would fire; deployment shows it a description *appended to* a longer system prompt, mid-session, after other turns. N9 takes the first, cheapest step: the same 258-item corpus, key v4, `haiku`, the `full` description, sent through `Conversation(in_situ=True)` (`--append-system-prompt`) instead of `--system-prompt`, one turn, against the existing N6 `full` arm as the unmodified reference. Conversation length is held at one turn on both sides; see below for why. | 516 calls | ran 2026-08-19 and is void. All 516 calls made and refused: the gate reads repeat 0 only and saw 0.8566 against its 0.90 floor; the aggregate over all 516 is 0.8643. No prediction is scored. None of the 70 unparseable responses contains a `"fire"` key, the substring "fire", or any JSON at all. They are prose, the model answering as Claude Code rather than emitting the contract. Parse rate splits into two clusters, not a gradient: `technical`/`money`/`career` 0.9135 against `relationships`/`health` 0.7892, Fisher p = 0.00011, while no adjacent pair in the sorted order is distinguishable. Identity-refusal language never appears in `technical` or `career`. The gate's blindness to repeat 1 is a standing instrument gap and is recorded rather than fixed. The venue question stays open and will need an in-situ arm whose output contract survives the host prompt, which is a new pre-registration rather than a re-score of this one. [Run](../results/decision-making/2026-08-19-505b236-n9-in-situ-void/README.md) |
-| N10 | Re-measure the six-procedure description. `docs/DECISIONS.md`'s 2026-08-19 entry retired all ten prior description arms, M4, M5, L5, L7's two, N6's three and N7's three, because none of them describes the string `SKILL.md` ships at `0.3.0`. N10 will re-run the same instrument `unbundle.py` already provides: all six `DESCRIPTION_VARIANTS` (`full`, `no-exclusions`, `opener-only`, `no-opener`, `stakes-named`, `stakes-shown`, unchanged names with new inputs, since `description_variant` derives each from whatever `SKILL.md` currently ships) × 258 items (`datasets/triggers/decision-making/index.yaml` v4) × 2 repeats, mirroring N6+N7's combined design exactly so the two are comparable in scope if nothing else. This run will not be able to separate why any difference appears. One commit (`ae55b5b`) changed three things at once: the description's enumeration clause (four conditions → six), the procedure set the router table names (four rows → six), and `ledger`'s router-row wording. Every arm in this run will see all three simultaneously, so a divergence from N6/N7 will be a statement about the shipped edit as a whole, not about any one part of it. What will be separable: the six arms will still vary wording alone against each other, holding the new router table fixed across all six, so the L5/L7-shaped question ("does this description edit move firing accuracy") will stay answerable within this run exactly as it did in N6/N7. Only the cross-run question ("did the 2026-08-19 edit help") will be confounded, and constructing an arm that separates the three sub-changes would mean shipping a description that misstates the procedure set, the exact inconsistency the maintainer ruled out when landing `ae55b5b`. `ledger`'s routing accuracy under its rewritten row will be a new instrument reading, not a continuation of the six prior figures (0.105 to 0.579); a notebook entry naming the estimator, its denominator, and a numeric band will need to be registered before this run launches, and this row does not attempt that prediction. No `description_version` or `skill_version` field exists in the verdict record schema (`scripts/run_triggers.py`'s row dict carries `set_version`, `model`, `in_situ` and nothing that identifies which `SKILL.md` revision produced the description) so no verdict row identifies which `SKILL.md` revision produced its description. The guard itself is no longer missing: `skill_versions_comparable` was built in `6e2028c` and is wired into `compare()`, and it refuses a comparison where one side stamps `skill_version` and the other does not -- exactly the N10-against-N6 case. This row claimed otherwise for a day after the guard existed, which is the same defect the guard's own paragraph below records about itself. What remains is narrower: the guard keys on a field `run_triggers.py` stamps from `metadata.version`, so two arms built from *different* description text under the *same* skill version would still compare, and N10 will need that distinction registered before its numbers are set against anything published before it. | 3,096 calls | not started |
+| N10 | Re-measure the six-procedure description. `docs/DECISIONS.md`'s 2026-08-19 entry retired all ten prior description arms, M4, M5, L5, L7's two, N6's three and N7's three, because none of them describes the string `SKILL.md` ships at `0.3.0`. N10 will re-run the same instrument `unbundle.py` already provides: all six `DESCRIPTION_VARIANTS` (`full`, `no-exclusions`, `opener-only`, `no-opener`, `stakes-named`, `stakes-shown`, unchanged names with new inputs, since `description_variant` derives each from whatever `SKILL.md` currently ships) × 258 items (`datasets/triggers/decision-making/index.yaml` v4) × 2 repeats, mirroring N6+N7's combined design exactly so the two are comparable in scope if nothing else. This run will not be able to separate why any difference appears. One commit (`ae55b5b`) changed three things at once: the description's enumeration clause (four conditions → six), the procedure set the router table names (four rows → six), and `ledger`'s router-row wording. Every arm in this run will see all three simultaneously, so a divergence from N6/N7 will be a statement about the shipped edit as a whole, not about any one part of it. What will be separable: the six arms will still vary wording alone against each other, holding the new router table fixed across all six, so the L5/L7-shaped question ("does this description edit move firing accuracy") will stay answerable within this run exactly as it did in N6/N7. Only the cross-run question ("did the 2026-08-19 edit help") will be confounded, and constructing an arm that separates the three sub-changes would mean shipping a description that misstates the procedure set, the exact inconsistency the maintainer ruled out when landing `ae55b5b`. `ledger`'s routing accuracy under its rewritten row will be a new instrument reading, not a continuation of the six prior figures (0.105 to 0.579); a notebook entry naming the estimator, its denominator, and a numeric band will need to be registered before this run launches, and this row does not attempt that prediction. No `description_version` or `skill_version` field exists in the verdict record schema (`scripts/run_triggers.py`'s row dict carries `set_version`, `model`, `in_situ` and nothing that identifies which `SKILL.md` revision produced the description) so no verdict row identifies which `SKILL.md` revision produced its description. The guard itself is no longer missing: `skill_versions_comparable` was built in `6e2028c` and is wired into `compare()`, and it refuses a comparison where one side stamps `skill_version` and the other does not, exactly the N10-against-N6 case. This row claimed otherwise for a day after the guard existed, which is the same defect the guard's own paragraph below records about itself. What remains is narrower: the guard keys on a field `run_triggers.py` stamps from `metadata.version`, so two arms built from *different* description text under the *same* skill version would still compare, and N10 will need that distinction registered before its numbers are set against anything published before it. | 3,096 calls | not started |
 
 #### N10: the six-procedure description, and what one run cannot separate
 
@@ -1157,14 +1155,14 @@ names are therefore a coincidence of counting, not a relationship. Six
 two unrelated sixes landing in the same row, worth stating so a reader does
 not infer a connection that is not there.
 
-Call count, derived rather than invented. 258 items (index.yaml v4, 86
+Call count, derived. 258 items (index.yaml v4, 86
 triples: s 24, m 24, l 21, xl 17, confirmed against N3's closure figures) ×
 2 repeats (ICC 0.83 to 0.85, Track I, the same repeat count N6, N7 and N9
 already used) × 6 arms = 3,096 calls, identical to N6's 1,548 plus N7's 1,548,
 because N10 is those two runs' design repeated against a different input
 rather than a new design.
 
-What separates and what does not, stated plainly rather than assumed away.
+What separates and what does not.
 Commit `ae55b5b` moved three things at once, verified by reading the diff
 `docs/DECISIONS.md`'s entry names:
 
@@ -1217,7 +1215,7 @@ first commit must be an ancestor of N10's run commit before N10 launches, per
 the run-provenance rule. This row states what must be registered; it does not
 register it.
 
-The comparability gap, investigated rather than assumed. `trigger_arms.py`
+The comparability gap. `trigger_arms.py`
 carries three guards: `label_versions_comparable` (keyed on the record's
 `set_version`), `models_comparable` (keyed on `model`) and `venue_comparable`
 (keyed on `in_situ`), each raising `ArmError` inside `compare()` when two
@@ -1256,7 +1254,7 @@ document.
 
 #### N9: the proxy the module docstring names, and the cheapest step toward closing it
 
-The gap, verified rather than taken on report. `scripts/run_triggers.py`'s
+The gap, in the module's own words. `scripts/run_triggers.py`'s
 module docstring says plainly what the instrument is not: *"The real harness
 decides differently: the description sits among other skills, in a longer
 context, with the model mid-task. This measures the description's
@@ -1275,8 +1273,7 @@ appended rather than substituted, against N6's own `full` arm (accuracy
 [`results/decision-making/2026-08-18-e632659-n6-confirmatory/`](../results/decision-making/2026-08-18-e632659-n6-confirmatory/README.md))
 as the reference. No new reference run is needed; N6 already paid for it.
 
-The two mechanisms this reuses already exist, checked by reading the code
-rather than by trusting this description of it:
+The two mechanisms this reuses already exist, checked by reading the code:
 
 1. A secure multi-turn transport, already used by every trigger call.
    `Conversation` (`evals/src/decision_evals/providers/claude_code.py`, line
@@ -1300,12 +1297,11 @@ rather than by trusting this description of it:
    through is the only new code this row needs; both machines it calls
    already run.
 
-Call count, derived rather than invented. One new arm (`full`, in_situ) ×
+Call count, derived. One new arm (`full`, in_situ) ×
 258 items × 2 repeats = 516 calls. Two repeats, not five, for the reason
-N6 and N7 already used rather than a fresh choice here: Track I measured ICC
-0.83 to 0.85 for this instrument.
+N6 and N7 already used: Track I measured ICC 0.83 to 0.85 for this instrument.
 
-The risk in the design, named rather than absorbed silently. An `in_situ`
+The risk in the design. An `in_situ`
 arm that *also* inserts turns before the one under test confounds two changes
 in a single comparison, prompt position (appended vs substituted) and
 conversation length (one turn vs several), and a divergence from N6 could
@@ -1350,7 +1346,7 @@ model wrote, all of them hunted by gates a model built. Human text breaks that
 loop whether or not the human is the maintainer.
 
 The labels will come from N3's three-judge blind adjudication, unchanged.
-That is a real weakening and it is stated rather than argued away: the
+That is a real weakening, and it is stated plainly: the
 adjudicator is still a model. But the contamination being controlled sits in the
 *text*, not the key, so a model-labelled human corpus is materially less
 circular than a model-authored one, and it is reachable without a person.
@@ -1497,7 +1493,7 @@ standing rule 2 demands before any falsifier may fail anything: which turn is
 human is a fact on the record, not a taste. N5 therefore now depends on N4
 rather than on anybody's calendar.
 
-What this costs should be stated rather than glossed. The retired audit was the
+What this costs. The retired audit was the
 only place in the programme where a reader outside the model loop was ever going
 to look at this corpus. Nothing replaces that, and the forced choice does not:
 its judge is a model too. What it gains is a ground truth the audit never had.
@@ -1773,7 +1769,7 @@ numbers already exist, scattered across two notebook entries, a CLI table
 pair count, a repeat count or a design effect written down anywhere in this
 repository, and a grep of the whole tree comes up empty for both. The table
 below calls `stats/power.required_pairs` and `minimum_detectable_effect`
-directly rather than re-deriving the arithmetic by hand, and it counts the
+directly, and it counts the
 corpus on disk rather than trusting the figures already written about it, the
 same discipline the 527-to-315 correction above cost an hour to learn.
 
@@ -2007,7 +2003,7 @@ fact? If not, it is a preference survey and it is cut.
 
 | # | Experiment | Cost | State |
 |---|---|---|---|
-| H1 | **Phase 0: the control arm, before a corpus.** 20 invented life cores × 3 files (base / governing fact changed / matched non-governing fact changed) = **60 files**, ~35,000 newly authored characters (~1,200 per base core, ~150 per variant delta, ~1,500 per triplet × 20, plus ~5,000 for the falsifier battery); the on-disk corpus would be some 180,000 characters, because each variant is a whole file repeating its base and the eight triplets authored so far measure 72,358 -- about 9,000 each, so this row's original ~72,000 estimate for twenty was the cost of eight, and the two figures are not interchangeable. **Control arm only, no skill arm** — the question is not *does `fit.md` help* but *is there anything here for it to help with*. 20 × 3 × 2 repeats = **120 generation calls**; 3 judges × 120 responses = **360 blind extraction calls** (`ADJUDICATORS = 3` in `scripts/adjudicate.py`); 2 planted triplets × 3 hand-written responses × 3 judges = **18 falsifier calls**. Two repeats, not five, derived from Track I's ICC 0.83 to 0.85 exactly as N6, N7 and N9 derived it rather than chosen here. Primary: Youden's J, which is identically the programme's `d` (see below), over **40 sensitivity and 40 specificity events, clustered on the 20 triplets and never pooled over the 60 files**, by `stats.cluster.cluster_bootstrap_diff` with the triplet id as the cluster label. Pre-registered kill: **unaided J ≥ 0.70 closes the venue**, the value reached at sensitivity 0.85 and specificity 0.85, and 0.85 is `ADMISSIBILITY_CEILING` in `scripts/probe_casefile.py`. Prediction registered before authoring: [`notebook/2026-08-19-prediction-track-h-phase-0.md`](../notebook/2026-08-19-prediction-track-h-phase-0.md). | 498 calls | **corpus authoring blocked; see below** |
+| H1 | **Phase 0: the control arm, before a corpus.** 20 invented life cores × 3 files (base / governing fact changed / matched non-governing fact changed) = **60 files**, ~35,000 newly authored characters (~1,200 per base core, ~150 per variant delta, ~1,500 per triplet × 20, plus ~5,000 for the falsifier battery); the on-disk corpus would be some 180,000 characters, because each variant is a whole file repeating its base and the eight triplets authored so far measure 72,358, about 9,000 each, so this row's original ~72,000 estimate for twenty was the cost of eight, and the two figures are not interchangeable. **Control arm only, no skill arm**: the question is not *does `fit.md` help* but *is there anything here for it to help with*. 20 × 3 × 2 repeats = **120 generation calls**; 3 judges × 120 responses = **360 blind extraction calls** (`ADJUDICATORS = 3` in `scripts/adjudicate.py`); 2 planted triplets × 3 hand-written responses × 3 judges = **18 falsifier calls**. Two repeats, not five, derived from Track I's ICC 0.83 to 0.85 exactly as N6, N7 and N9 derived it rather than chosen here. Primary: Youden's J, which is identically the programme's `d` (see below), over **40 sensitivity and 40 specificity events, clustered on the 20 triplets and never pooled over the 60 files**, by `stats.cluster.cluster_bootstrap_diff` with the triplet id as the cluster label. Pre-registered kill: **unaided J ≥ 0.70 closes the venue**, the value reached at sensitivity 0.85 and specificity 0.85, and 0.85 is `ADMISSIBILITY_CEILING` in `scripts/probe_casefile.py`. Prediction registered before authoring: [`notebook/2026-08-19-prediction-track-h-phase-0.md`](../notebook/2026-08-19-prediction-track-h-phase-0.md). | 498 calls | **corpus authoring blocked; see below** |
 
 #### H1: Phase 0, and the deviation it commits
 
@@ -2021,7 +2017,7 @@ this row now says *blocked* rather than *not started*.
 | one | 3 | 0 | 0 | 3 |
 | two | 5 | 1 (`t03`) | 1 (`t04`) | 3 (`t01`, `t02`, `t05`) |
 
-Pass one failed both of its checks — two of three matched facts governed, and a
+Pass one failed both of its checks: two of three matched facts governed, and a
 single register feature separated all six inserts
 ([entry](../notebook/2026-08-19-the-h1-form-failed-and-the-two-dials-are-one-dial.md)).
 Pass two changed the neutralisation from *margin* to *categorical* and removed
@@ -2035,49 +2031,48 @@ the track only if passes two *and* three fail. That is a weaker statement than i
 sounds, and two things must be read with it. The corpus **cannot be merged**: a
 causal-rule-overlap feature reaches pooled AUC 0.740, and 0.800 with proper nouns
 dropped, against `SEPARABILITY_BAND` of [0.40, 0.60]. And that feature is **not**
-in `tailoring.FEATURES`, so the battery does not currently compute it — it was
+in `tailoring.FEATURES`, so the battery does not currently compute it: it was
 found by two readers, not by the gate.
 
-**What this does to the cost line, stated rather than left for a reader to
-notice.** At one clean triplet per five authored in pass two -- or two usable of
-eight across both passes, which is the figure `docs/STATUS.md` carries and the
-one to quote for a whole-corpus estimate -- twenty triplets is on
-the order of a hundred authored — some 700,000 characters of authored prose
-before a single generation call. That is the same authoring bill that closed
-Track G, arriving at a different track by a different route, and it is the open
-question about this venue rather than a detail of it. Nothing here has costed a
+**What this does to the cost line.** At one clean triplet per five authored in
+pass two, or two usable of eight across both passes, which is the figure
+`docs/STATUS.md` carries and the one to quote for a whole-corpus estimate,
+twenty triplets is on the order of a hundred authored: some 700,000 characters
+of authored prose before a single generation call. That is the same authoring
+bill that closed Track G, arriving at a different track by a different route,
+and it is the open question about this venue rather than a detail of it. Nothing here has costed a
 smaller H1: whether the primary is estimable at ten triplets, or five, is a power
 question nobody has asked, and asking it is cheaper than authoring ninety more.
 
 **τ has a registered rule and no derived number, and those are different.** The
 threshold is defined below as the maximum relative difference between two repeats
-of the same **base** prompt, which carry no perturbation — a noise floor,
+of the same **base** prompt, which carry no perturbation: a noise floor,
 computed before any contrast is examined. It cannot be derived without the run's
 own base arm, so it does not exist yet, which is why `t04` is *blocked* rather
 than cut: its relative movement is 0.333, and any τ above 1/3 would make its
 governing arm a structural false negative. A τ that high would also mean some
 base swung more than a third between identical repeats, which would be its own
-finding — so the block is standing rule 1 being obeyed, not a coin flip.
+finding, so the block is standing rule 1 being obeyed, not a coin flip.
 
 **The deviation, named as one.** This section says Track H is *"Not a separate
 venue, but a task family that runs inside C, D, E and F"*. C, D, E and F have not
 started. H1 promotes Track H to a standalone Phase-0 venue and runs it **before**
 them. That is a change to the programme and it is recorded here rather than
-absorbed: what it gives up is the two questions the sub-agent setting adds — does
-the personal context survive a handoff, and does a summariser destroy tailoring —
+absorbed: what it gives up is the two questions the sub-agent setting adds (does
+the personal context survive a handoff, and does a summariser destroy tailoring),
 neither of which H1 can ask and both of which stay with C through F. What it
 buys is that the founding construct stops being gated behind four unstarted
 tracks. The section already refers to *"the single-call venue"* as a thing Track H
 can inhabit, so the deviation is narrower than promotion usually is; it is still
 a deviation.
 
-**Why it goes first, and the argument is structural rather than hopeful.** Four
-of the five *closed* venues in `docs/STATUS.md`'s *Venues built* table --
-seven rows now, the other two being the working trigger instrument and Track
-H's own blocked `tailoring` corpus -- closed on a verifier-backed **accuracy** — relevance labels, trap-taking, arithmetic,
-admissibility — with the unaided model at 0.917 to 0.971 on every one. Track H's
-primary is not an accuracy. It is a difference of two rates inside a matched
-triplet, so competence at reading the item raises `P(change | governing)` and
+**Why it goes first, and the argument is structural.** Four of the five *closed*
+venues in `docs/STATUS.md`'s *Venues built* table (seven rows now, the other two
+being the working trigger instrument and Track H's own blocked `tailoring`
+corpus) closed on a verifier-backed **accuracy**: relevance labels, trap-taking,
+arithmetic, admissibility, with the unaided model at 0.917 to 0.971 on every
+one. Track H's primary is not an accuracy. It is a difference of two rates
+inside a matched triplet, so competence at reading the item raises `P(change | governing)` and
 says nothing about `P(change | matched non-governing)`. The mechanism that closed
 the other four therefore cannot ceiling this one by construction. It can still
 ceiling it by a *different* mechanism, and the registered prediction names the
@@ -2089,7 +2084,7 @@ This section reports `d = P(change | governing) − P(change | matched
 non-governing)` *and* Youden's J. They are the same number:
 `J = sens + spec − 1 = P(change | gov) + (1 − P(change | matched)) − 1 =
 P(change | gov) − P(change | matched) = d`. So there is one primary with a
-two-part decomposition, and — usefully — `d` is a **paired mean difference of two
+two-part decomposition, and, usefully, `d` is a **paired mean difference of two
 indicator vectors**, which is exactly the shape
 `stats.cluster.cluster_bootstrap_diff` takes
 (`evals/src/decision_evals/stats/cluster.py`, line 139).
@@ -2111,7 +2106,7 @@ flip"* and states the metric as a difference of two **probabilities of change**.
 Both are right and together they leave a hole: binarising a continuous quantity
 into `change` / `no change` needs a threshold, and no number for one exists
 anywhere in this repository. H1 registers the *rule* and derives the *number*
-from the run's own base arm — movement is relative, `|q_variant − q_base| /
+from the run's own base arm: movement is relative, `|q_variant − q_base| /
 |q_base|`, and the threshold is the maximum of the 20 base repeat-0 vs repeat-1
 relative differences, which carry no perturbation at all. That threshold is
 computed before any governing or matched contrast is examined. The prediction
@@ -2121,12 +2116,11 @@ so runs *against* the kill.
 
 **That last sentence is half the story, and the missing half is a defect no
 corpus size fixes.** τ is a *maximum* over the n base pairs, so it grows with the
-corpus — and with it the estimand. Reconstructed on 2026-08-19, true J runs
+corpus, and with it the estimand. Reconstructed on 2026-08-19, true J runs
 **0.843 → 0.915 → 0.956 → 0.977** as n goes 5 → 10 → 20 → 40 at one
 parameterisation. So the direction the prediction names is right and its size is
 not fixed: **the bias changes with n**, no two corpus sizes measure the same
-venue, and the drift runs *toward* the kill. Adding triplets makes this worse
-rather than better.
+venue, and the drift runs *toward* the kill. Adding triplets makes this worse.
 
 A second consequence of the same rule: τ is one draw shared by every triplet, so
 the clusters are not independent. Measured across-cluster correlation of
@@ -2135,14 +2129,14 @@ resamples i.i.d. and cannot see; realised SD runs ×1.23 to ×2.31 the closed fo
 and coverage does **not** improve with n.
 
 **Settle τ before authoring further.** A quantile, or a pooled noise estimate,
-rather than a max over n would remove the drift. Note that this was found in
+rather than a max over n would remove the drift. This was found in
 source before H1 ran, and that every figure behind it rests on a reconstruction
-rather than a measurement — **no quantity has ever been elicited in this
+rather than a measurement: **no quantity has ever been elicited in this
 harness**. Full account:
 [`notebook/2026-08-19-h1-does-not-need-twenty-and-tau-drifts-with-n.md`](../notebook/2026-08-19-h1-does-not-need-twenty-and-tau-drifts-with-n.md).
 
 **And twenty triplets is not load-bearing.** Simulating the registered *point*
-rule — `Phase0Result.kill` is `j >= 0.70`, not an interval — over 174 cells:
+rule (`Phase0Result.kill` is `j >= 0.70`, not an interval) over 174 cells:
 
 | | n=5 | n=10 | n=15 | n=20 |
 |---|---|---|---|---|
@@ -2165,7 +2159,7 @@ there. The lattice argument is a reason to prefer a representable threshold, not
 a monotone cost in n.
 
 An interval reading of the same grid says no n between 5 and 20 works at all,
-which is a different question from the one H1 registered — and it is the reading
+which is a different question from the one H1 registered, and it is the reading
 the first version of this analysis scored by mistake. Both are reported because
 the gap between them is the finding: if H1 ever wants to *state* headroom rather
 than observe a point estimate under the kill, twenty triplets does not deliver
@@ -2177,19 +2171,19 @@ where nothing is supposed to happen, which is what makes it look free to drop
 when a grid is too large. It is not free: without it J is a flip-rate and a model
 that flips on everything scores 1.0, silently and with a number that still
 computes. The elicited-quantity primary stays for the reason this section already
-gives — flip-rate scores conditional advice, the best available answer, as
+gives: flip-rate scores conditional advice, the best available answer, as
 failure. Neither is cut in H1 and neither may be cut to size a later grid.
 
 **What must pass before any J exists.** Standing rule 2: two planted triplets
 with hand-written responses, one that obviously must move and one that obviously
 must not, scored by the same three extractors. The battery must return
 sensitivity 1.0 and specificity 1.0. **If it does not, the extractor is the
-finding and no J is reported** — not a caveat on a number, no number. The raw
+finding and no J is reported**: not a caveat on a number, no number. The raw
 per-arm movement counts will be printed beside J in every case, because
 `docs/STATUS.md` records five separate inert-estimator instances and a plausible
 zero does not announce itself.
 
-**What H1 does not settle.** A pass — J < 0.70 — authorises the skill arm and
+**What H1 does not settle.** A pass, J < 0.70, authorises the skill arm and
 nothing else. It licenses no claim that any skill works; every skill here carries
 `UNTESTED`. The *n* for any confirmatory grid is deliberately not chosen in this
 row: it is an MDE, `stats/power.py`'s `minimum_detectable_effect` **will** be run
@@ -2204,7 +2198,7 @@ degradation is increased unreliability rather than lost aptitude. A mean-only
 metric will under-detect it, and binary admissibility is already nearly a
 constant in our data.
 
-How lopsided, now that the numbers have been read rather than paraphrased.
+How lopsided, now that the numbers have been read first-hand.
 Aptitude falls 16% and the source calls that non-significant; unreliability
 rises 112%. Roughly seven-eighths of the headline −39% lives in the spread.
 Every measurement this repository has taken is a mean, so a mean-only design was
@@ -2521,4 +2515,4 @@ What we may honestly say, at each stage, and not before.
 | Track F | "The system decides better end to end." |
 | Track J | Any of the above, with an artifact someone else can re-run. |
 
-Today we are entitled to the first row and not yet to the rest. Track 0 *is* built — every row 0.1 to 0.7 is done — and this sentence said otherwise until 2026-08-19, having been written before it completed.
+Today we are entitled to the first row and not yet to the rest. Track 0 *is* built, every row 0.1 to 0.7 is done, and this sentence said otherwise until 2026-08-19, having been written before it completed.

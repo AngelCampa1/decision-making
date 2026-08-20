@@ -1,8 +1,11 @@
 # Contributing
 
-This repository is a research project with a product attached, and most of its
-rules exist because the corresponding failure already happened here. Nearly all
-of them are enforced by `de check` rather than by asking you to remember.
+**Audience:** someone about to send a change.
+
+A research project with a product attached. Almost every rule here is enforced
+by `de check`, so the gate tells you what it wants and you rarely have to
+remember anything. This page covers what it will refuse, the research rules no
+gate can check, and how to change a skill, a document, or the website.
 
 ## Setup
 
@@ -36,7 +39,7 @@ disagreed in four places.
 | If you | `de check` says |
 | --- | --- |
 | commit under an address other than the GitHub noreply one | the history *is* the pre-registration evidence, and a misattributed commit cannot be rewritten later without destroying the timestamps the method relies on |
-| change `datasets/triggers/` or `skills/` without an entry in [`docs/DECISIONS.md`](docs/DECISIONS.md) | a label move is invisible in a checkpoint and shifts every number already computed from it |
+| change `datasets/triggers/`, `datasets/tailoring/` or `skills/` without an entry in [`docs/DECISIONS.md`](docs/DECISIONS.md) | a label move is invisible in a checkpoint and shifts every number already computed from it |
 | publish a run without an answer-key version, or with a prediction that cannot be shown to predate its data | a prediction that cannot be shown to predate its data is not evidence |
 | give a module a coverage floor that no entry point reaches | a tested refusal with no caller is inert, and the gate reports green either way |
 | name a `de` command, path, or component that does not exist | documentation was the last obligation here checked by reading it, and the README was found naming two commands that never existed |
@@ -70,28 +73,47 @@ methodology.
 
 ## Writing
 
-Prose a person reads goes through the humanizer skill before it is committed.
-That means [`README.md`](README.md), this file,
-[`SCORECARD.md`](SCORECARD.md), and the living documents under
-[`docs/`](docs/). Nothing enforces it. The documentation gate reads whether a
-reference resolves, not whether the sentence is worth reading.
+[`docs/VOICE.md`](docs/VOICE.md) is the standard, and it governs everything:
+documents, skill bodies, and the comments and docstrings in the source. Read it
+before you write. Run the humanizer skill, which applies to drafting as much as
+to editing. Then hand the result to a different agent or person, briefed with
+[`docs/reviews/HOUSE_STYLE.md`](docs/reviews/HOUSE_STYLE.md) and
+[`docs/reviews/POSITIONING.md`](docs/reviews/POSITIONING.md).
 
-Three kinds of file are exempt, for three different reasons. Dated records say
-what was true on the day somebody wrote them: [`notebook/`](notebook/),
-[`results/`](results/), [`docs/DECISIONS.md`](docs/DECISIONS.md) and
-[`docs/STATUS.md`](docs/STATUS.md). Generated files are rewritten by the next
-build: [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md) and `CLAUDE.md`. And
-[`AGENTS.md`](AGENTS.md), `CLAUDE.md` and
-[`docs/AUTONOMOUS_WORK_ORDER.md`](docs/AUTONOMOUS_WORK_ORDER.md) are written for
-an agent working mid-task rather than for a person deciding whether to trust the
-work. [`skills/`](skills/) is exempt too, and most sharply: the description
-there is the thing the trigger experiments measure, so an edit for style makes
-the published numbers incomparable.
+It applies to what you write, going forward. Bring a comment up to standard when
+you change it. Do not sweep the source for style, and do not restyle a document
+you are not otherwise working on.
 
-The pass never touches a number, a citation, a correction left in place, or a
-hedge that is carrying its own weight. *"We have not shown this works"* does not
-get shortened into *"this does not work"*. [`AGENTS.md`](AGENTS.md) states the
-rule in full, including why no gate catches a violation.
+Nothing enforces any of this. The documentation gate reads whether a reference
+resolves and declines to judge the sentence around it, on purpose, so the review
+is the only thing between a draft and the repository.
+
+Four kinds of file need a specific reading of that rule:
+
+- **Dated records** say what was true on the day somebody wrote them:
+  [`notebook/`](notebook/), [`results/`](results/),
+  [`docs/DECISIONS.md`](docs/DECISIONS.md) and
+  [`docs/STATUS.md`](docs/STATUS.md). New entries meet the standard. Old ones
+  are left alone, because a record rewritten for style is a record destroyed.
+- **Generated files** are fixed at their source. Editing
+  [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `CLAUDE.md`, `.agents/skills/` or
+  `plugin/skills/` is reverted by the next build, so fix
+  [`AGENTS.md`](AGENTS.md) and the generators instead.
+- **Agent-facing files** get the standard plus a stricter one of their own:
+  imperative mood, one rule per bullet, and the reasoning moved out to
+  [`docs/WHY_THESE_RULES.md`](docs/WHY_THESE_RULES.md). A paragraph of
+  justification in [`AGENTS.md`](AGENTS.md) is context spent on every session
+  forever.
+- **`skills/decision-making/SKILL.md`'s description field** is the artefact the
+  trigger runs measure. Editing it for style makes every published number
+  incomparable, so it changes only as a deliberate new arm with an entry in
+  [`docs/DECISIONS.md`](docs/DECISIONS.md). The procedure bodies around it are
+  ordinary prose and get the ordinary standard.
+
+The pass never touches a number, a citation, a correction a gate register
+depends on, or a hedge carrying its own weight. *"We have not shown this works"*
+never gets shortened into *"this does not work"*.
+[`docs/VOICE.md`](docs/VOICE.md) states all three prohibitions in full.
 
 ## Changing a skill
 
@@ -142,7 +164,8 @@ issue and say so.
 
 ## Scope
 
-Pull requests that add a skill without a way to measure it will be turned into a
-discussion about how to measure it. That is not a rejection of the skill. It is
-the entire premise of the repository. *"We have not shown this works"* and
-*"this works"* are different statements, and keeping them apart is the job.
+Send the skill and the measurement together. A pull request that adds a skill
+without a way to test it opens a conversation about how to test it, because
+building that feedback loop is the entire premise here. *"We have not shown this
+works"* and *"this works"* are different statements, and keeping them apart is
+the job.

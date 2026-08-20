@@ -1,4 +1,4 @@
-/* `/llms.txt` -- a plain-text index of this site for a model that is citing it.
+/* `/llms.txt`: a plain-text index of this site for a model that is citing it.
  *
  * Generated rather than written. A static file listing the runs and the
  * procedures would be a hand-maintained index, and this repository has two
@@ -11,7 +11,7 @@
  * disagree about what a document says.
  *
  * Any figure here goes through `shown()`. Typing a digit into this file would
- * publish a number nothing checks -- `decision_evals.claims` scans this file for
+ * publish a number nothing checks. `decision_evals.claims` scans this file for
  * exactly those calls, and a bare digit is what it cannot see.
  *
  * The limitation, stated because the convention hides it: this is served at
@@ -89,8 +89,8 @@ export const GET: APIRoute = async ({ site }) => {
     ``,
     `> ${SITE_DESCRIPTION}`,
     `>`,
-    `> Nothing here has passed a confirmatory test. Every result is published,`,
-    `> including the measurements that turned out to be broken.`,
+    `> Every result is published, including the measurements that turned out to be`,
+    `> broken. No confirmatory run has happened, so no skill carries a verdict.`,
     `>`,
     `> Repository: ${REPO}`,
     ``,

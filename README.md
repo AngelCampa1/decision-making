@@ -13,103 +13,90 @@
 
 </div>
 
-Agent skills for making better decisions under uncertainty, plus the evaluation
-harness that measures whether they actually work. The harness relabels its own
-answer key with an LLM-as-a-judge panel and reports the panel's agreement
-chance-corrected. It refuses to publish a result whose prediction cannot be
-shown to predate its data.
+**Audience:** anyone deciding whether this is worth their attention.
 
-The mark is one row of a forest plot: a line of no effect, an interval, a point
-estimate. The interval crosses zero, which is this repository's position stated
-in the notation it argues in. It is *we have not shown this works*, not *this
-does not work*, and [`SCORECARD.md`](SCORECARD.md) exists to keep those apart.
+Two things live here.
 
-> Status: pre-alpha. No skill in this repository has been validated yet. The
-> harness is being built first, deliberately. Until a skill carries a verdict
-> in [`SCORECARD.md`](SCORECARD.md), treat it as an untested hypothesis.
->
-> [`docs/STATUS.md`](docs/STATUS.md) is the ledger: every run on record, what
-> it showed, which measurements turned out to be broken, and which tracks are
-> still untouched.
+**An agent skill for decisions.** It works out what is *hard* about the choice
+before it answers, then runs one of six procedures built for that specific
+difficulty. Paste in the whole thread and ask what to do about Tuesday:
 
-## In the usual vocabulary
+```text
+LEDGER
+  1. the Lisbon forecast — decides what to pack
+  2. the Tuesday flight — decides when
 
-This repository names things after the failure they defend against rather than
-after the job posting. The translation:
+SET ASIDE
+  - the rain in Paraguay — your trip does not touch it
 
-| What it is called elsewhere | What is in this repository |
-| --- | --- |
-| Eval harness, LLM evaluation | `decision_evals`, run offline by `de check` and against live models by [`scripts/run_triggers.py`](scripts/run_triggers.py) |
-| A/B test, ablation study | The confirmation design: four arms on the same items, off, on, a token- and structure-matched placebo, and plain chain-of-thought. No published run has used the placebo or cot arm |
-| LLM-as-a-judge, model-graded evaluation | Three blind adjudicators per turn, resolved by majority against a kill threshold fixed before the run |
-| Inter-rater reliability | Fleiss' kappa and Krippendorff's alpha, reported next to raw agreement rather than instead of it, by [`scripts/adjudicate.py`](scripts/adjudicate.py). Cohen's kappa is implemented in [`evals/src/decision_evals/stats/agreement.py`](evals/src/decision_evals/stats/agreement.py) and nothing calls it |
-| Golden dataset | [`datasets/`](datasets/): parameterised templates with computed ground truth, versioned, plus third-party corpora pinned by SHA-256 and fetched by `de fetch` |
-| Tool-use evaluation, function calling | A scorer in the shape of BFCL's checker, matching a call's name and arguments after a JSON parse, in [`evals/src/decision_evals/scorers/bfcl.py`](evals/src/decision_evals/scorers/bfcl.py). The venue it was built for is closed |
-| Skill routing | One skill that reads one of six procedure files, chosen by what is hard about the decision |
-| Regression pipeline, CI gate | `de check`: lint, types, tests, coverage floors and the integrity checks, bound to pre-commit and pre-push and run again in CI |
-| Observability, OpenTelemetry | GenAI semantic-convention attribute names pinned in [`evals/src/decision_evals/telemetry.py`](evals/src/decision_evals/telemetry.py), adopted as names without the dependency |
-| Multi-agent, sub-agent delegation | A scripted orchestrator with N sub-agents and per-node records, in [`evals/src/decision_evals/orchestrator.py`](evals/src/decision_evals/orchestrator.py) |
-| MCP, Model Context Protocol | Pinned empty at every call (`--strict-mcp-config`), because a connector present in one arm and absent in another is a confound. The full lockdown is in [`docs/HARNESS_DISCLOSURE.md`](docs/HARNESS_DISCLOSURE.md) |
-| Model calibration | The Murphy decomposition, so hedging every forecast toward the base rate is caught by the resolution term |
-| Pre-registration | A dated prediction committed to [`notebook/`](notebook/) before the run, enforced by git ancestry |
+THEREFORE
+  pack for Lisbon
+```
 
-Every row names an instrument. What those instruments have found is in
-[`SCORECARD.md`](SCORECARD.md), and none of it is about whether a decision skill
-improves a decision.
+That is `ledger.md`, the one for when too much context arrived and you cannot
+see which fact decides it. The other five handle advice that is generically
+right and may be wrong for you, consequences you did not price, timing, several
+positions that are each defensible, and a missing fact that may or may not
+matter.
 
-## How this is measured
+**And `decision_evals`, the harness built to find out whether any of that
+helps.** It relabels its own answer key with a blind panel of three model
+instances and reports their agreement chance-corrected. It stamps an answer-key
+version into every record and refuses, in code, to compare arms across a version
+boundary. It pins MCP empty at every call, because a connector present in one
+arm and absent in another is a confound. And it refuses to publish a result
+whose prediction cannot be shown by git ancestry to predate its data. Thirteen
+runs are published under those rules, raw transcripts included.
 
-Most skill libraries ship on the author's word that the thing helps. This one is
-built the other way round: the harness came first, and the claim is still
-`UNTESTED`.
+What they have found so far is about *firing*: whether a skill switches on when
+it should. Rewriting the skill's description five different ways changed which
+mistakes it made, trading missed decisions against unwanted interruptions, and
+never changed how well it told the two apart. Then the harness was pointed at
+its own test set, and a rule as crude as *fire if the question is long* scored
+close to the real thing. That finding retired the test set and paid for the
+rebuilt one every result since has run on.
 
-What that costs, in practice, is a set of mechanisms that make it hard to
-overclaim by accident. The answer key, which is the golden dataset every arm is
-scored against, is relabelled blind by an LLM-as-a-judge panel of three
-independent model instances that never see the maintainer's label, against a
-kill threshold fixed before the run. Their agreement is reported
-chance-corrected, because on this class balance two judges who have learned
-nothing at all still agree most of the time. Every prediction since the convention was adopted is committed
-to `notebook/` before its run, and `de check` refuses a published run whose
-prediction cannot be shown by git ancestry to predate its data. Two runs predate
-the rule and are baselined by name in
-[`results/provenance-baseline.txt`](results/provenance-baseline.txt), a list
-that may only shrink. The key carries a version stamped into every
-record, and comparing arms across a version boundary is refused in code. That rule
-exists because one correct label move raised recall on every arm on disk
-without a single call being re-made. Primary metrics are deterministic; a judge never produces one.
+One of those runs was aimed at this repository's own argument. A published
+result says that a large skill library crowds out the right skill, and this
+README used to cite it as the reason the skill ships as one entry instead of
+four. The run found nothing of the kind at four entries, so the citation was
+retired from the claim it was supporting and the four-entry arm turned out to
+route better.
 
-None of that is a claim that the skills work. It is the reason this repository
-can say they have not been shown to.
-
-[`docs/METHODS.md`](docs/METHODS.md) is the full account: nine sections, each
-naming the technique, the failure it defends against, the code that
-implements it, and whether it has actually run. Several entries say it has not.
+No skill here carries a verdict yet, so [`SCORECARD.md`](SCORECARD.md) is empty
+and [`docs/STATUS.md`](docs/STATUS.md) is the ledger of every run on record.
+The skill is free, installs in one line, and comes out again in one line.
 
 ## The skill
 
-One skill, `decision-making`, whose routing sends a decision to one of six
-procedures depending on what is actually hard about it. It reads only that one.
+One skill, `decision-making`. Its router asks a single question, *what is hard
+here?*, and the answer selects one of six procedures. It reads only that one.
 
 | What is hard | Procedure | What it produces |
 | --- | --- | --- |
-| A pile of context arrived and it is unclear which fact decides it (the choice itself, not what acting on it would set off) | [`ledger.md`](skills/decision-making/ledger.md) | what bears on it, what was set aside, and why |
+| A pile of context arrived and it is unclear which fact decides it | [`ledger.md`](skills/decision-making/ledger.md) | what bears on it, what was set aside, and why |
 | The advice may be generically right and wrong for this person | [`fit.md`](skills/decision-making/fit.md) | the generic answer, and the facts that would overturn it |
 | The action looks fine and the worry is what it starts, or what it spends | [`cascade.md`](skills/decision-making/cascade.md) | the chain, what it forecloses, and the order |
 | The direction is settled and the question is when | [`timing.md`](skills/decision-making/timing.md) | the undo price, the real deadline, what waiting buys |
 | Several positions are each defensible, and whichever was argued first has the advantage | [`council.md`](skills/decision-making/council.md) | the case for each, argued fairly, and which one survives |
 | Something needed to answer is missing, and it is unclear whether asking for it is worth the wait | [`hinge.md`](skills/decision-making/hinge.md) | which gaps would change the answer, and the answer now or the one question to ask |
 
-Where more than one of those six applies they run in the order ledger → fit
-→ cascade → timing, because each supplies an input to the next. `council.md`
-and `hinge.md` are not in that chain; each runs alone. A seventh file,
+The six exist because agents fail at decisions in separable ways. Everything
+retrieved gets weighted roughly equally, so an agent told it is raining in
+Paraguay while planning a trip to Lisbon will suggest a raincoat. Stated
+confidence drifts from observed frequency. A one-way door and a trivially
+reversible choice draw the same deliberation budget.
+
+Where more than one applies they run in the order ledger, fit, cascade, timing,
+because each supplies an input to the next. `council.md` and `hinge.md` sit
+outside that chain and each runs alone. A seventh file,
 [`placebo.md`](skills/decision-making/placebo.md), is the token- and
-structure-matched control arm; it ships alongside because a skill that only
+structure-matched control arm. It ships alongside because a skill that only
 beats nothing has not been measured against the thing that would fake it.
 
-### Installing
+### Install
 
-The skills use only the six portable frontmatter fields defined by the
+The skills carry only the six portable frontmatter fields of the
 [Agent Skills standard](https://agentskills.io), so they need no conversion.
 
 ```bash
@@ -122,146 +109,135 @@ cp -r .agents/skills/* ~/.agents/skills/
 cp -r skills/* .claude/skills/
 ```
 
-There is also a Claude Code plugin, and it currently ships nothing.
-`plugin/skills/` is empty because a skill is copied there only once a
-confirmation run gives it a verdict. See
-[`plugin/skills/README.md`](plugin/skills/README.md). Copying from `skills/` is
-the way to use this today.
+There is also a Claude Code plugin, and it currently ships nothing. A skill is
+copied into `plugin/skills/` only once a confirmation run gives it a verdict.
+Copying from `skills/` is the way to use this today.
 
-Nothing here is proven, and that is not a reason to avoid it. A verdict governs
-the *public claim*, not whether a skill is usable.
+## How it works
 
-## Why this exists
+`decision_evals` does four things: it holds the answer key, it runs arms against
+it, it scores them, and it refuses to publish what it cannot trace.
 
-Agents fail at decisions in three separable ways:
+**The answer key.** [`datasets/`](datasets/) is the golden dataset:
+parameterised scenario templates with *computed* ground truth, plus third-party
+corpora pinned by SHA-256 and downloaded by `de fetch`. The key carries a
+version stamped into every record, and `label_versions_comparable` refuses a
+comparison that spans a version boundary. That guard exists because one correct
+label move once raised recall on every arm on disk without a single call being
+re-made.
 
-1. Unranked context. Everything retrieved is weighted roughly equally. Tell an
-   agent it's raining in Paraguay while planning a trip to Lisbon and it will
-   suggest a raincoat. The information arrived, so it must be used somehow.
-2. Uncalibrated probability. Stated confidence doesn't track observed
-   frequency, and RLHF makes this worse rather than better.
-3. Uniform deliberation budget. A one-way door and a trivially reversible
-   choice get the same amount of thought.
+**Relabelling it, blind.** The maintainer's labels do not get the last word on
+themselves. [`scripts/adjudicate.py`](scripts/adjudicate.py) puts three blind
+adjudicators on every turn, an LLM-as-a-judge panel of independent model
+instances, none of which sees the maintainer's label or the other two, resolved
+by majority against a kill threshold fixed before the run. Inter-rater
+reliability is reported chance-corrected, with Fleiss' kappa and Krippendorff's
+alpha beside raw agreement, because on this class balance two judges that have
+learned nothing still agree most of the time. Primary metrics stay
+deterministic and a judge never produces one.
 
-Plenty of prompt libraries claim to fix this. The closest prior art ships 28
-thinking skills and states in its own README that none is proven to improve
-model accuracy. That is not an argument against skills. The published evidence
-says having the right skill available is worth a great deal, so it is an
-argument for building the feedback loop that tells you *which* ones help, and
-by how much.
+**The arms.** A confirmation run is a within-item comparison with four arms on
+the same items: **off** (the ablation), **on**, **placebo** (token- and
+structure-matched filler), and **cot** (plain "think step by step"). The placebo
+is what makes the design worth running. A skill that beats *off* and ties
+*placebo* is a length effect, and a skill that ties *cot* is an expensive way to
+say "think". [`scripts/run_triggers.py`](scripts/run_triggers.py) is the runner
+behind every model call on record, and it pins MCP empty at every call with
+`--strict-mcp-config`. The full lockdown is in
+[`docs/HARNESS_DISCLOSURE.md`](docs/HARNESS_DISCLOSURE.md).
+
+**The scorers.** Firing accuracy is the selection question, the same shape as
+tool selection in a function-calling evaluation, and
+[`evals/src/decision_evals/scorers/bfcl.py`](evals/src/decision_evals/scorers/bfcl.py)
+scores a call the way BFCL's checker does, matching name and arguments after a
+JSON parse. Calibration goes through the Murphy decomposition, so a skill that
+improves Brier by hedging every forecast toward the base rate is caught by the
+resolution term. The statistics are exact and resampling-based instead of
+CLT-based, because at these item counts the normal approximation is unreliable,
+and the resampling unit is the template, since items from one template are
+correlated.
+
+**The record each run leaves.**
+[`evals/src/decision_evals/telemetry.py`](evals/src/decision_evals/telemetry.py)
+pins the GenAI OpenTelemetry semantic-convention attribute names, adopted as
+names without taking the dependency, so a record written here reads in a tool
+that has never seen this repository.
+[`evals/src/decision_evals/orchestrator.py`](evals/src/decision_evals/orchestrator.py)
+runs a scripted fan-out of sub-agents with a per-node record. Every published
+run ships its raw transcripts under [`results/`](results/) and is indexed with
+its answer key and its prediction in
+[`docs/RUN_INDEX.md`](docs/RUN_INDEX.md).
+
+**Pre-registration.** A dated prediction goes into [`notebook/`](notebook/)
+before the run. `de check` enforces it and refuses a published run whose README
+does not name a prediction whose first commit is a git ancestor of the run's
+commit. Two runs predate the rule and are baselined by name in
+[`results/provenance-baseline.txt`](results/provenance-baseline.txt), a list
+that may only shrink.
+
+[`docs/METHODS.md`](docs/METHODS.md) is the full account: nine sections, each
+naming the technique, the failure it defends against, the code that implements
+it, and whether it has actually run.
 
 ## What's actually here
 
 | Component | Purpose |
 | --- | --- |
-| `skills/` | The skills, authored to the [Agent Skills](https://agentskills.io) 6-field standard so they work in Claude Code, Codex, Cursor, Copilot, Gemini CLI, Cline, Amp and OpenCode without conversion. Mirrored byte-for-byte to `.agents/skills/` by `de mirror` |
-| `plugin/` | The Claude Code plugin. A skill is copied here only once a confirmation run gives it a verdict, so the directory is currently empty on purpose |
+| `skills/` | The skills, authored to the [Agent Skills](https://agentskills.io) six-field standard so they work in Claude Code, Codex, Cursor, Copilot, Gemini CLI, Cline, Amp and OpenCode without conversion. Mirrored byte-for-byte by `de mirror` |
+| `plugin/` | The Claude Code plugin. A skill is copied here once a confirmation run gives it a verdict |
 | `evals/` | `decision_evals`, the evaluation harness. Paired experiments, exact tests, cluster-aware resampling, and chance-corrected inter-rater reliability |
-| `datasets/` | The answer key, this repository's golden dataset: parameterised scenario templates with *computed* ground truth, the trigger corpus, and the SHA-256 lockfile for the third-party corpus `de fetch` downloads |
+| `datasets/` | The answer key: parameterised scenario templates with *computed* ground truth, the trigger corpus, and the SHA-256 lockfile for the third-party corpus `de fetch` downloads |
 | `results/` | Published run records: raw transcripts and a README per run |
 | `notebook/` | Append-only research log. Predictions go in *before* runs |
 | `docs/` | Protocol, status, the research programme, related work, limitations, and what was rejected. Start at [`docs/README.md`](docs/README.md) |
 | `paper/` | The write-up, in LaTeX. A draft; see [`paper/CHECKLIST.md`](paper/CHECKLIST.md) |
 | `scripts/` | Standalone analysis and runners, including `run_triggers.py`, the script behind every model call on record |
 | `tests/` | Unit, integration, property and golden tests |
-| `site/` | The website. It renders the markdown already in this repository rather than copying it, so there is no second copy of a document to disagree with the first. Built locally by `de site`; `de check` refuses a build older than what it publishes |
+| `site/` | The website. It renders the markdown already in this repository in place, so no second copy of a document can disagree with the first |
 
-## What has been measured
+## Where the evidence stands
 
-Nothing about whether a decision skill improves a decision. Every number on
-record measures something upstream of that: whether a skill *fires* when it
-should. That is the selection question, the same shape as tool selection in a
-function-calling evaluation, and it decides whether a skill is worth having
-installed at all.
+Every caveat, in one place.
 
-Thirteen runs are published, each one indexed with its answer key and its
-prediction in [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), and
-[`docs/STATUS.md`](docs/STATUS.md) has all of them with links to the data. One
-of the thirteen is **void** and answers nothing.
+No skill here carries a verdict. `decision-making` and all six procedures are
+`UNTESTED` and ship as `experimental`. [`SCORECARD.md`](SCORECARD.md) is the
+file that changes that, and it is empty.
 
-The call total belongs to the ledger and is not restated here.
-`docs/STATUS.md` keeps it, corrects it by appending, and the site quotes that
-file rather than a second copy. Recounting means separating published records
-from the working checkpoints and re-scores they overlap with, which is a job for
-the ledger rather than a number to guess at in a README. The through-line:
+Every number on record measures whether a skill *fires*, which is upstream of
+whether it helps. Firing decides whether a skill is worth having installed at
+all, and it is the question this instrument was built for. Nothing here has yet
+measured whether a decision procedure improves a decision.
 
-> Five independent manipulations of a skill description, covering structure,
-> content, entry count and composition twice, and not one moved how well it
-> discriminates. Every one moved only where it sits on the precision/recall
-> frontier.
+No published run has used the placebo or cot arm. Every call on record compares
+variants of the skill's *description*. The four-arm comparison is what a
+confirmation run would do, and no confirmation run has happened.
 
-Two findings worth naming here because they cut against what this repository
-originally claimed:
+One of the thirteen published runs is void. It was refused on parse rate before
+any prediction was scored, which is the first registered void condition here to
+fire on its own.
 
-- Skill shadowing did not appear at four entries. One entry and four separate
-  entries were indistinguishable on firing accuracy (0.956 vs 0.951, paired
-  Wilcoxon p = 0.83). The
-  [202-skill shadowing result](https://arxiv.org/abs/2605.24050) may no longer
-  be cited as though it reached down to four.
-- The corpus behind those numbers is 89% solvable by counting
-  words. This scopes to the version 2 answer key and the runs above it,
-  not to everything on record: the corpus was rebuilt, and on the version 4
-  key the best model-free shortcut reaches 0.7054. Turn length alone separates the labels at AUC 0.850, and a bare
-  *"fire if ≥ 18 words"* rule scores 0.890 with no model at all. Both sit on
-  the version 2 answer key, against the best arm measured on that key: 0.9795
-  for the best description arm (`stakes-shown`), 0.9863 for `confidence`. So
-  every result above was competing for about nine
-  points over a ruler, and five nulls is also what a ceiling looks like. Both
-  readings must be reported for every result measured on that key, which is all
-  of them above. [Track N](docs/RESEARCH_PROGRAMME.md) rebuilt the corpus, and
-  runs measured on the new one carry the version 4 figure instead — the two keys
-  are not comparable and are never mixed.
+The description arms no longer measure what ships. The shipped description now
+enumerates six procedures, so the ten arms that varied earlier wordings describe
+something the skill has moved past. The harness therefore has no measurement of
+how the shipped description behaves in the venue anybody uses, which qualifies
+every finding above and needs a new arm and a new pre-registration to close.
 
-## How claims are made
+The corpus behind the earlier results was largely solvable without a model, a
+finding this harness produced about its own instrument. It scopes to answer-key
+version 2 and the runs above it. The rebuilt version 4 corpus is far harder to
+shortcut, the two keys are never mixed, and
+[`SCORECARD.md`](SCORECARD.md) carries both figures with the arms measured
+against them.
 
-The design is a within-item A/B comparison with four arms on the same items:
-**off** (the ablation), **on**, **placebo** (token- and structure-matched
-filler), and **cot** (plain "think step by step").
-A skill that beats *off* but not *placebo* is a length effect. A skill that
-doesn't beat *cot* is an expensive way to say "think."
+The hash-locked pre-registration refusal is built, tested, and has never run. It
+is scoped to the `confirm` arena, no confirmation run has happened, and the
+module is declared in `[tool.decision-evals.unwired]` because a tested refusal
+that nothing calls is inert.
 
-**No published run has used the placebo or cot arm.** Every call on record is a
-trigger measurement comparing variants of the skill's *description*. The
-four-arm comparison is what a confirmation run would do, and no confirmation run
-has happened, so the placebo is a written, size-checked control that has never
-stood in for anything.
-
-The statistics are exact and resampling-based rather than CLT-based, because at
-our item counts the normal approximation isn't reliable. Templates rather than
-items are the resampling unit, since items from one template are correlated.
-Model calibration goes through the Murphy decomposition, so a "skill" that improves
-Brier by hedging every forecast toward the base rate is caught by the
-resolution term instead of being scored as a win.
-
-The controls, the instrument checks that run before any of it is believed, and
-the statistics are covered properly in
-[`docs/METHODS.md`](docs/METHODS.md) §4 and §6.
-
-### Pre-registration: two mechanisms, and only one of them has ever run
-
-This section used to describe the second as though it were the first. It read
-*"a confirmation run refuses to start unless the pre-registration file is
-committed, predates the results, and its recorded hash still matches the skill
-on disk"*, in the present tense, and it pointed at a `preregistration/`
-directory that has never existed. It also told you to run `de screen` and
-`de confirm`, neither of which is a command. The correction is
-[`docs/PROTOCOL.md`](docs/PROTOCOL.md) §3, split in two:
-
-- The standing mechanism, the one every run on record actually used, is a dated
-  prediction committed to [`notebook/`](notebook/) *before* the run. `de check`
-  enforces it, and refuses a published run whose README does not name a
-  prediction whose first commit is an ancestor of the run's commit.
-- The hash-locked refusal is built, tested, and has never run. It is scoped to
-  the `confirm` arena, and no confirmation run has happened. The module carries
-  a 100% branch floor and no caller, which is why it is declared in
-  `[tool.decision-evals.unwired]`. A tested refusal that nothing calls is
-  inert, and the gate reports green either way.
-
-The model calls on record were made by [`scripts/run_triggers.py`](scripts/run_triggers.py).
-
-Verdicts govern the *public claim*, not your ability to use something. A skill
-that comes back `NULL` goes back to the workbench and ships as `experimental`:
-available, just not claimed as proven.
+[`docs/STATUS.md`](docs/STATUS.md) is the ledger: every run, what it showed,
+which measurements turned out to be broken, and which tracks are untouched.
+[`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) covers what is wrong with the
+harness, the statistics, the datasets and the judges.
 
 ## Development
 
@@ -271,65 +247,22 @@ Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 uv sync --group dev
 ```
 
-That is the whole install. There is no second dependency group.
-
-Run the full regression pipeline locally. It is lint, types, tests, coverage
-floors, and the repository-integrity checks:
+That is the whole install. Run the full gate, which is lint, types, tests,
+coverage floors and the repository-integrity checks:
 
 ```bash
 uv run de check
 ```
 
-**The gate runs locally, and from now on in CI as well.** `de check` is bound to
-`pre-commit` (fast subset) and `pre-push` (everything), so a red tree can't be
-pushed, and it runs on a machine where you can watch it. It makes no model
-calls; model-backed evaluation is run explicitly from [`scripts/`](scripts/).
-Because it is offline and deterministic, the same command runs unchanged in
-[`.github/workflows/check.yml`](.github/workflows/check.yml) on every push and
-pull request. Its first run went red on a tree whose local gate was green, in
-four places, none of which a working directory can show -- a CLI the runner had
-no reason to have, and an assertion that was reading an error message Rich had
-wrapped to eighty columns. It has been green since `ada7b4a`. That is what the
-workflow is for: a gate that has only ever run on the machine it was written on
-has only ever been asked about that machine.
+`de check` makes no model calls and is fully deterministic, so the same command
+runs unchanged in [`.github/workflows/check.yml`](.github/workflows/check.yml)
+on every push and pull request. It is bound to `pre-commit` as a fast subset and
+to `pre-push` in full. Running it in CI as well as locally is not redundant:
+local tells you the working tree passes, CI tells you the *commit* passes, and a
+gate that has only ever run on the machine it was written on has only ever been
+asked about that machine.
 
-**Simulating a clean clone is what found the reason to want that.** Checking out
-the committed tree on its own showed the gate had only ever been asked about a
-working directory, never about a commit. The tip of `main` imported a module
-that had never been committed. Two living documents linked paths that
-`.gitignore` excludes by design, so those links cannot resolve for anyone who
-clones this. The site manifest recorded a build from a file that is not in the
-repository. A test asserting that published checkpoints exist found one where it
-wanted two, because the second is under an ignored path. Every one of those is
-the gate working correctly on a tree it had never been shown. Written up in
-[`notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md`](notebook/2026-08-19-the-gate-had-never-run-on-a-clean-clone.md).
-
-A second workflow publishes rather than checks.
-[`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml) builds
-the site and deploys it to GitHub Pages on every push to `main`, and the Pages
-source is that workflow. Nothing on a machine can publish: the `de site
---deploy` flag and the `ghp-import` dependency behind it were both removed, and
-the `gh-pages` branch they pushed to is retired.
-
-This section used to admit a step it could not check, and that step is gone.
-The site gate proves the committed build matches the current tree; it never
-proved the build was pushed, and for six days in August 2026 the live site was
-a hand-written page nothing here had ever touched. Publishing is now a function
-of `main` instead of a function of who remembered. `de check` is still offline
-on purpose and still cannot see the live site, so the question is answered on
-demand by a separate command:
-
-```bash
-uv run de deployed
-```
-
-It fetches what the site says about its own origin and compares that against
-`origin/main`. Exit 0 means the live site is a build of the current `main`,
-1 means it is behind, and 2 means the question could not be answered. That last
-one is deliberately not the same as 0.
-
-Several of `de check`'s steps check the method rather than the code, each one
-added after the failure it prevents had already happened here:
+Several of its steps check the method instead of the code:
 
 | Step | Refuses |
 | --- | --- |
@@ -343,24 +276,39 @@ added after the failure it prevents had already happened here:
 | published claims | a measured number on the website that no longer matches the sentence in the document it came from |
 | site | a published build older than the documents it publishes, naming the files that moved |
 
-The other commands: `de index` regenerates
-[`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool
-skill copies, `de site` rebuilds the website and records what it was built from,
-`de lint` checks skill frontmatter and the promotion gate, `de power` prints a
-minimum-detectable-effect table, `de rescore` re-grades an existing checkpoint
-against a newer answer key without re-making a single call, and `de fetch`
-downloads the hash-pinned third-party corpora.
+Merging to `main` publishes the site through
+[`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml).
+Nothing on a developer machine can publish. `de check` is offline by design and
+cannot see the live site, so that question is answered on demand:
 
-`de site` needs Node; the gate that demands you run it does not. Editing any
-document the site renders makes the published build stale, so the loop is edit,
-`de site`, commit both:
+```bash
+uv run de deployed
+```
+
+It fetches what the site says about its own origin and compares that against
+`origin/main`. Exit 0 means the live site is a build of the current `main`, 1
+means it is behind, and 2 means the question could not be answered, which is
+deliberately distinct from 0.
+
+Editing any document the site renders makes the published build stale, so the
+loop is edit, rebuild, commit both:
 
 ```bash
 uv run de site
 ```
 
-> **Note:** if `uv` was installed with `pip install uv`, its executable may not be
-> on `PATH`. On Windows it lands in
+`de site` needs Node and npm on `PATH`, because the site is an Astro project.
+The gate that demands you run it does not.
+
+The other commands: `de index` regenerates
+[`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool
+skill copies, `de lint` checks skill frontmatter and the promotion gate,
+`de power` prints a minimum-detectable-effect table, `de rescore` re-grades an
+existing checkpoint against a newer answer key without re-making a single call,
+and `de fetch` downloads the hash-pinned third-party corpora.
+
+> **Note:** if `uv` was installed with `pip install uv`, its executable may not
+> be on `PATH`. On Windows it lands in
 > `%APPDATA%\Python\Python313\Scripts`. Add that directory to `PATH`, or invoke
 > it as `python -m uv`.
 
@@ -369,6 +317,7 @@ uv run de site
 See [`CONTRIBUTING.md`](CONTRIBUTING.md). The short version: run `de check`
 before believing anything works, put predictions in the notebook before runs,
 and never edit a notebook entry after the fact. Append a correction instead.
+Prose goes through the standard in [`docs/VOICE.md`](docs/VOICE.md).
 
 ## License
 

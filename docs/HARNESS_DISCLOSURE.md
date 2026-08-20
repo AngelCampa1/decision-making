@@ -1,7 +1,12 @@
 # Harness disclosure
 
-Every run in this repository records its harness configuration against the
-ETCSOVG checklist. This is not bureaucracy. In the controlled 3×3 factorial
+**Audience:** the evaluating reader, and anyone trying to reproduce a run here.
+
+**What this is.** The harness configuration every run in this repository records
+against the ETCSOVG checklist, and the reason each field is on the list.
+
+Harness choice can move a result by more than model choice does. In the
+controlled 3×3 factorial
 that arXiv:2605.23950 runs on "a difficulty-stratified 100-task subset of
 SWE-bench Verified", two runs per cell, the aggregate harness-to-model variance
 ratio was 7.80×, with ranking reversals in "6 out of 9
@@ -26,15 +31,14 @@ without its harness is not reproducible, and most published ones are not.
 > "unverified" note) and were introduced by a notebook entry restating a
 > different, since-corrected passage.
 
-The 7.80× is narrower than it looks, and the narrowing is the point rather than
-a footnote: it is one estimate from one 3×3 design on one task distribution.
-What it supports is the direction, that harness choice can move a result by
-more than model choice does, and it is not a constant to carry into another
-setting. This file does not use it as one.
+The 7.80× is narrower than it looks, and the narrowing belongs in the same
+breath as the figure: it is one estimate from one 3×3 design on one task
+distribution. What it supports is the direction. It is not a constant to carry
+into another setting, and this file does not use it as one.
 
-Since the independent variable here is a markdown file and the model is held
-fixed, the harness is not background detail. It is the largest thing in the
-room, and it has to be nailed down and written down.
+The independent variable here is a markdown file and the model is held fixed,
+which makes the harness the largest thing in the room. So it is nailed down and
+written down.
 
 ## Preconditions
 
@@ -108,8 +112,8 @@ would be the error this document exists to avoid.
 | In-situ arm | **Refused.** There is no pre-existing system prompt to append to, so the call would be the isolated arm under another arm's label |
 | Reasoning output | Returned in a field separate from the answer and **recorded**. Measured on `qwen3:4b`, 2026-08-19: 277 completion tokens for a `content` of `"4"`, the other 276 in `reasoning` |
 
-**The `cot` arm is not safely measurable against a reasoning model, and this is
-a live threat rather than a note.** `solvers/arms.py` compares a
+**The `cot` arm is not safely measurable against a reasoning model, and that is
+a live threat to any grid run here.** `solvers/arms.py` compares a
 chain-of-thought arm against the others by asking for reasoning in the prompt.
 A reasoning model reasons whether or not it is asked, and emits the chain in its
 own field. So on `qwen3:4b` the `cot` and `off` arms would differ in what the
@@ -139,7 +143,7 @@ The skill under test is the only intervention. Anything else in scope would be a
 confound, and the tool budget is zero so that "the agent looked it up" can never
 be an explanation for a difference between arms.
 
-The receipt is a stronger control than the flags, and it is new. Every row
+The receipt is a stronger control than the flags. Every row
 above it describes what was *requested*. The `init` event describes what the CLI
 actually loaded, and the two can differ: a flag can be renamed, deprecated, or
 silently ignored by a version bump, and nothing in a passing run would show it.

@@ -1,6 +1,8 @@
 # Documentation index
 
-Sixteen documents, and they answer different questions. This is the map.
+**Audience:** anyone looking for the document that answers their question.
+
+Every document here, and the question each one answers.
 
 ## Start here
 
@@ -38,6 +40,9 @@ Sixteen documents, and they answer different questions. This is the map.
 | Document | Answers |
 | --- | --- |
 | [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md) | How work is done here: the five standing rules, sub-agents, adversarial review, and the confirmation requirement. Nothing in it waits on a person. Every rule in it exists because that failure already happened. |
+| [`VOICE.md`](VOICE.md) | The house writing standard: who reads what, the register each audience gets, the patterns to avoid, and the three things a writing pass may never do. Governs documents, skill bodies, and source comments. |
+| [`WHY_THESE_RULES.md`](WHY_THESE_RULES.md) | The incident record behind `AGENTS.md`. Every rule there keeps one line and links here for the dated failure that produced it. |
+| [`reviews/`](reviews/) | Three review briefs, used as prompts: [`HOUSE_STYLE.md`](reviews/HOUSE_STYLE.md) checks a draft against `VOICE.md`, [`POSITIONING.md`](reviews/POSITIONING.md) finds where writing undersells work that was done, and [`COLD_READER.md`](reviews/COLD_READER.md) tests what a stranger takes from the first screen. |
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | How to contribute, and which gates will refuse you. |
 | [`superpowers/plans/`](superpowers/plans/) | Long-form experiment plans. |
 
