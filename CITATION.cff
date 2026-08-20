@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: >-
-  decision-making-skills: agent skills for decisions under uncertainty, with a
-  harness that measures whether they work
+  decision-making-skills: agent skills for decisions under uncertainty, with an
+  evaluation harness that measures whether they work
 message: >-
   If you cite this repository, please cite the software entry below. There is
   no paper to cite yet: `paper/` is a draft, and no skill in this repository
@@ -23,7 +23,10 @@ abstract: >-
   placebo-controlled: every skill is measured against four arms on the same
   items (off, on, a token- and structure-matched placebo, and plain
   chain-of-thought), so that a skill beating nothing but not beating filler is
-  reported as a length effect. Statistics are exact and resampling-based, with
+  reported as a length effect. Labels are re-derived blind by a panel of
+  independent model instances and reported with chance-corrected inter-rater
+  reliability (Cohen's kappa, Fleiss' kappa, Krippendorff's alpha) rather than
+  raw agreement. Statistics are exact and resampling-based, with
   templates rather than items as the resampling unit, and calibration is
   reported with the Murphy decomposition. Published results to date measure
   skill *triggering* — whether a skill fires when it should — not decision
@@ -31,13 +34,29 @@ abstract: >-
 keywords:
   - agent skills
   - LLM evaluation
+  - evaluation harness
+  - agent evaluation
+  - LLM-as-a-judge
+  - model-graded evaluation
+  - inter-rater reliability
+  - benchmark
+  - golden dataset
+  - tool-use evaluation
+  - function calling
+  - skill routing
   - skill evaluation
-  - decision making
-  - pre-registration
-  - placebo control
   - calibration
-  - AI agents
+  - experimental design
+  - ablation study
+  - placebo control
+  - pre-registration
+  - statistical analysis
   - reproducible research
+  - observability
+  - OpenTelemetry
+  - AI agents
+  - multi-agent systems
+  - decision making
 license: Apache-2.0
 version: 0.1.0
 date-released: "2026-08-13"

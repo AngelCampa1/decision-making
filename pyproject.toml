@@ -5,21 +5,44 @@ build-backend = "hatchling.build"
 [project]
 name = "decision-evals"
 version = "0.1.0"
-description = "Evaluation harness for measuring whether agent decision skills actually work"
+description = "Eval harness for LLM and agent evaluation: pre-registered, placebo-controlled experiments, LLM-as-a-judge panels scored for inter-rater reliability, and exact resampling statistics"
 readme = "README.md"
 requires-python = ">=3.13"
 license = "Apache-2.0"
 authors = [{ name = "Angel Campa" }]
 keywords = [
     "evaluation",
+    "eval-harness",
+    "evaluation-harness",
+    "llm-evaluation",
+    "agent-evaluation",
+    "agentic-evaluation",
+    "llm-as-a-judge",
+    "model-graded-evaluation",
+    "benchmark",
+    "golden-dataset",
+    "inter-rater-reliability",
+    "tool-use-evaluation",
+    "function-calling",
     "agent-skills",
-    "llm",
-    "decision-making",
-    "calibration",
+    "skill-routing",
     "skill-evaluation",
-    "pre-registration",
-    "placebo-controlled",
     "ai-agents",
+    "multi-agent",
+    "llm",
+    "calibration",
+    "experimental-design",
+    "ablation-study",
+    "placebo-controlled",
+    "pre-registration",
+    "statistical-analysis",
+    "regression-testing",
+    "observability",
+    "opentelemetry",
+    "reproducible-research",
+    "prompt-engineering",
+    "context-engineering",
+    "decision-making",
 ]
 
 # Development Status is 2 - Pre-Alpha and stays there until a skill carries a

@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "decision-making-skills",
   "version": "0.1.0",
-  "description": "Decision skills for agents, each shipped with the evidence for or against it. Skills appear here only after a confirmation run assigns them a verdict; an UNTESTED skill cannot be promoted into this directory.",
+  "description": "Decision skills for agents, each shipped with the evidence for or against it. One skill routes to six procedures; it appears here only after a confirmation run in the evaluation harness assigns it a verdict, so an UNTESTED skill cannot be promoted here.",
   "author": {
     "name": "Angel Campa",
     "url": "https://github.com/AngelCampa1"
@@ -12,8 +12,14 @@
   "license": "Apache-2.0",
   "keywords": [
     "decision-making",
+    "agent-skills",
+    "skill-routing",
+    "skill-evaluation",
     "evaluation",
+    "llm-evaluation",
+    "agent-evaluation",
     "calibration",
+    "pre-registration",
     "context-curation"
   ],
   "skills": [
