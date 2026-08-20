@@ -1266,7 +1266,7 @@ avoid re-running one item.
 
 ## 2026-08-20 — council and hinge get positives, and the key moves to version 5
 
-**Commits:** `069df14`
+**Commits:** `069df14`, `a84626b`
 
 Twenty-four triples added to the banded corpus, seventy-two items. Twelve
 positives route to `council` and twelve to `hinge`, three of each in every band.
@@ -1320,6 +1320,14 @@ it moved the wrong way, 3.10 to 3.23. The tuning stopped there. The baseline
 file names per-item retuning against whichever feature is currently over the
 line as the thing that produced four generations of leak in this corpus, and a
 fifth was not started.
+
+**A second commit under the same heading.** `a84626b` rebuilds the thirty-six
+long-band items from their bodies and closings. `textwrap.fill` had been wrapping
+on hyphens, so "five-year" was stored as "five- year", and the new `xl` bodies
+carried no em dash where every other long-band item in the set does. Both are
+authoring defects in items this entry introduced, so they belong to this
+decision rather than to a separate one. No label moved and no closing ask
+changed meaning.
 
 **Not yet adjudicated.** These labels are the author's, and the corpus rule is
 blind three-judge adjudication with a pre-registered kill at more than 20% of
