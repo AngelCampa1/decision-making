@@ -1263,3 +1263,70 @@ a resumed run skips item/arm pairs already present, so a crash costs the current
 call and nothing else. A truncated final line is ignored rather than fatal —
 refusing to resume over a partial write would throw away a whole checkpoint to
 avoid re-running one item.
+
+## 2026-08-20 — council and hinge get positives, and the key moves to version 5
+
+**Commits:** `069df14`
+
+Twenty-four triples added to the banded corpus, seventy-two items. Twelve
+positives route to `council` and twelve to `hinge`, three of each in every band.
+No existing label moved and no existing turn was edited.
+
+The defect this closes was recorded in `datasets/triggers/corpus-baseline.txt`
+on 2026-08-19 and is a measurement defect rather than a gap in coverage.
+`evaluate_routing` scores `chosen in case.routes`. The router table grew from
+four rows to six on 2026-08-19 and the key did not grow with it, so a model that
+correctly named `council` could only ever be counted wrong, and an arm offered
+six procedures carried two ways to be wrong that a four-procedure arm did not
+have. That reads as a description effect and is a menu-size artefact.
+
+The baseline entry named two ways to close it and did not assume either.
+Authoring the positives is the one taken; dropping the two rows from the router
+table was the other and would have meant shipping a smaller skill to make a
+number computable.
+
+**Why the version moves rather than the labels being edited in place.** A
+routing number computed on version 4 is a six-way choice graded against a
+four-way key. It is not comparable with one computed here, and
+`label_versions_comparable` is what refuses that comparison. Moving the integer
+is how the refusal happens; leaving it would let a v4 routing figure sit beside
+a v5 one with nothing to say they are graded against different-sized keys.
+
+Nothing had been scored against version 4 — zero records on disk carry
+`set_version: 4` — so no published number is invalidated. What changes is the
+denominator every future one is computed over: 258 items across 86 triples
+becomes 330 across 110, and routed positives go from 65 over four procedures to
+89 over six, at ledger 19, cascade 16, fit 15, timing 15, council 12, hinge 12.
+
+**What the shortcut battery said, and what was done about it.** The first draft
+of the 24 triples left `matched:turn:type_token_ratio` firing at 3.61 standard
+errors. That was a real authoring defect with a nameable cause: the positive
+asks were written as deliberation and the negative ones as task requests, so the
+positives carried runs of function words that the negatives did not. Rewriting
+the twelve long-band positive asks at the negatives' lexical density closed the
+key and took the pre-existing `matched:ask:type_token_ratio` from 4.28 to 3.03
+in passing.
+
+`cancel:close:type_token_ratio` crossed the z = 3.0 gate and is baselined with
+its arithmetic rather than tuned away. The positive is at an extreme of its own
+triple on the closing sentence in 79 of the 86 pre-existing triples and in 22 of
+the 24 new ones — 0.9186 against 0.9167 — so the rate did not move and only `n`
+did. This is the finding the 2026-08-14 close-out already described as
+corpus-wide and one clause-shift below the gate; twenty-four more triples at the
+same rate is what put it one clause-shift above.
+
+Four items were retuned against that key before the mechanism was obvious, and
+it moved the wrong way, 3.10 to 3.23. The tuning stopped there. The baseline
+file names per-item retuning against whichever feature is currently over the
+line as the thing that produced four generations of leak in this corpus, and a
+fifth was not started.
+
+**Not yet adjudicated.** These labels are the author's, and the corpus rule is
+blind three-judge adjudication with a pre-registered kill at more than 20% of
+labels moving. That has not run on these items and no number may be published
+against version 5 until it has.
+
+**`datasets/triggers/decision-making.yaml` is not fixed.** The version 2 corpus
+still has no `council` or `hinge` positive and its baseline entry stays. It is
+the superseded set, and closing it would mean either authoring the same triples
+again for a corpus nothing will run against or claiming a fix that was not made.

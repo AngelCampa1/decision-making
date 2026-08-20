@@ -30,7 +30,24 @@
 # nothing else, so a version that moves only when a label flips cannot see a
 # corpus whose text changed under it, which is what happened today: eleven asks
 # were rewritten and three items removed while every `should_fire` stayed put.
-version: 4
+# Bumped 4 -> 5 on 2026-08-20. Twenty-four triples were added, twelve routed to
+# `council` and twelve to `hinge`, three of each in every band. No existing
+# label moved and no existing turn was touched.
+#
+# The bump is not optional and it is not bookkeeping. Two of the six procedures
+# in the shipped router table were the correct answer for no positive here, so
+# `evaluate_routing` scored `chosen in case.routes` against a key that could
+# only ever count a correct `council` as wrong. Every routing number computed
+# on version 4 was a six-way choice graded against a four-way key. Those
+# numbers are not comparable with anything computed here, which is what
+# `label_versions_comparable` exists to refuse, and refusing it is the point of
+# moving the integer rather than editing in place.
+#
+# What the addition does to the denominators: 258 items over 86 triples becomes
+# 330 over 110, positives 86 becomes 110, and routed positives 65 becomes 89
+# across six procedures rather than four (ledger 19, cascade 16, fit 15,
+# timing 15, council 12, hinge 12).
+version: 5
 skill: decision-making
 includes:
   - s.yaml
