@@ -23,17 +23,26 @@ estimator-returns-a-plausible-zero failure this repository keeps hitting.
 set, git aborts a commit before any hook is invoked. It is reached only through
 `--doctor`/`--fix`, and `TestPlainRunNeverChecksBare` pins that, so nobody later
 reads the `--doctor` tests as evidence that a commit is guarded.
+
+**Several tests here assert on which git commands ran, not only on the return
+value.** That is deliberate and it is the lesson of the 2026-08-20 review: this
+function has five independent guards that all return `[]`, so a test asserting
+only `== []` passes with the guard it is named after deleted. `_recording_git`
+exists so a guard can be pinned by what it *stops* -- almost always a fetch.
 """
 
 from __future__ import annotations
 
+import contextlib
 import importlib.util
 import os
 import subprocess
 import sys
 import time
+from collections.abc import Callable, Iterator
 from pathlib import Path
 from types import ModuleType
+from typing import Any, NamedTuple
 
 import pytest
 
@@ -51,6 +60,13 @@ def _load() -> ModuleType:
 
 
 hygiene = _load()
+
+#: Older than any suppression window this hook should ever carry. Deliberately
+#: *not* derived from `hygiene.FETCH_STALE_SECONDS`: a test that backdates by
+#: the constant it is testing moves with the constant, so raising the window to
+#: a billion seconds -- which switches the fetch off entirely -- would not fail
+#: a single test. An hour is the assertion: the window is shorter than this.
+COMFORTABLY_STALE_SECONDS = 3600
 
 
 # --------------------------------------------------------------------------- #
@@ -88,6 +104,42 @@ def _git(cwd: Path, *args: str) -> str:
     return proc.stdout.strip()
 
 
+def _git_allowing_failure(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    """Run git in ``cwd`` where a non-zero exit is the point of the test."""
+    return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+
+
+class _GitCall(NamedTuple):
+    argv: tuple[str, ...]
+    kwargs: dict[str, Any]
+
+
+@contextlib.contextmanager
+def _recording_git() -> Iterator[list[_GitCall]]:
+    """Record every `git` the script runs, and how, without changing behaviour.
+
+    Wrapped around the call under test rather than installed as a fixture, so
+    that the git commands a test uses to *build* its repository are not counted.
+    """
+    calls: list[_GitCall] = []
+    real: Callable[..., Any] = subprocess.run
+
+    def spy(args: Any, **kwargs: Any) -> Any:
+        if isinstance(args, list) and args and args[0] == "git":
+            calls.append(_GitCall(tuple(args), dict(kwargs)))
+        return real(args, **kwargs)
+
+    subprocess.run = spy
+    try:
+        yield calls
+    finally:
+        subprocess.run = real
+
+
+def _fetches(calls: list[_GitCall]) -> list[_GitCall]:
+    return [call for call in calls if "fetch" in call.argv]
+
+
 def _commit(repo: Path, text: str, message: str) -> None:
     (repo / "f.txt").write_text(text, encoding="utf-8")
     _git(repo, "add", "f.txt")
@@ -120,10 +172,67 @@ def _clone(root: Path, upstream: Path, name: str) -> Path:
     return path
 
 
+def _main_left_behind(root: Path) -> Path:
+    """A clone whose `main` is one commit behind the remote, unbeknownst to it."""
+    upstream, seed = _upstream_with_seed(root)
+    work = _clone(root, upstream, "work")
+    _commit(seed, "2\n", "c2")
+    _git(seed, "push", "--quiet", "origin", "main")
+    return work
+
+
 def _behind(repo: Path) -> int:
     """How far `main` trails `origin/main` *according to the refs on disk*."""
     counts = _git(repo, "rev-list", "--left-right", "--count", "main...origin/main")
     return int(counts.split()[1])
+
+
+def _stamp(repo: Path) -> Path:
+    return repo / ".git" / hygiene.FETCH_STAMP
+
+
+def _backdate(path: Path, seconds: float) -> None:
+    old = time.time() - seconds
+    os.utime(path, (old, old))
+
+
+def _make_core_bare_unreadable(repo: Path) -> None:
+    """Put a value in `.git/config` that git cannot parse as a boolean.
+
+    Everything after this -- `git status`, `git commit`, `git config`, even
+    `git rev-parse --git-dir` -- exits 128 in this repository.
+    """
+    config = repo / ".git" / "config"
+    kept = [
+        line
+        for line in config.read_text(encoding="utf-8").splitlines()
+        if not line.strip().startswith("bare")
+    ]
+    out: list[str] = []
+    for line in kept:
+        out.append(line)
+        if line.strip() == "[core]":
+            out.append("\tbare = maybe")
+    config.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+
+def _bare_with_linked_worktree(root: Path) -> tuple[Path, Path]:
+    """A genuinely bare repository that has a linked worktree checked out.
+
+    This is the shape `--doctor` used to report as broken and `--fix` used to
+    break: the worktree's git dir is `<bare>/worktrees/<name>/`, which is a
+    directory *and* holds an `index`, while `git config --local` reads the
+    shared config where `core.bare = true` is entirely correct.
+    """
+    bare = root / "shared.git"
+    _git(root, "init", "--quiet", "--bare", "-b", "main", str(bare))
+    seed = root / "bare-seed"
+    _git(root, "clone", "--quiet", str(bare), str(seed))
+    _commit(seed, "1\n", "c1")
+    _git(seed, "push", "--quiet", "origin", "main")
+    linked = root / "linked"
+    _git(bare, "worktree", "add", "--quiet", str(linked), "main")
+    return bare, linked
 
 
 # --------------------------------------------------------------------------- #
@@ -135,10 +244,7 @@ class TestMainBehindOriginIsRefused:
     def test_one_commit_behind_is_named_with_the_catch_up_command(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
 
         monkeypatch.chdir(work)
         problems = hygiene.check_main_drift()
@@ -157,10 +263,7 @@ class TestMainBehindOriginIsRefused:
         would wave the commit through. Only the fetch makes the answer non-zero.
         Delete the fetch and this test is the one that fails.
         """
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
 
         assert _behind(work) == 0, "precondition: the stale ref alone says nothing is wrong"
 
@@ -187,10 +290,7 @@ class TestMainBehindOriginIsRefused:
     def test_diverged_says_so_and_warns_that_ff_only_will_refuse(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
         _commit(work, "local\n", "local-c2")
 
         monkeypatch.chdir(work)
@@ -222,19 +322,60 @@ class TestMainCurrentOrAheadPasses:
         monkeypatch.chdir(work)
         assert hygiene.check_main_drift() == []
 
-    def test_no_remote_tracking_ref_is_silent(
+    def test_no_remote_tracking_ref_is_silent_and_attempts_no_fetch(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        monkeypatch.chdir(_standalone(tmp_path))
-        assert hygiene.check_main_drift() == []
+        """Silence alone does not test the guard, so this tests the fetch.
 
-    def test_outside_a_repository_is_silent(
+        Every later guard in `check_main_drift` also returns `[]` on a
+        repository with no `origin/main` -- `rev-list` fails, and that failure
+        is swallowed. Deleting the `rev-parse --verify` guard therefore left all
+        35 tests passing. What the guard actually buys is not reaching the
+        network at all, so that is what is asserted.
+        """
+        monkeypatch.chdir(_standalone(tmp_path))
+
+        with _recording_git() as calls:
+            assert hygiene.check_main_drift() == []
+
+        assert _fetches(calls) == []
+
+    def test_a_deleted_remote_tracking_ref_is_silent_even_though_main_is_behind(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
+        """The same guard, in the shape where deleting it changes the verdict.
+
+        `main` here really is a commit behind the remote. With the guard, that
+        is unknowable without a fetch and the hook says nothing. Without it, the
+        fetch runs, recreates `origin/main`, and the commit is refused on a
+        repository the hook was never asked to have an opinion about.
+        """
+        work = _main_left_behind(tmp_path)
+        _git(work, "update-ref", "-d", "refs/remotes/origin/main")
+
+        monkeypatch.chdir(work)
+        with _recording_git() as calls:
+            assert hygiene.check_main_drift() == []
+
+        assert _fetches(calls) == []
+
+    def test_outside_a_repository_is_silent_and_gives_up_on_the_first_call(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Return value alone cannot discriminate here, so the call list does.
+
+        Outside a repository every guard in the function returns `[]`, so this
+        test passed with its own guard deleted. What the guard buys is that
+        nothing further is attempted.
+        """
         elsewhere = tmp_path / "not-a-repo"
         elsewhere.mkdir()
         monkeypatch.chdir(elsewhere)
-        assert hygiene.check_main_drift() == []
+
+        with _recording_git() as calls:
+            assert hygiene.check_main_drift() == []
+
+        assert [call.argv[1:] for call in calls] == [("rev-parse", "--abbrev-ref", "HEAD")]
 
 
 class TestBranchesAreSilent:
@@ -260,13 +401,86 @@ class TestBranchesAreSilent:
     def test_a_detached_head_is_not_refused(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
         _git(work, "checkout", "--quiet", "--detach", "HEAD")
 
         monkeypatch.chdir(work)
+        assert hygiene.check_main_drift() == []
+
+
+class TestIntegrationInProgressIsSilent:
+    """The hook used to refuse the merge that was resolving the drift.
+
+    During a conflicted `git merge origin/main`, `main` is both behind *and*
+    ahead. The refusal said so on line 2 -- "--ff-only will refuse" -- and then
+    advised `git pull --ff-only origin main` on line 4, which git answers with
+    `fatal: Exiting because of unfinished merge.` The only way to make the
+    commit was `--no-verify`, so the hook trained you to bypass it on the one
+    flow it should have been helping. Reproduced 2026-08-20.
+    """
+
+    #: Hard-coded rather than read from `hygiene.INTEGRATION_MARKERS`, so that
+    #: deleting a marker from the module fails a test instead of silently
+    #: deleting the test that covered it.
+    MARKERS = ("MERGE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "rebase-merge", "rebase-apply")
+
+    def test_the_marker_list_is_the_documented_one(self) -> None:
+        assert hygiene.INTEGRATION_MARKERS == self.MARKERS
+
+    def test_a_clean_repository_reports_no_integration(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.chdir(_standalone(tmp_path))
+        assert hygiene._integration_in_progress() is False
+
+    def test_a_conflicted_merge_that_resolves_the_drift_is_not_refused(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The reported bug, end to end, with the advice checked too.
+
+        The last two assertions are the bug report: the drift is real and would
+        be refused, and the command the refusal recommends is one git will not
+        run while the merge is open.
+        """
+        work = _main_left_behind(tmp_path)
+        _commit(work, "local\n", "local-c2")
+        _git(work, "fetch", "--quiet", "origin", "main")
+
+        merge = _git_allowing_failure(work, "merge", "origin/main")
+        assert merge.returncode != 0, "precondition: the merge conflicts"
+        assert (work / ".git" / "MERGE_HEAD").exists()
+
+        # Resolve and stage, which is where the hook actually fires: the next
+        # thing anyone types here is `git commit`.
+        (work / "f.txt").write_text("resolved\n", encoding="utf-8")
+        _git(work, "add", "f.txt")
+
+        monkeypatch.chdir(work)
+        assert hygiene.check_main_drift() == []
+
+        pull = _git_allowing_failure(work, "pull", "--ff-only", "origin", "main")
+        assert "unfinished merge" in pull.stderr, "the advice git refuses to run"
+
+        (work / ".git" / "MERGE_HEAD").unlink()
+        assert hygiene.check_main_drift(), "without the marker this is exactly what fires"
+
+    @pytest.mark.parametrize(
+        "marker", ["MERGE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "rebase-merge", "rebase-apply"]
+    )
+    def test_every_marker_silences_a_main_that_really_is_behind(
+        self, marker: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        work = _main_left_behind(tmp_path)
+
+        monkeypatch.chdir(work)
+        assert hygiene.check_main_drift(), "precondition: this main really is behind"
+
+        path = work / ".git" / marker
+        if marker.startswith("rebase-"):
+            path.mkdir()
+        else:
+            path.write_text(f"{'0' * 40}\n", encoding="utf-8")
+
         assert hygiene.check_main_drift() == []
 
 
@@ -286,10 +500,7 @@ class TestOfflineIsBestEffort:
     def test_an_unreachable_remote_still_refuses_a_main_already_known_to_be_behind(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
         _git(work, "fetch", "--quiet", "origin", "main")
         _git(work, "remote", "set-url", "origin", str(tmp_path / "gone.git"))
 
@@ -298,43 +509,178 @@ class TestOfflineIsBestEffort:
         assert hygiene.check_main_drift()
 
 
-class TestFetchStaleness:
-    def test_a_missing_fetch_head_counts_as_stale(self, tmp_path: Path) -> None:
-        repo = _standalone(tmp_path)
-        assert hygiene._fetch_is_stale(str(repo / ".git")) is True
+class TestAFailedFetchDoesNotArmTheWindow:
+    """The suppression window belongs to success, not to having tried.
 
-    def test_a_fresh_fetch_head_is_not_stale(self, tmp_path: Path) -> None:
-        repo = _standalone(tmp_path)
-        (repo / ".git" / "FETCH_HEAD").write_text("", encoding="utf-8")
-        assert hygiene._fetch_is_stale(str(repo / ".git")) is False
+    `git fetch` truncates and re-creates `FETCH_HEAD` even when it fails, so
+    the old staleness check -- an mtime read off `FETCH_HEAD` -- was armed by
+    failure. One run against an unreachable remote blinded the hook for ten
+    minutes, and the case it then waved through is the case it exists for.
+    Reproduced 2026-08-20: unreachable remote, run (rc 0), restore the remote
+    with `main` genuinely one commit behind, run again -- rc 0, no fetch.
+    """
 
-    def test_an_old_fetch_head_is_stale(self, tmp_path: Path) -> None:
-        repo = _standalone(tmp_path)
-        fetch_head = repo / ".git" / "FETCH_HEAD"
-        fetch_head.write_text("", encoding="utf-8")
-        old = time.time() - hygiene.FETCH_STALE_SECONDS - 60
-        os.utime(fetch_head, (old, old))
-        assert hygiene._fetch_is_stale(str(fetch_head.parent)) is True
-
-    def test_a_fresh_fetch_head_suppresses_the_fetch(
+    def test_a_failed_fetch_leaves_the_next_run_to_fetch_again(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """The cost of the ten-minute window, stated as a test.
+        work = _main_left_behind(tmp_path)
+        gone = str(tmp_path / "gone.git")
+        reachable = _git(work, "remote", "get-url", "origin")
+        _git(work, "remote", "set-url", "origin", gone)
 
-        Inside it the check runs against whatever `origin/main` already says,
-        so a `main` that went stale in the last ten minutes commits. That is the
-        deliberate trade -- a fetch on every commit is what the window buys off
-        -- and it is here so the next reader does not discover it as a surprise.
+        monkeypatch.chdir(work)
+        assert hygiene.check_main_drift() == [], "offline is best-effort, not a refusal"
+        assert not _stamp(work).exists(), "a failed fetch must not arm the window"
+
+        _git(work, "remote", "set-url", "origin", reachable)
+        assert hygiene.check_main_drift(), "the very next run must still look"
+
+    def test_a_successful_fetch_does_arm_the_window(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The other half, and the cost of the window stated as a test.
+
+        Inside the ten minutes the check runs against whatever `origin/main`
+        already says, so a `main` that went stale during them commits. That is
+        the deliberate trade -- a fetch on every commit is what the window buys
+        off -- and it is here so the next reader does not meet it as a surprise.
         """
         upstream, seed = _upstream_with_seed(tmp_path)
         work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
-        (work / ".git" / "FETCH_HEAD").write_text("", encoding="utf-8")
 
         monkeypatch.chdir(work)
         assert hygiene.check_main_drift() == []
-        assert _behind(work) == 0, "no fetch happened"
+        assert _stamp(work).exists(), "a fetch that succeeded arms the window"
+
+        _commit(seed, "2\n", "c2")
+        _git(seed, "push", "--quiet", "origin", "main")
+
+        with _recording_git() as calls:
+            assert hygiene.check_main_drift() == []
+        assert _fetches(calls) == [], "suppressed inside the window"
+
+
+class TestFetchStaleness:
+    def test_a_missing_stamp_counts_as_stale(self, tmp_path: Path) -> None:
+        repo = _standalone(tmp_path)
+        assert hygiene._fetch_is_stale(_stamp(repo)) is True
+
+    def test_no_stamp_path_at_all_counts_as_stale(self) -> None:
+        assert hygiene._fetch_is_stale(None) is True
+
+    def test_a_fresh_stamp_is_not_stale(self, tmp_path: Path) -> None:
+        repo = _standalone(tmp_path)
+        _stamp(repo).write_text("", encoding="utf-8")
+        assert hygiene._fetch_is_stale(_stamp(repo)) is False
+
+    def test_an_hour_old_stamp_is_stale(self, tmp_path: Path) -> None:
+        repo = _standalone(tmp_path)
+        _stamp(repo).write_text("", encoding="utf-8")
+        _backdate(_stamp(repo), COMFORTABLY_STALE_SECONDS)
+        assert hygiene._fetch_is_stale(_stamp(repo)) is True
+
+    def test_an_expired_window_fetches_again_end_to_end(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The window has to expire, and nothing used to drive that end to end.
+
+        Setting `FETCH_STALE_SECONDS` to a billion switches the fetch off
+        entirely, and all 35 tests passed with it there: the unit tests around
+        `_fetch_is_stale` backdated by the constant itself, so they moved with
+        it. This one backdates by a fixed hour and asserts on the refusal, so it
+        fails if the window ever grows past that.
+        """
+        work = _main_left_behind(tmp_path)
+        _stamp(work).write_text("", encoding="utf-8")
+        _backdate(_stamp(work), COMFORTABLY_STALE_SECONDS)
+
+        assert _behind(work) == 0, "precondition: the ref on disk says nothing is wrong"
+
+        monkeypatch.chdir(work)
+        assert hygiene.check_main_drift(), "an expired window must fetch again"
+        assert _behind(work) == 1, "the script fetched"
+
+    def test_an_unwritable_stamp_location_just_fetches_every_time(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A repository this cannot write to loses the window, not the check."""
+        work = _main_left_behind(tmp_path)
+        monkeypatch.chdir(work)
+
+        missing = work / ".git" / "no-such-dir" / hygiene.FETCH_STAMP
+        hygiene._record_fetch(missing)  # must not raise
+        hygiene._record_fetch(None)
+
+        assert not missing.exists()
+        assert hygiene._fetch_is_stale(missing) is True
+
+
+class TestTheFetchIsTimeBoxed:
+    """`.pre-commit-config.yaml` and the module docstring both promise this.
+
+    They were wrong until 2026-08-20. `subprocess.run(timeout=...)` with
+    `capture_output=True` kills the child and then calls `communicate()` again
+    to drain the pipes; the transport helper git spawned inherited them,
+    outlives the kill, and holds them open. Measured on Windows against a
+    helper that slept 60s: `timeout=3` returned after 60.21s. The same
+    measurement with `DEVNULL` returned after 3.00s.
+    """
+
+    def test_the_fetch_passes_a_timeout_and_asks_for_no_pipes(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The portable half: deleting `timeout=` left all 35 tests passing.
+
+        The wall-clock test below cannot cover it everywhere -- on POSIX,
+        `subprocess.run` waits rather than draining after the kill, so the hang
+        is a Windows shape. This assertion holds on every platform.
+        """
+        work = _main_left_behind(tmp_path)
+        monkeypatch.chdir(work)
+
+        with _recording_git() as calls:
+            hygiene.check_main_drift()
+
+        fetches = _fetches(calls)
+        assert len(fetches) == 1
+        kwargs = fetches[0].kwargs
+        assert kwargs.get("timeout") == hygiene.FETCH_TIMEOUT_SECONDS
+        assert kwargs.get("stdout") is subprocess.DEVNULL
+        assert kwargs.get("stderr") is subprocess.DEVNULL
+        assert not kwargs.get("capture_output"), "pipes are what the helper holds open"
+
+    def test_a_transport_helper_holding_the_pipes_does_not_outlast_the_timeout(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The behavioural half, run against a helper that hangs for 25 seconds.
+
+        `GIT_SSH_COMMAND` answers git's `ssh -G` probe and then sleeps, so git
+        is genuinely blocked inside a transport it spawned. With the pipes
+        asked for, this took the full sleep; the bound below is five times the
+        timeout and still well under it.
+        """
+        upstream, _seed = _upstream_with_seed(tmp_path)
+        work = _clone(tmp_path, upstream, "work")
+        sleeper = tmp_path / "sleeper.py"
+        sleeper.write_text(
+            "import sys, time\n"
+            "if '-G' in sys.argv[1:]:\n"
+            "    sys.stdout.write('user u\\nhostname h\\nport 22\\n')\n"
+            "    raise SystemExit(0)\n"
+            "time.sleep(25)\n",
+            encoding="utf-8",
+        )
+        _git(work, "remote", "set-url", "origin", "ssh://nowhere.invalid/x.git")
+        monkeypatch.setenv("GIT_SSH_COMMAND", f'"{sys.executable}" "{sleeper}"')
+        monkeypatch.setattr(hygiene, "FETCH_TIMEOUT_SECONDS", 2)
+        monkeypatch.chdir(work)
+
+        started = time.monotonic()
+        assert hygiene.check_main_drift() == [], "a hung fetch may not block a commit"
+        elapsed = time.monotonic() - started
+
+        assert elapsed < 10, f"the fetch was not time-boxed: {elapsed:.1f}s"
+        assert not _stamp(work).exists(), "a fetch that timed out has not succeeded"
 
 
 # --------------------------------------------------------------------------- #
@@ -356,8 +702,9 @@ class TestDoctorFindsBareOnARealCheckout:
         assert "core.bare is true" in problems[0]
         assert any("git config --local core.bare false" in line for line in problems)
 
-    def test_the_numeric_spelling_is_caught_too(
-        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    @pytest.mark.parametrize("spelling", ["true", "1", "yes", "on"])
+    def test_every_spelling_of_true_is_caught(
+        self, spelling: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         """`bare = 1` breaks a checkout exactly as `bare = true` does.
 
@@ -368,15 +715,31 @@ class TestDoctorFindsBareOnARealCheckout:
         makes this a bug report rather than a preference.
         """
         repo = _standalone(tmp_path)
-        _git(repo, "config", "--local", "core.bare", "1")
+        _git(repo, "config", "--local", "core.bare", spelling)
 
-        broken = subprocess.run(
-            ["git", "status", "--short"], cwd=repo, capture_output=True, text=True
-        )
+        broken = _git_allowing_failure(repo, "status", "--short")
         assert broken.returncode != 0, "precondition: git really is refusing to work"
 
         monkeypatch.chdir(repo)
         assert hygiene.check_bare(fix=False)
+
+    def test_the_index_path_in_the_message_is_one_path(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """It used to be an f-string gluing a `Path` to a literal `/index`.
+
+        On Windows that printed `...\\worktrees\\A-wt/index`. Only the native
+        separator can be asserted, so this is a real assertion on Windows and a
+        tautology on POSIX -- which is the platform the defect could not occur
+        on anyway.
+        """
+        repo = _standalone(tmp_path)
+        _git(repo, "config", "--local", "core.bare", "true")
+
+        monkeypatch.chdir(repo)
+        problems = hygiene.check_bare(fix=False)
+
+        assert str(Path(".git") / "index") in problems[0]
 
     def test_core_bare_false_is_silent(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -399,13 +762,167 @@ class TestDoctorFindsBareOnARealCheckout:
         monkeypatch.chdir(bare)
         assert hygiene.check_bare(fix=False) == []
 
-    def test_outside_a_repository_is_silent(
+    def test_outside_a_repository_is_silent_and_gives_up_on_the_first_call(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
+        """The guard is load-bearing now, and this pins what it stops.
+
+        `git config --local` outside a repository exits 128 -- the same exit
+        code an unreadable `core.bare` produces. Reaching it from here is how a
+        directory that is simply not a repository would be reported as a broken
+        one, so the assertion is that it is never reached.
+        """
         elsewhere = tmp_path / "not-a-repo"
         elsewhere.mkdir()
         monkeypatch.chdir(elsewhere)
+
+        with _recording_git() as calls:
+            assert hygiene.check_bare(fix=False) == []
+
+        assert [call.argv[1:] for call in calls] == [("rev-parse", "--git-dir")]
+
+
+class TestBareRepositoriesWithLinkedWorktrees:
+    """`--doctor` reported a defect here, and `--fix` then created one.
+
+    In a linked worktree of a bare repository the git dir is
+    `<bare>/worktrees/<name>/`, which *is* a directory and *does* contain
+    `index`, while `git config --local` reads the shared config where
+    `core.bare = true` is correct. The old docstring's claim that this "never
+    fires on a real bare repo" was false. Reproduced 2026-08-20: `--doctor`
+    exited 1, and `--fix` printed "repaired: core.bare true -> false" and left
+    the bare repository no longer bare.
+    """
+
+    def test_a_linked_worktree_of_a_bare_repository_is_silent(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        _bare, linked = _bare_with_linked_worktree(tmp_path)
+
+        assert (Path(_git(linked, "rev-parse", "--git-dir")) / "index").exists(), (
+            "precondition: the git dir here really does hold an index"
+        )
+        assert _git(linked, "config", "--local", "--type=bool", "--get", "core.bare") == "true", (
+            "precondition: the shared config really does say bare"
+        )
+        assert _git_allowing_failure(linked, "status", "--short").returncode == 0, (
+            "precondition: nothing is wrong here"
+        )
+
+        monkeypatch.chdir(linked)
         assert hygiene.check_bare(fix=False) == []
+
+    def test_fix_in_a_linked_worktree_leaves_the_bare_repository_bare(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        bare, linked = _bare_with_linked_worktree(tmp_path)
+
+        monkeypatch.chdir(linked)
+        assert hygiene.check_bare(fix=True) == []
+        assert capsys.readouterr().out == "", "nothing was repaired, so nothing is claimed"
+
+        assert _git(bare, "config", "--local", "--type=bool", "--get", "core.bare") == "true"
+        assert _git(bare, "rev-parse", "--is-bare-repository") == "true"
+        assert _git_allowing_failure(linked, "status", "--short").returncode == 0
+
+    def test_the_bare_repository_itself_is_silent_even_with_worktrees(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        bare, _linked = _bare_with_linked_worktree(tmp_path)
+
+        monkeypatch.chdir(bare)
+        assert hygiene.check_bare(fix=False) == []
+
+    def test_the_main_worktree_of_a_broken_repository_is_still_reported(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The false negative the fix costs, named rather than left to be found.
+
+        A non-bare repository with `core.bare = true` and a linked worktree is
+        broken in its *main* worktree only; git commands in the linked worktree
+        work normally. So the doctor is silent there and reports from here, and
+        that is the trade.
+        """
+        repo = _standalone(tmp_path, "mainwt")
+        side = tmp_path / "side"
+        _git(repo, "worktree", "add", "--quiet", str(side), "-b", "side")
+        _git(repo, "config", "--local", "core.bare", "true")
+
+        assert _git_allowing_failure(side, "status", "--short").returncode == 0
+        assert _git_allowing_failure(repo, "status", "--short").returncode != 0
+
+        monkeypatch.chdir(side)
+        assert hygiene.check_bare(fix=False) == []
+
+        monkeypatch.chdir(repo)
+        assert hygiene.check_bare(fix=False)
+
+
+class TestUnreadableCoreBare:
+    """The exit code of the `core.bare` read used to be discarded.
+
+    `_, bare = git(...)` reproduced, through a second door, the exact bug the
+    `--type=bool` change of 2026-08-19 was made to close: `bare = maybe` makes
+    every git command in the repository exit 128 with `bad boolean config
+    value`, and `--doctor` printed `git hygiene: clean`, rc 0. Reproduced
+    2026-08-20.
+    """
+
+    def test_a_value_git_cannot_parse_is_reported(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        repo = _standalone(tmp_path)
+        _make_core_bare_unreadable(repo)
+
+        broken = _git_allowing_failure(repo, "status", "--short")
+        assert broken.returncode == 128, "precondition: git really is refusing to work"
+        assert "bad boolean config value" in broken.stderr
+
+        monkeypatch.chdir(repo)
+        problems = hygiene.check_bare(fix=False)
+
+        assert problems
+        assert "core.bare" in problems[0]
+        assert any("bad boolean config value" in line for line in problems), (
+            "git's own words, so the reader can see which value it choked on"
+        )
+
+    def test_the_doctor_exits_one_rather_than_reporting_clean(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        repo = _standalone(tmp_path)
+        _make_core_bare_unreadable(repo)
+
+        monkeypatch.chdir(repo)
+        assert _main(monkeypatch, "--doctor") == 1
+        captured = capsys.readouterr()
+        assert "clean" not in captured.out
+        assert "core.bare" in captured.err
+
+    def test_fix_does_not_touch_a_value_it_cannot_interpret(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Refusing to guess, on purpose.
+
+        Git cannot be asked whether the repository is meant to be bare while
+        the value is unreadable, and `git config --local core.bare false` fails
+        for the same reason -- checked 2026-08-20, it exits 128 too. So the
+        message says to edit `.git/config`, and `--fix` changes nothing.
+        """
+        repo = _standalone(tmp_path)
+        _make_core_bare_unreadable(repo)
+        before = (repo / ".git" / "config").read_text(encoding="utf-8")
+
+        monkeypatch.chdir(repo)
+        assert hygiene.check_bare(fix=True)
+        assert (repo / ".git" / "config").read_text(encoding="utf-8") == before
+
+    def test_a_missing_repository_is_not_reported_as_an_unreadable_value(self) -> None:
+        """The two cases exit 128 alike; only what git *says* separates them."""
+        not_a_repo = "fatal: not a git repository (or any of the parent directories): .git"
+        assert hygiene._unreadable_core_bare(not_a_repo) == []
+        assert hygiene._unreadable_core_bare("") == []
+        assert hygiene._unreadable_core_bare("fatal: bad boolean config value 'x' for 'core.bare'")
 
 
 class TestFixRepairs:
@@ -424,10 +941,7 @@ class TestFixRepairs:
         assert hygiene.check_bare(fix=True) == []
         assert "repaired" in capsys.readouterr().out
 
-        repaired = subprocess.run(
-            ["git", "status", "--short"], cwd=repo, capture_output=True, text=True
-        )
-        assert repaired.returncode == 0
+        assert _git_allowing_failure(repo, "status", "--short").returncode == 0
 
     def test_fix_on_a_healthy_repository_changes_nothing(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
@@ -486,10 +1000,7 @@ class TestMainExitCodes:
     def test_a_stale_main_exits_one_on_stderr_with_the_bypass_named(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
     ) -> None:
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
 
         monkeypatch.chdir(work)
         assert _main(monkeypatch) == 1
@@ -553,10 +1064,7 @@ class TestOverride:
     def test_the_documented_value_bypasses_a_refusal(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
     ) -> None:
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
 
         monkeypatch.chdir(work)
         assert _main(monkeypatch) == 1  # refused without it
@@ -596,10 +1104,7 @@ class TestOverride:
         the script does not record, so the actual semantics are pinned rather
         than improved.
         """
-        upstream, seed = _upstream_with_seed(tmp_path)
-        work = _clone(tmp_path, upstream, "work")
-        _commit(seed, "2\n", "c2")
-        _git(seed, "push", "--quiet", "origin", "main")
+        work = _main_left_behind(tmp_path)
         monkeypatch.chdir(work)
 
         monkeypatch.setenv(hygiene.OVERRIDE_ENV, "0")
@@ -625,6 +1130,8 @@ class TestGitHelper:
 
         monkeypatch.setattr(subprocess, "run", explode)
         assert hygiene.git("rev-parse", "--git-dir") == (1, "")
+        assert hygiene._run("rev-parse", "--git-dir") == (1, "", "")
+        assert hygiene._fetch(1.0) is False
 
     def test_a_timeout_is_a_failure_not_an_exception(self, monkeypatch: pytest.MonkeyPatch) -> None:
         def time_out(*_args: object, **_kwargs: object) -> None:
@@ -632,3 +1139,13 @@ class TestGitHelper:
 
         monkeypatch.setattr(subprocess, "run", time_out)
         assert hygiene.git("fetch", timeout=1.0) == (1, "")
+        assert hygiene._fetch(1.0) is False
+
+    def test_a_git_path_outside_a_repository_is_none(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        elsewhere = tmp_path / "not-a-repo"
+        elsewhere.mkdir()
+        monkeypatch.chdir(elsewhere)
+        assert hygiene._git_path(hygiene.FETCH_STAMP) is None
+        assert hygiene._integration_in_progress() is False

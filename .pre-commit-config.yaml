@@ -71,7 +71,23 @@ repos:
       #
       # It runs `git` and nothing else, so it does not pay uv's startup cost.
       # The fetch it attempts is best-effort and time-boxed -- offline still
-      # commits, against whatever remote ref is already on disk.
+      # commits, against whatever remote ref is already on disk. "Time-boxed"
+      # was a promise rather than a fact until 2026-08-20: `subprocess.run`
+      # kills the child on timeout and then drains the pipes a transport helper
+      # is still holding, so a 10-second fetch measured 60 seconds. The fetch
+      # now asks for no pipes.
+      #
+      # `stages: [pre-commit]` is the whole list, and `pre-merge-commit` is
+      # deliberately absent -- so this does NOT run on a clean merge. That is
+      # correct rather than an oversight: a merge is integration, not new work,
+      # and the script is silent during one anyway (MERGE_HEAD, rebase state
+      # and friends). Adding the stage would only reintroduce the loop it was
+      # taken out of, where the hook refused the merge that was resolving the
+      # drift and then advised a command git will not run mid-merge.
+      #
+      # `origin` is hardcoded in the script. On a repository whose remote is
+      # named otherwise, or where `remote.origin.fetch` is unset, this check
+      # fails open and silently -- green here is not evidence.
       #
       # The same script carries a `--doctor` mode for `core.bare`, which is
       # deliberately *not* wired here: with `core.bare = true` git aborts the
