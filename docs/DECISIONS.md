@@ -1330,3 +1330,24 @@ against version 5 until it has.
 still has no `council` or `hinge` positive and its baseline entry stays. It is
 the superseded set, and closing it would mean either authoring the same triples
 again for a corpus nothing will run against or claiming a fix that was not made.
+
+## 2026-08-20 — The changelog records a version that added items rather than moved labels
+
+**Commits:** `a34923a`
+
+Bumps the banded corpus to version 5 and writes the `corrections.jsonl` line
+that accounts for the move, which the gate added this morning requires before
+the bump will pass.
+
+The line needed a kind that did not exist. `moved` names an item and both of its
+labels and there is no such item here. `rebuilt` says item ids do not carry
+across, which is false — every version 4 id is still present and unchanged.
+`none` says the bump moved no label, which is true and is the whole problem: it
+would have been silent about seventy-two items that were not there before, and a
+reader comparing a version 4 figure with a version 5 one needs to know the
+denominator changed even when nothing was relabelled.
+
+So `extended` — items added, no existing label moved — with the denominators in
+the reason field. The register of kinds may grow when a real event has no
+accurate one; what it may not do is have an event described by the nearest
+inaccurate kind.
