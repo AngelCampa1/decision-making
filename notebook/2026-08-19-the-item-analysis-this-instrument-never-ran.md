@@ -559,6 +559,29 @@ has no entry point any run reaches.
   entries, `docs/DECISIONS.md` and this file. Commit messages cannot be amended
   here, so it is recorded rather than fixed.
 
+### Closed, 2026-08-20: the wired caller now assembles the registered twelve
+
+`report_item_analysis` takes a `pool` argument and `run_triggers.py` exposes it
+as a repeatable `--pool`. Each pooled checkpoint joins as an arm named by its
+file stem, and nothing about comparability is decided at the call site:
+`_respondent_grid` already applies the same four guards `compare` applies, and
+pooling is the stronger claim of the two, so a refusal stops the whole table
+rather than dropping one arm out of it. Dropping would move the denominator the
+caller named and print a number anyway.
+
+Pooling the six description arms this entry names reproduces every figure in the
+section above from a clean checkout: **12 respondents, 258 items, 0
+unparseable**, mean difficulty 0.9913 over positives and 0.8614 over negatives,
+median `r_pb` 0.5153 over the 73 items where it is defined, 86 complete triples,
+and a floor of exactly one item, `l19n1`. That is the re-derivation, not a
+re-reading of the section.
+
+Two of the three bullets above are therefore closed or were already closed. The
+docstring bullet was stale when it was written: the text on disk states the
+correlation as a magnitude with the direction in words, which is what
+`benchbench2026`'s `note` asks for. `s13p`'s `why` is still open and is still a
+governed path.
+
 ### What the review did not find
 
 Nothing in the arithmetic. The independent re-derivation for this section

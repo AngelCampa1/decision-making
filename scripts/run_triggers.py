@@ -65,6 +65,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Sequence
 from dataclasses import replace
 from pathlib import Path
 
@@ -83,6 +84,7 @@ from decision_evals.providers.claude_code import (  # noqa: E402
 from decision_evals.skills import parse_skill  # noqa: E402
 from decision_evals.trigger_arms import (  # noqa: E402
     ArmError,
+    Record,
     bootstrap_rate,
     bootstrap_rate_difference,
     compare,
@@ -717,8 +719,12 @@ def report_negative_kinds(done: dict[tuple[str, int], dict[str, object]]) -> Non
         print("  So the ranking is a description of this run, not a difference between kinds.")
 
 
-def report_item_analysis(done: dict[tuple[str, int], dict[str, object]], arm: str) -> None:
-    """The four item estimators registered on 2026-08-19, over this run's repeats.
+def report_item_analysis(
+    done: dict[tuple[str, int], dict[str, object]],
+    arm: str,
+    pool: Sequence[Path] = (),
+) -> None:
+    """The four item estimators registered on 2026-08-19, over a respondent set.
 
     Registered in
     `notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md`: item
@@ -732,31 +738,77 @@ def report_item_analysis(done: dict[tuple[str, int], dict[str, object]], arm: st
     writing `-0.62` asserts a character the source does not print. See the
     `note` on `benchbench2026` in `paper/refs.bib`.
 
-    **A respondent is one `(arm, repeat)` pair, and this call sees one arm**, so
-    the respondent count here is this run's repeat count and nothing more. The
-    registered 12-respondent set is six description arms at two repeats and is
-    assembled by loading their checkpoints together --
-    `trigger_arms.item_analysis` takes a mapping of arm name to records for
-    exactly that reason. What this call is for is that the estimator runs on
-    every run rather than living in a script nobody invokes: four estimators in
-    this repository have been tested to their floor and reached by nothing.
+    **A respondent is one `(arm, repeat)` pair, so the denominator is a
+    parameter of the call and not of the corpus.** Without `pool` this sees one
+    arm and the respondent count is this run's repeat count -- which is what
+    this function did for its first day on disk, and it is *not* what the
+    pre-registration registered. That entry names twelve respondents: the six
+    description arms, `full`, `no-exclusions`, `no-opener`, `opener-only`,
+    `stakes-named` and `stakes-shown`, at two repeats each. At two respondents
+    the discrimination column is undefined almost everywhere -- three is the
+    floor `item_discrimination` refuses below -- so the wired path was reporting
+    a table whose most load-bearing column was structurally blank. Registering
+    an estimator and then wiring a weaker one is the same shape as the four
+    estimators here that were tested to their floor and reached by nothing;
+    `pool` is the argument that closes it.
+
+    Each pooled path becomes an arm named by its file stem. Nothing about
+    comparability is decided here: `_respondent_grid` applies the same four
+    guards `compare` applies -- `label_versions_comparable`,
+    `models_comparable`, `venue_comparable`, `skill_versions_comparable` -- and
+    pooling is the stronger claim of the two, so a refusal from any of them
+    stops the whole table rather than dropping one arm. Dropping would move the
+    denominator the caller named and print a number anyway.
+    `venue_comparable` is what makes the entry's exclusion of `verdicts-in-situ`
+    mechanical: every row there is stamped `in_situ: true`.
 
     Printed rather than raised, like `report_bands`: a version 2 checkpoint has
     no triples, and a run that made every call should not lose its report to a
     refusal at the end.
     """
     print(f"\n{'=' * 60}\nITEM ANALYSIS -- difficulty, discrimination, screen, triples\n{'=' * 60}")
+    arms: dict[str, Sequence[Record]] = {arm: list(done.values())}
+    for path in pool:
+        name = path.stem
+        if name in arms:
+            # Two respondent sets under one key silently become one, and the
+            # printed respondent count would be right about a set nobody asked
+            # for. Refusing names the collision instead.
+            print(
+                f"  not available: {path} joins this set as {name!r}, which is already in "
+                "it. Two checkpoints under one arm name collapse into one and the "
+                "denominator would be wrong without saying so."
+            )
+            return
+        try:
+            arms[name] = load_arm(path)
+        except (OSError, ValueError) as error:
+            # `load_arm` raises `UnicodeDecodeError` on a cp1252 checkpoint and
+            # `json.JSONDecodeError` on a half-written line, both `ValueError`
+            # subclasses. Same reasoning as `report_against`: this runs after
+            # every model call, on a path the caller typed.
+            print(f"  not available: {path} could not be read -- {error}")
+            return
     try:
-        analysis = item_analysis({arm: list(done.values())})
+        analysis = item_analysis(arms)
     except ArmError as error:
         print(f"  not available: {error}")
         return
     for line in format_item_analysis(analysis):
         print(line)
-    print(
-        "  Descriptive. Twelve respondents is the registered ceiling and this is one "
-        "arm's worth; no band is scored here and nothing here moves a label."
-    )
+    if len(arms) == 1:
+        print(
+            f"  Descriptive, over {analysis.n_respondents} respondent(s) from this arm alone. "
+            "The registered set is the six description arms at two repeats, which is twelve; "
+            "--pool assembles it. No band is scored here and nothing here moves a label."
+        )
+    else:
+        print(
+            f"  Descriptive, over {analysis.n_respondents} respondent(s) pooled from "
+            f"{len(arms)} arms: {', '.join(sorted(arms))}. All four comparability guards "
+            "passed, which is what makes one respondent set out of several checkpoints. "
+            "No band is scored here and nothing here moves a label."
+        )
 
 
 def report_against(done: dict[tuple[str, int], dict[str, object]], other: Path, arm: str) -> None:
@@ -930,6 +982,20 @@ def main() -> int:
             "is attached to still does: it is free only when THIS run's own checkpoint "
             "is already complete, and otherwise the run makes its calls first as usual. "
             "A comparability guard that refuses prints the refusal"
+        ),
+    )
+    parser.add_argument(
+        "--pool",
+        type=Path,
+        action="append",
+        metavar="PATH",
+        help=(
+            "add this checkpoint to the item analysis as another arm, repeatable. A "
+            "respondent is one (arm, repeat) pair, so this is the denominator: the "
+            "registered set is the six description arms at two repeats and one arm alone "
+            "leaves the discrimination column undefined almost everywhere. Collects "
+            "nothing itself; the four comparability guards refuse the whole table rather "
+            "than dropping an arm out of it"
         ),
     )
     parser.add_argument(
@@ -1197,7 +1263,7 @@ def main() -> int:
 
     report_bands(done)
     report_negative_kinds(done)
-    report_item_analysis(done, checkpoint.stem)
+    report_item_analysis(done, checkpoint.stem, args.pool or ())
     if args.against is not None:
         report_against(done, Path(args.against), checkpoint.stem)
     if entry_names is None:

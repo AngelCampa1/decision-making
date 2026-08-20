@@ -712,6 +712,121 @@ class TestItemAnalysisIsReachedFromTheReportPath:
         assert "unparseable" in out
 
 
+def _write_arm(path: Path, rows: list[dict[str, object]]) -> Path:
+    path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
+    return path
+
+
+class TestPoolAssemblesTheRegisteredRespondentSet:
+    """`--pool` is the denominator, and without it the wired path was n=2.
+
+    The pre-registration in
+    `notebook/2026-08-19-the-item-analysis-this-instrument-never-ran.md`
+    registers twelve respondents -- six description arms at two repeats. The
+    report path shipped passing one arm, so `item_discrimination`, which
+    refuses below three respondents, was blank in every run that printed it.
+    """
+
+    def test_pooling_raises_the_respondent_count(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        pool = [
+            _write_arm(tmp_path / "verdicts-opener-only.jsonl", _paired_rows()),
+            _write_arm(tmp_path / "verdicts-no-opener.jsonl", _paired_rows(correct=False)),
+        ]
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_item_analysis(done, "verdicts-full", pool)
+        out = capsys.readouterr().out
+        assert "pooled from 3 arms" in out
+        assert "verdicts-no-opener" in out
+        assert "verdicts-opener-only" in out
+        assert "over 3 respondent(s)" in out
+
+    def test_one_arm_names_the_set_it_is_not(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """The caveat has to say the denominator is a parameter of the call."""
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_item_analysis(done, "verdicts-full")
+        out = capsys.readouterr().out
+        assert "from this arm alone" in out
+        assert "--pool" in out
+
+    def test_a_comparability_guard_refuses_the_whole_table(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """Pooling is a stronger claim than comparing, so a refusal stops it.
+
+        Dropping the offending arm would move the denominator the caller named
+        and print a number anyway, which is how a pooled statistic quietly
+        becomes a statistic about a different set.
+        """
+        pool = [_write_arm(tmp_path / "verdicts-v3.jsonl", _paired_rows(set_version=3))]
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_item_analysis(done, "verdicts-full", pool)
+        out = capsys.readouterr().out
+        assert "not available" in out
+        assert "cannot join this respondent set" in out
+        assert "label revisions" in out
+        assert "DIFFICULTY" not in out
+
+    def test_the_in_situ_arm_is_refused_by_the_venue_guard(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """The registered exclusion, enforced rather than remembered.
+
+        The entry excludes `verdicts-in-situ` because 70 of its 516 responses
+        are unparseable and the parse rate splits by domain. Every row there
+        carries `in_situ: true`, so `venue_comparable` catches the exact file
+        the entry names -- the exclusion does not depend on which paths a
+        caller happened to type.
+        """
+        in_situ = [dict(row, in_situ=True) for row in _paired_rows()]
+        pool = [_write_arm(tmp_path / "verdicts-in-situ.jsonl", in_situ)]
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_item_analysis(done, "verdicts-full", pool)
+        out = capsys.readouterr().out
+        assert "not available" in out
+        assert "cannot join this respondent set" in out
+
+    def test_a_stem_collision_is_refused(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """Two checkpoints under one arm name collapse into one silently."""
+        pool = [_write_arm(tmp_path / "verdicts-full.jsonl", _paired_rows())]
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_item_analysis(done, "verdicts-full", pool)
+        out = capsys.readouterr().out
+        assert "not available" in out
+        assert "already in it" in out
+
+    def test_an_unreadable_pooled_checkpoint_costs_the_table_not_the_run(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        done = {(str(record["case"]), 0): record for record in _paired_rows()}
+        runner.report_item_analysis(done, "verdicts-full", [tmp_path / "absent.jsonl"])
+        assert "could not be read" in capsys.readouterr().out
+
+        broken = tmp_path / "half-written.jsonl"
+        broken.write_text('{"case": "p1", "repeat":', encoding="utf-8")
+        runner.report_item_analysis(done, "verdicts-full", [broken])
+        assert "could not be read" in capsys.readouterr().out
+
+    def test_main_reaches_it(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """The flag has to be wired, not merely accepted."""
+        other = _write_arm(tmp_path / "verdicts-pooled.jsonl", _paired_rows())
+        monkeypatch.setattr(runner, "collect", _fake_collect_from_labels)
+        monkeypatch.setattr(sys, "argv", ["run_triggers.py", "--pool", str(other)])
+        assert runner.main() == 0
+        out = capsys.readouterr().out
+        assert "ITEM ANALYSIS" in out
+        # The run's own checkpoint is stamped from the corpus and from
+        # `SKILL.md`; this file is stamped at neither, so a guard refuses. Which
+        # one depends on the default corpus, so only the refusal is asserted
+        # here and the guard-by-guard assertions are above.
+        assert "cannot join this respondent set" in out
+
+
 class TestAgainstReachesCompare:
     def test_it_prints_the_registered_paired_test(
         self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
