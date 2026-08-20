@@ -1,6 +1,16 @@
 ---
 import Base from './Base.astro';
-import { REPO } from '../lib/site.ts';
+import { REPO, SITE_DESCRIPTION } from '../lib/site.ts';
+import { descriptionFrom } from '../lib/descriptions.ts';
+import {
+  breadcrumbNode,
+  dateFromId,
+  documentNode,
+  graph,
+  kindMeta,
+  personNode,
+  websiteNode,
+} from '../lib/schema.ts';
 
 interface Props {
   title: string;
@@ -9,12 +19,50 @@ interface Props {
   /** Short label for where this sits: "documentation", "notebook", ... */
   kind: string;
   description?: string;
+  /** Raw markdown. The description is derived from it; these files carry no frontmatter. */
+  body?: string;
+  /** Collection id, the only place a publication date can honestly come from. */
+  id?: string;
 }
 
-const { title, source, kind, description } = Astro.props;
+const { title, source, kind, description, body, id } = Astro.props;
+
+/* Every rendered document gets its metadata here rather than in the five page
+   templates, so there is one implementation and not five that drift. */
+const meta = kindMeta(kind);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const siteRoot = new URL(`${base}/`, Astro.site).href;
+const resolved = description ?? descriptionFrom(body, `${title}. ${SITE_DESCRIPTION}`);
+const published = id ? dateFromId(id) : undefined;
+
+const schema = graph([
+  personNode(siteRoot),
+  websiteNode(siteRoot, SITE_DESCRIPTION),
+  documentNode({
+    canonical,
+    siteRoot,
+    title,
+    description: resolved,
+    meta,
+    sourcePath: source,
+    datePublished: published,
+  }),
+  breadcrumbNode({ canonical, siteRoot, title, section: meta.section }),
+]);
 ---
 
-<Base title={`${title} · decision-making-skills`} description={description}>
+{/* `ogTitle` drops the suffix: `og:site_name` already carries it, and a social
+    card that spends its headline saying the site name twice has wasted it. */}
+<Base
+  title={`${title} · decision-making-skills`}
+  description={resolved}
+  ogTitle={title}
+  ogDescription={resolved}
+  ogType={meta.ogType}
+  publishedTime={published}
+  schema={schema}
+>
   <article class="page doc">
     <p class="doc__eyebrow">
       <span>{kind}</span>

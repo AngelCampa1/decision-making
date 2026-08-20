@@ -12,6 +12,12 @@ const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 ---
 
-<Doc title={titleFrom(headings, entry.id)} source={sourcePath(entry.filePath, `skills/${entry.id}.md`)} kind="the skill">
+<Doc
+  title={titleFrom(headings, entry.id)}
+  source={sourcePath(entry.filePath, `skills/${entry.id}.md`)}
+  kind="the skill"
+  body={(entry as typeof entry & { body?: string }).body}
+  id={entry.id}
+>
   <Content />
 </Doc>

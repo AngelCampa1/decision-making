@@ -1,8 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { REPO } from '../../lib/site.ts';
+import { REPO, SITE_DESCRIPTION } from '../../lib/site.ts';
 import { skillFacts } from '../../lib/facts.ts';
 import { verdictState } from '../../lib/verdicts.ts';
+import { breadcrumbNode, graph, personNode, softwareNode, webPageNode, websiteNode } from '../../lib/schema.ts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -24,9 +25,28 @@ const state = verdictState(facts.verdict);
 // list is derived rather than typed so it shortens if the table does.
 const CHAINED = ['ledger', 'fit', 'cascade', 'timing'];
 const chain = facts.procedures.filter((p) => CHAINED.includes(p.file));
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const siteRoot = new URL(`${base}/`, Astro.site).href;
+const DESCRIPTION =
+  'One skill that works out what is hard about a decision, then runs a single ' +
+  'procedure for it. Plain markdown, Apache-2.0, and free.';
+const schema = graph([
+  personNode(siteRoot),
+  websiteNode(siteRoot, SITE_DESCRIPTION),
+  softwareNode(siteRoot, DESCRIPTION, facts.version),
+  webPageNode(canonical, siteRoot, 'The skill', DESCRIPTION),
+  breadcrumbNode({ canonical, siteRoot, title: 'The skill', section: null }),
+]);
 ---
 
-<Base title="The skill &middot; decision-making-skills">
+<Base
+  title="The skill &middot; decision-making-skills"
+  description={DESCRIPTION}
+  ogTitle="The skill"
+  ogDescription={DESCRIPTION}
+  schema={schema}
+>
   <div class="page index-page">
     <p class="eyebrow">
       <span class="verdict" data-verdict={state}>{facts.verdict}</span>

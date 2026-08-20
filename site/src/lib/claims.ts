@@ -65,6 +65,19 @@ export function shown(id: string): string {
   return found.rounded ?? found.value;
 }
 
+/**
+ * Phrases this repository has withdrawn, as `site/claims.json` records them.
+ *
+ * `decision_evals.claims` refuses a page whose source text carries one. A
+ * description derived from markdown at build time is not source text and is not
+ * seen by that gate, so `descriptions.ts` reads this register directly. One
+ * list, two readers -- the same arrangement as the claims above, and for the
+ * same reason.
+ */
+export function retractedPhrases(): string[] {
+  return (data.retractions as { phrase: string }[]).map((entry) => entry.phrase);
+}
+
 /** Where a figure came from, for a citation line under a statistic. */
 export function attribution(id: string): { source: string; href: string } {
   const found = claim(id);

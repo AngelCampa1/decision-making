@@ -3,6 +3,8 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { titleFrom, stripReadme } from '../../lib/titles.ts';
 import { shown } from '../../lib/claims.ts';
+import { SITE_DESCRIPTION } from '../../lib/site.ts';
+import { breadcrumbNode, collectionNode, graph, personNode, websiteNode } from '../../lib/schema.ts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const entries = await getCollection('results');
@@ -17,9 +19,27 @@ const runs = await Promise.all(
 );
 
 runs.sort((a, b) => (a.dir < b.dir ? 1 : -1));
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const siteRoot = new URL(`${base}/`, Astro.site).href;
+const DESCRIPTION =
+  'One directory per run, with its raw transcripts and a record of what it showed. Each names the answer-key version it used.';
+const schema = graph([
+  personNode(siteRoot),
+  websiteNode(siteRoot, SITE_DESCRIPTION),
+  collectionNode(canonical, siteRoot, 'Published runs', DESCRIPTION),
+  breadcrumbNode({ canonical, siteRoot, title: 'Published runs', section: null }),
+]);
+
 ---
 
-<Base title="Published runs &middot; decision-making-skills">
+<Base
+  title="Published runs &middot; decision-making-skills"
+  description={DESCRIPTION}
+  ogTitle="Published runs"
+  ogDescription={DESCRIPTION}
+  schema={schema}
+>
   <div class="page index-page">
     <h1>Published runs</h1>
     <p class="lede">

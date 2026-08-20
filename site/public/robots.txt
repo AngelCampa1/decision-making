@@ -1,0 +1,16 @@
+# This is not the operative robots.txt for this host, and saying so is the point
+# of the file. A crawler reads robots.txt only at the origin root --
+# https://angelcampa1.github.io/robots.txt -- which belongs to a separate
+# user-pages repository that does not exist. That URL 404s, so every crawler
+# already treats this whole origin as allow-all, and nothing below changes what
+# any of them do.
+#
+# What it is for: stating the intent in the repository rather than in someone's
+# head, and pointing anything that fetches this path directly at the sitemap.
+# It gates nothing. A file that reads like a guard and enforces nothing is the
+# shape this project refuses elsewhere, so it is labelled here instead.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://angelcampa1.github.io/decision-making-skills/sitemap-index.xml

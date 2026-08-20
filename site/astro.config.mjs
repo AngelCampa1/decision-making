@@ -2,6 +2,7 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
+import sitemap from '@astrojs/sitemap';
 import rewriteLinks from './src/lib/remark-rewrite-links.mjs';
 import rehypeTables from './src/lib/rehype-tables.mjs';
 
@@ -18,7 +19,15 @@ export default defineConfig({
   // Svelte is here for exactly one island, the router demo on the landing page.
   // It is loaded `client:visible`, and all of its panels are server-rendered, so
   // the page is complete and readable before any of this arrives.
-  integrations: [svelte()],
+  // The sitemap enumerates the pages the build actually emitted. A hand-rolled
+  // endpoint would re-derive the route set alongside `getStaticPaths()` in six
+  // templates, which is the drift `facts.ts` exists to end -- a route added to
+  // `routes.ts` and forgotten here would go unlisted, silently, forever.
+  //
+  // No `serialize`. Google ignores <changefreq> and <priority>, and the only
+  // mtime available in CI is the clone time, so any <lastmod> this build could
+  // produce would be one fabricated date stamped across every page at once.
+  integrations: [svelte(), sitemap()],
   site: 'https://angelcampa1.github.io',
   base: '/decision-making-skills',
   // Astro's default content cache is node_modules/.astro, which survives a

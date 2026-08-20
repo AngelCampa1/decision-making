@@ -5,6 +5,14 @@ import { REPO } from '../lib/site.ts';
 import { skillFacts, publishedRunCount, armResults, requireCopy } from '../lib/facts.ts';
 import { verdictState } from '../lib/verdicts.ts';
 import { shown } from '../lib/claims.ts';
+import { SITE_DESCRIPTION } from '../lib/site.ts';
+import {
+  graph,
+  personNode,
+  softwareNode,
+  webPageNode,
+  websiteNode,
+} from '../lib/schema.ts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -147,13 +155,47 @@ const testArms = [
 // the frame and hide the only thing the chart is for; a floor at the lowest arm
 // would exaggerate the gap. A round floor below the minimum, printed on the
 // axis, is the honest middle.
+/**
+ * The social card understated the procedure count for five days after the skill
+ * started routing to six, because it was a default parameter in a layout nobody
+ * had reason to look at. It lives on the page it describes now.
+ *
+ * The count is not spelled out here on purpose. `site/claims.json` refuses any
+ * page carrying a retracted phrase, and it cannot tell a published claim from a
+ * comment describing one — so a comment that quoted the old wording would fail
+ * the gate that exists to catch the old wording. Say what was wrong; do not
+ * reprint it.
+ *
+ * Deliberately no measured numbers in any of these strings. They are cached by
+ * every crawler that has ever seen the page and cannot be corrected once
+ * posted, so they say only what is structurally true.
+ */
+const DESCRIPTION = `A free file your AI agent reads when you face a hard call. ${facts.countWord} methods, and it reads one. The evaluation harness that measures it is here, and proves nothing yet.`;
+const OG_TITLE = 'An agent skill for hard choices. Nothing proven yet.';
+const OG_DESCRIPTION = `${facts.countWord} procedures. Your agent reads one. Free, and one line installs it. Every result is public, including the ones that went badly.`;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const siteRoot = new URL(`${base}/`, Astro.site).href;
+const schema = graph([
+  personNode(siteRoot),
+  websiteNode(siteRoot, SITE_DESCRIPTION),
+  softwareNode(siteRoot, OG_DESCRIPTION, facts.version),
+  webPageNode(canonical, siteRoot, 'decision-making-skills', DESCRIPTION),
+]);
+
 const floor = 0.8;
 const span = 1 - floor;
 const place = (n: number) => ((n - floor) / span) * 100;
 const best = Math.max(...arms.map((a) => a.accuracy));
 ---
 
-<Base title="decision-making-skills: an agent skill for hard choices, tested in the open">
+<Base
+  title="decision-making-skills: an agent skill, and the LLM evaluation harness that tests it"
+  description={DESCRIPTION}
+  ogTitle={OG_TITLE}
+  ogDescription={OG_DESCRIPTION}
+  schema={schema}
+>
   <div class="page">
     <header class="board hero">
       <div class="hero__main">

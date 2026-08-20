@@ -9,36 +9,48 @@ import { verdictState } from '../lib/verdicts.ts';
 
 interface Props {
   title: string;
-  description?: string;
+  /** The sentence a search engine prints under the link. Required, see below. */
+  description: string;
   ogTitle?: string;
   ogDescription?: string;
+  ogType?: 'website' | 'article';
+  /** ISO date. Article pages only, and only where one can be derived. */
+  publishedTime?: string;
+  /** The JSON-LD graph for this page, built by `schema.ts`. */
+  schema?: object;
 }
 
-/**
- * The social card understated the procedure count for five days after the skill
- * started routing to six, because it was a default parameter nobody had reason
- * to look at. Defaults cannot be async, so the facts are read first and the
- * props fall back to them below.
- *
- * The count is not spelled out here on purpose. `site/claims.json` refuses any
- * page carrying a retracted phrase, and it cannot tell a published claim from a
- * comment describing one — so a comment that quoted the old wording would fail
- * the gate that exists to catch the old wording. Say what was wrong; do not
- * reprint it.
- *
- * Deliberately no measured numbers here. This string is cached by every crawler
- * that has ever seen the page and cannot be corrected once posted, so it says
- * only what is structurally true.
- */
 const facts = await skillFacts();
 const state = verdictState(facts.verdict);
 
 const {
   title,
-  description = `A free file your AI agent reads when you have a hard call to make. ${facts.countWord} methods, and it reads one. Nothing here is proven yet, and every result is public.`,
-  ogTitle = 'An agent skill for hard choices. Nothing proven yet.',
-  ogDescription = `${facts.countWord} procedures. Your agent reads one. Free, and one line installs it. Every result is public, including the ones that went badly.`,
+  description,
+  ogTitle = title,
+  ogDescription = description,
+  ogType = 'website',
+  publishedTime,
+  schema,
 } = Astro.props;
+
+/**
+ * Every page states its own description, and this throw is what makes that
+ * true. It was a default parameter until 2026-08-20, and a default nobody has
+ * reason to look at is how all 159 pages came to advertise themselves with one
+ * sentence about the skill — the limitations page and the research log
+ * included.
+ *
+ * A type would be the obvious guard and is not enough on its own: `astro check`
+ * is not in `deploy-site.yml`, which runs `npm run build`, so `Props` is
+ * advisory at deploy time and this is not.
+ */
+if (!description) {
+  throw new Error(
+    `<Base> rendered "${title}" with no description. Derive one with ` +
+      '`descriptionFrom()` or write one, but do not leave this page sharing ' +
+      'the description that belongs to another.',
+  );
+}
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -46,6 +58,8 @@ const path = Astro.url.pathname.replace(/\/$/, '');
 
 // Absolute, because a social crawler resolves nothing against the page.
 const ogImage = new URL(`${base}/og.png`, Astro.site).href;
+const ogImageAlt =
+  'decision-making-skills. An agent skill for hard choices. Nothing proven yet.';
 ---
 
 <!doctype html>
@@ -57,19 +71,27 @@ const ogImage = new URL(`${base}/og.png`, Astro.site).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
-    <meta property="og:type" content="website" />
+    <link rel="sitemap" type="application/xml" href={`${base}/sitemap-index.xml`} />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={ogDescription} />
     <meta property="og:site_name" content="decision-making-skills" />
+    <meta property="og:locale" content="en" />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="decision-making-skills. An agent skill for hard choices. Nothing proven yet." />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    {/* `set:html` does not escape, and these descriptions are derived from
+        markdown that contains `<`. Escaping the sequence that could close this
+        script early is the whole guard. */}
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\u003c')} />}
     {/* Set before first paint so an explicit choice never flashes the other theme. */}
     <script is:inline>
       (function () {

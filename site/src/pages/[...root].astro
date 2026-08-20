@@ -26,6 +26,8 @@ const TITLES: Record<string, string> = { readme: 'decision-making-skills' };
   title={TITLES[entry.id] ?? titleFrom(headings, entry.id)}
   source={entry.id === 'readme' ? 'README.md' : source}
   kind="repository"
+  body={(entry as typeof entry & { body?: string }).body}
+  id={entry.id}
 >
   <Content />
 </Doc>

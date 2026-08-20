@@ -2,6 +2,8 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { titleFrom } from '../../lib/titles.ts';
+import { SITE_DESCRIPTION } from '../../lib/site.ts';
+import { breadcrumbNode, collectionNode, graph, personNode, websiteNode } from '../../lib/schema.ts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const entries = await getCollection('notebook');
@@ -25,6 +27,17 @@ const items = await Promise.all(
 // Newest first. The id is date-prefixed, so this is a string sort on purpose.
 items.sort((a, b) => (a.id < b.id ? 1 : -1));
 
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const siteRoot = new URL(`${base}/`, Astro.site).href;
+const DESCRIPTION =
+  'An append-only research log. Every run, every prediction written before it, and every time a measurement here turned out to be broken.';
+const schema = graph([
+  personNode(siteRoot),
+  websiteNode(siteRoot, SITE_DESCRIPTION),
+  collectionNode(canonical, siteRoot, 'Research log', DESCRIPTION),
+  breadcrumbNode({ canonical, siteRoot, title: 'Research log', section: null }),
+]);
+
 const byDate = new Map<string, typeof items>();
 for (const item of items) {
   const bucket = byDate.get(item.date) ?? [];
@@ -33,7 +46,13 @@ for (const item of items) {
 }
 ---
 
-<Base title="Research log &middot; decision-making-skills">
+<Base
+  title="Research log &middot; decision-making-skills"
+  description={DESCRIPTION}
+  ogTitle="Research log"
+  ogDescription={DESCRIPTION}
+  schema={schema}
+>
   <div class="page index-page">
     {Readme ? <Readme /> : <h1>Research log</h1>}
 

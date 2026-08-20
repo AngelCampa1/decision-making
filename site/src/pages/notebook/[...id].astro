@@ -20,6 +20,8 @@ const { Content, headings } = await render(entry);
   title={titleFrom(headings, entry.id)}
   source={sourcePath(entry.filePath, `notebook/${entry.id}.md`)}
   kind="notebook · append-only"
+  body={(entry as typeof entry & { body?: string }).body}
+  id={entry.id}
 >
   <Content />
 </Doc>

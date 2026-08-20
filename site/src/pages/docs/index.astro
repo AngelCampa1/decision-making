@@ -12,6 +12,11 @@ if (!entry) throw new Error('docs/README.md is missing; it is the documentation 
 const { Content } = await render(entry);
 ---
 
-<Doc title="Documentation" source="docs/README.md" kind="documentation">
+<Doc
+  title="Documentation"
+  source="docs/README.md"
+  kind="documentation"
+  description="Every document behind this project: how it is tested, what it has found, and what is still wrong with it."
+>
   <Content />
 </Doc>
