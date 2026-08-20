@@ -200,14 +200,17 @@ def isolated_git(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("GIT_TERMINAL_PROMPT", "0")
     # The developer running the suite may have the bypass exported.
     monkeypatch.delenv(hygiene.OVERRIDE_ENV, raising=False)
-    # And git exports these to every hook it runs, so a suite invoked from
-    # `pre-push` inherits them and every `git` call below is aimed at the outer
-    # repository whatever `cwd` says. That made the suite green under
-    # `de check` and red under `git push`, which is the worst way round: it
-    # fails only in the hook that gates the push. Tests that want one of these
-    # set it themselves, after this fixture has run.
-    for redirect in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"):
-        monkeypatch.delenv(redirect, raising=False)
+    # The redirect variables are cleared at the top of this function by
+    # `scrub_repo_scoped_env`, which two sessions arrived at independently on
+    # 2026-08-20 and which landed here first as a four-name loop at this line.
+    # Keeping the reasoning that came with it, because it says the part that is
+    # easy to lose: git exports them to every hook it runs, so a suite invoked
+    # from `pre-push` inherits them and every `git` call below is aimed at the
+    # outer repository whatever `cwd` says. That made the suite green under
+    # `de check` and red under `git push`, which is the worst way round -- it
+    # fails only in the hook that gates the push, where the failure looks like
+    # it belongs to whoever is pushing. Tests that want one of these set it
+    # themselves, after this fixture has run.
 
 
 @pytest.fixture(autouse=True)
