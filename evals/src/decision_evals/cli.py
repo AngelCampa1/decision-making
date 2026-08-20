@@ -199,6 +199,7 @@ def check(
         check_provenance_step(),
         check_wiring_step(),
         check_decisions_step(),
+        check_corrections_step(),
         check_checkpoints_step(),
         check_docs_step(),
         check_claims_step(),
@@ -610,6 +611,55 @@ def check_decisions_step() -> StepResult:
     typer.echo(f"{commits} governed commit(s), {entries} entries, {baselined} baselined")
 
     issues = check_decisions(REPO_ROOT, governed)
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def check_corrections_step() -> StepResult:
+    """Every version the answer key has reached says which labels moved into it.
+
+    Added 2026-08-20. ``set_version`` says *that* the labels changed and
+    ``label_versions_comparable`` refuses a comparison across the boundary;
+    neither says *which* label moved. That lived in ``docs/DECISIONS.md`` as
+    prose, which a reader of the numbers cannot join against a record, and in
+    commit bodies, which cannot be amended here.
+
+    The corpus version is the highest any trigger set on disk declares, because
+    two sets live here -- the version 2 file every published Track L and Track M
+    number was measured on, and the version 4 directory. A gate keyed to one of
+    them would stop noticing the other.
+    """
+    name = "label corrections"
+    _echo_header(name)
+
+    from decision_evals.corrections import census, check_corrections
+    from decision_evals.triggers import TRIGGERS_DIR, TriggerSetError, load_trigger_set
+
+    triggers_dir = REPO_ROOT / TRIGGERS_DIR
+    versions = []
+    for path in (*sorted(triggers_dir.glob("*.yaml")), *sorted(triggers_dir.glob("*/index.yaml"))):
+        try:
+            versions.append(load_trigger_set(path).version)
+        except TriggerSetError:
+            # Reported with its reason by `check_triggers_step`. A set that will
+            # not load contributes no version rather than failing this step too.
+            continue
+    # `None`, not 1, when nothing loaded. A corpus file that will not load is
+    # the trigger-set step's finding; defaulting here would report every line
+    # on disk as ahead of a corpus nobody could read.
+    corpus_version = max(versions) if versions else None
+
+    lines, moved, accounted = census(REPO_ROOT)
+    at = "version unreadable" if corpus_version is None else f"at version {corpus_version}"
+    typer.echo(
+        f"corpus {at}; {lines} line(s), {moved} moved label(s), "
+        f"{accounted} version(s) accounted for"
+    )
+
+    issues = check_corrections(REPO_ROOT, corpus_version)
     if not issues:
         return StepResult(name, True)
     for issue in issues:

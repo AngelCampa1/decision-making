@@ -337,6 +337,7 @@ added after the failure it prevents had already happened here:
 | run provenance | a published run that does not state its answer-key version, or whose prediction cannot be shown to predate its data |
 | integrity wiring | a module with a coverage floor that no entry point can reach |
 | decision register | a change to the answer key or the shipped skill with no entry in [`docs/DECISIONS.md`](docs/DECISIONS.md) |
+| label corrections | a version the answer key has reached that no line of [`datasets/triggers/corrections.jsonl`](datasets/triggers/corrections.jsonl) accounts for |
 | documentation | a `de` command, path, or component that this README names and the repository does not have |
 | citations | a claim carrying an arXiv identifier whose entry in [`paper/refs.bib`](paper/refs.bib) has no quote behind it |
 | published claims | a measured number on the website that no longer matches the sentence in the document it came from |

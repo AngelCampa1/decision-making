@@ -222,6 +222,12 @@ output = "coverage.json"
 # reason. A label move is invisible in a checkpoint and shifts every number
 # computed from it.
 "decision_evals/decisions.py" = { line = 100.0, branch = 100.0 }
+# The changelog under that register, added 2026-08-20. `decisions.py` proves a
+# governed commit was explained in prose; this proves every version the answer
+# key reached says which labels moved into it, in a form that can be joined
+# against a record. Same class of failure, one level finer, and the refusals
+# here are the whole module.
+"decision_evals/corrections.py" = { line = 100.0, branch = 100.0 }
 # The gate over the front door. Documentation was the last obligation here
 # checked by reading it, and the README was found naming two commands that do
 # not exist and a directory that never has.

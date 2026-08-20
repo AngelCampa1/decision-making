@@ -351,7 +351,7 @@ the larger number.
 
 The organising claim of this repository is that **every confident wrong number
 it has produced was caught by somebody checking, never by somebody being
-careful.** So the checks are mechanical. `de check` runs seventeen steps at the
+careful.** So the checks are mechanical. `de check` runs nineteen steps at the
 time of writing, and the count moves as gates are added; the ones that are about
 method rather than lint:
 
@@ -359,6 +359,7 @@ method rather than lint:
 |---|---|---|
 | run provenance | a published run with no answer-key version, no prediction, or a prediction that does not predate it | predictions that could not be shown to predate their data |
 | decision register | a commit touching the answer key or the shipped skill with no written entry | a label move being invisible in a checkpoint |
+| label corrections | a version the answer key has reached that no line of `datasets/triggers/corrections.jsonl` accounts for | the register above proves a commit was explained in prose, which cannot be joined against a record |
 | integrity wiring | a module with a coverage floor that no entry point can reach | two shipped modules tested to 100% and called by nothing |
 | checkpoint label versions | two checkpoints disagreeing about the answer key with no re-scored bridge | §3 |
 | citations | an arXiv identifier with no bib entry, or a claim number beside one with no verbatim source quote | three misattributed figures in one morning, all citing real papers |

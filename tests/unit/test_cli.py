@@ -21,6 +21,7 @@ from decision_evals.cli import (
     StepResult,
     _summarise,
     app,
+    check_corrections_step,
     check_decisions_step,
     check_git_identity,
     check_provenance_step,
@@ -30,6 +31,7 @@ from decision_evals.cli import (
     validate_manifests_step,
 )
 from decision_evals.corpora import CorpusError
+from decision_evals.corrections import CorrectionIssue
 from decision_evals.decisions import DecisionIssue
 from decision_evals.deployed import DeployState
 from decision_evals.provenance import ProvenanceIssue, discover_runs
@@ -602,6 +604,43 @@ class TestWiringStep:
         result = check_wiring_step()
         assert not result.passed
         assert "1 issue" in result.detail
+
+
+class TestCorrectionsStep:
+    def test_the_repository_accounts_for_its_own_version_bumps(self) -> None:
+        assert check_corrections_step().passed
+
+    def test_it_fails_on_an_undeclared_bump(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        import decision_evals.corrections as corrections
+
+        monkeypatch.setattr(
+            corrections,
+            "check_corrections",
+            lambda root, version: [CorrectionIssue("datasets/triggers/corrections.jsonl", "gap")],
+        )
+        result = check_corrections_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
+
+    def test_a_set_that_will_not_load_contributes_no_version(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """It is `check_triggers_step`'s job to report that, not this one.
+
+        Failing here too would turn one broken corpus file into two red steps
+        and send a reader to the wrong one.
+        """
+        import decision_evals.triggers as triggers
+
+        def refuse(path: object) -> object:
+            raise triggers.TriggerSetError("unreadable")
+
+        monkeypatch.setattr(triggers, "load_trigger_set", refuse)
+        # Every set refuses, so the version is unknown and the transition checks
+        # are skipped. Defaulting to 1 instead would report all three committed
+        # lines as ahead of the corpus, which is three errors about the wrong
+        # thing in the wrong step.
+        assert check_corrections_step().passed
 
 
 class TestDecisionsStep:
