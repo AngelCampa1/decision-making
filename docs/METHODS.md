@@ -102,6 +102,22 @@ hide. Agreement statistics are in
 which reports kappa rather than raw agreement because at this corpus's class
 balance two judges who have learned nothing at all still agree most of the time.
 
+**Kappa says how much the judges agree. It does not say how many judges this
+is**, and the two get read as one number. Kohli (arXiv:2605.29800) finds nine
+frontier judges from seven model families "effectively provide only about 2
+independent votes' worth of information". Dividing the rater count by the design
+effect of the agreement above puts this panel at **1.10 effective raters**:
+three judges carrying roughly one judge's worth of information, and 1.07 at the
+post-rewrite kappa of 0.898. `effective_raters` computes it, and the
+adjudication report prints it beside the panel's composition, which here is one
+model sampled three times.
+
+That number is the weaker of the two claims available, and it is not Kohli's
+cross-family figure. It cannot be: agreement because the item is clear and
+agreement because the judges share a model are not separately identified from
+ratings one model produced. What it rules out is the reading kappa alone
+invites, that 0.862 across three judges is three independent confirmations.
+
 **Two weaknesses, stated here rather than left to be found.** The key is
 *model-labelled*: a bias the judges share with the adjudicators is invisible to
 this check, and three instances bound that without removing it. `PROTOCOL.md` §7

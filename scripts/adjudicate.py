@@ -52,6 +52,7 @@ from decision_evals.providers.claude_code import (  # noqa: E402
 )
 from decision_evals.skills import parse_skill  # noqa: E402
 from decision_evals.stats.agreement import (  # noqa: E402
+    effective_raters,
     fleiss_kappa,
     krippendorff_alpha,
     percent_agreement,
@@ -252,6 +253,7 @@ class AdjudicationOutcome:
     """The whole run, and whether the corpus survives it."""
 
     outcomes: tuple[CaseOutcome, ...]
+    panel: tuple[str, ...] = ()
     threshold: float = KILL_THRESHOLD
 
     @property
@@ -314,7 +316,23 @@ def adjudication_outcome(
                 band=rows[0]["band"] if rows[0]["band"] is None else str(rows[0]["band"]),
             )
         )
-    return AdjudicationOutcome(outcomes=tuple(outcomes))
+    # The panel's composition, kept because the reliability block cannot be
+    # read without it. Every coefficient there measures how much these judges
+    # agree; none of them measures how many judges this is, and three fresh
+    # instances of one model at one tier is not three raters' worth of
+    # evidence however high the coefficient comes out.
+    #
+    # One entry per *judge slot*, not per row. The slot is the rater the
+    # coefficients count -- 783 rows here are three judges over 261 cases, and
+    # a panel line reading "haiku x783" would describe the checkpoint rather
+    # than the panel. A slot that somehow ran on two models is named as such
+    # rather than collapsed to one of them.
+    by_judge: dict[int, set[str]] = {}
+    for row in done.values():
+        if row.get("model"):
+            by_judge.setdefault(int(row["judge"]), set()).add(str(row["model"]))  # type: ignore[call-overload]
+    panel = tuple(sorted("+".join(sorted(models)) for models in by_judge.values() if models))
+    return AdjudicationOutcome(outcomes=tuple(outcomes), panel=panel)
 
 
 def _agreement_line(label: str, compute: Callable[[], float]) -> str:
@@ -344,16 +362,55 @@ def report_reliability(outcome: AdjudicationOutcome) -> None:
     outright the moment one reply is unreadable, alpha drops the unpairable
     units and says how many. When both are available they differ only by the
     finite-sample factor ``(n - 1) / n``.
+
+    **Every one of those coefficients answers how much these judges agree, not
+    how many judges this is.** Kohli (arXiv:2605.29800) finds nine frontier
+    judges from seven model families "effectively provide only about 2
+    independent votes' worth of information". So the panel's composition is
+    printed above the coefficients and its effective size below them: a high
+    kappa over three fresh instances of one model at one tier is not three
+    raters' worth of evidence, and the coefficient alone will be read as though
+    it were.
+
+    The effective size is the weaker statement and says so.
+    :func:`~decision_evals.stats.agreement.effective_raters` divides the rater
+    count by the design effect of the agreement observed here. It is **not**
+    Kohli's cross-family figure and cannot be computed on this design —
+    agreement driven by the item and agreement driven by the shared model are
+    not separately identified from ratings one model produced.
     """
     ratings = [case.ratings for case in outcome.outcomes]
     print("\n  inter-rater agreement (judges against each other, key not involved):")
+    print(f"    {'panel':<20s} {_panel_line(outcome.panel)}")
     for line in (
         _agreement_line("pairwise agreement", lambda: percent_agreement(ratings).agreement),
         _agreement_line("unanimous judges", lambda: unanimity_rate(ratings).rate),
         _agreement_line("Fleiss kappa", lambda: fleiss_kappa(ratings).kappa),
         _agreement_line("Krippendorff alpha", lambda: krippendorff_alpha(ratings).alpha),
+        _agreement_line("effective raters", lambda: effective_raters(ratings).effective),
     ):
         print(line)
+    print(
+        "    ^ effective raters is the rater count over the design effect of the agreement "
+        "above, and it is not Kohli's cross-family n_eff: one model resampled cannot "
+        "separate agreeing about the item from sharing the model."
+    )
+
+
+def _panel_line(panel: tuple[str, ...]) -> str:
+    """Who the judges were, as counts by model.
+
+    Printed because a coefficient over three samples of one model reads exactly
+    like a coefficient over three independent judges, and nothing else in the
+    block distinguishes them.
+    """
+    if not panel:
+        return "unrecorded -- these rows carry no `model`, so the panel cannot be described"
+    counts = Counter(panel)
+    named = ", ".join(f"{model} x{count}" for model, count in sorted(counts.items()))
+    if len(counts) == 1:
+        return f"{named} -- one model, sampled {sum(counts.values())} times"
+    return f"{named} -- {len(counts)} distinct models"
 
 
 def report(outcome: AdjudicationOutcome) -> None:

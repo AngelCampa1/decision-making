@@ -21,6 +21,7 @@ import pytest
 from decision_evals.stats.agreement import (
     DegenerateAgreementError,
     cohen_kappa,
+    effective_raters,
     fleiss_kappa,
     krippendorff_alpha,
     percent_agreement,
@@ -369,3 +370,93 @@ class TestAdjudicationShape:
     def test_true_and_one_are_the_same_category(self) -> None:
         """Documented, because equality — not identity — defines a category."""
         assert unanimity_rate([[True, 1]]).n_unanimous == 1
+
+
+class TestEffectiveRaters:
+    """Kappa says how much the panel agrees. It does not say how big the panel is.
+
+    Kohli (arXiv:2605.29800) finds nine frontier judges from seven model
+    families "effectively provide only about 2 independent votes' worth of
+    information". This is the weaker, computable companion: the rater count over
+    the design effect of the agreement actually observed.
+    """
+
+    def test_raters_that_agree_only_by_chance_are_worth_their_count(self) -> None:
+        """Kappa at zero means no inflation to remove.
+
+        Constructed to sit exactly on chance at three raters and a pooled
+        marginal of 0.5: a unit's agreement is 1.0 when unanimous and 1/3 when
+        split two-one, so a quarter unanimous averages to the 0.5 that a
+        marginal of 0.5 expects.
+        """
+        units: list[list[bool | None]] = [
+            [True, True, True],
+            [False, False, False],
+            [True, True, False],
+            [True, True, False],
+            [True, True, False],
+            [False, False, True],
+            [False, False, True],
+            [False, False, True],
+        ]
+        result = effective_raters(units)
+        assert result.icc == pytest.approx(0.0)
+        assert result.design_effect == pytest.approx(1.0)
+        assert result.effective == pytest.approx(3.0)
+
+    def test_a_panel_that_always_agrees_is_worth_one(self) -> None:
+        units: list[list[bool | None]] = [
+            [True, True, True],
+            [False, False, False],
+            [True, True, True],
+            [False, False, False],
+        ]
+        result = effective_raters(units)
+        assert result.icc == pytest.approx(1.0)
+        assert result.design_effect == pytest.approx(3.0)
+        assert result.effective == pytest.approx(1.0)
+
+    def test_the_adjudication_panel_is_worth_about_one_rater(self) -> None:
+        """The number this exists to print, at the corpus's own agreement.
+
+        Three judges at Fleiss kappa near 0.9 carry the information of roughly
+        one independent rater. The coefficient alone reads as a strong panel.
+        """
+        units: list[list[bool | None]] = (
+            [[True, True, True]] * 10
+            + [[False, False, False]] * 10
+            + [[True, True, False], [False, False, True]]
+        )
+        result = effective_raters(units)
+        assert result.n_raters == 3
+        assert result.icc == pytest.approx(0.8788, abs=5e-4)
+        assert result.effective == pytest.approx(1.088, abs=5e-3)
+
+    def test_a_negative_kappa_is_clamped_and_the_raw_value_kept(self) -> None:
+        """A negative estimate is a sampling artefact of a correlation near zero.
+
+        The design effect is undefined below zero, so the clamp is forced. It is
+        recorded separately rather than overwriting `icc`, because a reader who
+        sees `effective == n_raters` should be able to find out whether that
+        came from independence or from a clamp.
+        """
+        units: list[list[bool | None]] = [
+            [True, False, False],
+            [False, True, True],
+            [True, False, False],
+            [False, True, True],
+        ]
+        result = effective_raters(units)
+        assert result.icc < 0.0
+        assert result.icc_used == 0.0
+        assert result.design_effect == pytest.approx(1.0)
+        assert result.effective == pytest.approx(result.n_raters)
+
+    def test_a_panel_that_says_one_thing_has_no_measurable_independence(self) -> None:
+        with pytest.raises(DegenerateAgreementError):
+            effective_raters([[True, True, True], [True, True, True]])
+
+    def test_a_missing_rating_is_refused_here_too(self) -> None:
+        """It is computed from Fleiss, so it inherits Fleiss's refusal."""
+        with pytest.raises(ValueError, match="krippendorff_alpha"):
+            effective_raters([[True, True, None], [False, False, False]])

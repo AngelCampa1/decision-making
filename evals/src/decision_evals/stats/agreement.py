@@ -52,6 +52,8 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import combinations
 
+from .cluster import design_effect
+
 #: A category. Anything hashable and comparable by equality would do; the union
 #: is narrowed to what this repository actually labels with so that mypy can
 #: check call sites. Note that ``True`` and ``1`` are one category, because they
@@ -493,6 +495,84 @@ def fleiss_kappa(ratings: Sequence[Sequence[Label | None]]) -> FleissKappaResult
         expected_agreement=expected,
         kappa=(observed - expected) / (1.0 - expected),
         categories=tuple(dict.fromkeys(rating for unit in units for rating in unit)),
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class EffectiveRatersResult:
+    """How many independent raters a panel is worth, given how much it agrees.
+
+    Kappa answers *how much do these raters agree*. It does not answer *how
+    many raters is this*, and the two are routinely read as one number.
+    Kohli (arXiv:2605.29800) makes the point at scale: nine frontier judges
+    from seven model families "effectively provide only about 2 independent
+    votes' worth of information". The figure often quoted alongside that,
+    n_eff = 2.18, is **not in the abstract** and `paper/refs.bib` records it as
+    unverified, so the verified sentence is the one carried here.
+
+    The arithmetic here is the design effect, `1 + (m - 1) * rho`, with the
+    raters as the members of a cluster. For binary ratings at a constant rater
+    count, Fleiss' kappa **is** an intraclass correlation, so it is what goes in
+    as ``rho`` and no second estimator is introduced to disagree with the first.
+
+    **What this is not, stated because the name invites the mistake.** It is not
+    Kohli's cross-family n_eff and cannot be computed on this repository's
+    adjudication design. That number measures whether judges drawn from
+    different model families make *correlated errors*. Three fresh instances of
+    one model at one tier cannot answer it: agreement driven by the item and
+    agreement driven by the shared model are not separately identified from the
+    ratings, and any single number over them is both. What this does say is the
+    weaker, true thing -- given the agreement observed, the panel carries the
+    information of about this many independent raters -- and the panel's
+    composition has to be reported beside it or the reader will supply the
+    stronger reading.
+
+    Attributes:
+        n_raters: Raters per unit, as :func:`fleiss_kappa` counts them.
+        icc: Observed Fleiss kappa, used as the intraclass correlation.
+        icc_used: ``icc`` clamped into ``[0, 1]``. A negative kappa estimate is
+            a sampling artefact of a true correlation near zero, and the design
+            effect is not defined below zero; clamping is the standard
+            treatment and is recorded separately so the raw value stays
+            visible.
+        design_effect: ``1 + (n_raters - 1) * icc_used``. Variance inflation.
+        effective: ``n_raters / design_effect``. Never above ``n_raters``, and
+            never below 1.
+    """
+
+    n_raters: int
+    icc: float
+    icc_used: float
+    design_effect: float
+    effective: float
+
+
+def effective_raters(ratings: Sequence[Sequence[Label | None]]) -> EffectiveRatersResult:
+    """The panel's effective size under its own observed agreement.
+
+    Args:
+        ratings: One sequence of ratings per unit, as :func:`fleiss_kappa`
+            takes them. Same constraints, because it is computed from that.
+
+    Returns:
+        An :class:`EffectiveRatersResult`.
+
+    Raises:
+        ValueError: As :func:`fleiss_kappa` raises it -- empty, ragged, fewer
+            than two raters, or a ``None`` present.
+        DegenerateAgreementError: As :func:`fleiss_kappa` raises it. A panel
+            that always says the same thing has no measurable reliability and
+            therefore no measurable independence either.
+    """
+    result = fleiss_kappa(ratings)
+    icc_used = min(max(result.kappa, 0.0), 1.0)
+    inflation = design_effect(float(result.n_raters), icc_used)
+    return EffectiveRatersResult(
+        n_raters=result.n_raters,
+        icc=result.kappa,
+        icc_used=icc_used,
+        design_effect=inflation,
+        effective=result.n_raters / inflation,
     )
 
 
