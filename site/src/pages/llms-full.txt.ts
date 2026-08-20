@@ -11,6 +11,14 @@
  * Each document is preceded by its own source path, so a quotation taken from
  * this file can be traced back to the file it came from rather than to this
  * concatenation.
+ *
+ * The limitation, stated rather than left implied: this publishes whole bodies
+ * verbatim, so it carries every corrected-in-place figure those documents carry,
+ * including the ones `site/claims.json` records as retracted. That is the same
+ * text `/docs/status/` already renders and it arrives with its correction
+ * attached, but a reader lifting a number out of a correction would get the
+ * withdrawn one. No guard here would help: removing the sentence would destroy
+ * the correction it belongs to.
  */
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';

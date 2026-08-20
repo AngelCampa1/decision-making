@@ -14,10 +14,10 @@
 </div>
 
 Agent skills for making better decisions under uncertainty, plus the evaluation
-harness that measures whether they actually work. The harness puts four arms on
-the same items and scores an LLM-as-a-judge panel for inter-rater reliability.
-It refuses to publish a result whose prediction cannot be shown to predate its
-data.
+harness that measures whether they actually work. The harness relabels its own
+answer key with an LLM-as-a-judge panel and reports the panel's agreement
+chance-corrected. It refuses to publish a result whose prediction cannot be
+shown to predate its data.
 
 The mark is one row of a forest plot: a line of no effect, an interval, a point
 estimate. The interval crosses zero, which is this repository's position stated
@@ -40,11 +40,11 @@ after the job posting. The translation:
 | What it is called elsewhere | What is in this repository |
 | --- | --- |
 | Eval harness, LLM evaluation | `decision_evals`, run offline by `de check` and against live models by [`scripts/run_triggers.py`](scripts/run_triggers.py) |
-| A/B test, ablation study | Four arms on the same items: off, on, a token- and structure-matched placebo, and plain chain-of-thought |
+| A/B test, ablation study | The confirmation design: four arms on the same items, off, on, a token- and structure-matched placebo, and plain chain-of-thought. No published run has used the placebo or cot arm |
 | LLM-as-a-judge, model-graded evaluation | Three blind adjudicators per turn, resolved by majority against a kill threshold fixed before the run |
-| Inter-rater reliability | Cohen's kappa, Fleiss' kappa and Krippendorff's alpha in [`evals/src/decision_evals/stats/agreement.py`](evals/src/decision_evals/stats/agreement.py), reported next to raw agreement rather than instead of it |
+| Inter-rater reliability | Fleiss' kappa and Krippendorff's alpha, reported next to raw agreement rather than instead of it, by [`scripts/adjudicate.py`](scripts/adjudicate.py). Cohen's kappa is implemented in [`evals/src/decision_evals/stats/agreement.py`](evals/src/decision_evals/stats/agreement.py) and nothing calls it |
 | Golden dataset | [`datasets/`](datasets/): parameterised templates with computed ground truth, versioned, plus third-party corpora pinned by SHA-256 and fetched by `de fetch` |
-| Tool-use evaluation, function calling | BFCL's own AST match, in [`evals/src/decision_evals/scorers/bfcl.py`](evals/src/decision_evals/scorers/bfcl.py) |
+| Tool-use evaluation, function calling | A scorer in the shape of BFCL's checker, matching a call's name and arguments after a JSON parse, in [`evals/src/decision_evals/scorers/bfcl.py`](evals/src/decision_evals/scorers/bfcl.py). The venue it was built for is closed |
 | Skill routing | One skill that reads one of six procedure files, chosen by what is hard about the decision |
 | Regression pipeline, CI gate | `de check`: lint, types, tests, coverage floors and the integrity checks, bound to pre-commit and pre-push and run again in CI |
 | Observability, OpenTelemetry | GenAI semantic-convention attribute names pinned in [`evals/src/decision_evals/telemetry.py`](evals/src/decision_evals/telemetry.py), adopted as names without the dependency |
@@ -156,8 +156,8 @@ by how much.
 | --- | --- |
 | `skills/` | The skills, authored to the [Agent Skills](https://agentskills.io) 6-field standard so they work in Claude Code, Codex, Cursor, Copilot, Gemini CLI, Cline, Amp and OpenCode without conversion. Mirrored byte-for-byte to `.agents/skills/` by `de mirror` |
 | `plugin/` | The Claude Code plugin. A skill is copied here only once a confirmation run gives it a verdict, so the directory is currently empty on purpose |
-| `evals/` | `decision_evals`, the evaluation harness. Paired experiments, exact tests, cluster-aware resampling, chance-corrected inter-rater reliability, and the OpenTelemetry GenAI attribute names every record is written under |
-| `datasets/` | The answer key, this repository's golden dataset: parameterised scenario templates with *computed* ground truth, the trigger corpus, and SHA-256 lockfiles for the third-party corpora `de fetch` downloads |
+| `evals/` | `decision_evals`, the evaluation harness. Paired experiments, exact tests, cluster-aware resampling, and chance-corrected inter-rater reliability |
+| `datasets/` | The answer key, this repository's golden dataset: parameterised scenario templates with *computed* ground truth, the trigger corpus, and the SHA-256 lockfile for the third-party corpus `de fetch` downloads |
 | `results/` | Published run records: raw transcripts and a README per run |
 | `notebook/` | Append-only research log. Predictions go in *before* runs |
 | `docs/` | Protocol, status, the research programme, related work, limitations, and what was rejected. Start at [`docs/README.md`](docs/README.md) |

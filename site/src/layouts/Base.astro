@@ -36,7 +36,7 @@ const {
 /**
  * Every page states its own description, and this throw is what makes that
  * true. It was a default parameter until 2026-08-20, and a default nobody has
- * reason to look at is how all 159 pages came to advertise themselves with one
+ * reason to look at is how every page came to advertise itself with one
  * sentence about the skill — the limitations page and the research log
  * included.
  *
@@ -91,7 +91,7 @@ const ogImageAlt =
     {/* `set:html` does not escape, and these descriptions are derived from
         markdown that contains `<`. Escaping the sequence that could close this
         script early is the whole guard. */}
-    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\u003c')} />}
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
     {/* Set before first paint so an explicit choice never flashes the other theme. */}
     <script is:inline>
       (function () {

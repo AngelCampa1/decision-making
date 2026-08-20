@@ -2,9 +2,9 @@
  *
  * Structured data is the machine-readable half of a page: it is what a search
  * engine, and increasingly a model, reads to decide what a URL *is* rather than
- * which words are on it. This site had none, so 159 pages of methodology, dated
- * research log and published run records were indistinguishable from each other
- * and from the landing page.
+ * which words are on it. This site had none, so the methodology, the dated
+ * research log and the published run records were indistinguishable from each
+ * other and from the landing page.
  *
  * What is deliberately absent, and why. There is no `aggregateRating`, no
  * `Review`, no `FAQPage`: that is the markup which asserts a thing is good, and
@@ -206,7 +206,9 @@ export function breadcrumbNode(opts: {
   const trail: object[] = [
     { '@type': 'ListItem', position: 1, name: 'decision-making-skills', item: siteRoot },
   ];
-  if (section) {
+  // `/docs/` is itself the Documentation section, and a page cannot be its own
+  // parent. Compare against the section URL rather than trusting the kind.
+  if (section && !canonical.replace(/\/$/, '').endsWith(section.path.replace(/\/$/, ''))) {
     trail.push({
       '@type': 'ListItem',
       position: 2,

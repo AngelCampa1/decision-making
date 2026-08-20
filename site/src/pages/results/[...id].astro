@@ -20,7 +20,7 @@ const { Content, headings } = await render(entry);
   source={sourcePath(entry.filePath, `results/${entry.id}.md`)}
   kind="published run record"
   body={(entry as typeof entry & { body?: string }).body}
-  id={entry.id}
+  id={stripReadme(entry.id).replace(/\/$/, '')}
 >
   <Content />
 </Doc>

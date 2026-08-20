@@ -1,6 +1,6 @@
 /* A description for each page, derived from the document that page renders.
  *
- * Until 2026-08-20 all 159 pages shipped the same `<meta name="description">`.
+ * Until 2026-08-20 every page shipped the same `<meta name="description">`.
  * That string is what a search engine prints under the link, so every document
  * in this repository was advertised with one sentence about the skill -- the
  * research log, the run records and the limitations page included.
@@ -26,7 +26,7 @@ export const DESCRIPTION_LIMIT = 155;
 const MIN_BLOCK = 25;
 
 /** Blocks that are structure rather than prose. Tested against the block's first line. */
-const STRUCTURAL = /^(#|\||>?\s*[-*+]\s|>?\s*\d+\.\s|-{3,}|\*{3,}|<|!\[|\[!\[)/;
+const STRUCTURAL = /^(#|\||>?\s*[-*+]\s|>?\s*\d+\.\s|-{3,}|={3,}|\*{3,}|<|!\[|\[!\[)/;
 
 /** Remove fenced code and HTML comments, which are not prose and often contain prose. */
 function stripBlocks(text: string): string {
@@ -42,7 +42,9 @@ function stripInline(block: string): string {
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/[`*_]/g, '')
+    // Not `_`: these documents are full of identifiers, and stripping it
+    // published `assert_isolated` as `assertisolated`.
+    .replace(/[`*]/g, '')
     .replace(/&[a-z]+;/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -70,7 +72,7 @@ export function descriptionFrom(
   fallback: string,
   limit = DESCRIPTION_LIMIT,
 ): string {
-  if (!body) return fallback;
+  if (!body) return truncate(fallback, limit);
   const retracted = retractedPhrases();
 
   for (const raw of stripBlocks(body).split(/\n\s*\n/)) {

@@ -24,9 +24,9 @@ abstract: >-
   items (off, on, a token- and structure-matched placebo, and plain
   chain-of-thought), so that a skill beating nothing but not beating filler is
   reported as a length effect. Labels are re-derived blind by a panel of
-  independent model instances and reported with chance-corrected inter-rater
-  reliability (Cohen's kappa, Fleiss' kappa, Krippendorff's alpha) rather than
-  raw agreement. Statistics are exact and resampling-based, with
+  independent model instances, and the panel's agreement is reported
+  chance-corrected (Fleiss' kappa, Krippendorff's alpha) alongside the raw
+  rate rather than instead of it. Statistics are exact and resampling-based, with
   templates rather than items as the resampling unit, and calibration is
   reported with the Murphy decomposition. Published results to date measure
   skill *triggering* — whether a skill fires when it should — not decision

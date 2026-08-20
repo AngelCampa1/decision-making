@@ -9,9 +9,13 @@ export const BRANCH = 'main';
  *
  * Used by the `WebSite` node of every page's structured data, so it is the
  * site-level answer rather than any page's. Deliberately carries no measured
- * number: it is repeated on 159 pages and cached by every crawler that has seen
- * one of them, so it says only what stays true.
+ * number: it is repeated on every page and cached by every crawler that has
+ * seen one of them, so it says only what stays true.
  */
+export const SKILL_DESCRIPTION =
+  'One skill that works out what is hard about a decision, then runs a single ' +
+  'procedure for it. Plain markdown, Apache-2.0, and free.';
+
 export const SITE_DESCRIPTION =
   'Agent skills for decisions under uncertainty, plus the evaluation harness ' +
   'that measures whether they work: pre-registered, placebo-controlled, and ' +

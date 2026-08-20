@@ -22,13 +22,14 @@
 import type { APIRoute } from 'astro';
 import { getCollection, render } from 'astro:content';
 import { shown } from '../lib/claims.ts';
-import { descriptionFrom } from '../lib/descriptions.ts';
+import { DESCRIPTION_LIMIT, descriptionFrom } from '../lib/descriptions.ts';
 import { skillFacts } from '../lib/facts.ts';
 import { REPO, SITE_DESCRIPTION } from '../lib/site.ts';
 import { stripReadme, titleFrom } from '../lib/titles.ts';
 
-/** Shorter than a meta description: this is a line in a list, not a summary card. */
-const NOTE_LIMIT = 110;
+/* The same limit the pages use. At 110 two pairs of run records collided on an
+   identical note, because a run README opens with its own call arithmetic. */
+const NOTE_LIMIT = DESCRIPTION_LIMIT;
 
 /** Documents that answer "how was this measured", in the order a reader needs them. */
 const METHOD_DOCS = [
@@ -52,7 +53,8 @@ export const GET: APIRoute = async ({ site }) => {
   const facts = await skillFacts();
   const docs = await getCollection('docs');
   const results = await getCollection('results');
-  const notebook = await getCollection('notebook');
+  // Same filter the index uses: README.md states the rules, it is not an entry.
+  const notebook = (await getCollection('notebook')).filter((entry) => entry.id !== 'readme');
 
   const byId = new Map(docs.map((entry) => [entry.id, entry]));
   const line = (title: string, path: string, note: string) => `- [${title}](${url(path)}): ${note}`;
@@ -109,7 +111,7 @@ export const GET: APIRoute = async ({ site }) => {
     ...findingLines,
     line(
       'The shortcut audit',
-      '/docs/status/',
+      '/notebook/2026-08-13-the-corpus-is-89-percent-solved-by-counting-words/',
       `The retired trigger corpus was solvable at ${shown('corpus-solvability')} by counting words alone, ` +
         `so every result on it was competing for ${shown('headroom-points')} over a ruler. ` +
         `On the rebuilt corpus the best model-free shortcut reaches ${shown('word-trick-ceiling')}.`,

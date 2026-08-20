@@ -5,7 +5,7 @@ import { REPO } from '../lib/site.ts';
 import { skillFacts, publishedRunCount, armResults, requireCopy } from '../lib/facts.ts';
 import { verdictState } from '../lib/verdicts.ts';
 import { shown } from '../lib/claims.ts';
-import { SITE_DESCRIPTION } from '../lib/site.ts';
+import { SITE_DESCRIPTION, SKILL_DESCRIPTION } from '../lib/site.ts';
 import {
   graph,
   personNode,
@@ -170,7 +170,7 @@ const testArms = [
  * every crawler that has ever seen the page and cannot be corrected once
  * posted, so they say only what is structurally true.
  */
-const DESCRIPTION = `A free file your AI agent reads when you face a hard call. ${facts.countWord} methods, and it reads one. The evaluation harness that measures it is here, and proves nothing yet.`;
+const DESCRIPTION = `A free file your AI agent reads when you face a hard call. ${facts.countWord} methods, and it reads one. The evaluation harness that measures it is here too.`;
 const OG_TITLE = 'An agent skill for hard choices. Nothing proven yet.';
 const OG_DESCRIPTION = `${facts.countWord} procedures. Your agent reads one. Free, and one line installs it. Every result is public, including the ones that went badly.`;
 
@@ -179,7 +179,7 @@ const siteRoot = new URL(`${base}/`, Astro.site).href;
 const schema = graph([
   personNode(siteRoot),
   websiteNode(siteRoot, SITE_DESCRIPTION),
-  softwareNode(siteRoot, OG_DESCRIPTION, facts.version),
+  softwareNode(siteRoot, SKILL_DESCRIPTION, facts.version),
   webPageNode(canonical, siteRoot, 'decision-making-skills', DESCRIPTION),
 ]);
 
