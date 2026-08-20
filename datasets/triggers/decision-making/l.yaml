@@ -1005,6 +1005,200 @@ positive:
       the constraints behind it are dates: the rate held to 12 August, the survey on
       the 20th, the buyer's offer running six months.
 
+  # --- council and hinge, added for version 5 -------------------------------
+  - id: l23p
+    triple: l23
+    band: l
+    domain: technical
+    stakes: high
+    ask: explicit
+    route: council
+    turn: >-
+      Pasting the two messages because I keep agreeing with whichever I read
+      last. From Ines (staff eng), Mon 11:20 - "Splitting the billing service
+      out is the only thing that fixes this. Every incident in the last six
+      months has been the same shape: something unrelated deploys, billing
+      goes down, and we find out from a customer. It is one deploy pipeline,
+      one database, one blast radius. Two engineers, one quarter. We have done
+      this twice before and both times the team stopped being paged." From
+      Marek (principal), Mon 16:05 - "I have watched three of these. What
+      actually happens is you get the split, and then you get a distributed
+      transaction where you used to have a foreign key, and a year of chasing
+      consistency bugs that never existed before. The incidents are a test
+      coverage problem wearing a costume. Same quarter spent on the
+      integration suite and the deploy gate gets you the same outcome with
+      none of the new failure modes." Both of them are right about our
+      history. Ines is right that we have split twice and both stuck. Marek is
+      right that the last split gave us the reconciliation job nobody wants to
+      own. Headcount is the same either way and I have to give the quarter's
+      plan on Thursday. Can you build each case properly, on its author's own
+      strongest terms, and then tell me which is left standing? Not a balanced
+      précis of both: Ines argued the way she argues it, Marek likewise, and
+      then your judgement on whose reasoning withstands the rebuttal nobody
+      has yet put to it.
+    why: >-
+      Two engineers, each with a case built from the same history, and the
+      turn says outright that whichever was read last is the one being agreed
+      with. The ask is for both to be argued. Not cascade: it does not ask
+      what a split sets off, it asks whether the case for one holds.
+  - id: l24p
+    triple: l24
+    band: l
+    domain: money
+    stakes: high
+    ask: implicit
+    route: council
+    turn: >-
+      Everything from the last fortnight, pasted, because I do not trust my
+      own read on it any more. From my brother, Sat - "Sell it. None of us
+      lives within two hours. It needs a roof and neither you nor I have
+      thirty thousand sitting there. Mum would not have wanted it to become
+      the thing that we argue about at Christmas for the next decade, and that
+      is what it will become." From my sister, Sun - "We are not selling the
+      house our mother was born in because of a roof. It has been in the
+      family for ninety years. Rent it out, put the rent into the roof, and in
+      five years it pays for itself and the grandchildren have somewhere.
+      Selling is the decision you cannot take back." Valuation: 340,000 as is,
+      agent thinks 385,000 with the roof done. Rental estimate: 1,250 a month,
+      agent says it lets in a fortnight. Quote for the roof: 28,400, valid
+      ninety days. Probate completes in about six weeks and the three of us
+      have to be agreed before it does. Neither of them is being stupid and
+      neither of them has moved an inch since the first week. I have pushed my
+      brother's case at my sister and hers back at him, and by now I honestly
+      cannot locate my own. Each has said things I later recycled to the other
+      as though I had thought them. The only conviction left is that neither
+      of them is being stupid, and that neither of them is going to say so.
+    why: >-
+      Two positions, both defensible, both immovable, and no question asked.
+      The implicit form: the turn reports having argued each side to the other
+      and stops.
+  - id: l25p
+    triple: l25
+    band: l
+    domain: career
+    stakes: high
+    ask: embedded
+    route: council
+    turn: >-
+      Two conversations, written up the same evening so I would not smooth
+      them out. Priya, who ran my old department - "Take the head of function
+      role. You are thirty-nine. The window where somebody hands you a
+      department because they like how you handled one crisis is now, and it
+      closes. You will learn the job by doing it badly for a year like
+      everyone does. Nobody has ever felt ready and the ones who wait get
+      passed by the ones who did not." Tom, who I worked for before that - "Do
+      not take it. You are good at the work and you have said the work is the
+      part you like. Head of function is budget meetings, hiring, and three
+      days a week of other people's disagreements. You will be a competent
+      manager who misses the thing he was excellent at, and there is no route
+      back at that level. Two more years as the person who does it is not a
+      wasted two years." Both of them have watched me work for years. Both of
+      them are describing somebody they have actually seen. The offer needs an
+      answer by the end of next week and my partner has said she will support
+      either. Which survives being argued out properly? Notice that I have
+      only ever rehearsed Priya's version, because hers flatters me, so I
+      would like Tom's constructed just as carefully as she constructed hers,
+      and then a verdict on whichever withstands the other.
+    why: >-
+      Two mentors, opposite advice, both coherent, and the question sits mid-
+      turn with the ordering problem stated after it. Not fit: neither is a
+      general rule being tested against this person, they are two whole
+      positions about what to do.
+  - id: l26p
+    triple: l26
+    band: l
+    domain: health
+    stakes: high
+    ask: explicit
+    route: hinge
+    turn: >-
+      Everything the clinic has sent, pasted in order. Letter, 4 March -
+      "Following the ultrasound we are arranging a core biopsy. The appearance
+      is indeterminate and we would not want to draw conclusions from imaging
+      alone." Letter, 19 March - "The biopsy was taken on 17 March. Histology
+      is with the regional laboratory. We expect to discuss the result at the
+      multidisciplinary meeting on 9 April." Email from the specialist nurse,
+      22 March - "The grade is the thing that matters most for what we offer
+      you. Until we have it, both pathways are still open and I would not want
+      to guess." My own note from the phone call, 24 March - asked whether
+      there was any way to get the grade sooner, was told the laboratory is
+      running about three weeks and 9 April is already the earliest meeting.
+      Separately: my employer needs the sabbatical decision by 31 March, and
+      the sabbatical is the only way I get the twelve weeks if it turns out I
+      need them. Once I have taken it I cannot take it again for three years,
+      and if the grade comes back low I will have spent it on nothing. Do I
+      take the sabbatical before the 31st without the grade, or hold for the
+      9th and forfeit it? What defeats me is whether grade genuinely decides
+      this, or whether I have fastened onto grade precisely because somebody
+      else promises to hand me that particular answer.
+    why: >-
+      One named absent fact, an explicit statement of why it swings the
+      answer, a date that puts a price on waiting, and an ask that is exactly
+      the choice between deciding and waiting.
+  - id: l27p
+    triple: l27
+    band: l
+    domain: technical
+    stakes: high
+    ask: embedded
+    route: hinge
+    turn: >-
+      The incident review and the vendor thread, both pasted. Incident review,
+      2 April - "Root cause: the connection pool in the 4.x driver does not
+      release on a failed TLS handshake. Fixed upstream in 6.0. We are on 4.7
+      because 6.0 requires the new licence tier." From procurement, 4 April -
+      "Any move to the new tier goes through the annual vendor review. If we
+      start now it lands in about three weeks. I cannot shorten it and I
+      cannot start it on a maybe." From the vendor's account manager, 5 April
+      - "I will have to come back to you on whether 4.x stays supported past
+      March next year. I do not want to tell you something and be wrong." From
+      our own head of platform, 5 April - "If 4.x is supported through next
+      year we patch around this and revisit at renewal. If it is not, we are
+      moving this year whatever it costs, and the sooner we start the review
+      the better." That last message is the whole thing. The two plans have
+      almost nothing in common and which one is right depends entirely on an
+      answer nobody has given us. The board pack that names next year's
+      platform spend is due in eight days. Is holding the board pack until our
+      account manager replies worth it, or do we draft now against a stated
+      assumption and name which? Eight days exhausts every hour of slack
+      anybody has.
+    why: >-
+      The gap is named, both branches are stated, the cost of waiting is a
+      date, and the question sits before the sentence that prices it. What
+      makes it hinge rather than timing is that the two plans differ in
+      content, not only in when they start.
+  - id: l28p
+    triple: l28
+    band: l
+    domain: relationships
+    stakes: high
+    ask: implicit
+    route: hinge
+    turn: >-
+      Pasting the messages because reading them back is the only way I can
+      think about it without getting upset. From my sister, Tuesday - "Dad
+      told the consultant he did not want to know the staging. The consultant
+      respected that. So none of us know, and I am not going to be the one who
+      asks over his head." From my aunt, Tuesday - "Your father has always
+      been like this. He does not want to know and he does not want to be
+      managed. If you start planning around something he has chosen not to
+      hear about, he will notice, and it will change how he spends whatever
+      this is." From my sister, Wednesday - "I know what you are going to say
+      about the wedding. But moving it forward tells him something, and you
+      cannot untell it." My own note - the venue will move us to July for the
+      deposit we have already paid, but only if we tell them by the 15th.
+      After that it is next April. July is four months away and April is
+      thirteen. If this is the kind of thing where four months and thirteen
+      months are different, we should move it, and if it is not, we are doing
+      something drastic and telling him why for no reason. So everything turns
+      on something unasked, which he has expressly forbidden anyone asking,
+      and the 15th arrives regardless of whether anyone asks and regardless of
+      whether anyone answers.
+    why: >-
+      The missing fact is named, so is the reason nobody will ask for it, and
+      so is the deadline. No question is asked, which is the implicit form.
+      Not ledger: the material pasted in is agreed, and what is absent is what
+      the decision turns on.
 negative:
   - id: l01n1
     triple: l01
@@ -2937,3 +3131,367 @@ negative:
       "Boil all of it down to five lines for me to send" is compression of material
       that is already on the page, for a named reader, with the format specified.
       Choosing what matters would be the wrong operation to perform on it.
+  # --- council and hinge, added for version 5 -------------------------------
+  - id: l23n1
+    triple: l23
+    band: l
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      Pasting the two messages because I keep agreeing with whichever I read
+      last. From Ines (staff eng), Mon 11:20 - "Splitting the billing service
+      out is the only thing that fixes this. Every incident in the last six
+      months has been the same shape: something unrelated deploys, billing
+      goes down, and we find out from a customer. It is one deploy pipeline,
+      one database, one blast radius. Two engineers, one quarter. We have done
+      this twice before and both times the team stopped being paged." From
+      Marek (principal), Mon 16:05 - "I have watched three of these. What
+      actually happens is you get the split, and then you get a distributed
+      transaction where you used to have a foreign key, and a year of chasing
+      consistency bugs that never existed before. The incidents are a test
+      coverage problem wearing a costume. Same quarter spent on the
+      integration suite and the deploy gate gets you the same outcome with
+      none of the new failure modes." Both of them are right about our
+      history. Ines is right that we have split twice and both stuck. Marek is
+      right that the last split gave us the reconciliation job nobody wants to
+      own. Headcount is the same either way and I have to give the quarter's
+      plan on Thursday. Before any of that: why would a foreign key becoming a
+      distributed transaction introduce consistency bugs that were not there
+      before? I want to understand the mechanism Marek is describing rather
+      than take it on trust, because I have not seen it myself.
+    why: >-
+      The same body, and the ask is a mechanism. A cause has a determinate
+      answer and arguing positions would not produce it.
+  - id: l23n2
+    triple: l23
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      Pasting the two messages because I keep agreeing with whichever I read
+      last. From Ines (staff eng), Mon 11:20 - "Splitting the billing service
+      out is the only thing that fixes this. Every incident in the last six
+      months has been the same shape: something unrelated deploys, billing
+      goes down, and we find out from a customer. It is one deploy pipeline,
+      one database, one blast radius. Two engineers, one quarter. We have done
+      this twice before and both times the team stopped being paged." From
+      Marek (principal), Mon 16:05 - "I have watched three of these. What
+      actually happens is you get the split, and then you get a distributed
+      transaction where you used to have a foreign key, and a year of chasing
+      consistency bugs that never existed before. The incidents are a test
+      coverage problem wearing a costume. Same quarter spent on the
+      integration suite and the deploy gate gets you the same outcome with
+      none of the new failure modes." Both of them are right about our
+      history. Ines is right that we have split twice and both stuck. Marek is
+      right that the last split gave us the reconciliation job nobody wants to
+      own. Headcount is the same either way and I have to give the quarter's
+      plan on Thursday. We are splitting it. Can you write the paragraph I put
+      in the quarter's plan, naming the alternative and why we did not take
+      it, in a way Marek will recognise as a fair account of what he said?
+    why: >-
+      The same body with the choice made in the first clause. The ask is to
+      produce a document, and the fairness it asks for is editorial rather
+      than deliberative.
+  - id: l24n1
+    triple: l24
+    band: l
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Everything from the last fortnight, pasted, because I do not trust my
+      own read on it any more. From my brother, Sat - "Sell it. None of us
+      lives within two hours. It needs a roof and neither you nor I have
+      thirty thousand sitting there. Mum would not have wanted it to become
+      the thing that we argue about at Christmas for the next decade, and that
+      is what it will become." From my sister, Sun - "We are not selling the
+      house our mother was born in because of a roof. It has been in the
+      family for ninety years. Rent it out, put the rent into the roof, and in
+      five years it pays for itself and the grandchildren have somewhere.
+      Selling is the decision you cannot take back." Valuation: 340,000 as is,
+      agent thinks 385,000 with the roof done. Rental estimate: 1,250 a month,
+      agent says it lets in a fortnight. Quote for the roof: 28,400, valid
+      ninety days. Probate completes in about six weeks and the three of us
+      have to be agreed before it does. Neither of them is being stupid and
+      neither of them has moved an inch since the first week. Work out what
+      each of those comes to over ten years. Sale at 340 now against roof-
+      then-rent, using the rental estimate, the roof quote, and the uplift the
+      agent is claiming, and tell me what you have assumed about voids and
+      maintenance.
+    why: >-
+      The same body, and the ask is arithmetic over the two positions.
+  - id: l24n2
+    triple: l24
+    band: l
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Everything from the last fortnight, pasted, because I do not trust my
+      own read on it any more. From my brother, Sat - "Sell it. None of us
+      lives within two hours. It needs a roof and neither you nor I have
+      thirty thousand sitting there. Mum would not have wanted it to become
+      the thing that we argue about at Christmas for the next decade, and that
+      is what it will become." From my sister, Sun - "We are not selling the
+      house our mother was born in because of a roof. It has been in the
+      family for ninety years. Rent it out, put the rent into the roof, and in
+      five years it pays for itself and the grandchildren have somewhere.
+      Selling is the decision you cannot take back." Valuation: 340,000 as is,
+      agent thinks 385,000 with the roof done. Rental estimate: 1,250 a month,
+      agent says it lets in a fortnight. Quote for the roof: 28,400, valid
+      ninety days. Probate completes in about six weeks and the three of us
+      have to be agreed before it does. Neither of them is being stupid and
+      neither of them has moved an inch since the first week. Before we all
+      get on a call, can you set out who has said what and when they said it,
+      in one page, with nothing from you added? I want the three of us
+      starting from the same account of the fortnight.
+    why: >-
+      The same body, and the ask is for the material to be laid out rather
+      than argued, with the model's own view explicitly excluded. The nearest
+      miss to council in this band.
+  - id: l25n1
+    triple: l25
+    band: l
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      Two conversations, written up the same evening so I would not smooth
+      them out. Priya, who ran my old department - "Take the head of function
+      role. You are thirty-nine. The window where somebody hands you a
+      department because they like how you handled one crisis is now, and it
+      closes. You will learn the job by doing it badly for a year like
+      everyone does. Nobody has ever felt ready and the ones who wait get
+      passed by the ones who did not." Tom, who I worked for before that - "Do
+      not take it. You are good at the work and you have said the work is the
+      part you like. Head of function is budget meetings, hiring, and three
+      days a week of other people's disagreements. You will be a competent
+      manager who misses the thing he was excellent at, and there is no route
+      back at that level. Two more years as the person who does it is not a
+      wasted two years." Both of them have watched me work for years. Both of
+      them are describing somebody they have actually seen. The offer needs an
+      answer by the end of next week and my partner has said she will support
+      either. I am taking it. Can you help me write back to Tom? He was
+      generous with his time and I do not want it to read as though I heard
+      him out and then did the opposite anyway, even though that is exactly
+      what I did.
+    why: >-
+      The same body, decision made, and the ask is drafting.
+  - id: l25n2
+    triple: l25
+    band: l
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Two conversations, written up the same evening so I would not smooth
+      them out. Priya, who ran my old department - "Take the head of function
+      role. You are thirty-nine. The window where somebody hands you a
+      department because they like how you handled one crisis is now, and it
+      closes. You will learn the job by doing it badly for a year like
+      everyone does. Nobody has ever felt ready and the ones who wait get
+      passed by the ones who did not." Tom, who I worked for before that - "Do
+      not take it. You are good at the work and you have said the work is the
+      part you like. Head of function is budget meetings, hiring, and three
+      days a week of other people's disagreements. You will be a competent
+      manager who misses the thing he was excellent at, and there is no route
+      back at that level. Two more years as the person who does it is not a
+      wasted two years." Both of them have watched me work for years. Both of
+      them are describing somebody they have actually seen. The offer needs an
+      answer by the end of next week and my partner has said she will support
+      either. Is there anything actually published on what happens to people
+      who move from an individual-contributor track into management and then
+      try to come back? Tom stated it as a fact and I would like to know
+      whether it is one.
+    why: >-
+      The same body, and the ask is whether a claim inside it is supported,
+      which is a question about the literature rather than about the choice.
+  - id: l26n1
+    triple: l26
+    band: l
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Everything the clinic has sent, pasted in order. Letter, 4 March -
+      "Following the ultrasound we are arranging a core biopsy. The appearance
+      is indeterminate and we would not want to draw conclusions from imaging
+      alone." Letter, 19 March - "The biopsy was taken on 17 March. Histology
+      is with the regional laboratory. We expect to discuss the result at the
+      multidisciplinary meeting on 9 April." Email from the specialist nurse,
+      22 March - "The grade is the thing that matters most for what we offer
+      you. Until we have it, both pathways are still open and I would not want
+      to guess." My own note from the phone call, 24 March - asked whether
+      there was any way to get the grade sooner, was told the laboratory is
+      running about three weeks and 9 April is already the earliest meeting.
+      Separately: my employer needs the sabbatical decision by 31 March, and
+      the sabbatical is the only way I get the twelve weeks if it turns out I
+      need them. Once I have taken it I cannot take it again for three years,
+      and if the grade comes back low I will have spent it on nothing. Can you
+      set out what each of those actually says, in date order and in the
+      clinic's own words where it matters? I have read them so many times that
+      I have stopped taking them in, and I want something I can hand to my
+      sister.
+    why: >-
+      The same body, and the ask is comprehension of what is present rather
+      than what to do about what is not.
+  - id: l26n2
+    triple: l26
+    band: l
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Everything the clinic has sent, pasted in order. Letter, 4 March -
+      "Following the ultrasound we are arranging a core biopsy. The appearance
+      is indeterminate and we would not want to draw conclusions from imaging
+      alone." Letter, 19 March - "The biopsy was taken on 17 March. Histology
+      is with the regional laboratory. We expect to discuss the result at the
+      multidisciplinary meeting on 9 April." Email from the specialist nurse,
+      22 March - "The grade is the thing that matters most for what we offer
+      you. Until we have it, both pathways are still open and I would not want
+      to guess." My own note from the phone call, 24 March - asked whether
+      there was any way to get the grade sooner, was told the laboratory is
+      running about three weeks and 9 April is already the earliest meeting.
+      Separately: my employer needs the sabbatical decision by 31 March, and
+      the sabbatical is the only way I get the twelve weeks if it turns out I
+      need them. Once I have taken it I cannot take it again for three years,
+      and if the grade comes back low I will have spent it on nothing. What
+      does grade mean in this context, and how is it different from the stage?
+      The nurse used both words in the same conversation and I did not want to
+      stop her to ask, and I would rather not go into the meeting on the 9th
+      not knowing.
+    why: >-
+      The same body, and the ask is the meaning of a term. A lookup with a
+      determinate answer.
+  - id: l27n1
+    triple: l27
+    band: l
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      The incident review and the vendor thread, both pasted. Incident review,
+      2 April - "Root cause: the connection pool in the 4.x driver does not
+      release on a failed TLS handshake. Fixed upstream in 6.0. We are on 4.7
+      because 6.0 requires the new licence tier." From procurement, 4 April -
+      "Any move to the new tier goes through the annual vendor review. If we
+      start now it lands in about three weeks. I cannot shorten it and I
+      cannot start it on a maybe." From the vendor's account manager, 5 April
+      - "I will have to come back to you on whether 4.x stays supported past
+      March next year. I do not want to tell you something and be wrong." From
+      our own head of platform, 5 April - "If 4.x is supported through next
+      year we patch around this and revisit at renewal. If it is not, we are
+      moving this year whatever it costs, and the sooner we start the review
+      the better." That last message is the whole thing. The two plans have
+      almost nothing in common and which one is right depends entirely on an
+      answer nobody has given us. The board pack that names next year's
+      platform spend is due in eight days. Can you help me work out why a
+      failed TLS handshake would leak a connection at all? I would like to
+      understand the 4.x behaviour well enough to say whether our own retry
+      loop is making it worse, because if it is then that is ours to fix
+      rather than theirs.
+    why: >-
+      The same body, and the ask is a cause.
+  - id: l27n2
+    triple: l27
+    band: l
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      The incident review and the vendor thread, both pasted. Incident review,
+      2 April - "Root cause: the connection pool in the 4.x driver does not
+      release on a failed TLS handshake. Fixed upstream in 6.0. We are on 4.7
+      because 6.0 requires the new licence tier." From procurement, 4 April -
+      "Any move to the new tier goes through the annual vendor review. If we
+      start now it lands in about three weeks. I cannot shorten it and I
+      cannot start it on a maybe." From the vendor's account manager, 5 April
+      - "I will have to come back to you on whether 4.x stays supported past
+      March next year. I do not want to tell you something and be wrong." From
+      our own head of platform, 5 April - "If 4.x is supported through next
+      year we patch around this and revisit at renewal. If it is not, we are
+      moving this year whatever it costs, and the sooner we start the review
+      the better." That last message is the whole thing. The two plans have
+      almost nothing in common and which one is right depends entirely on an
+      answer nobody has given us. The board pack that names next year's
+      platform spend is due in eight days. We are starting the vendor review
+      now and writing the board pack on the assumption that 4.x is gone. Can
+      you draft the two paragraphs that explain the spend, for readers who
+      will not know what a connection pool is and should not have to?
+    why: >-
+      The same body with the gap closed by assumption in the first sentence,
+      and the ask is to write for an audience.
+  - id: l28n1
+    triple: l28
+    band: l
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      Pasting the messages because reading them back is the only way I can
+      think about it without getting upset. From my sister, Tuesday - "Dad
+      told the consultant he did not want to know the staging. The consultant
+      respected that. So none of us know, and I am not going to be the one who
+      asks over his head." From my aunt, Tuesday - "Your father has always
+      been like this. He does not want to know and he does not want to be
+      managed. If you start planning around something he has chosen not to
+      hear about, he will notice, and it will change how he spends whatever
+      this is." From my sister, Wednesday - "I know what you are going to say
+      about the wedding. But moving it forward tells him something, and you
+      cannot untell it." My own note - the venue will move us to July for the
+      deposit we have already paid, but only if we tell them by the 15th.
+      After that it is next April. July is four months away and April is
+      thirteen. If this is the kind of thing where four months and thirteen
+      months are different, we should move it, and if it is not, we are doing
+      something drastic and telling him why for no reason. We are moving it to
+      July. Can you help me write to the venue, and then a short message to my
+      father that gives him a reason he will accept without putting the real
+      one in front of him? Warm, ordinary, not careful.
+    why: >-
+      The same body, decision made, and the ask is drafting.
+  - id: l28n2
+    triple: l28
+    band: l
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Pasting the messages because reading them back is the only way I can
+      think about it without getting upset. From my sister, Tuesday - "Dad
+      told the consultant he did not want to know the staging. The consultant
+      respected that. So none of us know, and I am not going to be the one who
+      asks over his head." From my aunt, Tuesday - "Your father has always
+      been like this. He does not want to know and he does not want to be
+      managed. If you start planning around something he has chosen not to
+      hear about, he will notice, and it will change how he spends whatever
+      this is." From my sister, Wednesday - "I know what you are going to say
+      about the wedding. But moving it forward tells him something, and you
+      cannot untell it." My own note - the venue will move us to July for the
+      deposit we have already paid, but only if we tell them by the 15th.
+      After that it is next April. July is four months away and April is
+      thirteen. If this is the kind of thing where four months and thirteen
+      months are different, we should move it, and if it is not, we are doing
+      something drastic and telling him why for no reason. Can you lay out
+      what each person has actually said and what each of them seems to be
+      asking of me, separately? I keep collapsing the two and then answering
+      something nobody said, and my sister and my aunt are not making the same
+      point.
+    why: >-
+      The same body, and the ask is to separate what is present into who said
+      what. That is the ledger-shaped ask, made of a pile that is not the
+      problem.

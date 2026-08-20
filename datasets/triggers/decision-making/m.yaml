@@ -432,6 +432,105 @@ positive:
       acceptable route: going to the customer before counsel is the move that
       cannot be taken back, and the turn names the clause that makes it so.
 
+  # --- council and hinge, added for version 5 -------------------------------
+  - id: m25p
+    triple: m25
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    route: council
+    turn: >-
+      My wife wants us to move back so we are twenty minutes from her parents
+      rather than four hours. I want to stay where our friends and my work are.
+      Neither of us is being unreasonable and we have both stopped listening,
+      because I think we each got fixed on a position in the first week and
+      have been defending it since. Can you put both cases properly?
+    why: >-
+      Two positions, both defensible, and the turn says outright that each was
+      fixed early and defended after. The ask is for the cases to be made, which
+      is council rather than ledger: nothing here is a pile of facts to weigh.
+  - id: m26p
+    triple: m26
+    band: m
+    domain: technical
+    stakes: high
+    ask: implicit
+    route: council
+    turn: >-
+      Half the team wants to buy the vendor product and half wants to build it
+      ourselves, and the arguments on both sides are good ones. Buying is
+      faster and we lose the ability to change it. Building costs us two
+      quarters and we own it. I have heard both put well and I keep agreeing
+      with whoever spoke last.
+    why: >-
+      Two positions stated with their strongest points, no question asked, and
+      the complaint is exactly the ordering effect the procedure exists for.
+  - id: m27p
+    triple: m27
+    band: m
+    domain: money
+    stakes: high
+    ask: embedded
+    route: council
+    turn: >-
+      One adviser says clear the mortgage and sleep at night. The other says
+      the rate is fixed until 2031 and the money does more elsewhere. Which of
+      those actually holds up if you argue it out? They are both competent and
+      they are both talking about the same numbers, so I do not think this is
+      one of them being wrong about the arithmetic.
+    why: >-
+      Two coherent positions over identical facts, and the question sits in the
+      middle with the reason it is not an arithmetic dispute after it.
+  - id: m28p
+    triple: m28
+    band: m
+    domain: career
+    stakes: high
+    ask: explicit
+    route: hinge
+    turn: >-
+      They want an answer on the transfer by the end of the month. What I still
+      do not know is whether the role is a backfill or a new headcount, because
+      that decides whether I am inheriting somebody's mess or building
+      something. Asking means going back to the hiring manager a third time.
+      Do I ask, or do I answer without it?
+    why: >-
+      One named absent fact, a reason it swings the answer, a stated cost to
+      asking, and the ask is the choice between the two.
+  - id: m29p
+    triple: m29
+    band: m
+    domain: health
+    stakes: high
+    ask: implicit
+    route: hinge
+    turn: >-
+      The genetics result is six to eight weeks out. My brother is planning
+      around a decision I have not made and my mother keeps asking. If it comes
+      back one way none of this matters and if it comes back the other way
+      everything about the next two years changes. Six weeks of everyone
+      waiting is not nothing either.
+    why: >-
+      The missing piece is named, it plainly swings the answer, and waiting has
+      a stated price. No question is asked, which is the implicit form.
+  - id: m30p
+    triple: m30
+    band: m
+    domain: technical
+    stakes: high
+    ask: embedded
+    route: hinge
+    turn: >-
+      We have to commit to the architecture on Monday. Is it worth holding the
+      decision until we have the real peak figure? Nobody has given us one, the
+      only person who could is on leave, and the two designs diverge completely
+      depending on whether it is two thousand a second or twenty. Monday is a
+      contractual date rather than a preference.
+    why: >-
+      The question comes second with the gap, its cost and its consequence
+      after it. What makes it hinge rather than timing is that the direction is
+      not settled: the missing number decides which design, not when.
 negative:
   - id: m01n1
     triple: m01
@@ -1238,3 +1337,195 @@ negative:
       Both halves of m24p's question are answered in the second sentence: counsel
       has seen it and the customer is being told today. The ask is to write the
       notice, with three stated constraints on its tone.
+  # --- council and hinge, added for version 5 -------------------------------
+  - id: m25n1
+    triple: m25
+    band: m
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      My wife wants us to move back so we are twenty minutes from her parents
+      rather than four hours. I want to stay where our friends and my work are.
+      We have been over it in about nine separate conversations and I have
+      notes from most of them. Can you pull out who has said what and when, so
+      that we are arguing about the same things rather than about March?
+    why: >-
+      The same two positions, same opening two sentences, and the ask is for the
+      material to be organised rather than argued. The nearest miss in the band.
+  - id: m25n2
+    triple: m25
+    band: m
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      We have decided to move back so we are twenty minutes from her parents
+      rather than four hours. Her mother will be pleased and mine will take it
+      as a verdict on us, which it is not. Can you help me write the message to
+      my mother? Warm, settled, clear that it is not a comment on her, and not
+      defensive about a choice the two of us are perfectly happy with.
+    why: >-
+      Same fork, resolved in the first clause, and the ask is drafting.
+  - id: m26n1
+    triple: m26
+    band: m
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Half the team wants to buy the vendor product and half wants to build it
+      ourselves. Somebody keeps citing a figure about how many in-house builds
+      of this kind get abandoned within two years. Where does that number come
+      from, and is there anything behind it beyond one consultancy blog post
+      that everyone has been quoting at each other?
+    why: >-
+      Same opening sentence, and the ask is the provenance of a claim.
+  - id: m26n2
+    triple: m26
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Half the team wants to buy the vendor product and half wants to build it
+      ourselves. Buying is forty thousand a year on a three-year term. Building
+      is two engineers for two quarters at our loaded rate, plus whatever we
+      spend keeping it running afterwards. Can you work out where those two
+      cross, and what the five-year figure looks like on each of them?
+    why: >-
+      Same opening, and the ask is arithmetic on the two positions rather than
+      the case for either.
+  - id: m27n1
+    triple: m27
+    band: m
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      One adviser says clear the mortgage and sleep at night. The other says
+      the rate is fixed until 2031 and the money does more elsewhere. Their
+      two projections differ by about eleven thousand over the term and I
+      cannot see why, since they are working from the same statement and the same
+      outstanding balance. Where is that gap actually coming from?
+    why: >-
+      Same two advisers and the same opening, and the ask is the cause of a
+      discrepancy, which has a determinate answer.
+  - id: m27n2
+    triple: m27
+    band: m
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      We are clearing the mortgage rather than leaving the money where it is.
+      One adviser argued for it and the other argued the rate is fixed until
+      2031, and we have gone with the first. Can you tell me what the lender
+      will want from us in writing, and roughly how long the discharge itself
+      takes once we have asked for it?
+    why: >-
+      Both positions named and the choice made in the first sentence. What is
+      left is a procedural question.
+  - id: m28n1
+    triple: m28
+    band: m
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: >-
+      They want an answer on the transfer by the end of the month. Is there
+      anything in the usual employment terms about whether an internal transfer
+      resets a probation period, whether continuous service carries across when
+      the role sits in a different legal entity of the same group, and whether
+      any of that changes if the transfer is treated as a new appointment
+      rather than a move?
+    why: >-
+      Same opening sentence, and the ask has a determinate answer somebody could
+      go and find.
+  - id: m28n2
+    triple: m28
+    band: m
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      I am taking the transfer and telling them at the end of the month. I
+      still do not know whether it is a backfill or a new headcount, and at
+      this point it does not change anything. Can you help me write the note to
+      my current manager, who will find out from someone else if I leave it any
+      longer?
+    why: >-
+      The gap is named and explicitly no longer load-bearing, which is the
+      abort condition the procedure states rather than the case for it.
+  - id: m29n1
+    triple: m29
+    band: m
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      The genetics result is six to eight weeks out. There are three letters
+      from the clinic, a leaflet, a printout somebody gave my mother, and a long
+      email from my brother who has read a great deal more about this than I
+      have. Can you go through all of them and set out what each one actually
+      says, keeping the clinic's own wording wherever it matters?
+    why: >-
+      Same opening sentence, and the ask is comprehension of material that is
+      present rather than what to do about material that is not.
+  - id: m29n2
+    triple: m29
+    band: m
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      The genetics result is six to eight weeks out. Is that a normal turnaround
+      for this kind of panel, or is six to eight weeks simply what they say to
+      everyone regardless of what the laboratory is actually doing? I would like
+      to know whether there is any point at all in ringing them at the four-week
+      mark to ask where it has got to.
+    why: >-
+      The same absent fact, and the ask is a fact about the process rather than
+      whether to decide without it.
+  - id: m30n1
+    triple: m30
+    band: m
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      We have to commit to the architecture on Monday. The load test we ran at
+      the weekend fell over at about six hundred a second, and the traces show
+      almost all of the time going somewhere in the write path rather than in
+      the query we expected it to be. Can you help me work out what is actually
+      slow here?
+    why: >-
+      Same opening sentence, and the ask is a cause. A deadline in the first
+      line is deliberately not a decision cue.
+  - id: m30n2
+    triple: m30
+    band: m
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      We committed to the architecture on Monday and went with the sharded
+      design rather than waiting for a peak figure that never arrived from the
+      one person who could have produced it. Can you draft the one-page note for
+      the architecture review board? They want the decision, the alternative we
+      turned down, and why we did not wait, in that order and on one side.
+    why: >-
+      The hinge is named and closed, and the ask is to produce a document about
+      a decision already taken.

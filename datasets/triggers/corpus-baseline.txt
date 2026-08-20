@@ -246,10 +246,59 @@ datasets/triggers/decision-making/index.yaml|matched:ask:type_token_ratio
 # real option; it is not the assumed one.
 datasets/triggers/decision-making.yaml|unreachable:council,hinge
 
-# Same finding, the banded version-3 corpus. Both corpora are labelled from
-# the same router table, so both went stale on the same edit.
+# CLOSED, 2026-08-20, the banded corpus half of the entry above. Twenty-four
+# triples authored -- twelve routed to `council`, twelve to `hinge`, three of
+# each in every band -- and the key moved 4 -> 5. Closed on exactly the
+# condition the entry named, by authoring rather than by dropping the two rows
+# from the router table, and no threshold was moved to reach it. Routed
+# positives go from 65 over four procedures to 89 over six: ledger 19,
+# cascade 16, fit 15, timing 15, council 12, hinge 12.
 #
-# CLOSED BY: the same condition as the entry above -- positives authored for
-# `council` and `hinge` here too, the key version bumped, and the arms re-run
-# rather than re-scored; or the two rows dropped from the router table.
-datasets/triggers/decision-making/index.yaml|unreachable:council,hinge
+# The `decision-making.yaml` half above is NOT closed and stays. That corpus is
+# still version 2, still has no `council` or `hinge` positive, and the fix was
+# not applied to it. It is the superseded set; closing it would mean either
+# authoring the same triples again for a corpus nothing will run against, or
+# claiming a fix that was not made.
+
+# ADDED 2026-08-20, by the same 24-triple addition that closed
+# `unreachable:council,hinge` immediately above. Not a new leak and not a leak
+# the new items introduced: **the rate did not move, only `n` did.**
+#
+# Measured directly rather than argued. The positive is the highest- or
+# lowest-vocabulary-diversity member of its own triple, on the closing sentence,
+# in 79 of the 86 pre-existing triples (0.9186) and in 22 of the 24 new ones
+# (0.9167). Pooled, 101 of 110 (0.9182) against 0.9186 before. The dispersion
+# statistic is a proportion tested against a chance rate of 2/3, so its z scales
+# with sqrt(n) at a fixed rate: 24 more triples at the same rate is 2.9 null
+# standard errors becoming 3.23, and the gate is at 3.0.
+#
+# This exact finding is described in the 2026-08-14 close-out above, under
+# "STILL ON THE RECORD, NOT IN THIS FILE": corpus-wide, pre-dating that session,
+# sitting "one clause-shift below the gate rather than one above it". It is now
+# one clause-shift above, and the honest reason is arithmetic rather than
+# authoring.
+#
+# WHAT WAS TRIED AND WHY IT STOPPED. The same 24 triples were written twice.
+# The first pass left `matched:turn:type_token_ratio` firing at 3.61 -- a
+# genuine authoring defect, positives written as deliberation and negatives as
+# task requests, so the positives carried runs of function words the negatives
+# did not. Rewriting the twelve long-band positive asks at the negatives'
+# lexical density closed that key and took `matched:ask:type_token_ratio` from
+# 4.28 to 3.03 standard errors, which is an improvement to a defect that
+# pre-dates this work. Four further items were then retuned against *this*
+# key and it went the wrong way, 3.10 to 3.23, which is where the tuning
+# stopped. The 2026-08-14 entry names that mechanism -- "per-item retuning
+# against whichever feature is currently over the line" -- as the thing that
+# produced four generations of leak, and a fifth was not started.
+#
+# WHAT IT DOES AND DOES NOT MEAN. As with every entry above: an arm sees one
+# turn and never its triple-mates, so a rank held inside a triple is a defect in
+# the construction rather than a demonstrated exploit. Pooled AUC, which is the
+# exploitability measure, is 0.458.
+#
+# CLOSED BY: a length- and complexity-neutral rewrite of closing sentences
+# across the whole corpus, which is what the 2026-08-14 entry already said this
+# one would need and declined to start. Not by editing the 24 new triples: they
+# are 0.9167 against the corpus's own 0.9186 and moving them alone cannot reach
+# 0.667.
+datasets/triggers/decision-making/index.yaml|cancel:close:type_token_ratio

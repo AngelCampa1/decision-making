@@ -59,7 +59,12 @@ REGISTER_PATH: Final = "docs/DECISIONS.md"
 #: ``none`` -- the bump moved no label; an identity or metadata change.
 #: ``rebuilt`` -- the corpus was replaced and item ids do not carry across, so a
 #: per-item correction is not defined for this transition.
-KINDS: Final[frozenset[str]] = frozenset({"moved", "none", "rebuilt"})
+#: ``extended`` -- items were added and no existing label moved. Added 2026-08-20
+#: when version 5 authored 24 new triples: ``none`` would have been true about
+#: every existing label and silent about 72 items that were not there before,
+#: and a reader comparing a v4 number with a v5 one needs to know the
+#: denominator changed even though nothing was relabelled.
+KINDS: Final[frozenset[str]] = frozenset({"moved", "none", "rebuilt", "extended"})
 
 _HEADING: Final = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 _DATE: Final = re.compile(r"^\d{4}-\d{2}-\d{2}$")

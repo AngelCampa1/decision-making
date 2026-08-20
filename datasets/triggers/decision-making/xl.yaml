@@ -2621,6 +2621,562 @@ positive:
       of the pile that carries numbers, which is the ledger's job described by the
       person asking.
 
+  # --- council and hinge, added for version 5 -------------------------------
+  - id: xl18p
+    triple: xl18
+    band: xl
+    domain: money
+    stakes: high
+    ask: explicit
+    route: council
+    turn: >-
+      Pasting the whole lot because I have now read it four times and I come
+      out somewhere different each time depending on which document I finished
+      on. Board minute, 12 February, item 4 (succession) "The Chair noted that
+      the founder's shareholding (61%) will pass under the will into the
+      family trust, and that the trust deed requires the trustees to act in
+      the interests of all four beneficiaries rather than of the business. Two
+      routes were tabled. Route A: accept the indicative offer from Halloway
+      Group (trade buyer, indicative 14.2m, structure to be agreed, retention
+      of the Bridgend site not guaranteed). Route B: a management buyout led
+      by the operations director, funded by a mix of vendor loan notes and
+      asset finance, indicative 11.6m of which 4.1m would be deferred over
+      five years. The Chair asked for written positions before the March
+      meeting." Written position from Halloway's corporate finance adviser, 20
+      February "Our client's offer is cash at completion for 80% of the
+      consideration with the balance in a twelve-month retention against
+      warranty claims. This is a clean exit. The family's exposure to the
+      business ends at completion. We would expect to consolidate the Bridgend
+      operation into our existing Newport facility within eighteen months; we
+      are not in a position to give an undertaking on that, and we would
+      rather say so now than say something warm and be held to it later. On
+      valuation: 14.2m reflects the customer concentration, which is 41% with
+      two accounts, and we have not discounted it as heavily as we might. We
+      are aware there is a management proposal. We would say only that a five-
+      year deferred element in a business with this customer concentration is
+      a risk the family would be retaining, not disposing of." Written
+      position from the operations director, 24 February "I have run Bridgend
+      for eleven years. Ninety-one people work there and about sixty of them
+      live within four miles. Halloway have told you what they will do with
+      it, and to their credit they have not pretended otherwise. My proposal
+      pays less on paper. What it does is keep the thing your father built
+      doing what he built it to do, with the people he hired. The deferred
+      element is real risk and I am not going to talk it down: if we lose
+      either of the two large accounts in the first three years, the family
+      will not see all of it. I would ask you to weigh that against a
+      certainty that the site closes. I have shown my numbers to the same
+      accountant you use and he has not told me they are wrong." Note from our
+      accountant, 26 February "Both are competent proposals and I am not going
+      to tell you which to take, because the question is not an accounting
+      one. Points of fact only. (1) The difference in headline is 2.6m. On the
+      MBO, 4.1m is deferred and unsecured beyond a debenture that ranks behind
+      the asset finance. Risk-adjusted, my own rough figure for the MBO is
+      somewhere between 9.8m and 11.2m depending on what you assume about the
+      two large accounts. (2) The tax position is broadly similar under both.
+      (3) The trust deed does not say the trustees must maximise
+      consideration. It says they must act in the beneficiaries' interests,
+      and whether a beneficiary's interest includes the town is a question for
+      you, not for me." Email from my sister, 27 February "I have read all of
+      it. I keep coming back to the fact that Dad would not have sold to
+      Halloway. But I also know that 'Dad would not have' is exactly the kind
+      of argument that has kept worse businesses than this one going for ten
+      years past the point. I do not want to be the person who turns down 2.6m
+      of other people's inheritance on a feeling about our father. I also do
+      not want to be the person who signs the paper that closes Bridgend. I
+      have argued myself into both of those and out of both of those since
+      Tuesday." Email from my brother, 27 February "Take the money. I am not
+      being cold about it. The MBO asks the four of us to underwrite the
+      operations director's business plan for five years using our own
+      inheritance as the collateral, and none of us has any way of judging
+      that plan. If he is right, he does not need us to carry the risk; he can
+      raise it properly from someone whose job it is to price it. If he is
+      wrong, we find out in year four with no way back." Letter from the two
+      large customers' relationship manager, 1 March, forwarded by the
+      operations director without comment "Further to your enquiry: neither
+      contract contains a change of control provision requiring consent, but
+      both contain a twelve-month termination for convenience on notice.
+      Historically both accounts have been renewed on the strength of the site
+      relationship rather than on price, and I would not want to predict how
+      either would respond to a change of ownership. I am aware this is the
+      least helpful possible answer." Second note from our accountant, 3 March
+      "Since you asked. If the two accounts hold, the MBO's deferred element
+      is almost certainly paid and the gap closes to under a million. If
+      either goes in the first two years, the deferred element is largely gone
+      and the gap is nearer four million. I cannot put a probability on that
+      and neither can anyone else in this correspondence, including the people
+      who have implied one. The trade offer does not carry that exposure,
+      because the exposure transfers with the shares. That is the entire
+      financial difference and everything else is detail." Email from my
+      youngest sister, 5 March "I have not said anything because I do not
+      understand the numbers and I have been embarrassed about that. What I do
+      understand is that we are four people who have not agreed about anything
+      since the funeral, and that both of the two loudest arguments in this
+      thread are being made by people who are certain. I would like someone to
+      make each of them the way the other side would have to answer it, rather
+      than the way it has been made to me." My own note, 8 March Neither of
+      them is being unreasonable and neither of them has said anything the
+      other could not answer. The trustees meet on 11 March. Can you construct
+      each case properly, phrased as its own author would phrase it, then tell
+      me which survives? My youngest sister rightly notes everybody writing
+      here sounds certain, and I have caught myself endorsing whichever
+      document I happened to finish most recently, which decides nothing.
+    why: >-
+      Two routes, each argued at length by someone with a real case, over an
+      agreed set of facts, and the turn says outright that the last document
+      read is the one being believed. The ask is for both to be made properly.
+      Not ledger: the pile is not the problem, the pile is two positions.
+  - id: xl19p
+    triple: xl19
+    band: xl
+    domain: career
+    stakes: high
+    ask: implicit
+    route: council
+    turn: >-
+      Everything from the last three weeks, in order, because I have been
+      arguing both sides of this to myself since the first conversation. Offer
+      letter, 3 October "...the position of Regional Clinical Lead, based at
+      the Leeds site, effective 1 January. Salary band 8c. The post carries
+      responsibility for four services across three hospitals and reports to
+      the Divisional Director. The post is substantive and the current
+      postholder retires on 31 December. We would need a decision by 7
+      November to run the handover." Email from my current clinical director,
+      6 October "I would be sorry to lose you and I am going to be honest
+      rather than supportive. You are the best diagnostician in this
+      department and I have said that in writing twice. The lead role is not a
+      diagnostic role. It is four services, three sites, and about a day and a
+      half a week of clinical time if you fight for it, which most people do
+      not manage to keep. I have watched three people make this move. Two of
+      them are good at it and neither of them is doing the thing they were
+      exceptional at. One went back and it took her five years to be taken
+      seriously in a clinic again. I am not telling you not to go. I am
+      telling you that the thing you are good at is not what you will be
+      doing." Email from the Divisional Director, 9 October "I want to be
+      straight with you about why we approached you rather than advertising
+      first. The three services at the Bradford site have been in special
+      measures on waiting times for two years and the last two leads have come
+      from a management background and have not been able to move it. My view
+      is that the reason is credibility: the consultants there do not believe
+      a manager understands what they are being asked to do, and they are not
+      entirely wrong. You would be believed. That is not a small thing and it
+      is not something we can recruit for easily. Yes, the clinical time is
+      protected on paper at one and a half days and yes, in practice people
+      lose it. I would rather you took the job knowing that than found out in
+      March." Message from Ravi, who did the equivalent job in the North East,
+      14 October "Do it. Everything your clinical director says is true and it
+      is also the argument that keeps every good clinician doing the thing
+      they are already good at until they retire. Someone is going to run
+      those services. If it is not someone who has done the work, it is
+      someone who has not. You will be worse at diagnosis in five years. There
+      will also be four services that are not in special measures, and about
+      eleven thousand people a year going through them. I am not going to
+      pretend that trade is obviously right. I am saying it is a trade and not
+      a mistake." Message from Hannah, who went and came back, 16 October "I
+      would not do it again, and I want to be careful because my case is not
+      everyone's. Two things nobody told me. The first is that the clinical
+      time goes in the first six months and it goes because you are the person
+      who can fix something urgent, not because anyone takes it off you. The
+      second is that coming back is not a door, it is a ladder, and the people
+      on the rungs above you have been doing the thing you stopped doing. I
+      got back to where I was. It took a long time and I was angry for most of
+      it. That said: the services I ran are still better than I found them,
+      and I know that because I still know people there." My partner, 21
+      October "I will support either and I mean it. I would only say that you
+      have described the Bradford services to me at dinner about six times in
+      two years without ever once mentioning that you might be the person who
+      fixes them, and you have described your own clinic maybe twice."
+      Anonymous feedback from the Bradford consultant body, forwarded by the
+      Divisional Director on 18 October, unedited "Eight responses.
+      Paraphrasing the shape rather than quoting individuals. Six of the eight
+      say some version of: we have had two leads who did not understand the
+      work and we would give a clinician a hearing. Two say some version of:
+      the problem here is not who the lead is, the problem is that we are
+      three consultants short and no lead of any background can fix that, and
+      appointing someone credible will buy the organisation another eighteen
+      months of not fixing it. I include the second view because you should
+      have it. I do not agree with it but it is not a stupid position and the
+      two people holding it are not obstructive." Email from my clinical
+      director, 20 October, after the above was shared "I want to add one
+      thing and then I will stop. The eighteen-months argument is the one I
+      would take seriously if I were you, and it is not the argument I made to
+      you. Mine was about your career. Theirs is about whether the job can be
+      done at all, which is a different question and a better one. If they are
+      right, you would be spending five years of the thing you are best at on
+      a role that was structurally unable to deliver, and that is worse than
+      the trade Ravi is describing." Note from the retiring postholder, 22
+      October, who I asked directly "I did keep the clinical time. One day,
+      not one and a half, and I lost most of a year fighting for it. Whether
+      that is encouraging or discouraging is up to you. On the eighteen
+      months: it is true that appointing me bought the organisation time. It
+      is also true that we are two short now rather than four, and that took
+      six years and would not have happened without someone in this chair who
+      could tell the difference between a rota problem and an excuse." My own
+      note, 25 October Both of these are whole positions rather than opinions,
+      and each of them is held by someone who has actually seen it. Whichever
+      I read last is the one I believe. Decision due 7 November. Every person
+      here has watched somebody attempt this and none of them is speculating,
+      and yet I keep relaying each position onward to somebody else as though
+      I had reached that position myself.
+    why: >-
+      Four people who have each watched this happen, two whole positions, and
+      no question asked. The implicit form. Not fit: nobody has stated a
+      general rule to test against this person, they have stated opposite
+      accounts of what the job is.
+  - id: xl20p
+    triple: xl20
+    band: xl
+    domain: relationships
+    stakes: high
+    ask: embedded
+    route: council
+    turn: >-
+      Pasting all of it because my wife and I have now had the same argument
+      five times and I want to see it written down by someone other than the
+      two of us. From the school, 8 May "...following the assessment we are
+      recommending a specialist placement from September. The nearest setting
+      able to meet the profile is Ashcombe, which is forty minutes each way.
+      We would support an application. We should be clear that the local
+      authority is likely to contest the placement on cost grounds and that
+      appeals of this kind currently take between nine and fourteen months at
+      tribunal. The alternative we can offer is enhanced support in our own
+      resourced provision, which is on site, and which we would not describe
+      as an equivalent." From the educational psychologist, 15 May "The
+      profile is unusual. I would put it like this. In a setting like
+      Ashcombe, the environment is built around this and he will not have to
+      spend the day managing it. In a mainstream resourced provision, he will
+      spend a proportion of each day managing it and the size of that
+      proportion depends on things nobody can predict, chiefly staffing. What
+      I cannot tell you is whether the forty minutes each way, and being
+      outside the town where his brother and every child he knows goes to
+      school, costs more than that proportion. That is not a clinical question
+      and I would be overstepping if I answered it." From my wife, 19 May,
+      written after we had rowed "I want to put my side properly because I do
+      not think I have. He is eight. He has two friends. They are on this
+      street. If we send him to Ashcombe he gets a setting that suits him and
+      he loses the only social world he has, at the age where that is how you
+      learn to have one. Every professional we have spoken to has told us
+      about his needs and not one of them has said anything about his life.
+      The tribunal is nine to fourteen months of us fighting the council, and
+      I have watched what that did to the Kellys. I am not saying the
+      provision here is as good. I am saying it is here." From me, 20 May,
+      same evening "Mine, so it is on the same page. Two years ago the school
+      told us they could meet his needs and they could not, and we lost two
+      years finding that out. 'It is here' is the same argument that lost us
+      those years, and I do not think we get to make it twice. He does not
+      have two friends because of the school; he has them because of this
+      street, and this street does not go anywhere. The forty minutes is real
+      and I would drive it. The nine to fourteen months is real and I would do
+      it. What I would not do is watch another year of him coming home having
+      spent the whole day holding himself together, so that he can be near
+      children he sees at the weekend anyway." From his older brother, 22 May,
+      unprompted "He asked me last week whether he was going to have to go to
+      the school where he does not know anyone. I did not know what to say so
+      I said nobody had decided. I do not think you should tell him it is
+      decided until it is." From my mother, 24 May "Whichever you choose I
+      will drive him. I would say only that both of you are describing a child
+      you love and neither of you is describing the same problem." From the
+      parents' group, 25 May, three replies to my question, pasted whole "We
+      did Ashcombe from year 4. The travel was the thing I was most worried
+      about and it was the thing that mattered least. He slept in the car.
+      What mattered was that he stopped coming home wrung out. I would say the
+      friendships did change and I would not pretend otherwise: he has friends
+      now who live twenty minutes away and we drive a lot at weekends." "We
+      stayed in mainstream with enhanced support and I would do it again, but
+      our provision has had the same two staff for six years and I know that
+      is luck. If they had left I think my answer would be different and I do
+      not have a way to tell you whether yours will." "We went to tribunal,
+      won, and I would tell anyone thinking about it that the year is worse
+      than people say. Not the paperwork. The way it makes you talk about your
+      own child for twelve months, in the worst possible terms, over and over,
+      because that is what the process rewards. He was fine. I was not fine
+      for a while afterwards." From the local authority caseworker, 26 May, in
+      response to our enquiry "I can confirm only that the authority's
+      position on out-of-area placements where a resourced provision is
+      available locally is that the local provision should be tried first. I
+      am not able to tell you in advance whether the authority would contest a
+      specific application, and I would be careful about reading my previous
+      sentence as an answer to that question, although I understand why you
+      would." From my wife, 27 May, later "One more thing and then I will
+      leave it. You keep saying we do not get to make the 'it is here'
+      argument twice. But the reason it failed last time was that the school
+      promised something it could not do. This time they have told us in
+      writing that their provision is not equivalent. That is not the same
+      argument in the same position, and I think you are treating it as though
+      it were, because it is easier to answer that way." Note to self, 29 May
+      We have to lodge or not lodge by 30 June. She is not wrong. I am not
+      wrong. We have each said the other's argument back correctly, which is
+      how I know neither of us has actually heard it. Whose case is stronger,
+      argued out properly on both sides? Neither of us has raised anything the
+      other cannot answer, and my mother is right that we are not describing
+      the same problem, so I would like each case put whole rather than a
+      middle found between the two of them.
+    why: >-
+      Two parents, each position stated whole and each answered by the other,
+      with the question mid-turn and the reason it is not a middle-ground
+      problem after it.
+  - id: xl21p
+    triple: xl21
+    band: xl
+    domain: health
+    stakes: high
+    ask: explicit
+    route: hinge
+    turn: >-
+      Everything from the transplant team and the employer, in date order,
+      because the two of them are running on different clocks and I need to
+      see it laid out. Clinic letter, 6 January "Following the
+      multidisciplinary meeting, we are proceeding on the basis of listing for
+      transplant. The workup is complete other than the tissue typing on the
+      two potential related donors, which has been sent to the reference
+      laboratory. We would expect a result within eight to ten weeks. If
+      either proves a suitable match, the pathway is a planned living-donor
+      procedure, which we would ordinarily schedule within four to five months
+      of confirmation. If neither is suitable, the pathway is the deceased-
+      donor list, and the median wait for a patient with these antibody levels
+      is currently just over three years." Email from the transplant
+      coordinator, 9 January "To answer your question directly: no, we cannot
+      expedite the typing. The reference laboratory is the only one that does
+      this panel and eight to ten weeks is their current turnaround, not a
+      target we can push. I know that is not what you wanted to hear. I would
+      also say, because people often ask this at this point, that there is
+      genuinely no way to form a view in advance. Sibling matching is a coin
+      toss with better odds and worse consequences, and anyone who tells you
+      they can guess from the family history is guessing." Note of phone call
+      with my brother, 11 January He has done the test and he does not want to
+      be told the result before I am. He said he would rather not spend two
+      months either feeling responsible or feeling useless. He also said, and
+      I am writing this down because I want to remember he said it, that if he
+      is not a match he does not want that to become a thing in the family.
+      Email from HR, 14 January "Further to our meeting. The extended medical
+      leave scheme is available to you and I would encourage you to take it if
+      you need it. I should set out the mechanics honestly. The scheme runs
+      for up to twelve months at full pay, starting from the date you commence
+      it, and it can be taken once in any five-year period. It is not possible
+      to start it, pause it, and resume. If you commence in February and the
+      procedure happens in September, you would have five months of the
+      entitlement remaining for the recovery period. If you commence at the
+      point the procedure is scheduled, you would have the full twelve months
+      from that date. The reason I am setting it out at this length is that
+      several people have started the scheme early, in good faith, and been
+      left short at the end, and I would rather you had the arithmetic in
+      front of you." Email from my manager, 15 January "Whatever you decide. I
+      would only say that the reason I raised it in the first place is that
+      you have been coming in and you have not been well, and I am not going
+      to pretend I have not noticed. The team can cover. What the team cannot
+      do is cover twice, six months apart, and I would rather you took the
+      leave once at the right moment than twice at the wrong ones." My own
+      note, 18 January The whole thing turns on the typing result and nothing
+      else. If my brother is a match, the right move is obviously to keep
+      working now and take the leave in the summer when the procedure is
+      scheduled, because I would want the full twelve months on the other side
+      of it. If neither of them is a match, then I am looking at three years
+      on the list, the leave is not for a procedure at all, it is for being
+      ill, and the right move is to start it now while I can still choose
+      when. Those are opposite answers and there is nothing in between them.
+      Second note, same evening I have tried to work out whether I can just
+      start the leave and take the risk. The answer is that I can, and that if
+      my brother is a match I will have spent five of the twelve months on a
+      period where I was, by my own account, well enough to work. I have also
+      tried to work out whether I can wait. The answer is that eight to ten
+      weeks from 6 January is somewhere between the end of February and the
+      middle of March, and that I am not certain I can do the job properly
+      between now and then, which is a separate problem that starting the
+      leave would solve. Message from my wife, 20 January "You have said 'once
+      we know' four times this week. I am not saying that is wrong. I am
+      saying I think you should notice you are saying it, because there was a
+      version of this in November where the thing we were waiting for was the
+      biopsy, and when it came back it did not change anything we did." Note,
+      22 January HR need to know whether I am commencing in February by the
+      31st, because of the payroll cycle. After that the next commencement
+      date is 1 March. Do I commence leave in February lacking the typing
+      result, or hold for it and accept 1 March?
+    why: >-
+      One named absent fact, two opposite answers spelled out under its two
+      values, a stated price for waiting and a date. The ask is exactly the
+      choice between deciding now and waiting. The wife's message is the abort
+      condition being raised and not settled, which is inside the procedure
+      rather than outside it.
+  - id: xl22p
+    triple: xl22
+    band: xl
+    domain: technical
+    stakes: high
+    ask: embedded
+    route: hinge
+    turn: >-
+      Pasting the whole thread plus the two documents, because the decision is
+      due and I want to be honest with myself about what we actually know.
+      Architecture proposal, 4 September, section 3 (data residency) "Both
+      candidate designs move the primary store out of the on-premise estate.
+      Design A places the primary in the vendor's Frankfurt region with an
+      asynchronous replica in Dublin. Design B places the primary in Frankfurt
+      with no replica and a nightly export to on-premise cold storage. Design
+      A is materially simpler to operate, gives us a recovery point objective
+      of under a minute against Design B's twenty-four hours, and is the
+      design the team would choose on every axis other than regulatory. The
+      open question is whether the supervisory authority regards the Dublin
+      replica as a transfer requiring a separate notification under the
+      sectoral rules, or as within the existing authorisation." Email from
+      external counsel, 11 September "We have looked at this and we are not
+      going to give you a clean answer, because there is not one to give. The
+      2024 guidance is drafted around a primary and a backup in the same
+      member state and does not contemplate this pattern. We have seen the
+      authority take both readings in adjacent sectors within the last
+      eighteen months. Our best assessment is that they would more likely than
+      not treat the replica as within the existing authorisation, and we would
+      put that at something like seventy per cent, which is a number we are
+      giving you reluctantly and which you should not treat as a calculation.
+      If you want an answer rather than an assessment, the mechanism is a
+      written enquiry to the authority. Their published service standard for a
+      written enquiry of this kind is eight weeks and our experience is that
+      eight weeks is optimistic." Email from the Chief Risk Officer, 12
+      September "I want to be clear about what I am and am not saying. I am
+      not saying we cannot proceed on counsel's assessment; boards accept
+      assessments every day. I am saying that if we build Design A and the
+      authority later takes the other reading, the remediation is not a
+      configuration change. It is a migration of the primary store performed
+      under a deadline set by a regulator, in a system that will by then be
+      carrying live volume, and I have been through one of those and would
+      like not to go through another. Conversely, if we build Design B and the
+      authority would have accepted Design A, we have bought a twenty-four
+      hour recovery point objective for four years for nothing, and I do not
+      want to pretend that is costless either. It is not obviously the safe
+      choice. It is a different risk." Email from the platform lead, 15
+      September "The build itself does not care which we pick, and the cost
+      difference over the programme is around three hundred thousand, which is
+      inside the contingency. What the build does care about is when we pick.
+      The storage layer is the first thing we lay down and everything else is
+      written against it. If we choose in the next fortnight, the difference
+      is a design decision. If we choose in January, it is a rewrite of about
+      four months of work, because by then the services above it will have
+      been built against whichever assumption we made in order to keep
+      moving." Email from the programme director, 18 September "For the
+      avoidance of doubt on dates. The programme board approved funding on the
+      basis of a go-live in October next year. That date is in the customer
+      communications that went out in August. The eight-week enquiry, if we
+      start it today, returns an answer in the middle of November at the
+      earliest and counsel has told us to expect later. There is no version of
+      this where we wait for the authority and also keep the storage decision
+      open, because the platform lead's fortnight is a real fortnight." Email
+      from counsel, 22 September, in response to my direct question "You asked
+      whether we can make the enquiry without signalling which design we
+      intend, and whether an enquiry itself carries risk. Briefly: an enquiry
+      is not without consequence. It puts the pattern in front of the
+      authority in writing. Our assessment of seventy per cent is an
+      assessment of how they would respond if the question arose. It is not an
+      assessment of how they would respond to being asked in the abstract by a
+      firm that is plainly about to do it, and those are not the same
+      question. We would not describe the enquiry as high risk. We would
+      describe it as not free." Email from the platform lead, 23 September
+      "One correction to what I said last week, because I have gone and
+      looked. The fortnight is a fortnight for the storage layer itself. There
+      is about six weeks of work above it that does not depend on the choice
+      at all, so if we are prepared to reorder the plan we can buy perhaps
+      five weeks before the decision becomes expensive rather than two. That
+      still does not reach the middle of November and it costs us the buffer
+      we were holding for the integration work, which is the buffer I would
+      least like to spend. I am telling you because it changes the shape of
+      the question and not because I am recommending it." My own note, 24
+      September So the position is: one fact decides between two designs that
+      share almost nothing, the fact is obtainable, obtaining it takes at
+      least eight weeks against a fortnight of slack that might be five, and
+      asking is not free. The storage decision goes to the design authority on
+      8 October. Is making the enquiry and holding storage worth it, or do we
+      choose on counsel's assessment and disclose that we did? Eight weeks
+      exceeds five however anybody reorders the plan.
+    why: >-
+      The gap is named, both branches are costed, the price of asking is
+      stated in weeks and in signalling, and the question sits before the
+      sentence that prices it. Not timing: the two designs differ in content,
+      not in when they start.
+  - id: xl23p
+    triple: xl23
+    band: xl
+    domain: money
+    stakes: high
+    ask: implicit
+    route: hinge
+    turn: >-
+      Everything from the funder and the landlord, pasted, because they are
+      asking for answers in the wrong order and I need to see it side by side.
+      Grant decision letter, 2 June "Your application has been shortlisted.
+      Shortlisted applications proceed to a panel which meets quarterly; the
+      next panel is 14 September. Approximately one in three shortlisted
+      applications is funded. We are not able to indicate the likelihood in an
+      individual case and panel members are not identified. Please note
+      condition 7 of the scheme: the award may not be applied retrospectively
+      to expenditure committed before the panel date, and any application
+      withdrawn before the panel cannot be resubmitted in the same funding
+      round." Email from the scheme administrator, 9 June "In answer to your
+      query, no, there is no mechanism for an early or provisional indication,
+      and I would be careful of anyone who offers you one informally. On your
+      second question: 'committed' in condition 7 means a binding obligation.
+      Signing a lease is a commitment. A conditional agreement that can be
+      walked away from without cost is generally not, but I am not able to
+      advise you on whether a specific document falls one side or the other,
+      and the panel takes a strict view." Email from the landlord's agent, 12
+      June "The unit has had two other enquiries this month. My client is
+      prepared to hold it for you until 15 July on the basis of the heads of
+      terms as drafted, and is not prepared to hold it past that. A
+      conditional lease is not something my client will entertain; he has been
+      through that before and the deal fell over after four months.
+      Realistically, if you are not signing by the middle of July you should
+      assume it will go." Note of conversation with our accountant, 18 June
+      Two scenarios. With the grant, the fit-out is funded, we open in
+      November, and the business plan is the one we wrote. Without the grant,
+      we can still take the unit, but the fit-out has to come from the working
+      capital facility, which takes our covenant headroom to almost nothing
+      for the first two trading quarters, in a business that has never traded.
+      She was careful to say she is not telling us it cannot be done, and
+      equally careful to say she would not do it herself. Message from my
+      business partner, 21 June "I have been going round this all week. Here
+      is where I have got to. If we knew the grant was coming, we sign in July
+      and this is easy. If we knew it was not, we would either walk away from
+      this unit and look again in the autumn, or take it on the facility with
+      our eyes open, and I could argue either. What I cannot do is work out
+      what to do while not knowing, because the two answers are not near each
+      other and there is no cautious middle that is better than both." Second
+      message, same day "The other thing. I keep noticing that I want to wait,
+      and I keep noticing that wanting to wait would feel exactly the same to
+      me if the honest answer was that I am frightened of signing a lease. I
+      do not think that is what is happening. I also do not think I would be
+      able to tell." Email from the scheme administrator, 28 June, in response
+      to a further query "To confirm: if you sign an unconditional lease
+      before 14 September, the lease costs themselves are not eligible
+      expenditure, but the fit-out remains eligible provided it is not
+      committed before the panel date. This does not change the position on
+      withdrawal. I should add that we have had applicants sign leases before
+      panel and be funded, and applicants do the same and not be funded, and
+      the scheme cannot take the former into account as a reason to fund."
+      Note of conversation with a former shortlisted applicant, 29 June,
+      introduced to us by the accountant She was shortlisted twice. Funded the
+      second time, not the first. She said the only thing she would pass on is
+      that both times she spent the summer trying to read the tea leaves and
+      both times the reading was worthless, and that the useful question was
+      never "will it come" but "what do I do on the fifteenth of September if
+      it does not". She also said, unprompted, that the year she was not
+      funded she had already signed a lease, and that she does not regret it,
+      and that she would not tell anyone else to do it. Email from the
+      landlord's agent, 30 June "To be helpful rather than otherwise: my
+      client would accept a longer rent-free period in place of a lower rent,
+      if that assists the cash position in the first two quarters. He will not
+      accept a condition. I mention it because it changes the shape of the
+      without-grant case somewhat and I do not think you had it in front of
+      you." Message from my business partner, 1 July "The rent-free changes
+      the arithmetic and does not change the question, which is annoying. It
+      makes the without-grant case survivable rather than reckless. It does
+      not tell us whether we are in the with-grant world or the without-grant
+      one, and that is still the only thing I actually want to know." Note to
+      self, 2 July So: one fact decides it, the fact arrives on 14 September,
+      the unit goes on 15 July, and nobody can tell me anything in between.
+      Two months of gap and eight weeks on the wrong side of it. Everything
+      hangs on 14 September, the unit disappears 15 July, and my partner
+      rightly says neither of us distinguishes wanting more time from dreading
+      a signature.
+    why: >-
+      One fact, a date it arrives, an earlier date that forces the decision,
+      and an explicit statement that the person cannot tell wanting-to-wait
+      from being-afraid. No question is asked, which is the implicit form.
 negative:
   - id: xl01n1
     triple: xl01
@@ -7816,3 +8372,1103 @@ negative:
       an earlier assistant reply, because there is none, and the ask closes on "not
       asking whether she is right", which holds her conclusion, "the answer is
       obviously yes", outside what is wanted.
+  # --- council and hinge, added for version 5 -------------------------------
+  - id: xl18n1
+    triple: xl18
+    band: xl
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Pasting the whole lot because I have now read it four times and I come
+      out somewhere different each time depending on which document I finished
+      on. Board minute, 12 February, item 4 (succession) "The Chair noted that
+      the founder's shareholding (61%) will pass under the will into the
+      family trust, and that the trust deed requires the trustees to act in
+      the interests of all four beneficiaries rather than of the business. Two
+      routes were tabled. Route A: accept the indicative offer from Halloway
+      Group (trade buyer, indicative 14.2m, structure to be agreed, retention
+      of the Bridgend site not guaranteed). Route B: a management buyout led
+      by the operations director, funded by a mix of vendor loan notes and
+      asset finance, indicative 11.6m of which 4.1m would be deferred over
+      five years. The Chair asked for written positions before the March
+      meeting." Written position from Halloway's corporate finance adviser, 20
+      February "Our client's offer is cash at completion for 80% of the
+      consideration with the balance in a twelve-month retention against
+      warranty claims. This is a clean exit. The family's exposure to the
+      business ends at completion. We would expect to consolidate the Bridgend
+      operation into our existing Newport facility within eighteen months; we
+      are not in a position to give an undertaking on that, and we would
+      rather say so now than say something warm and be held to it later. On
+      valuation: 14.2m reflects the customer concentration, which is 41% with
+      two accounts, and we have not discounted it as heavily as we might. We
+      are aware there is a management proposal. We would say only that a five-
+      year deferred element in a business with this customer concentration is
+      a risk the family would be retaining, not disposing of." Written
+      position from the operations director, 24 February "I have run Bridgend
+      for eleven years. Ninety-one people work there and about sixty of them
+      live within four miles. Halloway have told you what they will do with
+      it, and to their credit they have not pretended otherwise. My proposal
+      pays less on paper. What it does is keep the thing your father built
+      doing what he built it to do, with the people he hired. The deferred
+      element is real risk and I am not going to talk it down: if we lose
+      either of the two large accounts in the first three years, the family
+      will not see all of it. I would ask you to weigh that against a
+      certainty that the site closes. I have shown my numbers to the same
+      accountant you use and he has not told me they are wrong." Note from our
+      accountant, 26 February "Both are competent proposals and I am not going
+      to tell you which to take, because the question is not an accounting
+      one. Points of fact only. (1) The difference in headline is 2.6m. On the
+      MBO, 4.1m is deferred and unsecured beyond a debenture that ranks behind
+      the asset finance. Risk-adjusted, my own rough figure for the MBO is
+      somewhere between 9.8m and 11.2m depending on what you assume about the
+      two large accounts. (2) The tax position is broadly similar under both.
+      (3) The trust deed does not say the trustees must maximise
+      consideration. It says they must act in the beneficiaries' interests,
+      and whether a beneficiary's interest includes the town is a question for
+      you, not for me." Email from my sister, 27 February "I have read all of
+      it. I keep coming back to the fact that Dad would not have sold to
+      Halloway. But I also know that 'Dad would not have' is exactly the kind
+      of argument that has kept worse businesses than this one going for ten
+      years past the point. I do not want to be the person who turns down 2.6m
+      of other people's inheritance on a feeling about our father. I also do
+      not want to be the person who signs the paper that closes Bridgend. I
+      have argued myself into both of those and out of both of those since
+      Tuesday." Email from my brother, 27 February "Take the money. I am not
+      being cold about it. The MBO asks the four of us to underwrite the
+      operations director's business plan for five years using our own
+      inheritance as the collateral, and none of us has any way of judging
+      that plan. If he is right, he does not need us to carry the risk; he can
+      raise it properly from someone whose job it is to price it. If he is
+      wrong, we find out in year four with no way back." Letter from the two
+      large customers' relationship manager, 1 March, forwarded by the
+      operations director without comment "Further to your enquiry: neither
+      contract contains a change of control provision requiring consent, but
+      both contain a twelve-month termination for convenience on notice.
+      Historically both accounts have been renewed on the strength of the site
+      relationship rather than on price, and I would not want to predict how
+      either would respond to a change of ownership. I am aware this is the
+      least helpful possible answer." Second note from our accountant, 3 March
+      "Since you asked. If the two accounts hold, the MBO's deferred element
+      is almost certainly paid and the gap closes to under a million. If
+      either goes in the first two years, the deferred element is largely gone
+      and the gap is nearer four million. I cannot put a probability on that
+      and neither can anyone else in this correspondence, including the people
+      who have implied one. The trade offer does not carry that exposure,
+      because the exposure transfers with the shares. That is the entire
+      financial difference and everything else is detail." Email from my
+      youngest sister, 5 March "I have not said anything because I do not
+      understand the numbers and I have been embarrassed about that. What I do
+      understand is that we are four people who have not agreed about anything
+      since the funeral, and that both of the two loudest arguments in this
+      thread are being made by people who are certain. I would like someone to
+      make each of them the way the other side would have to answer it, rather
+      than the way it has been made to me." My own note, 8 March Neither of
+      them is being unreasonable and neither of them has said anything the
+      other could not answer. The trustees meet on 11 March. Can you work out
+      what each route pays each of the four of us, after the trust takes its
+      share, under the accountant's two scenarios for the large accounts? Use
+      his own risk-adjusted range for the buyout rather than the headline, and
+      set out what you have assumed at each step.
+    why: >-
+      The same body, and the ask is arithmetic over the two routes.
+  - id: xl18n2
+    triple: xl18
+    band: xl
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Pasting the whole lot because I have now read it four times and I come
+      out somewhere different each time depending on which document I finished
+      on. Board minute, 12 February, item 4 (succession) "The Chair noted that
+      the founder's shareholding (61%) will pass under the will into the
+      family trust, and that the trust deed requires the trustees to act in
+      the interests of all four beneficiaries rather than of the business. Two
+      routes were tabled. Route A: accept the indicative offer from Halloway
+      Group (trade buyer, indicative 14.2m, structure to be agreed, retention
+      of the Bridgend site not guaranteed). Route B: a management buyout led
+      by the operations director, funded by a mix of vendor loan notes and
+      asset finance, indicative 11.6m of which 4.1m would be deferred over
+      five years. The Chair asked for written positions before the March
+      meeting." Written position from Halloway's corporate finance adviser, 20
+      February "Our client's offer is cash at completion for 80% of the
+      consideration with the balance in a twelve-month retention against
+      warranty claims. This is a clean exit. The family's exposure to the
+      business ends at completion. We would expect to consolidate the Bridgend
+      operation into our existing Newport facility within eighteen months; we
+      are not in a position to give an undertaking on that, and we would
+      rather say so now than say something warm and be held to it later. On
+      valuation: 14.2m reflects the customer concentration, which is 41% with
+      two accounts, and we have not discounted it as heavily as we might. We
+      are aware there is a management proposal. We would say only that a five-
+      year deferred element in a business with this customer concentration is
+      a risk the family would be retaining, not disposing of." Written
+      position from the operations director, 24 February "I have run Bridgend
+      for eleven years. Ninety-one people work there and about sixty of them
+      live within four miles. Halloway have told you what they will do with
+      it, and to their credit they have not pretended otherwise. My proposal
+      pays less on paper. What it does is keep the thing your father built
+      doing what he built it to do, with the people he hired. The deferred
+      element is real risk and I am not going to talk it down: if we lose
+      either of the two large accounts in the first three years, the family
+      will not see all of it. I would ask you to weigh that against a
+      certainty that the site closes. I have shown my numbers to the same
+      accountant you use and he has not told me they are wrong." Note from our
+      accountant, 26 February "Both are competent proposals and I am not going
+      to tell you which to take, because the question is not an accounting
+      one. Points of fact only. (1) The difference in headline is 2.6m. On the
+      MBO, 4.1m is deferred and unsecured beyond a debenture that ranks behind
+      the asset finance. Risk-adjusted, my own rough figure for the MBO is
+      somewhere between 9.8m and 11.2m depending on what you assume about the
+      two large accounts. (2) The tax position is broadly similar under both.
+      (3) The trust deed does not say the trustees must maximise
+      consideration. It says they must act in the beneficiaries' interests,
+      and whether a beneficiary's interest includes the town is a question for
+      you, not for me." Email from my sister, 27 February "I have read all of
+      it. I keep coming back to the fact that Dad would not have sold to
+      Halloway. But I also know that 'Dad would not have' is exactly the kind
+      of argument that has kept worse businesses than this one going for ten
+      years past the point. I do not want to be the person who turns down 2.6m
+      of other people's inheritance on a feeling about our father. I also do
+      not want to be the person who signs the paper that closes Bridgend. I
+      have argued myself into both of those and out of both of those since
+      Tuesday." Email from my brother, 27 February "Take the money. I am not
+      being cold about it. The MBO asks the four of us to underwrite the
+      operations director's business plan for five years using our own
+      inheritance as the collateral, and none of us has any way of judging
+      that plan. If he is right, he does not need us to carry the risk; he can
+      raise it properly from someone whose job it is to price it. If he is
+      wrong, we find out in year four with no way back." Letter from the two
+      large customers' relationship manager, 1 March, forwarded by the
+      operations director without comment "Further to your enquiry: neither
+      contract contains a change of control provision requiring consent, but
+      both contain a twelve-month termination for convenience on notice.
+      Historically both accounts have been renewed on the strength of the site
+      relationship rather than on price, and I would not want to predict how
+      either would respond to a change of ownership. I am aware this is the
+      least helpful possible answer." Second note from our accountant, 3 March
+      "Since you asked. If the two accounts hold, the MBO's deferred element
+      is almost certainly paid and the gap closes to under a million. If
+      either goes in the first two years, the deferred element is largely gone
+      and the gap is nearer four million. I cannot put a probability on that
+      and neither can anyone else in this correspondence, including the people
+      who have implied one. The trade offer does not carry that exposure,
+      because the exposure transfers with the shares. That is the entire
+      financial difference and everything else is detail." Email from my
+      youngest sister, 5 March "I have not said anything because I do not
+      understand the numbers and I have been embarrassed about that. What I do
+      understand is that we are four people who have not agreed about anything
+      since the funeral, and that both of the two loudest arguments in this
+      thread are being made by people who are certain. I would like someone to
+      make each of them the way the other side would have to answer it, rather
+      than the way it has been made to me." My own note, 8 March Neither of
+      them is being unreasonable and neither of them has said anything the
+      other could not answer. The trustees meet on 11 March. Before the
+      trustees meet, can you set out who has said what and when they said it,
+      in one page, with nothing added from you? My youngest sister has not
+      read the whole thread and I would like the four of us going into the
+      eleventh with the same account of what has actually been put to us.
+    why: >-
+      The same body, and the ask is for the material to be laid out with the
+      model's own view explicitly excluded. The nearest miss to council in
+      this band, and it is close on purpose.
+  - id: xl19n1
+    triple: xl19
+    band: xl
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Everything from the last three weeks, in order, because I have been
+      arguing both sides of this to myself since the first conversation. Offer
+      letter, 3 October "...the position of Regional Clinical Lead, based at
+      the Leeds site, effective 1 January. Salary band 8c. The post carries
+      responsibility for four services across three hospitals and reports to
+      the Divisional Director. The post is substantive and the current
+      postholder retires on 31 December. We would need a decision by 7
+      November to run the handover." Email from my current clinical director,
+      6 October "I would be sorry to lose you and I am going to be honest
+      rather than supportive. You are the best diagnostician in this
+      department and I have said that in writing twice. The lead role is not a
+      diagnostic role. It is four services, three sites, and about a day and a
+      half a week of clinical time if you fight for it, which most people do
+      not manage to keep. I have watched three people make this move. Two of
+      them are good at it and neither of them is doing the thing they were
+      exceptional at. One went back and it took her five years to be taken
+      seriously in a clinic again. I am not telling you not to go. I am
+      telling you that the thing you are good at is not what you will be
+      doing." Email from the Divisional Director, 9 October "I want to be
+      straight with you about why we approached you rather than advertising
+      first. The three services at the Bradford site have been in special
+      measures on waiting times for two years and the last two leads have come
+      from a management background and have not been able to move it. My view
+      is that the reason is credibility: the consultants there do not believe
+      a manager understands what they are being asked to do, and they are not
+      entirely wrong. You would be believed. That is not a small thing and it
+      is not something we can recruit for easily. Yes, the clinical time is
+      protected on paper at one and a half days and yes, in practice people
+      lose it. I would rather you took the job knowing that than found out in
+      March." Message from Ravi, who did the equivalent job in the North East,
+      14 October "Do it. Everything your clinical director says is true and it
+      is also the argument that keeps every good clinician doing the thing
+      they are already good at until they retire. Someone is going to run
+      those services. If it is not someone who has done the work, it is
+      someone who has not. You will be worse at diagnosis in five years. There
+      will also be four services that are not in special measures, and about
+      eleven thousand people a year going through them. I am not going to
+      pretend that trade is obviously right. I am saying it is a trade and not
+      a mistake." Message from Hannah, who went and came back, 16 October "I
+      would not do it again, and I want to be careful because my case is not
+      everyone's. Two things nobody told me. The first is that the clinical
+      time goes in the first six months and it goes because you are the person
+      who can fix something urgent, not because anyone takes it off you. The
+      second is that coming back is not a door, it is a ladder, and the people
+      on the rungs above you have been doing the thing you stopped doing. I
+      got back to where I was. It took a long time and I was angry for most of
+      it. That said: the services I ran are still better than I found them,
+      and I know that because I still know people there." My partner, 21
+      October "I will support either and I mean it. I would only say that you
+      have described the Bradford services to me at dinner about six times in
+      two years without ever once mentioning that you might be the person who
+      fixes them, and you have described your own clinic maybe twice."
+      Anonymous feedback from the Bradford consultant body, forwarded by the
+      Divisional Director on 18 October, unedited "Eight responses.
+      Paraphrasing the shape rather than quoting individuals. Six of the eight
+      say some version of: we have had two leads who did not understand the
+      work and we would give a clinician a hearing. Two say some version of:
+      the problem here is not who the lead is, the problem is that we are
+      three consultants short and no lead of any background can fix that, and
+      appointing someone credible will buy the organisation another eighteen
+      months of not fixing it. I include the second view because you should
+      have it. I do not agree with it but it is not a stupid position and the
+      two people holding it are not obstructive." Email from my clinical
+      director, 20 October, after the above was shared "I want to add one
+      thing and then I will stop. The eighteen-months argument is the one I
+      would take seriously if I were you, and it is not the argument I made to
+      you. Mine was about your career. Theirs is about whether the job can be
+      done at all, which is a different question and a better one. If they are
+      right, you would be spending five years of the thing you are best at on
+      a role that was structurally unable to deliver, and that is worse than
+      the trade Ravi is describing." Note from the retiring postholder, 22
+      October, who I asked directly "I did keep the clinical time. One day,
+      not one and a half, and I lost most of a year fighting for it. Whether
+      that is encouraging or discouraging is up to you. On the eighteen
+      months: it is true that appointing me bought the organisation time. It
+      is also true that we are two short now rather than four, and that took
+      six years and would not have happened without someone in this chair who
+      could tell the difference between a rota problem and an excuse." My own
+      note, 25 October Both of these are whole positions rather than opinions,
+      and each of them is held by someone who has actually seen it. Whichever
+      I read last is the one I believe. Decision due 7 November. Is there
+      anything published on what actually happens to clinicians who move into
+      a service lead role and then return to full-time clinical work? Hannah
+      and my clinical director both stated it as a fact about the ladder, and
+      I would like to know whether it is one or whether it is two people
+      generalising from themselves.
+    why: >-
+      The same body, and the ask is whether a claim made inside it is
+      supported by anything published.
+  - id: xl19n2
+    triple: xl19
+    band: xl
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      Everything from the last three weeks, in order, because I have been
+      arguing both sides of this to myself since the first conversation. Offer
+      letter, 3 October "...the position of Regional Clinical Lead, based at
+      the Leeds site, effective 1 January. Salary band 8c. The post carries
+      responsibility for four services across three hospitals and reports to
+      the Divisional Director. The post is substantive and the current
+      postholder retires on 31 December. We would need a decision by 7
+      November to run the handover." Email from my current clinical director,
+      6 October "I would be sorry to lose you and I am going to be honest
+      rather than supportive. You are the best diagnostician in this
+      department and I have said that in writing twice. The lead role is not a
+      diagnostic role. It is four services, three sites, and about a day and a
+      half a week of clinical time if you fight for it, which most people do
+      not manage to keep. I have watched three people make this move. Two of
+      them are good at it and neither of them is doing the thing they were
+      exceptional at. One went back and it took her five years to be taken
+      seriously in a clinic again. I am not telling you not to go. I am
+      telling you that the thing you are good at is not what you will be
+      doing." Email from the Divisional Director, 9 October "I want to be
+      straight with you about why we approached you rather than advertising
+      first. The three services at the Bradford site have been in special
+      measures on waiting times for two years and the last two leads have come
+      from a management background and have not been able to move it. My view
+      is that the reason is credibility: the consultants there do not believe
+      a manager understands what they are being asked to do, and they are not
+      entirely wrong. You would be believed. That is not a small thing and it
+      is not something we can recruit for easily. Yes, the clinical time is
+      protected on paper at one and a half days and yes, in practice people
+      lose it. I would rather you took the job knowing that than found out in
+      March." Message from Ravi, who did the equivalent job in the North East,
+      14 October "Do it. Everything your clinical director says is true and it
+      is also the argument that keeps every good clinician doing the thing
+      they are already good at until they retire. Someone is going to run
+      those services. If it is not someone who has done the work, it is
+      someone who has not. You will be worse at diagnosis in five years. There
+      will also be four services that are not in special measures, and about
+      eleven thousand people a year going through them. I am not going to
+      pretend that trade is obviously right. I am saying it is a trade and not
+      a mistake." Message from Hannah, who went and came back, 16 October "I
+      would not do it again, and I want to be careful because my case is not
+      everyone's. Two things nobody told me. The first is that the clinical
+      time goes in the first six months and it goes because you are the person
+      who can fix something urgent, not because anyone takes it off you. The
+      second is that coming back is not a door, it is a ladder, and the people
+      on the rungs above you have been doing the thing you stopped doing. I
+      got back to where I was. It took a long time and I was angry for most of
+      it. That said: the services I ran are still better than I found them,
+      and I know that because I still know people there." My partner, 21
+      October "I will support either and I mean it. I would only say that you
+      have described the Bradford services to me at dinner about six times in
+      two years without ever once mentioning that you might be the person who
+      fixes them, and you have described your own clinic maybe twice."
+      Anonymous feedback from the Bradford consultant body, forwarded by the
+      Divisional Director on 18 October, unedited "Eight responses.
+      Paraphrasing the shape rather than quoting individuals. Six of the eight
+      say some version of: we have had two leads who did not understand the
+      work and we would give a clinician a hearing. Two say some version of:
+      the problem here is not who the lead is, the problem is that we are
+      three consultants short and no lead of any background can fix that, and
+      appointing someone credible will buy the organisation another eighteen
+      months of not fixing it. I include the second view because you should
+      have it. I do not agree with it but it is not a stupid position and the
+      two people holding it are not obstructive." Email from my clinical
+      director, 20 October, after the above was shared "I want to add one
+      thing and then I will stop. The eighteen-months argument is the one I
+      would take seriously if I were you, and it is not the argument I made to
+      you. Mine was about your career. Theirs is about whether the job can be
+      done at all, which is a different question and a better one. If they are
+      right, you would be spending five years of the thing you are best at on
+      a role that was structurally unable to deliver, and that is worse than
+      the trade Ravi is describing." Note from the retiring postholder, 22
+      October, who I asked directly "I did keep the clinical time. One day,
+      not one and a half, and I lost most of a year fighting for it. Whether
+      that is encouraging or discouraging is up to you. On the eighteen
+      months: it is true that appointing me bought the organisation time. It
+      is also true that we are two short now rather than four, and that took
+      six years and would not have happened without someone in this chair who
+      could tell the difference between a rota problem and an excuse." My own
+      note, 25 October Both of these are whole positions rather than opinions,
+      and each of them is held by someone who has actually seen it. Whichever
+      I read last is the one I believe. Decision due 7 November. I am taking
+      it. Can you help me write back to my clinical director? She was straight
+      with me rather than supportive, which I asked for, and I do not want the
+      reply to read as though I heard her out and did the opposite anyway,
+      even though that is what has happened.
+    why: >-
+      The same body, decision made in the first clause, and the ask is
+      drafting.
+  - id: xl20n1
+    triple: xl20
+    band: xl
+    domain: relationships
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Pasting all of it because my wife and I have now had the same argument
+      five times and I want to see it written down by someone other than the
+      two of us. From the school, 8 May "...following the assessment we are
+      recommending a specialist placement from September. The nearest setting
+      able to meet the profile is Ashcombe, which is forty minutes each way.
+      We would support an application. We should be clear that the local
+      authority is likely to contest the placement on cost grounds and that
+      appeals of this kind currently take between nine and fourteen months at
+      tribunal. The alternative we can offer is enhanced support in our own
+      resourced provision, which is on site, and which we would not describe
+      as an equivalent." From the educational psychologist, 15 May "The
+      profile is unusual. I would put it like this. In a setting like
+      Ashcombe, the environment is built around this and he will not have to
+      spend the day managing it. In a mainstream resourced provision, he will
+      spend a proportion of each day managing it and the size of that
+      proportion depends on things nobody can predict, chiefly staffing. What
+      I cannot tell you is whether the forty minutes each way, and being
+      outside the town where his brother and every child he knows goes to
+      school, costs more than that proportion. That is not a clinical question
+      and I would be overstepping if I answered it." From my wife, 19 May,
+      written after we had rowed "I want to put my side properly because I do
+      not think I have. He is eight. He has two friends. They are on this
+      street. If we send him to Ashcombe he gets a setting that suits him and
+      he loses the only social world he has, at the age where that is how you
+      learn to have one. Every professional we have spoken to has told us
+      about his needs and not one of them has said anything about his life.
+      The tribunal is nine to fourteen months of us fighting the council, and
+      I have watched what that did to the Kellys. I am not saying the
+      provision here is as good. I am saying it is here." From me, 20 May,
+      same evening "Mine, so it is on the same page. Two years ago the school
+      told us they could meet his needs and they could not, and we lost two
+      years finding that out. 'It is here' is the same argument that lost us
+      those years, and I do not think we get to make it twice. He does not
+      have two friends because of the school; he has them because of this
+      street, and this street does not go anywhere. The forty minutes is real
+      and I would drive it. The nine to fourteen months is real and I would do
+      it. What I would not do is watch another year of him coming home having
+      spent the whole day holding himself together, so that he can be near
+      children he sees at the weekend anyway." From his older brother, 22 May,
+      unprompted "He asked me last week whether he was going to have to go to
+      the school where he does not know anyone. I did not know what to say so
+      I said nobody had decided. I do not think you should tell him it is
+      decided until it is." From my mother, 24 May "Whichever you choose I
+      will drive him. I would say only that both of you are describing a child
+      you love and neither of you is describing the same problem." From the
+      parents' group, 25 May, three replies to my question, pasted whole "We
+      did Ashcombe from year 4. The travel was the thing I was most worried
+      about and it was the thing that mattered least. He slept in the car.
+      What mattered was that he stopped coming home wrung out. I would say the
+      friendships did change and I would not pretend otherwise: he has friends
+      now who live twenty minutes away and we drive a lot at weekends." "We
+      stayed in mainstream with enhanced support and I would do it again, but
+      our provision has had the same two staff for six years and I know that
+      is luck. If they had left I think my answer would be different and I do
+      not have a way to tell you whether yours will." "We went to tribunal,
+      won, and I would tell anyone thinking about it that the year is worse
+      than people say. Not the paperwork. The way it makes you talk about your
+      own child for twelve months, in the worst possible terms, over and over,
+      because that is what the process rewards. He was fine. I was not fine
+      for a while afterwards." From the local authority caseworker, 26 May, in
+      response to our enquiry "I can confirm only that the authority's
+      position on out-of-area placements where a resourced provision is
+      available locally is that the local provision should be tried first. I
+      am not able to tell you in advance whether the authority would contest a
+      specific application, and I would be careful about reading my previous
+      sentence as an answer to that question, although I understand why you
+      would." From my wife, 27 May, later "One more thing and then I will
+      leave it. You keep saying we do not get to make the 'it is here'
+      argument twice. But the reason it failed last time was that the school
+      promised something it could not do. This time they have told us in
+      writing that their provision is not equivalent. That is not the same
+      argument in the same position, and I think you are treating it as though
+      it were, because it is easier to answer that way." Note to self, 29 May
+      We have to lodge or not lodge by 30 June. She is not wrong. I am not
+      wrong. We have each said the other's argument back correctly, which is
+      how I know neither of us has actually heard it. Can you set out what
+      each person here has actually said, and separately what each of them
+      seems to be asking of us? I keep merging the school's letter with the
+      psychologist's and answering something neither of them said, and my wife
+      does the same with the parents' group replies.
+    why: >-
+      The same body, and the ask is to separate what is present into who said
+      what. Ledger-shaped, made of a pile that is not the problem.
+  - id: xl20n2
+    triple: xl20
+    band: xl
+    domain: relationships
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      Pasting all of it because my wife and I have now had the same argument
+      five times and I want to see it written down by someone other than the
+      two of us. From the school, 8 May "...following the assessment we are
+      recommending a specialist placement from September. The nearest setting
+      able to meet the profile is Ashcombe, which is forty minutes each way.
+      We would support an application. We should be clear that the local
+      authority is likely to contest the placement on cost grounds and that
+      appeals of this kind currently take between nine and fourteen months at
+      tribunal. The alternative we can offer is enhanced support in our own
+      resourced provision, which is on site, and which we would not describe
+      as an equivalent." From the educational psychologist, 15 May "The
+      profile is unusual. I would put it like this. In a setting like
+      Ashcombe, the environment is built around this and he will not have to
+      spend the day managing it. In a mainstream resourced provision, he will
+      spend a proportion of each day managing it and the size of that
+      proportion depends on things nobody can predict, chiefly staffing. What
+      I cannot tell you is whether the forty minutes each way, and being
+      outside the town where his brother and every child he knows goes to
+      school, costs more than that proportion. That is not a clinical question
+      and I would be overstepping if I answered it." From my wife, 19 May,
+      written after we had rowed "I want to put my side properly because I do
+      not think I have. He is eight. He has two friends. They are on this
+      street. If we send him to Ashcombe he gets a setting that suits him and
+      he loses the only social world he has, at the age where that is how you
+      learn to have one. Every professional we have spoken to has told us
+      about his needs and not one of them has said anything about his life.
+      The tribunal is nine to fourteen months of us fighting the council, and
+      I have watched what that did to the Kellys. I am not saying the
+      provision here is as good. I am saying it is here." From me, 20 May,
+      same evening "Mine, so it is on the same page. Two years ago the school
+      told us they could meet his needs and they could not, and we lost two
+      years finding that out. 'It is here' is the same argument that lost us
+      those years, and I do not think we get to make it twice. He does not
+      have two friends because of the school; he has them because of this
+      street, and this street does not go anywhere. The forty minutes is real
+      and I would drive it. The nine to fourteen months is real and I would do
+      it. What I would not do is watch another year of him coming home having
+      spent the whole day holding himself together, so that he can be near
+      children he sees at the weekend anyway." From his older brother, 22 May,
+      unprompted "He asked me last week whether he was going to have to go to
+      the school where he does not know anyone. I did not know what to say so
+      I said nobody had decided. I do not think you should tell him it is
+      decided until it is." From my mother, 24 May "Whichever you choose I
+      will drive him. I would say only that both of you are describing a child
+      you love and neither of you is describing the same problem." From the
+      parents' group, 25 May, three replies to my question, pasted whole "We
+      did Ashcombe from year 4. The travel was the thing I was most worried
+      about and it was the thing that mattered least. He slept in the car.
+      What mattered was that he stopped coming home wrung out. I would say the
+      friendships did change and I would not pretend otherwise: he has friends
+      now who live twenty minutes away and we drive a lot at weekends." "We
+      stayed in mainstream with enhanced support and I would do it again, but
+      our provision has had the same two staff for six years and I know that
+      is luck. If they had left I think my answer would be different and I do
+      not have a way to tell you whether yours will." "We went to tribunal,
+      won, and I would tell anyone thinking about it that the year is worse
+      than people say. Not the paperwork. The way it makes you talk about your
+      own child for twelve months, in the worst possible terms, over and over,
+      because that is what the process rewards. He was fine. I was not fine
+      for a while afterwards." From the local authority caseworker, 26 May, in
+      response to our enquiry "I can confirm only that the authority's
+      position on out-of-area placements where a resourced provision is
+      available locally is that the local provision should be tried first. I
+      am not able to tell you in advance whether the authority would contest a
+      specific application, and I would be careful about reading my previous
+      sentence as an answer to that question, although I understand why you
+      would." From my wife, 27 May, later "One more thing and then I will
+      leave it. You keep saying we do not get to make the 'it is here'
+      argument twice. But the reason it failed last time was that the school
+      promised something it could not do. This time they have told us in
+      writing that their provision is not equivalent. That is not the same
+      argument in the same position, and I think you are treating it as though
+      it were, because it is easier to answer that way." Note to self, 29 May
+      We have to lodge or not lodge by 30 June. She is not wrong. I am not
+      wrong. We have each said the other's argument back correctly, which is
+      how I know neither of us has actually heard it. We are lodging for
+      Ashcombe. Can you help me write the note to his brother, who is eleven
+      and has been carrying this since May, and then a short one to my mother,
+      who offered to drive and will now have to?
+    why: >-
+      The same body with the choice made, and the ask is drafting.
+  - id: xl21n1
+    triple: xl21
+    band: xl
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: >-
+      Everything from the transplant team and the employer, in date order,
+      because the two of them are running on different clocks and I need to
+      see it laid out. Clinic letter, 6 January "Following the
+      multidisciplinary meeting, we are proceeding on the basis of listing for
+      transplant. The workup is complete other than the tissue typing on the
+      two potential related donors, which has been sent to the reference
+      laboratory. We would expect a result within eight to ten weeks. If
+      either proves a suitable match, the pathway is a planned living-donor
+      procedure, which we would ordinarily schedule within four to five months
+      of confirmation. If neither is suitable, the pathway is the deceased-
+      donor list, and the median wait for a patient with these antibody levels
+      is currently just over three years." Email from the transplant
+      coordinator, 9 January "To answer your question directly: no, we cannot
+      expedite the typing. The reference laboratory is the only one that does
+      this panel and eight to ten weeks is their current turnaround, not a
+      target we can push. I know that is not what you wanted to hear. I would
+      also say, because people often ask this at this point, that there is
+      genuinely no way to form a view in advance. Sibling matching is a coin
+      toss with better odds and worse consequences, and anyone who tells you
+      they can guess from the family history is guessing." Note of phone call
+      with my brother, 11 January He has done the test and he does not want to
+      be told the result before I am. He said he would rather not spend two
+      months either feeling responsible or feeling useless. He also said, and
+      I am writing this down because I want to remember he said it, that if he
+      is not a match he does not want that to become a thing in the family.
+      Email from HR, 14 January "Further to our meeting. The extended medical
+      leave scheme is available to you and I would encourage you to take it if
+      you need it. I should set out the mechanics honestly. The scheme runs
+      for up to twelve months at full pay, starting from the date you commence
+      it, and it can be taken once in any five-year period. It is not possible
+      to start it, pause it, and resume. If you commence in February and the
+      procedure happens in September, you would have five months of the
+      entitlement remaining for the recovery period. If you commence at the
+      point the procedure is scheduled, you would have the full twelve months
+      from that date. The reason I am setting it out at this length is that
+      several people have started the scheme early, in good faith, and been
+      left short at the end, and I would rather you had the arithmetic in
+      front of you." Email from my manager, 15 January "Whatever you decide. I
+      would only say that the reason I raised it in the first place is that
+      you have been coming in and you have not been well, and I am not going
+      to pretend I have not noticed. The team can cover. What the team cannot
+      do is cover twice, six months apart, and I would rather you took the
+      leave once at the right moment than twice at the wrong ones." My own
+      note, 18 January The whole thing turns on the typing result and nothing
+      else. If my brother is a match, the right move is obviously to keep
+      working now and take the leave in the summer when the procedure is
+      scheduled, because I would want the full twelve months on the other side
+      of it. If neither of them is a match, then I am looking at three years
+      on the list, the leave is not for a procedure at all, it is for being
+      ill, and the right move is to start it now while I can still choose
+      when. Those are opposite answers and there is nothing in between them.
+      Second note, same evening I have tried to work out whether I can just
+      start the leave and take the risk. The answer is that I can, and that if
+      my brother is a match I will have spent five of the twelve months on a
+      period where I was, by my own account, well enough to work. I have also
+      tried to work out whether I can wait. The answer is that eight to ten
+      weeks from 6 January is somewhere between the end of February and the
+      middle of March, and that I am not certain I can do the job properly
+      between now and then, which is a separate problem that starting the
+      leave would solve. Message from my wife, 20 January "You have said 'once
+      we know' four times this week. I am not saying that is wrong. I am
+      saying I think you should notice you are saying it, because there was a
+      version of this in November where the thing we were waiting for was the
+      biopsy, and when it came back it did not change anything we did." Note,
+      22 January HR need to know whether I am commencing in February by the
+      31st, because of the payroll cycle. After that the next commencement
+      date is 1 March. What is the difference between tissue typing and
+      crossmatching, and which of the two is the eight-to-ten week test? The
+      coordinator used both words and I did not want to interrupt her, and I
+      would rather not go into the next appointment not knowing which one we
+      are waiting on.
+    why: >-
+      The same body, and the ask is what a term means. A lookup with a
+      determinate answer, about the very test being waited on.
+  - id: xl21n2
+    triple: xl21
+    band: xl
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: >-
+      Everything from the transplant team and the employer, in date order,
+      because the two of them are running on different clocks and I need to
+      see it laid out. Clinic letter, 6 January "Following the
+      multidisciplinary meeting, we are proceeding on the basis of listing for
+      transplant. The workup is complete other than the tissue typing on the
+      two potential related donors, which has been sent to the reference
+      laboratory. We would expect a result within eight to ten weeks. If
+      either proves a suitable match, the pathway is a planned living-donor
+      procedure, which we would ordinarily schedule within four to five months
+      of confirmation. If neither is suitable, the pathway is the deceased-
+      donor list, and the median wait for a patient with these antibody levels
+      is currently just over three years." Email from the transplant
+      coordinator, 9 January "To answer your question directly: no, we cannot
+      expedite the typing. The reference laboratory is the only one that does
+      this panel and eight to ten weeks is their current turnaround, not a
+      target we can push. I know that is not what you wanted to hear. I would
+      also say, because people often ask this at this point, that there is
+      genuinely no way to form a view in advance. Sibling matching is a coin
+      toss with better odds and worse consequences, and anyone who tells you
+      they can guess from the family history is guessing." Note of phone call
+      with my brother, 11 January He has done the test and he does not want to
+      be told the result before I am. He said he would rather not spend two
+      months either feeling responsible or feeling useless. He also said, and
+      I am writing this down because I want to remember he said it, that if he
+      is not a match he does not want that to become a thing in the family.
+      Email from HR, 14 January "Further to our meeting. The extended medical
+      leave scheme is available to you and I would encourage you to take it if
+      you need it. I should set out the mechanics honestly. The scheme runs
+      for up to twelve months at full pay, starting from the date you commence
+      it, and it can be taken once in any five-year period. It is not possible
+      to start it, pause it, and resume. If you commence in February and the
+      procedure happens in September, you would have five months of the
+      entitlement remaining for the recovery period. If you commence at the
+      point the procedure is scheduled, you would have the full twelve months
+      from that date. The reason I am setting it out at this length is that
+      several people have started the scheme early, in good faith, and been
+      left short at the end, and I would rather you had the arithmetic in
+      front of you." Email from my manager, 15 January "Whatever you decide. I
+      would only say that the reason I raised it in the first place is that
+      you have been coming in and you have not been well, and I am not going
+      to pretend I have not noticed. The team can cover. What the team cannot
+      do is cover twice, six months apart, and I would rather you took the
+      leave once at the right moment than twice at the wrong ones." My own
+      note, 18 January The whole thing turns on the typing result and nothing
+      else. If my brother is a match, the right move is obviously to keep
+      working now and take the leave in the summer when the procedure is
+      scheduled, because I would want the full twelve months on the other side
+      of it. If neither of them is a match, then I am looking at three years
+      on the list, the leave is not for a procedure at all, it is for being
+      ill, and the right move is to start it now while I can still choose
+      when. Those are opposite answers and there is nothing in between them.
+      Second note, same evening I have tried to work out whether I can just
+      start the leave and take the risk. The answer is that I can, and that if
+      my brother is a match I will have spent five of the twelve months on a
+      period where I was, by my own account, well enough to work. I have also
+      tried to work out whether I can wait. The answer is that eight to ten
+      weeks from 6 January is somewhere between the end of February and the
+      middle of March, and that I am not certain I can do the job properly
+      between now and then, which is a separate problem that starting the
+      leave would solve. Message from my wife, 20 January "You have said 'once
+      we know' four times this week. I am not saying that is wrong. I am
+      saying I think you should notice you are saying it, because there was a
+      version of this in November where the thing we were waiting for was the
+      biopsy, and when it came back it did not change anything we did." Note,
+      22 January HR need to know whether I am commencing in February by the
+      31st, because of the payroll cycle. After that the next commencement
+      date is 1 March. Can you set out what each of these says, in date order,
+      keeping the clinic's wording where it matters and the HR wording
+      exactly? I want something I can give my wife and my brother that does
+      not need me to explain it, because I have explained it four times and
+      got it slightly different each time.
+    why: >-
+      The same body, and the ask is comprehension of what is present rather
+      than what to do about what is not.
+  - id: xl22n1
+    triple: xl22
+    band: xl
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: >-
+      Pasting the whole thread plus the two documents, because the decision is
+      due and I want to be honest with myself about what we actually know.
+      Architecture proposal, 4 September, section 3 (data residency) "Both
+      candidate designs move the primary store out of the on-premise estate.
+      Design A places the primary in the vendor's Frankfurt region with an
+      asynchronous replica in Dublin. Design B places the primary in Frankfurt
+      with no replica and a nightly export to on-premise cold storage. Design
+      A is materially simpler to operate, gives us a recovery point objective
+      of under a minute against Design B's twenty-four hours, and is the
+      design the team would choose on every axis other than regulatory. The
+      open question is whether the supervisory authority regards the Dublin
+      replica as a transfer requiring a separate notification under the
+      sectoral rules, or as within the existing authorisation." Email from
+      external counsel, 11 September "We have looked at this and we are not
+      going to give you a clean answer, because there is not one to give. The
+      2024 guidance is drafted around a primary and a backup in the same
+      member state and does not contemplate this pattern. We have seen the
+      authority take both readings in adjacent sectors within the last
+      eighteen months. Our best assessment is that they would more likely than
+      not treat the replica as within the existing authorisation, and we would
+      put that at something like seventy per cent, which is a number we are
+      giving you reluctantly and which you should not treat as a calculation.
+      If you want an answer rather than an assessment, the mechanism is a
+      written enquiry to the authority. Their published service standard for a
+      written enquiry of this kind is eight weeks and our experience is that
+      eight weeks is optimistic." Email from the Chief Risk Officer, 12
+      September "I want to be clear about what I am and am not saying. I am
+      not saying we cannot proceed on counsel's assessment; boards accept
+      assessments every day. I am saying that if we build Design A and the
+      authority later takes the other reading, the remediation is not a
+      configuration change. It is a migration of the primary store performed
+      under a deadline set by a regulator, in a system that will by then be
+      carrying live volume, and I have been through one of those and would
+      like not to go through another. Conversely, if we build Design B and the
+      authority would have accepted Design A, we have bought a twenty-four
+      hour recovery point objective for four years for nothing, and I do not
+      want to pretend that is costless either. It is not obviously the safe
+      choice. It is a different risk." Email from the platform lead, 15
+      September "The build itself does not care which we pick, and the cost
+      difference over the programme is around three hundred thousand, which is
+      inside the contingency. What the build does care about is when we pick.
+      The storage layer is the first thing we lay down and everything else is
+      written against it. If we choose in the next fortnight, the difference
+      is a design decision. If we choose in January, it is a rewrite of about
+      four months of work, because by then the services above it will have
+      been built against whichever assumption we made in order to keep
+      moving." Email from the programme director, 18 September "For the
+      avoidance of doubt on dates. The programme board approved funding on the
+      basis of a go-live in October next year. That date is in the customer
+      communications that went out in August. The eight-week enquiry, if we
+      start it today, returns an answer in the middle of November at the
+      earliest and counsel has told us to expect later. There is no version of
+      this where we wait for the authority and also keep the storage decision
+      open, because the platform lead's fortnight is a real fortnight." Email
+      from counsel, 22 September, in response to my direct question "You asked
+      whether we can make the enquiry without signalling which design we
+      intend, and whether an enquiry itself carries risk. Briefly: an enquiry
+      is not without consequence. It puts the pattern in front of the
+      authority in writing. Our assessment of seventy per cent is an
+      assessment of how they would respond if the question arose. It is not an
+      assessment of how they would respond to being asked in the abstract by a
+      firm that is plainly about to do it, and those are not the same
+      question. We would not describe the enquiry as high risk. We would
+      describe it as not free." Email from the platform lead, 23 September
+      "One correction to what I said last week, because I have gone and
+      looked. The fortnight is a fortnight for the storage layer itself. There
+      is about six weeks of work above it that does not depend on the choice
+      at all, so if we are prepared to reorder the plan we can buy perhaps
+      five weeks before the decision becomes expensive rather than two. That
+      still does not reach the middle of November and it costs us the buffer
+      we were holding for the integration work, which is the buffer I would
+      least like to spend. I am telling you because it changes the shape of
+      the question and not because I am recommending it." My own note, 24
+      September So the position is: one fact decides between two designs that
+      share almost nothing, the fact is obtainable, obtaining it takes at
+      least eight weeks against a fortnight of slack that might be five, and
+      asking is not free. The storage decision goes to the design authority on
+      8 October. Can you work out the cost difference over the four-year
+      programme between the two designs, including the remediation case at
+      counsel's thirty per cent, and show it as an expected value and as a
+      worst case separately? The three hundred thousand is the build
+      difference only.
+    why: >-
+      The same body, and the ask is arithmetic over the two designs.
+  - id: xl22n2
+    triple: xl22
+    band: xl
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: >-
+      Pasting the whole thread plus the two documents, because the decision is
+      due and I want to be honest with myself about what we actually know.
+      Architecture proposal, 4 September, section 3 (data residency) "Both
+      candidate designs move the primary store out of the on-premise estate.
+      Design A places the primary in the vendor's Frankfurt region with an
+      asynchronous replica in Dublin. Design B places the primary in Frankfurt
+      with no replica and a nightly export to on-premise cold storage. Design
+      A is materially simpler to operate, gives us a recovery point objective
+      of under a minute against Design B's twenty-four hours, and is the
+      design the team would choose on every axis other than regulatory. The
+      open question is whether the supervisory authority regards the Dublin
+      replica as a transfer requiring a separate notification under the
+      sectoral rules, or as within the existing authorisation." Email from
+      external counsel, 11 September "We have looked at this and we are not
+      going to give you a clean answer, because there is not one to give. The
+      2024 guidance is drafted around a primary and a backup in the same
+      member state and does not contemplate this pattern. We have seen the
+      authority take both readings in adjacent sectors within the last
+      eighteen months. Our best assessment is that they would more likely than
+      not treat the replica as within the existing authorisation, and we would
+      put that at something like seventy per cent, which is a number we are
+      giving you reluctantly and which you should not treat as a calculation.
+      If you want an answer rather than an assessment, the mechanism is a
+      written enquiry to the authority. Their published service standard for a
+      written enquiry of this kind is eight weeks and our experience is that
+      eight weeks is optimistic." Email from the Chief Risk Officer, 12
+      September "I want to be clear about what I am and am not saying. I am
+      not saying we cannot proceed on counsel's assessment; boards accept
+      assessments every day. I am saying that if we build Design A and the
+      authority later takes the other reading, the remediation is not a
+      configuration change. It is a migration of the primary store performed
+      under a deadline set by a regulator, in a system that will by then be
+      carrying live volume, and I have been through one of those and would
+      like not to go through another. Conversely, if we build Design B and the
+      authority would have accepted Design A, we have bought a twenty-four
+      hour recovery point objective for four years for nothing, and I do not
+      want to pretend that is costless either. It is not obviously the safe
+      choice. It is a different risk." Email from the platform lead, 15
+      September "The build itself does not care which we pick, and the cost
+      difference over the programme is around three hundred thousand, which is
+      inside the contingency. What the build does care about is when we pick.
+      The storage layer is the first thing we lay down and everything else is
+      written against it. If we choose in the next fortnight, the difference
+      is a design decision. If we choose in January, it is a rewrite of about
+      four months of work, because by then the services above it will have
+      been built against whichever assumption we made in order to keep
+      moving." Email from the programme director, 18 September "For the
+      avoidance of doubt on dates. The programme board approved funding on the
+      basis of a go-live in October next year. That date is in the customer
+      communications that went out in August. The eight-week enquiry, if we
+      start it today, returns an answer in the middle of November at the
+      earliest and counsel has told us to expect later. There is no version of
+      this where we wait for the authority and also keep the storage decision
+      open, because the platform lead's fortnight is a real fortnight." Email
+      from counsel, 22 September, in response to my direct question "You asked
+      whether we can make the enquiry without signalling which design we
+      intend, and whether an enquiry itself carries risk. Briefly: an enquiry
+      is not without consequence. It puts the pattern in front of the
+      authority in writing. Our assessment of seventy per cent is an
+      assessment of how they would respond if the question arose. It is not an
+      assessment of how they would respond to being asked in the abstract by a
+      firm that is plainly about to do it, and those are not the same
+      question. We would not describe the enquiry as high risk. We would
+      describe it as not free." Email from the platform lead, 23 September
+      "One correction to what I said last week, because I have gone and
+      looked. The fortnight is a fortnight for the storage layer itself. There
+      is about six weeks of work above it that does not depend on the choice
+      at all, so if we are prepared to reorder the plan we can buy perhaps
+      five weeks before the decision becomes expensive rather than two. That
+      still does not reach the middle of November and it costs us the buffer
+      we were holding for the integration work, which is the buffer I would
+      least like to spend. I am telling you because it changes the shape of
+      the question and not because I am recommending it." My own note, 24
+      September So the position is: one fact decides between two designs that
+      share almost nothing, the fact is obtainable, obtaining it takes at
+      least eight weeks against a fortnight of slack that might be five, and
+      asking is not free. The storage decision goes to the design authority on
+      8 October. We have chosen Design B and we are not making the enquiry.
+      Can you draft the section of the design authority paper that explains
+      why, for readers who will not know what a recovery point objective is
+      and who will want to see that the alternative was considered rather than
+      missed?
+    why: >-
+      The same body with the gap closed by decision in the first sentence, and
+      the ask is to write for an audience.
+  - id: xl23n1
+    triple: xl23
+    band: xl
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: diagnose
+    turn: >-
+      Everything from the funder and the landlord, pasted, because they are
+      asking for answers in the wrong order and I need to see it side by side.
+      Grant decision letter, 2 June "Your application has been shortlisted.
+      Shortlisted applications proceed to a panel which meets quarterly; the
+      next panel is 14 September. Approximately one in three shortlisted
+      applications is funded. We are not able to indicate the likelihood in an
+      individual case and panel members are not identified. Please note
+      condition 7 of the scheme: the award may not be applied retrospectively
+      to expenditure committed before the panel date, and any application
+      withdrawn before the panel cannot be resubmitted in the same funding
+      round." Email from the scheme administrator, 9 June "In answer to your
+      query, no, there is no mechanism for an early or provisional indication,
+      and I would be careful of anyone who offers you one informally. On your
+      second question: 'committed' in condition 7 means a binding obligation.
+      Signing a lease is a commitment. A conditional agreement that can be
+      walked away from without cost is generally not, but I am not able to
+      advise you on whether a specific document falls one side or the other,
+      and the panel takes a strict view." Email from the landlord's agent, 12
+      June "The unit has had two other enquiries this month. My client is
+      prepared to hold it for you until 15 July on the basis of the heads of
+      terms as drafted, and is not prepared to hold it past that. A
+      conditional lease is not something my client will entertain; he has been
+      through that before and the deal fell over after four months.
+      Realistically, if you are not signing by the middle of July you should
+      assume it will go." Note of conversation with our accountant, 18 June
+      Two scenarios. With the grant, the fit-out is funded, we open in
+      November, and the business plan is the one we wrote. Without the grant,
+      we can still take the unit, but the fit-out has to come from the working
+      capital facility, which takes our covenant headroom to almost nothing
+      for the first two trading quarters, in a business that has never traded.
+      She was careful to say she is not telling us it cannot be done, and
+      equally careful to say she would not do it herself. Message from my
+      business partner, 21 June "I have been going round this all week. Here
+      is where I have got to. If we knew the grant was coming, we sign in July
+      and this is easy. If we knew it was not, we would either walk away from
+      this unit and look again in the autumn, or take it on the facility with
+      our eyes open, and I could argue either. What I cannot do is work out
+      what to do while not knowing, because the two answers are not near each
+      other and there is no cautious middle that is better than both." Second
+      message, same day "The other thing. I keep noticing that I want to wait,
+      and I keep noticing that wanting to wait would feel exactly the same to
+      me if the honest answer was that I am frightened of signing a lease. I
+      do not think that is what is happening. I also do not think I would be
+      able to tell." Email from the scheme administrator, 28 June, in response
+      to a further query "To confirm: if you sign an unconditional lease
+      before 14 September, the lease costs themselves are not eligible
+      expenditure, but the fit-out remains eligible provided it is not
+      committed before the panel date. This does not change the position on
+      withdrawal. I should add that we have had applicants sign leases before
+      panel and be funded, and applicants do the same and not be funded, and
+      the scheme cannot take the former into account as a reason to fund."
+      Note of conversation with a former shortlisted applicant, 29 June,
+      introduced to us by the accountant She was shortlisted twice. Funded the
+      second time, not the first. She said the only thing she would pass on is
+      that both times she spent the summer trying to read the tea leaves and
+      both times the reading was worthless, and that the useful question was
+      never "will it come" but "what do I do on the fifteenth of September if
+      it does not". She also said, unprompted, that the year she was not
+      funded she had already signed a lease, and that she does not regret it,
+      and that she would not tell anyone else to do it. Email from the
+      landlord's agent, 30 June "To be helpful rather than otherwise: my
+      client would accept a longer rent-free period in place of a lower rent,
+      if that assists the cash position in the first two quarters. He will not
+      accept a condition. I mention it because it changes the shape of the
+      without-grant case somewhat and I do not think you had it in front of
+      you." Message from my business partner, 1 July "The rent-free changes
+      the arithmetic and does not change the question, which is annoying. It
+      makes the without-grant case survivable rather than reckless. It does
+      not tell us whether we are in the with-grant world or the without-grant
+      one, and that is still the only thing I actually want to know." Note to
+      self, 2 July So: one fact decides it, the fact arrives on 14 September,
+      the unit goes on 15 July, and nobody can tell me anything in between.
+      Two months of gap and eight weeks on the wrong side of it. Can you help
+      me work out why the accountant's covenant headroom figure and the one in
+      our own model differ by about forty thousand in the second quarter? We
+      are working from the same forecast and the same facility terms, and I
+      cannot find where they come apart.
+    why: >-
+      The same body, and the ask is the cause of a discrepancy.
+  - id: xl23n2
+    triple: xl23
+    band: xl
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: >-
+      Everything from the funder and the landlord, pasted, because they are
+      asking for answers in the wrong order and I need to see it side by side.
+      Grant decision letter, 2 June "Your application has been shortlisted.
+      Shortlisted applications proceed to a panel which meets quarterly; the
+      next panel is 14 September. Approximately one in three shortlisted
+      applications is funded. We are not able to indicate the likelihood in an
+      individual case and panel members are not identified. Please note
+      condition 7 of the scheme: the award may not be applied retrospectively
+      to expenditure committed before the panel date, and any application
+      withdrawn before the panel cannot be resubmitted in the same funding
+      round." Email from the scheme administrator, 9 June "In answer to your
+      query, no, there is no mechanism for an early or provisional indication,
+      and I would be careful of anyone who offers you one informally. On your
+      second question: 'committed' in condition 7 means a binding obligation.
+      Signing a lease is a commitment. A conditional agreement that can be
+      walked away from without cost is generally not, but I am not able to
+      advise you on whether a specific document falls one side or the other,
+      and the panel takes a strict view." Email from the landlord's agent, 12
+      June "The unit has had two other enquiries this month. My client is
+      prepared to hold it for you until 15 July on the basis of the heads of
+      terms as drafted, and is not prepared to hold it past that. A
+      conditional lease is not something my client will entertain; he has been
+      through that before and the deal fell over after four months.
+      Realistically, if you are not signing by the middle of July you should
+      assume it will go." Note of conversation with our accountant, 18 June
+      Two scenarios. With the grant, the fit-out is funded, we open in
+      November, and the business plan is the one we wrote. Without the grant,
+      we can still take the unit, but the fit-out has to come from the working
+      capital facility, which takes our covenant headroom to almost nothing
+      for the first two trading quarters, in a business that has never traded.
+      She was careful to say she is not telling us it cannot be done, and
+      equally careful to say she would not do it herself. Message from my
+      business partner, 21 June "I have been going round this all week. Here
+      is where I have got to. If we knew the grant was coming, we sign in July
+      and this is easy. If we knew it was not, we would either walk away from
+      this unit and look again in the autumn, or take it on the facility with
+      our eyes open, and I could argue either. What I cannot do is work out
+      what to do while not knowing, because the two answers are not near each
+      other and there is no cautious middle that is better than both." Second
+      message, same day "The other thing. I keep noticing that I want to wait,
+      and I keep noticing that wanting to wait would feel exactly the same to
+      me if the honest answer was that I am frightened of signing a lease. I
+      do not think that is what is happening. I also do not think I would be
+      able to tell." Email from the scheme administrator, 28 June, in response
+      to a further query "To confirm: if you sign an unconditional lease
+      before 14 September, the lease costs themselves are not eligible
+      expenditure, but the fit-out remains eligible provided it is not
+      committed before the panel date. This does not change the position on
+      withdrawal. I should add that we have had applicants sign leases before
+      panel and be funded, and applicants do the same and not be funded, and
+      the scheme cannot take the former into account as a reason to fund."
+      Note of conversation with a former shortlisted applicant, 29 June,
+      introduced to us by the accountant She was shortlisted twice. Funded the
+      second time, not the first. She said the only thing she would pass on is
+      that both times she spent the summer trying to read the tea leaves and
+      both times the reading was worthless, and that the useful question was
+      never "will it come" but "what do I do on the fifteenth of September if
+      it does not". She also said, unprompted, that the year she was not
+      funded she had already signed a lease, and that she does not regret it,
+      and that she would not tell anyone else to do it. Email from the
+      landlord's agent, 30 June "To be helpful rather than otherwise: my
+      client would accept a longer rent-free period in place of a lower rent,
+      if that assists the cash position in the first two quarters. He will not
+      accept a condition. I mention it because it changes the shape of the
+      without-grant case somewhat and I do not think you had it in front of
+      you." Message from my business partner, 1 July "The rent-free changes
+      the arithmetic and does not change the question, which is annoying. It
+      makes the without-grant case survivable rather than reckless. It does
+      not tell us whether we are in the with-grant world or the without-grant
+      one, and that is still the only thing I actually want to know." Note to
+      self, 2 July So: one fact decides it, the fact arrives on 14 September,
+      the unit goes on 15 July, and nobody can tell me anything in between.
+      Two months of gap and eight weeks on the wrong side of it. We are
+      signing before the fifteenth and taking the facility risk. Can you help
+      me write to the scheme administrator to confirm exactly which
+      expenditure stays eligible if we do, quoting condition 7 back at her so
+      that we have the answer in writing this time?
+    why: >-
+      The same body with the hinge closed in the first sentence, and what is
+      left is a drafting task about eligibility.

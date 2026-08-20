@@ -300,6 +300,84 @@ positive:
       none of the three settles it. Low stakes, genuinely open, and the closing
       sentence is the shortest of the three in this triple.
 
+  # --- council and hinge, added for version 5 -------------------------------
+  #
+  # Two of the six procedures in the shipped router table were the correct
+  # answer for no positive in the corpus, so `evaluate_routing` could only ever
+  # score a correct choice of either as wrong. These twelve triples per
+  # procedure, three in each band, are what makes them reachable.
+  - id: s25p
+    triple: s25
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    route: council
+    turn: "Stay and fix the team, or leave for the offer. I've spent a week arguing myself into leaving. Reasoning or momentum?"
+    why: >-
+      Two positions, each with a real case, and the ask is whether the one that
+      got argued first has won by going first. Not `fit`: no general rule is
+      stated. Not `ledger`: nothing is piled up, and one week of thinking is
+      not a set of facts to weigh.
+  - id: s26p
+    triple: s26
+    band: s
+    domain: money
+    stakes: high
+    ask: implicit
+    route: council
+    turn: "My partner wants to sell the flat and I want to keep renting it out. Both of us have a case and neither will move."
+    why: >-
+      Two defensible positions held by two people, no question asked. The
+      implicit form: the turn states the deadlock and stops.
+  - id: s27p
+    triple: s27
+    band: s
+    domain: technical
+    stakes: high
+    ask: embedded
+    route: council
+    turn: "Rewrite it or keep patching, and which survives being argued properly? I have only ever made the case for the rewrite."
+    why: >-
+      The question sits mid-turn with the load-bearing admission after it. What
+      makes it council rather than cascade is that the ask is for the other
+      case to be made, not for what a rewrite would set off.
+  - id: s28p
+    triple: s28
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    route: hinge
+    turn: "I have to accept or decline by Friday. Nobody has told me who I would report to. Decide now, or push for it?"
+    why: >-
+      One named absent fact, a deadline that puts a price on asking, and the
+      ask is exactly the choice between the two. Not `ledger`: the fact is
+      missing rather than present and unweighed. Not `timing`: the direction is
+      not settled.
+  - id: s29p
+    triple: s29
+    band: s
+    domain: health
+    stakes: high
+    ask: implicit
+    route: hinge
+    turn: "The scan result will not be back before I have to give the school an answer. I keep going round and round on it."
+    why: >-
+      The missing piece is named and so is the reason waiting has a cost. No
+      question is asked, which is the implicit form.
+  - id: s30p
+    triple: s30
+    band: s
+    domain: money
+    stakes: high
+    ask: embedded
+    route: hinge
+    turn: "Is it worth chasing the exact fee before I sign? The broker is away until the 30th and the rate holds until then."
+    why: >-
+      The question comes first and the two facts that decide whether the gap is
+      worth waiting on come after it. A lookup would have a determinate answer;
+      what this asks is whether the number would change anything.
 negative:
   - id: s01n1
     triple: s01
@@ -800,3 +878,133 @@ negative:
       A pile and an explicit ask, and the ask is what the pile already says. Two
       paste cues where s24p has none, which is the direction that keeps the cue
       from tracking the label.
+  # --- council and hinge, added for version 5 -------------------------------
+  - id: s25n1
+    triple: s25
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "Stay and fix the team, or leave for the offer. People quote a stat about counter-offers. Where does that number come from?"
+    why: >-
+      The same two-position opening as s25p. The ask is the provenance of a
+      claim, which has a determinate answer.
+  - id: s25n2
+    triple: s25
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: generate
+    turn: "I am leaving for the offer rather than staying to fix the team. Can you help me write the note to my team?"
+    why: >-
+      Same fork, resolved in the first clause. The ask is drafting.
+  - id: s26n1
+    triple: s26
+    band: s
+    domain: money
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: "My partner wants to sell the flat and I want to keep renting it out. Can you lay out what each of us has said?"
+    why: >-
+      The same deadlock, byte-identical for the first sentence, and the ask is
+      for the positions to be listed rather than argued. The nearest miss in
+      the set: council argues them, this one only collects them.
+  - id: s26n2
+    triple: s26
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: "My partner wants to sell the flat and I want to keep renting it out. What is the yield at 1,400 a month?"
+    why: >-
+      Same opening, and the ask is arithmetic on one of the two positions.
+  - id: s27n1
+    triple: s27
+    band: s
+    domain: technical
+    stakes: high
+    ask: explicit
+    kind: diagnose
+    turn: "Rewrite it or keep patching, but first: why does the patched build still drop requests under load? I can attach the trace."
+    why: >-
+      The fork is stated and then set aside. The ask is a cause, which is a
+      question about the system rather than about what to do.
+  - id: s27n2
+    triple: s27
+    band: s
+    domain: technical
+    stakes: low
+    ask: explicit
+    kind: meta
+    turn: "Rewrite it or keep patching. Before I put it to you properly, how should I be phrasing a question like this one?"
+    why: >-
+      Same fork, and the ask is about how to ask rather than about the answer.
+  - id: s28n1
+    triple: s28
+    band: s
+    domain: career
+    stakes: high
+    ask: explicit
+    kind: lookup
+    turn: "I have to accept or decline by Friday. Is there a standard notice period for withdrawing an acceptance once it is signed?"
+    why: >-
+      Same opening sentence as s28p. The ask has one correct answer and finding
+      it is the whole job.
+  - id: s28n2
+    triple: s28
+    band: s
+    domain: career
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: "I am declining by Friday. Nobody ever told me who I would report to. Draft the note, and keep it warm rather than curt."
+    why: >-
+      Both facts of the positive, with the decision made in the first clause.
+      The gap is still open and it no longer matters, which is the point.
+  - id: s29n1
+    triple: s29
+    band: s
+    domain: health
+    stakes: high
+    ask: explicit
+    kind: summarise
+    turn: "The scan result will not be back before I have to give the school an answer. Can you put the emails into one list?"
+    why: >-
+      Same opening, and the ask is to collect what is already there rather than
+      to act without what is not.
+  - id: s29n2
+    triple: s29
+    band: s
+    domain: health
+    stakes: low
+    ask: explicit
+    kind: lookup
+    turn: "The scan result will not be back for a fortnight. How long do results from that sort of scan usually take to come back?"
+    why: >-
+      The same absent fact, and the ask is a fact about the world rather than
+      whether to wait for it.
+  - id: s30n1
+    triple: s30
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: compute
+    turn: "The broker is away until the 30th and the rate holds until then. What does the fee come to at 0.4 percent of it?"
+    why: >-
+      The second sentence of s30p, byte-identical, and the ask is arithmetic.
+  - id: s30n2
+    triple: s30
+    band: s
+    domain: money
+    stakes: low
+    ask: explicit
+    kind: settled
+    turn: "I am signing before the 30th rather than chasing the exact fee first. Can you check the wording of clause four for me?"
+    why: >-
+      The hinge is named and closed in the same sentence. What is left is a
+      reading task.

@@ -78,7 +78,7 @@ class TestParsing:
 
     def test_an_unknown_kind_is_refused(self) -> None:
         _, issues = parse_corrections(_line(kind="amended"))
-        assert "not one of moved, none, rebuilt" in str(issues[0])
+        assert "not one of extended, moved, none, rebuilt" in str(issues[0])
 
     def test_a_non_integer_version_is_refused(self) -> None:
         _, issues = parse_corrections(_line(to_version="2"))
@@ -115,6 +115,19 @@ class TestParsing:
     def test_a_label_that_did_not_change_is_not_a_move(self) -> None:
         _, issues = parse_corrections(_line(new_label=True))
         assert "which is not a move" in str(issues[0])
+
+    @pytest.mark.parametrize("kind", ["none", "rebuilt", "extended"])
+    def test_only_a_moved_line_has_to_name_an_item(self, kind: str) -> None:
+        """`extended` is the 2026-08-20 addition and it carries no item either.
+
+        A version that added items relabelled nothing, so there is no item to
+        name; what it changed is the denominator, which the reason states.
+        """
+        row = {k: v for k, v in _MOVED.items() if k not in ("item", "old_label", "new_label")}
+        corrections, issues = parse_corrections(json.dumps({**row, "kind": kind}))
+        assert issues == []
+        assert corrections[0].kind == kind
+        assert corrections[0].item is None
 
     def test_a_none_line_needs_no_item(self) -> None:
         """An identity bump has no item to name, and demanding one would invent it."""
