@@ -15,6 +15,15 @@ It is exposed as `--doctor` instead: a command to reach for when git starts
 refusing everything, plus `--fix` to repair it. Nothing enforces that anyone
 runs it. That is a limitation of the mechanism, not an oversight.
 
+**`--doctor` answers for a git that refuses everything, not only for
+`core.bare`.** Until 2026-08-20 it reported `git hygiene: clean`, rc 0, in a
+repository where every git command exited 128, because it recognised a setup
+failure only by finding the string `core.bare` in git's stderr. A junk line in
+`.git/config`, or `core.repositoryformatversion = banana`, names neither
+`core.bare` nor "not a git repository", and both break the checkout completely.
+The discriminator is the filesystem now: git refused *and* a `.git` entry is
+here or above. `--fix` repairs neither -- see `_git_is_refusing`.
+
 The drift half *is* a hook, and it is narrow on purpose: it refuses a commit
 on `main` while `main` is behind `origin/main`. Work here happens on branches
 and merges to `main`, so committing directly onto a stale `main` is already
@@ -31,6 +40,16 @@ it on the one flow it should have been helping. Reproduced and fixed
 2026-08-20. A merge, cherry-pick, revert or rebase is integration rather than
 new work, so `MERGE_HEAD`, `CHERRY_PICK_HEAD`, `REVERT_HEAD` and a
 `rebase-merge`/`rebase-apply` directory each make the drift check silent.
+
+**The exemption says so out loud**, because an unbounded exemption that says
+nothing is one nobody can debug. `mkdir .git/rebase-apply` is what a crashed
+`git am` leaves behind, and until 2026-08-20 it turned the drift guard off with
+no output at all -- `--doctor` in that state even printed `git hygiene: clean`.
+The check now prints which marker it found and skips. Note the arena: run
+directly, the note is on stdout. Under `pre-commit` it is swallowed, because
+`pre-commit` shows a passing hook's output only when the hook is configured
+`verbose: true`, which this one is not -- so the note reaches a person who runs
+the script, not a person who commits.
 
 **The hook runs at `pre-commit` only, so it does not run on a clean merge at
 all** -- pre-commit's `pre-merge-commit` stage is deliberately not wired. Once
@@ -56,6 +75,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import os
+import stat
 import subprocess
 import sys
 import time
@@ -84,23 +104,35 @@ INTEGRATION_MARKERS = (
 )
 
 
-def _run(*args: str, timeout: float | None = None) -> tuple[int, str, str]:
-    """Run a git command, returning (exit code, stripped stdout, stripped stderr)."""
+def _run(*args: str) -> tuple[int, str, str]:
+    """Run a git command, returning (exit code, stripped stdout, stripped stderr).
+
+    There is no `timeout=` here, and there was one until 2026-08-20 that no
+    production caller ever passed. `_fetch` is the only time-boxed call in this
+    script and it cannot come through this function, because it must not ask
+    for pipes -- see `_fetch` for why. So the parameter could not acquire a
+    caller without undoing that fix, and a tested path with no caller is inert
+    whatever the coverage number says. Mutating `_run` to drop `timeout=timeout`
+    survived all 63 tests, which is what that looks like from the outside.
+
+    `subprocess.TimeoutExpired` went with it. `subprocess.run` cannot raise it
+    when no timeout is passed, so catching it here was a second inert path
+    behind the first.
+    """
     try:
         proc = subprocess.run(
             ["git", *args],
             capture_output=True,
             text=True,
-            timeout=timeout,
         )
-    except (subprocess.TimeoutExpired, OSError):
+    except OSError:
         return 1, "", ""
     return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
 
 
-def git(*args: str, timeout: float | None = None) -> tuple[int, str]:
+def git(*args: str) -> tuple[int, str]:
     """Run a git command, returning (exit code, stripped stdout)."""
-    code, out, _ = _run(*args, timeout=timeout)
+    code, out, _ = _run(*args)
     return code, out
 
 
@@ -131,7 +163,7 @@ def check_bare(fix: bool) -> list[str]:
     """
     code, git_dir, stderr = _run("rev-parse", "--git-dir")
     if code != 0:
-        return _unreadable_core_bare(stderr)
+        return _git_is_refusing(stderr)
 
     # `--type=bool` rather than the raw value. Git accepts `1`, `yes` and `on`
     # as spellings of true and breaks the checkout for all of them, so reading
@@ -163,34 +195,75 @@ def check_bare(fix: bool) -> list[str]:
     ]
 
 
-def _unreadable_core_bare(stderr: str) -> list[str]:
-    """Tell "not a repository" apart from "git cannot read `core.bare` at all".
+def _looks_like_a_repository(start: Path) -> bool:
+    """Whether a `.git` entry sits at `start` or above it.
 
-    Discarding the exit code of the `core.bare` read reproduced, through a
-    second door, the exact bug that reading it as a bool was meant to close.
-    `bare = maybe` in `.git/config` makes *every* git command in the repository
-    exit 128 with `bad boolean config value` -- `git status`, `git commit`,
-    `git config` and `git rev-parse --git-dir` alike -- and `--doctor` printed
-    `git hygiene: clean`, rc 0, standing in a repository where nothing worked.
-    Reproduced and fixed 2026-08-20.
-
-    Nothing git can be asked will separate the two cases, because everything
-    git is asked fails the same way. Checked 2026-08-20: `-c core.bare=false`
-    does not override it, `git config -f .git/config` does not sidestep it, and
-    a subdirectory behaves identically. What does separate them is what git
-    *says*: the setup failure names `core.bare`, and `not a git repository`
-    does not. The key name survives translation even though the sentence around
-    it does not.
+    Filesystem only, and deliberately so: this is consulted after git has
+    already refused to answer, which makes anything git says about itself
+    unavailable. `.git` is a directory in a main worktree and a file in a
+    linked one, so existence rather than type is the test. The walk upwards
+    mirrors git's own discovery, so that `--doctor` run from a subdirectory of
+    a repository git will not open is not reported as standing outside a
+    repository -- which is the same defect one directory down.
     """
-    if "core.bare" not in stderr:
-        return []  # not a repository, or some unrelated setup failure
+    return any((directory / ".git").exists() for directory in (start, *start.parents))
+
+
+def _git_is_refusing(stderr: str) -> list[str]:
+    """Report a git that will not run here, having already exited non-zero.
+
+    `git rev-parse --git-dir` fails for two very different reasons: there is no
+    repository here, or there is one and git is refusing to open it. Nothing
+    git can be asked separates them, because everything git is asked fails the
+    same way. Checked 2026-08-20: `-c core.bare=false` does not override a bad
+    value, `git config -f .git/config` does not sidestep it, and a
+    subdirectory behaves identically.
+
+    **So the discriminator is the filesystem, not the message.** Until
+    2026-08-20 this sniffed stderr for `core.bare` and returned `[]` for
+    everything else, on a stated dichotomy -- the failure either names
+    `core.bare` or is "not a git repository" -- that is false. There is a third
+    class naming neither: a junk line in `.git/config` gives `fatal: bad config
+    line 8 in file .git/config`, and `core.repositoryformatversion = banana`
+    gives its own. Both make every git command in the checkout exit 128, and
+    `--doctor` printed `git hygiene: clean`, rc 0, standing in one. Reproduced
+    and fixed 2026-08-20. `.git` existing while git refuses to open it is
+    message-independent and locale-independent, which the sniff was not.
+
+    `core.bare` keeps its own message where git names it, because that value can
+    be repaired by hand and the general case cannot even be named. Neither is
+    repaired by `--fix`: `check_bare` returns through here before `fix` is ever
+    consulted.
+
+    One case is still missed, and is named rather than guessed at: a repository
+    reached through `GIT_DIR` or `--git-dir` from a directory with no `.git`
+    above it leaves nothing on the filesystem to find.
+    """
+    said = stderr.splitlines()[0] if stderr.strip() else "(nothing)"
+
+    if "core.bare" in stderr:
+        return [
+            "core.bare cannot be read at all, and git is refusing every command here.",
+            f"    git said: {said}",
+            "--fix will not touch this one. Git cannot be asked whether the repository is",
+            "meant to be bare while the value is unreadable, and `git config` is refusing",
+            "for the same reason -- so edit the `bare =` line in .git/config by hand.",
+        ]
+
+    try:
+        here = Path.cwd()
+    except OSError:  # pragma: no cover - the working directory was deleted under us
+        return []
+    if not _looks_like_a_repository(here):
+        return []  # no repository here; nothing to have an opinion about
 
     return [
-        "core.bare cannot be read at all, and git is refusing every command here.",
-        f"    git said: {stderr.splitlines()[0]}",
-        "--fix will not touch this one. Git cannot be asked whether the repository is",
-        "meant to be bare while the value is unreadable, and `git config` is refusing",
-        "for the same reason -- so edit the `bare =` line in .git/config by hand.",
+        "git is refusing to operate here, and it is not that there is no repository:",
+        "a .git entry exists at or above this directory.",
+        f"    git said: {said}",
+        "Every git command in this checkout will fail the same way, including the ones",
+        "this script would need to diagnose it, so --fix will not touch this one.",
+        "Start with .git/config -- a value git cannot parse is the usual cause.",
     ]
 
 
@@ -202,18 +275,34 @@ def _git_path(name: str) -> Path | None:
     return Path(path)
 
 
-def _integration_in_progress() -> bool:
-    """Whether git is part-way through a merge, cherry-pick, revert or rebase.
+def _integration_in_progress() -> str | None:
+    """Which integration git is part-way through, or None if it is not.
 
-    One `rev-parse` covers all of `INTEGRATION_MARKERS`; the flag repeats.
+    One `rev-parse` covers all of `INTEGRATION_MARKERS`; the flag repeats, and
+    git answers one line per flag in order.
+
+    The marker *name* is returned rather than a bool because the caller says it
+    out loud. Planting any of these turns the drift guard off for as long as the
+    file is there, and `mkdir .git/rebase-apply` is what a crashed `git am`
+    leaves behind -- so the exemption has to be able to name itself.
     """
     args: list[str] = ["rev-parse"]
     for name in INTEGRATION_MARKERS:
         args += ["--git-path", name]
     code, out = git(*args)
     if code != 0:
-        return False
-    return any(Path(line).exists() for line in out.splitlines() if line)
+        return None
+
+    paths = [line for line in out.splitlines() if line]
+    if len(paths) != len(INTEGRATION_MARKERS):
+        # git answered a shape this cannot pair up. Keep the exemption, since
+        # refusing the merge that resolves the drift is the failure it closes,
+        # but do not claim to know which marker was found.
+        return "an integration marker" if any(Path(p).exists() for p in paths) else None
+    for name, path in zip(INTEGRATION_MARKERS, paths, strict=True):
+        if Path(path).exists():
+            return name
+    return None
 
 
 def _fetch_is_stale(stamp: Path | None) -> bool:
@@ -226,14 +315,38 @@ def _fetch_is_stale(stamp: Path | None) -> bool:
     for the next ten minutes, and the case it then waved through -- a `main`
     that fell behind while the remote was briefly away -- is the exact case the
     hook exists for. Reproduced and fixed 2026-08-20.
+
+    **An age outside the window in either direction counts as stale**, and the
+    negative half is not hypothetical. `age > FETCH_STALE_SECONDS` is never true
+    of a stamp dated ahead of the clock -- a VM clock jump, a restored backup,
+    an unzipped archive, a dual boot -- so such a stamp blinded the drift check
+    *permanently* rather than for ten minutes, reopening the exact defect the
+    stamp was introduced to close. Reproduced 2026-08-20: arm the stamp, set its
+    mtime a year ahead, leave `main` genuinely one commit behind -- rc 0 and no
+    fetch attempted; remove the stamp -- rc 1.
+
+    No grace is allowed on the negative side, so a filesystem that rounds an
+    mtime up past `time.time()` fetches on every commit until the rounding stops
+    mattering. That is the safe direction: this fails towards fetching, never
+    towards silence.
+
+    **And the stamp has to be a regular file.** `mkdir
+    <git-dir>/de-git-hygiene-fetch` suppressed the check for ten minutes at a
+    time while `_record_fetch` could never arm it -- writing to a directory
+    raises `OSError` and is suppressed -- so the window renewed itself off the
+    directory's own mtime and nothing here could close it. Reproduced 2026-08-20
+    on a `main` one commit behind: rc 0, no fetch.
     """
     if stamp is None:
         return True
     try:
-        age = time.time() - stamp.stat().st_mtime
+        stamped = stamp.stat()
     except OSError:
         return True  # missing, or unreadable; either way, fetch
-    return age > FETCH_STALE_SECONDS
+    if not stat.S_ISREG(stamped.st_mode):
+        return True  # not something `_record_fetch` could have written
+    age = time.time() - stamped.st_mtime
+    return not 0 <= age <= FETCH_STALE_SECONDS
 
 
 def _record_fetch(stamp: Path | None) -> None:
@@ -258,13 +371,48 @@ def _fetch(timeout: float) -> bool:
     against a helper that slept 60s: with `capture_output=True` and `timeout=3`
     the call returned after **60.21s**; with `DEVNULL`, after 3.00s. The output
     is discarded either way, so there is nothing to lose by not asking for it.
+
+    **Credential helpers are disabled for this one fetch, and
+    `GIT_TERMINAL_PROMPT` alone does not do that.** That variable governs git's
+    *own* prompt; a helper is a separate program git launches, and Git
+    Credential Manager on Windows launches a GUI. Measured 2026-08-20 against a
+    local server answering 401: the fetch returned False after 10.01s -- the
+    whole budget, on every commit, for as long as the credentials stay lapsed --
+    and left an orphaned `git-credential-manager.exe` holding a dialog, one per
+    timed-out fetch, with nothing written anywhere to connect it to a commit
+    because both streams are discarded.
+
+    `-c credential.helper=` resets the helper list to empty, `-c core.askPass=`
+    and the emptied askpass variables close the other doors, and
+    `GIT_TERMINAL_PROMPT=0` turns the remaining prompt into an immediate
+    failure -- the same variable, for the same reason, as
+    `decision_evals.deployed._git`. Measured after the change: 0.07s against a
+    hanging helper that had eaten the full budget before it. A fetch that needs
+    credentials is a fetch this hook cannot make, so failing at once beats
+    blocking the commit and then failing anyway.
     """
     try:
         proc = subprocess.run(
-            ["git", "fetch", REMOTE, PROTECTED_BRANCH, "--quiet"],
+            [
+                "git",
+                "-c",
+                "credential.helper=",
+                "-c",
+                "core.askPass=",
+                "fetch",
+                REMOTE,
+                PROTECTED_BRANCH,
+                "--quiet",
+            ],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             timeout=timeout,
+            env={
+                **os.environ,
+                "GIT_TERMINAL_PROMPT": "0",
+                "GIT_ASKPASS": "",
+                "SSH_ASKPASS": "",
+            },
         )
     except (subprocess.TimeoutExpired, OSError):
         return False
@@ -274,7 +422,9 @@ def _fetch(timeout: float) -> bool:
 def check_main_drift() -> list[str]:
     """Refuse a commit on `main` while `main` is behind `origin/main`.
 
-    Only fires on `main` itself, and only when no integration is in progress.
+    Only fires on `main` itself, and only when no integration is in progress --
+    and it says so when it skips for that reason, naming the marker, because an
+    exemption nobody can see is one nobody can debug.
     The comparison uses the already-fetched remote ref; a fetch is attempted
     first when the last *successful* one has gone stale, and a failed fetch is
     ignored so that being offline does not block a commit -- the check then
@@ -289,7 +439,11 @@ def check_main_drift() -> list[str]:
     if code != 0 or branch != PROTECTED_BRANCH:
         return []  # not a repository, or not the protected branch
 
-    if _integration_in_progress():
+    marker = _integration_in_progress()
+    if marker is not None:
+        # Said out loud: the exemption lasts as long as the marker does, and a
+        # crashed `git am` leaves one behind that nobody put there.
+        print(f"git hygiene: drift check skipped, integration in progress ({marker})")
         return []  # a merge is integration, not new work
 
     remote_ref = f"{REMOTE}/{PROTECTED_BRANCH}"
