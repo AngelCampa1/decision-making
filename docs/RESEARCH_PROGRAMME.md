@@ -2374,15 +2374,20 @@ which names every remaining item, says which of them are partly built rather
 than unstarted, and reproduces the plan itself, because the plan file lives
 outside this repository and will not survive.
 
-Three of the pending items bind things stated elsewhere in this document, so
-they are repeated here:
+Three items bind things stated elsewhere in this document, so they are repeated
+here. One of the three closed after the stop and is kept for the same reason:
+a reader who finds the constraint should find that it lifted.
 
 - **The twenty-four version 5 triples are unadjudicated.** No number may be
   published against answer key v5 until the blind three-judge round has run on
   them. Every downstream run in Part 3 and after is scored against that key.
-- **Concurrency on the Claude CLI backend is unmeasured.** The falsifier has its
-  prediction and its second backend; the run is incomplete. No arm may set
-  `concurrency > 1` on a CLI model until it finishes and is scored.
+- **Concurrency on the Claude CLI backend was measured on 2026-08-20 and the
+  register did not move.** 840 calls, concurrency 8 agreeing with serial better
+  than serial agrees with itself, 7.69× wall-clock. `CONCURRENCY_UNSAFE` still
+  names only `ollama/`, and now that silence is earned rather than inherited.
+  What this does not cover: `scripts/run_triggers.py` runs its own serial loop
+  and was not touched, so the published path is still serial. See
+  [`the outcome`](../notebook/2026-08-20-concurrency-on-the-cli-backend-changes-nothing.md).
 - **The `confirm` pathway does not exist.** `de screen`, `de confirm` and
   `de report` are registered as deliberately absent, and `decision_evals.prereg`
   is the last entry in `[tool.decision-evals.unwired]`. Until they exist no

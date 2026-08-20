@@ -108,3 +108,17 @@ not swept.
 
 `SCORECARD.md` and the dated sections of `docs/STATUS.md` also say 258 items.
 Those are scoped to runs that happened on v4 and are correct as written.
+
+---
+
+## Postscript, same day: 1.1 finished on its own
+
+The concurrency run was mid-flight when this entry was written and it completed
+after the entry was committed, so the line above saying it reached S2 187/280 is
+the state at the time of writing and not the state now. It reached 280/280 in
+all three arms, the registered primary landed inside its band, and
+`CONCURRENCY_UNSAFE` does not move. The outcome is in
+[`concurrency on the CLI backend changes nothing`](2026-08-20-concurrency-on-the-cli-backend-changes-nothing.md).
+
+**1.1 is closed. Everything else on the pending list above still stands**, and
+1.2 -- the unadjudicated version 5 items -- is still the binding one.
