@@ -74,8 +74,10 @@ repos:
       # commits, against whatever remote ref is already on disk. "Time-boxed"
       # was a promise rather than a fact until 2026-08-20: `subprocess.run`
       # kills the child on timeout and then drains the pipes a transport helper
-      # is still holding, so a 10-second fetch measured 60 seconds. The fetch
-      # now asks for no pipes.
+      # is still holding, so the call is bounded by the helper's lifetime and
+      # not by the timeout at all. Measured against a helper sleeping 60s, a
+      # `timeout=3` fetch returned after 60.21s. The fetch now asks for no
+      # pipes; the module docstring carries the measurement.
       #
       # `stages: [pre-commit]` is the whole list, and `pre-merge-commit` is
       # deliberately absent -- so this does NOT run on a clean merge. That is

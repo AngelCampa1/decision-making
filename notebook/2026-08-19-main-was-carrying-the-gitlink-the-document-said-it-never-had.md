@@ -49,10 +49,12 @@ the gitlink, before anything had been done in it.
 
 **The document was not wrong about the mechanism, only about whether it had
 fired here.** Its own prescription — `git rm --cached <path>`, never delete the
-worktree — was the fix, unused for as long as the sentence saying it had never
-been needed sat above it.
+worktree — was the fix, sitting under a sentence claiming it had never been
+needed. Whether it had ever been *run* is not a thing git records, so that claim
+was unfalsifiable rather than merely wrong; what is checkable is that the entry
+was still in `main`'s tree.
 
-## The contradiction in `AGENTS.md`
+## The stale scope in `AGENTS.md`
 
 `datasets/triggers/decision-making/index.yaml` grew an `ancestry:` block on
 2026-08-19 recording that `s13p` descends from v2's `x-n22`, that the text was
@@ -64,9 +66,21 @@ edited rather than carried over, and that it "fires in 11 of 14 v4 rows".
 
 Both are in `main`. The dataset correction landed; the rule it was written to
 correct did not — the corrected wording existed only on `f86269a`, on the branch
-nobody merged. A standing rule contradicted by the dataset it reasons about is
-worse than either being wrong alone, because the rule is what gets read while
-setting the next band.
+nobody merged.
+
+**And the framing above is wrong, which a later review caught.** This section was
+first written as a *contradiction* between `AGENTS.md` and the dataset. It is not
+one. `index.yaml` says "x-n22 fired in no arm on any version; s13p fires in 11 of
+14 v4 rows" — the first half **affirms** the sentence in `AGENTS.md` exactly. Both
+statements about `x-n22` are true.
+
+The defect is subtler, and it is the one the fix actually addresses: the rule
+reaches for a per-item history to set a ceiling, and the item that will *run* is
+`s13p`, not `x-n22`. A true fact about the ancestor, used to bound a run of the
+descendant, is stale rather than false — harder to notice than a contradiction,
+and why the dataset's own note ends "Treat any v2-era statement about x-n22 as
+being about a different turn." The wrong framing is kept above rather than
+deleted, because it is also in a commit message that cannot be edited.
 
 ## What the two leftovers turned out to be
 
@@ -143,8 +157,8 @@ if candidate.split("/", 1)[0] in top_level:
 ```
 
 The gitlink made `.claude` such a directory in *every* checkout, clean clones
-included, because a mode-160000 entry materialises an empty placeholder. So every
-`.claude/...` span in the living documents was being resolved — and
+included, because a mode-160000 entry materialises an empty placeholder. So two
+`.claude/...` spans in the living documents were being resolved — and
 `docs/DECISION_FRAMEWORKS.md` carried a `docs-external-paths` line for a
 directory in wanikua/thinking-skills purely because of that. The register line
 existed to excuse a reference that was only being checked because of a defect.
@@ -221,7 +235,7 @@ pinned by tests that say in their docstrings that the behaviour is recorded
 rather than endorsed. Changing either needs a decision about whether the variable
 names the hook or the script, and nobody has written that down.
 
-## The guard had five defects, four in the half that runs on every commit
+## The guard had five defects, three in the half that runs on every commit
 
 The hygiene script was reviewed as recovered work, by an agent briefed to break
 it. It found six things; five reproduced. Listing them because the pattern is
@@ -256,10 +270,18 @@ wrong.**
   draining pipes the transport grandchild still holds: 60.4s measured under a 2s
   timeout against a hung `ssh`.
 
-Four of the five sit in the drift half, which runs on every commit to `main`.
+Three of the five sit in the drift half, which runs on every commit to `main`:
+the failed fetch, the merge refusal, and the untimed fetch. The other two are in
+`check_bare`, which `main()` dispatches only under `--doctor`/`--fix`. An earlier
+draft of this heading and of two commit subjects said four; corrected here, and
+the commit subjects cannot be.
 
 **The tests did not catch any of them, and they were not bad tests.** 35 tests,
-mutation-checked before the review: removing the fetch failed eight of them. But
+mutation-checked before the review: removing the fetch alone failed seven of
+them, reverting the bool parse failed one, and the two together failed eight. An
+earlier line here, and the subject of the commit that added it, compressed that
+into "removing the fetch failed eight" — which is the total for both mutations,
+not for the fetch alone. But
 four mutants survived all 35 — most sharply `FETCH_STALE_SECONDS = 10**9`, which
 gates the fetch off entirely without deleting it. The test written to prove the
 fetch is load-bearing was immune, because a fresh `git clone` writes no
@@ -272,13 +294,48 @@ value that a later `return []` produces anyway — two tests were passing with
 their guard deleted for exactly that reason. And backdating fixtures by a fixed
 hour rather than by `FETCH_STALE_SECONDS`, since a test that backdates by the
 constant it tests moves with the mutant. 63 tests now, 13 of 14 mutants dead, the
-fourteenth equivalent and documented rather than given an invented test.
+fourteenth equivalent: dropping `code != 0 or` from `check_bare`'s guard changes
+nothing, because outside a repository `rev-parse --abbrev-ref HEAD` prints
+nothing and the branch comparison returns early regardless. Recorded here because
+an earlier version of this paragraph said it was "documented as such" while
+nothing in the tree documented it.
+
+## This entry broke the rule it cites, and here is the ledger
+
+`AGENTS.md` says `notebook/` is append-only. This entry was edited in place
+across three of its own commits, and one of those commits invoked the
+append-and-preserve rule in its message while doing it. A review counted the
+hunks: `b532407→a05eb1b` added 26 lines and deleted 14; `a05eb1b→dfaa00b` added
+41 and deleted 3; only the last was a pure append.
+
+What was deleted rather than annotated, recorded now because it cannot be
+recovered from the text:
+
+- A block quote of the ignored-register's comment in `pyproject.toml` — "A path
+  here exists for whoever ran the experiment and not on a clean clone, so
+  existence proves nothing…" — which had been quoted to justify a deletion in
+  the *other* register, and does not support that. Removed because the citation
+  was wrong, but removing a wrong citation is still a deletion.
+- A sentence naming `thinking-skills/.claude/commands/`, a path that repository
+  does not have. It was invented to defeat the gate's first-segment test and
+  should never have been written.
+- "Both are on the consolidation branch; the branch they were stranded on is
+  deleted once that lands." — replaced when the branch turned out to hold two
+  more files.
+
+None of those deletions changed a finding. That is not the point. The rule exists
+because an entry rewritten for correctness reads exactly like an entry that was
+right the first time, and the fifth pass over a document cannot tell which it is
+looking at. The corrections in this entry that *are* annotated in place — the
+register miscount, the framing of the `AGENTS.md` defect, the seven-versus-eight
+— are annotated precisely because a later reader should see the wrong version
+too. These three are not, and this list is the only remaining trace.
 
 ## What this cost, and what it did not
 
 Nothing here was found by being careful. The gitlink was found by making a
 worktree and noticing a directory that should not have been there; the
-`AGENTS.md` contradiction was found by diffing a branch nobody expected to
+`AGENTS.md` staleness was found by diffing a branch nobody expected to
 contain anything. Both had been sitting in `main` through every green `de check`,
 because neither is a thing the gate can ask about: `git ls-files -s` is not
 consulted anywhere, and no check compares a sentence in `AGENTS.md` against a

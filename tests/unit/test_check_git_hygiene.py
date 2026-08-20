@@ -1114,6 +1114,21 @@ class TestOverride:
         assert _main(monkeypatch) == 1
 
 
+# One mutation of `check_bare` survives this suite, and it is equivalent rather
+# than a gap. Dropping `code != 0 or` from
+#
+#     if code != 0 or branch != PROTECTED_BRANCH:
+#
+# changes no observable behaviour: outside a repository `git rev-parse
+# --abbrev-ref HEAD` writes nothing to stdout, so `branch` is the empty string
+# and the second half of the comparison already returns early. No input
+# distinguishes the two versions, so no test can, and inventing one that pokes
+# at internals would pin the implementation rather than the behaviour. The
+# clause stays because it says what the guard is for. Recorded here so the
+# claim that it is "equivalent" has something behind it other than an
+# assertion. Verified 2026-08-20.
+
+
 class TestGitHelper:
     def test_a_missing_executable_is_a_failure_not_an_exception(
         self, monkeypatch: pytest.MonkeyPatch
