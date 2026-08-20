@@ -6,6 +6,13 @@ and `GIT_CONFIG_SYSTEM` at an empty file so that the maintainer's own settings
 -- `init.defaultBranch`, `commit.gpgsign`, hooks -- cannot decide whether these
 pass.
 
+**That sentence was false whenever this file ran from a git hook**, which is
+where `de check` runs it. Git exports `GIT_DIR` and friends to every hook, they
+outrank the working directory, and the fixture did not clear them, so the
+throwaway repositories were the real one. It set `core.bare = true` on the live
+checkout on 2026-08-20. `REPO_SCOPED_GIT_ENV` is the list that closes it and
+`TestTheFixtureIsolatesTheRepository` is the guard.
+
 Two invariants are under test, and they are unrelated except that one script
 carries both.
 
@@ -134,14 +141,53 @@ PATIENT_FETCH_SECONDS = 120
 # --------------------------------------------------------------------------- #
 
 
+#: Git environment variables that name *which repository* a command acts on.
+#:
+#: Every one of these outranks the working directory, so a test that carefully
+#: builds a repository under ``tmp_path`` and runs ``git`` inside it acts on
+#: whatever these point at instead. Git exports them to every hook it invokes,
+#: and ``de check`` runs this suite from ``pre-commit`` and ``pre-push`` -- so
+#: the suite is at its least isolated in the one place it runs automatically.
+#:
+#: Observed on 2026-08-20, not theorised: running this file with ``GIT_DIR``
+#: inherited set ``core.bare = true`` in the live checkout, which is the exact
+#: defect ``--doctor`` exists to find, and left a test fixture's ``f.txt`` in
+#: the real index. The module docstring's opening sentence was false under a
+#: hook and is true again with this list scrubbed.
+REPO_SCOPED_GIT_ENV: tuple[str, ...] = (
+    "GIT_DIR",
+    "GIT_COMMON_DIR",
+    "GIT_WORK_TREE",
+    "GIT_INDEX_FILE",
+    "GIT_OBJECT_DIRECTORY",
+    "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+    "GIT_NAMESPACE",
+    "GIT_PREFIX",
+    "GIT_CEILING_DIRECTORIES",
+    "GIT_CONFIG",
+    "GIT_CONFIG_COUNT",
+)
+
+
+def scrub_repo_scoped_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Unset every variable that would redirect git away from ``tmp_path``."""
+    for name in REPO_SCOPED_GIT_ENV:
+        monkeypatch.delenv(name, raising=False)
+
+
 @pytest.fixture(autouse=True)
 def isolated_git(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Point every git subprocess at an empty global and system config.
+    """Point every git subprocess at an empty config and at no repository.
 
     Identity comes from the environment rather than `git config user.*` so that
     a repository can be created and committed to in two calls, and so that no
     test depends on a config file it did not write.
+
+    The config half was here from the start. The repository half was not, and
+    its absence is what let a hook-time run of this file reconfigure the
+    maintainer's own checkout; see :data:`REPO_SCOPED_GIT_ENV`.
     """
+    scrub_repo_scoped_env(monkeypatch)
     empty = tmp_path / "gitconfig-empty"
     empty.write_text("", encoding="utf-8")
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(empty))
@@ -2253,3 +2299,44 @@ class TestGitHelper:
         monkeypatch.chdir(elsewhere)
         assert hygiene._git_path(hygiene.FETCH_STAMP) is None
         assert hygiene._integration_in_progress() is None
+
+
+class TestTheFixtureIsolatesTheRepository:
+    """The isolation the module docstring claims, asserted rather than assumed.
+
+    These are cheap and they are the only thing standing between this file and
+    the maintainer's own repository. A test here that only checked "the tests
+    pass" would keep passing with the scrub deleted, because the scrub only
+    matters when something upstream has set the variables -- and the thing that
+    sets them is a git hook, which is not how anybody runs pytest by hand.
+    """
+
+    def test_the_scrub_removes_every_name_it_lists(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        for name in REPO_SCOPED_GIT_ENV:
+            monkeypatch.setenv(name, "somewhere-else")
+        scrub_repo_scoped_env(monkeypatch)
+        assert [name for name in REPO_SCOPED_GIT_ENV if name in os.environ] == []
+
+    def test_git_dir_and_the_index_are_on_the_list_by_name(self) -> None:
+        """The two that did the damage, pinned so a tidy-up cannot drop them.
+
+        `GIT_DIR` redirected the reads and `GIT_INDEX_FILE` redirected the
+        writes; between them a test committing to its own fixture repository
+        was staging into the real one.
+        """
+        assert "GIT_DIR" in REPO_SCOPED_GIT_ENV
+        assert "GIT_INDEX_FILE" in REPO_SCOPED_GIT_ENV
+
+    def test_a_fixture_repository_is_the_one_git_resolves(self, tmp_path: Path) -> None:
+        """End to end: `git` inside a throwaway repository reports that one."""
+        repo = tmp_path / "elsewhere"
+        repo.mkdir()
+        subprocess.run(["git", "init", "-q", str(repo)], check=True)
+        resolved = subprocess.run(
+            ["git", "rev-parse", "--absolute-git-dir"],
+            cwd=repo,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        assert Path(resolved).resolve().is_relative_to(tmp_path.resolve())
