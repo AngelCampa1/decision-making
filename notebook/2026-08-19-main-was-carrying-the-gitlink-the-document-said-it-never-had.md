@@ -300,6 +300,47 @@ nothing and the branch comparison returns early regardless. Recorded here becaus
 an earlier version of this paragraph said it was "documented as such" while
 nothing in the tree documented it.
 
+## Then two of the fixes reopened the holes they closed
+
+A third review read the *fixes* as adversarially as the first read the code, and
+that is where the useful finding is: two of the five repairs moved the failure
+rather than closing it, and one of them made it worse.
+
+The stamp file was introduced so that a **failed** fetch could not arm the
+ten-minute suppression window. It was armed instead by a clock: `_fetch_is_stale`
+asked `age > FETCH_STALE_SECONDS`, and a negative age is never greater than
+anything, so a stamp mtime ahead of the filesystem clock — VM resume, restored
+backup, unzipped archive, dual boot — suppressed the fetch **forever** rather than
+for ten minutes. The signature is identical to the defect it replaced: rc 0 on a
+`main` that is genuinely behind, no fetch attempted, on-disk ref reading level.
+A bound written as a one-sided comparison is not a window; it is a floor.
+
+The stderr sniff for an unreadable `core.bare` closed one spelling of a class and
+left the class open. Its docstring stated the dichotomy out loud — the setup
+failure either names `core.bare`, or it is "not a git repository" — and there is a
+third kind that names neither: `fatal: bad config line 8 in file .git/config`.
+`--doctor`, which the module docstring sells as the thing to reach for when git
+starts refusing everything, printed `clean` on a repository where `git status`
+exits 128. **A stated dichotomy in a docstring is a claim like any other, and this
+one was never checked.** The discriminator is now the filesystem rather than the
+message text, which also makes it locale-independent — a property the old one only
+had by accident, this build of Git for Windows shipping no translations.
+
+Two more of the same shape. `FETCH_TIMEOUT_SECONDS = 10 → 100000` passed all 63
+tests, which is the very trap the suite's own docstring says it fixed for
+`FETCH_STALE_SECONDS` — the test compared the argument against the constant, so it
+moved with the mutant. And the integration exemption, added that morning to stop
+the guard refusing the merge that resolves the drift, turned out to be permanent
+and silent: `mkdir .git/rebase-apply`, which is what a crashed `git am` leaves
+behind, disables the check with no expiry and no notice.
+
+**The pattern across all three rounds is one thing.** Every defect was a case
+where the check returned a plausible zero and nothing looked wrong — and in this
+round, two of them were introduced *by the fix for exactly that*. The tests were
+mutation-checked at each step and still missed it, because a mutation suite tests
+the code that exists against deletion, not the code that exists against being
+gated off by a constant, a clock, or a leftover file.
+
 ## This entry broke the rule it cites, and here is the ledger
 
 `AGENTS.md` says `notebook/` is append-only. This entry was edited in place
