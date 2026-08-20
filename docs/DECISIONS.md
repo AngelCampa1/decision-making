@@ -47,6 +47,50 @@ merge is exactly where a label could move with no commit of its own to name,
 and the register is where a reader would find out whether one did. This one
 records that none did.
 
+## 2026-08-20 — The key version says that labels moved, and nothing said which
+
+**Commits:** `92ea9e0`
+
+Adds `datasets/triggers/corrections.jsonl` and the `de check` step that keeps it
+complete. Governed path, hence this entry.
+
+This register is where the reasoning behind a label move lives, and that is the
+right home for reasoning. It is the wrong home for a *record*: prose cannot be
+joined against a checkpoint, and a reader holding a number and asking "which
+label moved between the version this was scored on and the version I am reading
+now" has to read the register end to end and hope. `set_version` answers whether
+two runs are comparable. Nothing answered what changed.
+
+One line per change, naming the item, both labels, the version moved into, the
+date, the adjudicator, and the heading here that argued for it. The gate refuses
+a version the corpus has reached that no line accounts for, and refuses a line
+whose `decision` names no heading in this file.
+
+**The backfill is three lines and it was read out of git.** The labels in
+`datasets/triggers/decision-making.yaml` were parsed from the commits either
+side of each bump and diffed, rather than transcribed from the entries below.
+Exactly one `should_fire` has ever changed on an item present before and after:
+`x-n21`, true to false, at `d43c490`, with the version stamp landing at
+`903169c` and moving nothing further. Version 3 is `rebuilt` -- a different
+corpus, no item id carrying across, nothing ever scored against it. Version 4 is
+`none` -- an identity fix, and the rewrite round that followed changed twelve
+asks and moved no label either.
+
+That agrees with the entries below, which is the point of checking it a second
+way rather than a reason not to have.
+
+**What this cannot do.** It does not diff the corpus against its own history to
+find a move nobody declared, so a line missing from *inside* a bump that was
+otherwise declared is invisible to it. The version 2 to version 3 transition
+replaced the corpus wholesale, so there is no item-level diff to take across it
+even in principle. What the gate catches is an undeclared bump, which is the
+failure that has happened here.
+
+**The coupling this creates, named because it is deliberate.** Authoring
+positives for `council` and `hinge` means a new key version, and this gate will
+refuse the tree until a line here says what moved into it. That is the intended
+cost of a version bump, and it is the reason the file exists.
+
 ## 2026-08-20 — `s13p`'s annotation named a directory no verdict has been written to
 
 **Commits:** `2bc3a26`
