@@ -1,0 +1,104 @@
+---
+/**
+ * Renders the `<pre class="mermaid">` blocks `remark-mermaid.mjs` produced.
+ *
+ * Dropped into the document layout, so it ships on every rendered page. The
+ * guard below is why that costs nothing: mermaid is a large library and the
+ * `import()` is inside a `querySelector` check, so a page without a diagram
+ * never asks for the chunk.
+ *
+ * Re-renders on a theme change because mermaid bakes its palette into the SVG
+ * it emits. It also destroys the source when it renders, so the source is
+ * captured first and put back before each re-run.
+ */
+---
+
+<script>
+  const blocks = Array.from(document.querySelectorAll('pre.mermaid'));
+
+  if (blocks.length > 0) {
+    const sources = blocks.map((block) => block.textContent ?? '');
+
+    const isDark = () => {
+      const chosen = document.documentElement.dataset.theme;
+      if (chosen === 'dark') return true;
+      if (chosen === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+
+    /* Read the palette off the page rather than restating it here. The site
+       has one set of colour tokens and a diagram that hardcoded its own would
+       be a second theme to keep in step with the first. */
+    const token = (name, fallback) => {
+      const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return value || fallback;
+    };
+
+    const { default: mermaid } = await import('mermaid');
+
+    const render = async () => {
+      const dark = isDark();
+      const ink = token('--ink', dark ? '#e9e7e2' : '#1c1f23');
+      const muted = token('--ink-muted', dark ? '#969da6' : '#5e646c');
+      const surface = token('--raised', dark ? '#12151a' : '#f5f5f3');
+      const ground = token('--ground', dark ? '#0b0d0f' : '#ffffff');
+      const line = token('--rule-strong', dark ? '#333941' : '#bdbdb6');
+      const accent = token('--signal', '#c6f24e');
+
+      blocks.forEach((block, index) => {
+        block.textContent = sources[index];
+        block.removeAttribute('data-processed');
+      });
+
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'strict',
+        fontFamily: token('--font-sans', 'system-ui, sans-serif'),
+        themeVariables: {
+          darkMode: dark,
+          background: ground,
+          primaryColor: surface,
+          primaryTextColor: ink,
+          primaryBorderColor: line,
+          secondaryColor: surface,
+          tertiaryColor: surface,
+          lineColor: muted,
+          textColor: ink,
+          mainBkg: surface,
+          nodeBorder: line,
+          clusterBkg: 'transparent',
+          clusterBorder: line,
+          edgeLabelBackground: ground,
+          titleColor: ink,
+          nodeTextColor: ink,
+          fontSize: '14px',
+          /* The palette is one hue plus greys, and a diagram is not the place
+             to introduce a second. */
+          cScale0: accent,
+        },
+      });
+
+      /* One diagram at a time. `run()` over the whole list aborts the batch on
+         the first parse error, which on 2026-08-21 left five diagrams
+         unrendered and the theme observer dead because a node id collided with
+         a mermaid keyword. A failure now costs one figure. */
+      for (const block of blocks) {
+        try {
+          await mermaid.run({ nodes: [block] });
+        } catch (error) {
+          console.error('mermaid: diagram failed to render', error);
+        }
+      }
+    };
+
+    await render();
+
+    /* The toggle writes `data-theme` on the root; system mode writes nothing
+       and follows the media query. Watch both. */
+    new MutationObserver(render).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+  }
+</script>

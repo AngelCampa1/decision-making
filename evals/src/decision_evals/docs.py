@@ -63,7 +63,12 @@ from typing import Final
 #: The living documentation. Globs relative to the repository root, in the
 #: order a reader meets them. ``notebook/`` and ``results/`` are deliberately
 #: absent -- see the module docstring.
-SCANNED: Final[tuple[str, ...]] = ("*.md", "docs/*.md")
+#:
+#: Recursive since 2026-08-21. It was ``docs/*.md`` for eight days, one level
+#: deep, so ``docs/reviews/`` and ``docs/superpowers/`` were rendered by the
+#: site, linked from ``docs/README.md``, and read by nothing. Widening it found
+#: 23 unresolvable references, all of them in one dated plan.
+SCANNED: Final[tuple[str, ...]] = ("*.md", "docs/**/*.md")
 
 #: Dated registers caught by :data:`SCANNED` that are records rather than
 #: instructions. ``docs/DECISIONS.md`` explains past decisions, and a decision
@@ -72,6 +77,30 @@ SCANNED: Final[tuple[str, ...]] = ("*.md", "docs/*.md")
 #: commit deleted. Demanding an edit there would corrupt the register for the
 #: same reason it would corrupt ``notebook/``.
 EXCLUDED: Final[frozenset[str]] = frozenset({"docs/DECISIONS.md"})
+
+#: Directories under :data:`SCANNED` that hold records rather than
+#: instructions, excluded by prefix. A plan is what somebody intended on the
+#: day it is dated, and ``docs/superpowers/plans/`` names files it proposed and
+#: never created, a ``skills/evidence-ledger/`` that was later deleted, and
+#: line ranges like ``runner.py:211-221`` that moved the next time the file
+#: was touched. Each of those is correct history and none of them resolves.
+#:
+#: Excluded as a class, not as the files that happen to fail today. One plan in
+#: that directory is clean, and gating it would make the rule "records are
+#: checked until they age", which nobody can write to.
+EXCLUDED_PREFIXES: Final[frozenset[str]] = frozenset({"docs/superpowers/plans/"})
+
+#: The documentation index, and the page the site serves at ``/docs/``.
+INDEX_PATH: Final = "docs/README.md"
+
+#: The line every living document carries under its title, naming the one
+#: audience it serves.
+AUDIENCE_MARKER: Final = "**Audience:**"
+
+#: Generated documents, which carry an audience line because their generator
+#: writes one. Listed so a reader of this module can see that the rule has no
+#: exemptions rather than having to check.
+GENERATED: Final[frozenset[str]] = frozenset({"docs/RUN_INDEX.md"})
 
 #: The README section whose table is the map of the repository.
 COMPONENT_HEADING: Final = "## What's actually here"
@@ -136,8 +165,12 @@ def scanned_files(repo_root: Path) -> list[Path]:
     seen: dict[Path, None] = {}
     for pattern in SCANNED:
         for path in sorted(repo_root.glob(pattern)):
-            if path.is_file() and _relative(path, repo_root) not in EXCLUDED:
-                seen.setdefault(path, None)
+            if not path.is_file():
+                continue
+            relative = _relative(path, repo_root)
+            if relative in EXCLUDED or relative.startswith(tuple(sorted(EXCLUDED_PREFIXES))):
+                continue
+            seen.setdefault(path, None)
     return list(seen)
 
 
@@ -470,20 +503,157 @@ def check_component_table(repo_root: Path) -> list[DocIssue]:
     return issues
 
 
+def index_entries(repo_root: Path) -> set[str]:
+    """File names the documentation index links, as bare ``NAME.md``.
+
+    Targets carrying a slash are dropped: ``../SCORECARD.md`` and
+    ``reviews/HOUSE_STYLE.md`` are real links to real files, and neither is a
+    row claiming to index ``docs/`` itself.
+    """
+    index = repo_root / INDEX_PATH
+    if not index.is_file():
+        return set()
+    return {
+        target
+        for target in link_targets(index.read_text(encoding="utf-8"))
+        if "/" not in target and target.endswith(".md")
+    }
+
+
+def linked_paths(repo_root: Path) -> set[Path]:
+    """Every existing file the living documentation links to.
+
+    Targets resolve against the linking file's own directory, which is what a
+    reader's browser does. Anchors are stripped: a link into a section is a
+    link to the file that holds it. No guard against an empty result, because
+    :func:`link_targets` has already dropped every target that begins with
+    ``#``, and a branch nothing can reach is the defect :mod:`decision_evals.wiring`
+    exists to refuse.
+    """
+    found: set[Path] = set()
+    for path in scanned_files(repo_root):
+        parent = path.resolve().parent
+        for target in link_targets(path.read_text(encoding="utf-8")):
+            resolved = (parent / target.split("#", 1)[0]).resolve()
+            if resolved.exists():
+                found.add(resolved)
+    return found
+
+
+def check_docs_index(repo_root: Path) -> list[DocIssue]:
+    """The documentation index agrees with the documentation.
+
+    ``docs/README.md`` is the index a reader meets and the page the site serves
+    at ``/docs/``. It listed every file under ``docs/`` because somebody kept
+    it that way by hand, which held for nineteen documents and would have held
+    until the first one nobody remembered. This is the same two-directional
+    comparison :func:`check_component_table` makes for the README's map of the
+    repository, one level down.
+
+    Three rules. Every ``docs/*.md`` is a row and every row is a file. Every
+    subdirectory of ``docs/`` is named. And every living document inside those
+    subdirectories is linked from somewhere, which is the rule that found
+    ``docs/superpowers/drafts/s9-ledger-replacement/README.md``: 315 lines
+    describing an unshipped procedure, reachable only by listing the directory.
+    """
+    index = repo_root / INDEX_PATH
+    if not index.is_file():
+        return [DocIssue(INDEX_PATH, "the documentation index is missing")]
+
+    listed = index_entries(repo_root)
+    actual = {path.name for path in (repo_root / "docs").glob("*.md") if path.name != "README.md"}
+
+    issues = [
+        DocIssue(
+            INDEX_PATH,
+            f"the index lists `{name}`, which is not a file under `docs/`. A row pointing "
+            "at nothing is the defect `check_component_table` was written for, one level "
+            "down.",
+        )
+        for name in sorted(listed - actual)
+    ]
+    issues += [
+        DocIssue(
+            INDEX_PATH,
+            f"`docs/{name}` exists and the index does not list it. This page is the map "
+            "and the site's `/docs/` landing page; a document missing from it is a "
+            "document nobody reads.",
+        )
+        for name in sorted(actual - listed)
+    ]
+
+    named = {
+        target.split("/", 1)[0]
+        for target in link_targets(index.read_text(encoding="utf-8"))
+        if "/" in target and not target.startswith("..")
+    }
+    issues += [
+        DocIssue(
+            INDEX_PATH,
+            f"`docs/{directory.name}/` exists and the index never names it. A "
+            "subdirectory the map does not mention is a wing of the building with no "
+            "door.",
+        )
+        for directory in sorted((repo_root / "docs").iterdir())
+        if directory.is_dir() and directory.name not in named
+    ]
+
+    linked = linked_paths(repo_root)
+    issues += [
+        DocIssue(
+            _relative(path, repo_root),
+            "nothing links to this document. It renders on the site and sits in the "
+            "repository, and the only way to arrive at it is to list the directory it "
+            "is in.",
+        )
+        for path in scanned_files(repo_root)
+        if _relative(path, repo_root).count("/") > 1
+        and _relative(path, repo_root).startswith("docs/")
+        and path.resolve() not in linked
+    ]
+    return issues
+
+
+def check_audience_lines(repo_root: Path) -> list[DocIssue]:
+    """Every living document declares the one audience it serves.
+
+    ``docs/VOICE.md`` names four audiences and says a document serving two
+    serves neither. The declaration was a convention, and its stated value was
+    that writing the line forces the question -- which it does, for anyone who
+    remembers to write it.
+
+    The rule has no exemptions. ``docs/RUN_INDEX.md`` is generated, so
+    :func:`decision_evals.provenance.render_index` emits the line rather than
+    the register carrying a name somebody has to keep true.
+    """
+    return [
+        DocIssue(
+            _relative(path, repo_root),
+            f"carries no `{AUDIENCE_MARKER}` line. Name the one audience this document "
+            "serves; `docs/DOCUMENTATION_MAP.md` lists the four and what each one wants.",
+        )
+        for path in scanned_files(repo_root)
+        if AUDIENCE_MARKER not in path.read_text(encoding="utf-8")
+    ]
+
+
 def check_docs(repo_root: Path, commands: set[str]) -> list[DocIssue]:
     """Every reference in the living documentation resolves to something real."""
     return [
         *check_command_references(repo_root, commands),
         *check_path_references(repo_root),
         *check_component_table(repo_root),
+        *check_docs_index(repo_root),
+        *check_audience_lines(repo_root),
     ]
 
 
-def census(repo_root: Path) -> tuple[int, int, int, int]:
-    """``(files, components, commands_declared_absent, paths_declared_external)``."""
+def census(repo_root: Path) -> tuple[int, int, int, int, int]:
+    """``(files, components, indexed, commands_absent, paths_external)``."""
     return (
         len(scanned_files(repo_root)),
         len(component_entries(repo_root)),
+        len(index_entries(repo_root)),
         len(load_absent_commands(repo_root)),
         len(load_external_paths(repo_root)),
     )

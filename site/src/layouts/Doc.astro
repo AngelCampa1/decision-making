@@ -1,5 +1,6 @@
 ---
 import Base from './Base.astro';
+import Mermaid from '../components/Mermaid.astro';
 import { REPO, SITE_DESCRIPTION } from '../lib/site.ts';
 import { descriptionFrom } from '../lib/descriptions.ts';
 import {
@@ -72,6 +73,9 @@ const schema = graph([
       <slot />
     </div>
   </article>
+  {/* Ships on every rendered page and loads nothing on a page without a
+      diagram: the mermaid import sits behind a `querySelector` check. */}
+  <Mermaid />
 </Base>
 
 {/* Styles for the rendered markdown itself live in base.css, next to the grid

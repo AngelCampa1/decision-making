@@ -1,5 +1,7 @@
 # Track S9 — a replacement candidate for `ledger`, drafted and not shipped
 
+**Audience:** the record.
+
 **2026-08-14. Draft only.** Nothing in this directory is wired into
 `skills/decision-making/`, `SKILL.md`'s router table, or
 `datasets/triggers/`. The candidate procedure lives beside this file at

@@ -22,13 +22,17 @@ from pathlib import Path
 from decision_evals.docs import (
     DocIssue,
     census,
+    check_audience_lines,
     check_command_references,
     check_component_table,
     check_docs,
+    check_docs_index,
     check_path_references,
     code_fragments,
     component_entries,
+    index_entries,
     link_targets,
+    linked_paths,
     load_absent_commands,
     load_external_paths,
     load_ignored_paths,
@@ -50,10 +54,23 @@ def _repo(tmp_path: Path, files: dict[str, str], dirs: tuple[str, ...] = ()) -> 
     return tmp_path
 
 
+AUDIENCE = "**Audience:** the evaluating reader."
+
+
+def _index(entries: tuple[str, ...] = (), extra: str = "") -> str:
+    """A ``docs/README.md`` listing the documents beside it."""
+    rows = "\n".join(f"| [`{name}`]({name}) | answers something |" for name in entries)
+    return (
+        f"# Documentation index\n\n{AUDIENCE}\n\n"
+        f"| Document | Answers |\n| --- | --- |\n{rows}\n\n{extra}"
+    )
+
+
 def _readme(components: tuple[str, ...] = (), extra: str = "") -> str:
     rows = "\n".join(f"| `{name}/` | purpose |" for name in components)
     return (
         "# title\n\n"
+        f"{AUDIENCE}\n\n"
         "## What's actually here\n\n"
         "| Component | Purpose |\n| --- | --- |\n"
         f"{rows}\n\n{extra}"
@@ -459,30 +476,216 @@ def test_a_cell_without_a_trailing_slash_is_not_a_component(tmp_path: Path) -> N
 # --------------------------------------------------------------------------- #
 
 
-def test_check_docs_runs_all_three(tmp_path: Path) -> None:
+def test_check_docs_runs_every_check(tmp_path: Path) -> None:
     repo = _repo(
         tmp_path,
-        {"README.md": _readme(("docs", "gone"), extra="Run `de nope`.\n\n[x](MISSING.md)")},
+        {
+            "README.md": _readme(("docs", "gone"), extra="Run `de nope`.\n\n[x](MISSING.md)"),
+            "docs/README.md": _index(),
+            "docs/STATUS.md": "no audience here",
+        },
         dirs=("docs",),
     )
     messages = " ".join(issue.message for issue in check_docs(repo, COMMANDS))
     assert "is not a command" in messages
     assert "does not exist" in messages
     assert "is not a directory" in messages
+    assert "the index does not list it" in messages
+    assert "carries no `**Audience:**` line" in messages
 
 
-def test_census_counts_files_components_and_declarations(tmp_path: Path) -> None:
+def test_census_counts_files_components_index_and_declarations(tmp_path: Path) -> None:
     repo = _repo(
         tmp_path,
         {
             "README.md": _readme(("docs",)),
+            "docs/README.md": _index(("STATUS.md",)),
             "docs/STATUS.md": "x",
             "pyproject.toml": '[tool.decision-evals.docs-absent-commands]\n"report" = "why"\n',
         },
         dirs=("docs",),
     )
-    assert census(repo) == (2, 1, 1, 0)
+    assert census(repo) == (3, 1, 1, 1, 0)
 
 
 def test_an_issue_reads_as_a_line() -> None:
     assert str(DocIssue("README.md", "broken")) == "README.md: broken"
+
+
+# --------------------------------------------------------------------------- #
+# The documentation index
+# --------------------------------------------------------------------------- #
+
+
+def test_an_index_matching_the_directory_passes(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": _index(("STATUS.md", "VOICE.md")),
+            "docs/STATUS.md": AUDIENCE,
+            "docs/VOICE.md": AUDIENCE,
+        },
+    )
+    assert check_docs_index(repo) == []
+
+
+def test_a_document_the_index_omits_is_refused(tmp_path: Path) -> None:
+    """The failure the gate exists for: a file nobody remembered to list."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": _index(("STATUS.md",)),
+            "docs/STATUS.md": AUDIENCE,
+            "docs/ARCHITECTURE.md": AUDIENCE,
+        },
+    )
+    issues = check_docs_index(repo)
+    assert len(issues) == 1
+    assert "`docs/ARCHITECTURE.md` exists and the index does not list it" in issues[0].message
+
+
+def test_an_index_row_pointing_at_nothing_is_refused(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"docs/README.md": _index(("GONE.md",))})
+    issues = check_docs_index(repo)
+    assert len(issues) == 1
+    assert "which is not a file under `docs/`" in issues[0].message
+
+
+def test_a_subdirectory_the_index_never_names_is_refused(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": _index(),
+            "docs/programme/part-1.md": AUDIENCE + "\n\n[back](../README.md)",
+        },
+    )
+    messages = " ".join(issue.message for issue in check_docs_index(repo))
+    assert "`docs/programme/` exists and the index never names it" in messages
+
+
+def test_naming_a_subdirectory_satisfies_the_rule(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": _index(extra="[the parts](programme/part-1.md)"),
+            "docs/programme/part-1.md": AUDIENCE,
+        },
+    )
+    assert check_docs_index(repo) == []
+
+
+def test_a_document_in_a_subdirectory_nothing_links_to_is_refused(tmp_path: Path) -> None:
+    """Found on the first run: a 315-line draft reachable only by `ls`."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": _index(extra="[the drafts](drafts/one.md)"),
+            "docs/drafts/one.md": AUDIENCE,
+            "docs/drafts/two.md": AUDIENCE,
+        },
+    )
+    issues = check_docs_index(repo)
+    assert len(issues) == 1
+    assert issues[0].where == "docs/drafts/two.md"
+    assert "nothing links to this document" in issues[0].message
+
+
+def test_a_link_from_any_living_document_counts(tmp_path: Path) -> None:
+    """Reachability is repository-wide, not index-only."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": _index(("VOICE.md",), extra="[drafts](drafts/one.md)"),
+            "docs/VOICE.md": AUDIENCE + "\n\n[two](drafts/two.md)",
+            "docs/drafts/one.md": AUDIENCE,
+            "docs/drafts/two.md": AUDIENCE,
+        },
+    )
+    assert check_docs_index(repo) == []
+
+
+def test_an_anchor_does_not_stop_a_link_from_counting(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": _index(extra="[a part](programme/part-1.md#the-tracks)"),
+            "docs/programme/part-1.md": AUDIENCE,
+        },
+    )
+    assert check_docs_index(repo) == []
+
+
+def test_a_missing_index_is_refused(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme()})
+    assert [issue.message for issue in check_docs_index(repo)] == [
+        "the documentation index is missing"
+    ]
+
+
+def test_index_entries_ignores_targets_carrying_a_slash(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {"docs/README.md": _index(("STATUS.md",), extra="[s](../SCORECARD.md) [h](reviews/H.md)")},
+    )
+    assert index_entries(repo) == {"STATUS.md"}
+
+
+def test_no_index_means_no_entries(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": _readme()})
+    assert index_entries(repo) == set()
+
+
+def test_linked_paths_skips_a_target_that_does_not_exist(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"docs/README.md": _index(extra="[gone](nowhere.md)")})
+    assert linked_paths(repo) == set()
+
+
+# --------------------------------------------------------------------------- #
+# The audience declaration
+# --------------------------------------------------------------------------- #
+
+
+def test_a_declared_audience_passes(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"docs/VOICE.md": "# Voice\n\n" + AUDIENCE + "\n"})
+    assert check_audience_lines(repo) == []
+
+
+def test_a_document_without_an_audience_is_refused(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"docs/VOICE.md": "# Voice\n\nno declaration\n"})
+    issues = check_audience_lines(repo)
+    assert len(issues) == 1
+    assert issues[0].where == "docs/VOICE.md"
+
+
+def test_the_decision_register_needs_no_audience(tmp_path: Path) -> None:
+    """It is excluded from the scan, so every rule keyed on the scan skips it."""
+    repo = _repo(tmp_path, {"docs/DECISIONS.md": "2026-08-11 - a decision"})
+    assert check_audience_lines(repo) == []
+
+
+# --------------------------------------------------------------------------- #
+# Scan scope
+# --------------------------------------------------------------------------- #
+
+
+def test_the_scan_reaches_into_subdirectories(tmp_path: Path) -> None:
+    """One level deep for eight days, which is how `docs/reviews/` went unread."""
+    repo = _repo(
+        tmp_path,
+        {"docs/README.md": "x", "docs/reviews/HOUSE_STYLE.md": "x"},
+    )
+    assert [path.name for path in scanned_files(repo)] == ["README.md", "HOUSE_STYLE.md"]
+
+
+def test_dated_plans_are_excluded_as_records(tmp_path: Path) -> None:
+    """A plan names what it intended to build, which is often not what exists."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/README.md": "x",
+            "docs/superpowers/plans/2026-08-11-a-plan.md": "`scripts/detect_core.py` will do it",
+        },
+        dirs=("scripts",),
+    )
+    assert [path.name for path in scanned_files(repo)] == ["README.md"]
+    assert check_path_references(repo) == []

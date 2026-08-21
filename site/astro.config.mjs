@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
 import sitemap from '@astrojs/sitemap';
 import rewriteLinks from './src/lib/remark-rewrite-links.mjs';
+import mermaid from './src/lib/remark-mermaid.mjs';
 import rehypeTables from './src/lib/rehype-tables.mjs';
 
 // The content collections read markdown from directories above this project
@@ -36,7 +37,10 @@ export default defineConfig({
   // it somewhere `de site` can find and clear.
   cacheDir: './.astro-cache',
   markdown: {
-    remarkPlugins: [rewriteLinks],
+    // `mermaid` runs on the mdast, before `syntaxHighlight: false` below
+    // decides what a code block becomes, so it reads the language tag from the
+    // node instead of from a class a highlighter may not have attached.
+    remarkPlugins: [rewriteLinks, mermaid],
     rehypePlugins: [rehypeTables],
     // No syntax highlighting. Astro's default is a fixed dark theme, which is
     // wrong on a light page, and the dual-theme output is a rainbow -- this

@@ -1,5 +1,7 @@
 # Status: what has been run, what it showed, what is left
 
+**Audience:** the record.
+
 **Hand-maintained. Last updated 2026-08-14.** There is no generator behind this
 file and it does not pretend otherwise — see the note at the top of
 [`SCORECARD.md`](../SCORECARD.md) about a status file that claimed to be

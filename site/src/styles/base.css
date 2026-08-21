@@ -582,8 +582,49 @@ blockquote {
 
 .doc__body>table,
 .doc__body>pre,
+.doc__body>.diagram,
 .doc__body>.table-scroll {
   grid-column: text-start / wide-end;
+}
+
+/* --------------------------------------------------------------- diagrams */
+
+/* A mermaid fence renders here and stays a fence on github.com. Before the
+ * script arrives, and for anyone it never reaches, the figure is the diagram
+ * source as text -- readable, which a blank space would not be.
+ *
+ * Its own scroller for the same reason tables have one: a wide graph has a
+ * hard minimum width, and without somewhere to spend it the document scrolls
+ * sideways and drags the prose with it. WCAG 1.4.10. */
+.doc__body>.diagram {
+  margin-block: var(--space-md) var(--space-xl);
+  padding: var(--space-md);
+  background: var(--raised);
+  border: 1px solid var(--rule-hair);
+  border-radius: var(--radius-2);
+  overflow-x: auto;
+}
+
+.doc__body>.diagram>pre.mermaid {
+  margin: 0;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Until mermaid replaces it, the element is holding source. Wrap it like the
+ * code block it is. */
+.doc__body>.diagram>pre.mermaid:not([data-processed]) {
+  text-align: left;
+  white-space: pre-wrap;
+  font: 400 .8125rem/1.6 var(--font-mono);
+  color: var(--ink-muted);
+}
+
+.doc__body>.diagram svg {
+  max-width: 100%;
+  height: auto;
 }
 
 .doc__body table,

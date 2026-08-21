@@ -43,6 +43,9 @@ disagreed in four places.
 | publish a run without an answer-key version, or with a prediction that cannot be shown to predate its data | a prediction that cannot be shown to predate its data is not evidence |
 | give a module a coverage floor that no entry point reaches | a tested refusal with no caller is inert, and the gate reports green either way |
 | name a `de` command, path, or component that does not exist | documentation was the last obligation here checked by reading it, and the README was found naming two commands that never existed |
+| add a document under `docs/` without listing it in [`docs/README.md`](docs/README.md) | that page is the index and the site's `/docs/` landing page, so a document missing from it is a document nobody reads |
+| write a living document with no `**Audience:**` line | four audiences want different things from a page, and one serving two serves neither |
+| leave a document under a `docs/` subdirectory that nothing links to | the first run of that check found 315 lines of drafted procedure reachable only by listing the directory |
 | leave [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md) stale | run `de index`; it is generated so it cannot drift the way a hand-maintained index does |
 | edit a document the website renders without rebuilding it | run `de site`; the site reads this repository's markdown in place, so an edited document is a published page that disagrees with the repository until somebody notices |
 | regenerate a golden file without `pytest --bless` | a benchmark that changes silently makes every earlier number incomparable with every later one |
@@ -85,16 +88,21 @@ you change it. Do not sweep the source for style, and do not restyle a document
 you are not otherwise working on.
 
 Nothing enforces any of this. The documentation gate reads whether a reference
-resolves and declines to judge the sentence around it, on purpose, so the review
-is the only thing between a draft and the repository.
+resolves, whether the index agrees with the directory, and whether a document
+names its audience; it declines to judge the sentence around any of them, on
+purpose, so the review is the only thing between a draft and the repository.
+
+Where a new document goes, and which of the classes below it belongs to, is
+[`docs/DOCUMENTATION_MAP.md`](docs/DOCUMENTATION_MAP.md).
 
 Four kinds of file need a specific reading of that rule:
 
 - **Dated records** say what was true on the day somebody wrote them:
   [`notebook/`](notebook/), [`results/`](results/),
-  [`docs/DECISIONS.md`](docs/DECISIONS.md) and
-  [`docs/STATUS.md`](docs/STATUS.md). New entries meet the standard. Old ones
-  are left alone, because a record rewritten for style is a record destroyed.
+  [`docs/DECISIONS.md`](docs/DECISIONS.md), [`docs/STATUS.md`](docs/STATUS.md)
+  and [`docs/superpowers/plans/`](docs/superpowers/plans/). New entries meet the
+  standard. Old ones are left alone, because a record rewritten for style is a
+  record destroyed.
 - **Generated files** are fixed at their source. Editing
   [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `CLAUDE.md`, `.agents/skills/` or
   `plugin/skills/` is reverted by the next build, so fix

@@ -758,9 +758,10 @@ def check_docs_step() -> StepResult:
     name = "documentation"
     _echo_header(name)
 
-    files, components, absent, external = docs_census(REPO_ROOT)
+    files, components, indexed, absent, external = docs_census(REPO_ROOT)
     typer.echo(
         f"{files} living doc(s), {components} component(s) listed, "
+        f"{indexed} indexed under docs/, "
         f"{absent} command(s) declared absent, {external} path(s) declared external"
     )
 

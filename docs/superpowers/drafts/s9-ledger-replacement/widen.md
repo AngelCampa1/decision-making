@@ -7,6 +7,8 @@ status: hypothesis
 
 # Widen (draft — not shipped, not wired into any router)
 
+**Audience:** an agent mid-task, if this is ever promoted. Today, the record.
+
 **This file is not a live procedure.** It sits outside `skills/decision-making/`
 on purpose — see `docs/superpowers/drafts/s9-ledger-replacement/README.md` for
 why it is a candidate and not a swap. If it is ever promoted, the frontmatter

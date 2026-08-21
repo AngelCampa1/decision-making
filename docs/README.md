@@ -8,9 +8,11 @@ Every document here, and the question each one answers.
 
 | Document | Answers |
 | --- | --- |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | What the pieces are and how a run flows through them: the skill, the harness, the datastore, the gate, the site. Read it before the programme. |
 | [`STATUS.md`](STATUS.md) | Where the work actually is. Every run on record, what it showed, which measurements turned out to be broken, which tracks are untouched. The ledger. |
 | [`../SCORECARD.md`](../SCORECARD.md) | What may be publicly claimed about a skill. Empty on purpose, plus the verdict vocabulary and the retirement rule. |
-| [`RESEARCH_PROGRAMME.md`](RESEARCH_PROGRAMME.md) | What the tracks are. The goal, what the literature already settles, and sixteen tracks in eight parts. Read this before proposing experiment work. |
+| [`RESEARCH_PROGRAMME.md`](RESEARCH_PROGRAMME.md) | What the tracks are. The goal, what the literature already settles, and the map to sixteen tracks in eight parts. Read this before proposing experiment work. |
+| [`programme/`](programme/part-1-what-is-already-known.md) | The eight parts themselves, one file each, from [what is already known](programme/part-1-what-is-already-known.md) through [the product](programme/part-2-the-product.md), [the instrument](programme/part-3-the-instrument.md), [does the failure exist](programme/part-4-does-the-failure-exist.md), [where a skill helps](programme/part-5-where-a-skill-helps.md), [confirmation](programme/part-6-confirmation.md), [cross-cutting](programme/part-7-cross-cutting.md) and [output](programme/part-8-output.md). |
 
 ## Method
 
@@ -40,11 +42,13 @@ Every document here, and the question each one answers.
 | Document | Answers |
 | --- | --- |
 | [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md) | How work is done here: the five standing rules, sub-agents, adversarial review, and the confirmation requirement. Nothing in it waits on a person. Every rule in it exists because that failure already happened. |
+| [`DOCUMENTATION_MAP.md`](DOCUMENTATION_MAP.md) | Where a new document goes. The four audiences, the three document classes and the rule each carries, how the documentation connects, and which gate refuses what. |
 | [`VOICE.md`](VOICE.md) | The house writing standard: who reads what, the register each audience gets, the patterns to avoid, and the three things a writing pass may never do. Governs documents, skill bodies, and source comments. |
 | [`WHY_THESE_RULES.md`](WHY_THESE_RULES.md) | The incident record behind `AGENTS.md`. Every rule there keeps one line and links here for the dated failure that produced it. |
 | [`reviews/`](reviews/) | Three review briefs, used as prompts: [`HOUSE_STYLE.md`](reviews/HOUSE_STYLE.md) checks a draft against `VOICE.md`, [`POSITIONING.md`](reviews/POSITIONING.md) finds where writing undersells work that was done, and [`COLD_READER.md`](reviews/COLD_READER.md) tests what a stranger takes from the first screen. |
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | How to contribute, and which gates will refuse you. |
-| [`superpowers/plans/`](superpowers/plans/) | Long-form experiment plans. |
+| [`superpowers/plans/`](superpowers/plans/) | Long-form experiment plans, dated and left as written. |
+| [`superpowers/drafts/`](superpowers/drafts/s9-ledger-replacement/README.md) | Candidate procedures written and not shipped. [`s9-ledger-replacement/`](superpowers/drafts/s9-ledger-replacement/README.md) is a replacement for `ledger`, drafted 2026-08-14 and wired into nothing. |
 
 ## The rest of the repository
 

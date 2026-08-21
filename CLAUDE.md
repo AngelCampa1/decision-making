@@ -167,8 +167,10 @@ a clean checkout, which sees what a working directory cannot. A second workflow,
 `citations.py`, `provenance.py`, `decisions.py`, `wiring.py`, `skills.py`.
 `scripts/run_triggers.py` is the runner behind every model call on record.
 `datasets/` is the answer key, `skills/` the product, `results/` and `notebook/`
-the record. `README.md` carries the component table and
-[`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md) carries the tracks.
+the record. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) draws how they fit
+and how a run flows through them. `README.md` carries the component table and
+[`docs/RESEARCH_PROGRAMME.md`](docs/RESEARCH_PROGRAMME.md) maps the tracks to
+[`docs/programme/`](docs/programme/part-1-what-is-already-known.md).
 
 ## Standing obligations
 
@@ -201,15 +203,24 @@ the record. `README.md` carries the component table and
   module that no entry point can reach. Intentional gaps go in
   `[tool.decision-evals.unwired]` with the condition that would close them.
 - **The documentation gate catches a reference that does not resolve, never a
-  description that is wrong.** Scope is root `*.md` and `docs/*.md`.
-  `notebook/`, `results/**/README.md` and [`docs/DECISIONS.md`](docs/DECISIONS.md)
-  are excluded as dated records, so do not "fix" a stale reference in them.
+  description that is wrong.** Scope is root `*.md` and `docs/` recursively.
+  `notebook/`, `results/**/README.md`,
+  [`docs/DECISIONS.md`](docs/DECISIONS.md) and `docs/superpowers/plans/` are
+  excluded as dated records, so do not "fix" a stale reference in them.
   Deliberately absent commands go in
   `[tool.decision-evals.docs-absent-commands]` and deliberately untracked paths
   in `[tool.decision-evals.docs-ignored-paths]`. Both may only shrink, and both
   refuse an entry named nowhere in the scanned documentation. Prose describing a
   mechanism names the arena and the tense it runs in: a gate scoped to an arena
   that has never run **will refuse**, it does not refuse.
+- **A new document is listed, declares an audience, and is reachable.**
+  [`docs/README.md`](docs/README.md) is the index and the site's `/docs/` page;
+  `de check` compares it against `docs/` in both directions, refuses a living
+  document carrying no `**Audience:**` line, and refuses one under a `docs/`
+  subdirectory that nothing links to. Where a document goes and which class it
+  belongs to is
+  [`docs/DOCUMENTATION_MAP.md`](docs/DOCUMENTATION_MAP.md); splitting one goes
+  by exact line boundaries, never by rewrapping.
 - **All prose you write goes through [`docs/VOICE.md`](docs/VOICE.md) and the
   humanizer skill**, including the comments and docstrings you touch. Review
   with [`docs/reviews/HOUSE_STYLE.md`](docs/reviews/HOUSE_STYLE.md) and

@@ -66,11 +66,19 @@ from typing import Final
 #: top-level directories and fail ``docs.check_component_table``.
 SITE_DIR: Final = "site"
 
-#: The globs the site renders and the files that decide how, authored once.
-#: Read by this module *and* by ``site/src/content.config.ts``, so the two
-#: cannot drift. It is not in ``pyproject.toml`` because TypeScript cannot read
-#: TOML without another dependency, and a generated second copy would recreate
-#: the disagreement this whole design exists to prevent.
+#: The globs the site renders and the files that decide how.
+#:
+#: This module reads them to hash what a build was built from.
+#: ``site/src/content.config.ts`` **restates** them for Astro's loader; it
+#: imports nothing from here, and a comment asking the next author to keep the
+#: two in step is the whole mechanism. Corrected 2026-08-21, when this comment
+#: claimed both files read this one and an adversarial review checked it: the
+#: two had already drifted in two entries, ``*.md`` against an explicit list of
+#: four root documents, and ``plugin/skills/README.md`` against no collection at
+#: all.
+#:
+#: The file is not in ``pyproject.toml`` because TypeScript cannot read TOML
+#: without another dependency.
 INPUTS_PATH: Final = "site/inputs.json"
 
 #: The committed record of what the last build was built from.

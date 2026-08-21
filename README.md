@@ -65,6 +65,8 @@ route better.
 
 No skill here carries a verdict yet, so [`SCORECARD.md`](SCORECARD.md) is empty
 and [`docs/STATUS.md`](docs/STATUS.md) is the ledger of every run on record.
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) draws how the skill, the harness,
+the datasets and the gate fit together.
 The skill is free, installs in one line, and comes out again in one line.
 
 ## The skill
@@ -189,7 +191,7 @@ it, and whether it has actually run.
 | `datasets/` | The answer key: parameterised scenario templates with *computed* ground truth, the trigger corpus, and the SHA-256 lockfile for the third-party corpus `de fetch` downloads |
 | `results/` | Published run records: raw transcripts and a README per run |
 | `notebook/` | Append-only research log. Predictions go in *before* runs |
-| `docs/` | Protocol, status, the research programme, related work, limitations, and what was rejected. Start at [`docs/README.md`](docs/README.md) |
+| `docs/` | Protocol, status, the research programme, related work, limitations, and what was rejected. Start at [`docs/README.md`](docs/README.md), or [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for how the pieces fit |
 | `paper/` | The write-up, in LaTeX. A draft; see [`paper/CHECKLIST.md`](paper/CHECKLIST.md) |
 | `scripts/` | Standalone analysis and runners, including `run_triggers.py`, the script behind every model call on record |
 | `tests/` | Unit, integration, property and golden tests |
@@ -271,7 +273,7 @@ Several of its steps check the method instead of the code:
 | integrity wiring | a module with a coverage floor that no entry point can reach |
 | decision register | a change to the answer key or the shipped skill with no entry in [`docs/DECISIONS.md`](docs/DECISIONS.md) |
 | label corrections | a version the answer key has reached that no line of [`datasets/triggers/corrections.jsonl`](datasets/triggers/corrections.jsonl) accounts for |
-| documentation | a `de` command, path, or component that this README names and the repository does not have |
+| documentation | a `de` command, path, or component that this README names and the repository does not have, a document under `docs/` that [`docs/README.md`](docs/README.md) does not list, and a living document that names no audience |
 | citations | a claim carrying an arXiv identifier whose entry in [`paper/refs.bib`](paper/refs.bib) has no quote behind it |
 | published claims | a measured number on the website that no longer matches the sentence in the document it came from |
 | site | a published build older than the documents it publishes, naming the files that moved |

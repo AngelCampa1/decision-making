@@ -412,3 +412,34 @@ subscription stated. Writing "we spent $250" would be false.
   the direction. Before a run: does the scorer read the *same object* in every
   arm? A measure that is legitimate for one arm can be a turn-count proxy for
   another.
+
+## A new document is listed, declares an audience, and is reachable
+
+**2026-08-21.** The documentation gate had been reading root `*.md` and
+`docs/*.md` since 2026-08-13. One level deep, so `docs/reviews/` and
+`docs/superpowers/` were rendered by the site, linked from `docs/README.md`, and
+read by nothing. Widening the glob to `docs/**/*.md` found 23 unresolvable
+references in one dated plan, which is a record and now sits in
+`EXCLUDED_PREFIXES` as a class.
+
+Three things were true at once and none of them was checked. `docs/README.md`
+listed every document under `docs/` because somebody had kept it that way by
+hand. `docs/STATUS.md`, one of the most linked files here, carried no
+`**Audience:**` line. And `docs/superpowers/drafts/s9-ledger-replacement/`
+held 315 lines describing a candidate procedure that nothing had ever linked
+to, reachable only by listing the directory.
+
+`check_docs_index` and `check_audience_lines` close all three, and they are the
+two-directional comparison `check_component_table` already made for the README's
+map of the repository, one level down. The same run that added them caught two
+`de` commands and a deleted path in the prose of the documents announcing them,
+which is the argument for the gate rather than the convention.
+
+`docs/RESEARCH_PROGRAMME.md` was split in the same change: 2,550 lines and 66
+commits, the most-edited file in this history, became a map and eight parts
+under `docs/programme/`. The split went by exact line boundaries. Rewrapping
+during a split can move a claim number into a markdown block whose identifier
+carries no quote in `paper/refs.bib`, which turns a green citation gate red.
+
+The map, the classes and the placement rule are
+[`docs/DOCUMENTATION_MAP.md`](DOCUMENTATION_MAP.md).

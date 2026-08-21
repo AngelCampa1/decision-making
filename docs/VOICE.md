@@ -13,22 +13,19 @@ the source for style, and do not restyle a document you are not otherwise
 working on. A half-applied sweep leaves a package speaking in two voices, which
 is worse than one voice you have not got to yet.
 
-Nothing enforces this file. `de check` refuses a reference that does not resolve
-and declines to judge the sentence around it, because an advisory gate that
-flags prose becomes noise and then gets switched off. The guardrail is a writing
-pass and a review, both described at the bottom of this page.
+Nothing enforces the register. `de check` refuses a reference that does not
+resolve, a document that declares no audience, and an index that disagrees with
+the directory beside it; it declines to judge the sentence around any of them,
+because an advisory gate that flags prose becomes noise and then gets switched
+off. The guardrail on how the prose reads is a writing pass and a review, both
+described at the bottom of this page.
 
 ## Who reads what
 
 Four audiences. Every document serves exactly one, and a document that tries to
-serve two serves neither.
-
-| Audience | Files | What they want |
-| --- | --- | --- |
-| **Cold reader** | `README.md`, the site landing page, the GitHub description and topics, `CITATION.cff` | Thirty seconds to decide whether this deserves their attention |
-| **Evaluating reader** | `SCORECARD.md`, `CONTRIBUTING.md`, `docs/README.md`, `docs/METHODS.md`, `docs/PROTOCOL.md`, `docs/LIMITATIONS.md`, `docs/RELATED_WORK.md`, and the other living documents | To judge whether the method holds up |
-| **Agent mid-task** | `AGENTS.md`, `CLAUDE.md`, `docs/AUTONOMOUS_WORK_ORDER.md` | The rule that applies right now, at the lowest context cost |
-| **The record** | `notebook/`, `results/`, `docs/DECISIONS.md`, `docs/STATUS.md`, `docs/RUN_INDEX.md` | What was true on the day it was written |
+serve two serves neither. Which file serves which is the table in
+[`DOCUMENTATION_MAP.md`](DOCUMENTATION_MAP.md), along with where a new document
+goes; the registers below say how each audience is written for.
 
 Declare it. Every governed document carries one line under its title:
 
@@ -36,8 +33,10 @@ Declare it. Every governed document carries one line under its title:
 **Audience:** the evaluating reader.
 ```
 
-This is a convention. No gate checks it, and its value is that writing the line
-forces the question.
+`de check` refuses a living document that carries no such line. It was a
+convention until 2026-08-21, and the value claimed for it was that writing the
+line forces the question, which it does for anyone who remembers to write it.
+`docs/STATUS.md` did not.
 
 ## Register, by audience
 
