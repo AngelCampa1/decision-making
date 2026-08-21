@@ -85,3 +85,84 @@ near-misses authored against their own positives, which is the shape most likely
 to read as a decision to a judge who has the turn and no triple around it. A
 result where the 24 positives move and the negatives hold would surprise me and
 would point at the route labels rather than the fire labels.
+
+## Result
+
+216 blind adjudications, 3 judges x 72 turns, 0 unparseable, `--model haiku`
+matching the instrument every earlier batch ran on. Judges saw the turn and the
+shipped `Abort if` clauses and nothing else.
+
+```
+cases                72
+unanimous with key   0.875
+contested (2-1 kept)   6
+moved (2-1 against)    3
+movement rate        0.042   (pre-registered kill above 0.20)
+
+inter-rater agreement, key not involved:
+  pairwise agreement  0.926
+  unanimous judges    0.889
+  Fleiss kappa        0.839
+  Krippendorff alpha  0.839
+  effective raters    1.121
+
+movement by band:
+  l     1/18   0.056
+  m     2/18   0.111
+  s     0/18   0.000
+  xl    0/18   0.000
+```
+
+**The corpus survives the pre-registered kill**, by a factor of nearly five, and
+survives it in every band separately.
+
+All three registered bands held. Movement 0.042 against a predicted 0.03 to
+0.09. Unanimity with key 0.875 against a predicted 0.84 to 0.92. Fleiss kappa
+0.839 against a predicted 0.80 to 0.88. The single-sitting authoring worry that
+the prediction called its most likely failure did not materialise: one afternoon
+of authoring produced the same movement rate as batches written across days.
+
+Where the prediction was right for a weak reason: it expected movement to
+cluster in the 48 negatives, and two of the three moves are negatives. Three
+items is too few to call that anything but consistent.
+
+**Correction to the prediction, appended.** The batch rates it quotes — 0.025,
+0.056, 0.089 — cover 248 of the 261 items, not all of them. The remaining 13
+were adjudicated in the opener-leak session, which never reported a batch rate.
+The move counts still reconcile to the recorded total of 12, so only the
+denominators were understated.
+
+### The three moves cannot be applied, for the reason 2026-08-18 found
+
+```
+l24n1    negative -> positive   votes (True, True, False)
+m25p     positive -> negative   votes (False, False, True)
+m29n2    negative -> positive   votes (True, True, True)
+```
+
+Every one of the three breaks the one-positive-two-negative invariant
+`corpus._check_triples` enforces, computed against the corpus and the ledger:
+
+| triple | what the judges said | applying the move gives |
+|---|---|---|
+| `l24` | `l24p` confirmed positive 3-0, and `l24n1` also reads as fire 2-1 | two positives |
+| `m29` | `m29p` confirmed positive 2-1, and `m29n2` reads as fire 3-0 | two positives |
+| `m25` | `m25p` reads as no-fire 2-1, and both negatives unanimously no-fire | zero positives |
+
+This is
+[`2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md`](2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md)
+happening again on the new items, at 3 of 3 where that round was 12 of 12. The
+corpus is authored in triples and adjudicated in items: a judge sees one turn
+and cannot know that two of the turns it just read share a body with a third and
+compete for a single positive slot. So a 2-of-3 vote against the key says the
+authored contrast did not land, and moving the label is not an available branch.
+
+The plan's live remedy is to rewrite the disputed ask and re-adjudicate, which
+is 3 items and 9 calls. Retirement is the remedy for a three-way split, and with
+three binary judges a three-way split cannot occur, so that branch stays dead.
+
+**What this settles and what it does not.** Every one of the 330 items in
+version 5 now carries a three-judge blind record, and the movement rate over the
+72 clears the kill. Three items carry a label three blind readers dispute, and
+a number published against version 5 today is scored against those three as the
+author wrote them.
