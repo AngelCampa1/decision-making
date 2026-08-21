@@ -445,11 +445,12 @@ positive:
       rather than four hours. I want to stay where our friends and my work are.
       Neither of us is being unreasonable and we have both stopped listening,
       because I think we each got fixed on a position in the first week and
-      have been defending it since. Can you put both cases properly?
+      have been defending it since. Can you tell me which way we should go?
     why: >-
       Two positions, both defensible, and the turn says outright that each was
-      fixed early and defended after. The ask is for the cases to be made, which
-      is council rather than ledger: nothing here is a pile of facts to weigh.
+      fixed early and defended after. The ask is for a recommendation on which
+      way to go, and it is council rather than ledger because nothing here is a
+      pile of facts to weigh.
   - id: m26p
     triple: m26
     band: m
@@ -1491,12 +1492,12 @@ negative:
     turn: >-
       The genetics result is six to eight weeks out. Is that a normal turnaround
       for this kind of panel, or is six to eight weeks simply what they say to
-      everyone regardless of what the laboratory is actually doing? I would like
-      to know whether there is any point at all in ringing them at the four-week
-      mark to ask where it has got to.
+      everyone regardless of what the laboratory is actually doing? I would also
+      like to know what happens during those weeks, in order, from the sample
+      reaching the laboratory to the letter being posted to me.
     why: >-
-      The same absent fact, and the ask is a fact about the process rather than
-      whether to decide without it.
+      The same absent fact, and the ask is how the process runs while the fact
+      is pending rather than what to do in the meantime.
   - id: m30n1
     triple: m30
     band: m

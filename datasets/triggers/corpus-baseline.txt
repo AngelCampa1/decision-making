@@ -155,10 +155,20 @@ datasets/triggers/decision-making/index.yaml|cancel:ask:sentence_count
 # Same entry, `type_token_ratio` on `ask`: same cause, read through a third
 # ruler -- see the account above.
 #
-# CLOSED BY: the same condition immediately above -- a rank distribution for
-# the positive that is roughly uniform across longest, middle and shortest
-# within its triple, across all 87 triples.
-datasets/triggers/decision-making/index.yaml|matched:ask:type_token_ratio
+# CLOSED 2026-08-21, and closed by accident. The rewrite round on `l24n1`,
+# `m25p` and `m29n2` replaced three closing asks, and this statistic fell from
+# 3.03 to 2.91 null standard errors: matched 0.3886 against a null SE of
+# 0.0382, under the z = 3.0 gate. Three asks out of 330 items moved it, which
+# is the same one-clause-shift sensitivity the entry below documents for this
+# exact statistic on 2026-08-14, in the opposite direction.
+#
+# The movement is disclosed, never claimed. The rewrites were written to the
+# shipped definition of what firing means, by agents that never saw a judge's
+# verdict or this file, and the underlying skew the entry below records as
+# corpus-wide and pre-existing is unchanged by any of it. A corpus edit that
+# turns a gate green is the mechanism this repository has named as the source
+# of four generations of leak, so the reason this line goes is that the
+# baseline may only shrink, and not that the finding was worth closing.
 
 # SEEN AND CLOSED SAME DAY, 2026-08-14. The opener edit that closed the
 # `question_marks`/`terminal_question` pair above briefly carried this one
