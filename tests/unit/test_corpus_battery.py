@@ -636,12 +636,21 @@ class TestTheShippedBaseline:
         over the gate, not by changing the rate (0.9186 before, 0.9182 after)
         but by adding twenty-four triples to a proportion whose z scales with
         the square root of `n`.
+
+        Four on 2026-08-21. Blind adjudication of the seventy-two items version
+        5 added disputed three labels, and rewriting those three closing asks
+        took ``matched:ask:type_token_ratio`` from 3.03 to 2.91 null standard
+        errors, under the gate. Three asks out of 330 items moved it, so the
+        entry comes off the baseline and `corpus-baseline.txt` says in writing
+        that a corpus edit turning a gate green is the shape of the leak this
+        repository keeps finding. What earns it here is that the agents who
+        wrote those asks saw neither a judge's verdict nor that file.
         """
         assert check_trigger_sets(REPO_ROOT) == []
         deferred = deferred_corpus_findings(REPO_ROOT)
-        # Five, with different members since 2026-08-20: four shortcut leaks and
-        # one `unreachable:` gap, where it was three leaks and two gaps.
-        assert len(deferred) == 5
+        # Four since 2026-08-21: three shortcut leaks and one `unreachable:`
+        # gap, where it was four leaks and one gap.
+        assert len(deferred) == 4
         unreachable = [
             message
             for message in deferred
@@ -663,7 +672,8 @@ class TestTheShippedBaseline:
             "'sentence_count' on the 'ask' view puts the positive at an extreme" in message
             for message in deferred
         )
-        assert any(
+        # Closed 2026-08-21 by the three rewritten asks; see the docstring.
+        assert not any(
             "'type_token_ratio' on the 'ask' view sits below" in message for message in deferred
         )
         assert not any(
