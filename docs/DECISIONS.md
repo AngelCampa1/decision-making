@@ -1359,3 +1359,37 @@ So `extended` — items added, no existing label moved — with the denominators
 the reason field. The register of kinds may grow when a real event has no
 accurate one; what it may not do is have an event described by the nearest
 inaccurate kind.
+
+## 2026-08-21 — The version 2 corpus is exempt from the adjudication gate, and says why
+
+**Commits:** `8bdc1a5`
+
+Adds `datasets/triggers/adjudication-baseline.txt`, which is a governed path, so
+the reasoning belongs here rather than in the commit body.
+
+`de check` now refuses a trigger set on disk carrying an item with no
+three-judge blind adjudication record. Two answer keys load, and one of them
+would be refused on the first run: `datasets/triggers/decision-making.yaml` at
+version 2, whose items predate the rule. Blind adjudication arrived with version
+3 and has never run against these ids. The ledger holds banded ids like `s01p`
+and this file's are `p04` and `x-n21`, so its coverage is zero.
+
+**It is baselined rather than adjudicated, and the reason is not the cost of the
+calls.** This is the corpus `SCORECARD.md` records as 89% solvable by counting
+words, AUC 0.850 on turn length alone, against which a bare "fire if >= 18
+words" rule scores 0.890. Adjudicating its labels would buy a clean answer key
+for an instrument whose measurements still would not travel. The eight published
+runs scored against it stay published with that caveat attached.
+
+The line may only shrink, on the same terms as
+`results/provenance-baseline.txt`: the gate refuses a baselined set that turns
+out to be fully adjudicated, and refuses a line naming no set that loads. Remove
+it if the set is ever adjudicated, or when it is retired.
+
+**Why the gate reads the live key and not only the published runs.** It reads
+both. A run declares a version and the corpus file moves on, so a run-keyed
+check alone would be computed against records while the key drifted; a key-keyed
+check alone is computed against whatever the corpus holds now, and retiring an
+item erases the evidence that a published number stood on an unadjudicated
+label. Three ids in the ledger today, `l15p` and its two negatives, are that
+erasure having already happened in the direction that cost nothing.
