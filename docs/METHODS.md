@@ -146,7 +146,7 @@ every item in version 5 now carries a three-judge record.
 
 All three moves broke the same corpus invariant the twelve broke, at 3 of 3:
 `l24n1` and `m29n2` read as fire in triples whose positive the judges
-independently confirmed, and `m25p` reads as no-fire in a triple whose other two
+independently confirmed, and `m25p` read as no-fire in a triple whose other two
 members are unanimously negative. The same day, the same remedy: the three asks
 were rewritten by agents never shown a judge's verdict, bodies untouched and no
 `should_fire` changed, and re-adjudication returned **3-0 with the key on all

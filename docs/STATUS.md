@@ -403,6 +403,23 @@ in `datasets/triggers/corrections.jsonl` and argued in
 [`DECISIONS.md`](DECISIONS.md). No record on disk carries `set_version: 5`, so
 the bump is a choice and is written down as one.
 
+**Correction, 2026-08-21, appended a second time. The round took twelve calls,
+not nine, and one rewrite had to be repaired.** An adversarial review found that
+the first `l24n1` rewrite closed with *the roof is going on and it is being
+let*, which declares an outcome its own shared body holds open: the brother
+still says sell, and the body says nobody has moved. A second blind agent
+rewrote the ask to state the narrator's position and leave the household's open,
+and three more judges returned **3-0 with the key**. Every figure above survives
+the repair unchanged.
+
+**`matched:ask:type_token_ratio` is now 2.91 and off the baseline.** The
+paragraph below, which records this statistic reaching 3.03 on 2026-08-20, is
+where it stood then. Thirteen of the forty-four shortcut statistics moved in the
+2026-08-21 round, nine distinct once the `turn` and `ask` duplicates are folded:
+seven toward chance and two away. This is the one that crossed a gate, and
+`datasets/triggers/corpus-baseline.txt` carries the arithmetic and what the
+round has to offer against having moved it.
+
 **One shortcut finding crossed the gate and is baselined with its arithmetic
 rather than tuned away.** `cancel:close:type_token_ratio` reads 3.23 against a
 gate at 3.0. The rate did not move: the positive is at an extreme of its own

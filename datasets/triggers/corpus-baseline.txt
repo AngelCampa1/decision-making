@@ -162,13 +162,18 @@ datasets/triggers/decision-making/index.yaml|cancel:ask:sentence_count
 # is the same one-clause-shift sensitivity the entry below documents for this
 # exact statistic on 2026-08-14, in the opposite direction.
 #
-# The movement is disclosed, never claimed. The rewrites were written to the
-# shipped definition of what firing means, by agents that never saw a judge's
-# verdict or this file, and the underlying skew the entry below records as
-# corpus-wide and pre-existing is unchanged by any of it. A corpus edit that
-# turns a gate green is the mechanism this repository has named as the source
-# of four generations of leak, so the reason this line goes is that the
-# baseline may only shrink, and not that the finding was worth closing.
+# What the round has to offer against that is thin, and is stated as thin. The
+# rewrites were written to the shipped definition of what firing means, by
+# agents that saw neither a judge's verdict nor this file, and the underlying
+# skew the entry below records as corpus-wide and pre-existing survives all of
+# it. A corpus edit that turns a gate green is the mechanism this repository
+# has named behind four generations of leak.
+#
+# This line goes because `apply_corpus_baseline` refuses an entry matching no
+# current finding, so leaving it would turn the gate red on its own. Thirteen
+# of the forty-four statistics moved in the same round, nine distinct once the
+# `turn` and `ask` duplicates are folded: seven toward chance and two away.
+# This is the one that crossed a gate.
 
 # SEEN AND CLOSED SAME DAY, 2026-08-14. The opener edit that closed the
 # `question_marks`/`terminal_question` pair above briefly carried this one

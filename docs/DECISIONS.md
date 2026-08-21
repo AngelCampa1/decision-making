@@ -1414,20 +1414,30 @@ So the remedy is the one that round settled on, and it is the plan's live
 branch: rewrite the disputed ask and judge it again. Retirement is the remedy
 for a three-way split, and three binary judges cannot produce one.
 
-**What changed.** Three closing asks. Every body is untouched, every
-`should_fire` is unchanged, and each triple stays inside its own length
-tolerance. `m25p` now asks which way to go rather than for both cases to be put,
-which is the ask the label always meant. `m29n2` asks what happens during the
-wait rather than whether there is any point ringing. `l24n1` states the decision
-as already taken and asks for two figures on the chosen branch.
+**What changed.** Three closing asks, and then one of the three again. Every
+body is untouched, every `should_fire` is unchanged, and each triple stays
+inside its own length tolerance. `m25p` now asks which way to go rather than for
+both cases to be put, which is the ask the label always meant. `m29n2` asks what
+happens during the wait rather than whether there is any point ringing. `l24n1`
+states the narrator's own position and asks for two figures on that branch with
+the assumptions dictated. Re-adjudication returned 3-0 with the key on all
+three.
 
-**`l24n1` is the one worth reading.** Its ask was already arithmetic and three
-judges read the turn as a decision anyway. No ask alone fixed it: the body spends
-241 words establishing that three people must agree before probate completes,
-and that pressure survives whatever sentence closes it. What worked was a
-sentence conceding the choice, which puts the item in the shipped definition's
-own negative branch, a task whose decision has already been made and stated.
-Re-adjudication returned 3-0 with the key on all three.
+**`l24n1` took two passes.** Its ask was already arithmetic and three judges
+read the turn as a decision anyway. No ask alone fixed it: the shared body
+spends 199 words establishing that three people must agree before probate
+completes, and that pressure survives whatever sentence closes it. What worked
+was conceding the choice, which puts the item in the shipped definition's own
+negative branch, a task whose decision has already been made and stated.
+
+The first attempt conceded too much. It read "The roof is going on and it is
+being let", declaring an outcome the body holds open: the brother's position is
+"Sell it", the body says neither he nor the sister has moved, and the narrator
+backing the sister is two of three. `l24p` and `l24n2` both depend on that
+deadlock standing. An adversarial review found it and a second blind agent
+rewrote the ask to state the narrator's position and leave the household's open.
+Both versions came back 3-0, so the repair cost no agreement and bought back the
+near-miss the triple exists for.
 
 **Why the version moves, recorded as a choice.** No record on disk carries
 `set_version: 5`, so leaving it alone makes nothing incomparable. It moves
@@ -1436,10 +1446,24 @@ reasoning holds verbatim: a version that moves only when a label flips cannot
 see a corpus whose text changed under it. Leaving it at 5 would have one version
 naming two corpora.
 
-**One shortcut finding closed as a side effect, and is disclosed rather than
-claimed.** `matched:ask:type_token_ratio` fell from 3.03 to 2.91 null standard
-errors and left `datasets/triggers/corpus-baseline.txt`, which may only shrink.
-Three asks out of 330 items moved it, which is the same one-clause sensitivity
-that file already records for this statistic in the other direction on
-2026-08-14. The rewrites were written to the shipped definition by agents that
-never saw a judge's verdict or that file.
+**What the round did to the shortcut battery.** Thirteen of the forty-four
+statistics moved. Four features read identically under the `turn` and `ask`
+views because the body is shared, so those thirteen rows are nine distinct
+statistics: seven fell toward chance and two rose away from it. One crossed a
+gate. `matched:ask:type_token_ratio` fell from 3.03 to 2.91 null standard errors
+and left `datasets/triggers/corpus-baseline.txt`, which may only shrink. Three
+asks out of 330 items moved it, the same one-clause sensitivity that file
+already records for this statistic in the other direction on 2026-08-14.
+Leaving the line in would have turned the gate red by itself: `apply_corpus_baseline`
+refuses a baselined entry matching no current finding. The rewrites were written
+to the shipped definition by agents that saw neither a judge's verdict nor that
+file.
+
+**What the round cannot show.** Blinding stops an author writing to a judge. It
+does not stop one writing an easier item, and two of the three rewrites are
+easier than what they replaced: `m29n2` went from a small live question about
+whether to ring at all to a process explainer, which leaves `m29` holding two
+lookup negatives and no near-miss, and `m25p` went to the most explicit
+recommendation phrasing available. Unanimity of 1.000 on three rewritten items
+is partly bought and nothing here measures how much. The `l24n1` repair moves
+one item back toward the line, and that is one item.
