@@ -26,11 +26,13 @@ from decision_evals.cli import (
     check_adjudication_step,
     check_corrections_step,
     check_decisions_step,
+    check_drift_step,
     check_git_identity,
     check_provenance_step,
     check_sync_step,
     check_tailoring_step,
     check_wiring_step,
+    drift_movements,
     gate_steps,
     lint_skills_step,
     repository_facts,
@@ -40,6 +42,7 @@ from decision_evals.corpora import CorpusError
 from decision_evals.corrections import CorrectionIssue
 from decision_evals.decisions import DecisionIssue
 from decision_evals.deployed import DeployState
+from decision_evals.drift import DriftIssue, Movement
 from decision_evals.provenance import ProvenanceIssue, discover_runs
 from decision_evals.provenance import RunRecord as ProvenanceRun
 from decision_evals.site import INPUTS_PATH as SITE_INPUTS_PATH
@@ -82,6 +85,7 @@ GATE_STEPS = (
     ("published claims", True),
     ("generated regions", True),
     ("site", False),
+    ("document drift", False),
     ("pytest", False),
     ("coverage floors", False),
 )
@@ -91,9 +95,9 @@ class TestTheStepTable:
     def test_runs_the_same_steps_in_the_same_order(self) -> None:
         assert [(step.name, step.fast) for step in gate_steps()] == list(GATE_STEPS)
 
-    def test_fast_drops_exactly_three(self) -> None:
+    def test_fast_drops_exactly_four(self) -> None:
         steps = gate_steps()
-        assert len(steps) == 20
+        assert len(steps) == 21
         assert sum(1 for step in steps if step.fast) == 17
 
     def test_enumerating_the_gate_does_not_run_it(self, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -107,7 +111,68 @@ class TestTheStepTable:
             raise AssertionError("constructing the step table ran a step")
 
         monkeypatch.setattr(cli, "_run", explode)
-        assert len(gate_steps()) == 20
+        assert len(gate_steps()) == 21
+
+
+class TestDocumentDrift:
+    """The half in the CLI: what git is asked, and what is done when it cannot answer."""
+
+    def test_a_document_naming_nothing_has_not_moved(self) -> None:
+        """No dependencies, no git call, and zero rather than unknown."""
+        assert cli._commits_touching("650dcbc", ()) == 0
+
+    def test_a_commit_git_does_not_know_reads_as_unknown(self) -> None:
+        assert cli._commits_touching("0000000", ("README.md",)) is None
+
+    def test_a_real_range_counts(self) -> None:
+        count = cli._commits_touching("650dcbc", ("evals/src/decision_evals/cli.py",))
+        assert count is not None
+        assert count >= 1
+
+    def test_no_git_means_no_movement(
+        self, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    ) -> None:
+        """A source tarball has no history, and the gate has to run there."""
+        monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+        assert drift_movements() == {}
+
+    def test_this_repository_is_read(self) -> None:
+        assert check_drift_step().passed
+
+    def test_the_step_reports_what_it_refuses(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli,
+            "check_drift",
+            lambda repo_root, movements: [DriftIssue("docs/STATUS.md", "is unread")],
+        )
+        result = check_drift_step()
+        assert not result.passed
+        assert result.detail == "1 issue(s)"
+
+    def test_drift_says_when_nothing_has_moved(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(cli, "drift_movements", dict)
+        result = runner.invoke(app, ["drift"])
+        assert result.exit_code == 0
+        assert "nothing has moved" in result.output
+
+    def test_drift_names_the_paths_and_the_line_to_paste(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        paths = tuple(f"evals/src/decision_evals/m{n}.py" for n in range(8))
+        monkeypatch.setattr(
+            cli,
+            "drift_movements",
+            lambda: {
+                "docs/ARCHITECTURE.md": Movement("docs/ARCHITECTURE.md", "650dcbc", 12, paths),
+                "docs/STATUS.md": Movement("docs/STATUS.md", "650dcbc", None, ("a.py",)),
+            },
+        )
+        result = runner.invoke(app, ["drift"])
+        assert result.exit_code == 0
+        assert "12 commit(s) since 650dcbc" in result.output
+        assert "and 2 more" in result.output
+        assert "unknown commit(s)" in result.output
+        assert '"docs/ARCHITECTURE.md" = "' in result.output
 
 
 class TestGeneratedRegions:

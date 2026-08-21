@@ -189,7 +189,7 @@ def code_fragments(text: str) -> list[str]:
     return [*_FENCE.findall(text), *_CODE_SPAN.findall(without_fences)]
 
 
-def _load_register(repo_root: Path, table: tuple[str, ...]) -> dict[str, str]:
+def load_register(repo_root: Path, table: tuple[str, ...]) -> dict[str, str]:
     """One ``pyproject.toml`` table of declaration to reason, or ``{}``.
 
     Shared by :func:`load_absent_commands`, :func:`load_external_paths` and
@@ -219,7 +219,7 @@ def load_absent_commands(repo_root: Path) -> dict[str, str]:
     ``[tool.decision-evals.unwired]`` the register may only shrink, and an
     entry that becomes a real command is itself an error.
     """
-    return _load_register(repo_root, ABSENT_TABLE)
+    return load_register(repo_root, ABSENT_TABLE)
 
 
 def load_external_paths(repo_root: Path) -> dict[str, str]:
@@ -229,7 +229,7 @@ def load_external_paths(repo_root: Path) -> dict[str, str]:
     same reason: a reference that does not resolve *here* can still be a true
     sentence. See :data:`EXTERNAL_TABLE`.
     """
-    return _load_register(repo_root, EXTERNAL_TABLE)
+    return load_register(repo_root, EXTERNAL_TABLE)
 
 
 def load_ignored_paths(repo_root: Path) -> dict[str, str]:
@@ -250,7 +250,7 @@ def load_ignored_paths(repo_root: Path) -> dict[str, str]:
     what stops it becoming a place to put inconvenient failures: an entry whose
     path exists is an error, and so is an entry named nowhere.
     """
-    return _load_register(repo_root, IGNORED_TABLE)
+    return load_register(repo_root, IGNORED_TABLE)
 
 
 def check_command_references(repo_root: Path, commands: set[str]) -> list[DocIssue]:

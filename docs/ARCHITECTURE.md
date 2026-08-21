@@ -141,7 +141,7 @@ was missing two of them within a day of being written.
 <!-- de:generated harness-modules -->
 | Package | Modules |
 | --- | --- |
-| `decision_evals/` | `arenas` · `budget` · `citations` · `claims` · `cli` · `corpus` · `corrections` · `decisions` · `deployed` · `docs` · `orchestrator` · `prereg` · `provenance` · `rescore` · `runner` · `sharded` · `site` · `skills` · `sync` · `tailoring` · `telemetry` · `trigger_arms` · `triggers` · `unbundle` · `wiring` |
+| `decision_evals/` | `arenas` · `budget` · `citations` · `claims` · `cli` · `corpus` · `corrections` · `decisions` · `deployed` · `docs` · `drift` · `orchestrator` · `prereg` · `provenance` · `rescore` · `runner` · `sharded` · `site` · `skills` · `sync` · `tailoring` · `telemetry` · `trigger_arms` · `triggers` · `unbundle` · `wiring` |
 | `decision_evals/corpora/` | `lost_in_conversation` |
 | `decision_evals/generators/` | `audit` · `generate` · `loader` · `safe_eval` · `schema` |
 | `decision_evals/providers/` | `claude_code` · `openai_compatible` |
@@ -253,8 +253,9 @@ order below is the gate's own step table, not a copy of it.
 | 16 | published claims | runs |
 | 17 | generated regions | runs |
 | 18 | site | skipped |
-| 19 | pytest | skipped |
-| 20 | coverage floors | skipped |
+| 19 | document drift | skipped |
+| 20 | pytest | skipped |
+| 21 | coverage floors | skipped |
 <!-- /de:generated -->
 
 ```mermaid
@@ -372,6 +373,7 @@ Every command the harness answers to:
 | --- | --- |
 | `de check` | Run the full local gate. No model calls, fully deterministic. |
 | `de deployed` | Report whether the published site is a build of the current `main`. |
+| `de drift` | List the documents whose subject has moved since anyone read them. |
 | `de fetch` | Download the vendored corpora and verify them against their locks. |
 | `de index` | Regenerate `docs/RUN_INDEX.md` from the published run records. |
 | `de lint` | Validate skill frontmatter, evidence metadata, and claim coverage. |

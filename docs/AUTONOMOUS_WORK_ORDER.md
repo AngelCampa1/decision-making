@@ -498,6 +498,10 @@ hook it writes hardcodes the shared tree's `.venv`.
    - `python -m uv run de mirror`, after editing `AGENTS.md` **or anything
      under `skills/`**. It regenerates `CLAUDE.md`, `.agents/skills/`, and
      `plugin/skills/` for promotable skills.
+   - `python -m uv run de sync`, after changing anything a document derives a
+     table from: a `de` subcommand, a step of the gate, a module of the harness,
+     a file of the skill, an arm. Run it after `de mirror` and before `de site`,
+     since it writes into documents the site renders.
    - `python -m uv run de index`, after publishing a run, for
      `docs/RUN_INDEX.md`.
    - `python -m uv run de rescore`, after an answer-key version bump.

@@ -34,6 +34,18 @@ from decision_evals.deployed import CURRENT as DEPLOY_CURRENT
 from decision_evals.deployed import check_deployed
 from decision_evals.docs import census as docs_census
 from decision_evals.docs import check_docs
+from decision_evals.drift import (
+    CEILING as DRIFT_CEILING,
+)
+from decision_evals.drift import (
+    Movement,
+    check_drift,
+    dependencies,
+    living_documents,
+    load_reviewed,
+    worklist,
+)
+from decision_evals.drift import census as drift_census
 from decision_evals.provenance import (
     INDEX_PATH,
     GitFacts,
@@ -895,6 +907,93 @@ def check_sync_step() -> StepResult:
     return StepResult(name, False, f"{len(issues)} issue(s)")
 
 
+def _commits_touching(sha: str, paths: tuple[str, ...]) -> int | None:
+    """How many commits since ``sha`` touched any of these paths.
+
+    ``None`` when git cannot answer, which in practice means the recorded commit
+    was rebased away. That is reported rather than counted as zero, because a
+    review pinned to a commit nobody has is not a review.
+    """
+    if not paths:
+        return 0
+    output = _git_output(["rev-list", "--count", f"{sha}..HEAD", "--", *paths])
+    if output is None or not output.isdigit():
+        return None
+    return int(output)
+
+
+def drift_movements() -> dict[str, Movement]:
+    """How far each reviewed document's subject has moved since it was read.
+
+    One ``git rev-list`` per document. They are separate calls because each
+    document has its own baseline commit and its own set of paths, and a single
+    query over the union would count a commit against a document that never
+    named the file it touched.
+    """
+    if not (REPO_ROOT / ".git").exists():
+        return {}
+    reviewed = load_reviewed(REPO_ROOT)
+    movements: dict[str, Movement] = {}
+    for document in sorted(living_documents(REPO_ROOT)):
+        sha = reviewed.get(document)
+        if sha is None:
+            continue
+        paths = dependencies(REPO_ROOT, REPO_ROOT / document)
+        movements[document] = Movement(document, sha, _commits_touching(sha, paths), paths)
+    return movements
+
+
+@app.command()
+def drift() -> None:
+    """List the documents whose subject has moved since anyone read them."""
+    _echo_header("drift")
+    living, reviewed = drift_census(REPO_ROOT)
+    typer.echo(f"{living} living document(s), {reviewed} with a review on record")
+
+    pending = worklist(drift_movements())
+    if not pending:
+        typer.secho("nothing has moved under a document since it was read", fg=typer.colors.GREEN)
+        return
+
+    head = _git_output(["rev-parse", "--short", "HEAD"]) or "HEAD"
+    for movement in pending:
+        count = "unknown" if movement.commits is None else str(movement.commits)
+        typer.secho(f"\n{movement.document}", bold=True)
+        typer.echo(f"  {count} commit(s) since {movement.sha}, over {len(movement.paths)} path(s)")
+        for reference in movement.paths[:6]:
+            typer.echo(f"    {reference}")
+        if len(movement.paths) > 6:
+            typer.echo(f"    and {len(movement.paths) - 6} more")
+        typer.echo(f'  once read:  "{movement.document}" = "{head}"')
+
+
+def check_drift_step() -> StepResult:
+    """Every living document has been read since its subject last moved far.
+
+    The one step here that refuses on reading rather than on a defect. Nothing
+    it checks proves a description is true; what it proves is that somebody
+    claimed to have looked, and when.
+
+    Runs at pre-push rather than on every commit because it is one ``git
+    rev-list`` per document, which is a latency decision and not a statement
+    about how much it matters.
+    """
+    name = "document drift"
+    _echo_header(name)
+
+    living, reviewed = drift_census(REPO_ROOT)
+    typer.echo(
+        f"{living} living document(s), {reviewed} reviewed, ceiling {DRIFT_CEILING} commit(s)"
+    )
+
+    issues = check_drift(REPO_ROOT, drift_movements())
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
 def check_claims_step() -> StepResult:
     """Every measured number the site publishes still says what its source says.
 
@@ -1190,6 +1289,7 @@ def gate_steps() -> tuple[Step, ...]:
         Step("published claims", check_claims_step, True),
         Step("generated regions", check_sync_step, True),
         Step("site", check_site_step, False),
+        Step("document drift", check_drift_step, False),
         Step(
             "pytest",
             lambda: _run(

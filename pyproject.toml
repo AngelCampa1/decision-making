@@ -245,6 +245,7 @@ output = "coverage.json"
 # published page quietly disagreeing with the repository.
 "decision_evals/site.py" = { line = 100.0, branch = 100.0 }
 "decision_evals/sync.py" = { line = 100.0, branch = 100.0 }
+"decision_evals/drift.py" = { line = 100.0, branch = 100.0 }
 # The gate over the numbers the site publishes. `site.py` proves the pages were
 # rebuilt from the current tree and `docs.py` proves their references resolve;
 # neither opens a `.astro` file, so between them a page said the skill had four
@@ -457,3 +458,57 @@ a pure-Python hash comparison and only the deploy workflow builds.\
 The same directory with a trailing slash, which the same sentence also uses. \
 Two spellings of one path rather than two paths.\
 """
+
+# --------------------------------------------------------------------------- #
+# When each living document was last read, and by which commit.
+#
+# `de drift` counts the commits since that point which touched a path the
+# document names, and `de check` refuses one that has gone past the ceiling in
+# `decision_evals.drift`. This is the only register here whose entries a person
+# has to earn by reading; nothing stops a rubber stamp, and the claim is only
+# that the obligation is now visible and dated.
+#
+# Baselined 2026-08-21 at each document's own last-touched commit, which is the
+# strongest claim the history actually supports: whoever last edited a document
+# had read it. Generated documents are absent by rule, not by omission.
+#
+# Two directions, like every other register: a living document with no entry is
+# refused, and an entry naming no living document is refused.
+# --------------------------------------------------------------------------- #
+[tool.decision-evals.reviewed]
+"AGENTS.md" = "650dcbc"
+"CONTRIBUTING.md" = "650dcbc"
+"README.md" = "650dcbc"
+"SCORECARD.md" = "291548d"
+"docs/ACCUMULATION_VENUE.md" = "291548d"
+"docs/ARCHITECTURE.md" = "edbc1d0"
+"docs/AUTONOMOUS_WORK_ORDER.md" = "b9e68b9"
+"docs/DECISION_FRAMEWORKS.md" = "291548d"
+"docs/DOCUMENTATION_MAP.md" = "650dcbc"
+"docs/EVAL_SET_DATASHEET.md" = "291548d"
+"docs/FAILURE_TAXONOMY.md" = "291548d"
+"docs/HARNESS_DISCLOSURE.md" = "291548d"
+"docs/LIMITATIONS.md" = "b9e68b9"
+"docs/METHODS.md" = "b9e68b9"
+"docs/PROTOCOL.md" = "291548d"
+"docs/README.md" = "650dcbc"
+"docs/REJECTED.md" = "291548d"
+"docs/RELATED_WORK.md" = "291548d"
+"docs/RESEARCH_PROGRAMME.md" = "b9e68b9"
+"docs/STATUS.md" = "650dcbc"
+"docs/TAILORING_CORPUS_SPEC.md" = "291548d"
+"docs/VOICE.md" = "650dcbc"
+"docs/WHY_THESE_RULES.md" = "650dcbc"
+"docs/programme/part-1-what-is-already-known.md" = "650dcbc"
+"docs/programme/part-2-the-product.md" = "650dcbc"
+"docs/programme/part-3-the-instrument.md" = "650dcbc"
+"docs/programme/part-4-does-the-failure-exist.md" = "650dcbc"
+"docs/programme/part-5-where-a-skill-helps.md" = "650dcbc"
+"docs/programme/part-6-confirmation.md" = "650dcbc"
+"docs/programme/part-7-cross-cutting.md" = "650dcbc"
+"docs/programme/part-8-output.md" = "650dcbc"
+"docs/reviews/COLD_READER.md" = "3c8cb5e"
+"docs/reviews/HOUSE_STYLE.md" = "291548d"
+"docs/reviews/POSITIONING.md" = "291548d"
+"docs/superpowers/drafts/s9-ledger-replacement/README.md" = "650dcbc"
+"docs/superpowers/drafts/s9-ledger-replacement/widen.md" = "650dcbc"
