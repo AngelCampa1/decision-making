@@ -47,7 +47,22 @@
 # 330 over 110, positives 86 becomes 110, and routed positives 65 becomes 89
 # across six procedures rather than four (ledger 19, cascade 16, fit 15,
 # timing 15, council 12, hinge 12).
-version: 5
+# Bumped 5 -> 6 on 2026-08-21, before anything is scored against this corpus.
+# Blind adjudication of the seventy-two v5 items disputed three labels, and all
+# three broke the one-positive-two-negative invariant, so the remedy was the
+# plan's live branch: rewrite the disputed ask and judge it again. `l24n1`,
+# `m25p` and `m29n2` carry new closing asks and their bodies are untouched. No
+# `should_fire` moved, and re-adjudication returned 3-0 agreement on all three.
+#
+# The bump is a choice rather than a derivation, and it is recorded as one. No
+# record on disk carries `set_version: 5`, so nothing is made incomparable by
+# leaving it alone. It moves because the 3 -> 4 bump on 2026-08-18 was the same
+# fact pattern -- asks rewritten, no label moved, nothing scored yet -- and its
+# reasoning holds here verbatim: a version that moves only when a label flips
+# cannot see a corpus whose text changed under it. Leaving it at 5 would mean
+# one version naming two corpora, which is the defect version 4 exists to have
+# ended.
+version: 6
 skill: decision-making
 includes:
   - s.yaml

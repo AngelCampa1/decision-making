@@ -147,10 +147,13 @@ every item in version 5 now carries a three-judge record.
 All three moves broke the same corpus invariant the twelve broke, at 3 of 3:
 `l24n1` and `m29n2` read as fire in triples whose positive the judges
 independently confirmed, and `m25p` reads as no-fire in a triple whose other two
-members are unanimously negative. The rewrite-and-re-adjudicate round that
-resolved the twelve has not been run on these three, so a number published
-against version 5 is scored against three items whose labels three blind readers
-dispute. See
+members are unanimously negative. The same day, the same remedy: the three asks
+were rewritten by agents never shown a judge's verdict, bodies untouched and no
+`should_fire` changed, and re-adjudication returned **3-0 with the key on all
+three**. The corpus text moved, so the key moved with it to **version 6**.
+Cumulative disagreement over the seventy-two stays at 3/72 = 0.042, which is
+what a rewrite round has to report beside its own 0.000 for the kill to keep
+meaning anything. See
 [`2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md`](../notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md).
 
 ---
@@ -383,7 +386,7 @@ the larger number.
 
 The organising claim of this repository is that **every confident wrong number
 it has produced was caught by somebody checking, never by somebody being
-careful.** So the checks are mechanical. `de check` runs twenty steps at the
+careful.** So the checks are mechanical. `de check` runs twenty-two steps at the
 time of writing, and the count moves as gates are added; the ones that are about
 method rather than lint:
 

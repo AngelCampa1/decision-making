@@ -1393,3 +1393,53 @@ check alone is computed against whatever the corpus holds now, and retiring an
 item erases the evidence that a published number stood on an unadjudicated
 label. Three ids in the ledger today, `l15p` and its two negatives, are that
 erasure having already happened in the direction that cost nothing.
+
+## 2026-08-21 — Three disputed asks are rewritten, and the key moves to version 6
+
+**Commits:** `d3ec913`
+
+Blind adjudication of the seventy-two items version 5 added disputed three
+labels: `l24n1` and `m29n2` read as fire against a negative key, and `m25p` read
+as no-fire against a positive one. Movement was 3/72 = 0.042 and the corpus
+survived the pre-registered kill.
+
+**The labels were not applied, because none of the three can be.** Each move
+breaks the invariant `corpus._check_triples` enforces. `l24p` and `m29p` were
+independently confirmed positive by the same judges, so promoting a negative
+beside them gives a triple with two positives; `m25`'s other two members are
+unanimously negative, so demoting its positive gives a triple with none. That is
+2026-08-18's finding repeating on the new items at 3 of 3 where it was 12 of 12.
+
+So the remedy is the one that round settled on, and it is the plan's live
+branch: rewrite the disputed ask and judge it again. Retirement is the remedy
+for a three-way split, and three binary judges cannot produce one.
+
+**What changed.** Three closing asks. Every body is untouched, every
+`should_fire` is unchanged, and each triple stays inside its own length
+tolerance. `m25p` now asks which way to go rather than for both cases to be put,
+which is the ask the label always meant. `m29n2` asks what happens during the
+wait rather than whether there is any point ringing. `l24n1` states the decision
+as already taken and asks for two figures on the chosen branch.
+
+**`l24n1` is the one worth reading.** Its ask was already arithmetic and three
+judges read the turn as a decision anyway. No ask alone fixed it: the body spends
+241 words establishing that three people must agree before probate completes,
+and that pressure survives whatever sentence closes it. What worked was a
+sentence conceding the choice, which puts the item in the shipped definition's
+own negative branch, a task whose decision has already been made and stated.
+Re-adjudication returned 3-0 with the key on all three.
+
+**Why the version moves, recorded as a choice.** No record on disk carries
+`set_version: 5`, so leaving it alone makes nothing incomparable. It moves
+because the 3 to 4 bump on 2026-08-18 was this fact pattern exactly, and its
+reasoning holds verbatim: a version that moves only when a label flips cannot
+see a corpus whose text changed under it. Leaving it at 5 would have one version
+naming two corpora.
+
+**One shortcut finding closed as a side effect, and is disclosed rather than
+claimed.** `matched:ask:type_token_ratio` fell from 3.03 to 2.91 null standard
+errors and left `datasets/triggers/corpus-baseline.txt`, which may only shrink.
+Three asks out of 330 items moved it, which is the same one-clause sensitivity
+that file already records for this statistic in the other direction on
+2026-08-14. The rewrites were written to the shipped definition by agents that
+never saw a judge's verdict or that file.

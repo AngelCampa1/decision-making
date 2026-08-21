@@ -388,6 +388,21 @@ against version 5 today is scored against three items whose labels three blind
 readers dispute, and that is a smaller claim than the block this correction
 lifts.
 
+**Correction, 2026-08-21, appended. The three disputes are closed and the
+paragraph above is superseded.** The asks on `l24n1`, `m25p` and `m29n2` were
+rewritten by sub-agents that never saw a judge's verdict, bodies untouched and
+every `should_fire` unchanged, then judged blind again: 9 calls, **3-0 with the
+key on all three**. Over the seventy-two items as they now stand, unanimity is
+0.917 and movement is 0.000, Fleiss kappa 0.877. **Cumulative disagreement stays
+at 3/72 = 0.042**, because a round that rewrites until the judges agree can
+always report zero and the figure that means something counts every disagreement
+these items have produced.
+
+The corpus text moved, so the answer key moved with it, **v5 to v6**, recorded
+in `datasets/triggers/corrections.jsonl` and argued in
+[`DECISIONS.md`](DECISIONS.md). No record on disk carries `set_version: 5`, so
+the bump is a choice and is written down as one.
+
 **One shortcut finding crossed the gate and is baselined with its arithmetic
 rather than tuned away.** `cancel:close:type_token_ratio` reads 3.23 against a
 gate at 3.0. The rate did not move: the positive is at an extreme of its own
