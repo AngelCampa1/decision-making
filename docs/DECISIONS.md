@@ -1396,7 +1396,7 @@ erasure having already happened in the direction that cost nothing.
 
 ## 2026-08-21 — Three disputed asks are rewritten, and the key moves to version 6
 
-**Commits:** `d3ec913`, `3524594`
+**Commits:** `d3ec913`, `3524594`, `0415181`
 
 Blind adjudication of the seventy-two items version 5 added disputed three
 labels: `l24n1` and `m29n2` read as fire against a negative key, and `m25p` read
