@@ -14,6 +14,7 @@ from __future__ import annotations
 import shutil
 import subprocess
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
@@ -65,7 +66,14 @@ from decision_evals.site import (
     render_manifest,
     site_present,
 )
+from decision_evals.solvers.arms import ARM_NAMES, ARM_PURPOSE
 from decision_evals.stats import minimum_detectable_effect
+from decision_evals.sync import Command as SyncCommand
+from decision_evals.sync import Facts as SyncFacts
+from decision_evals.sync import GateStep as SyncStep
+from decision_evals.sync import census as sync_census
+from decision_evals.sync import check_sync, collect_facts
+from decision_evals.sync import sync as sync_regions
 from decision_evals.wiring import census as census_wiring
 from decision_evals.wiring import check_wiring
 
@@ -91,6 +99,28 @@ class StepResult:
     name: str
     passed: bool
     detail: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class Step:
+    """One step of the gate: its label, how to run it, and whether ``--fast`` keeps it.
+
+    The steps used to be a straight-line series of calls inside :func:`check`,
+    which left "how many are there, in what order, and which does ``--fast``
+    drop" answerable only by reading the source and counting. Documentation
+    answered it by hand and got it wrong: on 2026-08-21 ``docs/ARCHITECTURE.md``
+    drew thirteen of the sixteen and nothing could tell.
+
+    One object, two readers. :func:`check` runs it; :mod:`decision_evals.sync`
+    renders it into the documents that describe the gate.
+    """
+
+    #: The label the summary table prints, and the one ``StepResult`` carries.
+    name: str
+    #: Called with no arguments. Never called during enumeration.
+    run: Callable[[], StepResult]
+    #: Whether ``--fast`` keeps this step.
+    fast: bool
 
 
 def _echo_header(text: str) -> None:
@@ -188,55 +218,7 @@ def check(
     ),
 ) -> None:
     """Run the full local gate. No model calls, fully deterministic."""
-    python = sys.executable
-    results: list[StepResult] = [
-        check_git_identity(),
-        _run("ruff check", [python, "-m", "ruff", "check", "."]),
-        _run("ruff format", [python, "-m", "ruff", "format", "--check", "."]),
-        _run("mypy", [python, "-m", "mypy"]),
-        lint_skills_step(),
-        check_triggers_step(),
-        check_tailoring_step(),
-        validate_manifests_step(),
-        check_citations_step(),
-        check_provenance_step(),
-        check_wiring_step(),
-        check_decisions_step(),
-        check_corrections_step(),
-        check_adjudication_step(),
-        check_checkpoints_step(),
-        check_docs_step(),
-        check_claims_step(),
-    ]
-
-    if not fast:
-        # Rebuilding the site takes a Node toolchain and a few seconds, so it
-        # is demanded at `pre-push` rather than on every commit -- the same
-        # treatment as the test suite, and for the same reason.
-        results.append(check_site_step())
-        results.append(
-            _run(
-                "pytest",
-                [
-                    python,
-                    "-m",
-                    "pytest",
-                    "tests",
-                    "-m",
-                    "not llm and not slow",
-                    "--cov",
-                    "--cov-report=json",
-                    "--cov-report=term:skip-covered",
-                ],
-            )
-        )
-        results.append(
-            _run(
-                "coverage floors",
-                [python, str(REPO_ROOT / "scripts" / "check_coverage_floors.py")],
-            )
-        )
-
+    results = [step.run() for step in gate_steps() if step.fast or not fast]
     raise typer.Exit(_summarise(results))
 
 
@@ -837,6 +819,80 @@ def check_docs_step() -> StepResult:
     return StepResult(name, False, f"{len(issues)} issue(s)")
 
 
+def _first_line(text: str | None) -> str:
+    """The first sentence of a docstring, which is what a table column holds."""
+    if not text or not text.strip():
+        return ""
+    return text.strip().splitlines()[0].strip()
+
+
+def repository_facts() -> SyncFacts:
+    """Everything the generated regions render from, gathered from this process.
+
+    The command table and the step table are live objects rather than parsed
+    source, so a subcommand cannot be added without the documentation table
+    growing a row in the same run.
+    """
+    commands = sorted(
+        (
+            SyncCommand(
+                command.name or (command.callback.__name__ if command.callback else ""),
+                _first_line(command.callback.__doc__ if command.callback else None),
+            )
+            for command in app.registered_commands
+        ),
+        key=lambda command: command.name,
+    )
+    return collect_facts(
+        REPO_ROOT,
+        commands=[command for command in commands if command.name],
+        steps=[SyncStep(step.name, step.fast) for step in gate_steps()],
+        arms=[(name, ARM_PURPOSE[name]) for name in ARM_NAMES],
+    )
+
+
+@app.command()
+def sync() -> None:
+    """Rewrite every generated region and inline fact from its source."""
+    _echo_header("sync")
+    changed = sync_regions(REPO_ROOT, repository_facts())
+    if not changed:
+        typer.secho("every region already matches its source", fg=typer.colors.GREEN)
+        return
+    for where in changed:
+        typer.echo(f"  wrote {where}")
+    typer.secho(f"{len(changed)} document(s) rewritten", fg=typer.colors.GREEN)
+
+
+def check_sync_step() -> StepResult:
+    """Every table a document derives still says what it derives from.
+
+    The documentation gate proves a reference resolves and stops there, so a
+    document could enumerate the gate's own steps, the harness's modules or the
+    skill's procedures and be wrong about all three with every path correct.
+    On 2026-08-21 one did, in three places at once, having already been through
+    an adversarial fact-check.
+
+    What this cannot do is read the sentence above the table.
+    """
+    name = "generated regions"
+    _echo_header(name)
+
+    facts = repository_facts()
+    documents, regions, stated = sync_census(REPO_ROOT)
+    typer.echo(
+        f"{documents} document(s) carrying {regions} generated region(s) "
+        f"and {stated} inline fact(s)"
+    )
+
+    issues = check_sync(REPO_ROOT, facts)
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
 def check_claims_step() -> StepResult:
     """Every measured number the site publishes still says what its source says.
 
@@ -1087,3 +1143,72 @@ def lint() -> None:
 
 if __name__ == "__main__":  # pragma: no cover
     app()
+
+
+def gate_steps() -> tuple[Step, ...]:
+    """Every step of ``de check``, in the order it runs.
+
+    Nothing runs on construction. The callables are built and returned
+    unevaluated, so the gate can be enumerated without being run -- which is
+    what lets a document state the steps without a person retyping them.
+
+    The three steps ``--fast`` drops need a Node toolchain or the test suite.
+    They are demanded at pre-push instead of on every commit, which is a
+    latency decision and not a statement about how much they matter.
+    """
+    python = sys.executable
+    return (
+        Step("git identity", check_git_identity, True),
+        Step(
+            "ruff check",
+            lambda: _run("ruff check", [python, "-m", "ruff", "check", "."]),
+            True,
+        ),
+        Step(
+            "ruff format",
+            lambda: _run("ruff format", [python, "-m", "ruff", "format", "--check", "."]),
+            True,
+        ),
+        Step("mypy", lambda: _run("mypy", [python, "-m", "mypy"]), True),
+        Step("skill lint", lint_skills_step, True),
+        Step("trigger sets", check_triggers_step, True),
+        Step("tailoring corpus", check_tailoring_step, True),
+        Step("plugin manifests", validate_manifests_step, True),
+        Step("citations", check_citations_step, True),
+        Step("run provenance", check_provenance_step, True),
+        Step("integrity wiring", check_wiring_step, True),
+        Step("decision register", check_decisions_step, True),
+        Step("label corrections", check_corrections_step, True),
+        Step("label adjudication", check_adjudication_step, True),
+        Step("checkpoint label versions", check_checkpoints_step, True),
+        Step("documentation", check_docs_step, True),
+        Step("published claims", check_claims_step, True),
+        Step("generated regions", check_sync_step, True),
+        Step("site", check_site_step, False),
+        Step(
+            "pytest",
+            lambda: _run(
+                "pytest",
+                [
+                    python,
+                    "-m",
+                    "pytest",
+                    "tests",
+                    "-m",
+                    "not llm and not slow",
+                    "--cov",
+                    "--cov-report=json",
+                    "--cov-report=term:skip-covered",
+                ],
+            ),
+            False,
+        ),
+        Step(
+            "coverage floors",
+            lambda: _run(
+                "coverage floors",
+                [python, str(REPO_ROOT / "scripts" / "check_coverage_floors.py")],
+            ),
+            False,
+        ),
+    )

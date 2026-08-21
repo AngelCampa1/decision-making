@@ -20,6 +20,7 @@ from decision_evals import cli
 from decision_evals.adjudication import AdjudicationIssue
 from decision_evals.cli import (
     StepResult,
+    _first_line,
     _summarise,
     app,
     check_adjudication_step,
@@ -27,9 +28,12 @@ from decision_evals.cli import (
     check_decisions_step,
     check_git_identity,
     check_provenance_step,
+    check_sync_step,
     check_tailoring_step,
     check_wiring_step,
+    gate_steps,
     lint_skills_step,
+    repository_facts,
     validate_manifests_step,
 )
 from decision_evals.corpora import CorpusError
@@ -41,6 +45,7 @@ from decision_evals.provenance import RunRecord as ProvenanceRun
 from decision_evals.site import INPUTS_PATH as SITE_INPUTS_PATH
 from decision_evals.site import MANIFEST_PATH as SITE_MANIFEST_PATH
 from decision_evals.site import render_manifest
+from decision_evals.sync import SyncIssue
 from decision_evals.wiring import WiringIssue
 
 runner = CliRunner()
@@ -51,6 +56,106 @@ class _Completed:
     """Stand-in for `subprocess.CompletedProcess` where only the code matters."""
 
     returncode: int
+
+
+#: What ``de check`` ran, in order, on the commit before the steps became data.
+#: Pinned so that the change making them enumerable is provably a refactor.
+#: Changing the gate means changing this list in the same commit, which is the
+#: point: the list is small enough to read and the diff says what moved.
+GATE_STEPS = (
+    ("git identity", True),
+    ("ruff check", True),
+    ("ruff format", True),
+    ("mypy", True),
+    ("skill lint", True),
+    ("trigger sets", True),
+    ("tailoring corpus", True),
+    ("plugin manifests", True),
+    ("citations", True),
+    ("run provenance", True),
+    ("integrity wiring", True),
+    ("decision register", True),
+    ("label corrections", True),
+    ("label adjudication", True),
+    ("checkpoint label versions", True),
+    ("documentation", True),
+    ("published claims", True),
+    ("generated regions", True),
+    ("site", False),
+    ("pytest", False),
+    ("coverage floors", False),
+)
+
+
+class TestTheStepTable:
+    def test_runs_the_same_steps_in_the_same_order(self) -> None:
+        assert [(step.name, step.fast) for step in gate_steps()] == list(GATE_STEPS)
+
+    def test_fast_drops_exactly_three(self) -> None:
+        steps = gate_steps()
+        assert len(steps) == 20
+        assert sum(1 for step in steps if step.fast) == 17
+
+    def test_enumerating_the_gate_does_not_run_it(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """A document can state the steps without paying for them.
+
+        The callables come back unevaluated. Were the table to run anything on
+        construction, rendering the gate into a document would run the gate.
+        """
+
+        def explode(*args: object, **kwargs: object) -> StepResult:
+            raise AssertionError("constructing the step table ran a step")
+
+        monkeypatch.setattr(cli, "_run", explode)
+        assert len(gate_steps()) == 20
+
+
+class TestGeneratedRegions:
+    """The half of `de sync` that lives in the CLI: what the facts are gathered from."""
+
+    def test_a_docstring_first_line_is_the_summary(self) -> None:
+        assert _first_line("Does a thing.\n\nAt length.\n") == "Does a thing."
+
+    def test_no_docstring_is_an_empty_summary(self) -> None:
+        assert _first_line(None) == ""
+        assert _first_line("   ") == ""
+
+    def test_the_facts_come_from_the_live_app(self) -> None:
+        """Not from parsed source. Adding a subcommand grows the table in the same run."""
+        facts = repository_facts()
+        names = [command.name for command in facts.commands]
+        assert names == sorted(names)
+        assert "sync" in names
+        assert [step.name for step in facts.steps] == [step.name for step in gate_steps()]
+        assert all(command.summary for command in facts.commands)
+
+    def test_the_arms_carry_their_purpose(self) -> None:
+        assert dict(repository_facts().arms)["in_situ"]
+
+    def test_this_repository_is_current(self) -> None:
+        assert check_sync_step().passed
+
+    def test_the_step_reports_what_it_refuses(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli, "check_sync", lambda repo_root, facts: [SyncIssue("README.md", "is stale")]
+        )
+        result = check_sync_step()
+        assert not result.passed
+        assert result.detail == "1 issue(s)"
+
+    def test_sync_says_what_it_wrote(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(cli, "sync_regions", lambda repo_root, facts: ["docs/ARCHITECTURE.md"])
+        result = runner.invoke(app, ["sync"])
+        assert result.exit_code == 0
+        assert "docs/ARCHITECTURE.md" in result.output
+
+    def test_sync_says_when_there_was_nothing_to_write(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.setattr(cli, "sync_regions", lambda repo_root, facts: [])
+        result = runner.invoke(app, ["sync"])
+        assert result.exit_code == 0
+        assert "already matches" in result.output
 
 
 class TestGitIdentityGuard:

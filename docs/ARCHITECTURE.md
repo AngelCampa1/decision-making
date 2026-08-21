@@ -113,23 +113,19 @@ flowchart LR
 
     subgraph g["Integrity gates"]
         direction TB
-        g1["docs · citations · claims"]
-        g2["provenance · decisions<br/>corrections · wiring"]
-        g3["corpus · tailoring · skills<br/>rescore · site"]
+        g1["one module per step of <tt>de check</tt>,<br/>named after the step"]
     end
 
     subgraph r["Run engine"]
         direction TB
-        r1["runner · orchestrator · sharded"]
-        r2["triggers · trigger_arms · unbundle"]
-        r3["arenas<br/><i>dev / screen / confirm</i>"]
+        r1["assembling a run, sharding it,<br/>scoring it, comparing arms"]
+        r2["arenas<br/><i>dev / screen / confirm</i>"]
+        r1 --> r2
     end
 
     subgraph l["Libraries"]
         direction TB
-        l1["stats/: agreement, calibration, cluster,<br/>multiplicity, paired, power,<br/>reliability, track_h"]
-        l2["providers/: claude_code,<br/>openai_compatible"]
-        l3["generators/ · corpora/<br/>scorers/ · solvers/"]
+        l1["statistics · model providers<br/>generators · scorers · solvers"]
     end
 
     cli --> g
@@ -138,8 +134,23 @@ flowchart LR
     g --> l
 ```
 
-`trigger_arms.py` is the largest module and carries the part that is easiest to
-get wrong: scoring one arm, comparing two, and the four guards that refuse a
+The diagram draws the shape. The inventory below is rendered from the package
+itself, because the version of this drawing that named all twenty-five modules
+was missing two of them within a day of being written.
+
+<!-- de:generated harness-modules -->
+| Package | Modules |
+| --- | --- |
+| `decision_evals/` | `arenas` · `budget` · `citations` · `claims` · `cli` · `corpus` · `corrections` · `decisions` · `deployed` · `docs` · `orchestrator` · `prereg` · `provenance` · `rescore` · `runner` · `sharded` · `site` · `skills` · `sync` · `tailoring` · `telemetry` · `trigger_arms` · `triggers` · `unbundle` · `wiring` |
+| `decision_evals/corpora/` | `lost_in_conversation` |
+| `decision_evals/generators/` | `audit` · `generate` · `loader` · `safe_eval` · `schema` |
+| `decision_evals/providers/` | `claude_code` · `openai_compatible` |
+| `decision_evals/scorers/` | `answer` · `bfcl` |
+| `decision_evals/solvers/` | `arms` |
+| `decision_evals/stats/` | `agreement` · `calibration` · `cluster` · `multiplicity` · `paired` · `power` · `reliability` · `track_h` |
+<!-- /de:generated -->
+
+`trigger_arms.py` carries the part that is easiest to get wrong: scoring one arm, comparing two, and the four guards that refuse a
 comparison which would be meaningless. `label_versions_comparable` exists
 because a single label move once raised recall three to five points on every arm
 already on disk, with zero calls re-made.
@@ -218,20 +229,41 @@ that added that entry is an ancestor of the run's commit.
 
 ## The gate
 
-`de check` makes no model calls and is deterministic. Sixteen steps always,
-three more unless `--fast`.
+`de check` makes no model calls and is deterministic. It runs in order, and the
+order below is the gate's own step table, not a copy of it.
+
+<!-- de:generated de-check-steps -->
+| # | Step | `--fast` |
+| --- | --- | --- |
+| 1 | git identity | runs |
+| 2 | ruff check | runs |
+| 3 | ruff format | runs |
+| 4 | mypy | runs |
+| 5 | skill lint | runs |
+| 6 | trigger sets | runs |
+| 7 | tailoring corpus | runs |
+| 8 | plugin manifests | runs |
+| 9 | citations | runs |
+| 10 | run provenance | runs |
+| 11 | integrity wiring | runs |
+| 12 | decision register | runs |
+| 13 | label corrections | runs |
+| 14 | checkpoint label versions | runs |
+| 15 | documentation | runs |
+| 16 | published claims | runs |
+| 17 | generated regions | runs |
+| 18 | site | skipped |
+| 19 | pytest | skipped |
+| 20 | coverage floors | skipped |
+<!-- /de:generated -->
 
 ```mermaid
 flowchart TB
-    subgraph always["Always — the pre-commit subset"]
+    subgraph always["Every commit — the pre-commit subset"]
         direction TB
-        a["git identity → ruff check → ruff format → mypy"]
-        b["skill lint → trigger sets → tailoring corpus → plugin manifests"]
-        c["citations → run provenance → integrity wiring → decision register"]
-        d["label corrections → checkpoint label versions → documentation → published claims"]
-        a --> b --> c --> d
+        a["lint, types, and every repository-integrity check"]
     end
-    subgraph full["Adds at pre-push and in CI"]
+    subgraph full["Added at pre-push and in CI"]
         direction TB
         e["site staleness → pytest with coverage → coverage floors"]
     end
@@ -294,12 +326,24 @@ than one of `ledger`, `fit`, `cascade`, `timing` applies they run in that order,
 because each supplies an input to the next. `council` and `hinge` sit outside
 the chain, run alone, and run first where they apply.
 
-`placebo.md` is the eighth file, and the router never names it. It is
-token-matched and structure-matched to a real procedure and exists for the
-harness's four comparison arms: off, on, placebo, chain-of-thought. Without it,
-"the skill helped" and "any document of that length helped" are the same
-observation. A fifth arm, `in_situ`, delivers the description the way a real
-install would and is there for ecological validity.
+Every file the skill ships, and whether the router names it:
+
+<!-- de:generated skill-procedures -->
+| File | Named by `SKILL.md` |
+| --- | --- |
+| `cascade.md` | yes |
+| `council.md` | yes |
+| `fit.md` | yes |
+| `hinge.md` | yes |
+| `ledger.md` | yes |
+| `placebo.md` | no |
+| `timing.md` | yes |
+<!-- /de:generated -->
+
+`placebo.md` is the one the router never names. It is token-matched and
+structure-matched to a real procedure, and it exists so that "the skill helped"
+and "any document of that length helped" are not the same observation. It is a
+harness control, and [`METHODS.md`](METHODS.md) has the arms it belongs to.
 
 Routing is prose instructions to a model, so it is a claim, and `dm-1` through
 `dm-5` in the frontmatter are its falsifiable form. The verdict is `UNTESTED`.
@@ -320,6 +364,23 @@ Routing is prose instructions to a model, so it is a claim, and `dm-1` through
 | `paper/` | The write-up, and the `refs.bib` the citation gate reads. |
 | `site/` | The Astro project that renders all of the above. |
 | `tests/` | `unit/`, `integration/`, `property/`, and `golden/` for the byte-pinned generator output. |
+
+Every command the harness answers to:
+
+<!-- de:generated de-commands -->
+| Command | What it does |
+| --- | --- |
+| `de check` | Run the full local gate. No model calls, fully deterministic. |
+| `de deployed` | Report whether the published site is a build of the current `main`. |
+| `de fetch` | Download the vendored corpora and verify them against their locks. |
+| `de index` | Regenerate `docs/RUN_INDEX.md` from the published run records. |
+| `de lint` | Validate skill frontmatter, evidence metadata, and claim coverage. |
+| `de mirror` | Regenerate the cross-tool mirrors (`.agents/skills/`, `CLAUDE.md`). |
+| `de power` | Print the minimum detectable effect across item counts and discordance. |
+| `de rescore` | Stamp every checkpoint with its answer key, and bridge the older ones. |
+| `de site` | Build the site and record what it was built from. |
+| `de sync` | Rewrite every generated region and inline fact from its source. |
+<!-- /de:generated -->
 
 [`docs/DOCUMENTATION_MAP.md`](DOCUMENTATION_MAP.md) covers the documentation's
 own structure: which files are living, which are generated, which are records,

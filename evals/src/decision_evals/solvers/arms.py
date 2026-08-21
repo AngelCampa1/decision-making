@@ -39,6 +39,29 @@ ArmName = Literal["off", "on", "placebo", "cot", "in_situ"]
 #: it still help when it is not the only thing in the prompt".
 ARM_NAMES: Final[tuple[ArmName, ...]] = ("off", "on", "placebo", "cot", "in_situ")
 
+#: What each arm is for, in one line, beside the arm itself.
+#:
+#: Documents used to carry these sentences by hand, and by 2026-08-21 four of
+#: them described a four-arm design against a five-arm tuple. They are here so
+#: that a document can render them instead of restating them, and so that
+#: adding an arm without saying what it answers is a diff nobody can miss.
+ARM_PURPOSE: Final[dict[ArmName, str]] = {
+    "off": "The skill is absent. What the model does unaided, on the same items.",
+    "on": "The skill is present and is the only thing in the prompt.",
+    "placebo": (
+        "A document matched to the skill on tokens and structure, so that a gain "
+        "over `off` can be told apart from a gain from any document that size."
+    ),
+    "cot": (
+        "The plainest step-by-step instruction. The tripwire for whether the skill "
+        "is an expensive way to say think."
+    ),
+    "in_situ": (
+        "The skill delivered the way an install delivers it, alongside whatever "
+        "else is in the prompt. Ecological validity, not effect size."
+    ),
+}
+
 #: Present in every arm without exception.
 FORMAT_CONTRACT: Final = (
     "Give your reasoning if it helps you, then end your reply with a final line "

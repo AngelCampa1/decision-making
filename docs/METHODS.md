@@ -192,9 +192,21 @@ nothing, and a single-arm number is what goes into a README.
 ## 4. Controls, and instrument checks that run before results are believed
 
 **The design, and the part of it that has not run.**
-[`PROTOCOL.md`](PROTOCOL.md) §1 specifies four arms on the same items: **off**,
-**on**, **placebo**, and **cot**. A skill that beats *off* but not *placebo* is
-a length effect. A skill that does not beat *cot* is an expensive way to say
+[`PROTOCOL.md`](PROTOCOL.md) §1 specifies four comparison arms on the same
+items. The harness carries a fifth, `in_situ`, which answers a different
+question and is not part of the comparison:
+
+<!-- de:generated arm-purposes -->
+| Arm | What it answers |
+| --- | --- |
+| `off` | The skill is absent. What the model does unaided, on the same items. |
+| `on` | The skill is present and is the only thing in the prompt. |
+| `placebo` | A document matched to the skill on tokens and structure, so that a gain over `off` can be told apart from a gain from any document that size. |
+| `cot` | The plainest step-by-step instruction. The tripwire for whether the skill is an expensive way to say think. |
+| `in_situ` | The skill delivered the way an install delivers it, alongside whatever else is in the prompt. Ecological validity, not effect size. |
+<!-- /de:generated -->
+
+A skill that beats *off* but not *placebo* is a length effect. A skill that does not beat *cot* is an expensive way to say
 "think." The placebo
 ([`../skills/decision-making/placebo.md`](../skills/decision-making/placebo.md))
 is token- and structure-matched filler, and the match is enforced rather than
