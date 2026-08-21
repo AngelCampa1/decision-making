@@ -206,8 +206,7 @@ question and is not part of the comparison:
 | `in_situ` | The skill delivered the way an install delivers it, alongside whatever else is in the prompt. Ecological validity, not effect size. |
 <!-- /de:generated -->
 
-A skill that beats *off* but not *placebo* is a length effect. A skill that does not beat *cot* is an expensive way to say
-"think." The placebo
+The placebo
 ([`../skills/decision-making/placebo.md`](../skills/decision-making/placebo.md))
 is token- and structure-matched filler, and the match is enforced rather than
 eyeballed: `check_placebo_match` refuses a placebo of the wrong size or shape,

@@ -17,13 +17,11 @@ the rendered site::
 whose contents are not what its source would render right now. The document goes
 on being prose written by a person; the enumerations inside it stop being.
 
-The occasion was 2026-08-21. ``docs/ARCHITECTURE.md`` was written, fact-checked
-by an agent briefed to break it, and still shipped a gate diagram naming
-thirteen of sixteen steps, a module list missing two of ``stats/``, and a
-four-arm design against a five-arm tuple. Every path in it resolved. The
-architecture document is the one that most needs to be right and the one whose
-subject moves fastest, and the review that caught those four caught them by
-reading the source and counting -- which is the part a machine does better.
+The occasion was 2026-08-21: ``docs/ARCHITECTURE.md`` went through an
+adversarial fact-check and still shipped four false set comparisons with every
+path in it resolving. The full account is in ``docs/WHY_THESE_RULES.md``. What
+caught them was reading the source and counting, which is the part a machine
+does better.
 
 There is a second marker for a number that has to stay inside a sentence::
 
@@ -31,14 +29,15 @@ There is a second marker for a number that has to stay inside a sentence::
 
 ``de:fact`` renders the value from ``site/claims.json``, where the number is
 already pinned to one exact sentence in one repository file by
-:mod:`decision_evals.claims`. So a figure restated in a fourth document is not a
-fourth answer that can drift: it is the registered one, and when the source
-moves, ``de sync`` moves every restatement with it. That register owns whether
+:mod:`decision_evals.claims`. So a figure restated in a fourth document is the
+registered one. When the source sentence moves, the anchor check refuses; when
+the register is corrected, ``de sync`` carries that correction into every
+restatement. That register owns whether
 an id exists at all, in both directions and on both surfaces; this module only
 renders what it declares.
 
 **What this still does not do.** A region can be correct and the paragraph above
-it wrong. Rendering the sixteen steps says nothing about the sentence claiming
+it wrong. Rendering the gate's steps says nothing about the sentence claiming
 the gate is offline. That defect is invisible here, as it is everywhere else,
 and :mod:`decision_evals.drift` is the answer to it.
 """

@@ -884,8 +884,8 @@ def check_sync_step() -> StepResult:
     The documentation gate proves a reference resolves and stops there, so a
     document could enumerate the gate's own steps, the harness's modules or the
     skill's procedures and be wrong about all three with every path correct.
-    On 2026-08-21 one did, in three places at once, having already been through
-    an adversarial fact-check.
+    On 2026-08-21 one did, having already been through an adversarial
+    fact-check.
 
     What this cannot do is read the sentence above the table.
     """
@@ -945,7 +945,7 @@ def drift_movements() -> dict[str, Movement]:
 
 @app.command()
 def drift() -> None:
-    """List the documents whose subject has moved since anyone read them."""
+    """List the documents whose subject has moved since anyone recorded reading them."""
     _echo_header("drift")
     living, reviewed = drift_census(REPO_ROOT)
     typer.echo(f"{living} living document(s), {reviewed} with a review on record")
@@ -1256,9 +1256,9 @@ def gate_steps() -> tuple[Step, ...]:
     unevaluated, so the gate can be enumerated without being run -- which is
     what lets a document state the steps without a person retyping them.
 
-    The three steps ``--fast`` drops need a Node toolchain or the test suite.
-    They are demanded at pre-push instead of on every commit, which is a
-    latency decision and not a statement about how much they matter.
+    The four steps ``--fast`` drops need a Node toolchain, git history, or the
+    test suite. They are demanded at pre-push instead of on every commit, which
+    is a latency decision and says nothing about how much they matter.
     """
     python = sys.executable
     return (

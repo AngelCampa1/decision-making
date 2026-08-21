@@ -46,7 +46,7 @@ flowchart TB
     subgraph living["<b>Living</b> — edited freely, gated by docs.py"]
         direction TB
         L1["root: README · AGENTS · CONTRIBUTING · SCORECARD"]
-        L2["docs/*.md — one per question"]
+        L2["docs/*.md — the living documents"]
         L3["docs/programme/ — the eight parts"]
         L4["docs/reviews/ — three review briefs"]
     end
@@ -107,41 +107,37 @@ written by `de sync`.
 
 `REGIONS` in `decision_evals.sync` is the list of ids: the `de` subcommands, the
 steps of the gate, the modules of the harness, the files the skill ships, the
-arms and what each answers. Each renders from a live object rather than from
-parsed source, so a subcommand cannot be added without the table growing a row in
-the same run. `de check` refuses a region that is not what it renders from, one
-that names no renderer, and a renderer no document uses.
+arms and what each answers. Each renders from the live object itself, the Typer
+app or the step table or the package directory, so a subcommand added without a
+`de sync` is a red gate naming the row that is missing. `de check` also refuses
+a region no renderer answers to, a renderer no document uses, and a marker that
+never closes.
 
 **A figure that has to sit inside a sentence.** `site/claims.json` pins a number
 to one exact sentence in one repository file. A document states the registered
-value rather than its own copy:
+value, and `de sync` keeps it there:
 
 ````markdown
 a corpus that is <!-- de:fact <claim-id> -->89%<!-- /de:fact --> solvable
 ````
 
-`de check` refuses a marker naming a claim nothing declares, a claim nothing
-publishes, and a marker in the claim's own source, where `de sync` would rewrite
-the sentence the anchor exists to verify.
+`de check` refuses a marker naming a claim `site/claims.json` does not declare,
+and a marker in the claim's own source, where `de sync` would rewrite the
+sentence the anchor exists to verify. The register's own rule is unchanged: a
+claim nothing publishes may not sit in it.
 
 The ids are illustrative above and deliberately not real. A live marker in this
 file would make it a publisher of a figure it is only describing.
 
-**The line this stops at.** A region can be right and the sentence above it
-wrong. Rendering the gate's steps says nothing about the paragraph claiming the
-gate is offline, and nothing here reads that paragraph. Markers are for what the
-repository already knows; the rest is reading.
+Markers cover what the repository already knows. The rest is reading, and the
+next section is when that happens.
 
 ---
 
-## What no gate proves, and what narrows the reading
+## Which documents to re-read
 
-No check here can tell whether a description is still true. `docs/PROTOCOL.md`
-once described, in the present indicative, a refusal that had never run, with
-every path in it correct.
-
-`de drift` narrows the search. A document's dependencies are the repository
-paths it names — the same paths `docs.py` extracts to prove they resolve — and
+`de drift` computes the worklist. A document's dependencies are the repository
+paths it names, the same paths `docs.py` extracts to prove they resolve, and
 `[tool.decision-evals.reviewed]` records the commit somebody read it at. The
 report is the documents whose named paths have moved since, furthest behind
 first, with the line to paste back once you have read one. `de check` refuses a
@@ -150,8 +146,11 @@ document that has gone more than ten commits past its review.
 Generated documents are exempt by rule: reviewing one means reviewing its
 generator, which is source.
 
-Nothing in this stops a review that did not happen. What changed is that an
-obligation nobody could see is now visible and dated.
+A recorded sha is one person's claim that they read the document, and it is
+worth what that person is worth. `docs/PROTOCOL.md` once described, in the
+present indicative, a refusal that had never run, with every path in it correct,
+and no check here would catch that today either. What the register buys is an
+obligation that is visible and dated.
 
 ---
 

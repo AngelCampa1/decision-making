@@ -489,8 +489,8 @@ notes recorded three living documents disagreeing about the broken-measurement
 count — ten, around eleven, eight. `docs/STATUS.md` cited
 `run_triggers.py:918` for the parse-rate floor, which had moved to 1220.
 
-So a document no longer types out what the repository can derive.
-`de sync` writes five regions from live objects — the subcommands off the Typer
+So five enumerations stopped being typed out.
+`de sync` writes them from live objects — the subcommands off the Typer
 app, the steps off `gate_steps()`, the modules off the package, the skill's
 files off the directory, the arms off `ARM_NAMES` — and `de check` refuses one
 that is not what it renders from. The gate's own step list became a tuple in the

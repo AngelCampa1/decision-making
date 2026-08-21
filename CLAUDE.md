@@ -206,26 +206,28 @@ and how a run flows through them. `README.md` carries the component table and
 - **Every third published run, sweep `README.md` and `docs/` for drift** and
   land the sweep as a dated `notebook/` entry. Count runs from
   [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), which is generated and cannot
-  itself drift. `python -m uv run de drift` is the worklist: the documents whose
-  named paths have moved since anyone recorded reading them, furthest behind
+  itself drift.
+- **Run `python -m uv run de drift` for the worklist.** It names the documents
+  whose paths have moved since anyone recorded reading them, furthest behind
   first. Read those, re-read [`docs/README.md`](docs/README.md) as an index, and
-  record each one you read in `[tool.decision-evals.reviewed]`. `de check`
-  refuses a document with no review or one more than ten commits past it. What
-  no gate can tell you is whether a description is still true; that is the part
-  you are doing.
+  record each in `[tool.decision-evals.reviewed]` at the commit you read it at.
+  `de check` refuses a document with no review or one more than ten commits past
+  it.
 - **A document does not type out what the repository already knows.** A `de`
   subcommand, a step of the gate, a module of the harness, a file of the skill,
   an arm: mark the region and `python -m uv run de sync` writes it. A figure
-  registered in `site/claims.json` goes in a `de:fact` marker rather than as a
-  second copy of the number. Both markers are HTML comments and invisible
+  registered in `site/claims.json` goes in a `de:fact` marker, and the number
+  itself stays in the register. Both markers are HTML comments and invisible
   wherever the document renders. Where they go and what refuses them is
   [`docs/DOCUMENTATION_MAP.md`](docs/DOCUMENTATION_MAP.md).
 - **A coverage floor does not mean a module runs.** `de check` refuses a floored
   module that no entry point can reach. Intentional gaps go in
   `[tool.decision-evals.unwired]` with the condition that would close them.
-- **The documentation gate catches a reference that does not resolve, and a
-  table or figure that no longer matches its source, never a description that is
-  wrong.** Scope is root `*.md` and `docs/` recursively.
+- **No gate reads whether a description is true.** The documentation gate
+  catches a reference that does not resolve, `generated regions` catches a table
+  that is not what it renders from, and `published claims` catches a figure that
+  no longer matches its source. Scope for all three is root `*.md` and `docs/`
+  recursively.
   `notebook/`, `results/**/README.md`,
   [`docs/DECISIONS.md`](docs/DECISIONS.md) and `docs/superpowers/plans/` are
   excluded as dated records, so do not "fix" a stale reference in them.

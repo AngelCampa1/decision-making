@@ -135,8 +135,7 @@ flowchart LR
 ```
 
 The diagram draws the shape. The inventory below is rendered from the package
-itself, because the version of this drawing that named all twenty-five modules
-was missing two of them within a day of being written.
+itself, so it grows a row the day a module does.
 
 <!-- de:generated harness-modules -->
 | Package | Modules |
@@ -150,8 +149,9 @@ was missing two of them within a day of being written.
 | `decision_evals/stats/` | `agreement` · `calibration` · `cluster` · `multiplicity` · `paired` · `power` · `reliability` · `track_h` |
 <!-- /de:generated -->
 
-`trigger_arms.py` carries the part that is easiest to get wrong: scoring one arm, comparing two, and the four guards that refuse a
-comparison which would be meaningless. `label_versions_comparable` exists
+`trigger_arms.py` carries the part that is easiest to get wrong: scoring one
+arm, comparing two, and the four guards that refuse a comparison which would be
+meaningless. `label_versions_comparable` exists
 because a single label move once raised recall three to five points on every arm
 already on disk, with zero calls re-made.
 
@@ -230,7 +230,7 @@ that added that entry is an ancestor of the run's commit.
 ## The gate
 
 `de check` makes no model calls and is deterministic. It runs in order, and the
-order below is the gate's own step table, not a copy of it.
+table below is the gate's own step table.
 
 <!-- de:generated de-check-steps -->
 | # | Step | `--fast` |
@@ -332,7 +332,7 @@ than one of `ledger`, `fit`, `cascade`, `timing` applies they run in that order,
 because each supplies an input to the next. `council` and `hinge` sit outside
 the chain, run alone, and run first where they apply.
 
-Every file the skill ships, and whether the router names it:
+Every file the skill ships beside `SKILL.md`, and whether the router names it:
 
 <!-- de:generated skill-procedures -->
 | File | Named by `SKILL.md` |
@@ -378,7 +378,7 @@ Every command the harness answers to:
 | --- | --- |
 | `de check` | Run the full local gate. No model calls, fully deterministic. |
 | `de deployed` | Report whether the published site is a build of the current `main`. |
-| `de drift` | List the documents whose subject has moved since anyone read them. |
+| `de drift` | List the documents whose subject has moved since anyone recorded reading them. |
 | `de fetch` | Download the vendored corpora and verify them against their locks. |
 | `de index` | Regenerate `docs/RUN_INDEX.md` from the published run records. |
 | `de lint` | Validate skill frontmatter, evidence metadata, and claim coverage. |

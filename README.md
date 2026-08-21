@@ -304,12 +304,13 @@ uv run de sync && uv run de site
 `de site` needs Node and npm on `PATH`, because the site is an Astro project.
 The gate that demands you run it does not.
 
-The other commands: `de sync` rewrites the tables and figures the documents
-derive from the repository rather than restate by hand, `de drift` lists the
-documents whose code has moved since anybody last read them, `de index`
-regenerates [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates
-the cross-tool skill copies, `de lint` checks skill frontmatter and the
-promotion gate,
+Two commands keep the documents honest. `de sync` rewrites the tables and
+figures the documents derive from the repository, and `de drift` lists the
+documents whose subject has moved since anyone recorded reading them.
+
+The rest: `de index` regenerates
+[`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool
+skill copies, `de lint` checks skill frontmatter and the promotion gate,
 `de power` prints a minimum-detectable-effect table, `de rescore` re-grades an
 existing checkpoint against a newer answer key without re-making a single call,
 and `de fetch` downloads the hash-pinned third-party corpora.
