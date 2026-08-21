@@ -367,6 +367,27 @@ published number is invalidated.
 three-judge round has not run on them, and **no number may be published against
 version 5 until it has.**
 
+**Correction, 2026-08-21, appended. The round has now run and the paragraph
+above is superseded.** 216 blind adjudications, three judges over the seventy-two
+items, zero unparseable, `haiku`. Movement **3/72 = 0.042** against the
+pre-registered kill above 0.20, under it in every band separately (s 0.000,
+m 0.111, l 0.056, xl 0.000). Unanimity with the key 0.875, Fleiss kappa 0.839,
+Krippendorff alpha 0.839, 1.121 effective raters. **The corpus survives the
+kill**, and all 330 items in version 5 now carry a three-judge record. Written
+up in
+[`../notebook/2026-08-21-the-72-council-and-hinge-items-go-through-adjudication.md`](../notebook/2026-08-21-the-72-council-and-hinge-items-go-through-adjudication.md),
+with the prediction registered before the run in the same entry.
+
+**What the round left open.** All three moved labels break the
+one-positive-two-negative invariant, which is 2026-08-18's finding repeating on
+the new items at 3 of 3. `l24n1` and `m29n2` read as fire inside triples whose
+positive three judges confirmed; `m25p` reads as no-fire inside a triple whose
+other two members are unanimously negative. The rewrite-and-re-adjudicate round
+that resolved the twelve has not been run on these three. A number published
+against version 5 today is scored against three items whose labels three blind
+readers dispute, and that is a smaller claim than the block this correction
+lifts.
+
 **One shortcut finding crossed the gate and is baselined with its arithmetic
 rather than tuned away.** `cancel:close:type_token_ratio` reads 3.23 against a
 gate at 3.0. The rate did not move: the positive is at an extreme of its own

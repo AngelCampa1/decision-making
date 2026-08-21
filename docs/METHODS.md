@@ -134,10 +134,23 @@ The resolution, on 2026-08-18, was to rewrite the twelve asks (by agents never
 shown a judge's reasoning) and re-adjudicate blind: eleven of the twelve then
 agreed with the key, `l15` was retired whole, corpus movement fell to 0.004,
 and **no label moved**. The figures above are therefore the state on
-2026-08-14. The corpus now stands at 330 items in 110 triples, after answer
-key v5 added twenty-four on 2026-08-20 so that `council` and `hinge` have
-positives to be correct about. Those twenty-four have not been adjudicated and
-the figures here do not cover them. See
+2026-08-14.
+
+**The corpus now stands at 330 items in 110 triples**, after answer key v5 added
+twenty-four triples on 2026-08-20 so that `council` and `hinge` have positives
+to be correct about. Those seventy-two items were adjudicated on 2026-08-21:
+216 calls, three judges each, zero unparseable, **movement 3/72 = 0.042 against
+the 0.20 kill**, Fleiss kappa 0.839, unanimity with the key 0.875, and per-band
+movement 0.000 / 0.111 / 0.056 / 0.000. **The corpus survives the kill**, and
+every item in version 5 now carries a three-judge record.
+
+All three moves broke the same corpus invariant the twelve broke, at 3 of 3:
+`l24n1` and `m29n2` read as fire in triples whose positive the judges
+independently confirmed, and `m25p` reads as no-fire in a triple whose other two
+members are unanimously negative. The rewrite-and-re-adjudicate round that
+resolved the twelve has not been run on these three, so a number published
+against version 5 is scored against three items whose labels three blind readers
+dispute. See
 [`2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md`](../notebook/2026-08-18-the-corpus-is-authored-in-triples-and-adjudicated-in-items.md).
 
 ---
