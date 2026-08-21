@@ -33,7 +33,9 @@ There is a second marker for a number that has to stay inside a sentence::
 already pinned to one exact sentence in one repository file by
 :mod:`decision_evals.claims`. So a figure restated in a fourth document is not a
 fourth answer that can drift: it is the registered one, and when the source
-moves, ``de sync`` moves every restatement with it.
+moves, ``de sync`` moves every restatement with it. That register owns whether
+an id exists at all, in both directions and on both surfaces; this module only
+renders what it declares.
 
 **What this still does not do.** A region can be correct and the paragraph above
 it wrong. Rendering the sixteen steps says nothing about the sentence claiming
@@ -48,8 +50,6 @@ from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
-
-from decision_evals.claims import load_claims
 
 #: Where a marker is honoured. The same scope as the documentation gate, minus
 #: its exclusions: a register or a dated plan is still a document somebody may
@@ -80,6 +80,12 @@ _INLINE: Final = re.compile(
 )
 
 _OPEN: Final = re.compile(r"<!--\s*de:(?P<kind>generated|fact)\s+(?P<id>[a-z0-9-]+)\s*-->")
+
+#: Every claim id a document states, for :mod:`decision_evals.claims`, which
+#: owns whether a stated id is one the register declares. Exported from here
+#: rather than restated there, because two regexes for one syntax is the
+#: shape of drift this module exists to remove.
+FACT_IDS: Final = re.compile(r"<!--\s*de:fact\s+([a-z0-9-]+)\s*-->")
 _CLOSE: Final = re.compile(r"<!--\s*/de:(?P<kind>generated|fact)\s*-->")
 
 #: One newline. Named because editing this module through a script turned the
@@ -202,21 +208,22 @@ def collect_facts(
     commands: Iterable[Command],
     steps: Iterable[GateStep],
     arms: Iterable[tuple[str, str]],
+    values: Mapping[str, str],
 ) -> Facts:
     """Gather every fact the regions render from.
 
-    The three arguments are live objects the caller already holds -- the Typer
-    app's command table, the gate's step table, the arm tuple. Everything else
-    is read from ``repo_root``, so a test can hand this a directory.
+    The keyword arguments are live objects the caller already holds -- the Typer
+    app's command table, the gate's step table, the arm tuple, the claims
+    register. Everything else is read from ``repo_root``, so a test can hand
+    this a directory.
     """
-    claims, _ = load_claims(repo_root)
     return Facts(
         commands=tuple(commands),
         steps=tuple(steps),
         modules=module_inventory(repo_root),
         procedures=procedures(repo_root),
         arms=tuple(arms),
-        values={claim.id: claim.value for claim in claims},
+        values=dict(values),
     )
 
 
@@ -430,22 +437,17 @@ def check_sync(repo_root: Path, facts: Facts) -> list[SyncIssue]:
                     )
                 )
 
+        # An id the register does not declare is left for
+        # :mod:`decision_evals.claims`, which owns both directions of that
+        # question across pages and documents alike. Refusing it here as well
+        # would be two messages for one fix.
         for claim_id, value in facts_in(text):
             expected_value = facts.values.get(claim_id)
-            if expected_value is None:
+            if expected_value is not None and value != expected_value:
                 issues.append(
                     SyncIssue(
                         where,
-                        f"states a fact `{claim_id}`, which `site/claims.json` does not "
-                        "register. A figure with no source behind it is the thing this "
-                        "marker exists to prevent.",
-                    )
-                )
-            elif value != expected_value:
-                issues.append(
-                    SyncIssue(
-                        where,
-                        f"publishes `{claim_id}` as {value!r}; the register says "
+                        f"states `{claim_id}` as {value!r}; the register says "
                         f"{expected_value!r}. Run `de sync`.",
                     )
                 )

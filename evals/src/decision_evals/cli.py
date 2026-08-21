@@ -25,7 +25,7 @@ from decision_evals.adjudication import census as adjudication_census
 from decision_evals.adjudication import check_adjudication, record_cases
 from decision_evals.citations import census, check_citations, load_baseline
 from decision_evals.claims import census as claims_census
-from decision_evals.claims import check_claims
+from decision_evals.claims import check_claims, load_claims
 from decision_evals.decisions import GOVERNED as DECISION_PATHS
 from decision_evals.decisions import GovernedCommit, check_decisions
 from decision_evals.decisions import census as decisions_census
@@ -843,11 +843,13 @@ def repository_facts() -> SyncFacts:
         ),
         key=lambda command: command.name,
     )
+    claims, _ = load_claims(REPO_ROOT)
     return collect_facts(
         REPO_ROOT,
         commands=[command for command in commands if command.name],
         steps=[SyncStep(step.name, step.fast) for step in gate_steps()],
         arms=[(name, ARM_PURPOSE[name]) for name in ARM_NAMES],
+        values={claim.id: claim.value for claim in claims},
     )
 
 
@@ -925,8 +927,11 @@ def check_claims_step() -> StepResult:
     name = "published claims"
     _echo_header(name)
 
-    claims, retractions, pages = claims_census(REPO_ROOT)
-    typer.echo(f"{claims} claim(s), {retractions} retraction(s), {pages} page(s) scanned")
+    claims, retractions, pages, documents = claims_census(REPO_ROOT)
+    typer.echo(
+        f"{claims} claim(s), {retractions} retraction(s), "
+        f"{pages} page(s) and {documents} document(s) scanned"
+    )
 
     issues = check_claims(REPO_ROOT)
     if not issues:

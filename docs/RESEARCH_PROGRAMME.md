@@ -23,7 +23,7 @@ They are not appendices; the work is not doable without them.
 | | |
 |---|---|
 | [`AUTONOMOUS_WORK_ORDER.md`](AUTONOMOUS_WORK_ORDER.md) | How the work is done. Five standing rules, the sub-agent and adversarial-review method, the confirmation requirement, what may run unattended. Every rule is a failure that already happened here. Read it first. |
-| [`STATUS.md`](STATUS.md) | Where the work actually stopped. Track states, runs on record, and the eleven measurements caught being broken. This programme says what a track *is*; that file says how far it got. |
+| [`STATUS.md`](STATUS.md) | Where the work actually stopped. Track states, runs on record, and the <!-- de:fact broken-measurements -->eleven<!-- /de:fact --> measurements caught being broken. This programme says what a track *is*; that file says how far it got. |
 
 How to read this. Sixteen tracks in eight parts, and each part is its own file
 under [`programme/`](programme/part-1-what-is-already-known.md). This page is

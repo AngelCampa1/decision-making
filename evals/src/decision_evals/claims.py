@@ -52,6 +52,7 @@ from pathlib import Path
 from typing import Final
 
 from decision_evals.site import input_files, site_present
+from decision_evals.sync import FACT_IDS
 
 #: Every fact a page publishes, and what backs it. Read by this module *and* by
 #: the page that renders a claim, so the published string and the checked string
@@ -75,6 +76,18 @@ SCANNED_PAGES: Final[tuple[str, ...]] = (
     "site/src/**/*.ts",
     "site/src/**/*.svelte",
 )
+
+#: Where a document can state a claim, through a ``de:fact`` marker.
+#:
+#: Added 2026-08-21, when three living documents were found restating the
+#: broken-measurement count and this register's own notes recorded that they had
+#: once said ten, around eleven and eight. A page was never the only surface a
+#: figure could go stale on. It was the only surface with a gate.
+#:
+#: Retractions are deliberately not checked across these. A retracted phrase's
+#: own correction quotes it, and ``docs/STATUS.md`` carries both, so scanning
+#: documents for a retracted phrase would refuse the document that retracts it.
+SCANNED_DOCUMENTS: Final[tuple[str, ...]] = ("*.md", "docs/**/*.md")
 
 #: ``claim('total-model-calls')``, and ``shown(...)`` for the same call inside a
 #: template expression. Ids are kebab-case, which keeps this from matching every
@@ -266,6 +279,32 @@ def referenced_ids(repo_root: Path) -> dict[str, list[str]]:
     return found
 
 
+def scanned_documents(repo_root: Path) -> list[Path]:
+    """Every document a claim can be stated in, deduplicated and sorted."""
+    seen: dict[Path, None] = {}
+    for pattern in SCANNED_DOCUMENTS:
+        for path in repo_root.glob(pattern):
+            if path.is_file():
+                seen.setdefault(path, None)
+    return sorted(seen, key=lambda path: _relative(path, repo_root))
+
+
+def published_ids(repo_root: Path) -> dict[str, list[str]]:
+    """Claim id to everywhere it is published: a page that calls it, a document
+    that marks it.
+
+    One mapping rather than two, because the question every check below asks is
+    whether anything publishes this, and a figure restated in prose is published
+    exactly as much as one rendered on a page.
+    """
+    found = referenced_ids(repo_root)
+    for path in scanned_documents(repo_root):
+        where = _relative(path, repo_root)
+        for claim_id in sorted(set(FACT_IDS.findall(path.read_text(encoding="utf-8")))):
+            found.setdefault(claim_id, []).append(where)
+    return found
+
+
 def anchor_issues(repo_root: Path, where: str, source: str, quote: str) -> list[str]:
     """Whether one anchor still names a sentence, and exactly one of them.
 
@@ -426,28 +465,42 @@ def _claim_issues(repo_root: Path, claims: list[Claim]) -> list[ClaimIssue]:
 
 
 def _reference_issues(repo_root: Path, claims: list[Claim]) -> list[ClaimIssue]:
-    referenced = referenced_ids(repo_root)
+    published = published_ids(repo_root)
     declared = {claim.id for claim in claims}
 
     issues = [
         ClaimIssue(
             CLAIMS_PATH,
-            f"declares `{claim.id}` and no page publishes it. A claim nothing publishes "
-            "is a note that outlives the situation it describes: delete it, or call "
-            f"`claim('{claim.id}')` from the page that states it. Like every other "
-            "register here, this one may only shrink.",
+            f"declares `{claim.id}` and nothing publishes it. A claim nothing publishes "
+            "is a note that outlives the situation it describes: delete it, call "
+            f"`claim('{claim.id}')` from the page that states it, or mark it with "
+            f"`de:fact {claim.id}` in the document that does. Like every other register "
+            "here, this one may only shrink.",
         )
         for claim in claims
-        if claim.id not in referenced
+        if claim.id not in published
     ]
     issues += [
         ClaimIssue(
-            pages[0],
-            f"calls `claim('{claim_id}')` and `{CLAIMS_PATH}` does not declare it. An "
+            where[0],
+            f"publishes `{claim_id}` and `{CLAIMS_PATH}` does not declare it. An "
             "undeclared claim renders as nothing and is backed by nothing.",
         )
-        for claim_id, pages in sorted(referenced.items())
+        for claim_id, where in sorted(published.items())
         if claim_id not in declared
+    ]
+    # A marker in the claim's own source would let `de sync` rewrite the
+    # sentence the register quotes, from the value that sentence is supposed to
+    # be checked against. The anchor would still resolve and check nothing.
+    issues += [
+        ClaimIssue(
+            claim.source,
+            f"marks `{claim.id}` in the document the register quotes for it. `de sync` "
+            "would then rewrite the anchor sentence from the value the anchor exists to "
+            "verify. Restate the figure somewhere else, or quote a different sentence.",
+        )
+        for claim in claims
+        if claim.source in published.get(claim.id, [])
     ]
     return issues
 
@@ -569,8 +622,8 @@ def check_claims(repo_root: Path) -> list[ClaimIssue]:
     ]
 
 
-def census(repo_root: Path) -> tuple[int, int, int]:
-    """``(claims_declared, phrases_retracted, pages_scanned)``.
+def census(repo_root: Path) -> tuple[int, int, int, int]:
+    """``(claims_declared, phrases_retracted, pages_scanned, documents_scanned)``.
 
     An empty claims list is deliberately *not* a refusal, which is the one place
     this module departs from :mod:`decision_evals.site`. A manifest over no
@@ -580,6 +633,11 @@ def census(repo_root: Path) -> tuple[int, int, int]:
     declares none is correctly green rather than vacuously so.
     """
     if not site_present(repo_root):
-        return (0, 0, 0)
+        return (0, 0, 0, 0)
     claims, retractions = load_claims(repo_root)
-    return (len(claims), len(retractions), len(scanned_pages(repo_root)))
+    return (
+        len(claims),
+        len(retractions),
+        len(scanned_pages(repo_root)),
+        len(scanned_documents(repo_root)),
+    )

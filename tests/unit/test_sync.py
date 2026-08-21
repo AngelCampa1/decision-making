@@ -11,7 +11,6 @@ whose job is keeping documents true.
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from decision_evals.sync import (
@@ -190,30 +189,21 @@ def test_no_skill_means_no_procedures(tmp_path: Path) -> None:
     assert procedures(tmp_path) == ()
 
 
-def test_collecting_reads_the_claims_register(tmp_path: Path) -> None:
-    repo = _repo(
-        tmp_path,
-        {
-            "site/claims.json": json.dumps(
-                {
-                    "note": "x",
-                    "claims": [
-                        {
-                            "id": "corpus-solvability",
-                            "value": "89%",
-                            "source": "SCORECARD.md",
-                            "quote": "89% solvable",
-                            "why": "x",
-                        }
-                    ],
-                    "retractions": [],
-                }
-            ),
-        },
+def test_collecting_takes_the_live_values_and_reads_the_rest(tmp_path: Path) -> None:
+    """The register is handed in, not imported.
+
+    `claims.py` imports the marker from here, so this module importing the
+    register back would be a cycle. It also means a test can hand this a
+    directory and a dict.
+    """
+    root = "evals/src/decision_evals"
+    repo = _repo(tmp_path, {f"{root}/cli.py": ""})
+    facts = collect_facts(
+        repo, commands=(), steps=(), arms=(), values={"corpus-solvability": "89%"}
     )
-    facts = collect_facts(repo, commands=(), steps=(), arms=())
     assert facts.values == {"corpus-solvability": "89%"}
     assert facts.commands == ()
+    assert facts.modules == (("decision_evals/", ("cli",)),)
 
 
 # --------------------------------------------------------------------------- #
@@ -332,13 +322,17 @@ def test_a_nested_marker_is_refused(tmp_path: Path) -> None:
     assert any("do not pair up" in message or "pair up" in message for message in messages)
 
 
-def test_an_unregistered_inline_fact_is_refused(tmp_path: Path) -> None:
-    text = f"{_all_regions()}\n<!-- de:fact invented -->7<!-- /de:fact -->\n"
+def test_an_unregistered_inline_fact_is_left_to_the_register(tmp_path: Path) -> None:
+    """One mistake, one refusal.
+
+    `claims.py` owns whether a stated id exists, in both directions and across
+    pages and documents alike. Refusing it here as well would be two messages
+    for one fix, from two modules, neither of which owns the register.
+    """
+    text = _all_regions() + NEWLINE + "<!-- de:fact invented -->7<!-- /de:fact -->" + NEWLINE
     repo = _repo(tmp_path, {"README.md": text})
     sync(repo, FACTS)
-    messages = _for(check_sync(repo, FACTS), "README.md")
-    assert len(messages) == 1
-    assert "site/claims.json" in messages[0]
+    assert _for(check_sync(repo, FACTS), "README.md") == []
 
 
 def test_a_stale_inline_fact_is_refused(tmp_path: Path) -> None:

@@ -77,7 +77,8 @@ which does not eliminate it.
 
 ## The datasets
 
-Trigger corpus versions 1 through 3 are 89% solvable by counting words, and
+Trigger corpus versions 1 through 3 are
+<!-- de:fact corpus-solvability -->89%<!-- /de:fact --> solvable by counting words, and
 every Track L and Track M number sits on one of them. Turn length alone
 separates the positives from the negatives at AUC 0.850; a bare *"fire if ≥ 18
 words"* rule scores 0.890 with no model involved. Both figures are label version
@@ -85,7 +86,8 @@ words"* rule scores 0.890 with no model involved. Both figures are label version
 
 Version 4 is not that corpus, and as of 2026-08-18 not every published number
 sits on the old one. v4's best depth-2 stump over eight trivial features reads
-0.7054 against a majority baseline of 0.6667, a corpus a trivial feature can
+<!-- de:fact word-trick-ceiling -->0.7054<!-- /de:fact --> against a majority baseline
+of 0.6667, a corpus a trivial feature can
 nudge rather than solve, and Track N6's three arms cleared it by 12 to 24
 points. None of that retroactively rescues anything. Every figure in the rest of
 this paragraph, and every L- and M-track conclusion drawn from them, still sits
@@ -94,7 +96,8 @@ sentence may no longer be written about *every* number here. The best
 *description* arm on that key is `stakes-shown` at 0.9795, and the highest
 firing accuracy on record at all is the `confidence` arm at 0.9863: the shipped
 description with a probability also elicited, at one repeat rather than five. So
-the range any arm was competing over is about nine points above a ruler, either
+the range any arm was competing over is about
+<!-- de:fact headroom-points -->nine points<!-- /de:fact --> above a ruler, either
 way.
 
 This paragraph used to say six points, against a best arm of 0.956, and that was

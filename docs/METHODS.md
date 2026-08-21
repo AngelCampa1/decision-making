@@ -508,10 +508,12 @@ shadowing did not appear at four entries**: one bundled entry and four separate
 ones were indistinguishable on firing accuracy, 0.956 against 0.951, paired
 Wilcoxon p = 0.83, so the 202-skill shadowing result (arXiv:2605.24050) may no
 longer be cited as though it reached down to four. And **the corpus behind
-every one of those numbers was 89% solvable by counting words**: turn length
+every one of those numbers was <!-- de:fact corpus-solvability -->89%<!-- /de:fact -->
+solvable by counting words**: turn length
 alone separated the labels well enough that a bare "fire if long" rule beat
 most of what the arms were competing over. Track N rebuilt it, and on the
-rebuilt corpus the best shortcut is a depth-2 stump at 0.7054 against a 0.6667
+rebuilt corpus the best shortcut is a depth-2 stump at
+<!-- de:fact word-trick-ceiling -->0.7054<!-- /de:fact --> against a 0.6667
 baseline.
 
 One published run is **void** and answers nothing: 70 of its 516 responses were
@@ -521,8 +523,9 @@ decisions by re-reading the prose would be post-hoc scoring of a voided run
 against a rule invented after seeing it.
 
 [`STATUS.md`](STATUS.md) is the ledger: every run, what it showed, and the
-measurements caught being broken. That last count is around eleven and the
-ledger contradicts itself about it in two places, which is fitting. What holds
+measurements caught being broken. That last count is around
+<!-- de:fact broken-measurements -->eleven<!-- /de:fact --> and the ledger
+contradicts itself about it in two places, which is fitting. What holds
 across them is that **none was caught by anything failing**: no crash, no red
 test. Almost all share the same shape: a clean run, a full checkpoint, and a
 plausible number. Two sit outside that shape rather than outside the rule: one

@@ -41,7 +41,9 @@ from decision_evals.claims import (
     check_claims,
     load_claims,
     normalise,
+    published_ids,
     referenced_ids,
+    scanned_documents,
     scanned_pages,
 )
 
@@ -118,7 +120,7 @@ def _register(*claims: dict[str, Any], retractions: list[dict[str, Any]] | None 
 def test_absent_site_is_not_a_failure(tmp_path: Path) -> None:
     """The gate ships before the site does, exactly as ``site.py`` does."""
     assert check_claims(tmp_path) == []
-    assert census(tmp_path) == (0, 0, 0)
+    assert census(tmp_path) == (0, 0, 0, 0)
 
 
 def test_a_missing_register_refuses(tmp_path: Path) -> None:
@@ -224,7 +226,7 @@ def test_a_duplicate_id_refuses(tmp_path: Path) -> None:
 def test_a_green_register_passes(tmp_path: Path) -> None:
     repo = _repo(tmp_path, _published("total-model-calls"), claims=_register(_claim()))
     assert check_claims(repo) == []
-    assert census(repo) == (1, 0, 1)
+    assert census(repo) == (1, 0, 1, 1)
 
 
 def test_a_missing_source_refuses(tmp_path: Path) -> None:
@@ -445,12 +447,67 @@ def test_an_unroundable_value_refuses(tmp_path: Path) -> None:
 # --------------------------------------------------------------------------- #
 # What the pages say
 # --------------------------------------------------------------------------- #
-def test_a_claim_no_page_publishes_refuses(tmp_path: Path) -> None:
+def test_a_claim_nothing_publishes_refuses(tmp_path: Path) -> None:
     """Shrink-only, the same discipline as `unwired` and `docs-absent-commands`."""
     repo = _repo(tmp_path, claims=_register(_claim()))
     issues = check_claims(repo)
     assert [issue.where for issue in issues] == [CLAIMS_PATH]
-    assert "no page publishes it" in issues[0].message
+    assert "nothing publishes it" in issues[0].message
+
+
+# --------------------------------------------------------------------------- #
+# What the documents say
+# --------------------------------------------------------------------------- #
+def _marked(claim_id: str, value: str) -> str:
+    return f"a figure of <!-- de:fact {claim_id} -->{value}<!-- /de:fact --> here.\n"
+
+
+def test_a_document_scans_like_a_page(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, {"README.md": "x", "docs/VOICE.md": "x", "notebook/e.md": "x"})
+    (repo / "docs" / "adirectory.md").mkdir(parents=True)
+    found = {path.relative_to(repo).as_posix() for path in scanned_documents(repo)}
+    assert found == {"README.md", "docs/VOICE.md", "docs/STATUS.md"}
+
+
+def test_a_marked_document_publishes_a_claim(tmp_path: Path) -> None:
+    """The failure this widening exists for: three documents restating one count.
+
+    Before it, a figure could only go stale on a page, because a page was the
+    only surface with a gate.
+    """
+    repo = _repo(
+        tmp_path,
+        {"docs/LIMITATIONS.md": _marked("total-model-calls", "~4,816")},
+        claims=_register(_claim()),
+    )
+    assert published_ids(repo)["total-model-calls"] == ["docs/LIMITATIONS.md"]
+    assert check_claims(repo) == []
+
+
+def test_a_document_marking_an_undeclared_id_refuses(tmp_path: Path) -> None:
+    repo = _repo(
+        tmp_path,
+        {"docs/LIMITATIONS.md": _marked("invented", "7")},
+        claims=_register(_claim()),
+    )
+    issues = check_claims(repo)
+    assert any(issue.where == "docs/LIMITATIONS.md" for issue in issues)
+    assert any("does not declare it" in issue.message for issue in issues)
+
+
+def test_marking_a_claim_in_its_own_source_refuses(tmp_path: Path) -> None:
+    """A register that grades its own homework.
+
+    `de sync` would rewrite the quoted sentence from the value that sentence
+    exists to verify, and the anchor would go on resolving.
+    """
+    document = DOC.replace(QUOTE, f"<!-- de:fact total-model-calls -->{QUOTE}<!-- /de:fact -->")
+    repo = _repo(tmp_path, {SOURCE: document}, claims=_register(_claim()))
+    issues = check_claims(repo)
+    assert any(
+        issue.where == SOURCE and "the document the register quotes for it" in issue.message
+        for issue in issues
+    )
 
 
 def test_an_undeclared_call_refuses_and_names_the_page(tmp_path: Path) -> None:
@@ -471,7 +528,7 @@ def test_an_empty_claims_list_with_no_calls_is_green(tmp_path: Path) -> None:
     """
     repo = _repo(tmp_path, claims=_register())
     assert check_claims(repo) == []
-    assert census(repo) == (0, 0, 0)
+    assert census(repo) == (0, 0, 0, 1)
 
 
 def test_both_call_spellings_are_seen(tmp_path: Path) -> None:
@@ -536,7 +593,7 @@ def test_a_duplicate_retraction_refuses(tmp_path: Path) -> None:
 def test_a_retraction_alone_is_a_working_register(tmp_path: Path) -> None:
     repo = _repo(tmp_path, claims=_register(retractions=[_retraction()]))
     assert check_claims(repo) == []
-    assert census(repo) == (0, 1, 0)
+    assert census(repo) == (0, 1, 0, 1)
 
 
 # --------------------------------------------------------------------------- #
