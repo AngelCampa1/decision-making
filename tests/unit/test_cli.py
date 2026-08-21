@@ -7,6 +7,7 @@ fail — particularly the git-identity guard, whose whole job is to refuse.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from dataclasses import dataclass
@@ -879,7 +880,12 @@ class TestDecisionsStep:
 def _site_project(root: Path, *, installed: bool = False) -> None:
     """A repository with a site project and one document the site renders."""
     (root / "site").mkdir(exist_ok=True)
-    (root / SITE_INPUTS_PATH).write_text('{"content": ["*.md"]}', encoding="utf-8")
+    (root / SITE_INPUTS_PATH).write_text(
+        json.dumps(
+            {"collections": [{"name": "root", "base": "..", "pattern": "*.md", "hash": ["*.md"]}]}
+        ),
+        encoding="utf-8",
+    )
     (root / "README.md").write_text("# readme\n", encoding="utf-8")
     if installed:
         (root / "site" / "node_modules").mkdir(exist_ok=True)

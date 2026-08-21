@@ -32,6 +32,7 @@ from decision_evals.site import (
     census,
     changed_inputs,
     check_site,
+    collection_issues,
     input_files,
     load_inputs,
     manifest_is_current,
@@ -64,7 +65,17 @@ def _build(repo: Path) -> None:
 
 
 DOCS = {"docs/STATUS.md": "# status\n", "README.md": "# readme\n"}
-INPUTS: dict[str, object] = {"content": ["*.md", "docs/**/*.md"], "site": []}
+
+
+def _hashing(*patterns: str) -> list[dict[str, object]]:
+    """A collections array whose only job is to declare these hash globs."""
+    return [
+        {"name": f"c{index}", "base": "..", "pattern": "**/*.md", "hash": [pattern]}
+        for index, pattern in enumerate(patterns)
+    ]
+
+
+INPUTS: dict[str, object] = {"collections": _hashing("*.md", "docs/**/*.md"), "site": []}
 
 
 # --------------------------------------------------------------------------- #
@@ -98,11 +109,11 @@ def test_missing_inputs_file_refuses(tmp_path: Path) -> None:
 
 def test_unparseable_inputs_file_refuses(tmp_path: Path) -> None:
     """A truncated write must not read as "this site renders nothing"."""
-    repo = _repo(tmp_path, DOCS, inputs='{"content": [')
+    repo = _repo(tmp_path, DOCS, inputs='{"collections": [')
     assert load_inputs(repo) == []
     issues = check_site(repo)
     assert [issue.where for issue in issues] == [INPUTS_PATH]
-    assert "no inputs" in issues[0].message
+    assert "not parseable JSON" in issues[0].message
 
 
 def test_inputs_file_that_is_not_an_object_refuses(tmp_path: Path) -> None:
@@ -117,7 +128,7 @@ def test_empty_input_list_refuses(tmp_path: Path) -> None:
     This is the branch that would have made the whole gate decorative, and it
     fails green rather than red, so nothing else would have caught it.
     """
-    repo = _repo(tmp_path, DOCS, inputs={"content": [], "site": []})
+    repo = _repo(tmp_path, DOCS, inputs={"collections": [], "site": []})
     _build(repo)
     assert manifest_is_current(repo)  # vacuously, which is the point
     issues = check_site(repo)
@@ -126,7 +137,7 @@ def test_empty_input_list_refuses(tmp_path: Path) -> None:
 
 
 def test_non_list_sections_are_ignored(tmp_path: Path) -> None:
-    repo = _repo(tmp_path, DOCS, inputs={"content": "*.md", "site": ["site/*.json"]})
+    repo = _repo(tmp_path, DOCS, inputs={"collections": "*.md", "site": ["site/*.json"]})
     assert load_inputs(repo) == ["site/*.json"]
 
 
@@ -135,7 +146,7 @@ def test_absent_inputs_file_loads_as_empty(tmp_path: Path) -> None:
 
 
 def test_sections_load_in_declared_order(tmp_path: Path) -> None:
-    repo = _repo(tmp_path, inputs={"content": ["a/*.md"], "site": ["site/*.json"]})
+    repo = _repo(tmp_path, inputs={"collections": _hashing("a/*.md"), "site": ["site/*.json"]})
     assert load_inputs(repo) == ["a/*.md", "site/*.json"]
 
 
@@ -143,7 +154,9 @@ def test_sections_load_in_declared_order(tmp_path: Path) -> None:
 # Which files are inputs
 # --------------------------------------------------------------------------- #
 def test_directories_are_not_hashed(tmp_path: Path) -> None:
-    repo = _repo(tmp_path, {"docs/STATUS.md": "# status\n"}, inputs={"content": ["docs/*"]})
+    repo = _repo(
+        tmp_path, {"docs/STATUS.md": "# status\n"}, inputs={"collections": _hashing("docs/*")}
+    )
     (repo / "docs" / "nested").mkdir()
     assert [p.name for p in input_files(repo)] == ["STATUS.md"]
 
@@ -158,14 +171,14 @@ def test_build_output_is_never_an_input(tmp_path: Path) -> None:
             "site/node_modules/astro/package.json": "{}\n",
             "site/.astro-cache/data-store.json": "{}\n",
         },
-        inputs={"content": [], "site": ["site/**/*"]},
+        inputs={"collections": [], "site": ["site/**/*"]},
     )
     names = [str(p.relative_to(repo)).replace("\\", "/") for p in input_files(repo)]
     assert names == ["site/inputs.json", "site/src/pages/index.astro"]
 
 
 def test_overlapping_globs_count_a_file_once(tmp_path: Path) -> None:
-    repo = _repo(tmp_path, DOCS, inputs={"content": ["*.md", "README.md"], "site": []})
+    repo = _repo(tmp_path, DOCS, inputs={"collections": _hashing("*.md", "README.md"), "site": []})
     assert len(input_files(repo)) == 1
 
 
@@ -175,7 +188,7 @@ def test_line_endings_do_not_change_the_digest(tmp_path: Path) -> None:
     Without the normalisation the gate fails for whichever machine did not
     build last, which is a gate people switch off rather than fix.
     """
-    repo = _repo(tmp_path, inputs={"content": ["*.md"], "site": []})
+    repo = _repo(tmp_path, inputs={"collections": _hashing("*.md"), "site": []})
     (repo / "README.md").write_bytes(b"# readme\nline two\n")
     lf = render_manifest(repo)
     (repo / "README.md").write_bytes(b"# readme\r\nline two\r\n")
@@ -240,7 +253,7 @@ def test_a_changed_source_file_refuses(tmp_path: Path) -> None:
     repo = _repo(
         tmp_path,
         {"README.md": "# readme\n", "site/src/lib/rewrite.mjs": "export default a;\n"},
-        inputs={"content": ["*.md"], "site": ["site/src/**/*"]},
+        inputs={"collections": _hashing("*.md"), "site": ["site/src/**/*"]},
     )
     _build(repo)
     (repo / "site/src/lib/rewrite.mjs").write_text("export default b;\n", encoding="utf-8")
@@ -341,3 +354,92 @@ def test_paths_are_posix_on_every_platform(tmp_path: Path) -> None:
 
 def test_an_issue_reads_as_a_sentence(tmp_path: Path) -> None:
     assert str(SiteIssue("site/x.json", "is missing.")) == "site/x.json: is missing."
+
+
+# --------------------------------------------------------------------------- #
+# What a collection has to declare
+# --------------------------------------------------------------------------- #
+
+
+def _collection(**overrides: object) -> dict[str, object]:
+    entry: dict[str, object] = {
+        "name": "docs",
+        "base": "../docs",
+        "pattern": "**/*.md",
+        "hash": ["docs/**/*.md"],
+        "prefix": "docs/",
+        "route": "/docs/",
+    }
+    entry.update(overrides)
+    return entry
+
+
+def test_a_complete_collection_passes(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, DOCS, inputs={"collections": [_collection()], "site": []})
+    assert collection_issues(repo) == []
+
+
+def test_a_collection_that_is_not_an_object_refuses(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, DOCS, inputs={"collections": ["docs"], "site": []})
+    issues = collection_issues(repo)
+    assert [issue.where for issue in issues] == [f"{INPUTS_PATH} collection 0"]
+
+
+def test_a_collection_missing_a_field_names_the_reader(tmp_path: Path) -> None:
+    """One declaration, three readers, and a missing field is how that stops holding."""
+    repo = _repo(tmp_path, DOCS, inputs={"collections": [_collection(hash=[])], "site": []})
+    issues = collection_issues(repo)
+    assert [issue.where for issue in issues] == [f"{INPUTS_PATH} collection `docs`"]
+    assert "declares no `hash`" in issues[0].message
+    assert "whether a build is stale" in issues[0].message
+
+
+def test_an_unnamed_collection_is_reported_by_position(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, DOCS, inputs={"collections": [_collection(name=None)], "site": []})
+    issues = collection_issues(repo)
+    assert all(issue.where == f"{INPUTS_PATH} collection 0" for issue in issues)
+
+
+def test_a_prefix_without_a_route_refuses(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, DOCS, inputs={"collections": [_collection(route=None)], "site": []})
+    issues = collection_issues(repo)
+    assert any("one of `prefix` and `route`" in issue.message for issue in issues)
+
+
+def test_a_collection_with_neither_prefix_nor_route_is_fine(tmp_path: Path) -> None:
+    """Root documents share no prefix and are routed one file at a time."""
+    repo = _repo(
+        tmp_path,
+        DOCS,
+        inputs={"collections": [_collection(prefix=None, route=None)], "site": []},
+    )
+    assert collection_issues(repo) == []
+
+
+def test_no_collections_array_refuses(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, DOCS, inputs={"site": []})
+    issues = collection_issues(repo)
+    assert "no `collections` array" in issues[0].message
+
+
+def test_a_malformed_collection_is_skipped_rather_than_crashing(tmp_path: Path) -> None:
+    """`render_manifest` reads this file too, and it runs before any gate does.
+
+    `collection_issues` refuses these shapes, but it runs inside `check_site`
+    and a build does not wait for a gate. Skipping is what lets the refusal be
+    the thing that reports the problem.
+    """
+    repo = _repo(
+        tmp_path,
+        DOCS,
+        inputs={
+            "collections": ["not an object", {"hash": "docs/*.md"}, _collection()],
+            "site": [],
+        },
+    )
+    assert load_inputs(repo) == ["docs/**/*.md"]
+
+
+def test_a_site_section_that_is_not_a_list_is_skipped(tmp_path: Path) -> None:
+    repo = _repo(tmp_path, DOCS, inputs={"collections": [_collection()], "site": "site/*"})
+    assert load_inputs(repo) == ["docs/**/*.md"]

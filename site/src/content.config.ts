@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import inputs from '../inputs.json';
 
 /**
  * Every collection reads the markdown **in place** from the repository. There
@@ -7,14 +8,15 @@ import { glob } from 'astro/loaders';
  * and the file this site renders, and the only way to change what the site says
  * is to change the document.
  *
- * `base` uses the relative-string form throughout. That resolves against the
- * Astro project root (the directory holding astro.config.mjs). The `URL` form
- * would resolve against *this* file instead, which is two levels further down,
- * so mixing the two is a silent off-by-one. One form, everywhere.
+ * The globs come from `site/inputs.json`, which the staleness gate hashes and
+ * `src/lib/remark-rewrite-links.mjs` routes from. Until 2026-08-21 all three
+ * restated them and a comment here asked the next author to keep them in step;
+ * two had already drifted apart.
  *
- * Keep the globs in step with `site/inputs.json`, which is what the staleness
- * gate hashes, and with `RENDERED` in `src/lib/remark-rewrite-links.mjs`, which
- * is what decides whether a link stays on the site or leaves for github.com.
+ * `base` is the relative-string form throughout, which resolves against the
+ * Astro project root (the directory holding astro.config.mjs). The `URL` form
+ * would resolve against *this* file instead, two levels further down, so
+ * mixing the two is a silent off-by-one. One form, everywhere.
  */
 
 /**
@@ -27,17 +29,27 @@ import { glob } from 'astro/loaders';
  */
 const keepPath = ({ entry }: { entry: string }) => entry.replace(/\.md$/, '').toLowerCase();
 
-const docs = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: '../docs', generateId: keepPath }),
-});
+const declared = Object.fromEntries(
+  inputs.collections.map((collection) => [collection.name, collection]),
+);
 
-const notebook = defineCollection({
-  loader: glob({ pattern: '*.md', base: '../notebook', generateId: keepPath }),
-});
+/** The loader one named collection declares. Unknown names fail the build. */
+const loaderFor = (name: string) => {
+  const collection = declared[name];
+  if (!collection) {
+    throw new Error(
+      `site/inputs.json declares no collection named '${name}'. ` +
+        `It has: ${Object.keys(declared).join(', ')}.`,
+    );
+  }
+  return glob({ pattern: collection.pattern, base: collection.base, generateId: keepPath });
+};
 
-const results = defineCollection({
-  loader: glob({ pattern: '*/*/README.md', base: '../results', generateId: keepPath }),
-});
+const docs = defineCollection({ loader: loaderFor('docs') });
+
+const notebook = defineCollection({ loader: loaderFor('notebook') });
+
+const results = defineCollection({ loader: loaderFor('results') });
 
 /**
  * The only collection with a schema, because it is the only one the site reads
@@ -56,7 +68,7 @@ const results = defineCollection({
  * which is the check that belongs at the point of use.
  */
 const skills = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: '../skills', generateId: keepPath }),
+  loader: loaderFor('skills'),
   schema: z
     .object({
       name: z.string().optional(),
@@ -77,14 +89,10 @@ const skills = defineCollection({
 /**
  * Root-level documents. `CLAUDE.md` is deliberately absent: it is a
  * byte-identical generated mirror of `AGENTS.md` (`de mirror`), and rendering
- * both would publish the same document at two URLs.
+ * both would publish the same document at two URLs. It is still hashed, which
+ * is why this collection's `hash` in `site/inputs.json` is wider than its
+ * `pattern`.
  */
-const root = defineCollection({
-  loader: glob({
-    pattern: '{README,SCORECARD,CONTRIBUTING,AGENTS}.md',
-    base: '..',
-    generateId: keepPath,
-  }),
-});
+const root = defineCollection({ loader: loaderFor('root') });
 
 export const collections = { docs, notebook, results, skills, root };

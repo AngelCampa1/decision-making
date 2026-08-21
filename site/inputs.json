@@ -1,13 +1,55 @@
 {
-  "note": "What the site renders, and what decides how it renders. Read by decision_evals.site (which hashes these to gate staleness) and by site/src/content.config.ts (which loads them). One file, two readers, so the build and the check cannot drift apart. Paths are repository-relative globs.",
-  "content": [
-    "*.md",
-    "docs/**/*.md",
-    "notebook/*.md",
-    "results/*/*/README.md",
-    "skills/**/*.md",
-    "plugin/skills/README.md"
+  "note": "What the site renders, where each collection comes from, and where it is served. One declaration, three readers: decision_evals.site hashes `hash` and `site` to gate staleness, site/src/content.config.ts loads `base` and `pattern`, and site/src/lib/remark-rewrite-links.mjs turns `prefix` into `route` so a repository link becomes a site link. Until 2026-08-21 the three restated the globs and a comment asked the next author to keep them in step; two had already drifted. A collection added to one reader and forgotten in another is now a missing field rather than a silent hole. It is not in pyproject.toml because TypeScript cannot read TOML without another dependency.",
+  "collections": [
+    {
+      "name": "root",
+      "base": "..",
+      "pattern": "{README,SCORECARD,CONTRIBUTING,AGENTS}.md",
+      "hash": ["*.md"],
+      "prefix": null,
+      "route": null,
+      "why": "`hash` is wider than `pattern` on purpose. CLAUDE.md is a byte-identical mirror of AGENTS.md written by `de mirror`, so rendering it would publish one document at two URLs; it is still hashed, because a mirror that moves without a rebuild is a published page disagreeing with the repository. Root documents have no shared prefix, so `rootPages` routes them one at a time."
+    },
+    {
+      "name": "docs",
+      "base": "../docs",
+      "pattern": "**/*.md",
+      "hash": ["docs/**/*.md"],
+      "prefix": "docs/",
+      "route": "/docs/"
+    },
+    {
+      "name": "notebook",
+      "base": "../notebook",
+      "pattern": "*.md",
+      "hash": ["notebook/*.md"],
+      "prefix": "notebook/",
+      "route": "/notebook/"
+    },
+    {
+      "name": "results",
+      "base": "../results",
+      "pattern": "*/*/README.md",
+      "hash": ["results/*/*/README.md"],
+      "prefix": "results/",
+      "route": "/results/"
+    },
+    {
+      "name": "skills",
+      "base": "../skills",
+      "pattern": "**/*.md",
+      "hash": ["skills/**/*.md"],
+      "prefix": "skills/",
+      "route": "/skill/"
+    }
   ],
+  "rootPages": {
+    "README.md": "/readme/",
+    "SCORECARD.md": "/scorecard/",
+    "CONTRIBUTING.md": "/contributing/",
+    "AGENTS.md": "/agents/",
+    "CLAUDE.md": "/agents/"
+  },
   "site": [
     "site/package.json",
     "site/package-lock.json",

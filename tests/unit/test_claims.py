@@ -53,7 +53,7 @@ SOURCE = "docs/STATUS.md"
 QUOTE = "The total is therefore **~4,816**, not ~4,600."
 DOC = f"# Status\n\nSome earlier prose.\n\n{QUOTE}\nSee the notebook entry.\n"
 PAGE = "site/src/pages/index.astro"
-INPUTS: dict[str, object] = {"content": [], "site": ["site/claims.json"]}
+INPUTS: dict[str, object] = {"collections": [], "site": ["site/claims.json"]}
 
 
 def _claim(**overrides: Any) -> dict[str, Any]:
@@ -160,7 +160,7 @@ def test_a_claims_file_outside_inputs_refuses(tmp_path: Path) -> None:
         tmp_path,
         _published("total-model-calls"),
         claims=_register(_claim()),
-        inputs={"content": [], "site": ["site/inputs.json"]},
+        inputs={"collections": [], "site": ["site/inputs.json"]},
     )
     issues = check_claims(repo)
     assert [issue.where for issue in issues] == [CLAIMS_PATH]

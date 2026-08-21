@@ -20,6 +20,7 @@
  * flags prose becomes noise" failure `docs.py` warns about in its own
  * docstring.
  */
+import { createRequire } from 'node:module';
 import { existsSync, statSync, readFileSync } from 'node:fs';
 import { dirname, resolve, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,14 +45,20 @@ const SITE_BASE = '/decision-making-skills';
 /**
  * Repository directories this site renders, mapped to their route prefix.
  * A target inside one of these becomes an internal link; anything else is
- * off-site. Keep in step with `site/inputs.json` and `src/content.config.ts`.
+ * off-site.
+ *
+ * Read from `site/inputs.json`, which is also what the staleness gate hashes
+ * and what `src/content.config.ts` loads. A collection with no `prefix` has no
+ * shared route and is handled by `ROOT_PAGES` one file at a time.
+ *
+ * `createRequire` rather than an import attribute, because this module is
+ * loaded by `astro.config.mjs` before Vite is in the picture.
  */
-const RENDERED = [
-  ['docs/', '/docs/'],
-  ['notebook/', '/notebook/'],
-  ['results/', '/results/'],
-  ['skills/', '/skill/'],
-];
+const inputs = createRequire(import.meta.url)('../../inputs.json');
+
+const RENDERED = inputs.collections
+  .filter((collection) => collection.prefix && collection.route)
+  .map((collection) => [collection.prefix, collection.route]);
 
 /**
  * Root-level markdown rendered at its own slug. `README.md` does not take `/`:
@@ -59,13 +66,7 @@ const RENDERED = [
  * link at it would quietly send the reader somewhere else. `CLAUDE.md` shares
  * the AGENTS route because it is a byte-identical generated mirror.
  */
-const ROOT_PAGES = {
-  'README.md': '/readme/',
-  'SCORECARD.md': '/scorecard/',
-  'CONTRIBUTING.md': '/contributing/',
-  'AGENTS.md': '/agents/',
-  'CLAUDE.md': '/agents/',
-};
+const ROOT_PAGES = inputs.rootPages;
 
 /**
  * Targets that no longer resolve and are allowed not to.

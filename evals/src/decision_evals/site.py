@@ -68,14 +68,18 @@ SITE_DIR: Final = "site"
 
 #: The globs the site renders and the files that decide how.
 #:
-#: This module reads them to hash what a build was built from.
-#: ``site/src/content.config.ts`` **restates** them for Astro's loader; it
-#: imports nothing from here, and a comment asking the next author to keep the
-#: two in step is the whole mechanism. Corrected 2026-08-21, when this comment
-#: claimed both files read this one and an adversarial review checked it: the
-#: two had already drifted in two entries, ``*.md`` against an explicit list of
-#: four root documents, and ``plugin/skills/README.md`` against no collection at
-#: all.
+#: Three readers, one declaration: this module hashes ``hash`` and ``site`` to
+#: gate staleness, ``site/src/content.config.ts`` loads ``base`` and
+#: ``pattern``, and ``site/src/lib/remark-rewrite-links.mjs`` turns ``prefix``
+#: into ``route``. All three import this file.
+#:
+#: They did not, until 2026-08-21. Each restated the globs and a comment asked
+#: the next author to keep them in step, which is the mechanism this repository
+#: keeps finding at the scene. An adversarial review checked the comment that
+#: claimed otherwise and found two live drifts: ``*.md`` against an explicit
+#: list of four root documents, and ``plugin/skills/README.md`` hashed as a
+#: rendered input against no collection and no route, so a change to it staled
+#: a build that had never published it.
 #:
 #: The file is not in ``pyproject.toml`` because TypeScript cannot read TOML
 #: without another dependency.
@@ -115,7 +119,13 @@ def site_present(repo_root: Path) -> bool:
 
 
 def load_inputs(repo_root: Path) -> list[str]:
-    """The globs the site renders, in the order they are declared."""
+    """The globs the site renders, in the order they are declared.
+
+    A collection's ``hash`` is what this module reads, and it is allowed to be
+    wider than the ``pattern`` Astro loads: ``CLAUDE.md`` is hashed and not
+    rendered, because a mirror that moves without a rebuild is a published page
+    that disagrees with the repository.
+    """
     path = repo_root / INPUTS_PATH
     if not path.is_file():
         return []
@@ -125,11 +135,19 @@ def load_inputs(repo_root: Path) -> list[str]:
         return []
     if not isinstance(data, dict):
         return []
+
     patterns: list[str] = []
-    for key in ("content", "site"):
-        section = data.get(key, [])
-        if isinstance(section, list):
-            patterns.extend(str(item) for item in section)
+    collections = data.get("collections", [])
+    if isinstance(collections, list):
+        for entry in collections:
+            if not isinstance(entry, dict):
+                continue
+            hashed = entry.get("hash", [])
+            if isinstance(hashed, list):
+                patterns.extend(str(item) for item in hashed)
+    section = data.get("site", [])
+    if isinstance(section, list):
+        patterns.extend(str(item) for item in section)
     return patterns
 
 
@@ -215,6 +233,76 @@ def manifest_is_current(repo_root: Path) -> bool:
     return path.read_text(encoding="utf-8").replace("\r\n", "\n") == render_manifest(repo_root)
 
 
+#: What one collection has to declare, and which reader would go quiet without
+#: it. ``prefix`` and ``route`` are absent from this list because a collection
+#: may legitimately have neither -- root documents share no prefix and are
+#: routed one at a time -- but they travel together, which is checked below.
+_COLLECTION_FIELDS: Final[tuple[tuple[str, str], ...]] = (
+    ("name", "site/src/content.config.ts, which asks for a collection by name"),
+    ("base", "site/src/content.config.ts, which passes it to Astro's loader"),
+    ("pattern", "site/src/content.config.ts, which passes it to Astro's loader"),
+    ("hash", "this module, which hashes it to decide whether a build is stale"),
+)
+
+
+def collection_issues(repo_root: Path) -> list[SiteIssue]:
+    """Every collection declares what all three of its readers need.
+
+    The point of one declaration with three readers is that a collection cannot
+    be added to one and forgotten in another. That only holds if a missing field
+    is an error: without this, a collection with no ``hash`` renders happily and
+    is never hashed, which is the ``plugin/skills/README.md`` failure in the
+    other direction and just as quiet.
+    """
+    path = repo_root / INPUTS_PATH
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        return [
+            SiteIssue(
+                INPUTS_PATH,
+                f"is not parseable JSON ({error.msg}, line {error.lineno}). Three "
+                "readers load this file, and a truncated write reads to all of them "
+                "as a site that renders nothing.",
+            )
+        ]
+
+    collections = data.get("collections") if isinstance(data, dict) else None
+    if not isinstance(collections, list):
+        return [
+            SiteIssue(
+                INPUTS_PATH,
+                "has no `collections` array. It is what content.config.ts loads, what "
+                "remark-rewrite-links.mjs routes from, and what this module hashes.",
+            )
+        ]
+
+    issues: list[SiteIssue] = []
+    for index, entry in enumerate(collections):
+        where = f"{INPUTS_PATH} collection {index}"
+        if not isinstance(entry, dict):
+            issues.append(SiteIssue(where, "is not an object."))
+            continue
+        name = entry.get("name")
+        if isinstance(name, str):
+            where = f"{INPUTS_PATH} collection `{name}`"
+        issues += [
+            SiteIssue(where, f"declares no `{field}`, which is read by {reader}.")
+            for field, reader in _COLLECTION_FIELDS
+            if not entry.get(field)
+        ]
+        if bool(entry.get("prefix")) != bool(entry.get("route")):
+            issues.append(
+                SiteIssue(
+                    where,
+                    "declares one of `prefix` and `route` and not the other. A prefix "
+                    "with no route sends every link into it off-site, and a route with "
+                    "no prefix is a page nothing links to.",
+                )
+            )
+    return issues
+
+
 def check_site(repo_root: Path) -> list[SiteIssue]:
     """Refuse a tree whose published site is older than what it publishes."""
     if not site_present(repo_root):
@@ -229,6 +317,10 @@ def check_site(repo_root: Path) -> list[SiteIssue]:
                 "build and the check are guessing at different sets of files.",
             )
         ]
+
+    malformed = collection_issues(repo_root)
+    if malformed:
+        return malformed
 
     if not load_inputs(repo_root):
         return [
