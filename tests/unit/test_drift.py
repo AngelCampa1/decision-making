@@ -66,6 +66,18 @@ def test_a_document_depends_on_the_code_it_names(tmp_path: Path) -> None:
     )
 
 
+def test_a_directory_named_twice_is_one_dependency(tmp_path: Path) -> None:
+    """A backtick writes the trailing slash and a link does not. Git reads both alike."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/ARCHITECTURE.md": "It reads `notebook/` and links to [it](../notebook).\n",
+            "notebook/keep.txt": "",
+        },
+    )
+    assert dependencies(repo, repo / "docs/ARCHITECTURE.md") == ("notebook",)
+
+
 def test_another_document_is_not_a_dependency(tmp_path: Path) -> None:
     """An index linking to what it indexes is an index, not a stale description."""
     repo = _repo(

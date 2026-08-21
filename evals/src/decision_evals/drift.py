@@ -126,11 +126,16 @@ def dependencies(repo_root: Path, path: Path) -> tuple[str, ...]:
     here = _relative(path, repo_root)
     return tuple(
         sorted(
-            reference
-            for reference in found
-            if reference != here
-            and Path(reference).suffix not in _NOT_A_MECHANISM
-            and (repo_root / reference).exists()
+            # A directory arrives twice, as ``notebook/`` from a backticked
+            # reference and as ``notebook`` from a link, and git reads both the
+            # same way. Normalising keeps one path out of the report twice.
+            {
+                reference.rstrip("/")
+                for reference in found
+                if reference.rstrip("/") != here
+                and Path(reference).suffix not in _NOT_A_MECHANISM
+                and (repo_root / reference).exists()
+            }
         )
     )
 
