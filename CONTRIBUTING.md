@@ -46,6 +46,10 @@ disagreed in four places.
 | add a document under `docs/` without listing it in [`docs/README.md`](docs/README.md) | that page is the index and the site's `/docs/` landing page, so a document missing from it is a document nobody reads |
 | write a living document with no `**Audience:**` line | four audiences want different things from a page, and one serving two serves neither |
 | leave a document under a `docs/` subdirectory that nothing links to | the first run of that check found 315 lines of drafted procedure reachable only by listing the directory |
+| edit a generated region by hand, or open one no renderer answers to | run `de sync`; four documents said the harness had four arms while the code had five, and every path in all four sentences resolved |
+| point a `de:fact` marker at a figure the register does not declare, or put one inside the claim's own source | a figure pinned to nothing drifts, and a marker on the source sentence would let `de sync` rewrite the very line the anchor exists to check |
+| leave a living document more than ten commits past its recorded review | run `de drift`; it names the documents whose paths have moved and prints the line to paste back once you have read one |
+| add a collection to [`site/inputs.json`](site/inputs.json) missing a field one of its three readers needs | that file is the single declaration of what the site renders; it was three restatements kept in step by a comment, and two of them had already drifted |
 | leave [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md) stale | run `de index`; it is generated so it cannot drift the way a hand-maintained index does |
 | edit a document the website renders without rebuilding it | run `de site`; the site reads this repository's markdown in place, so an edited document is a published page that disagrees with the repository until somebody notices |
 | regenerate a golden file without `pytest --bless` | a benchmark that changes silently makes every earlier number incomparable with every later one |
@@ -87,10 +91,11 @@ It applies to what you write, going forward. Bring a comment up to standard when
 you change it. Do not sweep the source for style, and do not restyle a document
 you are not otherwise working on.
 
-Nothing enforces any of this. The documentation gate reads whether a reference
-resolves, whether the index agrees with the directory, and whether a document
-names its audience; it declines to judge the sentence around any of them, on
-purpose, so the review is the only thing between a draft and the repository.
+Nothing enforces any of this. The gates read whether a reference resolves,
+whether the index agrees with the directory, whether a document names its
+audience, and whether the tables and figures it derives still match what they
+derive from. They decline to judge the sentence around any of them, on purpose,
+so the review is the only thing between a draft and the repository.
 
 Where a new document goes, and which of the classes below it belongs to, is
 [`docs/DOCUMENTATION_MAP.md`](docs/DOCUMENTATION_MAP.md).
@@ -146,11 +151,15 @@ that each build is a snapshot with an expiry nobody can see. Rebuild in the
 same change:
 
 ```bash
-uv run de site
+uv run de sync && uv run de site
 ```
 
-That writes `site/build-manifest.json`, which records a hash of every file the
-site renders. Commit it with the document.
+`de sync` fills the generated regions and the pinned figures; `de site` then
+writes `site/build-manifest.json`, which records a hash of every file the site
+renders. Run them in that order, because a region `de sync` rewrites is a file
+the manifest has to hash. Commit both with the document. If you touched
+[`AGENTS.md`](AGENTS.md) or `skills/`, `de mirror` comes first: `CLAUDE.md` is
+itself a site input.
 
 Publishing is not your job any more. Merging to `main` deploys the site through
 [`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml), and

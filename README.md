@@ -275,7 +275,9 @@ Several of its steps check the method instead of the code:
 | label corrections | a version the answer key has reached that no line of [`datasets/triggers/corrections.jsonl`](datasets/triggers/corrections.jsonl) accounts for |
 | documentation | a `de` command, path, or component that this README names and the repository does not have, a document under `docs/` that [`docs/README.md`](docs/README.md) does not list, and a living document that names no audience |
 | citations | a claim carrying an arXiv identifier whose entry in [`paper/refs.bib`](paper/refs.bib) has no quote behind it |
-| published claims | a measured number on the website that no longer matches the sentence in the document it came from |
+| generated regions | a table a document derives from the repository that is no longer what it derives from, and a renderer no document uses |
+| document drift | a living document with no review on record, or one more than ten commits past the last one |
+| published claims | a measured number, on the website or in a document, that no longer matches the sentence it came from |
 | site | a published build older than the documents it publishes, naming the files that moved |
 
 Merging to `main` publishes the site through
@@ -296,15 +298,18 @@ Editing any document the site renders makes the published build stale, so the
 loop is edit, rebuild, commit both:
 
 ```bash
-uv run de site
+uv run de sync && uv run de site
 ```
 
 `de site` needs Node and npm on `PATH`, because the site is an Astro project.
 The gate that demands you run it does not.
 
-The other commands: `de index` regenerates
-[`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates the cross-tool
-skill copies, `de lint` checks skill frontmatter and the promotion gate,
+The other commands: `de sync` rewrites the tables and figures the documents
+derive from the repository rather than restate by hand, `de drift` lists the
+documents whose code has moved since anybody last read them, `de index`
+regenerates [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), `de mirror` regenerates
+the cross-tool skill copies, `de lint` checks skill frontmatter and the
+promotion gate,
 `de power` prints a minimum-detectable-effect table, `de rescore` re-grades an
 existing checkpoint against a newer answer key without re-making a single call,
 and `de fetch` downloads the hash-pinned third-party corpora.

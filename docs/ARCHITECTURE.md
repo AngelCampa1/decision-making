@@ -266,18 +266,23 @@ flowchart TB
     end
     subgraph full["Added at pre-push and in CI"]
         direction TB
-        e["site staleness → pytest with coverage → coverage floors"]
+        e["site staleness → document drift → pytest with coverage → coverage floors"]
     end
     always --> full
 ```
 
-Three checks are deliberately not steps. Rebuilding the site takes a Node
-toolchain and a few seconds, so the gate refuses a stale
-`site/build-manifest.json` at pre-push, which is what forces you to have run
-`de site`. `de fetch` verifies the hash-locked vendor corpora against their
-lockfiles, and that is a network call. `de deployed` asks the live site which
-commit it is serving: the one online check here, and the only one that can
-answer a question a working directory cannot.
+No generator is a step. `de sync`, `de mirror` and `de index` write files, and
+a gate that repaired the tree while reading it would be reporting on a tree
+nobody is about to commit, so each has a step that refuses the stale output
+instead. Rebuilding the site is the same shape with a harder edge: it needs a
+Node toolchain and a few seconds, so the refusal on a stale
+`site/build-manifest.json` waits until pre-push, which is what forces you to
+have run `de site`.
+
+Two checks sit outside the gate altogether. `de fetch` verifies the hash-locked
+vendor corpora against their lockfiles, and that is a network call. `de deployed`
+asks the live site which commit it is serving: the one online check here, and
+the only one that can answer a question a working directory cannot.
 
 CI runs the same gate on a clean checkout with full history, which is how the
 gate first learned that "the path exists" had meant "exists on the authoring
@@ -356,7 +361,7 @@ Routing is prose instructions to a model, so it is a claim, and `dm-1` through
 | Path | What it holds |
 |---|---|
 | `skills/decision-making/` | The product. Authored here; everything else is a mirror. |
-| `evals/src/decision_evals/` | The harness. `cli.py` wires the gate, and the repository-integrity steps live in the module each is named after: `docs.py`, `citations.py`, `provenance.py`, `decisions.py`, `wiring.py`, `skills.py`. |
+| `evals/src/decision_evals/` | The harness. `gate_steps()` in `cli.py` is the gate's step table, and each repository-integrity step lives in the module it is named after: `docs.py`, `citations.py`, `provenance.py`, `decisions.py`, `wiring.py`, `skills.py`, `sync.py`, `drift.py`. |
 | `scripts/` | The runners. `run_triggers.py` is behind every model call on record. |
 | `datasets/` | The answer key: `triggers/`, `tailoring/`, `templates/` and `golden/`, `probe/` and `library/`, hash-locked `vendor/`. |
 | `results/` | Published runs, one directory each, with their raw JSONL. |

@@ -81,17 +81,15 @@ _INLINE: Final = re.compile(
 
 _OPEN: Final = re.compile(r"<!--\s*de:(?P<kind>generated|fact)\s+(?P<id>[a-z0-9-]+)\s*-->")
 
-#: Every claim id a document states, for :mod:`decision_evals.claims`, which
-#: owns whether a stated id is one the register declares. Exported from here
-#: rather than restated there, because two regexes for one syntax is the
-#: shape of drift this module exists to remove.
-FACT_IDS: Final = re.compile(r"<!--\s*de:fact\s+([a-z0-9-]+)\s*-->")
 _CLOSE: Final = re.compile(r"<!--\s*/de:(?P<kind>generated|fact)\s*-->")
 
 #: One newline. Named because editing this module through a script turned the
 #: escape into the character it stands for, twice, and a bare newline literal
 #: in the middle of an expression is a syntax error that reads as a typo.
 NEWLINE: Final = "\n"
+
+#: A fence line: three or more backticks, and whatever language tag follows.
+_FENCE_LINE: Final = re.compile(r"^(?P<ticks>`{3,})")
 
 #: Python files that are not part of the inventory a reader wants.
 _UNLISTED_MODULES: Final[frozenset[str]] = frozenset({"__init__.py"})
@@ -316,6 +314,43 @@ def _relative(path: Path, repo_root: Path) -> str:
     return path.relative_to(repo_root).as_posix()
 
 
+def fenced_spans(text: str) -> list[tuple[int, int]]:
+    """Character ranges inside a fenced code block.
+
+    A document that explains the marker syntax has to be able to show it.
+    `docs/DOCUMENTATION_MAP.md` writes the markers out in a fence, and without
+    this every one of those would be a live region: the file would publish a
+    figure it is only describing, and its unmatched closers would read as
+    markers that never close.
+
+    Fences are matched by tick count, so a ```` block wrapping a ``` example
+    nests correctly, which is how that document writes it.
+    """
+    spans: list[tuple[int, int]] = []
+    offset = 0
+    opened: int | None = None
+    ticks = 0
+    for line in text.splitlines(keepends=True):
+        match = _FENCE_LINE.match(line)
+        if match is None:
+            offset += len(line)
+            continue
+        found = len(match["ticks"])
+        if opened is None:
+            opened, ticks = offset, found
+        elif found >= ticks:
+            spans.append((opened, offset + len(line)))
+            opened = None
+        offset += len(line)
+    if opened is not None:
+        spans.append((opened, offset))
+    return spans
+
+
+def _quoted(position: int, spans: list[tuple[int, int]]) -> bool:
+    return any(start <= position < end for start, end in spans)
+
+
 def unbalanced(text: str) -> list[str]:
     """Markers that do not pair up, named by the id that opened them.
 
@@ -323,9 +358,10 @@ def unbalanced(text: str) -> list[str]:
     regex simply does not match, the region is not rendered, and the gate has
     nothing to compare. So the counts are checked before anything else.
     """
-    opens = _OPEN.findall(text)
-    closes = _CLOSE.findall(text)
-    matched = len(_BLOCK.findall(text)) + len(_INLINE.findall(text))
+    spans = fenced_spans(text)
+    opens = [match for match in _OPEN.finditer(text) if not _quoted(match.start(), spans)]
+    closes = [match for match in _CLOSE.finditer(text) if not _quoted(match.start(), spans)]
+    matched = len(regions_in(text)) + len(facts_in(text))
     if len(opens) == len(closes) == matched:
         return []
     return [
@@ -336,12 +372,22 @@ def unbalanced(text: str) -> list[str]:
 
 def regions_in(text: str) -> list[tuple[str, str]]:
     """Every generated region in a document: its id and its current contents."""
-    return [(match["id"], match["body"]) for match in _BLOCK.finditer(text)]
+    spans = fenced_spans(text)
+    return [
+        (match["id"], match["body"])
+        for match in _BLOCK.finditer(text)
+        if not _quoted(match.start(), spans)
+    ]
 
 
 def facts_in(text: str) -> list[tuple[str, str]]:
     """Every inline fact in a document: its claim id and its current value."""
-    return [(match["id"], match["body"]) for match in _INLINE.finditer(text)]
+    spans = fenced_spans(text)
+    return [
+        (match["id"], match["body"])
+        for match in _INLINE.finditer(text)
+        if not _quoted(match.start(), spans)
+    ]
 
 
 def apply_text(text: str, facts: Facts) -> str:
@@ -351,6 +397,8 @@ def apply_text(text: str, facts: Facts) -> str:
     guess, and the gate is about to refuse it by name anyway.
     """
 
+    spans = fenced_spans(text)
+
     def replaced(match: re.Match[str], value: str) -> str:
         whole = match.group(0)
         start = match.start("body") - match.start()
@@ -359,13 +407,13 @@ def apply_text(text: str, facts: Facts) -> str:
 
     def block(match: re.Match[str]) -> str:
         renderer = REGIONS.get(match["id"])
-        if renderer is None:
+        if renderer is None or _quoted(match.start(), spans):
             return match.group(0)
         return replaced(match, renderer(facts) + NEWLINE)
 
     def inline(match: re.Match[str]) -> str:
         value = facts.values.get(match["id"])
-        if value is None:
+        if value is None or _quoted(match.start(), spans):
             return match.group(0)
         return replaced(match, value)
 

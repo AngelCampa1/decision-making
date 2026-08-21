@@ -151,7 +151,7 @@ then start it.
 ```bash
 uv sync --group dev
 python -m uv run de check              # the full local gate
-python -m uv run de check --fast       # pre-commit subset: no tests, coverage or site
+python -m uv run de check --fast       # pre-commit subset: no tests, coverage, site or drift
 python -m uv run pytest tests/unit/test_claims.py
 ```
 
@@ -162,9 +162,10 @@ a clean checkout, which sees what a working directory cannot. A second workflow,
 
 ## Where the code is
 
-`evals/src/decision_evals/` is the harness and the gates. `cli.py` wires every
-`de check` step, and each step lives in the module it is named after: `docs.py`,
-`citations.py`, `provenance.py`, `decisions.py`, `wiring.py`, `skills.py`.
+`evals/src/decision_evals/` is the harness and the gates. `gate_steps()` in
+`cli.py` is the whole of `de check`, in order, and each step lives in the module
+it is named after: `docs.py`, `citations.py`, `provenance.py`, `decisions.py`,
+`wiring.py`, `skills.py`, `sync.py`, `drift.py`.
 `scripts/run_triggers.py` is the runner behind every model call on record.
 `datasets/` is the answer key, `skills/` the product, `results/` and `notebook/`
 the record. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) draws how they fit
@@ -176,7 +177,8 @@ and how a run flows through them. `README.md` carries the component table and
 
 - **Editing a document means rebuilding the site in the same change.** Run
   `python -m uv run de mirror` first if you touched `AGENTS.md` or `skills/`,
-  because `CLAUDE.md` is itself a site input. Then `python -m uv run de site`.
+  because `CLAUDE.md` is itself a site input. Then `python -m uv run de sync`,
+  then `python -m uv run de site`.
   `de check` refuses a stale `site/build-manifest.json` and names the files that
   moved. Merging to `main` deploys; `python -m uv run de deployed` says whether
   it landed, and exit 2 means it could not tell.
@@ -204,15 +206,26 @@ and how a run flows through them. `README.md` carries the component table and
 - **Every third published run, sweep `README.md` and `docs/` for drift** and
   land the sweep as a dated `notebook/` entry. Count runs from
   [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), which is generated and cannot
-  itself drift. Recompute every count stated in prose against the table beneath
-  it, re-read [`docs/README.md`](docs/README.md) as an index, and read the
-  living documents for a description that has stopped being true. Nothing checks
-  this.
+  itself drift. `python -m uv run de drift` is the worklist: the documents whose
+  named paths have moved since anyone recorded reading them, furthest behind
+  first. Read those, re-read [`docs/README.md`](docs/README.md) as an index, and
+  record each one you read in `[tool.decision-evals.reviewed]`. `de check`
+  refuses a document with no review or one more than ten commits past it. What
+  no gate can tell you is whether a description is still true; that is the part
+  you are doing.
+- **A document does not type out what the repository already knows.** A `de`
+  subcommand, a step of the gate, a module of the harness, a file of the skill,
+  an arm: mark the region and `python -m uv run de sync` writes it. A figure
+  registered in `site/claims.json` goes in a `de:fact` marker rather than as a
+  second copy of the number. Both markers are HTML comments and invisible
+  wherever the document renders. Where they go and what refuses them is
+  [`docs/DOCUMENTATION_MAP.md`](docs/DOCUMENTATION_MAP.md).
 - **A coverage floor does not mean a module runs.** `de check` refuses a floored
   module that no entry point can reach. Intentional gaps go in
   `[tool.decision-evals.unwired]` with the condition that would close them.
-- **The documentation gate catches a reference that does not resolve, never a
-  description that is wrong.** Scope is root `*.md` and `docs/` recursively.
+- **The documentation gate catches a reference that does not resolve, and a
+  table or figure that no longer matches its source, never a description that is
+  wrong.** Scope is root `*.md` and `docs/` recursively.
   `notebook/`, `results/**/README.md`,
   [`docs/DECISIONS.md`](docs/DECISIONS.md) and `docs/superpowers/plans/` are
   excluded as dated records, so do not "fix" a stale reference in them.

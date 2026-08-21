@@ -471,3 +471,77 @@ carries no quote in `paper/refs.bib`, which turns a green citation gate red.
 
 The map, the classes and the placement rule are
 [`docs/DOCUMENTATION_MAP.md`](DOCUMENTATION_MAP.md).
+
+## Documents stopped writing what the repository already knows
+
+**2026-08-21, the same day.** The documentation gate proves a reference
+resolves. `docs/ARCHITECTURE.md` was written that morning, sent to an agent
+briefed to break it, and still shipped four false statements with every path in
+them correct: a gate diagram naming thirteen of sixteen steps, a module list
+missing `reliability` and `track_h`, a four-arm design against a five-arm
+tuple, and the plugin promotion condition given as "not `UNTESTED`" when it is
+"neither `UNTESTED` nor `WITHDRAWN`". All four are set comparisons.
+
+They were not the only ones. `docs/PROTOCOL.md`, `docs/METHODS.md` and
+`README.md` all said the harness has four arms while `solvers/arms.py` had five
+and `docs/programme/part-3-the-instrument.md` said so. `site/claims.json`'s own
+notes recorded three living documents disagreeing about the broken-measurement
+count — ten, around eleven, eight. `docs/STATUS.md` cited
+`run_triggers.py:918` for the parse-rate floor, which had moved to 1220.
+
+So a document no longer types out what the repository can derive.
+`de sync` writes five regions from live objects — the subcommands off the Typer
+app, the steps off `gate_steps()`, the modules off the package, the skill's
+files off the directory, the arms off `ARM_NAMES` — and `de check` refuses one
+that is not what it renders from. The gate's own step list became a tuple in the
+same change, because the only way to enumerate a straight-line series of calls
+is to read the source and count, which is the part that had been going wrong.
+
+A figure that has to stay inside a sentence goes in a `de:fact` marker instead,
+which renders the value `site/claims.json` already pins to one exact sentence in
+one file. That mechanism existed and scanned only `.astro` pages. Pages were
+never the only surface a number could go stale on; they were the only surface
+with a gate.
+
+The markers are HTML comments, invisible on github.com and on the site. What
+they cannot do is read the paragraph above the table.
+
+## Why the drift sweep has a worklist
+
+**2026-08-21.** The standing obligation to sweep `README.md` and `docs/` for
+drift every third published run ended with the words "Nothing checks this",
+which was accurate.
+
+`de drift` computes what to re-read. A document's dependencies are the
+repository paths it names — the same paths `docs.py` extracts to prove they
+resolve, asked a different question. If nothing under a document has moved since
+somebody read it, it probably still holds. `[tool.decision-evals.reviewed]`
+records the commit, baselined at each document's own last-touched commit,
+because whoever last edited a document had read it and that is the strongest
+claim the history supports.
+
+Its first run found one document over the ceiling.
+`docs/AUTONOMOUS_WORK_ORDER.md` listed what to regenerate before landing and did
+not mention `de sync`, added two commits earlier.
+
+The ceiling is ten commits, matching the rejoin cadence already in
+`AGENTS.md`, because two cadences in one head keeps neither. Nothing in this
+stops a review that did not happen. An obligation nobody could see is now
+visible and dated, and that is the whole claim.
+
+## Why the site's globs are declared once
+
+**2026-08-21.** `site/inputs.json`, `site/src/content.config.ts` and `RENDERED`
+in `site/src/lib/remark-rewrite-links.mjs` each restated what the site renders.
+A comment in each asked the next author to keep them in step, which is the
+mechanism this repository keeps finding at the scene of the failure.
+
+`decision_evals.site`'s docstring claimed two of them read one file. An
+adversarial review checked the claim and found two live drifts: `*.md` against
+an explicit list of four root documents, and `plugin/skills/README.md` hashed as
+a rendered input against no collection and no route, so editing it staled a
+build that had never published it.
+
+One `collections` array now carries every field its three readers need, and all
+three import it. `de check` refuses a collection missing a field, naming the
+reader that would have gone quiet.

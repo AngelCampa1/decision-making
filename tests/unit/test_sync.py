@@ -408,3 +408,72 @@ def test_the_census_counts_documents_regions_and_facts(tmp_path: Path) -> None:
 
 def test_an_issue_reads_as_one_line() -> None:
     assert str(SyncIssue("README.md", "is wrong")) == "README.md: is wrong"
+
+
+# --------------------------------------------------------------------------- #
+# A fence quotes the syntax
+# --------------------------------------------------------------------------- #
+
+
+def test_a_fenced_marker_is_not_a_region() -> None:
+    """`docs/DOCUMENTATION_MAP.md` has to be able to show what a marker looks like."""
+    text = (
+        "Like this:"
+        + NEWLINE
+        + NEWLINE
+        + "```markdown"
+        + NEWLINE
+        + _region("de-commands")
+        + NEWLINE
+        + "```"
+        + NEWLINE
+    )
+    assert regions_in(text) == []
+    assert unbalanced(text) == []
+    assert apply_text(text, FACTS) == text
+
+
+def test_a_fenced_fact_does_not_publish_a_claim() -> None:
+    """A document describing the marker must not become a publisher of the figure."""
+    inner = "<!-- de:fact corpus-solvability -->89%<!-- /de:fact -->"
+    text = "````markdown" + NEWLINE + inner + NEWLINE + "````" + NEWLINE
+    assert facts_in(text) == []
+    assert apply_text(text, FACTS) == text
+
+
+def test_a_longer_fence_wraps_a_shorter_one() -> None:
+    text = (
+        "````markdown"
+        + NEWLINE
+        + "```mermaid"
+        + NEWLINE
+        + "```"
+        + NEWLINE
+        + _region("de-commands")
+        + NEWLINE
+        + "````"
+        + NEWLINE
+    )
+    assert regions_in(text) == []
+
+
+def test_a_marker_after_a_closed_fence_is_live() -> None:
+    text = (
+        "```markdown"
+        + NEWLINE
+        + "an example"
+        + NEWLINE
+        + "```"
+        + NEWLINE
+        + NEWLINE
+        + _region("de-commands")
+        + NEWLINE
+    )
+    assert [region for region, _ in regions_in(text)] == ["de-commands"]
+
+
+def test_an_unclosed_fence_swallows_the_rest() -> None:
+    """Deliberate. An unterminated fence is broken markdown, and guessing where it
+    ends would put a live region inside a code block on the rendered page."""
+    text = "```markdown" + NEWLINE + _region("de-commands") + NEWLINE
+    assert regions_in(text) == []

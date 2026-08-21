@@ -52,7 +52,7 @@ from pathlib import Path
 from typing import Final
 
 from decision_evals.site import input_files, site_present
-from decision_evals.sync import FACT_IDS
+from decision_evals.sync import facts_in
 
 #: Every fact a page publishes, and what backs it. Read by this module *and* by
 #: the page that renders a claim, so the published string and the checked string
@@ -300,7 +300,8 @@ def published_ids(repo_root: Path) -> dict[str, list[str]]:
     found = referenced_ids(repo_root)
     for path in scanned_documents(repo_root):
         where = _relative(path, repo_root)
-        for claim_id in sorted(set(FACT_IDS.findall(path.read_text(encoding="utf-8")))):
+        stated = facts_in(path.read_text(encoding="utf-8"))
+        for claim_id in sorted({claim_id for claim_id, _ in stated}):
             found.setdefault(claim_id, []).append(where)
     return found
 

@@ -46,7 +46,7 @@ flowchart TB
     subgraph living["<b>Living</b> — edited freely, gated by docs.py"]
         direction TB
         L1["root: README · AGENTS · CONTRIBUTING · SCORECARD"]
-        L2["docs/*.md — the nineteen"]
+        L2["docs/*.md — one per question"]
         L3["docs/programme/ — the eight parts"]
         L4["docs/reviews/ — three review briefs"]
     end
@@ -89,6 +89,69 @@ was never added, and line ranges that moved the next time those files were
 touched. Excluded as a class rather than as the files that happen to fail today,
 because "records are checked until they age" is not a rule anybody can write
 to.
+
+---
+
+## What a living document does not write by hand
+
+A living document is prose written by a person, with two exceptions. Both are
+HTML comments, so they are invisible on github.com and on the site, and both are
+written by `de sync`.
+
+**A table the repository can derive.** Put the markers in and run `de sync`:
+
+````markdown
+<!-- de:generated <region-id> -->
+<!-- /de:generated -->
+````
+
+`REGIONS` in `decision_evals.sync` is the list of ids: the `de` subcommands, the
+steps of the gate, the modules of the harness, the files the skill ships, the
+arms and what each answers. Each renders from a live object rather than from
+parsed source, so a subcommand cannot be added without the table growing a row in
+the same run. `de check` refuses a region that is not what it renders from, one
+that names no renderer, and a renderer no document uses.
+
+**A figure that has to sit inside a sentence.** `site/claims.json` pins a number
+to one exact sentence in one repository file. A document states the registered
+value rather than its own copy:
+
+````markdown
+a corpus that is <!-- de:fact <claim-id> -->89%<!-- /de:fact --> solvable
+````
+
+`de check` refuses a marker naming a claim nothing declares, a claim nothing
+publishes, and a marker in the claim's own source, where `de sync` would rewrite
+the sentence the anchor exists to verify.
+
+The ids are illustrative above and deliberately not real. A live marker in this
+file would make it a publisher of a figure it is only describing.
+
+**The line this stops at.** A region can be right and the sentence above it
+wrong. Rendering the gate's steps says nothing about the paragraph claiming the
+gate is offline, and nothing here reads that paragraph. Markers are for what the
+repository already knows; the rest is reading.
+
+---
+
+## What no gate proves, and what narrows the reading
+
+No check here can tell whether a description is still true. `docs/PROTOCOL.md`
+once described, in the present indicative, a refusal that had never run, with
+every path in it correct.
+
+`de drift` narrows the search. A document's dependencies are the repository
+paths it names — the same paths `docs.py` extracts to prove they resolve — and
+`[tool.decision-evals.reviewed]` records the commit somebody read it at. The
+report is the documents whose named paths have moved since, furthest behind
+first, with the line to paste back once you have read one. `de check` refuses a
+document that has gone more than ten commits past its review.
+
+Generated documents are exempt by rule: reviewing one means reviewing its
+generator, which is source.
+
+Nothing in this stops a review that did not happen. What changed is that an
+obligation nobody could see is now visible and dated.
 
 ---
 
@@ -207,7 +270,10 @@ appended, never rewritten.
 | `check_component_table` | `../README.md`'s map disagreeing with the top-level directory listing |
 | `check_docs_index` | [`README.md`](README.md) disagreeing with `docs/`, a subdirectory it never names, or a document nothing links to |
 | `check_audience_lines` | A living document that declares no audience |
-| `check_site_step` | A published site older than the markdown it renders |
+| `check_sync` | A generated region that is not what it renders from, one naming no renderer, a renderer no document uses, or a marker that does not close |
+| `check_claims` | A figure a document states that the register does not declare, a claim nothing publishes, or a marker in the claim's own source |
+| `check_drift` | A living document with no review on record, or one more than ten commits past it |
+| `check_site_step` | A published site older than the markdown it renders, or a collection in `../site/inputs.json` missing a field one of its three readers needs |
 | `check_mirrors` | `../CLAUDE.md`, `../.agents/skills/` or `../plugin/skills/` disagreeing with its source, or a plugin copy whose source verdict no longer permits shipping |
 
 Each register a gate reads may only shrink, and each refuses twice: an entry
