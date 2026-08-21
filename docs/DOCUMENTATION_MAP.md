@@ -137,8 +137,11 @@ next section is when that happens.
 ## Which documents to re-read
 
 `de drift` computes the worklist. A document's dependencies are the repository
-paths it names, the same paths `docs.py` extracts to prove they resolve, and
-`[tool.decision-evals.reviewed]` records the commit somebody read it at. The
+files it names, the same paths `docs.py` extracts to prove they resolve, and
+`[tool.decision-evals.reviewed]` records the commit somebody read it at. A
+directory is a place and not a mechanism, so naming one is not a dependency on
+it: counting them put `docs/README.md` thirteen commits behind on other
+people's work inside `notebook/`, and every one of the thirteen was noise. The
 report is the documents whose named paths have moved since, furthest behind
 first, with the line to paste back once you have read one. `de check` refuses a
 document that has gone more than ten commits past its review.

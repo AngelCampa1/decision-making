@@ -140,10 +140,10 @@ itself, so it grows a row the day a module does.
 <!-- de:generated harness-modules -->
 | Package | Modules |
 | --- | --- |
-| `decision_evals/` | `arenas` · `budget` · `citations` · `claims` · `cli` · `corpus` · `corrections` · `decisions` · `deployed` · `docs` · `drift` · `orchestrator` · `prereg` · `provenance` · `rescore` · `runner` · `sharded` · `site` · `skills` · `sync` · `tailoring` · `telemetry` · `trigger_arms` · `triggers` · `unbundle` · `wiring` |
+| `decision_evals/` | `adjudication` · `arenas` · `budget` · `citations` · `claims` · `cli` · `corpus` · `corrections` · `decisions` · `deployed` · `docs` · `drift` · `orchestrator` · `prereg` · `provenance` · `rescore` · `runner` · `sharded` · `site` · `skills` · `sync` · `tailoring` · `telemetry` · `trigger_arms` · `triggers` · `unbundle` · `wiring` |
 | `decision_evals/corpora/` | `lost_in_conversation` |
 | `decision_evals/generators/` | `audit` · `generate` · `loader` · `safe_eval` · `schema` |
-| `decision_evals/providers/` | `claude_code` · `openai_compatible` |
+| `decision_evals/providers/` | `antigravity` · `claude_code` · `openai_compatible` |
 | `decision_evals/scorers/` | `answer` · `bfcl` |
 | `decision_evals/solvers/` | `arms` |
 | `decision_evals/stats/` | `agreement` · `calibration` · `cluster` · `multiplicity` · `paired` · `power` · `reliability` · `track_h` |
@@ -248,14 +248,15 @@ table below is the gate's own step table.
 | 11 | integrity wiring | runs |
 | 12 | decision register | runs |
 | 13 | label corrections | runs |
-| 14 | checkpoint label versions | runs |
-| 15 | documentation | runs |
-| 16 | published claims | runs |
-| 17 | generated regions | runs |
-| 18 | site | skipped |
-| 19 | document drift | skipped |
-| 20 | pytest | skipped |
-| 21 | coverage floors | skipped |
+| 14 | label adjudication | runs |
+| 15 | checkpoint label versions | runs |
+| 16 | documentation | runs |
+| 17 | published claims | runs |
+| 18 | generated regions | runs |
+| 19 | site | skipped |
+| 20 | document drift | skipped |
+| 21 | pytest | skipped |
+| 22 | coverage floors | skipped |
 <!-- /de:generated -->
 
 ```mermaid

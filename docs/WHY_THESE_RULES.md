@@ -513,9 +513,13 @@ drift every third published run ended with the words "Nothing checks this",
 which was accurate.
 
 `de drift` computes what to re-read. A document's dependencies are the
-repository paths it names — the same paths `docs.py` extracts to prove they
+repository files it names — the same paths `docs.py` extracts to prove they
 resolve, asked a different question. If nothing under a document has moved since
-somebody read it, it probably still holds. `[tool.decision-evals.reviewed]`
+somebody read it, it probably still holds. Directories were counted for exactly
+one day. They put `docs/README.md` thirteen commits behind and
+`docs/PROTOCOL.md` eleven, on nothing but other sessions committing inside
+`notebook/` and `results/`, and every one of those was noise; a directory is a
+place, and only the files a document names carry signal. `[tool.decision-evals.reviewed]`
 records the commit, baselined at each document's own last-touched commit,
 because whoever last edited a document had read it and that is the strongest
 claim the history supports.

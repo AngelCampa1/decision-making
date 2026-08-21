@@ -66,18 +66,6 @@ def test_a_document_depends_on_the_code_it_names(tmp_path: Path) -> None:
     )
 
 
-def test_a_directory_named_twice_is_one_dependency(tmp_path: Path) -> None:
-    """A backtick writes the trailing slash and a link does not. Git reads both alike."""
-    repo = _repo(
-        tmp_path,
-        {
-            "docs/ARCHITECTURE.md": "It reads `notebook/` and links to [it](../notebook).\n",
-            "notebook/keep.txt": "",
-        },
-    )
-    assert dependencies(repo, repo / "docs/ARCHITECTURE.md") == ("notebook",)
-
-
 def test_another_document_is_not_a_dependency(tmp_path: Path) -> None:
     """An index linking to what it indexes is an index, not a stale description."""
     repo = _repo(
@@ -89,6 +77,34 @@ def test_another_document_is_not_a_dependency(tmp_path: Path) -> None:
         },
     )
     assert dependencies(repo, repo / "docs/README.md") == ()
+
+
+def test_a_directory_is_a_place_and_not_a_dependency(tmp_path: Path) -> None:
+    """Counting them put `docs/README.md` thirteen commits behind on other people's work."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/ARCHITECTURE.md": "It reads `notebook/` and `evals/src/cli.py`.\n",
+            "notebook/keep.txt": "",
+            "evals/src/cli.py": "",
+        },
+    )
+    assert dependencies(repo, repo / "docs/ARCHITECTURE.md") == ("evals/src/cli.py",)
+
+
+def test_a_path_outside_the_repository_is_not_a_dependency(tmp_path: Path) -> None:
+    """`.venv` exists on a laptop and never in CI, so counting it splits the two."""
+    repo = _repo(
+        tmp_path,
+        {
+            "docs/ARCHITECTURE.md": (
+                "Invoke `.venv/Scripts/de.exe` and read `evals/src/cli.py`.\n"
+            ),
+            ".venv/Scripts/de.exe": "",
+            "evals/src/cli.py": "",
+        },
+    )
+    assert dependencies(repo, repo / "docs/ARCHITECTURE.md") == ("evals/src/cli.py",)
 
 
 def test_a_path_that_does_not_exist_is_not_a_dependency(tmp_path: Path) -> None:

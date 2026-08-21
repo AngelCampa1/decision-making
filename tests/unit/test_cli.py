@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -98,8 +99,8 @@ class TestTheStepTable:
 
     def test_fast_drops_exactly_four(self) -> None:
         steps = gate_steps()
-        assert len(steps) == 21
-        assert sum(1 for step in steps if step.fast) == 17
+        assert len(steps) == len(GATE_STEPS)
+        assert sum(1 for step in steps if not step.fast) == 4
 
     def test_enumerating_the_gate_does_not_run_it(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """A document can state the steps without paying for them.
@@ -112,7 +113,7 @@ class TestTheStepTable:
             raise AssertionError("constructing the step table ran a step")
 
         monkeypatch.setattr(cli, "_run", explode)
-        assert len(gate_steps()) == 21
+        assert len(gate_steps()) == len(GATE_STEPS)
 
 
 class TestDocumentDrift:
@@ -124,6 +125,19 @@ class TestDocumentDrift:
 
     def test_a_commit_git_does_not_know_reads_as_unknown(self) -> None:
         assert cli._commits_touching("0000000", ("README.md",)) is None
+
+    def test_a_commit_off_the_current_history_reads_as_unknown(self) -> None:
+        """A rebased-away commit survives as a dangling object in the tree that
+        rebased it, so ``rev-list`` answers locally and refuses in CI. Asking
+        ancestry first makes the two agree."""
+        orphan = subprocess.run(
+            ["git", "commit-tree", "HEAD^{tree}", "-m", "not on this history"],
+            cwd=cli.REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        assert cli._commits_touching(orphan, ("README.md",)) is None
 
     def test_a_real_range_counts(self) -> None:
         count = cli._commits_touching("650dcbc", ("evals/src/decision_evals/cli.py",))

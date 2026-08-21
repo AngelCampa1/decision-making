@@ -208,7 +208,7 @@ and how a run flows through them. `README.md` carries the component table and
   [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md), which is generated and cannot
   itself drift.
 - **Run `python -m uv run de drift` for the worklist.** It names the documents
-  whose paths have moved since anyone recorded reading them, furthest behind
+  whose files have moved since anyone recorded reading them, furthest behind
   first. Read those, re-read [`docs/README.md`](docs/README.md) as an index, and
   record each in `[tool.decision-evals.reviewed]` at the commit you read it at.
   `de check` refuses a document with no review or one more than ten commits past

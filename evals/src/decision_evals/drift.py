@@ -67,13 +67,22 @@ REVIEWED_TABLE: Final[tuple[str, ...]] = ("tool", "decision-evals", "reviewed")
 #:
 #: Ten because ``AGENTS.md`` already asks a worktree to rejoin at least every
 #: ten commits, and a reader holding two different cadences in their head keeps
-#: neither. It is a starting value, chosen before there was any distribution to
-#: choose it from, and it should tighten once there is one.
+#: neither.
+#:
+#: Measured on 2026-08-21, once directories stopped counting: the furthest
+#: behind of the 36 was four. That is not a distribution worth tightening on,
+#: because the register was a day old and every document was as freshly read as
+#: it will ever be. Revisit when the spread is real.
 CEILING: Final = 10
 
 #: Extensions that are not evidence a description has gone stale. A document
 #: linking to another document is an index doing its job.
 _NOT_A_MECHANISM: Final[frozenset[str]] = frozenset({".md"})
+
+#: Directories that exist on a developer machine and never in the repository.
+#: Without this the answer differs between a laptop and CI, where they are
+#: absent and the path drops out on its own.
+_NOT_THE_REPOSITORY: Final[tuple[str, ...]] = (".venv/", "node_modules/", "site/dist/")
 
 
 @dataclass(frozen=True)
@@ -111,6 +120,13 @@ def dependencies(repo_root: Path, path: Path) -> tuple[str, ...]:
     Both the backticked references ``docs.py`` proves exist and the markdown
     links it resolves, because a document points at code both ways and either
     one moving is a reason to read it again.
+
+    A directory is a place, not a mechanism, so naming one is not a dependency
+    on it. Measured on 2026-08-21 against the first register: counting
+    directories put ``docs/README.md`` thirteen commits behind and
+    ``docs/PROTOCOL.md`` eleven, on nothing but other people's work inside
+    ``notebook/`` and ``results/``. Every one of those thirteen was noise. The
+    files a document names are the signal, and they survive here.
     """
     text = path.read_text(encoding="utf-8")
     top_level = {child.name for child in repo_root.iterdir() if child.is_dir()}
@@ -126,16 +142,12 @@ def dependencies(repo_root: Path, path: Path) -> tuple[str, ...]:
     here = _relative(path, repo_root)
     return tuple(
         sorted(
-            # A directory arrives twice, as ``notebook/`` from a backticked
-            # reference and as ``notebook`` from a link, and git reads both the
-            # same way. Normalising keeps one path out of the report twice.
-            {
-                reference.rstrip("/")
-                for reference in found
-                if reference.rstrip("/") != here
-                and Path(reference).suffix not in _NOT_A_MECHANISM
-                and (repo_root / reference).exists()
-            }
+            reference
+            for reference in found
+            if reference != here
+            and Path(reference).suffix not in _NOT_A_MECHANISM
+            and not reference.startswith(_NOT_THE_REPOSITORY)
+            and (repo_root / reference).is_file()
         )
     )
 

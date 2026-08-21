@@ -913,9 +913,17 @@ def _commits_touching(sha: str, paths: tuple[str, ...]) -> int | None:
     ``None`` when git cannot answer, which in practice means the recorded commit
     was rebased away. That is reported rather than counted as zero, because a
     review pinned to a commit nobody has is not a review.
+
+    Ancestry is asked first. A rebased-away commit survives as a dangling object
+    in the tree that rebased it, so ``rev-list`` answers there and refuses on a
+    clean checkout, which is the one place the gate is supposed to be hardest to
+    fool. This happened here on 2026-08-21: four entries pointed at commits the
+    rebase had rewritten and the local gate read all four as fine.
     """
     if not paths:
         return 0
+    if _git_output(["merge-base", "--is-ancestor", sha, "HEAD"]) is None:
+        return None
     output = _git_output(["rev-list", "--count", f"{sha}..HEAD", "--", *paths])
     if output is None or not output.isdigit():
         return None

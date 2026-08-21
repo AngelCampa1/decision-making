@@ -62,8 +62,12 @@ that could not tell those apart would demand the correction be deleted.
 
 ## What `de drift` can and cannot see
 
-A document's dependencies are the repository paths it names, which
-`docs.py` already extracted to prove they resolve.
+A document's dependencies are the repository files it names, which
+`docs.py` already extracted to prove they resolve. Directories were in that set
+for one day: they put `docs/README.md` thirteen commits behind and
+`docs/PROTOCOL.md` eleven on other sessions' commits inside `notebook/` and
+`results/`, all of it noise, so a directory is now a place rather than a
+dependency.
 `[tool.decision-evals.reviewed]` records the commit somebody read each document
 at, 36 entries, baselined at each document's last-touched commit on the
 reasoning that whoever last edited a document had read it. `de drift` prints the
@@ -116,7 +120,9 @@ real.
 
 ## What this cost
 
-The gate went from 19 steps to 21, 16 to 17 under `--fast`. Both new modules
+The gate gained two steps, one of which runs under `--fast`. A concurrent
+session added a third on the same day, so the absolute count is a moving
+number and this entry does not state one. Both new modules
 carry 100% coverage floors. `de check` is still offline and still
 deterministic, and no step writes: every generator has a step that refuses its
 stale output instead, because a gate that repaired the tree while reading it
