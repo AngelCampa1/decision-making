@@ -180,7 +180,7 @@ class TestCollectStampsVenue:
     def test_every_row_carries_in_situ_true(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False):
+        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False, **_kwargs):
             return (True, None, None), "raw"
 
         monkeypatch.setattr(runner, "ask", fake_ask)
@@ -196,7 +196,7 @@ class TestCollectStampsVenue:
     ) -> None:
         """Run first, by standing rule 2's spirit: the existing arms are unchanged."""
 
-        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False):
+        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False, **_kwargs):
             return (True, None, None), "raw"
 
         monkeypatch.setattr(runner, "ask", fake_ask)
@@ -209,7 +209,7 @@ class TestCollectStampsVenue:
     def test_in_situ_reaches_ask(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         seen: list[bool] = []
 
-        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False):
+        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False, **_kwargs):
             seen.append(in_situ)
             return (True, None, None), "raw"
 
@@ -244,7 +244,7 @@ class TestCollectStampsSkillVersion:
     def test_every_row_carries_the_given_skill_version(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False):
+        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False, **_kwargs):
             return (True, None, None), "raw"
 
         monkeypatch.setattr(runner, "ask", fake_ask)
@@ -267,7 +267,7 @@ class TestCollectStampsSkillVersion:
         that as a fact rather than guess `metadata.version`'s current value.
         """
 
-        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False):
+        def fake_ask(description, case, model, system, allowed=(), *, in_situ=False, **_kwargs):
             return (True, None, None), "raw"
 
         monkeypatch.setattr(runner, "ask", fake_ask)
@@ -321,6 +321,8 @@ def _fake_collect_from_labels(
     entry_names: dict[str, str] | None,
     in_situ: bool,
     skill_version: str | None = None,
+    backend: str = "claude",
+    contract: str = "schema",
 ) -> dict[tuple[str, int], dict[str, object]]:
     """Replays `collect()`'s row shape from the labels, with no model call.
 

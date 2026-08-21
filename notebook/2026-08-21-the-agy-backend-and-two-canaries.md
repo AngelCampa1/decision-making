@@ -116,9 +116,9 @@ status would have pooled that call with the ones where nothing went wrong. So
 `CliResult` gained `status` and `num_turns`, and the record carries both.
 
 **Whether an `ERROR`-status verdict may be scored is not settled here.** It is an
-analysis decision and it needs a `docs/DECISIONS.md` entry before any arm is
-interpreted. What is settled is that the two cases are distinguishable in the
-record, which they would not have been.
+analysis decision and it belongs in the pre-registration of whichever arm first
+has to face it, alongside the void condition. What is settled is that the two
+cases are distinguishable in the record, which they would not have been.
 
 ## Eight real records, end to end
 
@@ -157,3 +157,92 @@ The plan for this change said the parse-rate gate reads repeat 0 only, citing th
 N9 README's "recorded and not fixed". That was true when N9 was written and is
 not true now: `parse_rate_over_all_repeats` computes over every repeat and the
 gate calls it. Nothing needed fixing and nothing was changed.
+
+
+---
+
+# The three decisions this backend forced
+
+Written the same day as the entry above, and kept here rather than in
+[`docs/DECISIONS.md`](../docs/DECISIONS.md) because that register governs
+`datasets/triggers/`, `datasets/tailoring/` and `skills/`, and none of this
+touches one. `de check` refused the entries on exactly that ground, which is the
+register's scope working rather than an obstacle -- so the reasoning lives where
+dated reasoning lives.
+
+**Worth arguing about later:** `arenas.py` decides what counts as evidence and is
+not a governed path, so a change to it needs no register entry. That is a real
+gap, it is not mine to close unilaterally, and it is written down here so the
+next person hits it as a question rather than as a surprise.
+
+### The arena stopped being a property of the model
+
+`ARENAS` matched a model id against a per-arena tuple of prefixes. That was
+correct while one backend existed and became wrong the moment a second one
+served the same vendor: `agy` offers a model it calls `claude-opus-4-6`, and
+`claude -p` accepts that id too. One is a `confirm`-tier venue reached with
+`--tools ""` and a replaced system prompt; the other is a coding agent that puts
+~14k tokens of scaffold and 57 tools in front of the question. Prefix matching
+reads them as one model and files the agent's answers under the arena whose
+results are evidence.
+
+So `MODELS` is now a registry of `(prefix, vendor, backend, arena)` and
+`resolve_model` takes the longest match. Adding a model is a row. Every existing
+prefix keeps the arena it had, so no published number changes meaning.
+
+**Antigravity ids are namespaced `agy/`**, the way `ollama/` already was and for
+the same reason: it makes the id spaces disjoint, and it makes
+`trigger_arms.models_comparable` refuse the pooling without anyone remembering
+to. `ArenaPolicy.model_prefixes` is now derived from the registry rather than
+stored, so a model's arena is written down in exactly one place.
+
+**Every Antigravity model lands in `screen`, whatever the weights.** The venue
+cannot support a verdict — the scaffold is in context on every call and no flag
+removes it — so `agy/gemini-3.1-pro-high` screens for the same reason
+`agy/gpt-oss-120b-medium` does. This is the decision most worth arguing with
+later: it says a frontier model reached through an agent harness is not a
+frontier-model measurement.
+
+Two refusals that did not exist before. An **unpinned alias** (`auto`, `pro`,
+`flash`, …) is refused by name, because `agy` defaults to `--model auto` and a
+record naming a family cannot say which weights answered. An **unknown model** is
+refused with the row to add, because "not permitted" without that is a dead end.
+`scripts/run_triggers.py` now calls the gate, which it never did before, so a
+typo costs one message instead of a checkpoint full of failed calls.
+
+### An `ERROR` status can carry a valid answer, and both are recorded
+
+Measured on `agy`: a call returned `status: "ERROR"` and a well-formed
+`structured_output` in the same result event, because the agent answered and then
+reached for a file outside its sandbox, where the CLI's own protection boundary
+refused it.
+
+Raising on the status would have discarded a complete verdict. Ignoring the
+status would have pooled that call with the ones where nothing went wrong. So
+`CliResult` carries `status` and `num_turns`, the record carries `status`, and
+the two cases are distinguishable.
+
+**What is deliberately not decided here is whether an `ERROR`-status verdict may
+be scored.** That is an analysis question, it needs its own entry before any arm
+on this backend is interpreted, and settling it silently inside a parser is
+exactly how a harness assumption becomes a published number.
+
+### The response contract is an arm on `agy`, not a formatting choice
+
+`agy` has no `--system-prompt`, so the contract carried by `SYSTEM` cannot be
+delivered where the Claude backend delivers it. Two options, and they are not two
+spellings of one thing: an enforced `--json-schema`, or the same prose prepended
+to the user message.
+
+The schema route is what makes this backend able to run the arm that voided N9 —
+516 calls lost at a 0.8566 parse rate to models answering in prose. But an
+enforced schema could move *firing* and not only formatting, and this repository
+has published two defects that were each an unexamined harness assumption. So
+`--contract {schema,prose}` is a flag, `contract` is a column, the two write to
+separate checkpoints, and which is used is measured before it is relied on.
+
+Recorded here too: the schema dialect is narrower than JSON Schema and a refused
+schema fails the whole call. `{"type": ["string","null"], "enum": [..., null]}`
+errors; `{"type": "string", "enum": [...], "nullable": true}` answers. Writing
+the natural spelling would have turned every item in an arm into an
+infrastructure zero.
