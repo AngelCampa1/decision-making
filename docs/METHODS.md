@@ -372,7 +372,7 @@ the larger number.
 
 The organising claim of this repository is that **every confident wrong number
 it has produced was caught by somebody checking, never by somebody being
-careful.** So the checks are mechanical. `de check` runs nineteen steps at the
+careful.** So the checks are mechanical. `de check` runs twenty steps at the
 time of writing, and the count moves as gates are added; the ones that are about
 method rather than lint:
 
@@ -383,6 +383,7 @@ method rather than lint:
 | label corrections | a version the answer key has reached that no line of `datasets/triggers/corrections.jsonl` accounts for | the register above proves a commit was explained in prose, which cannot be joined against a record |
 | integrity wiring | a module with a coverage floor that no entry point can reach | two shipped modules tested to 100% and called by nothing |
 | checkpoint label versions | two checkpoints disagreeing about the answer key with no re-scored bridge | §3 |
+| label adjudication | an answer key on disk, or a published run, naming an item with no three-judge adjudication record | a version shipping 72 unadjudicated items under a register entry blocking publication against them |
 | citations | an arXiv identifier with no bib entry, or a claim number beside one with no verbatim source quote | three misattributed figures in one morning, all citing real papers |
 | documentation | a `de` command, path or component named in the docs that does not exist | the README advertising two commands and a directory that never existed |
 | site | a published build older than the files it renders | a site that renders this repo's markdown in place, so it cannot silently drift |

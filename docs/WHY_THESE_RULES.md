@@ -260,6 +260,34 @@ subscription stated. Writing "we spent $250" would be false.
   Intentional gaps go in `[tool.decision-evals.unwired]` with the condition that
   would close them.
 
+## Why an unadjudicated answer key is refused
+
+- **The rule was written down and nothing read it.** On 2026-08-20 answer key
+  v5 gained 24 triples, 72 items, so that `council` and `hinge` had positives to
+  be correct about. The register entry that introduced them says the labels are
+  the author's and that no number may be published against version 5 until blind
+  three-judge adjudication has run. It was true when written and stayed true for
+  a day, during which all nineteen steps of `de check` reported green on a tree
+  whose live answer key was 78% adjudicated. A run could have been published
+  against those labels and the gate would have passed it.
+
+  The stakes are the reason the rule exists at all: 21 of 21 scored failures
+  across three corpora turned out to be the answer key rather than the model, and
+  the method is in `METHODS.md` section 2. A label nobody but its author has read
+  is the failure mode this repository has measured most often.
+
+  So `de check` now refuses a trigger set on disk carrying an item with no
+  three-judge record, joined on the case id. It is keyed to the live answer key
+  and not to published runs, because a run declares a version and the corpus file
+  moves on: four runs on disk declare v4 and the file is at v5, so checking them
+  would mean resolving each past version out of git. `corrections.py` declined
+  that same archaeology for the same reason. Keying to the live set buys the one
+  property the run-keyed version could not have, which is that the check cannot
+  quietly stop noticing.
+
+  Authoring items now turns the gate red until they are adjudicated. That cost
+  is the mechanism, not a side effect of it.
+
 ## Why documentation is gated mechanically
 
 

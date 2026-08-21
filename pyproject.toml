@@ -228,6 +228,12 @@ output = "coverage.json"
 # against a record. Same class of failure, one level finer, and the refusals
 # here are the whole module.
 "decision_evals/corrections.py" = { line = 100.0, branch = 100.0 }
+# The gate over the answer key itself, added 2026-08-21. `corrections.py`
+# proves a version bump says which labels moved; this proves the labels were
+# ever checked by anyone but their author. Version 5 shipped 72 unadjudicated
+# items on 2026-08-20 under a register entry saying no number could be
+# published against them. The incident is in `docs/WHY_THESE_RULES.md`.
+"decision_evals/adjudication.py" = { line = 100.0, branch = 100.0 }
 # The gate over the front door. Documentation was the last obligation here
 # checked by reading it, and the README was found naming two commands that do
 # not exist and a directory that never has.

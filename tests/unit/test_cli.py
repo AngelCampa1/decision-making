@@ -17,10 +17,12 @@ import yaml
 from typer.testing import CliRunner
 
 from decision_evals import cli
+from decision_evals.adjudication import AdjudicationIssue
 from decision_evals.cli import (
     StepResult,
     _summarise,
     app,
+    check_adjudication_step,
     check_corrections_step,
     check_decisions_step,
     check_git_identity,
@@ -641,6 +643,39 @@ class TestCorrectionsStep:
         # lines as ahead of the corpus, which is three errors about the wrong
         # thing in the wrong step.
         assert check_corrections_step().passed
+
+
+class TestAdjudicationStep:
+    def test_the_repository_has_adjudicated_its_own_answer_keys(self) -> None:
+        assert check_adjudication_step().passed
+
+    def test_it_fails_on_an_unadjudicated_key(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            cli,
+            "check_adjudication",
+            lambda root, corpora, runs: [
+                AdjudicationIssue("datasets/triggers/x.yaml", "uncovered")
+            ],
+        )
+        result = check_adjudication_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
+
+    def test_a_set_that_will_not_load_contributes_no_corpus(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """It is `check_triggers_step`'s job to report that, not this one."""
+        import decision_evals.triggers as triggers
+
+        def refuse(path: object) -> object:
+            raise triggers.TriggerSetError("unreadable")
+
+        monkeypatch.setattr(triggers, "load_trigger_set", refuse)
+        # No corpus loads, so nothing is uncovered. The baselined key then names
+        # no set that loaded, which is the one refusal left standing.
+        result = check_adjudication_step()
+        assert not result.passed
+        assert "1 issue" in result.detail
 
 
 class TestDecisionsStep:

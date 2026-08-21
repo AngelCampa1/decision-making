@@ -20,6 +20,8 @@ from typing import Final
 
 import typer
 
+from decision_evals.adjudication import census as adjudication_census
+from decision_evals.adjudication import check_adjudication, record_cases
 from decision_evals.citations import census, check_citations, load_baseline
 from decision_evals.claims import census as claims_census
 from decision_evals.claims import check_claims
@@ -35,6 +37,7 @@ from decision_evals.provenance import (
     INDEX_PATH,
     GitFacts,
     ProvenanceIssue,
+    answer_key,
     check_provenance,
     discover_runs,
     index_is_current,
@@ -200,6 +203,7 @@ def check(
         check_wiring_step(),
         check_decisions_step(),
         check_corrections_step(),
+        check_adjudication_step(),
         check_checkpoints_step(),
         check_docs_step(),
         check_claims_step(),
@@ -660,6 +664,62 @@ def check_corrections_step() -> StepResult:
     )
 
     issues = check_corrections(REPO_ROOT, corpus_version)
+    if not issues:
+        return StepResult(name, True)
+    for issue in issues:
+        typer.secho(f"  {issue}", fg=typer.colors.RED)
+    return StepResult(name, False, f"{len(issues)} issue(s)")
+
+
+def check_adjudication_step() -> StepResult:
+    """Every live answer key has been through blind three-judge adjudication.
+
+    Added 2026-08-21. On 2026-08-20 answer key v5 gained 72 items and the
+    register said no number may be published against version 5 until they had
+    been adjudicated. Nothing checked it, and the full gate passed green on a
+    tree whose live answer key was 78% covered.
+
+    The corpora are gathered here and passed in, the same split
+    `check_corrections_step` uses, so that every refusal in the module is
+    reachable from a dictionary rather than from a fixture repository.
+    """
+    name = "label adjudication"
+    _echo_header(name)
+
+    from decision_evals.triggers import TRIGGERS_DIR, TriggerSetError, load_trigger_set
+
+    triggers_dir = REPO_ROOT / TRIGGERS_DIR
+    corpora: dict[str, tuple[int, frozenset[str]]] = {}
+    for path in (*sorted(triggers_dir.glob("*.yaml")), *sorted(triggers_dir.glob("*/index.yaml"))):
+        try:
+            trigger_set = load_trigger_set(path)
+        except TriggerSetError:
+            # Reported with its reason by `check_triggers_step`. A set that will
+            # not load contributes no corpus rather than failing this step too.
+            continue
+        key = path.relative_to(REPO_ROOT).as_posix()
+        corpora[key] = (trigger_set.version, frozenset(case.id for case in trigger_set.cases))
+
+    runs: dict[str, tuple[str, frozenset[str]]] = {}
+    for run in discover_runs(REPO_ROOT):
+        if not run.readme.is_file():
+            # `check_provenance` refuses a run with no README. Two steps naming
+            # one defect sends a reader looking for two.
+            continue
+        declared = answer_key(run.readme.read_text(encoding="utf-8"))
+        if declared is None:
+            continue
+        cases = frozenset(case for path in run.jsonl for case in record_cases(path))
+        if cases:
+            runs[run.path] = (declared[0], cases)
+
+    items, covered, baselined = adjudication_census(REPO_ROOT, corpora)
+    typer.echo(
+        f"{len(corpora)} answer key(s); {covered} of {items} item(s) adjudicated, "
+        f"{baselined} key(s) baselined, {len(runs)} published run(s) checked"
+    )
+
+    issues = check_adjudication(REPO_ROOT, corpora, runs)
     if not issues:
         return StepResult(name, True)
     for issue in issues:

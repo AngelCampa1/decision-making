@@ -1,0 +1,25 @@
+# Trigger sets exempt from the blind-adjudication gate.
+#
+# One answer-key path per line, `#` for comments. Same semantics as
+# `results/provenance-baseline.txt`: exempt, and it MAY ONLY SHRINK. `de check`
+# fails when a listed set turns out to be fully adjudicated after all, and when
+# a line names no set that loads.
+#
+# A line here is not "this is fine". It is "this defect is on the record and
+# nobody is pretending otherwise".
+
+# The version 2 corpus, and the only one whose items predate the rule. Blind
+# adjudication was introduced with version 3 and has never run against these
+# ids: the ledger holds `s01p`-style banded ids and this file's are `p04` and
+# `x-n21`, so its coverage of them is zero rather than partial.
+#
+# The set cannot be repaired by running the adjudicator at it, and it would not
+# be worth repairing if it could. This is the corpus SCORECARD.md records as 89%
+# solvable by counting words, AUC 0.850 on turn length alone, against which a bare
+# "fire if >= 18 words" rule scores 0.890. Adjudicating its labels would buy a
+# clean answer key for an instrument whose measurements still would not travel,
+# and the eight published runs scored against it stay published with that
+# caveat attached.
+#
+# Remove this line if the set is ever adjudicated, or when it is retired.
+datasets/triggers/decision-making.yaml

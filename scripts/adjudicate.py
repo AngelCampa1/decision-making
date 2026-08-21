@@ -44,6 +44,11 @@ sys.path.insert(0, str(REPO_ROOT / "evals" / "src"))
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+from decision_evals.adjudication import (  # noqa: E402
+    ADJUDICATORS,
+    CHECKPOINT_PATH,
+    adjudicated_cases,
+)
 from decision_evals.providers.claude_code import (  # noqa: E402
     CliError,
     Conversation,
@@ -88,13 +93,10 @@ SYSTEM = (
     '{"decision": true|false, "why": "<one short sentence>"}'
 )
 
-CHECKPOINT = REPO_ROOT / "results" / "triggers" / "adjudication.jsonl"
+CHECKPOINT = REPO_ROOT / CHECKPOINT_PATH
 
 #: Pre-registered. More than this share of labels moving retires the corpus.
 KILL_THRESHOLD = 0.20
-
-#: Independent instances per turn. Odd, so a binary question always resolves.
-ADJUDICATORS = 3
 
 
 def abort_clauses(skill_path: Path) -> str:
@@ -178,7 +180,11 @@ def collect(
     with checkpoint.open("a", encoding="utf-8") as handle:
         for judge in range(judges):
             for index, case in enumerate(cases):
-                if (case.id, judge) in done:
+                # An unreadable reply is not a verdict, so the slot is still
+                # empty and a resume re-calls it. Skipping it here left a case
+                # that no invocation could finish: `--missing-only` excludes it
+                # for having a row, and this skipped it for the same reason.
+                if done.get((case.id, judge), {}).get("adjudicated") is not None:
                     continue
                 try:
                     verdict, raw = ask(case, model, system)
@@ -481,7 +487,10 @@ def main() -> int:
     only = parse_only(args.only) if args.only else None
     exclude_ids = None
     if args.missing_only:
-        exclude_ids = frozenset(case_id for case_id, _judge in load_done(checkpoint))
+        # Cases with a full readable panel. Excluding every case that has any
+        # row would skip one holding a single unreadable reply, which is the
+        # case most in need of re-running.
+        exclude_ids = frozenset(adjudicated_cases(REPO_ROOT))
     cases = select_cases(trigger_set.cases, only=only, exclude_ids=exclude_ids)
 
     if not args.report_only:

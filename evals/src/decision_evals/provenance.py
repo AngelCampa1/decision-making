@@ -121,6 +121,18 @@ class RunRecord:
         return matched.group(2) if matched else None
 
 
+def answer_key(text: str) -> tuple[str, int] | None:
+    """The answer-key path and version a README declares, or ``None``.
+
+    Public because three callers need it and a third copy of the pattern is how
+    two of them quietly start accepting different spellings of the same line.
+    """
+    declared = _ANSWER_KEY.search(text)
+    if declared is None:
+        return None
+    return (declared.group("path"), int(declared.group("version")))
+
+
 def prediction_links(text: str) -> list[str]:
     """Notebook entries a README registers as its prediction.
 
@@ -238,7 +250,7 @@ def check_run(run: RunRecord, repo_root: Path, git: GitFacts) -> list[Provenance
 
 def _check_answer_key(run: RunRecord, text: str) -> list[ProvenanceIssue]:
     """The README states its answer-key version, and the records agree."""
-    declared = _ANSWER_KEY.search(text)
+    declared = answer_key(text)
     if declared is None:
         return [
             ProvenanceIssue(
@@ -250,7 +262,7 @@ def _check_answer_key(run: RunRecord, text: str) -> list[ProvenanceIssue]:
             )
         ]
 
-    version = int(declared.group("version"))
+    _key, version = declared
     issues: list[ProvenanceIssue] = []
     for path in run.jsonl:
         found = record_versions(path)
@@ -425,8 +437,8 @@ def render_index(repo_root: Path) -> str:
     reverse: dict[str, list[str]] = {}
     for run in runs:
         text = run.readme.read_text(encoding="utf-8") if run.readme.is_file() else ""
-        declared = _ANSWER_KEY.search(text)
-        version = f"v{declared.group('version')}" if declared else "—"
+        declared = answer_key(text)
+        version = f"v{declared[1]}" if declared else "—"
         predictions = prediction_links(text)
         outcomes = outcome_links(text)
         note = " *(baselined)*" if run.name in baseline else ""

@@ -187,6 +187,15 @@ and how a run flows through them. `README.md` carries the component table and
   is an ancestor of the run's commit. Two pre-convention runs are baselined in
   `results/provenance-baseline.txt`; that list may only shrink. Regenerate
   [`docs/RUN_INDEX.md`](docs/RUN_INDEX.md) with `de index`.
+- **An answer key on disk has been through blind adjudication.** `de check`
+  refuses a trigger set carrying an item with no three-judge record in
+  `results/triggers/adjudication.jsonl`, so authoring items and adjudicating
+  them is one unit of work. Close it with
+  `python -m uv run python scripts/adjudicate.py --set <the set> --missing-only`,
+  and read the outcome against the pre-registered kill at more than 20% of
+  labels moving.
+  The version 2 corpus is baselined in
+  `datasets/triggers/adjudication-baseline.txt`; that list may only shrink.
 - **A published run updates [`docs/STATUS.md`](docs/STATUS.md) in the same
   change.** Corrections there are appended, never rewritten.
 - **A change to `datasets/triggers/`, `datasets/tailoring/` or `skills/` needs

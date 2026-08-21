@@ -12,9 +12,9 @@ The promotion gate has teeth. `de lint` refuses to let a skill carrying
 `UNTESTED` or `WITHDRAWN` sit in `plugin/skills/`, and `de check` runs it. No
 skill reaches the shipped plugin on an author's say-so.
 
-Four further checks govern the method rather than the product. Each was added
-on 2026-08-13, after the failure it prevents had already happened here, and
-each runs inside `de check` today.
+Five further checks govern the method rather than the product. Four were added
+on 2026-08-13 and the fifth on 2026-08-21, each after the failure it prevents
+had already happened here, and each runs inside `de check` today.
 
 | Check | What it refuses |
 | --- | --- |
@@ -22,6 +22,7 @@ each runs inside `de check` today.
 | Integrity wiring | A module carrying a coverage floor that no entry point reaches |
 | Decision register | A change to the answer key or to the shipped skill with no written reason |
 | Documentation | A `de` command or a repository path this repository does not have |
+| Label adjudication | An answer key on disk, or a published run, naming an item with no three-judge blind adjudication record (`docs/METHODS.md` §2: one model sampled three times, 1.10 effective raters) |
 
 Between them they decide whether a number is traceable. Whether it is *good* is
 the confirmation run's job, and none of them can put a row in the table below.
