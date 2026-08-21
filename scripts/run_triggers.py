@@ -68,13 +68,16 @@ import sys
 from collections.abc import Sequence
 from dataclasses import replace
 from pathlib import Path
+from typing import Final
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "evals" / "src"))
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+from decision_evals.arenas import assert_model_allowed, resolve_model  # noqa: E402
 from decision_evals.corpus import BANDS  # noqa: E402
+from decision_evals.providers import antigravity  # noqa: E402
 from decision_evals.providers.claude_code import (  # noqa: E402
     CliError,
     Conversation,
@@ -228,6 +231,78 @@ def four_arm_block(descriptions: dict[str, str]) -> str:
     return "\n\n".join(f"### {name}\n\n{text}" for name, text in descriptions.items())
 
 
+#: `--backend` names a harness the way a person says it; `arenas.MODELS` names
+#: the module that implements it. Kept as a mapping rather than by making the
+#: two strings equal, because the flag is a user interface and the registry is a
+#: fact about the code, and tying them together would make renaming either one
+#: break the other.
+_BACKEND_MODULES: Final[dict[str, str]] = {
+    "claude": "claude_code",
+    "agy": "antigravity",
+}
+
+
+def agy_response_schema(system: str, allowed: tuple[str, ...]) -> str:
+    """The response contract as a schema, for the backend that has no system prompt.
+
+    ``agy`` exposes no ``--system-prompt``, so the contract carried by
+    :data:`SYSTEM` cannot be delivered where the Claude backend delivers it. It
+    goes here instead, as an enforced schema, and that is not a like-for-like
+    substitution -- it is a different mechanism that could move firing and not
+    merely formatting. Which is why ``--contract`` exists and why the pair is
+    measured rather than assumed.
+
+    The key name follows the arm: the unbundled arm names a ``tool`` where the
+    one-entry arm names a ``procedure``, and
+    :func:`~decision_evals.triggers.decision` already reads either.
+    """
+    key = "tool" if system is SYSTEM_FOUR else "procedure"
+    properties: dict[str, object] = {
+        "fire": {"type": "boolean"},
+        key: antigravity.nullable_enum(allowed),
+    }
+    if system is SYSTEM_CONFIDENCE:
+        properties["p_fire"] = {"type": "number"}
+    return json.dumps({"type": "object", "properties": properties, "required": ["fire", key]})
+
+
+def ask_agy(
+    prompt: str,
+    model: str,
+    system: str,
+    allowed: tuple[str, ...],
+    *,
+    contract: str = "schema",
+) -> tuple[Verdict, str]:
+    """One call against the Antigravity CLI.
+
+    There is no ``in_situ`` switch here and its absence is the point: this
+    backend is *only* ever in situ. The scaffold and its 57 tools are in context
+    on every call and no flag removes them, so the venue this runs in is the one
+    Track N9 was built to measure and could not keep -- 516 calls lost at a
+    0.8566 parse rate, to a model answering in prose instead of the contract.
+
+    ``contract`` chooses how the response format is delivered, which is the one
+    thing this backend genuinely cannot do the way the Claude backend does:
+
+    ``schema``
+        ``--json-schema``, enforced out of band. The prose the agent writes
+        around its answer lands in ``reasoning`` and the verdict arrives in a
+        field that cannot be malformed.
+    ``prose``
+        The exact :data:`SYSTEM` text prepended to the user message, which keeps
+        the wording identical to every published arm and leaves an unparseable
+        answer as the real signal it has always been here.
+    """
+    schema = agy_response_schema(system, allowed) if contract == "schema" else None
+    if contract == "prose":
+        prompt = f"{system}\n\n{prompt}"
+    with isolated_cwd("de-trigger-") as cwd:
+        receipt, result = antigravity.run(prompt, model=model, cwd=cwd, json_schema=schema)
+        receipt.assert_isolated(model=model, cwd=cwd)
+    return decision(result.text, allowed), result.text
+
+
 def ask(
     description: str,
     case: TriggerCase,
@@ -236,6 +311,8 @@ def ask(
     allowed: tuple[str, ...] | None = None,
     *,
     in_situ: bool = False,
+    backend: str = "claude",
+    contract: str = "schema",
 ) -> tuple[Verdict, str]:
     """The verdict **and the raw reply**.
 
@@ -254,9 +331,19 @@ def ask(
     rather than replacing it, which is the position every deployed call
     actually uses. Conversation length is untouched: still one turn, still a
     fresh isolated process per call. Only where the description sits changes.
+
+    ``backend`` picks the venue, and the two are **not** two ways of asking one
+    question. ``claude`` is a bare description under a replaced system prompt
+    with ``--tools ""``. ``agy`` cannot be that at all: it has no flag that
+    removes the scaffold, so ``in_situ`` does not apply to it and is ignored
+    there -- see :func:`ask_agy`. The prompt is assembled once, above, so the
+    item text and its framing are identical either way and the venue is the only
+    thing that moves.
     """
     header = "Tool descriptions" if system is SYSTEM_FOUR else "Tool description"
     prompt = f"## {header}\n\n{description}\n\n## User message\n\n{case.turn}"
+    if backend == "agy":
+        return ask_agy(prompt, model, system, allowed or default_procedures(), contract=contract)
     with (
         isolated_cwd("de-trigger-") as cwd,
         Conversation(system_prompt=system, model=model, cwd=cwd, in_situ=in_situ) as chat,
@@ -359,6 +446,8 @@ def collect(
     entry_names: dict[str, str] | None = None,
     in_situ: bool = False,
     skill_version: str | None = None,
+    backend: str = "claude",
+    contract: str = "schema",
 ) -> dict[tuple[str, int], dict[str, object]]:
     """Run every case `repeats` times, checkpointing after each call.
 
@@ -389,7 +478,14 @@ def collect(
                 allowed = tuple(entry_names) if entry_names else default_procedures()
                 try:
                     (fired, procedure, p_fire), raw = ask(
-                        description, case, model, system, allowed, in_situ=in_situ
+                        description,
+                        case,
+                        model,
+                        system,
+                        allowed,
+                        in_situ=in_situ,
+                        backend=backend,
+                        contract=contract,
                     )
                 except IsolationError:
                     raise
@@ -422,6 +518,27 @@ def collect(
                     # the tier survived only as prose in a hand-written README.
                     # `models_comparable` refuses a comparison that spans it.
                     "model": model,
+                    # The harness the model was reached through, and the second
+                    # half of what identifies a venue. `model` alone stopped
+                    # being enough on 2026-08-21, when `agy` turned out to serve
+                    # `claude-opus-4-6` -- an id `claude -p` also accepts, at a
+                    # tier this repository calls `confirm`, through a harness
+                    # that puts fourteen thousand tokens of coding agent in front
+                    # of the question.
+                    #
+                    # `model` carries the `agy/` namespace so `models_comparable`
+                    # already refuses the pooling. This column is written anyway,
+                    # because a reader should not have to know a naming
+                    # convention to see which harness produced a row.
+                    "backend": backend,
+                    # How the response contract was delivered. `agy` has no
+                    # `--system-prompt`, so the contract goes either in an
+                    # enforced `--json-schema` or at the top of the user message,
+                    # and those are two mechanisms rather than two spellings of
+                    # one. Whether the choice moves firing rather than only
+                    # formatting is a registered question, not an assumption --
+                    # which is why it is a column instead of a constant.
+                    "contract": contract,
                     # N9's venue. True means the description was appended to
                     # the CLI's own system prompt (`--append-system-prompt`,
                     # the position every deployed call actually uses); False
@@ -442,7 +559,17 @@ def collect(
                     # value as False, the same way `label_versions_comparable`
                     # treats an absent `set_version` as 1: it states what
                     # happened rather than declaring the past unrecoverable.
-                    "in_situ": in_situ,
+                    #
+                    # Forced true on `agy`, and not as a convenience. That
+                    # backend has no `--system-prompt` to replace, so the host
+                    # agent's own prompt is in context on every call it makes:
+                    # the in-situ condition is not an arm there, it is the only
+                    # thing the venue can be. Writing the flag's value instead
+                    # would have every `agy` row assert it had replaced a system
+                    # prompt that was never replaced, and `venue_comparable`
+                    # reads this column to decide whether two arms describe the
+                    # same venue.
+                    "in_situ": in_situ or backend == "agy",
                     # `metadata.version` from the `SKILL.md` that produced
                     # `description`, or `None` when the caller has none to
                     # give. `set_version` above tracks the *corpus* label
@@ -957,6 +1084,25 @@ def report_calibration(done: dict[tuple[str, int], dict[str, object]]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="haiku")
+    parser.add_argument(
+        "--backend",
+        choices=("claude", "agy"),
+        default="claude",
+        help=(
+            "which harness to reach the model through. `agy` is a coding agent and "
+            "cannot run the bare-description arms at all; see `ask_agy`"
+        ),
+    )
+    parser.add_argument(
+        "--contract",
+        choices=("schema", "prose"),
+        default="schema",
+        help=(
+            "how the response contract reaches an `agy` call, which has no "
+            "--system-prompt: enforced as a JSON schema, or prepended as prose. "
+            "Ignored by the `claude` backend, which has a system prompt to put it in"
+        ),
+    )
     parser.add_argument("--skill", default="decision-making")
     parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument(
@@ -1168,6 +1314,20 @@ def main() -> int:
         # exclusive with the three branches above by the refusal already run,
         # so this assignment cannot be overwritten by any of them.
         checkpoint = CHECKPOINT_IN_SITU
+    if args.backend != "claude":
+        # A different harness is a different venue, on exactly the reasoning the
+        # `in_situ` branch above already gives. The scaffold, the tool set and
+        # the contract mechanism all differ, so a shared path plus a resume would
+        # pool an `agy` verdict with a `claude -p` one under one case id and the
+        # run would finish clean.
+        #
+        # The contract mechanism is in the name too, because `--contract` is a
+        # registered arm rather than a formatting preference: pooling a
+        # schema-enforced verdict with a prose one is the thing that experiment
+        # exists to make impossible.
+        checkpoint = checkpoint.with_name(
+            f"{checkpoint.stem}-{args.backend}-{args.contract}{checkpoint.suffix}"
+        )
     if set_path != default_set:
         # A different corpus is a different answer key, so it cannot share a
         # checkpoint with any arm above. `load_done` resumes on (case id,
@@ -1187,6 +1347,26 @@ def main() -> int:
     # `--band` deliberately does not appear here. A band is a subset of the same
     # items under the same labels, so a band run and a later full run resume into
     # each other, which is what makes running the cheap bands first worth doing.
+    # Refuse the model before item 1 rather than during it. This runner has
+    # never gated, and `--model` is an argument with a default, so until now a
+    # typo produced a full checkpoint of failed calls and an alias produced a
+    # complete run whose records cannot say which weights answered. The arena
+    # asserted is the model's own, so this refuses an unknown id, an unpinned
+    # alias and a backend mismatch without deciding which tier anyone may run.
+    entry = resolve_model(args.model)
+    assert_model_allowed(entry.arena, args.model, backend=_BACKEND_MODULES[args.backend])
+    print(f"model: {args.model} ({entry.vendor}, {entry.backend}, arena {entry.arena})")
+
+    if args.backend == "agy":
+        # One throwaway call. The credential here is interactive-only, so a
+        # signed-out machine fails every call in a run rather than refusing to
+        # start one, and the receipt check is worth making once against a known
+        # answer before it is made against 660 unknown ones.
+        with isolated_cwd("de-preflight-") as scratch:
+            receipt, _ = antigravity.preflight(model=args.model, cwd=scratch)
+            receipt.assert_isolated(model=args.model, cwd=scratch)
+        print(f"preflight: ok, {len(receipt.tools)} tools, {receipt.permission_mode}")
+
     print(f"checkpoint: {checkpoint.name}\n")
     try:
         done = collect(
@@ -1199,6 +1379,8 @@ def main() -> int:
             entry_names=entry_names,
             in_situ=args.in_situ,
             skill_version=skill_version,
+            backend=args.backend,
+            contract=args.contract,
         )
     except IsolationError as error:
         print(f"ISOLATION FAILURE, stopping: {error}")

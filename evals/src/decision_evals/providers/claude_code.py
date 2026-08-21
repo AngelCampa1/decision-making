@@ -188,6 +188,23 @@ class CliResult:
     #: instrument defect on record here. See
     #: :func:`decision_evals.providers.openai_compatible.parse_completion`.
     reasoning: str = ""
+    #: How the backend said the call ended, when it says so at all. Empty for
+    #: backends that report no such thing, which is both of the original two.
+    #:
+    #: Added for :mod:`decision_evals.providers.antigravity` on a measured
+    #: surprise, 2026-08-21: an ``agy`` call returned ``status: "ERROR"`` **and a
+    #: valid ``structured_output`` in the same result event**. The agent had
+    #: reached for a file outside its sandbox, been refused by the CLI's own
+    #: protection boundary, and terminated -- after it had already answered.
+    #: Treating status as a proxy for "is there an answer" would have discarded a
+    #: correct record; treating the answer as a proxy for "the call was clean"
+    #: would have pooled it with calls where nothing went wrong. Recorded so the
+    #: two can be told apart downstream instead of one being assumed.
+    status: str = ""
+    #: Turns the backend took to produce the answer. ``0`` where unreported. An
+    #: agentic backend can take several, and a turn count above one means tools
+    #: were used, which is a covariate rather than a constant.
+    num_turns: int = 0
 
     @property
     def context_fraction(self) -> float:

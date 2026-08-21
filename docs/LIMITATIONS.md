@@ -9,15 +9,22 @@ inconvenient.
 ## The harness
 
 The Claude Code CLI exposes no sampling parameters, so there is no temperature
-control. We run ≥2 independent repeats per cell and report run-to-run variance.
+control, and neither does the Antigravity CLI. The OpenAI-compatible backend
+does, and defaults to `temperature=0`; it is `dev`-arena only and has produced
+nothing published, so no number on record was sampled under a temperature this
+harness chose. We run ≥2 independent repeats per cell and report run-to-run
+variance.
 That is less of a loss than it sounds: temperature 0 is not deterministic on
 hosted inference anyway, and a stated variance is more honest than an assumed
 constant.
 
-The budget is rate limits, not dollars. Every call runs on a Claude Max
-subscription; there is no API key. The binding constraint is a rolling quota,
-so runs are checkpointed and resumable across days, and a confirmation run may
-span several sessions. Wall-clock timing is not comparable across runs, so we
+The budget is rate limits, not dollars. Every published call runs on a Claude Max
+subscription; there is no API key. The Antigravity backend added on 2026-08-21 is
+also subscription OAuth with no key, and its quota is **unknown** — no published
+figure was found and none is estimated here, so the first arm run on it will
+discover its own ceiling. The binding constraint is a rolling quota, so runs are
+checkpointed and resumable across days, and a confirmation run may span several
+sessions. Wall-clock timing is not comparable across runs, so we
 do not report it as a metric.
 
 Every dollar figure in this repository is notional. `total_cost_usd` is what

@@ -85,7 +85,7 @@ so a mid-experiment change surfaces as an error rather than as noise.
 
 | Field | Value |
 | --- | --- |
-| Agent | Claude Code CLI, non-interactive (`claude -p`). Every published number. A second backend exists from 2026-08-19, `providers/openai_compatible.py`, an OpenAI-compatible HTTP server. It is `dev`-arena only, has produced nothing published, and is disclosed separately below |
+| Agent | Claude Code CLI, non-interactive (`claude -p`). Every published number. Two further backends exist and neither has produced anything published: `providers/openai_compatible.py` from 2026-08-19, an OpenAI-compatible HTTP server, `dev` arena only; and `providers/antigravity.py` from 2026-08-21, the Antigravity CLI, `screen` arena only. Both are disclosed separately below |
 | CLI version | Recorded per run |
 | Resolved model id | Recorded per run from `--output-format json` |
 | Auth | Subscription OAuth. No API key. `--bare` is unusable: its help states auth is strictly `ANTHROPIC_API_KEY`/`apiKeyHelper` and OAuth is never read. See *Preconditions* below; this is the harness's most fragile assumption |
@@ -127,6 +127,33 @@ to reporting must be split by whether a chain was emitted or they will read as
 inflated. And any `dev`-arena grid involving `cot` needs either a non-reasoning
 tag or a pre-registered decision about what the arm means there. Neither has
 been made; nothing has been measured on this backend.
+
+**The third backend, disclosed separately for the same reason, and it is the one
+where the reason bites hardest.** The other two are ways of reaching a model.
+This one is a coding agent: the question arrives inside a working agent's
+context, and no flag takes that away. Folding it into either table above would
+report an agent's behaviour as a model's.
+
+| Field | Value |
+| --- | --- |
+| Agent | Antigravity CLI (`agy`) 1.1.12, non-interactive (`agy --print`), `providers/antigravity.py`, from 2026-08-21 |
+| Arena | `screen` only, for **every** model it serves, however capable. The venue cannot support a verdict, so the tier of the weights does not enter into it |
+| Vendors | Three from one binary: Google (Gemini 3.1–3.7), Anthropic (Claude Sonnet 4.6, Opus 4.6), OpenAI (GPT-OSS 120B) |
+| Resolved model id | From the `init` event, recorded with an `agy/` namespace. The namespace is load-bearing: `agy` serves a model it calls `claude-opus-4-6` and `claude -p` accepts that id too, so a bare record could not say which venue answered |
+| Auth | Subscription OAuth, interactive-only. No API key. A signed-out machine fails every call in a run, which is why `preflight` runs before item 1 |
+| Sampling parameters | Not exposed. `--effort` exists but is never passed; the effort level is pinned inside the model id instead, because two ways to set one parameter is how a run ends up not knowing what it ran |
+| **Context overhead** | **~14k input tokens on every call, before the item.** Measured 2026-08-21 on a six-word prompt: 13,742 tokens on `gemini-3.7-flash-low`, 15,750 on `claude-sonnet-4-6`. This is the disclosure that matters most here — the artefact under test is roughly 1% of what the model reads |
+| Tools | **57, always enabled**, at `permission_mode: "request-review"`. There is no `--tools` equivalent. Pinned as `AGY_TOOLS` and asserted per call; drift in either direction raises `IsolationError`. Identical set across vendors |
+| Cost | `0.0`, recorded rather than omitted, on the same convention as the local backend. `agy` reports no cost field at all |
+| Quota | **Unknown and not estimated.** Antigravity publishes no figure found; ~20 exploratory calls did not reach one. The first arm will discover it, and the checkpoint makes that recoverable |
+| Working directory | A fresh temporary directory per call, via `isolated_cwd`, and asserted against the `init` event's `cwd` |
+| Isolation receipt | The `init` event: resolved model, working directory and the full tool list, all three asserted. Not a capability list to be read — a mismatch stops the run |
+| Context files | `GEMINI.md`, `AGENTS.md` and `.agents/rules/*.md` planted in the working directory did **not** reach the response, verified against a positive control that did. See `notebook/2026-08-21-the-agy-backend-and-two-canaries.md` |
+| Response contract | No `--system-prompt` exists, so the contract travels either as an enforced `--json-schema` or as prose at the top of the user message. **Recorded per row as `contract`, and which one is used is a registered arm rather than a formatting choice** |
+| Schema dialect | Narrower than JSON Schema, and a refused schema fails the whole call. `{"type": ["string","null"], "enum": [..., null]}` errors; `{"type": "string", "enum": [...], "nullable": true}` answers |
+| Call status | Recorded per row. A call can return `status: "ERROR"` **carrying a valid answer** — observed when the agent reached outside its sandbox after answering. Whether such a verdict may be scored is an open analysis decision |
+| In-situ arm | **The only arm available.** Every row is stamped `in_situ: true` regardless of the flag, because there is no system prompt to replace and the host agent's own is always present |
+| Concurrency | **Unmeasured**, which is not the same as safe. Serial only |
 
 ### T: Tools
 

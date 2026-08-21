@@ -19,12 +19,14 @@ import yaml
 
 from decision_evals.arenas import (
     ARENAS,
+    MODELS,
     ArenaError,
     assert_may_emit_verdict,
     assert_may_revise_skill,
     assert_model_allowed,
     assert_split_allowed,
     policy_for,
+    resolve_model,
 )
 from decision_evals.budget import BudgetError, BudgetLedger, estimate_cost_usd, project_cost
 from decision_evals.prereg import (
@@ -80,8 +82,71 @@ def test_permitted_models_are_accepted(arena: str, model: str) -> None:
 
 def test_a_frontier_model_is_refused_in_dev() -> None:
     """Spends quota on a run that cannot produce a verdict."""
-    with pytest.raises(ArenaError, match="not permitted in the 'dev' arena"):
+    with pytest.raises(ArenaError, match="belongs to the 'confirm' arena, not 'dev'"):
         assert_model_allowed("dev", "opus")
+
+
+@pytest.mark.parametrize(
+    ("model", "arena", "backend", "vendor"),
+    [
+        ("agy/gemini-3.7-flash-low", "screen", "antigravity", "google"),
+        ("agy/gpt-oss-120b-medium", "screen", "antigravity", "openai"),
+        ("agy/claude-sonnet-4-6", "screen", "antigravity", "anthropic"),
+    ],
+)
+def test_antigravity_models_resolve_to_screen(
+    model: str, arena: str, backend: str, vendor: str
+) -> None:
+    """Every model on this backend screens, however capable the weights are.
+
+    The venue cannot support a verdict -- the agent scaffold and its 57 tools are
+    in context on every call and no flag removes them -- so the tier of the model
+    is not what decides this.
+    """
+    entry = resolve_model(model)
+    assert (entry.arena, entry.backend, entry.vendor) == (arena, backend, vendor)
+
+
+def test_the_same_weights_on_two_backends_are_two_venues() -> None:
+    """The collision this registry exists to resolve.
+
+    ``agy`` serves a model it calls ``claude-opus-4-6`` and ``claude -p`` accepts
+    that id too. Reading them as one model would file a coding agent's answers
+    under the arena whose results are evidence.
+    """
+    assert resolve_model("claude-opus-4-6").arena == "confirm"
+    assert resolve_model("agy/claude-opus-4-6").arena == "screen"
+    with pytest.raises(ArenaError, match="belongs to the 'screen' arena"):
+        assert_model_allowed("confirm", "agy/claude-opus-4-6")
+
+
+@pytest.mark.parametrize("alias", ["auto", "pro", "flash", "flash-lite", "default", "latest"])
+def test_an_unpinned_alias_is_refused(alias: str) -> None:
+    """A record naming a family cannot say which weights answered.
+
+    ``agy`` defaults to ``--model auto``, so this is the refusal that stops a
+    whole arm being run against an unknown.
+    """
+    with pytest.raises(ArenaError, match="names a family, not a set of weights"):
+        resolve_model(alias)
+
+
+def test_an_unknown_model_names_the_row_to_add() -> None:
+    with pytest.raises(ArenaError, match="not in the registry"):
+        resolve_model("llama-4-scout")
+
+
+def test_a_backend_that_does_not_serve_the_model_is_refused() -> None:
+    with pytest.raises(ArenaError, match="is served by 'antigravity'"):
+        assert_model_allowed("screen", "agy/gemini-3.7-flash-low", backend="claude_code")
+
+
+def test_arena_prefixes_are_derived_from_the_registry() -> None:
+    """Two copies of a model's arena would eventually disagree, invisibly."""
+    for name, policy in ARENAS.items():
+        assert policy.model_prefixes == tuple(
+            sorted(entry.prefix for entry in MODELS if entry.arena == name)
+        )
 
 
 def test_a_local_model_is_refused_in_confirm() -> None:
